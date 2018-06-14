@@ -1,0 +1,3 @@
+export enum Status {
+  SELECT_SONGS, UPLOADING_SONGS, GREAT_SUCCESS
+}

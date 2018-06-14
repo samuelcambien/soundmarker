@@ -1,0 +1,112 @@
+<div class="public-upload-form container">
+
+  <div class="header">
+    <div class="soundmarker-logo"></div>
+    <div class="spacer"></div>
+    <div class="header-link">Help</div>
+    <div class="header-link">About Us</div>
+    <div class="header-link pro">PRO</div>
+  </div>
+
+  <div *ngIf="uploader.isUploading; then uploadprocess"></div>
+  <div *ngIf="!uploader.isUploading && !finished; then selectsongs"></div>
+  <div *ngIf="!uploader.isUploading && finished; then uploadfinished"></div>
+
+  <ng-template #selectsongs>
+    <form (ngSubmit)="onFormSubmit()">
+      <div class="container">
+        <div class="row">
+
+          <div class="form-field col-md-4">
+
+            <table class="table">
+              <tbody>
+              <tr *ngFor="let item of uploader.queue">
+                <td><strong>{{ item?.file?.name }}</strong></td>
+                <button type="button" class="btn btn-danger btn-xs"
+                        (click)="item.remove()">
+                  <span class="glyphicon glyphicon-trash"></span> Remove
+                </button>
+              </tr>
+              </tbody>
+            </table>
+
+            <div class="upload-songs-area">
+
+              <input class="upload-songs-input" type="file" ng2FileSelect [uploader]="uploader" multiple
+
+                     accept="audio/*"/>
+
+              <div class="note-image"></div>
+
+              <div class="upload-songs-text">
+
+                <div *ngIf="uploader.getNotUploadedItems().length == 0; then uploadsongs else addsongs"></div>
+
+                <ng-template #uploadsongs>
+                  <div><b>UPLOAD SONGS</b></div>
+                  <div>Up to 5GB</div>
+                </ng-template>
+
+                <ng-template #addsongs>
+                  <div><b>ADD SONGS</b></div>
+                </ng-template>
+
+              </div>
+
+            </div>
+
+          </div>
+
+          <div class="col-md-8">
+            <div class="row">
+              <input type="text" placeholder="Notes" class="col-md-12"/>
+            </div>
+            <div class="row">
+              <div class="col-md-6">
+                <input type="text" [(ngModel)]='email_from' name="email_from" placeholder="Email from"/>
+              </div>
+              <div class="col-md-6">
+                <input type="text" [(ngModel)]='email_to' name="email_to" placeholder="Email to"/>
+              </div>
+            </div>
+            <div class="row">
+              <input class="slide-selector" type="radio" ngModel="expiration" name="expiration" value="1 week">1 week
+              <input class="slide-selector" type="radio" ngModel="expiration" name="expiration" value="1 month">1 month
+              <input class="slide-selector" type="radio" ngModel="usage" name="usage" value="stream">Stream
+              <input class="slide-selector" type="radio" ngModel="usage" name="usage" value="download">Download
+              <input class="slide-selector" type="radio" ngModel="usage" name="usage" value="both">Both
+              <button type="submit" [disabled]="!uploader.getNotUploadedItems().length">
+                <span class="glyphicon glyphicon-upload"></span>SHARE SONGS
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </ng-template>
+
+  <ng-template #uploadprocess>
+    <div class="container">
+      <div>
+        Queue progress: {{uploader.progress}} + '%'
+        <div class="progress">
+          <div class="progress-bar" role="progressbar" [ngStyle]="{ 'width': uploader.progress + '%' }"></div>
+        </div>
+      </div>
+    </div>
+
+    <div ng2FileDrop
+         [ngClass]="{'nv-file-over': hasBaseDropZoneOver}"
+         (fileOver)="fileOverBase($event)"
+         [uploader]="uploader"
+         class="well my-drop-zone">
+    </div>
+  </ng-template>
+
+  <ng-template #uploadfinished>
+    <iframe src="https://giphy.com/embed/a0h7sAqON67nO" width="480" height="270" frameBorder="0" class="giphy-embed"
+            allowFullScreen></iframe>
+  </ng-template>
+
+</div>
