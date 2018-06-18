@@ -1,8 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {FileItem, FileUploader} from 'ng2-file-upload/ng2-file-upload';
-import {Lame} from "node-lame";
+import * as lamejs from "lamejs";
 
-const UPLOAD_FILES_ENDPOINT = 'http://03b19740.ngrok.io/rest/upload/file';
+const UPLOAD_FILES_ENDPOINT = 'http://7c948483.ngrok.io/rest/upload/file';
 
 @Component({
   selector: 'app-public-upload-form',
@@ -33,18 +33,22 @@ export class PublicUploadFormComponent implements OnInit {
   protected convert(item: FileItem) {
     console.log("convert item: " + item.file.name);
 
-    // const encoder = new Lame({
-    //   "output": "./audio-files/demo.mp3",
-    //   "bitrate": 192
-    // }).setFile("./audio-files/demo.wav");
-    //
-    // encoder.encode()
-    //   .then(() => {
-    //     console.log("great success!")
-    //   })
-    //   .catch((error) => {
-    //     console.log("error!")
-    //   });
+    let mp3Data = [];
+
+    let mp3encoder = new lamejs.Mp3Encoder(1, 44100, 128); //mono 44.1khz encode to 128kbps
+    let mp3Tmp = mp3encoder.encodeBuffer(item); //encode mp3
+
+    //Push encode buffer to mp3Data variable
+    mp3Data.push(mp3Tmp);
+
+    // Get end part of mp3
+    mp3Tmp = mp3encoder.flush();
+
+    // Write last data to the output data, too
+    // mp3Data contains now the complete mp3Data
+    mp3Data.push(mp3Tmp);
+
+    console.debug(mp3Data);
   }
 
   public hasBaseDropZoneOver: boolean = false;

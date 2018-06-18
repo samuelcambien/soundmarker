@@ -84,23 +84,22 @@
         </div>
       </div>
     </form>
-  </ng-template>
-
-  <ng-template #uploadprocess>
-    <div class="container">
-      <div>
-        Queue progress: {{uploader.progress}} + '%'
-        <div class="progress">
-          <div class="progress-bar" role="progressbar" [ngStyle]="{ 'width': uploader.progress + '%' }"></div>
-        </div>
-      </div>
-    </div>
-
     <div ng2FileDrop
          [ngClass]="{'nv-file-over': hasBaseDropZoneOver}"
          (fileOver)="fileOverBase($event)"
          [uploader]="uploader"
          class="well my-drop-zone">
+    </div>
+  </ng-template>
+
+  <ng-template #uploadprocess>
+    <div class="container">
+      <div>
+        Queue progress: {{uploader.progress}}%
+        <div class="progress">
+          <div class="progress-bar" role="progressbar" [ngStyle]="{ 'width': uploader.progress + '%' }"></div>
+        </div>
+      </div>
     </div>
   </ng-template>
 
