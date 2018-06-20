@@ -1,0 +1,19 @@
+$spacer: 10px;
+
+.header {
+  margin-left: 10px;
+  display: flex;
+  height: 25px;
+  margin-bottom: 10px;
+}
+
+.soundmarker-logo {
+  background: url(sm-logo-topbar.svg);
+  width: 137px;
+  background-size: 100%;
+  background-repeat: no-repeat;
+}
+
+.spacer {
+  flex-grow: 1;
+}

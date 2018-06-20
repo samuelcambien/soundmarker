@@ -1,12 +1,6 @@
 <div class="public-upload-form container">
 
-  <div class="header">
-    <div class="soundmarker-logo"></div>
-    <div class="spacer"></div>
-    <div class="header-link">Help</div>
-    <div class="header-link">About Us</div>
-    <div class="header-link pro">PRO</div>
-  </div>
+  <app-public-info-header [infoZone]="infoZone"></app-public-info-header>
 
   <div *ngIf="uploader.isUploading; then uploadprocess"></div>
   <div *ngIf="!uploader.isUploading && !finished; then selectsongs"></div>
@@ -107,5 +101,7 @@
     <iframe src="https://giphy.com/embed/a0h7sAqON67nO" width="480" height="270" frameBorder="0" class="giphy-embed"
             allowFullScreen></iframe>
   </ng-template>
+
+  <app-public-info-zone #infoZone></app-public-info-zone>
 
 </div>
