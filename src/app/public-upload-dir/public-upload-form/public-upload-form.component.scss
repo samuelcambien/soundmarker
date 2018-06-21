@@ -20,8 +20,9 @@ body {
 }
 
 .navbar-nav .nav-link {
-  padding-right: 0.6rem;
-  padding-left: 0.6rem;
+  font-size: 10pt;
+  padding-right: 1rem;
+  padding-left: 1rem;
 }
 
 .shadow {
@@ -47,14 +48,47 @@ body {
   width: 750px;
 }
 
+.form-control {
+	border: 1px solid #E4E4E4;
+	font-size: 10pt;
+}
 
+.form-control:focus{
+    border-color: #cecece;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+}
 
+.form-control::-webkit-input-placeholder {
+  color: #9B9B9B;
+  opacity: 1;
+}
+
+.form-control::-moz-placeholder {
+  color: #9B9B9B;
+  opacity: 1;
+}
+
+.form-control:-ms-input-placeholder {
+  color: #9B9B9B;
+  opacity: 1;
+}
+
+.form-control::-ms-input-placeholder {
+  color: #9B9B9B;
+  opacity: 1;
+}
+
+.form-control::placeholder {
+  color: #9B9B9B;
+  opacity: 1;
+}
 .upload-songs-text {
   text-align: center;
 }
 
 .rounded {
-	border-radius: 0.3rem;
+	border-radius: 0.3rem !important;
 }
 
 
@@ -69,17 +103,34 @@ textarea {
     resize: none;
 }
 
+.btn-group-sm>.btn, .btn-sm {
+  font-size: 10pt;
+}
+
+
+
+.btn-group .btn + .btn,
+.btn-group .btn + .btn-group,
+.btn-group .btn-group + .btn,
+.btn-group .btn-group + .btn-group,
+.btn-group-vertical .btn + .btn,
+.btn-group-vertical .btn + .btn-group,
+.btn-group-vertical .btn-group + .btn,
+.btn-group-vertical .btn-group + .btn-group {
+  margin-left: -1px;
+}
+
 .btn-outline-form {
-  color: #6c757d;
+  color: #9B9B9B;
   background-color: white;
   background-image: none;
-  border: 1px solid #ced4da;
-  border-radius: 0.3rem;
+  border: 1px solid #E4E4E4;
 }
 
 .btn-outline-form:hover {
   color: #fff;
-  background-color: #FF857D;
+  background-color: #E4E4E4;
+  border: 1px solid #E4E4E4;
 }
 
 .btn-outline-form:focus, .btn-outline-form.focus {
@@ -95,12 +146,15 @@ textarea {
 .show > .btn-outline-form.dropdown-toggle {
   color: #fff;
   background-color: #FF857D;
+    border: 1px solid #E4E4E4;
+
 }
 
 .btn-outline-form:not(:disabled):not(.disabled):active:focus, .btn-outline-form:not(:disabled):not(.disabled).active:focus,
 .show > .btn-outline-form.dropdown-toggle:focus {
   box-shadow: 0 0 0 0.2rem rgba(108, 117, 125, 0.5);
 }
+
 
 .free-upload {
 	width: 100%;
@@ -113,8 +167,8 @@ textarea {
 
 .btn-primary.disabled, .btn-primary:disabled {
   
-  background-color: #ced4da;
-  border-color: #ced4da;
+  background-color: #E4E4E4;
+  border-color: #E4E4E4;
 }
 
 .btn-secondary {
@@ -142,8 +196,23 @@ textarea {
 .upload-songs-area {
   position: relative;
   height: 100%;
+  max-height: 129px;
   padding-top: 0;
-  
+  overflow-y: scroll;
+  border: 1px solid #E4E4E4;
+}
+
+
+
+.upload-songs-text {
+	
+	text-align: center;
+	font-size: 12pt;
+	margin-bottom: 3px;
+}
+
+.tabletainer {
+	padding: 10px;
 }
 
 .table {
@@ -151,20 +220,36 @@ textarea {
 	table-layout: fixed;
 }
 
-table td {
+table tr {
+	width: 100%;
+}
+
+table tr td{
 	padding-bottom: 0rem;
 	padding-left: 0.5rem;
 	padding-top: 0.4rem;
-	width: 71%;
+	width: 100%;
 	height: 32px;
 	 white-space: nowrap;
     overflow: hidden;
 }
 
-table td p {
-	font-size: 10pt;
+table tr td p {
+	font-size: 9pt;
+	color: #2F2F2F;
 	margin-bottom: 0;
 	padding-bottom: 0;
+}
+
+.btn-cross {
+	background: -webkit-linear-gradient(left, rgba(255,255,255,0) 0%, #ffffff 100%);
+	color: red;
+	margin-left: -20px;
+	border: 0;
+	padding-left: 10px;
+	padding-top: 4px;
+	padding-bottom: 0;
+	padding-right: 4px;
 }
 
 .upload-songs-input {

@@ -14,13 +14,13 @@
       <li class="nav-item">
         <a class="nav-link" href="#">About Us</a>
       </li>
-      <form class="form-inline">
-          <button class="btn btn-sm btn-secondary" href="#">PRO</button>
-        </form>
+      
+          <button class="btn btn-secondary btn-sm" href="#">PRO</button>
+       
     </ul>
   </div>
 </nav>
-  <div class="card-body bg-light">
+  <div class="card-body bg-light rounded">
 
   <div *ngIf="uploader.isUploading; then uploadprocess"></div>
   <div *ngIf="!uploader.isUploading && !finished; then selectsongs"></div>
@@ -37,19 +37,22 @@
 
             <div class="card upload-songs-area rounded">
 	            
+	            <div class="tabletainer container-fluid">
 	            
 	            <table class="table">
               <tbody>
 	              
               <tr *ngFor="let item of uploader.queue">
                 <td><p>{{ item?.file?.name }}</p></td>
-                <button type="button" class="btn btn-danger btn-sm"
+                <button type="button" class="btn btn-cross btn-sm"
                         (click)="item.remove()">
-                  <span class="glyphicon glyphicon-trash"></span> remove
+                  <span class="glyphicon glyphicon-remove"></span>  X
                 </button>
               </tr>
               </tbody>
             </table>
+            
+	            </div>
 
               <input class="upload-songs-input" type="file" ng2FileSelect [uploader]="uploader" multiple
 
@@ -62,12 +65,12 @@
                 <div *ngIf="uploader.getNotUploadedItems().length == 0; then uploadsongs else addsongs"></div>
 
                 <ng-template #uploadsongs>
-                  <div><h5>UPLOAD SONGS</h5></div>
+                  <div><h5>ADD SONGS</h5></div>
                   <div><h6>Up to 5GB</h6></div>
                 </ng-template>
 
                 <ng-template #addsongs>
-                  <div><p>ADD SONGS</p></div>
+                  <div class="addsongs"><p>ADD MORE SONGS</p></div>
                 </ng-template>
 
               </div>
@@ -92,7 +95,7 @@
             </div>
             <div class="form-row">
               <div class="col">
-              <div class="btn-group btn-group-sm btn-group-toggle rounded" data-toggle="buttons">
+              <div class="btn-group btn-group-sm btn-group-toggle" data-toggle="buttons">
                 <label class="btn btn-outline-form active">
                   <input class="slide-selector" type="radio" ngModel="expiration" name="expiration" autocomplete="off" checked value="1 week">1 week
                 </label>
@@ -116,7 +119,7 @@
             </div>
             <div class="col">
                   <button type="submit" [disabled]="!uploader.getNotUploadedItems().length" class="btn btn-primary btn-sm free-upload">
-                    <span class="glyphicon glyphicon-upload"></span>SHARE SONGS
+                    <span class="glyphicon glyphicon-upload"></span>Share songs
                   </button>
                </div> 
             </div>
