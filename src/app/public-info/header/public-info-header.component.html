@@ -1,6 +1,9 @@
 <nav class="wide-nav navbar navbar-expand-sm navbar-light bg-white shadow">
-  <a class="navbar-brand" href="#"><div class="soundmarker-logo"></div></a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+  <a class="navbar-brand" href="#">
+    <div class="soundmarker-logo"></div>
+  </a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown"
+          aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
   <div class="collapse navbar-collapse justify-content-end" id="navbarNavDropdown">
@@ -15,11 +18,9 @@
           <app-info-link (onInfoSelected)="infoWasSelected(aboutUs)" [info]='aboutUs.apply(aboutUs)'></app-info-link>
         </a>
       </li>
-      <form class="form-inline">
-        <button class="btn btn-sm btn-secondary" href="#">
-          <app-info-link (onInfoSelected)="infoWasSelected(pro)" [info]="pro.apply(pro)"></app-info-link>
-        </button>
-      </form>
+      <button class="btn btn-secondary btn-sm" href="#">
+        <app-info-link (onInfoSelected)="infoWasSelected(pro)" [info]="pro.apply(pro)"></app-info-link>
+      </button>
     </ul>
   </div>
 </nav>
