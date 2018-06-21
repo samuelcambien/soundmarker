@@ -1,107 +1,153 @@
-<div class="public-upload-form container">
+<div clas="container rounded">
 
-  <app-public-info-header [infoZone]="infoZone"></app-public-info-header>
+  <div class="public-upload-form card shadow-lg rounded border-0 position-static">
 
-  <div *ngIf="uploader.isUploading; then uploadprocess"></div>
-  <div *ngIf="!uploader.isUploading && !finished; then selectsongs"></div>
-  <div *ngIf="!uploader.isUploading && finished; then uploadfinished"></div>
+    <div class="card-body bg-light">
 
-  <ng-template #selectsongs>
-    <form (ngSubmit)="onFormSubmit()">
-      <div class="container">
-        <div class="row">
+      <app-public-info-header [infoZone]="infoZone"></app-public-info-header>
 
-          <div class="form-field col-md-4">
+      <div *ngIf="uploader.isUploading; then uploadprocess"></div>
+      <div *ngIf="!uploader.isUploading && !finished; then selectsongs"></div>
+      <div *ngIf="!uploader.isUploading && finished; then uploadfinished"></div>
 
-            <table class="table">
-              <tbody>
-              <tr *ngFor="let item of uploader.queue">
-                <td><strong>{{ item?.file?.name }}</strong></td>
-                <button type="button" class="btn btn-danger btn-xs"
-                        (click)="item.remove()">
-                  <span class="glyphicon glyphicon-trash"></span> Remove
-                </button>
-              </tr>
-              </tbody>
-            </table>
+      <ng-template #selectsongs>
+        <form (ngSubmit)="onFormSubmit()">
 
-            <div class="upload-songs-area">
+          <div class="form-row">
 
-              <input class="upload-songs-input" type="file" ng2FileSelect [uploader]="uploader" multiple
+            <div class="form-field col-md-4">
 
-                     accept="audio/*"/>
 
-              <div class="note-image"></div>
+              <div class="card upload-songs-area rounded">
 
-              <div class="upload-songs-text">
 
-                <div *ngIf="uploader.getNotUploadedItems().length == 0; then uploadsongs else addsongs"></div>
+                <table class="table">
+                  <tbody>
 
-                <ng-template #uploadsongs>
-                  <div><b>UPLOAD SONGS</b></div>
-                  <div>Up to 5GB</div>
-                </ng-template>
+                  <tr *ngFor="let item of uploader.queue">
+                    <td><p>{{ item?.file?.name }}</p></td>
+                    <button type="button" class="btn btn-danger btn-sm"
+                            (click)="item.remove()">
+                      <span class="glyphicon glyphicon-trash"></span> remove
+                    </button>
+                  </tr>
+                  </tbody>
+                </table>
 
-                <ng-template #addsongs>
-                  <div><b>ADD SONGS</b></div>
-                </ng-template>
+                <input class="upload-songs-input" type="file" ng2FileSelect [uploader]="uploader" multiple
+
+                       accept="audio/*"/>
+
+                <div class="note-image"></div>
+
+                <div class="upload-songs-text">
+
+                  <div *ngIf="uploader.getNotUploadedItems().length == 0; then uploadsongs else addsongs"></div>
+
+                  <ng-template #uploadsongs>
+                    <div><h5>UPLOAD SONGS</h5></div>
+                    <div><h6>Up to 5GB</h6></div>
+                  </ng-template>
+
+                  <ng-template #addsongs>
+                    <div><p>ADD SONGS</p></div>
+                  </ng-template>
+
+                </div>
 
               </div>
 
             </div>
 
+            <div class="col-md-8">
+              <div class="form-row">
+                <div class="form-group col">
+                <textarea type="text" placeholder="Notes" class="form-control form-control-sm rounded "
+                          rows="2"></textarea>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group col">
+                  <input type="text" [(ngModel)]='email_from' name="email_from" placeholder="Email from"
+                         class="form-control form-control-sm rounded">
+                </div>
+                <div class="col">
+                  <input type="text" [(ngModel)]='email_to' name="email_to" placeholder="Email to"
+                         class="form-control form-control-sm rounded">
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="col">
+                  <div class="btn-group btn-group-sm btn-group-toggle rounded" data-toggle="buttons">
+                    <label class="btn btn-outline-form active">
+                      <input class="slide-selector" type="radio" ngModel="expiration" name="expiration"
+                             autocomplete="off"
+                             checked value="1 week">1 week
+                    </label>
+                    <label class="btn btn-outline-form">
+                      <input class="slide-selector" type="radio" ngModel="expiration" name="expiration"
+                             autocomplete="off"
+                             value="1 month">1 month
+                    </label>
+                  </div>
+                </div>
+                <div class="col">
+                  <div class="btn-group btn-group-sm btn-group-toggle" data-toggle="buttons">
+                    <label class="btn btn-outline-form active">
+                      <input class="slide-selector" type="radio" ngModel="usage" autocomplete="off" checked name="usage"
+                             value="stream">Stream
+                    </label>
+                    <label class="btn btn-outline-form">
+                      <input class="slide-selector" type="radio" ngModel="usage" autocomplete="off" name="usage"
+                             value="download">Download
+                    </label>
+                    <label class="btn btn-outline-form">
+                      <input class="slide-selector" type="radio" ngModel="usage" autocomplete="off" name="usage"
+                             value="both">Both
+                    </label>
+                  </div>
+                </div>
+                <div class="col">
+                  <button type="submit" [disabled]="!uploader.getNotUploadedItems().length"
+                          class="btn btn-primary btn-sm free-upload">
+                    <span class="glyphicon glyphicon-upload"></span>SHARE SONGS
+                  </button>
+                </div>
+              </div>
+            </div>
           </div>
 
-          <div class="col-md-8">
-            <div class="row">
-              <input type="text" placeholder="Notes" class="col-md-12"/>
-            </div>
-            <div class="row">
-              <div class="col-md-6">
-                <input type="text" [(ngModel)]='email_from' name="email_from" placeholder="Email from"/>
-              </div>
-              <div class="col-md-6">
-                <input type="text" [(ngModel)]='email_to' name="email_to" placeholder="Email to"/>
-              </div>
-            </div>
-            <div class="row">
-              <input class="slide-selector" type="radio" ngModel="expiration" name="expiration" value="1 week">1 week
-              <input class="slide-selector" type="radio" ngModel="expiration" name="expiration" value="1 month">1 month
-              <input class="slide-selector" type="radio" ngModel="usage" name="usage" value="stream">Stream
-              <input class="slide-selector" type="radio" ngModel="usage" name="usage" value="download">Download
-              <input class="slide-selector" type="radio" ngModel="usage" name="usage" value="both">Both
-              <button type="submit" [disabled]="!uploader.getNotUploadedItems().length">
-                <span class="glyphicon glyphicon-upload"></span>SHARE SONGS
-              </button>
+        </form>
+        <div ng2FileDrop
+             [ngClass]="{'nv-file-over': hasBaseDropZoneOver}"
+             (fileOver)="fileOverBase($event)"
+             [uploader]="uploader"
+             class="well my-drop-zone">
+        </div>
+      </ng-template>
+
+      <ng-template #uploadprocess>
+        <div class="container">
+          <div>
+            Queue progress: {{uploader.progress}}%
+            <div class="progress">
+              <div class="progress-bar" role="progressbar" [ngStyle]="{ 'width': uploader.progress + '%' }"></div>
             </div>
           </div>
         </div>
-      </div>
-    </form>
-    <div ng2FileDrop
-         [ngClass]="{'nv-file-over': hasBaseDropZoneOver}"
-         (fileOver)="fileOverBase($event)"
-         [uploader]="uploader"
-         class="well my-drop-zone">
+      </ng-template>
+
+      <ng-template #uploadfinished>
+        <iframe src="https://giphy.com/embed/a0h7sAqON67nO" width="480" height="270" frameBorder="0" class="giphy-embed"
+                allowFullScreen></iframe>
+      </ng-template>
+
+      <app-public-info-zone #infoZone></app-public-info-zone>
+
     </div>
-  </ng-template>
 
-  <ng-template #uploadprocess>
-    <div class="container">
-      <div>
-        Queue progress: {{uploader.progress}}%
-        <div class="progress">
-          <div class="progress-bar" role="progressbar" [ngStyle]="{ 'width': uploader.progress + '%' }"></div>
-        </div>
-      </div>
-    </div>
-  </ng-template>
-
-  <ng-template #uploadfinished>
-    <iframe src="https://giphy.com/embed/a0h7sAqON67nO" width="480" height="270" frameBorder="0" class="giphy-embed"
-            allowFullScreen></iframe>
-  </ng-template>
-
-  <app-public-info-zone #infoZone></app-public-info-zone>
+  </div>
 
 </div>
+
+

@@ -1,19 +1,20 @@
-$spacer: 10px;
-
-.header {
-  margin-left: 10px;
-  display: flex;
-  height: 25px;
-  margin-bottom: 10px;
+.navbar {
+  padding: 0.1rem 0.6rem;
 }
 
 .soundmarker-logo {
-  background: url(sm-logo-topbar.svg);
-  width: 137px;
+  background: url(../../public-info/header/sm-logo-topbar.svg);
+  width: 140px;
+  height: 40px;
   background-size: 100%;
   background-repeat: no-repeat;
+  background-position: center center;
 }
 
-.spacer {
-  flex-grow: 1;
+.shadow {
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.05) !important;
+}
+
+.shadow-lg {
+  box-shadow: 0 0rem 3rem rgba(0, 0, 0, 0.25) !important;
 }

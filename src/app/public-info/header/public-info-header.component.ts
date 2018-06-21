@@ -4,31 +4,18 @@ import {PublicInfoZoneComponent} from "../zone/public-info-zone.component";
 
 @Component({
   selector: 'app-public-info-header',
-  template: `
-    <div class="header">
-      <div class="soundmarker-logo"></div>
-      <div class="spacer"></div>
-      <app-info-link
-        *ngFor="let info of infoComponents"
-        [info]="info.apply(info)"
-        (onInfoSelected)="infoWasSelected($event)"
-      >
-      </app-info-link>
-    </div>
-  `,
+  templateUrl: './public-info-header.component.html',
   styleUrls: ['./public-info-header.component.scss']
 })
 export class PublicInfoHeaderComponent implements OnInit {
 
   @Input() infoZone: PublicInfoZoneComponent;
 
-  infoComponents: Type<PublicInfoComponent>[] = [
-    HelpInfoComponent,
-    AboutUsInfoComponent,
-    ProInfoComponent
-  ];
+  help: Type<PublicInfoComponent> = HelpInfoComponent;
+  aboutUs: Type<PublicInfoComponent> = AboutUsInfoComponent;
+  pro: Type<PublicInfoComponent> = ProInfoComponent;
 
-  public infoWasSelected(info: PublicInfoComponent): void {
+  public infoWasSelected(info: Type<PublicInfoComponent>): void {
     this.infoZone.info = info;
   }
 
@@ -42,20 +29,18 @@ export class PublicInfoHeaderComponent implements OnInit {
 @Component({
   selector: 'app-info-link',
   template: `
-    <div (click)="clicked()" class="header-link {{info.title}}">{{info.title}}</div>`,
+    <a (click)="onInfoSelected.emit(info);" class="nav-link {{info.title.toLowerCase()}}" href="#">{{info.title}}</a>
+  `,
   styleUrls: ['./public-info-link.component.scss']
 })
 export class PublicInfoLinkComponent implements OnInit {
 
   @Input() info: PublicInfoComponent;
+  @Input() infoZone: PublicInfoZoneComponent;
   @Output() onInfoSelected: EventEmitter<PublicInfoComponent>;
 
   constructor() {
     this.onInfoSelected = new EventEmitter<PublicInfoComponent>();
-  }
-
-  clicked() {
-    this.onInfoSelected.emit(this.info);
   }
 
   ngOnInit() {

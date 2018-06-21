@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, Type} from '@angular/core';
 import {PublicInfoComponent} from "../public-info.component";
 
 @Component({
@@ -10,11 +10,10 @@ import {PublicInfoComponent} from "../public-info.component";
 })
 export class PublicInfoZoneComponent implements OnInit {
 
-  info: PublicInfoComponent;
+  info: Type<PublicInfoComponent>;
 
   constructor() { }
 
   ngOnInit() {
   }
-
 }

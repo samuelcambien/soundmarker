@@ -1,2 +1,56 @@
-/* You can add global styles to this file, and also import other style files */
+.container {
+  display: flex;
+  justify-content: center;
+}
 
+.btn-outline-form {
+  color: #6c757d;
+  background-color: white;
+  background-image: none;
+  border: 1px solid #ced4da;
+  border-radius: 0.3rem;
+}
+
+.btn-outline-form:hover {
+  color: #fff;
+  background-color: #FF857D;
+}
+
+.btn-outline-form:focus, .btn-outline-form.focus {
+  box-shadow: 0 0 0 0.2rem rgba(108, 117, 125, 0.5);
+}
+
+.btn-outline-form.disabled, .btn-outline-form:disabled {
+  color: #6c757d;
+  background-color: transparent;
+}
+
+.btn-outline-form:not(:disabled):not(.disabled):active, .btn-outline-form:not(:disabled):not(.disabled).active,
+.show > .btn-outline-form.dropdown-toggle {
+  color: #fff;
+  background-color: #FF857D;
+}
+
+.btn-outline-form:not(:disabled):not(.disabled):active:focus, .btn-outline-form:not(:disabled):not(.disabled).active:focus,
+.show > .btn-outline-form.dropdown-toggle:focus {
+  box-shadow: 0 0 0 0.2rem rgba(108, 117, 125, 0.5);
+}
+
+.btn-primary {
+  background-color: #FF857D;
+  border-color: #FF857D;
+}
+
+.btn-primary.disabled, .btn-primary:disabled {
+
+  background-color: #ced4da;
+  border-color: #ced4da;
+}
+
+.btn-secondary {
+  background-color: #5673AB;
+}
+
+.rounded {
+  border-radius: 0.3rem;
+}
