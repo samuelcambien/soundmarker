@@ -1,16 +1,13 @@
 // form
 
 .bg-light {
-  background-color: #FAFAFA !important;
+  background-color: #fff !important;
 }
 
-.public-upload-form {
-  margin-top: 60px;
-  width: 750px;
-}
 
 .upload-songs-text {
   text-align: center;
+  cursor: pointer;
 }
 
 .form-group {
@@ -26,39 +23,63 @@ textarea {
 }
 
 .form-control {
-  border: 1px solid #E4E4E4;
   font-size: 10pt;
+  font-family: 'avenirnext-regular';
+  padding-top: 10px;
+  padding-bottom: 8px;
+  border: 0;
+  border-bottom: 1px solid #D4D7D9;
+  border-radius: 0 !important;
+  background: transparent;
+  color: #6A6D6F;
+  margin-bottom: 0px;
+}
+
+.form-control:hover {
+	 border-color: #9b9b9b;
 }
 
 .form-control:focus {
-  border-color: #cecece;
+  border-color: #9b9b9b;
   -webkit-box-shadow: none;
   box-shadow: none;
 }
 
 .form-control::-webkit-input-placeholder {
-  color: #9B9B9B;
+  color: #6A6D6F;
   opacity: 1;
 }
 
 .form-control::-moz-placeholder {
-  color: #9B9B9B;
+  color: #6A6D6F;
   opacity: 1;
 }
 
 .form-control:-ms-input-placeholder {
-  color: #9B9B9B;
+  color: #6A6D6F;
   opacity: 1;
 }
 
 .form-control::-ms-input-placeholder {
-  color: #9B9B9B;
+  color: #6A6D6F;
   opacity: 1;
 }
 
 .form-control::placeholder {
-  color: #9B9B9B;
+  color: #6A6D6F;
   opacity: 1;
+}
+
+textarea.form-control {
+	padding-top: 0px;
+}
+
+.form-group {
+	margin-bottom: 0px;
+}
+
+.form-row .radios {
+	margin-top: 10px;
 }
 
 // file select
@@ -66,62 +87,190 @@ textarea {
 .note-image {
   position: relative;
   display: block;
-  margin: 0 auto;
-  margin-top: 15px;
-  margin-bottom: 10px;
   background: url(SM-note.svg);
-  width: 47px;
-  height: 47px;
   background-size: 100%;
   background-repeat: no-repeat;
+  cursor: pointer;
+}
+
+#ni1.note-image {
+	  width: 60px;
+  height: 60px;	
+    margin: 0 auto;
+  margin-top: 30px;
+  margin-bottom: 8px;
+}
+
+#ni2.note-image {
+	  width: 27px;
+  height: 27px;	
+    margin: 0 auto;
+  margin-top: 0px;
+  margin-bottom: 2px;
+  margin-left: 28px;
+  float: left;
+}
+
+#ni3.note-image {
+		  width: 60px;
+  height: 60px;	
+    margin: 0 auto;
+  margin-top: 22px;
+  margin-bottom: 8px;
 }
 
 .upload-songs-area {
   position: relative;
-  height: 100%;
-  max-height: 129px;
+  height: 142px;
   padding-top: 0;
   overflow-y: scroll;
-  border: 1px solid #E4E4E4;
+  padding: 0 !important;
+  cursor: pointer;
+  	
+}
+
+.upload-songs-area::-webkit-scrollbar {
+    width: 4px;
+}
+ 
+.upload-songs-area::-webkit-scrollbar-thumb {
+  background-color: #D4D7D9;
+  border-radius: 4px;
+}
+
+.upload-songs-area::-webkit-scrollbar-thumb:hover {
+  background-color: #6A6D6F;
+  cursor: pointer;
 }
 
 .upload-songs-text {
-
   text-align: center;
   font-size: 12pt;
-  margin-bottom: 3px;
+  margin-bottom: 0px;
 }
 
+.addsongs {
+	padding-bottom: -4px;
+}
+
+.addsongs .note-image, .addsongs h5 {
+		     -webkit-transition: 200ms ease-in;
+    -moz-transition: 200ms ease-in;
+    -o-transition:  200ms ease-in;
+    transition: 200ms ease-in;
+}
+
+.upload-songs-area:hover .addsongs .note-image, .upload-songs-area:hover  .addsongs h5 {
+	 transform: translateY(-8px); 
+	     -webkit-transition: 200ms ease-in;
+    -moz-transition: 200ms ease-in;
+    -o-transition:  200ms ease-in;
+    transition: 200ms ease-in;
+}
+
+.addsongs h6 {
+	opacity: 0;
+	margin-top: -16px;
+		     -webkit-transition: 200ms ease-in;
+    -moz-transition: 200ms ease-in;
+    -o-transition:  200ms ease-in;
+    transition: 200ms ease-in;
+}
+
+.upload-songs-area:hover h6 {
+	opacity: 1;
+	transform: translateY(8px);
+	    -webkit-transition: 200ms ease-in;
+    -moz-transition: 200ms ease-in;
+    -o-transition:  200ms ease-in;
+    transition: 200ms ease-in;
+}
+
+.addmoresongs {
+	text-align: left;
+	padding-top: 4px;
+	padding-left: 64px;
+	padding-bottom: 20px;
+	
+}
+
+// file overview
+
 .tabletainer {
-  padding: 10px;
+  padding-right: 4px;
+  z-index: 4;
 }
 
 .table {
   margin-bottom: auto;
+  margin-top: -10px;
   table-layout: fixed;
+    text-overflow: ellipsis;
+white-space: nowrap;
 }
 
 table tr {
   width: 100%;
+   
+}
+
+table button {
+	opacity: 0;
+	    -webkit-transition: 100ms;
+    -moz-transition: 100ms;
+    -o-transition:  100ms;
+    transition: 100ms;
+}
+
+table tr:hover button {
+	opacity: 1;
 }
 
 table tr td{
   padding-bottom: 0rem;
   padding-left: 0.5rem;
-  padding-top: 0.4rem;
+  padding-top: 0.5rem;
   width: 100%;
   height: 32px;
   white-space: nowrap;
   overflow: hidden;
+ 
 }
 
 table tr td p {
-  font-size: 9pt;
+  font-size: 8pt;
+  font-family: 'avenirnext-regular';
   color: #2F2F2F;
   font-size: 10pt;
   margin-bottom: 0;
   padding-bottom: 0;
+  width: 94%;
+  overflow: hidden;
+    text-overflow: ellipsis;
+white-space: nowrap;
+
 }
+
+.btn-cross {
+  background: -webkit-linear-gradient(left, rgba(255,255,255,0) 0%, #ffffff 100%);
+  color: red;
+  font-size: 14pt;
+  margin-right: 0px;
+  border: 0;
+padding: 2px;
+
+}
+
+.btn-cross:focus {
+	outline: 0;
+}
+
+.remove {
+	font-size: 20pt;
+	color: #FF857D;
+}
+
+// upload fields
 
 .upload-songs-input {
   opacity: 0;
@@ -131,6 +280,8 @@ table tr td p {
   top: 0;
   left: 0;
   z-index: 2;
+  cursor: pointer;
+  padding: 0;
 }
 
 .my-drop-zone {
@@ -142,18 +293,38 @@ table tr td p {
   height: 100vh;
 }
 
+
+
+// progress
+
+.progress-container h5 {
+	text-align: center;
+}
+
+.progress {
+	height: 4px;
+	max-width: 700px;
+	
+}
+
+.progress-bar {
+	background: #FF857D;
+}
+
 // responsive
 
 @media (max-width: 768px) {
-  .public-upload-form {
-    margin-top: 60px;
-    width: 100%;
-    max-width: 268px;
-  }
 
-  .wide-nav {
-    display: none;
-  }
+	
+	.btn-group {
+		margin-bottom: 10px;
+		width: 100%;
+	}
+	
+	.progress {
+	width: 96%;
 
-}
+	}
+	}
+
 

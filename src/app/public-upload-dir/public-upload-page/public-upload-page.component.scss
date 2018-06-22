@@ -1,0 +1,16 @@
+.public-upload-form {
+  margin-top: 60px;
+  width: 750px;
+  height: 230px;
+}
+
+@media (max-width: 768px) {
+  .public-upload-form {
+    margin-top: 60px;
+    width: 100%;
+    max-width: 268px;
+  }
+
+  
+
+}

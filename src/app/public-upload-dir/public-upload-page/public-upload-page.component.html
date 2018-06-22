@@ -1,5 +1,17 @@
+<div clas="container rounded">
+
+  <div class="public-upload-form card shadow-lg rounded-lg border-0 position-static">
+	  
+	  <app-public-info-header [infoZone]="infoZone"></app-public-info-header>
+
 <div [ngSwitch]="status">
   <app-public-upload-form *ngSwitchCase="statusEnum.SELECT_SONGS"></app-public-upload-form>
   <app-public-uploading-files *ngSwitchCase="statusEnum.UPLOADING_SONGS"></app-public-uploading-files>
   <app-public-upload-finished *ngSwitchCase="statusEnum.GREAT_SUCCESS"></app-public-upload-finished>
 </div>
+
+ <app-public-info-zone #infoZone></app-public-info-zone>
+
+    </div>
+
+  </div>

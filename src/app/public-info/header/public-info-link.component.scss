@@ -1,5 +1,24 @@
 .nav-link {
   font-size: 10pt;
-  padding-right: 1rem;
-  padding-left: 1rem;
+  font-family: 'avenirnext-regular';
+  margin-right: 0rem ;
+  margin-left: 0rem !important;
+  padding-left: 0.1rem !important;
+  padding-right: 0rem !important;
+  color: #4A4A4A !important;
+  margin-top: 2px;
 }
+
+.nav-link.pro {
+	color: white !important;
+	background: #5673AB;
+	padding-left: 16px !important;
+	padding-right: 16px !important;
+	padding-top: 5px;
+	padding-bottom: 5px;
+	border-radius: 0.3rem;
+	margin-top: 3px;
+	margin-right: -8px;
+}
+
+

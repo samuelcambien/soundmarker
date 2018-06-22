@@ -1,10 +1,6 @@
-<div clas="container rounded">
 
-  <div class="public-upload-form card shadow-lg rounded border-0 position-static">
 
-    <div class="card-body bg-light rounded">
-
-      <app-public-info-header [infoZone]="infoZone"></app-public-info-header>
+    <div class="card-body bg-light rounded-lg">
 
       <div *ngIf="uploader.isUploading; then uploadprocess"></div>
       <div *ngIf="!uploader.isUploading && !finished; then selectsongs"></div>
@@ -18,18 +14,41 @@
             <div class="form-field col-md-4">
 
 
-              <div class="card upload-songs-area rounded">
+              <div class="card upload-songs-area rounded border-0">
 
-                <div class="tabletainer container-fluid">
+
+
+
+                <div class="upload-songs-text">
+
+                  <div *ngIf="uploader.getNotUploadedItems().length == 0; then uploadsongs else addsongs"></div>
+
+                  <ng-template #uploadsongs>
+                 
+                    <div class="addsongs"> 
+	                    <div class="note-image" id="ni1"></div><h5>Add songs</h5>
+	                    
+                    <div><h6>Up to 5GB</h6></div></div>
+                  </ng-template>
+
+                  <ng-template #addsongs>
+                  <div class="note-image" id="ni2"></div>
+                    <div class="addmoresongs"><h5> Add more songs</h5></div>
+                  </ng-template>
+
+                </div>
+
+
+                <div class="tabletainer">
 
                   <table class="table">
                     <tbody>
 
                     <tr *ngFor="let item of uploader.queue">
                       <td><p>{{ item?.file?.name }}</p></td>
-                      <button type="button" class="btn btn-cross btn-sm"
+                      <button type="button" class="btn-cross close"
                               (click)="item.remove()">
-                        <span class="glyphicon glyphicon-remove"></span> remove
+                        <span class="remove" aria-hidden="true">&times;</span>
                       </button>
                     </tr>
                     </tbody>
@@ -41,23 +60,7 @@
 
                        accept="audio/*"/>
 
-                <div class="note-image"></div>
-
-                <div class="upload-songs-text">
-
-                  <div *ngIf="uploader.getNotUploadedItems().length == 0; then uploadsongs else addsongs"></div>
-
-                  <ng-template #uploadsongs>
-                    <div><h5>ADD SONGS</h5></div>
-                    <div><h6>Up to 5GB</h6></div>
-                  </ng-template>
-
-                  <ng-template #addsongs>
-                    <div><p>ADD MORE SONGS</p></div>
-                  </ng-template>
-
-                </div>
-
+                
               </div>
 
             </div>
@@ -65,21 +68,21 @@
             <div class="col-md-8">
               <div class="form-row">
                 <div class="form-group col">
-                <textarea type="text" placeholder="Notes" class="form-control form-control-sm rounded "
-                          rows="2"></textarea>
+                <textarea type="text" placeholder="Notes" class="form-control form-control-sm"
+                          rows="3"></textarea>
                 </div>
               </div>
               <div class="form-row">
                 <div class="form-group col">
                   <input type="text" [(ngModel)]='email_from' name="email_from" placeholder="Email from"
-                         class="form-control form-control-sm rounded">
+                         class="form-control form-control-sm">
                 </div>
                 <div class="col">
                   <input type="text" [(ngModel)]='email_to' name="email_to" placeholder="Email to"
-                         class="form-control form-control-sm rounded">
+                         class="form-control form-control-sm">
                 </div>
               </div>
-              <div class="form-row">
+              <div class="form-row radios">
                 <div class="col">
                   <div class="btn-group btn-group-sm btn-group-toggle" data-toggle="buttons">
                     <label class="btn btn-outline-form active">
@@ -130,9 +133,10 @@
       </ng-template>
 
       <ng-template #uploadprocess>
-        <div class="container">
+        <div class="container progress-container">
           <div>
-            Queue progress: {{uploader.progress}}%
+	          <div class="note-image" id="ni3"></div>
+            <h5>Uploading songs...</h5><h6> {{uploader.progress}}% </h6>
             <div class="progress">
               <div class="progress-bar" role="progressbar" [ngStyle]="{ 'width': uploader.progress + '%' }"></div>
             </div>
@@ -141,15 +145,26 @@
       </ng-template>
 
       <ng-template #uploadfinished>
-        <iframe src="https://giphy.com/embed/a0h7sAqON67nO" width="480" height="270" frameBorder="0" class="giphy-embed"
-                allowFullScreen></iframe>
+       	<div class="container-fluid">
+	       	 <div class="row">
+		   	 	<div class="col-3">
+		   	 		GIF
+    			</div>
+				<div class="col-9">
+					<h3>Well done, mate!</h3>
+					<p>The songs will be available untill january 17th.<br><br><br></p>
+
+<button type="button" class="btn btn-secondary btn-sm">Copy link</button>
+<button type="button" class="btn btn-primary btn-sm">Show songs</button>
+<button type="button" class="btn btn-primary btn-sm">Share more songs</button>
+
+    			</div>
+				
+  			</div>
+       	</div>
       </ng-template>
 
-      <app-public-info-zone #infoZone></app-public-info-zone>
-
-    </div>
-
-  </div>
+     
 
 </div>
 

@@ -1,20 +1,29 @@
 .navbar {
-  padding: 0.1rem 0.6rem;
+	height: 48px;
+  padding: 0rem 0.6rem;
+  border-top-left-radius: 0.6rem;
+  border-top-right-radius: 0.6rem;
+  
 }
 
 .soundmarker-logo {
   background: url(../../public-info/header/sm-logo-topbar.svg);
-  width: 140px;
-  height: 40px;
+  width: 154px;
+  height: 46px;
   background-size: 100%;
   background-repeat: no-repeat;
   background-position: center center;
 }
 
-.shadow {
-  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.05) !important;
-}
+// responsive
 
-.shadow-lg {
-  box-shadow: 0 0rem 3rem rgba(0, 0, 0, 0.25) !important;
-}
+@media (max-width: 768px) {
+	
+	.navbar {
+		display: none;
+	}
+	
+	}
+
+
+
