@@ -1,3 +1,7 @@
+.upload-container {
+	min-height: 194px;
+}
+
 // form
 
 .bg-light {
@@ -10,9 +14,6 @@
   cursor: pointer;
 }
 
-.form-group {
-  margin-bottom: 0.7rem;
-}
 
 textarea {
   resize: none;
@@ -22,53 +23,7 @@ textarea {
   width: 100%;
 }
 
-.form-control {
-  font-size: 10pt;
-  font-family: 'avenirnext-regular';
-  padding-top: 10px;
-  padding-bottom: 8px;
-  border: 0;
-  border-bottom: 1px solid #D4D7D9;
-  border-radius: 0 !important;
-  background: transparent;
-  color: #6A6D6F;
-  margin-bottom: 0px;
-}
 
-.form-control:hover {
-	 border-color: #9b9b9b;
-}
-
-.form-control:focus {
-  border-color: #9b9b9b;
-  -webkit-box-shadow: none;
-  box-shadow: none;
-}
-
-.form-control::-webkit-input-placeholder {
-  color: #6A6D6F;
-  opacity: 1;
-}
-
-.form-control::-moz-placeholder {
-  color: #6A6D6F;
-  opacity: 1;
-}
-
-.form-control:-ms-input-placeholder {
-  color: #6A6D6F;
-  opacity: 1;
-}
-
-.form-control::-ms-input-placeholder {
-  color: #6A6D6F;
-  opacity: 1;
-}
-
-.form-control::placeholder {
-  color: #6A6D6F;
-  opacity: 1;
-}
 
 textarea.form-control {
 	padding-top: 0px;
@@ -87,10 +42,14 @@ textarea.form-control {
 .note-image {
   position: relative;
   display: block;
-  background: url(SM-note.svg);
   background-size: 100%;
   background-repeat: no-repeat;
   cursor: pointer;
+  fill: yellow;
+}
+
+.note-image svg:hover {
+	fill: #ffffff;
 }
 
 #ni1.note-image {
@@ -115,7 +74,7 @@ textarea.form-control {
 		  width: 60px;
   height: 60px;	
     margin: 0 auto;
-  margin-top: 22px;
+  margin-top: 12px;
   margin-bottom: 8px;
 }
 
@@ -126,7 +85,7 @@ textarea.form-control {
   overflow-y: scroll;
   padding: 0 !important;
   cursor: pointer;
-  	
+  background: transparent !important;
 }
 
 .upload-songs-area::-webkit-scrollbar {
@@ -153,14 +112,14 @@ textarea.form-control {
 	padding-bottom: -4px;
 }
 
-.addsongs .note-image, .addsongs h5 {
+.addsongs .note-image, .addsongs h4 {
 		     -webkit-transition: 200ms ease-in;
     -moz-transition: 200ms ease-in;
     -o-transition:  200ms ease-in;
     transition: 200ms ease-in;
 }
 
-.upload-songs-area:hover .addsongs .note-image, .upload-songs-area:hover  .addsongs h5 {
+.upload-songs-area:hover .addsongs .note-image, .upload-songs-area:hover  .addsongs h4 {
 	 transform: translateY(-8px); 
 	     -webkit-transition: 200ms ease-in;
     -moz-transition: 200ms ease-in;
@@ -295,20 +254,24 @@ padding: 2px;
 
 
 
+
 // progress
 
-.progress-container h5 {
+.progress-container h5, .progress-container h6 {
 	text-align: center;
 }
 
 .progress {
 	height: 4px;
-	max-width: 700px;
+	width: 700px;
+	margin-top: 22px;
+
 	
 }
 
 .progress-bar {
 	background: #FF857D;
+	
 }
 
 // responsive

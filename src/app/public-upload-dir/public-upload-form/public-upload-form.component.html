@@ -1,13 +1,13 @@
 
 
-    <div class="card-body bg-light rounded-lg">
+    <div class="upload-container card-body bg-light rounded-lg">
 
       <div *ngIf="uploader.isUploading; then uploadprocess"></div>
       <div *ngIf="!uploader.isUploading && !finished; then selectsongs"></div>
       <div *ngIf="!uploader.isUploading && finished; then uploadfinished"></div>
 
       <ng-template #selectsongs>
-        <form (ngSubmit)="onFormSubmit()">
+        <form #myForm="ngForm" (ngSubmit)="onFormSubmit()" >
 
           <div class="form-row">
 
@@ -26,13 +26,13 @@
                   <ng-template #uploadsongs>
                  
                     <div class="addsongs"> 
-	                    <div class="note-image" id="ni1"></div><h5>Add songs</h5>
+	                    <div class="note-image" id="ni1"><svg enable-background="new 0 0 141.7 141.7" viewBox="0 0 141.7 141.7" xmlns="http://www.w3.org/2000/svg"><circle cx="70.9" cy="70.9" fill="#f3f3f3" r="70.9"/><g fill="#ff857d" stroke="#2f2f2f" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="3"><ellipse cx="83.3" cy="84.2" rx="12.9" ry="13.1"/><path d="m56.1 54.8 40.1-17.1v46.5-61.6l-40.1 17.1v63.2z" stroke-linecap="round"/><ellipse cx="43.2" cy="102.9" rx="12.9" ry="13.1"/></g></svg></div><h4>Add songs</h4>
 	                    
                     <div><h6>Up to 5GB</h6></div></div>
                   </ng-template>
 
                   <ng-template #addsongs>
-                  <div class="note-image" id="ni2"></div>
+                  <div class="note-image" id="ni2"><svg enable-background="new 0 0 141.7 141.7" viewBox="0 0 141.7 141.7" xmlns="http://www.w3.org/2000/svg"><circle cx="70.9" cy="70.9" fill="#f3f3f3" r="70.9"/><g id="fill1" fill="#ff857d" stroke="#2f2f2f" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="3"><ellipse cx="83.3" cy="84.2" rx="12.9" ry="13.1"/><path d="m56.1 54.8 40.1-17.1v46.5-61.6l-40.1 17.1v63.2z" stroke-linecap="round"/><ellipse cx="43.2" cy="102.9" rx="12.9" ry="13.1"/></g></svg></div>
                     <div class="addmoresongs"><h5> Add more songs</h5></div>
                   </ng-template>
 
@@ -74,11 +74,11 @@
               </div>
               <div class="form-row">
                 <div class="form-group col">
-                  <input type="text" [(ngModel)]='email_from' name="email_from" placeholder="Email from"
+                  <input type="text" required [(ngModel)]='email_from' name="email_from" placeholder="Email from"
                          class="form-control form-control-sm">
                 </div>
                 <div class="col">
-                  <input type="text" [(ngModel)]='email_to' name="email_to" placeholder="Email to"
+                  <input type="text" required [(ngModel)]='email_to' name="email_to" placeholder="Email to"
                          class="form-control form-control-sm">
                 </div>
               </div>
@@ -86,15 +86,14 @@
                 <div class="col">
                   <div class="btn-group btn-group-sm btn-group-toggle" data-toggle="buttons">
                     <label class="btn btn-outline-form active">
-                      <input class="slide-selector" type="radio" ngModel="expiration" name="expiration"
-                             autocomplete="off"
-                             checked value="1 week">1 week
+                      <input class="slide-selector" type="radio" ngModel="expiration" autocomplete="off" checked name="expiration"
+                             
+                              value="1 week">1 week
                     </label>
                     <label class="btn btn-outline-form">
-                      <input class="slide-selector" type="radio" ngModel="expiration" name="expiration"
-                             autocomplete="off"
-                             value="1 month">1 month
-                    </label>
+                      <input class="slide-selector" type="radio" ngModel="expiration" autocomplete="off" name="expiration"
+                             
+                             value="1 month">1 month</label>
                   </div>
                 </div>
                 <div class="col">
@@ -114,9 +113,9 @@
                   </div>
                 </div>
                 <div class="col">
-                  <button type="submit" [disabled]="!uploader.getNotUploadedItems().length"
+                  <button type="submit" [disabled]="!uploader.getNotUploadedItems().length || !myForm.valid"  
                           class="btn btn-primary btn-sm free-upload">
-                    <span class="glyphicon glyphicon-upload"></span>Share songs
+                    Share songs
                   </button>
                 </div>
               </div>
@@ -135,8 +134,8 @@
       <ng-template #uploadprocess>
         <div class="container progress-container">
           <div>
-	          <div class="note-image" id="ni3"></div>
-            <h5>Uploading songs...</h5><h6> {{uploader.progress}}% </h6>
+	          <div class="note-image" id="ni3"><svg enable-background="new 0 0 141.7 141.7" viewBox="0 0 141.7 141.7" xmlns="http://www.w3.org/2000/svg"><circle cx="70.9" cy="70.9" fill="#f3f3f3" r="70.9"/><g fill="#ff857d" stroke="#2f2f2f" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="3"><ellipse cx="83.3" cy="84.2" rx="12.9" ry="13.1"/><path d="m56.1 54.8 40.1-17.1v46.5-61.6l-40.1 17.1v63.2z" stroke-linecap="round"/><ellipse cx="43.2" cy="102.9" rx="12.9" ry="13.1"/></g></svg></div>
+            <h5>Uploading...</h5><h6> {{uploader.progress}}% </h6>
             <div class="progress">
               <div class="progress-bar" role="progressbar" [ngStyle]="{ 'width': uploader.progress + '%' }"></div>
             </div>

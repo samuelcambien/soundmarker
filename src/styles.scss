@@ -4,8 +4,14 @@ CONTENTS
 
 - typography
 - containers
+- sections
+- forms
 - buttons
 - utilities
+- pages						
+--- public
+------ bottom info
+--- pro
 	
 */
 
@@ -25,12 +31,25 @@ body {
     src: url();
 }
 
+@font-face {
+    font-family: 'halant-bold';
+    src: url();
+}
+
 ::-moz-selection { background: rgba(255, 133, 125, 0.4);  }
 ::selection { background: rgba(255, 133, 125, 0.4);  }
 
 p {
 	font-size: 10pt;
 	font-family: 'avenirnext-regular';
+	color: #9B9B9B;
+}
+
+#sm h1 {
+	font-family: 'halant-bold';
+	font-size: 28pt;
+	color: #2F2F2F;
+	margin-top: 20px;
 }
 
 #sm h3 {
@@ -40,8 +59,15 @@ p {
 	color: #2F2F2F;
 }
 
+#sm h4 {
+		font-family: 'avenirnext-regular';
+	font-size: 14pt;
+	margin-bottom: 4px;
+	color: #2F2F2F;
+}
+
 #sm h5 {
-	font-family: 'avenirnext-bold';
+	font-family: 'avenirnext-regular';
 	font-size: 12pt;
 	margin-bottom: 4px;
 	color: #2F2F2F;
@@ -60,14 +86,104 @@ p {
   justify-content: center;
 }
 
+.spacing-sm {
+	height: 10px;
+}
+
+.spacing {
+	height: 30px;
+}
+
+.spacing-lg {
+	height: 50px;
+}
+
+.public-bottom-container {
+	border-top-left-radius: 0px !important;
+	border-top-right-radius: 0px !important;
+	border-top: 1px solid #dadada !important;
+	border-bottom: 0px !important;
+	border-left: 0px !important;
+	border-right: 0px !important;
+	
+	}
+	
+// sections
+
+.info-footer {
+	background: #F3F3F3;
+	border-bottom-left-radius: 0.5rem;
+	border-bottom-right-radius: 0.5rem;
+
+}
+
+.info-footer a  {
+	float: left;
+	padding: 10px;
+	margin-top: 20px;
+}
+
+
+// forms
+
+#sm .form-control {
+  font-size: 10pt;
+  font-family: 'avenirnext-regular';
+  padding-top: 10px;
+  padding-bottom: 8px;
+  border: 0;
+  border-bottom: 1px solid #D4D7D9;
+  border-radius: 0 !important;
+  background: transparent;
+  color: #6A6D6F;
+  margin-bottom: 0px;
+}
+
+#sm .form-control:hover {
+	 border-color: #9b9b9b;
+}
+
+#sm .form-control:focus {
+  border-color: #9b9b9b;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+}
+
+#sm .form-control::-webkit-input-placeholder {
+  color: #9B9B9B;
+  opacity: 1;
+}
+
+#sm .form-control::-moz-placeholder {
+  color: #9B9B9B;
+  opacity: 1;
+}
+
+#sm .form-control:-ms-input-placeholder {
+  color: #9B9B9B;
+  opacity: 1;
+}
+
+#sm .form-control::-ms-input-placeholder {
+  color: #9B9B9B;
+  opacity: 1;
+}
+
+#sm .form-control::placeholder {
+  color: #9B9B9B;
+  opacity: 1;
+}
+
+
+
 // buttons 
 
 #sm .btn-outline-form {
   color: #fff;
-  background-color: rgba(255, 133, 125, 0.4);
+  background-color: #FECECC;
   background-image: none;
-  border: 1px solid rgba(255, 133, 125, 0);
-  box-shadow: 0 0.5rem 4rem rgba(255, 255, 255, 0.4) !important;
+  border: 1px solid #FECECC;
+  box-shadow: 0 0.5rem 4rem rgba(255, 255, 255, 0.5) !important;
   
 }
 
@@ -141,18 +257,40 @@ color: white;
 
 // utilities
 
-#sm .shadow {
-  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.05) !important;
+#sm .shadow, .shadow {
+  box-shadow: 0 0rem 2rem rgba(0, 0, 0, 0.1) !important;
 }
 
 #sm .shadow-lg {
-  box-shadow: 0 0rem 3rem rgba(0, 0, 0, 0.25) !important;
+  box-shadow: 0 0rem 3rem rgba(0, 0, 0, 0.15) !important;
 }
 
 #sm .rounded-lg {
-  border-radius: 0.5rem !important;
+  border-radius: 0.5rem;
 }
 
 #sm .rounded-sm, .rounded-sm {
   border-radius: 0.3rem !important;
 }
+
+// pages
+
+// -- public
+
+// ---- bottom info
+
+.close-info {
+	margin-top: 20px;
+	margin-right: -5px;
+}
+
+.close-info .btn-cross {
+	padding: 0px;
+	margin: 0px;
+	color: #9B9B9B;
+}
+
+.info-card {
+	margin-top: 30px;
+}
+
