@@ -5,6 +5,7 @@ CONTENTS
 - typography
 - containers
 - sections
+- modals
 - forms
 - buttons
 - utilities
@@ -16,24 +17,24 @@ CONTENTS
 */
 
 body {
-	background: #444444 !important;
+	background: #FF857D !important;
 }
 
 // typography
 
 @font-face {
     font-family: 'avenirnext-regular';
-    src: url();
+    src: url(fonts/AvenirNext-Regular.ttf);
 }
 
 @font-face {
     font-family: 'avenirnext-bold';
-    src: url();
+    src: url(fonts/AvenirNext-Bold.ttf);
 }
 
 @font-face {
     font-family: 'halant-bold';
-    src: url();
+    src: url(fonts/Halant-Bold.ttf);
 }
 
 ::-moz-selection { background: rgba(255, 133, 125, 0.4);  }
@@ -79,11 +80,25 @@ p {
 	color: #2F2F2F;
 }
 
+@media (max-width: 768px) {
+	#sm h1 {
+
+	font-size: 18pt;
+
+}
+
+p {
+		font-size: 8pt;
+}
+
+}
+
 // containers 
 
 .container {
   display: flex;
   justify-content: center;
+  
 }
 
 .spacing-sm {
@@ -99,14 +114,20 @@ p {
 }
 
 .public-bottom-container {
-	border-top-left-radius: 0px !important;
-	border-top-right-radius: 0px !important;
-	border-top: 1px solid #dadada !important;
-	border-bottom: 0px !important;
-	border-left: 0px !important;
-	border-right: 0px !important;
-	
+	border: 0px;
 	}
+	
+	@media (max-width: 768px) {
+	  .col-sm-4 {
+   -ms-flex: 0 0 100% !important;
+     flex: 0 0 100% !important; 
+    max-width: 100% !important; 
+  }
+}
+
+
+
+
 	
 // sections
 
@@ -122,6 +143,40 @@ p {
 	padding: 10px;
 	margin-top: 20px;
 }
+
+// modals
+
+#sm .modal-lg {
+	width: 750px;
+}
+
+@media (min-width: 768px) {
+  .modal-lg {
+    max-width: 750px !important;
+  }
+}
+
+@media (max-width: 768px) {
+ #sm .modal-lg {
+    margin-top: 60px;
+    width: 90%;
+    margin: auto;
+    max-width: 268px;
+  }	
+}
+
+#sm .modal-dialog {
+	margin: 60px auto;
+}
+
+#sm .modal-content {
+	border-radius: 0.5rem !important;
+	
+}
+
+
+
+
 
 
 // forms
@@ -146,6 +201,11 @@ p {
 #sm .form-control:focus {
   border-color: #9b9b9b;
   -webkit-box-shadow: none;
+  box-shadow: none;
+}
+
+#sm .btn:focus, #sm .nav-link:focus {
+	 -webkit-box-shadow: none;
   box-shadow: none;
 }
 
@@ -271,6 +331,10 @@ color: white;
 
 #sm .rounded-sm, .rounded-sm {
   border-radius: 0.3rem !important;
+}
+
+#sm .dropdown-toggle::after {
+	display: none;
 }
 
 // pages

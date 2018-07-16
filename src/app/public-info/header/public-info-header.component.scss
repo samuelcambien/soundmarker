@@ -16,13 +16,66 @@
   background-position: center center;
 }
 
+.nav-link, .dropdown-item {
+	font-family: 'avenirnext-regular';
+	font-size: 10pt;
+}
+
+.nav-link {
+   color: #5673AB ;
+   margin-top: 3px;
+   background: none !important;
+}
+
+ .nav-link.pro.active {
+	color: #fff !important;
+	padding: .4rem 1rem !important;
+	font-family: 'avenirnext-bold';
+}
+
+
+
+.nav-link:hover, .nav-link:active, .nav-link:focus, nav-link:visited, nav-link:link {
+	color: #5673AB !important;
+	background: none !important;
+}
+
+.nav-item .pro {
+	background: #5673AB !important;
+}
+
+.dropdown-menu {
+	border-radius: 0.5rem;
+	border: 1px solid #dadada;
+}
+
+.dropdown-menu-right {
+	margin-top: 16px;
+  right: 2px !important; //-61
+  left: auto;
+}
+
+.dropdown-item:active, .dropdown-item:focus, .dropdown-item:hover {
+	background: #f6f6f6;
+}
+
+.pro-dropdown {
+	display: none;
+}
+
+
 // responsive
 
 @media (max-width: 768px) {
 	
-	.navbar {
-		display: none;
-	}
+	 .nav-link.pro.active {
+		 display: none;
+	 }
+	 
+	 .pro-dropdown {
+	display: block;
+}
+	
 	
 	}
 

@@ -4,27 +4,50 @@
   <a class="navbar-brand" href="#">
     <div class="soundmarker-logo"></div>
   </a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown"
-          aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
+
   <div class="collapse navbar-collapse justify-content-end" id="navbarNavDropdown">
-    <ul class="navbar-nav">
-      <li class="nav-item">
-        <a class="nav-link" href="">
-          <app-info-link (onInfoSelected)="infoWasSelected(help)" [info]='help.apply(help)'></app-info-link>
-        </a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="">
-          <app-info-link (onInfoSelected)="infoWasSelected(aboutUs)" [info]='aboutUs.apply(aboutUs)'></app-info-link>
-        </a>
-      </li>
-      <li class="nav-item pro rounded-sm">
-        <a class="nav-link" href="">
-          <app-info-link (onInfoSelected)="infoWasSelected(pro)" [info]="pro.apply(pro)"></app-info-link>
-        </a>
-      </li>
+    <ul class="nav nav-pills">
+  <li class="nav-item dropdown">
+    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">•••</a>
+    <div class="dropdown-menu dropdown-menu-right shadow">
+	     <a class="dropdown-item pro-dropdown" href="" data-toggle="modal" data-target=".info-modal-pro">Pro</a>
+      <a class="dropdown-item" href="" data-toggle="modal" data-target=".info-modal-aboutus">About Us</a>
+      <a class="dropdown-item" href=""data-toggle="modal" data-target=".info-modal-faq">Help</a>
+     
+      <div class="dropdown-divider"></div>
+      <a class="dropdown-item" href="#">Privacy & Terms</a>
+       <a class="dropdown-item" href="#">Contact us</a>
+     
+    </div>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link pro active" href="" data-toggle="modal" data-target=".info-modal-pro">Pro</a>
+  </li>
+     
     </ul>
   </div>
 </nav>
+
+<div class="modal fade info-modal-faq" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+  <div class="modal-dialog  modal-lg">
+    <div class="modal-content">
+      <app-help-info></app-help-info>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade info-modal-aboutus " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+  <div class="modal-dialog  modal-lg">
+    <div class="modal-content">
+      <app-about-us-info></app-about-us-info>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade info-modal-pro" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+  <div class="modal-dialog  modal-lg">
+    <div class="modal-content">
+      <app-pro-info></app-pro-info>
+    </div>
+  </div>
+</div>
