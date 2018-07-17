@@ -29,7 +29,7 @@ export class PublicInfoHeaderComponent implements OnInit {
 @Component({
   selector: 'app-info-link',
   template: `
-    <a (click)="onInfoSelected.emit(info);" class="nav-link {{info.title.toLowerCase()}}" href="#">{{info.title}}</a>
+    <a (click)="onInfoSelected.emit(info);" class="nav-link {{info.title.toLowerCase()}}">{{info.title}}</a>
   `,
   styleUrls: ['./public-info-link.component.scss']
 })
