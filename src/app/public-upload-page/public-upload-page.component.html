@@ -1,20 +1,10 @@
-<div clas="container rounded">
+<app-public-page>
 
-  <div class="public-upload-page card shadow-lg rounded border-0 position-static">
-
-    <div class="card-body bg-light rounded">
-
-      <div [ngSwitch]="status">
-        <app-public-info-header [infoZone]="infoZone"></app-public-info-header>
-        <app-public-upload-form *ngSwitchCase="statusEnum.SELECT_SONGS" [uploader]="uploader"></app-public-upload-form>
-        <app-public-uploading-files *ngSwitchCase="statusEnum.UPLOADING_SONGS"
-                                    [uploader]="uploader"></app-public-uploading-files>
-        <app-public-upload-finished *ngSwitchCase="statusEnum.GREAT_SUCCESS"></app-public-upload-finished>
-        <app-public-info-zone #infoZone></app-public-info-zone>
-      </div>
-
-    </div>
-
+  <div [ngSwitch]="status">
+    <app-public-upload-form *ngSwitchCase="statusEnum.SELECT_SONGS" [uploader]="uploader"></app-public-upload-form>
+    <app-public-uploading-files *ngSwitchCase="statusEnum.UPLOADING_SONGS"
+                                [uploader]="uploader"></app-public-uploading-files>
+    <app-public-upload-finished *ngSwitchCase="statusEnum.GREAT_SUCCESS"></app-public-upload-finished>
   </div>
 
-</div>
+</app-public-page>
