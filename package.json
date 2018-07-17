@@ -42,6 +42,7 @@
     "stream-array-buffer": "^1.0.1",
     "tape": "^4.9.1",
     "wavefile": "^8.0.3",
+    "wavesurfer": "^1.3.4",
     "web-audio-api": "^0.2.2",
     "zone.js": "^0.8.26"
   },

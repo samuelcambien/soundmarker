@@ -8,12 +8,19 @@ import {FormsModule} from '@angular/forms';
 import {PublicUploadingFilesComponent} from './public-upload-page/public-upload-progress/public-uploading-files.component';
 import {PublicUploadFinishedComponent} from './public-upload-page/public-upload-finished/public-upload-finished.component';
 import {PublicUploadPageComponent} from './public-upload-page/public-upload-page.component';
-import {PublicInfoLinkComponent} from "./public-info/header/public-info-header.component";
-import {PublicInfoHeaderComponent} from "./public-info/header/public-info-header.component";
-import {PublicInfoZoneComponent} from "./public-info/zone/public-info-zone.component";
-import {AboutUsInfoComponent} from './public-info/public-info.component';
-import {ProInfoComponent} from './public-info/public-info.component';
-import {HelpInfoComponent} from './public-info/public-info.component';
+import {routing} from "./app.routing";
+import {PublicPlayerPageComponent} from './public-player-page/public-player-page.component';
+import {PublicPageComponent} from './public-page/public-page.component';
+import {
+  PublicInfoHeaderComponent,
+  PublicInfoLinkComponent
+} from "./public-page/public-info/header/public-info-header.component";
+import {PublicInfoZoneComponent} from "./public-page/public-info/zone/public-info-zone.component";
+import {
+  AboutUsInfoComponent,
+  HelpInfoComponent,
+  ProInfoComponent
+} from "./public-page/public-info/public-info.component";
 
 @NgModule({
   declarations: [
@@ -27,12 +34,15 @@ import {HelpInfoComponent} from './public-info/public-info.component';
     PublicInfoZoneComponent,
     AboutUsInfoComponent,
     ProInfoComponent,
-    HelpInfoComponent
+    HelpInfoComponent,
+    PublicPlayerPageComponent,
+    PublicPageComponent
   ],
   imports: [
     BrowserModule,
     FileUploadModule,
     FormsModule,
+    routing
   ],
   providers: [
   ],

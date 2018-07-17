@@ -1,0 +1,28 @@
+<app-public-page>
+
+  <div class="player-header container">
+    <div class="title col-md-8">too_long.wav</div>
+    <div class="cloud-icon col-md-2">cloud icon</div>
+    <div class="text-icon col-md-2">text icon</div>
+  </div>
+
+  <div class="player-content container">
+
+    <button *ngIf="isPlaying(); then pausebutton else playbutton"></button>
+
+    <ng-template #pausebutton>
+      <button class="pause-button col-md-2" (click)="pause()">pause button</button>
+    </ng-template>
+
+    <ng-template #playbutton>
+      <button class="play-button col-md-2" (click)="play()">play button</button>
+    </ng-template>
+
+    <div class="waveform-container col-md-10">
+      <div id="waveform"></div>
+      <div class="time float-left">1:53</div>
+      <div class="time float-right">3:14</div>
+    </div>
+  </div>
+
+</app-public-page>

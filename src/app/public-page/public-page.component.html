@@ -1,0 +1,17 @@
+<div clas="container rounded">
+
+  <div class="public-upload-page card shadow-lg rounded border-0 position-static">
+
+    <div class="card-body bg-light rounded">
+
+      <app-public-info-header [infoZone]="infoZone"></app-public-info-header>
+
+      <ng-content></ng-content>
+
+      <app-public-info-zone #infoZone></app-public-info-zone>
+
+    </div>
+
+  </div>
+
+</div>
