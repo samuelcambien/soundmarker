@@ -1,0 +1,8 @@
+<div class="container">
+  <div>
+    Queue progress: {{uploader.progress}}%
+    <div class="progress">
+      <div class="progress-bar" role="progressbar" [ngStyle]="{ 'width': uploader.progress + '%' }"></div>
+    </div>
+  </div>
+</div>

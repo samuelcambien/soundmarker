@@ -4,11 +4,6 @@
   background-color: #FAFAFA !important;
 }
 
-.public-upload-form {
-  margin-top: 60px;
-  width: 750px;
-}
-
 .upload-songs-text {
   text-align: center;
 }
@@ -141,19 +136,3 @@ table tr td p {
   width: 100vw;
   height: 100vh;
 }
-
-// responsive
-
-@media (max-width: 768px) {
-  .public-upload-form {
-    margin-top: 60px;
-    width: 100%;
-    max-width: 268px;
-  }
-
-  .wide-nav {
-    display: none;
-  }
-
-}
-
