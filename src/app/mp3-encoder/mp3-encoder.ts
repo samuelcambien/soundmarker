@@ -165,7 +165,7 @@ export class Mp3Encoder {
 
   public static convertAlac(file: File, callback: Function) {
     Mp3Encoder.convertFile(file, (buffer: ArrayBuffer) => {
-        require("av");
+        // require("av");
         require("alac");
         // new AudioContext().decodeAudioData(buffer, (buf) => {
         require("audio-decode")(buffer, (err, buf: AudioBuffer) => {
