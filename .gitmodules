@@ -1,0 +1,3 @@
+[submodule "audiofile"]
+	path = audiofile.all.js
+	url = https://github.com/oampo/audiofile.all.js.git

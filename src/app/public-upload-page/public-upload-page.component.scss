@@ -1,0 +1,18 @@
+.public-upload-page {
+  margin-top: 60px;
+  width: 750px;
+}
+
+// responsive
+
+@media (max-width: 768px) {
+  .public-upload-page {
+    margin-top: 60px;
+    width: 100%;
+    max-width: 268px;
+  }
+
+  .wide-nav {
+    display: none;
+  }
+}
