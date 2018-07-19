@@ -1,20 +1,83 @@
 .navbar {
-  padding: 0.1rem 0.6rem;
+	height: 48px;
+  padding: 0rem 0.6rem;
+  border-top-left-radius: 0.6rem;
+  border-top-right-radius: 0.6rem;
+ border-bottom: 1px solid #dadada;
+  
 }
 
 .soundmarker-logo {
   background: url(../../public-info/header/sm-logo-topbar.svg);
-  width: 140px;
-  height: 40px;
+  width: 154px;
+  height: 46px;
   background-size: 100%;
   background-repeat: no-repeat;
   background-position: center center;
 }
 
-.shadow {
-  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.05) !important;
+.nav-link, .dropdown-item {
+	font-family: 'avenirnext-regular';
+	font-size: 10pt;
 }
 
-.shadow-lg {
-  box-shadow: 0 0rem 3rem rgba(0, 0, 0, 0.25) !important;
+.nav-link {
+   color: #5673AB ;
+   margin-top: 3px;
+   background: none !important;
 }
+
+ .nav-link.pro.active {
+	color: #fff !important;
+	padding: .4rem 1rem !important;
+	font-family: 'avenirnext-bold';
+}
+
+
+
+.nav-link:hover, .nav-link:active, .nav-link:focus, nav-link:visited, nav-link:link {
+	color: #5673AB !important;
+	background: none !important;
+}
+
+.nav-item .pro {
+	background: #5673AB !important;
+}
+
+.dropdown-menu {
+	border-radius: 0.5rem;
+	border: 1px solid #dadada;
+}
+
+.dropdown-menu-right {
+	margin-top: 16px;
+  right: 2px !important; //-61
+  left: auto;
+}
+
+.dropdown-item:active, .dropdown-item:focus, .dropdown-item:hover {
+	background: #f6f6f6;
+}
+
+.pro-dropdown {
+	display: none;
+}
+
+
+// responsive
+
+@media (max-width: 768px) {
+	
+	 .nav-link.pro.active {
+		 display: none;
+	 }
+	 
+	 .pro-dropdown {
+	display: block;
+}
+	
+	
+	}
+
+
+

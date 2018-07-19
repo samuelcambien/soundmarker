@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {FileUploader} from "ng2-file-upload/ng2-file-upload";
 
-const UPLOAD_FILES_ENDPOINT = 'http://619ebc6e.ngrok.io/rest/upload/file';
+const UPLOAD_FILES_ENDPOINT = 'http://7a390ad3.ngrok.io/rest/upload/file';
 
 enum Status {
   SELECT_SONGS, UPLOADING_SONGS, GREAT_SUCCESS

@@ -1,21 +1,65 @@
-<form (ngSubmit)="this.onSubmit();">
+<form #myForm="ngForm" (ngSubmit)="onSubmit()">
 
   <div class="form-row">
 
     <div class="form-field col-md-4">
 
-      <div class="card upload-songs-area rounded">
 
-        <div class="tabletainer container-fluid">
+      <div class="card upload-songs-area rounded border-0">
+
+
+        <div class="upload-songs-text">
+
+          <div *ngIf="uploader.getNotUploadedItems().length == 0; then uploadsongs else addsongs"></div>
+
+          <ng-template #uploadsongs>
+
+            <div class="addsongs">
+              <div class="note-image" id="ni1">
+                <svg enable-background="new 0 0 141.7 141.7" viewBox="0 0 141.7 141.7"
+                     xmlns="http://www.w3.org/2000/svg">
+                  <circle cx="70.9" cy="70.9" fill="#f3f3f3" r="70.9"/>
+                  <g fill="#ff857d" stroke="#2f2f2f" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="3">
+                    <ellipse cx="83.3" cy="84.2" rx="12.9" ry="13.1"/>
+                    <path d="m56.1 54.8 40.1-17.1v46.5-61.6l-40.1 17.1v63.2z" stroke-linecap="round"/>
+                    <ellipse cx="43.2" cy="102.9" rx="12.9" ry="13.1"/>
+                  </g>
+                </svg>
+              </div>
+              <h4>Add songs</h4>
+
+              <div><h6>Up to 20</h6></div>
+            </div>
+          </ng-template>
+
+          <ng-template #addsongs>
+            <div class="note-image" id="ni2">
+              <svg enable-background="new 0 0 141.7 141.7" viewBox="0 0 141.7 141.7" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="70.9" cy="70.9" fill="#f3f3f3" r="70.9"/>
+                <g id="fill1" fill="#ff857d" stroke="#2f2f2f" stroke-linejoin="round" stroke-miterlimit="10"
+                   stroke-width="3">
+                  <ellipse cx="83.3" cy="84.2" rx="12.9" ry="13.1"/>
+                  <path d="m56.1 54.8 40.1-17.1v46.5-61.6l-40.1 17.1v63.2z" stroke-linecap="round"/>
+                  <ellipse cx="43.2" cy="102.9" rx="12.9" ry="13.1"/>
+                </g>
+              </svg>
+            </div>
+            <div class="addmoresongs"><h5> Add more songs</h5></div>
+          </ng-template>
+
+        </div>
+
+
+        <div class="tabletainer">
 
           <table class="table">
             <tbody>
 
             <tr *ngFor="let item of uploader.queue">
               <td><p>{{ item?.file?.name }}</p></td>
-              <button type="button" class="btn btn-cross btn-sm"
+              <button type="button" class="btn-cross close"
                       (click)="item.remove()">
-                <span class="glyphicon glyphicon-remove"></span> remove
+                <span class="remove" aria-hidden="true">&times;</span>
               </button>
             </tr>
             </tbody>
@@ -27,22 +71,6 @@
 
                accept="audio/*"/>
 
-        <div class="note-image"></div>
-
-        <div class="upload-songs-text">
-
-          <div *ngIf="uploader.getNotUploadedItems().length == 0; then uploadsongs else addsongs"></div>
-
-          <ng-template #uploadsongs>
-            <div><h5>ADD SONGS</h5></div>
-            <div><h6>Up to 5GB</h6></div>
-          </ng-template>
-
-          <ng-template #addsongs>
-            <div><p>ADD MORE SONGS</p></div>
-          </ng-template>
-
-        </div>
 
       </div>
 
@@ -51,55 +79,51 @@
     <div class="col-md-8">
       <div class="form-row">
         <div class="form-group col">
-                <textarea type="text" placeholder="Notes" class="form-control form-control-sm rounded "
-                          rows="2"></textarea>
+                <textarea type="text" placeholder="Notes" class="form-control form-control-sm"
+                          rows="3"></textarea>
         </div>
       </div>
       <div class="form-row">
         <div class="form-group col">
-          <input type="text" [(ngModel)]='email_from' name="email_from" placeholder="Email from"
-                 class="form-control form-control-sm rounded">
+          <input type="text" required [(ngModel)]='email_from' name="email_from" placeholder="Email from"
+                 class="form-control form-control-sm">
         </div>
         <div class="col">
-          <input type="text" [(ngModel)]='email_to' name="email_to" placeholder="Email to"
-                 class="form-control form-control-sm rounded">
+          <input type="text" required [(ngModel)]='email_to' name="email_to" placeholder="Email to"
+                 class="form-control form-control-sm">
         </div>
       </div>
-      <div class="form-row">
+      <div class="form-row radios">
         <div class="col">
           <div class="btn-group btn-group-sm btn-group-toggle" data-toggle="buttons">
             <label class="btn btn-outline-form active">
-              <input class="slide-selector" type="radio" ngModel="expiration" name="expiration"
-                     autocomplete="off"
-                     checked value="1 week">1 week
+              <input class="slide-selector" type="radio" ngModel="expiration" autocomplete="off" name="expiration"
+                     value="1 week" checked>1 week
             </label>
             <label class="btn btn-outline-form">
-              <input class="slide-selector" type="radio" ngModel="expiration" name="expiration"
-                     autocomplete="off"
-                     value="1 month">1 month
-            </label>
+              <input class="slide-selector" type="radio" ngModel="expiration" autocomplete="off" name="expiration"
+                     value="1 month">1 month</label>
           </div>
         </div>
         <div class="col">
           <div class="btn-group btn-group-sm btn-group-toggle" data-toggle="buttons">
             <label class="btn btn-outline-form active">
-              <input class="slide-selector" type="radio" ngModel="usage" autocomplete="off" checked name="usage"
-                     value="stream">Stream
+              <input class="slide-selector" type="radio" ngModel="usage" autocomplete="off" name="usage" value="stream"
+                     checked>Stream
             </label>
             <label class="btn btn-outline-form">
               <input class="slide-selector" type="radio" ngModel="usage" autocomplete="off" name="usage"
                      value="download">Download
             </label>
             <label class="btn btn-outline-form">
-              <input class="slide-selector" type="radio" ngModel="usage" autocomplete="off" name="usage"
-                     value="both">Both
+              <input class="slide-selector" type="radio" ngModel="usage" autocomplete="off" name="usage" value="both">Both
             </label>
           </div>
         </div>
         <div class="col">
-          <button type="submit" [disabled]="!uploader.getNotUploadedItems().length"
+          <button type="submit" [disabled]="!uploader.getNotUploadedItems().length || !myForm.valid"
                   class="btn btn-primary btn-sm free-upload">
-            <span class="glyphicon glyphicon-upload"></span>Share songs
+            Share songs
           </button>
         </div>
       </div>
@@ -107,10 +131,8 @@
   </div>
 
 </form>
-
 <div ng2FileDrop
      [ngClass]="{'nv-file-over': hasBaseDropZoneOver}"
      (fileOver)="fileOverBase($event)"
      [uploader]="uploader"
      class="well my-drop-zone">
-</div>

@@ -1,16 +1,16 @@
 <div clas="container rounded">
 
-  <div class="public-upload-page card shadow-lg rounded border-0 position-static">
+  <div class="public-page card shadow-lg rounded-lg border-0 position-static">
 
-    <div class="card-body bg-light rounded">
+    <app-public-info-header [infoZone]="infoZone"></app-public-info-header>
 
-      <app-public-info-header [infoZone]="infoZone"></app-public-info-header>
+    <div class="upload-container card-body bg-light rounded-lg">
 
       <ng-content></ng-content>
 
-      <app-public-info-zone #infoZone></app-public-info-zone>
-
     </div>
+
+    <app-public-info-zone #infoZone></app-public-info-zone>
 
   </div>
 

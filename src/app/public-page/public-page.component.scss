@@ -1,18 +1,39 @@
-.public-upload-page {
+.public-page {
   margin-top: 60px;
+  margin-bottom: 60px;
   width: 750px;
+  min-height: 233px;
+}
+
+.bg-light {
+  background-color: #fff !important;
+}
+
+.upload-container {
+  min-height: 194px;
 }
 
 // responsive
 
 @media (max-width: 768px) {
-  .public-upload-page {
+
+  .public-page {
     margin-top: 60px;
     width: 100%;
     max-width: 268px;
   }
 
-  .wide-nav {
-    display: none;
+  .btn-group {
+    margin-bottom: 10px;
+    width: 100%;
+  }
+
+  .btn {
+    width: 100% !important;
+  }
+
+  .progress {
+    width: 96%;
   }
 }
+
