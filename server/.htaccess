@@ -18,6 +18,7 @@
 
     # Handle Front Controller...
     RewriteCond %{REQUEST_URI} "/file/upload" [OR]
-    RewriteCond %{REQUEST_URI} "/file/new"
+    RewriteCond %{REQUEST_URI} "/file/new" [OR]
+    RewriteCond %{REQUEST_URI} "/track/url" 
     RewriteRule ^ index.php [L]
 </IfModule>
