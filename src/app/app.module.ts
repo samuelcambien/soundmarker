@@ -20,9 +20,6 @@ import {
 import {CommentComponent} from './comments/comment/comment.component';
 import {ReplyComponent} from './comments/reply/reply.component';
 import {CommentFormComponent} from "./comments/comment-form/comment-form.component";
-import {HttpClientInMemoryWebApiModule} from "angular-in-memory-web-api";
-import {InMemoryDataService} from "./in-memory-data-service";
-import {environment} from "../environments/environment";
 
 @NgModule({
   declarations: [
@@ -45,8 +42,6 @@ import {environment} from "../environments/environment";
     BrowserModule,
     FileUploadModule,
     FormsModule,
-    environment.production ?
-      HttpClientInMemoryWebApiModule.forRoot(InMemoryDataService, { delay: 100 }) : [],
     routing
   ],
   providers: [
