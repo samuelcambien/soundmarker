@@ -1,0 +1,25 @@
+<div class="comment container-fluid">
+  <div class="row">
+    <div class="comment-name">{{comment.name}}</div>
+    <button>
+      <div class="play-button">|></div>
+      <div *ngIf="comment.end; then interval else start" class="comment-time"></div>
+      <ng-template #start>
+        {{comment.start}}
+      </ng-template>
+      <ng-template #interval>
+        {{comment.start}} - {{comment.end}}
+      </ng-template>
+    </button>
+  </div>
+  <div class="row comment-text">
+    {{comment.text}}
+  </div>
+  <div class="row comment-replies">
+    <app-reply *ngFor="let reply of comment.replies" [reply]="reply"></app-reply>
+  </div>
+  <div class="row comment-reply" (click)="comment.text">
+    REPLY
+  </div>
+</div>
+

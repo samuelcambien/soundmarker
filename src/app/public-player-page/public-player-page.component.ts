@@ -1,5 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import * as WaveSurfer from 'wavesurfer';
+import {ActivatedRoute} from "@angular/router";
+import {Comment} from "../comment";
+import {RestUrl, Utils} from "../app.component";
 
 @Component({
   selector: 'app-public-player',
@@ -8,7 +11,13 @@ import * as WaveSurfer from 'wavesurfer';
 })
 export class PublicPlayerPageComponent implements OnInit {
 
-  constructor() {
+  trackId: string;
+  trackTitle: string;
+  versionId: string;
+
+  comments: Comment[];
+
+  constructor(private route: ActivatedRoute) {
   }
 
   private wavesurfer: any;
@@ -20,7 +29,19 @@ export class PublicPlayerPageComponent implements OnInit {
       waveColor: 'violet',
       progressColor: 'purple'
     });
-    this.wavesurfer.load('http://9774e4f5.ngrok.io/rest/stream/file');
+
+    this.route.params.subscribe(params => {
+      this.trackId = params['track_id'];
+    });
+
+    Utils.sendGetRequest(RestUrl.TRACK, (response) => {
+      this.trackTitle = response['track_title'];
+      this.versionId = response['version_id'];
+    });
+
+    Utils.sendGetRequest(RestUrl.COMMENTS, (response) => this.comments = response);
+
+    this.wavesurfer.load(RestUrl.VERSION);
   }
 
   play() {
