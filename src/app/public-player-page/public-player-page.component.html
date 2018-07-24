@@ -1,7 +1,7 @@
 <app-public-page>
 
   <div class="player-header container">
-    <div class="title col-md-8">too_long.wav</div>
+    <div class="title col-md-8">{{trackTitle}}</div>
     <div class="cloud-icon col-md-2">cloud icon</div>
     <div class="text-icon col-md-2">text icon</div>
   </div>
@@ -23,6 +23,20 @@
       <div class="time float-left">1:53</div>
       <div class="time float-right">3:14</div>
     </div>
+
+  </div>
+
+  <div class="comments">
+
+    <div class="comments-header">{{comments.length}} comments</div>
+
+    <app-comment-form></app-comment-form>
+
+    <app-comment
+      *ngFor="let comment of comments"
+      [comment]="comment">
+    </app-comment>
+
   </div>
 
 </app-public-page>
