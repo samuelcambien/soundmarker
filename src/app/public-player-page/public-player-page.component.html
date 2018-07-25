@@ -28,9 +28,9 @@
 
   <div class="comments">
 
-    <div class="comments-header">{{comments.length}} comments</div>
+    <div class="comments-header">{{comments?.length}} comments</div>
 
-    <app-comment-form></app-comment-form>
+    <app-comment-form [version_id]="versionId"></app-comment-form>
 
     <app-comment
       *ngFor="let comment of comments"

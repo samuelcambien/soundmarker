@@ -1,0 +1,15 @@
+<form #myForm="ngForm" (ngSubmit)="onSubmit()" class="comment-form container-fluid">
+  <div class="form-group col">
+    <input type="text" required name="text" [(ngModel)]='reply.text' name="text" placeholder="Type comment"
+           class="form-row comment-form-text"/>
+  </div>
+  <div class="form-row">
+    <div class="form-group col">
+      <input type="text" required name="name" [(ngModel)]='reply.name' placeholder="Type name"
+             class="row comment-form-name"/>
+    </div>
+    <div class="form-group col">
+      <button type="submit" [disabled]="!myForm.valid">ADD COMMENT</button>
+    </div>
+  </div>
+</form>

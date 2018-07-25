@@ -20,6 +20,7 @@ import {
 import {CommentComponent} from './comments/comment/comment.component';
 import {ReplyComponent} from './comments/reply/reply.component';
 import {CommentFormComponent} from "./comments/comment-form/comment-form.component";
+import {ReplyFormComponent} from './comments/reply-form/reply-form.component';
 
 @NgModule({
   declarations: [
@@ -36,7 +37,8 @@ import {CommentFormComponent} from "./comments/comment-form/comment-form.compone
     PublicPageComponent,
     CommentFormComponent,
     CommentComponent,
-    ReplyComponent
+    ReplyComponent,
+    ReplyFormComponent
   ],
   imports: [
     BrowserModule,
@@ -50,7 +52,8 @@ import {CommentFormComponent} from "./comments/comment-form/comment-form.compone
   entryComponents: [
     AboutUsInfoComponent,
     ProInfoComponent,
-    HelpInfoComponent
+    HelpInfoComponent,
+    ReplyFormComponent
   ]
 })
 export class AppModule {
