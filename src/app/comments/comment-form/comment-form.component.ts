@@ -1,5 +1,6 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {Comment} from "../../comment";
+import {RestUrl, Utils} from "../../app.component";
 
 @Component({
   selector: 'app-comment-form',
@@ -8,6 +9,7 @@ import {Comment} from "../../comment";
 })
 export class CommentFormComponent implements OnInit {
 
+  @Input() version_id;
   comment: Comment = new Comment();
 
   constructor() { }
@@ -16,6 +18,10 @@ export class CommentFormComponent implements OnInit {
   }
 
   onSubmit() {
-    console.log(this.comment.text);
+    this.comment.version_id = this.version_id;
+    Utils.sendPostRequest(
+      RestUrl.COMMENTS,
+      JSON.stringify(this.comment)
+    );
   }
 }

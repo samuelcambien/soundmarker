@@ -34,14 +34,33 @@ export class PublicPlayerPageComponent implements OnInit {
       this.trackId = params['track_id'];
     });
 
-    Utils.sendGetRequest(RestUrl.TRACK, (response) => {
+    this.loadTrackInfo();
+  }
+
+  private loadTrackInfo() {
+    Utils.sendGetRequest(RestUrl.TRACK, [this.trackId], (response) => {
+
       this.trackTitle = response['track_title'];
       this.versionId = response['version_id'];
+
+      this.wavesurfer.load(RestUrl.VERSION);
+      this.loadComments();
     });
+  }
 
-    Utils.sendGetRequest(RestUrl.COMMENTS, (response) => this.comments = response);
+  private loadComments() {
+    Utils.sendGetRequest(RestUrl.COMMENTS, [this.versionId], (response) => {
+      this.comments = response;
+      this.loadReplies();
+    });
+  }
 
-    this.wavesurfer.load(RestUrl.VERSION);
+  private loadReplies() {
+    for (let comment of this.comments) {
+      Utils.sendGetRequest(RestUrl.REPLIES, [comment.id], (response) => {
+        comment.replies = response;
+      });
+    }
   }
 
   play() {

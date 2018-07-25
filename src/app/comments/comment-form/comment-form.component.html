@@ -1,19 +1,19 @@
 <form #myForm="ngForm" (ngSubmit)="onSubmit()" class="comment-form container-fluid">
   <div class="form-group col">
-    <input type="text" required [(ngModel)]='comment.text' name="comment_text" placeholder="Type comment" class="form-row comment-form-text"/>
+    <input type="text" required [(ngModel)]='comment.text' name="text" placeholder="Type comment" class="form-row comment-form-text"/>
   </div>
   <div class="form-row">
     <div class="form-group col">
-      <input type="text" required [(ngModel)]='comment.name' name="comment_name" placeholder="Type name" class="row comment-form-name"/>
+      <input type="text" required [(ngModel)]='comment.name' name="name" placeholder="Type name" class="row comment-form-name"/>
     </div>
     <div class="form-group col">
-      <input type="text" required [(ngModel)]='comment.tag' name="comment_tag" placeholder="Type tag" class="row comment-form-tag"/>
+      <input type="text" required [(ngModel)]='comment.tag' name="tag" placeholder="Type tag" class="row comment-form-tag"/>
     </div>
     <div class="form-group col">
-      <input type="text" required [(ngModel)]='comment.start' name="comment_start_time" placeholder="START" class="row comment-form-start-time"/>
+      <input type="text" required [(ngModel)]='comment.start' name="start" placeholder="START" class="row comment-form-start-time"/>
     </div>
     <div class="form-group col">
-      <input type="text" [(ngModel)]='comment.end' name="comment_end_time" placeholder="END" class="row comment-form-end-time"/>
+      <input type="text" [(ngModel)]='comment.end' name="end" placeholder="END" class="row comment-form-end-time"/>
     </div>
     <div class="form-group col">
       <button type="submit" [disabled]="!myForm.valid">ADD COMMENT</button>

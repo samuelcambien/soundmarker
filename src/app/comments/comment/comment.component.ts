@@ -1,5 +1,6 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, ComponentFactoryResolver, Input, OnInit, ViewChild, ViewContainerRef} from '@angular/core';
 import {Comment} from "../../comment";
+import {ReplyFormComponent} from "../reply-form/reply-form.component";
 
 @Component({
   selector: 'app-comment',
@@ -10,8 +11,19 @@ export class CommentComponent implements OnInit {
 
   @Input() comment: Comment;
 
-  constructor() { }
+  @ViewChild('reply', { read: ViewContainerRef }) reply: ViewContainerRef;
+
+  constructor(private cfr: ComponentFactoryResolver) {}
 
   ngOnInit() {
+  }
+
+  showReplyForm() {
+    this.reply.clear();
+    this.reply.createComponent(
+      this.cfr.resolveComponentFactory(
+        ReplyFormComponent
+      )
+    ).instance.parentId = this.comment.id;
   }
 }

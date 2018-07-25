@@ -10,21 +10,28 @@ export class AppComponent {
 
 export class RestUrl {
 
-  public static BASE: string = "http://localhost:3000";
+  private static TEXT: string = "http://localhost:3000";
 
-  public static UPLOAD: string = RestUrl.BASE + "/upload/file";
+  private static DATA: string;
 
-  public static TRACK: string = RestUrl.BASE + "/track";
+  public static UPLOAD: string = RestUrl.DATA + "/upload/file";
 
-  public static VERSION: string = RestUrl.TRACK + "/version";
+  public static TRACK: string = RestUrl.TEXT + "/track";
 
-  public static COMMENTS: string = RestUrl.VERSION + "/comments";
+  public static VERSION: string = RestUrl.DATA + "/version";
+
+  public static COMMENTS: string = RestUrl.TRACK + "/version/comments";
+
+  public static REPLIES: string = RestUrl.COMMENTS + "/replies";
 }
 
 export class Utils {
 
-  public static sendGetRequest(url, callback): void {
+  public static sendGetRequest(url, data, callback): void {
     let trackRequest = new XMLHttpRequest();
+    for (let entry of data) {
+      url += "/" + entry;
+    }
     trackRequest.open("GET", url, true);
     trackRequest.send();
     trackRequest.addEventListener("readystatechange", () => {
@@ -34,9 +41,10 @@ export class Utils {
     }, false);
   }
 
-  public static sendPostRequest(url): void {
+  public static sendPostRequest(url, data): void {
     let trackRequest = new XMLHttpRequest();
     trackRequest.open("POST", url, true);
-    trackRequest.send();
+    trackRequest.setRequestHeader("Content-Type", "application/json");
+    trackRequest.send(data);
   }
 }
