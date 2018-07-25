@@ -28,12 +28,24 @@
 
   <div class="comments">
 
-    <div class="comments-header">{{comments?.length}} comments</div>
+    <div class="comments-header">
+      <div>{{comments?.length}} comments</div>
+      <div>
+        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true"
+           aria-expanded="false">sort icon</a>
+
+        <div class="dropdown-menu">
+          <a *ngFor="let sorter of commentSorters" (click)="currentSorter = sorter" class="dropdown-item">
+            {{sorter.description}}
+          </a>
+        </div>
+      </div>
+    </div>
 
     <app-comment-form [version_id]="versionId"></app-comment-form>
 
     <app-comment
-      *ngFor="let comment of comments"
+      *ngFor="let comment of getCommentsSorted()"
       [comment]="comment">
     </app-comment>
 
