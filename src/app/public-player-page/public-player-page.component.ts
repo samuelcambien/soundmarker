@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import * as WaveSurfer from 'wavesurfer';
 import {ActivatedRoute} from "@angular/router";
-import {Comment} from "../comment";
+import {Comment, CommentSorter} from "../comment";
 import {RestUrl, Utils} from "../app.component";
 
 @Component({
@@ -16,6 +16,15 @@ export class PublicPlayerPageComponent implements OnInit {
   versionId: string;
 
   comments: Comment[];
+
+  public commentSorters: CommentSorter[] = [
+    CommentSorter.MOST_RECENT_FIRST,
+    CommentSorter.MOST_RECENT_LAST,
+    CommentSorter.NAME_A_Z,
+    CommentSorter.NAME_Z_A
+  ];
+
+  private currentSorter: CommentSorter = CommentSorter.MOST_RECENT_FIRST;
 
   constructor(private route: ActivatedRoute) {
   }
@@ -73,5 +82,9 @@ export class PublicPlayerPageComponent implements OnInit {
 
   isPlaying() {
     return this.wavesurfer.isPlaying();
+  }
+
+  getCommentsSorted() {
+    return this.comments ? this.comments.sort(this.currentSorter.comparator) : [];
   }
 }

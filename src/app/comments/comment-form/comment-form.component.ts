@@ -12,12 +12,14 @@ export class CommentFormComponent implements OnInit {
   @Input() version_id;
   comment: Comment = new Comment();
 
-  constructor() { }
+  constructor() {
+  }
 
   ngOnInit() {
   }
 
   onSubmit() {
+    this.comment.time = Date.now();
     this.comment.version_id = this.version_id;
     Utils.sendPostRequest(
       RestUrl.COMMENTS,

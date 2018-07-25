@@ -13,13 +13,13 @@ export class ReplyFormComponent implements OnInit {
   reply: Comment = new Comment();
 
   constructor() {
-
   }
 
   ngOnInit() {
   }
 
   onSubmit() {
+    this.reply.time = Date.now();
     this.reply.parent_id = this.parentId;
     Utils.sendPostRequest(
       RestUrl.COMMENTS,
