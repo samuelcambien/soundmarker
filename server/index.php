@@ -1,11 +1,11 @@
 <?php
 require 'flight/Flight.php';
-require 'aws/aws-autoloader.php';
+require 'vendor/autoload.php';
 
 ////////////////////////////// Setup DB //////////////////////////////
 // Setup DB
 // register dB
-// Flight::register('db', 'PDO', array('mysql:host=localhost;dbname=soundmarkerdev', 'root', 'mysql'));
+// Flight::register('db', 'PDO', array('mysql:host='.$_SERVER["RDS_HOSTNAME"].';dbname='.$_SERVER["RDS_DB_NAME"], $_SERVER["RDS_USERNAME"], $_SERVER["RDS_PASSWORD"]));
 // $db = Flight::db();
 // $sql = "SELECT * FROM user WHERE email = '{$email}'";
 // $result = $db->query($sql);
@@ -19,7 +19,7 @@ require 'aws/aws-autoloader.php';
 use Aws\S3\S3Client;
 use Aws\S3\Exception\S3Exception;
 
-$credentials = new Aws\Credentials\Credentials('AKIAJ2I2I4CLJHCP3NPQ', 'H31YdXr6TwoC8lRCSrFhA4n5JXZsiBIuqezP9P+b');
+$credentials = new Aws\Credentials\Credentials($_SERVER["AWScredentials-username"], $_SERVER["AWScredentials-password"]);
 $s3bucket = 'soundmarkersass-local-robin';
 
 $s3 = new Aws\S3\S3Client([
@@ -33,7 +33,7 @@ Flight::set("s3bucket", $s3bucket);
 
 ////////////////////////////// Routes - Global //////////////////////////////
 Flight::route('/', function(){
-    include 'soundmarker-development/dist/Soundmarker-sass/index.html';
+    include 'index.html';
 });
 
 ////////////////////////////// Routes - /file/new //////////////////////////////

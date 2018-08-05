@@ -9,16 +9,26 @@
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteRule ^(.*)/$ /$1 [L,R=301]
 
-    # Map to Angular-js distribution
-    RewriteRule ^$ /soundmarker-dev/soundmarker-development/dist/Soundmarker-sass/ [L]
-    RewriteCond %{REQUEST_FILENAME} !-f
-    RewriteCond %{REQUEST_FILENAME} !-d
-    RewriteCond %{REQUEST_URI} !^/soundmarker-dev/soundmarker-development/dist/Soundmarker-sass/
-    RewriteRule ^(.*)$ /soundmarker-dev/soundmarker-development/dist/Soundmarker-sass/$1
-
     # Handle Front Controller...
     RewriteCond %{REQUEST_URI} "/file/upload" [OR]
     RewriteCond %{REQUEST_URI} "/file/new" [OR]
     RewriteCond %{REQUEST_URI} "/track/url" 
     RewriteRule ^ index.php [L]
+
+    # Prefer .php over .html
+    DirectoryIndex index.php index.html index.shtml index.htm Index.html Index.htm Index.shtml default.htm Default.htm default.html Default.html default.shtml Default.shtml page1.html index.pl index.cgi index.php3 index.phtml home.htm home.html home.shtml index.wml index.pcgi quickstart.html
 </IfModule>
+
+# password protect single file
+<Files "index.html">
+AuthType Basic
+AuthName "Restricted Files"
+AuthUserFile /etc/httpd/.htpasswd
+Require user soundmarker
+</Files>
+<FilesMatch "^$">
+AuthType Basic
+AuthName "Restricted Files"
+AuthUserFile /etc/httpd/.htpasswd
+Require user soundmarker
+</FilesMatch>
