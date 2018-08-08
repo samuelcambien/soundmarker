@@ -21,6 +21,7 @@ import {CommentComponent} from './comments/comment/comment.component';
 import {ReplyComponent} from './comments/reply/reply.component';
 import {CommentFormComponent} from "./comments/comment-form/comment-form.component";
 import {ReplyFormComponent} from './comments/reply-form/reply-form.component';
+import {NgbModule} from "@ng-bootstrap/ng-bootstrap";
 
 @NgModule({
   declarations: [
@@ -44,6 +45,7 @@ import {ReplyFormComponent} from './comments/reply-form/reply-form.component';
     BrowserModule,
     FileUploadModule,
     FormsModule,
+    NgbModule.forRoot(),
     routing
   ],
   providers: [

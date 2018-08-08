@@ -1,22 +1,24 @@
 <form #myForm="ngForm" (ngSubmit)="onSubmit()" class="comment-form container-fluid">
-  <div class="form-group col">
-    <input type="text" required [(ngModel)]='comment.text' name="text" placeholder="Type comment" class="form-row comment-form-text"/>
-  </div>
   <div class="form-row">
-    <div class="form-group col">
-      <input type="text" required [(ngModel)]='comment.name' name="name" placeholder="Type name" class="row comment-form-name"/>
+
+    <textarea type="text" required [(ngModel)]='comment.text' name="text" placeholder="Type comment" class="form-row comment-form-text form-control form-control-sm" rows="1"></textarea>
+
+</div>
+  <div class="form-row">
+    <div class="form-group col-5">
+      <input type="text" required [(ngModel)]='comment.name' name="name" placeholder="Type name" class="row comment-form-name form-control form-control-sm"/>
     </div>
-    <div class="form-group col">
-      <input type="text" required [(ngModel)]='comment.tag' name="tag" placeholder="Type tag" class="row comment-form-tag"/>
+    <div class="form-group col-3">
+      <input type="text" required [(ngModel)]='comment.tag' name="tag" placeholder="Type tag" class="row comment-form-tag form-control form-control-sm"/>
     </div>
-    <div class="form-group col">
-      <input type="text" required [(ngModel)]='comment.start' name="start" placeholder="START" class="row comment-form-start-time"/>
+    <div class="form-group col-1">
+      <input type="text" required [(ngModel)]='comment.start' name="start" placeholder="1:53" class="row comment-form-start-time form-control form-control-sm"/>
     </div>
-    <div class="form-group col">
-      <input type="text" [(ngModel)]='comment.end' name="end" placeholder="END" class="row comment-form-end-time"/>
+    <div class="form-group col-1">
+      <input type="text" [(ngModel)]='comment.end' name="end" placeholder="END" class="row comment-form-end-time form-control form-control-sm"/>
     </div>
-    <div class="form-group col">
-      <button type="submit" [disabled]="!myForm.valid">ADD COMMENT</button>
+    <div class="form-group col-2">
+      <button type="submit" class="btn btn-primary btn-sm free-upload" [disabled]="!myForm.valid">Add comment</button>
     </div>
   </div>
 </form>

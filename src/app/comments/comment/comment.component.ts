@@ -13,6 +13,8 @@ export class CommentComponent implements OnInit {
 
   @ViewChild('reply', { read: ViewContainerRef }) reply: ViewContainerRef;
 
+  showReplies: boolean = false;
+
   constructor(private cfr: ComponentFactoryResolver) {}
 
   ngOnInit() {
