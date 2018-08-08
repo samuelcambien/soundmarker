@@ -1,0 +1,74 @@
+<div class="comment container-fluid">
+
+  <div class="row">
+
+    <div class="comment-name"><p class="name-tx">{{comment.name}}</p></div>
+
+    <button (click)="goToCommentTime(comment)" class="btn btn-secondary btn-sm comment-play">
+      <div class="play-button">
+        <svg width="10px" height="8px" viewBox="0 0 33 33" version="1.1" xmlns="http://www.w3.org/2000/svg">
+          <defs></defs>
+          <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+            <g id="public-player-s" transform="translate(-61.000000, -161.000000)" fill="#FFFFFF">
+              <g id="Group-2">
+                <g id="Group-4" transform="translate(38.000000, 129.000000)">
+                  <g id="Group-5" transform="translate(0.000000, 13.000000)">
+                    <g id="Group-6">
+                      <path
+                        d="M41.2001413,23.6040044 L53.12746,43.3356181 C54.270271,45.2261943 53.6640875,47.6852404 51.7735114,48.8280514 C51.1492596,49.2053976 50.4337074,49.4048604 49.7042691,49.4048604 L25.8496316,49.4048604 C23.6404926,49.4048604 21.8496316,47.6139994 21.8496316,45.4048604 C21.8496316,44.675422 22.0490945,43.9598698 22.4264407,43.3356181 L34.3537594,23.6040044 C35.4965703,21.7134283 37.9556165,21.1072448 39.8461926,22.2500558 C40.4004672,22.5851023 40.8650947,23.0497299 41.2001413,23.6040044 Z"
+                        id="Triangle-2"
+                        transform="translate(37.777246, 35.538758) rotate(90.000000) translate(-37.777246, -35.538758) "></path>
+                    </g>
+                  </g>
+                </g>
+              </g>
+            </g>
+          </g>
+        </svg>
+      </div>
+      <div *ngIf="comment.end; then interval else start" class="comment-time"></div>
+      <ng-template #start>
+        <p>{{comment.start}}</p>
+      </ng-template>
+      <ng-template #interval>
+        <p>{{comment.start}} - {{comment.end}}</p>
+      </ng-template>
+    </button>
+
+    <p class="date-tx text-right">{{comment.time}}</p>
+
+  </div>
+
+  <div class="row comment-text">
+    <p class="comment-tx">{{comment.text}}</p>
+  </div>
+
+  <div *ngIf="comment.replies?.length">
+
+    <p role="button" [attr.aria-expanded]="showReplies" aria-controls="collapseExample"
+       (click)="showReplies = !showReplies"
+       class="btn-text showhidereplies collapsed">
+      <span *ngIf="!showReplies">\/ Show replies</span>
+      <span *ngIf="showReplies">/\ Hide replies</span>
+    </p>
+
+    <div class="comment-replies" id="comment-replies" [ngbCollapse]="!showReplies">
+      <app-reply *ngFor="let reply of comment.replies" [reply]="reply"></app-reply>
+    </div>
+
+  </div>
+
+  <div class="row">
+    <div class="comment-reply" (click)="showReplyForm()">
+      <p class="reply-tx"> REPLY</p>
+    </div>
+  </div>
+
+  <template #reply></template>
+
+  <div class="row comment-reply" (click)="comment.text">
+    REPLY
+  </div>
+
+</div>
+

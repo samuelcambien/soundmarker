@@ -1,0 +1,6 @@
+{
+  "/track/:track_id": "/track?track_id=:track_id",
+  "/track/version/comments": "/track-version-comments",
+  "/track/version/comments/:version_id": "/track-version-comments?version_id=:version_id",
+  "/track/version/comments/replies/:parent_id": "/track-version-comments?parent_id=:parent_id"
+}

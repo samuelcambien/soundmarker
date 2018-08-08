@@ -1,28 +1,119 @@
 <app-public-page>
+  <div class="container-fluid">
 
-  <div class="player-header container">
-    <div class="title col-md-8">too_long.wav</div>
-    <div class="cloud-icon col-md-2">cloud icon</div>
-    <div class="text-icon col-md-2">text icon</div>
-  </div>
+    <div class="player-header row">
+      <div class="title col-md-8"><h4>{{trackTitle}}</h4></div>
+      <div class="cloud-icon col-md-2">cloud icon</div>
+      <div class="text-icon col-md-2" (click)="showComments = !showComments">text icon</div>
+    </div>
 
-  <div class="player-content container">
+    <div class="player-content row">
 
-    <button *ngIf="isPlaying(); then pausebutton else playbutton"></button>
+      <button *ngIf="isPlaying(); then pausebutton else playbutton"></button>
 
-    <ng-template #pausebutton>
-      <button class="pause-button col-md-2" (click)="pause()">pause button</button>
-    </ng-template>
+      <ng-template #pausebutton>
+        <button class="pause-button col-md-2 btn btn-link" (click)="pause()">
+          <svg width="90px" height="90px" viewBox="0 0 70 70" version="1.1" xmlns="http://www.w3.org/2000/svg">
+            <defs></defs>
+            <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+              <g id="public-player-s" transform="translate(-38.000000, -142.000000)">
+                <g id="Group-2">
+                  <g id="Group-4" transform="translate(38.000000, 129.000000)">
+                    <g id="Group-5" transform="translate(0.000000, 13.000000)">
+                      <circle id="Oval" fill="#5673AB" cx="35" cy="35" r="35"></circle>
+                      <rect id="Rectangle-5" fill="#FFFFFF" x="38" y="21" width="8" height="28" rx="2"></rect>
+                      <rect id="Rectangle-5" fill="#FFFFFF" x="25" y="21" width="8" height="28" rx="2"></rect>
+                    </g>
+                  </g>
+                </g>
+              </g>
+            </g>
+          </svg>
+        </button>
+      </ng-template>
 
-    <ng-template #playbutton>
-      <button class="play-button col-md-2" (click)="play()">play button</button>
-    </ng-template>
+      <ng-template #playbutton>
+        <button class="play-button col-md-2 btn btn-link" (click)="play()">
+          <svg width="90px" height="90px" viewBox="0 0 70 70" version="1.1" xmlns="http://www.w3.org/2000/svg">
+            <defs></defs>
+            <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+              <g id="public-player-s" transform="translate(-38.000000, -142.000000)">
+                <g id="Group-2">
+                  <g id="Group-4" transform="translate(38.000000, 129.000000)">
+                    <g id="Group-5" transform="translate(0.000000, 13.000000)">
+                      <g id="Group-6">
+                        <circle id="Oval" fill="#5673AB" cx="35" cy="35" r="35"></circle>
+                        <path
+                          d="M41.2001413,23.6040044 L53.12746,43.3356181 C54.270271,45.2261943 53.6640875,47.6852404 51.7735114,48.8280514 C51.1492596,49.2053976 50.4337074,49.4048604 49.7042691,49.4048604 L25.8496316,49.4048604 C23.6404926,49.4048604 21.8496316,47.6139994 21.8496316,45.4048604 C21.8496316,44.675422 22.0490945,43.9598698 22.4264407,43.3356181 L34.3537594,23.6040044 C35.4965703,21.7134283 37.9556165,21.1072448 39.8461926,22.2500558 C40.4004672,22.5851023 40.8650947,23.0497299 41.2001413,23.6040044 Z"
+                          id="Triangle-2" fill="#FFFFFF"
+                          transform="translate(37.777246, 35.538758) rotate(90.000000) translate(-37.777246, -35.538758) "></path>
+                      </g>
+                    </g>
+                  </g>
+                </g>
+              </g>
+            </g>
+          </svg>
+        </button>
+      </ng-template>
 
-    <div class="waveform-container col-md-10">
-      <div id="waveform"></div>
-      <div class="time float-left">1:53</div>
-      <div class="time float-right">3:14</div>
+      <div class="player-container col-md-10">
+        <div class="waveform-container">
+          <div id="waveform"></div>
+        </div>
+        <div class="timebar-container">
+          <div id="timebar">
+            <div
+              #startTime
+              class="drag-block"
+              mwlDraggable [dragAxis]="{x: true, y:false}"
+              (dragEnd)="updateStartTime($event)"
+              [validateDrag]="validateDragStart()"
+              [style.left]="getStartPosition()"
+            >*
+            </div>
+            <div
+              #endTime
+              class="drag-block"
+              [class.invisible]="!comment.includeEnd"
+              mwlDraggable [dragAxis]="{x: true, y:false}"
+              (dragEnd)="updateEndTime($event)"
+              [validateDrag]="validateDragEnd()"
+              [style.left]="getEndPosition()"
+            >*
+            </div>
+          </div>
+        </div>
+        <div class="time float-left"><h5>1:53</h5></div>
+        <div class="time float-right"><h5>3:14</h5></div>
+      </div>
+
+    </div>
+
+    <div class="comments" [ngbCollapse]="!showComments">
+
+      <div class="comments-header">
+        <div><h3>{{comments?.length}} comments</h3></div>
+        <div>
+          <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true"
+             aria-expanded="false">sort icon</a>
+
+          <div class="dropdown-menu">
+            <a *ngFor="let sorter of commentSorters" (click)="currentSorter = sorter" class="dropdown-item">
+              {{sorter.description}}
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <app-comment-form [version_id]="versionId" [comment]="comment" [player]="player"></app-comment-form>
+
+      <app-comment
+        *ngFor="let comment of getCommentsSorted()"
+        [player]="player"
+        [comment]="comment">
+      </app-comment>
+
     </div>
   </div>
-
 </app-public-page>

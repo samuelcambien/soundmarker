@@ -4,9 +4,7 @@
 
     <div class="form-field col-md-4">
 
-
       <div class="card upload-songs-area rounded border-0">
-
 
         <div class="upload-songs-text">
 
@@ -48,7 +46,6 @@
           </ng-template>
 
         </div>
-
 
         <div class="tabletainer">
 
@@ -131,8 +128,10 @@
   </div>
 
 </form>
+
 <div ng2FileDrop
      [ngClass]="{'nv-file-over': hasBaseDropZoneOver}"
      (fileOver)="fileOverBase($event)"
      [uploader]="uploader"
      class="well my-drop-zone">
+</div>

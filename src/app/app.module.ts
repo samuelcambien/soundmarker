@@ -11,16 +11,20 @@ import {PublicUploadPageComponent} from './public-upload-page/public-upload-page
 import {routing} from "./app.routing";
 import {PublicPlayerPageComponent} from './public-player-page/public-player-page.component';
 import {PublicPageComponent} from './public-page/public-page.component';
-import {
-  PublicInfoHeaderComponent,
-  PublicInfoLinkComponent
-} from "./public-page/public-info/header/public-info-header.component";
-import {PublicInfoZoneComponent} from "./public-page/public-info/zone/public-info-zone.component";
+import {PublicInfoHeaderComponent,} from "./public-page/public-info/header/public-info-header.component";
 import {
   AboutUsInfoComponent,
   HelpInfoComponent,
   ProInfoComponent
 } from "./public-page/public-info/public-info.component";
+import {CommentComponent} from './comments/comment/comment.component';
+import {ReplyComponent} from './comments/reply/reply.component';
+import {CommentFormComponent} from "./comments/comment-form/comment-form.component";
+import {ReplyFormComponent} from './comments/reply-form/reply-form.component';
+import {DragAndDropModule} from "angular-draggable-droppable";
+import {DurationDirective} from './duration.directive';
+import {DurationFormatterPipe} from './duration-formatter.pipe';
+import {NgbModule} from "@ng-bootstrap/ng-bootstrap";
 
 @NgModule({
   declarations: [
@@ -30,18 +34,24 @@ import {
     PublicUploadFinishedComponent,
     PublicUploadPageComponent,
     PublicInfoHeaderComponent,
-    PublicInfoLinkComponent,
-    PublicInfoZoneComponent,
     AboutUsInfoComponent,
     ProInfoComponent,
     HelpInfoComponent,
     PublicPlayerPageComponent,
-    PublicPageComponent
+    PublicPageComponent,
+    CommentFormComponent,
+    CommentComponent,
+    ReplyComponent,
+    ReplyFormComponent,
+    DurationDirective,
+    DurationFormatterPipe
   ],
   imports: [
     BrowserModule,
     FileUploadModule,
     FormsModule,
+    DragAndDropModule.forRoot(),
+    NgbModule.forRoot(),
     routing
   ],
   providers: [
@@ -50,7 +60,8 @@ import {
   entryComponents: [
     AboutUsInfoComponent,
     ProInfoComponent,
-    HelpInfoComponent
+    HelpInfoComponent,
+    ReplyFormComponent
   ]
 })
 export class AppModule {
