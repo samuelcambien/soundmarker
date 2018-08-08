@@ -1,0 +1,56 @@
+.comment-play {
+	height: 16px;
+	margin-left: 10px;
+	padding-top: 0px !important;
+	padding-right: 24px;
+}
+
+.play-button {
+	float: left;
+	margin-top: -2px;
+	margin-right: 3px;
+	margin-left: -1px;
+}
+
+.comment-time {
+	float: left;
+}
+
+.comment-play p {
+	font-family: "avenirnext-bold";
+	font-size: 8pt;
+	color: white;
+}
+
+.name-tx {
+	margin-bottom: 0rem !important;
+	font-family: "avenirnext-bold";
+	color: #2F2F2F;
+}
+
+.comment-tx {
+	color: #2F2F2F;
+}
+
+.reply-tx {
+	margin-top: -0.8rem !important;
+	font-family: "avenirnext-bold";
+	font-size: 8pt;
+	cursor: pointer;
+}
+
+.date-tx {
+	margin-bottom: -0rem;
+	font-size: 8pt;
+	display: inline;
+	margin-left: 8px;
+	}
+	
+.showhidereplies {
+	margin-top: -0.4rem;
+	margin-bottom: 0.4rem;
+}
+
+.btn-text b{display:inline}
+.btn-text:not(.collapsed)  span{display:none}
+.btn-text.collapsed b {display:none}
