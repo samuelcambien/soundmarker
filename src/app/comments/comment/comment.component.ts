@@ -10,6 +10,7 @@ import {ReplyFormComponent} from "../reply-form/reply-form.component";
 export class CommentComponent implements OnInit {
 
   @Input() comment: Comment;
+  @Input() player;
 
   @ViewChild('reply', { read: ViewContainerRef }) reply: ViewContainerRef;
 
@@ -26,6 +27,13 @@ export class CommentComponent implements OnInit {
       this.cfr.resolveComponentFactory(
         ReplyFormComponent
       )
-    ).instance.parentId = this.comment.id;
+    ).instance.parentId = this.comment.comment_id;
+  }
+
+  goToCommentTime(comment: Comment) {
+
+    this.player.backend.seekTo(comment.start, this.comment.end);
+    this.player.drawer.progress(this.player.backend.getPlayedPercents());
+    this.player.play();
   }
 }

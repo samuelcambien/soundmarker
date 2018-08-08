@@ -21,6 +21,9 @@ import {CommentComponent} from './comments/comment/comment.component';
 import {ReplyComponent} from './comments/reply/reply.component';
 import {CommentFormComponent} from "./comments/comment-form/comment-form.component";
 import {ReplyFormComponent} from './comments/reply-form/reply-form.component';
+import {DragAndDropModule} from "angular-draggable-droppable";
+import {DurationDirective} from './duration.directive';
+import {DurationFormatterPipe} from './duration-formatter.pipe';
 import {NgbModule} from "@ng-bootstrap/ng-bootstrap";
 
 @NgModule({
@@ -39,12 +42,15 @@ import {NgbModule} from "@ng-bootstrap/ng-bootstrap";
     CommentFormComponent,
     CommentComponent,
     ReplyComponent,
-    ReplyFormComponent
+    ReplyFormComponent,
+    DurationDirective,
+    DurationFormatterPipe
   ],
   imports: [
     BrowserModule,
     FileUploadModule,
     FormsModule,
+    DragAndDropModule.forRoot(),
     NgbModule.forRoot(),
     routing
   ],

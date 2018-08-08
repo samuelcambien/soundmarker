@@ -1,13 +1,15 @@
 export class Comment {
 
-  public id;
+  public comment_id;
   public version_id;
   public parent_id;
   public time;
   public name: string;
   public tag: string;
   public start;
+  public includeStart: boolean;
   public end;
+  public includeEnd: boolean;
   public text: string;
   public replies: Comment[];
 

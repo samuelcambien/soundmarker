@@ -2,6 +2,18 @@
 	border-bottom: 1px solid black;
 }
 
+#timebar {
+  background-color: grey;
+}
+
+.drag-block {
+  position: absolute;
+}
+
+.timebar-container {
+  position: relative;
+}
+
 .time {
 	margin-top: -36px;
 }

@@ -4,7 +4,7 @@
 
     <div class="comment-name"><p class="name-tx">{{comment.name}}</p></div>
 
-    <button class="btn btn-secondary btn-sm comment-play">
+    <button (click)="goToCommentTime(comment)" class="btn btn-secondary btn-sm comment-play">
       <div class="play-button">
         <svg width="10px" height="8px" viewBox="0 0 33 33" version="1.1" xmlns="http://www.w3.org/2000/svg">
           <defs></defs>
@@ -35,7 +35,7 @@
       </ng-template>
     </button>
 
-    <p class="date-tx text-right">2 days ago</p>
+    <p class="date-tx text-right">{{comment.time}}</p>
 
   </div>
 

@@ -1,4 +1,5 @@
 import {Component} from '@angular/core';
+import * as moment from "moment";
 
 @Component({
   selector: 'app-root',
@@ -12,13 +13,13 @@ export class RestUrl {
 
   private static TEXT: string = "http://localhost:3000";
 
-  private static DATA: string;
+  private static DATA: string = "http://localhost:8080/rest";
 
   public static UPLOAD: string = RestUrl.DATA + "/upload/file";
 
   public static TRACK: string = RestUrl.TEXT + "/track";
 
-  public static VERSION: string = RestUrl.DATA + "/version";
+  public static VERSION: string = "https://d3k08uu3zdbsgq.cloudfront.net/Bruno-LetHerKnow.wav";
 
   public static COMMENTS: string = RestUrl.TRACK + "/version/comments";
 
@@ -27,13 +28,23 @@ export class RestUrl {
 
 export class Utils {
 
-  public static sendGetRequest(url, data, callback): void {
+  public static getTimeReadable(time) {
+    return moment.utc(time).format("mm:ss");
+  }
+
+  public static getTimeFormatted(seconds) {
+    return moment.utc(moment.duration({'seconds': seconds}).asMilliseconds()).format("mm:ss");
+  }
+
+  public static sendGetRequest(url, data, params, callback): void {
     let trackRequest = new XMLHttpRequest();
     for (let entry of data) {
       url += "/" + entry;
     }
     trackRequest.open("GET", url, true);
-    trackRequest.send();
+    // trackRequest.setRequestHeader("Access-Control-Allow-Origin", "true");
+    // trackRequest.setRequestHeader("emailAdress", "george.washington@america.com");
+    trackRequest.send(params);
     trackRequest.addEventListener("readystatechange", () => {
       if (trackRequest.readyState == 4 && trackRequest.status == 200) {
         callback(JSON.parse(trackRequest.responseText));
