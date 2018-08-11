@@ -11,9 +11,9 @@ export class AppComponent {
 
 export class RestUrl {
 
-  private static TEXT: string = "http://localhost:3000";
+  private static TEXT: string = "http://soundmarker-env.mc3wuhhgpz.eu-central-1.elasticbeanstalk.com/";
 
-  private static DATA: string = "http://localhost:8080/rest";
+  private static DATA: string = "http://soundmarker-env.mc3wuhhgpz.eu-central-1.elasticbeanstalk.com/";
 
   public static UPLOAD: string = RestUrl.DATA + "/upload/file";
 

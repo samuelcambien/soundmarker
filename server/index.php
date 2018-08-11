@@ -36,6 +36,10 @@ Flight::route('/', function(){
     include 'index.html';
 });
 
+Flight::route('/player/47', function(){
+    include 'index.html';
+});
+
 ////////////////////////////// Routes - /file/new //////////////////////////////
 Flight::route('POST /file/new', function() {
 $version_id = Flight::request()->data->version_id;
