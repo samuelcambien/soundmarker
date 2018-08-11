@@ -82,5 +82,15 @@ Flight::json(array(
 ), 200);
 });
 
+Flight::route('GET /track/47', function() {
+$track_id = Flight::request()->data->track_id;
+
+// return ok
+Flight::json(array(
+   'track_url' => "https://d3k08uu3zdbsgq.cloudfront.net/06pianoconverted.mp3",
+   'track_hash' => "hash"
+), 200);
+});
+
 ////////////////////////////// Start Flight //////////////////////////////
 Flight::start();
