@@ -4,16 +4,13 @@ require 'vendor/autoload.php';
 
 ////////////////////////////// Setup DB //////////////////////////////
 // Setup DB
-// register dB
-// Flight::register('db', 'PDO', array('mysql:host='.$_SERVER["RDS_HOSTNAME"].';dbname='.$_SERVER["RDS_DB_NAME"], $_SERVER["RDS_USERNAME"], $_SERVER["RDS_PASSWORD"]));
-// $db = Flight::db();
-// $sql = "SELECT * FROM user WHERE email = '{$email}'";
-// $result = $db->query($sql);
-// if ($result != false) {
-//     return new user($result->fetch_assoc());
-// } else {
-//     return false;
-// }
+Flight::register('db', 'PDO', array('mysql:host='.$_SERVER["RDS_HOSTNAME"].';dbname='.$_SERVER["RDS_DB_NAME"], $_SERVER["RDS_USERNAME"], $_SERVER["RDS_PASSWORD"]), function($db) {
+        $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+});
+// SELECT o.*, p.product_id productId, p.name productName, p.price productPrice
+//  FROM orders o
+//  JOIN products p ON o.product = p.product_id
+//  WHERE order_id = :oId
 
 ////////////////////////////// Setup S3 client //////////////////////////////
 use Aws\S3\S3Client;
@@ -40,11 +37,116 @@ Flight::route('/player/47', function(){
     include 'index.html';
 });
 
+
+////////////////////////////// Routes - /project/new //////////////////////////////
+
+Flight::route('POST /project/new', function() {
+
+// Todo: check if user_id exists first (foreign_key needs to be valid) -> put in dB
+$user_id = Flight::request()->data->user_id;
+$project_title = Flight::request()->data->project_title;
+$project_password = Flight::request()->data->project_password;
+
+$db = Flight::db();
+$sql = "INSERT INTO Project (title, password, active) VALUES ('$project_title', '$project_password', '1')";
+$result = $db->query($sql);
+
+// return ok
+Flight::json(array(
+   'project_id' => $db->lastInsertId()
+), 200);
+});
+
+
+////////////////////////////// Routes - /project/password //////////////////////////////
+
+Flight::route('POST /project/password', function() {
+
+$project_id = Flight::request()->data->project_id;
+
+$db = Flight::db();
+$sql = "SELECT password FROM Project WHERE project_id = '$project_id'";
+$result = $db->query($sql);
+
+Flight::json(array(
+   'project_id' => $project_id,
+   'project_password' => $result->fetch()[0] 
+), 200);
+
+});
+
+////////////////////////////// Routes - /project/delete //////////////////////////////
+
+Flight::route('POST /project/delete', function() {
+
+$project_id = Flight::request()->data->project_id;
+
+$db = Flight::db();
+$sql = "UPDATE Project SET active = '0' WHERE project_id = '$project_id'";
+$result = $db->query($sql);
+
+// return ok
+Flight::json(array(
+   'project_id' => $project_id
+), 200);
+});
+
+////////////////////////////// Routes - /track/new //////////////////////////////
+
+Flight::route('POST /track/new', function() {
+
+$project_id = Flight::request()->data->project_id;
+$track_title = Flight::request()->data->track_title;
+$track_artist = Flight::request()->data->track_artist;
+
+$db = Flight::db();
+if ($project_id) {
+    $sql = "INSERT INTO Track (title, artist, project_id) VALUES ('$track_title', '$track_artist', '$project_id')";
+} else {
+    $sql = "INSERT INTO Track (title, artist) VALUES ('$track_title', '$track_artist')";
+}
+$result = $db->query($sql);
+
+// return ok
+Flight::json(array(
+   'track_id' => $db->lastInsertId()
+), 200);
+});
+
+////////////////////////////// Routes - /track/version //////////////////////////////
+
+Flight::route('POST /track/version', function() {
+
+// Todo: add SVG?
+$track_id = Flight::request()->data->track_id;
+$streamable = Flight::request()->data->streamable;
+$downloadable = Flight::request()->data->downloadable;
+$visibility = Flight::request()->data->visibility;
+$version_notes = Flight::request()->data->version_notes;
+$version_title = Flight::request()->data->version_title;
+
+$db = Flight::db();
+$sql = "INSERT INTO Version (track_id, streamable, downloadable, visibility, notes, version_title) VALUES ('$track_id', '$streamable', 'downloadable', '$visibility', '$version_notes', '$version_title')";
+$result = $db->query($sql);
+
+// return ok
+Flight::json(array(
+   'version_id' => $db->lastInsertId()
+), 200);
+});
+
 ////////////////////////////// Routes - /file/new //////////////////////////////
 Flight::route('POST /file/new', function() {
+
+// Todo: check if files actually get uploaded 
+    // And put in DB
 $version_id = Flight::request()->data->version_id;
 $stream_identifier = Flight::request()->data->stream_identifier;
-$file_id = uniqid();
+
+$db = Flight::db();
+$sql = "INSERT INTO File (version_id, filename) VALUES ('$version_id', 'bla')";
+$result = $db->query($sql);
+$file_id = $db->lastInsertId();
 
 // get the variables
 $s3 = Flight::get("s3");
@@ -58,7 +160,7 @@ try {
         'Body'   => "Flight::request()->files[0]", // figuring out right way to get the file from the JSON
         'ACL'    => 'public-read'
     ]);
-	// Print the URL to the object.
+    // Print the URL to the object.
     echo $result['ObjectURL'] . PHP_EOL;
 } catch (S3Exception $e) {
     echo $e->getMessage() . PHP_EOL;

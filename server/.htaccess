@@ -14,7 +14,12 @@
     RewriteCond %{REQUEST_URI} "/file/new" [OR]
     RewriteCond %{REQUEST_URI} "/track/url" [OR]
     RewriteCond %{REQUEST_URI} "/track/47" [OR]
-    RewriteCond %{REQUEST_URI} "/player/47"
+    RewriteCond %{REQUEST_URI} "/player/47" [OR]
+    RewriteCond %{REQUEST_URI} "/track/new" [OR]
+    RewriteCond %{REQUEST_URI} "/track/version" [OR]
+    RewriteCond %{REQUEST_URI} "/project/new" [OR]
+    RewriteCond %{REQUEST_URI} "/project/password" [OR]
+    RewriteCond %{REQUEST_URI} "/project/delete"
     RewriteRule ^ index.php [L]
 
     # Prefer .php over .html
