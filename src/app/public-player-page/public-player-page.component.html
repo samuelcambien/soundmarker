@@ -1,9 +1,9 @@
-<app-public-page>
+<app-public-page xmlns="http://www.w3.org/1999/html">
   <div class="container-fluid">
 
     <div class="player-header row">
-      <div class="title col-md-8"><h4>{{trackTitle}}</h4></div>
-      <div class="cloud-icon col-md-2">cloud icon</div>
+      <div class="title col-md-8"><h4>{{track?.title}}</h4></div>
+      <div class="cloud-icon col-md-2" (click)="download()">cloud icon</div>
       <div class="text-icon col-md-2" (click)="showComments = !showComments">text icon</div>
     </div>
 
@@ -59,7 +59,7 @@
 
       <div class="player-container col-md-10">
         <div class="waveform-container">
-          <div id="waveform"></div>
+          <div id="waveform" #waveform></div>
         </div>
         <div class="timebar-container">
           <div id="timebar">
@@ -67,25 +67,37 @@
               #startTime
               class="drag-block"
               mwlDraggable [dragAxis]="{x: true, y:false}"
-              (dragEnd)="updateStartTime($event)"
               [validateDrag]="validateDragStart()"
+              (dragStart)="startPos=startTime.offsetLeft"
+              (dragEnd)="updateStartTime(startPos, $event)"
               [style.left]="getStartPosition()"
-            >*
+            >
+              <ng-container *ngTemplateOutlet="soundmarker"></ng-container>
             </div>
             <div
               #endTime
               class="drag-block"
               [class.invisible]="!comment.includeEnd"
               mwlDraggable [dragAxis]="{x: true, y:false}"
-              (dragEnd)="updateEndTime($event)"
+              (dragStart)="startPos=endTime.offsetLeft"
+              (dragEnd)="updateEndTime(startPos, $event)"
               [validateDrag]="validateDragEnd()"
               [style.left]="getEndPosition()"
-            >*
+            >
+              <ng-container *ngTemplateOutlet="soundmarker"></ng-container>
             </div>
+
+            <ng-template #soundmarker>
+              <svg width="10px" height="140px" viewBox="0 0 10 140" version="1.1" xmlns="http://www.w3.org/2000/svg">
+                <line x1="5" y1="0" x2="5" y2="130" style="stroke:rgb(0,0,255);stroke-width:2px"></line>
+                <circle cx="5" cy="135" r="5"></circle>
+              </svg>
+            </ng-template>
+
           </div>
         </div>
-        <div class="time float-left"><h5>1:53</h5></div>
-        <div class="time float-right"><h5>3:14</h5></div>
+        <div class="time float-left"><h5>{{formatTime(5)}}</h5></div>
+        <div class="time float-right"><h5>{{formatTime(duration)}}</h5></div>
       </div>
 
     </div>
@@ -106,7 +118,7 @@
         </div>
       </div>
 
-      <app-comment-form [version_id]="versionId" [comment]="comment" [player]="player"></app-comment-form>
+      <app-comment-form [version_id]="track?.last_version" [comment]="comment" [player]="player"></app-comment-form>
 
       <app-comment
         *ngFor="let comment of getCommentsSorted()"

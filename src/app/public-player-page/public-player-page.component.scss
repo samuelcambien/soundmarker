@@ -2,18 +2,27 @@
 	border-bottom: 1px solid black;
 }
 
-#timebar {
-  background-color: grey;
+#waveform {
+  width: 100%;
+  height: 70px;
+  background-image: url("waveformjs.png");
 }
 
-.drag-block {
-  position: absolute;
+#timebar {
+  background-color: grey;
+  height: 5px;
 }
 
 .timebar-container {
   position: relative;
 }
 
+.drag-block {
+  position: absolute;
+  bottom: -9px;
+  z-index: 100;
+}
+
 .time {
-	margin-top: -36px;
+	margin-top: 20px;
 }

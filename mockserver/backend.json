@@ -1,16 +1,59 @@
 {
-  "track": {
-    "track_id": 47,
-    "version_id": 3,
-    "track_title": "piano.wav"
-  },
+  "project": [
+    {
+      "id": 1
+    },
+    {
+      "id": 2
+    },
+    {
+      "id": 3
+    },
+    {
+      "id": 4
+    },
+    {
+      "id": 5
+    },
+    {
+      "id": 6
+    },
+    {
+      "id": 7
+    },
+    {
+      "id": 8
+    },
+    {
+      "id": 9
+    },
+    {
+      "id": 10
+    },
+    {
+      "id": 11
+    }
+  ],
+  "track": [
+    {
+      "id": 47,
+      "last_version": 3,
+      "track_title": "piano.wav"
+    }
+  ],
+  "track-version": [
+    {
+      "aws_path": "http://localhost:8080/rest/version",
+      "duration": "0:15.3"
+    }
+  ],
   "track-version-comments": [
     {
       "version_id": 3,
       "time": 1532527794707,
       "text": "I love that bass, can you put it up a bit",
       "name": "Peter Johnson",
-      "start": 2,
+      "start": "2:45",
       "end": 5,
       "comment_id": 1
     },

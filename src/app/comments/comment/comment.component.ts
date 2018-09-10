@@ -1,5 +1,5 @@
 import {Component, ComponentFactoryResolver, Input, OnInit, ViewChild, ViewContainerRef} from '@angular/core';
-import {Comment} from "../../comment";
+import {Comment} from "../comment";
 import {ReplyFormComponent} from "../reply-form/reply-form.component";
 
 @Component({

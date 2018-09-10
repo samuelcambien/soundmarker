@@ -43,6 +43,14 @@
     <p class="comment-tx">{{comment.text}}</p>
   </div>
 
+  <div class="row">
+    <div class="comment-reply" (click)="showReplyForm()">
+      <p class="reply-tx"> REPLY</p>
+    </div>
+  </div>
+
+  <template #reply></template>
+
   <div *ngIf="comment.replies?.length">
 
     <p role="button" [attr.aria-expanded]="showReplies" aria-controls="collapseExample"
@@ -56,18 +64,6 @@
       <app-reply *ngFor="let reply of comment.replies" [reply]="reply"></app-reply>
     </div>
 
-  </div>
-
-  <div class="row">
-    <div class="comment-reply" (click)="showReplyForm()">
-      <p class="reply-tx"> REPLY</p>
-    </div>
-  </div>
-
-  <template #reply></template>
-
-  <div class="row comment-reply" (click)="comment.text">
-    REPLY
   </div>
 
 </div>

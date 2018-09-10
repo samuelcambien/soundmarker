@@ -7,6 +7,7 @@ export class Comment {
   public name: string;
   public tag: string;
   public start;
+  public startFormatted;
   public includeStart: boolean;
   public end;
   public includeEnd: boolean;

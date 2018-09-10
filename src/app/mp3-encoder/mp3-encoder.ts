@@ -4,9 +4,13 @@ import * as lamejs from "lamejs";
 // import * as AV from 'av';
 // import * as decode from 'audio-decode';
 // import * as lena from 'audio-lena/flac';
-import * as flac from 'flac.js';
+// import * as flac from 'flac.js';
 
-import audiofile, {default as AudioFile} from 'audiofile';
+import * as audiofile from './audiofile.js';
+import * as AV from './av.js';
+
+import * as stream from 'binary-io';
+
 
 import WaveFile from "wavefile";
 
@@ -154,6 +158,7 @@ export class Mp3Encoder {
   }
 
   public static convertFlac(file: File, callback: Function) {
+    // require("flac.js");
     Mp3Encoder.convertFile(file, (buffer: ArrayBuffer) =>
       require("audio-decode")(buffer, (err, buf: AudioBuffer) =>
         Mp3Encoder.convertWavOther(new File([
@@ -164,84 +169,119 @@ export class Mp3Encoder {
   }
 
   public static convertAlac(file: File, callback: Function) {
-    Mp3Encoder.convertFile(file, (buffer: ArrayBuffer) => {
-        // require("av");
-        require("alac");
-        // new AudioContext().decodeAudioData(buffer, (buf) => {
-        require("audio-decode")(buffer, (err, buf: AudioBuffer) => {
-            try {
-              Mp3Encoder.convertWavOther(new File([
-                require('audiobuffer-to-wav')(buf)
-              ], file.name), callback)
-            } catch (e) {
-              console.log(e);
-            }
-          }
-        )
-      }
+
+    // require('./node_modules/aurora.js');
+
+    // require("./node_modules/aac.js");
+
+    // require("./flac.js");
+    // require("./index.js");
+    // var AV = require('av');
+    // require('mp3');
+
+    Mp3Encoder.convertFile(file, (buffer: ArrayBuffer) =>
+      require("audio-decode")(buffer, (buf: AudioBuffer) => {
+
+        Mp3Encoder.convertWavOther(new File([
+          require('audiobuffer-to-wav')(buf)
+        ], file.name), callback)
+      })
     );
+
+    // console.log(
+    //   require("src/app/mp3-encoder/alac")
+    // );
+    // new AV.Demuxer().decode();
+
+    // Mp3Encoder.convertFile(file, (buffer: ArrayBuffer) => {
+    //     // require("av");
+    //     // new AudioContext().decodeAudioData(buffer, (buf) => {
+    //     require("audio-decode")(buffer, (err, buf: AudioBuffer) => {
+    //         try {
+    //           Mp3Encoder.convertWavOther(new File([
+    //             require('audiobuffer-to-wav')(buf)
+    //           ], file.name), callback)
+    //         } catch (e) {
+    //           console.log(e);
+    //         }
+    //       }
+    //     )
+    //   }
+    // );
   }
+
 
   public static convertAiff(file: File, callback: Function) {
 
-    // Mp3Encoder.convertFile(file, (buffer: ArrayBuffer) => {
-    //
-    //   let af = new AudioFile();
-    //
-    //   require('flac.js');
-    //
-    //
-    //   // af.load();
-    //
-    //   // console.log(audio);
-    //   console.log(audiofile);
-    //   // console.log(af);
-    //
-    //   // let streamBuffer = require('stream-array-buffer')({size: this.sampleBlockSize});
-    //   //
-    //   // // streamBuffer.toStream()
-    //   //
-    //   // let Alac2Pcm = require('alac2pcm');
-    //   //
-    //   // let out = new ArrayBuffer(0);
-    //
-    //   // buffer.pipe(new Alac2Pcm({bitdepth: 16}))
-    //
-    //   // Mp3Encoder.convertWav16bit(new File([
-    //   //     []
-    //   //   ])
-    //   // )
-    //
-    // })
 
     Mp3Encoder.convertFile(file, (buffer: ArrayBuffer) => {
+      console.log(
+        audiofile
+      );
+      console.log(
+        new audiofile.AIFFDecoder().decode(buffer)
+      );
+    });
 
-      let af = new AudioFile();
-
-
-      // require('alac');
-
-      // require("audio-decode")(file, (err, buf: AudioBuffer) => {
-      //   Mp3Encoder.convertWavOther(new File([require('audiobuffer-to-wav')(buf)], file.name), callback)
-      // });
-
-      let streamBuffer = require('stream-array-buffer')({size: this.sampleBlockSize});
-
-      let stream = streamBuffer.toStream();
-
-      // let Alac2Pcm = require('alac2pcm');
-
-      let out = new ArrayBuffer(0);
-
-      // stream.pipe(new Alac2Pcm({bitdepth: 16}))
-
-      // Mp3Encoder.convertWav16bit(new File([
-      //     []
-      //   ])
-      // )
-
-    })
   }
+
+
+  //
+  //   let af = new AudioFile();
+  //
+  //   require('flac.js');
+  //
+  //
+  //   // af.load();
+  //
+  //   // console.log(audio);
+  //   console.log(audiofile);
+  //   // console.log(af);
+  //
+  //   // let streamBuffer = require('stream-array-buffer')({size: this.sampleBlockSize});
+  //   //
+  //   // // streamBuffer.toStream()
+  //   //
+  //   // let Alac2Pcm = require('alac2pcm');
+  //   //
+  //   // let out = new ArrayBuffer(0);
+  //
+  //   // buffer.pipe(new Alac2Pcm({bitdepth: 16}))
+  //
+  //   // Mp3Encoder.convertWav16bit(new File([
+  //   //     []
+  //   //   ])
+  //   // )
+  //
+  // })
+
+  // Mp3Encoder.convertFile(file, (buffer: ArrayBuffer) => {
+  //
+  //   require("audiofile");
+  //
+  //   // require('alac');
+  //
+  //   // require("audio-decode")(file, (err, buf: AudioBuffer) => {
+  //   //   Mp3Encoder.convertWavOther(new File([require('audiobuffer-to-wav')(buf)], file.name), callback)
+  //   // });
+  //
+  //   let streamBuffer = require('stream-array-buffer')({size: this.sampleBlockSize});
+  //
+  //   let stream = streamBuffer.toStream();
+  //
+  //   // let Alac2Pcm = require('alac2pcm');
+  //
+  //   let out = new ArrayBuffer(0);
+  //
+  //   // stream.pipe(new Alac2Pcm({bitdepth: 16}))
+  //
+  //   // Mp3Encoder.convertWav16bit(new File([
+  //   //     []
+  //   //   ])
+  //   // )
+  //
+  // })
+  // }
 
   //
   //

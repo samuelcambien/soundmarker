@@ -1,14 +1,18 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {Comment} from "../../comment";
+import {Comment} from "../comment";
 import {RestUrl, Utils} from "../../app.component";
-import {NgForm} from "@angular/forms";
+import {FormControl, FormGroup, NgForm} from "@angular/forms";
 
 @Component({
   selector: 'app-comment-form',
   templateUrl: './comment-form.component.html',
-  styleUrls: ['./comment-form.component.scss']
+  styleUrls: ['./comment-form.component.scss'],
 })
 export class CommentFormComponent implements OnInit {
+
+  commentForm = new FormGroup({
+    text: new FormControl('Type comment')
+  });
 
   @Input() version_id;
   @Input() comment: Comment;
@@ -30,13 +34,21 @@ export class CommentFormComponent implements OnInit {
     form.resetForm();
   }
 
+  format(seconds) {
+    // return Utils.getTimeFormatted(seconds);
+  }
+
   triggerStart() {
     if (!this.comment.start)
       this.comment.start = this.player.backend.getCurrentTime();
   }
 
   triggerEnd() {
-    if (!this.comment.includeEnd)
+    if (!this.comment.end)
       this.comment.end = this.player.backend.getDuration();
+  }
+
+  onFormSubmit() {
+
   }
 }

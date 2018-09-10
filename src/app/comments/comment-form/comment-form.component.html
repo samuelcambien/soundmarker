@@ -1,3 +1,9 @@
+<form [formGroup]="commentForm" (ngSubmit)="onFormSubmit()">
+  Name: <input formControlName="text" placeholder="Enter Comment"
+               [value]="'iedemenne'">
+  <button type="submit">Submit</button>
+</form>
+
 <form #myForm="ngForm" (ngSubmit)="onSubmit(myForm)" class="comment-form container-fluid"
       [ngFormOptions]="{ updateOn: 'change'}">
   <div class="form-row">
