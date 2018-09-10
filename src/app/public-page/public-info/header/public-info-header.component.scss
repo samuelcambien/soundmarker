@@ -3,7 +3,7 @@
   padding: 0rem 0.6rem;
   border-top-left-radius: 0.6rem;
   border-top-right-radius: 0.6rem;
- border-bottom: 1px solid #dadada;
+ border-bottom: 1px solid #E8EAED;
   
 }
 
@@ -23,7 +23,7 @@
 
 .nav-link {
    color: #5673AB ;
-   margin-top: 3px;
+   margin-top: 2px;
    background: none !important;
 }
 
@@ -44,9 +44,13 @@
 	background: #5673AB !important;
 }
 
+dropdown-toggle:active .menu-item {
+	fill: yellow;
+}
+
 .dropdown-menu {
 	border-radius: 0.5rem;
-	border: 1px solid #dadada;
+	border: 1px solid #E8EAED;
 }
 
 .dropdown-menu-right {
@@ -59,8 +63,10 @@
 	background: #f6f6f6;
 }
 
-.pro-dropdown {
-	display: none;
+
+
+#menu {
+	margin-top: 0px;
 }
 
 

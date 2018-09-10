@@ -7,7 +7,7 @@ Player = {
         autoCenter    : true,
         backend       : 'WebAudio',
         container     : null,
-        cursorColor   : '#333',
+        cursorColor   : '#FF857D',
         cursorWidth   : 1,
         dragSelection : true,
         fillParent    : true,
@@ -28,7 +28,7 @@ Player = {
         scrollParent  : false,
         skipLength    : 2,
         splitChannels : false,
-        waveColor     : '#999',
+        waveColor     : '#F3F3F3',
     },
 
     init: function (params) {

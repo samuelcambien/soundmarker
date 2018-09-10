@@ -19,7 +19,7 @@ export class RestUrl {
 
   public static TRACK: string = RestUrl.TEXT + "/track";
 
-  public static VERSION: string = "https://d3k08uu3zdbsgq.cloudfront.net/Bruno-LetHerKnow.wav";
+  public static VERSION: string = "https://d3k08uu3zdbsgq.cloudfront.net/Zelmar-LetYouGo.mp3";
 
   public static COMMENTS: string = RestUrl.TRACK + "/version/comments";
 

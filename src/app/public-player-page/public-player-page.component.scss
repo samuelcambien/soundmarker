@@ -3,17 +3,146 @@
 }
 
 #timebar {
-  background-color: grey;
+  border-bottom: 5px solid #F3F3F3;
 }
 
 .drag-block {
   position: absolute;
+  z-index: 10;
 }
 
 .timebar-container {
   position: relative;
+  margin-top: -62px;
+}
+
+#waveform {
+	cursor: text;
 }
 
 .time {
-	margin-top: -36px;
+	margin-top: 8px;
+}
+
+.top-icon {
+	float: right;
+	margin-left: 12px;
+	cursor: pointer;
+}
+
+.top-icon .icon-stroke {
+	stroke: #6094F7;
+	stroke-width: 1.1;
+}
+
+.top-icon:hover .icon-stroke {
+	stroke: #6094F7;
+	transition: 0.3s;
+	stroke-width: 1.6;
+}
+
+.drag-block {
+	cursor: ew-resize !important;
+}
+
+.top-icon:after{
+	position:absolute;
+   margin-top: -4px;
+   opacity: 0;
+   color: white;
+   font-family: "avenirnext-regular";
+   padding: 0px;
+   padding-left: 6px; padding-right: 6px;
+   border-radius: 3px;
+   font-size: 10pt;
+  text-align: center;
+   background-color: #b4ceff;
+    -webkit-transition:  all 0.3s; /* Safari */
+    transition: all 0.3s;
+    display: block;
+    
+}
+
+#text-icon.top-icon:after {
+	content:"comments";
+	margin-left: -22px;
+}
+
+#cloud-icon.top-icon:after {
+	content:"download";
+	margin-left: -22px;
+}
+
+#list-icon.top-icon:after {
+	content:"overview";
+	margin-left: -20px;
+	margin-top: 6px;
+}
+
+.top-icon:hover:after {
+	opacity: 1;
+	
+	margin-top: 4px;
+	   -webkit-transition:  all 0.3s; /* Safari */
+    transition: all 0.3s;
+	
+}
+
+.list-icon {
+	margin-top: 1px;
+}
+
+
+
+
+#comments-toggle:hover {
+	fill: #5673AB;
+	transition-duration: 0.5s;
+}
+
+.player-header {
+	margin-left: 0px;
+	margin-right: 0px;
+	margin-bottom: 18px;
+}
+
+.player-content {
+	margin-bottom: 0px;
+}
+
+.playerknob {
+	padding: 0px;
+}
+
+.sort-icon {
+	float: right;
+}
+
+.comments-header {
+	margin: 0px;
+	margin-top: 20px;
+}
+
+.order.nav-link {
+	padding: 0px;
+}
+
+.nav-link, .dropdown-item {
+	font-family: 'avenirnext-regular';
+	font-size: 10pt;
+}
+
+.dropdown-menu {
+	border-radius: 0.5rem;
+	border: 1px solid #dadada;
+}
+
+.sendersnote {
+	margin-top: 20px;
+}
+
+.audioline {
+	margin-top: -60px;
+	margin-bottom: 4px;
+	
 }

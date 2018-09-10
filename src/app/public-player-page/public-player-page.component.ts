@@ -50,8 +50,9 @@ export class PublicPlayerPageComponent implements OnInit {
     let player = this.player = Player.create({
       container: '#waveform',
       timebar: '#timebar',
-      waveColor: 'grey',
-      progressColor: 'orange'
+      waveColor: '#E8EAED',
+      progressColor: '#b4ceff'
+   
     });
 
     let my = this;
@@ -64,7 +65,7 @@ export class PublicPlayerPageComponent implements OnInit {
       timeline.init({
         player: player,
         container: "#timebar",
-        height: 10
+        height: 6
       });
 
       my.duration = my.getDuration();
