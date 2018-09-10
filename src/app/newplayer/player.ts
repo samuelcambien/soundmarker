@@ -1,3 +1,5 @@
+import {now} from "moment";
+
 export class Player {
 
   constructor(private track_url: string, private duration) {
@@ -31,7 +33,7 @@ export class Player {
   private startTime: number = 0;
   private currentIndex: number = 0;
   private currentSource: AudioBufferSourceNode;
-  private playNext: boolean = false;
+  private playID: number;
 
   private loadBuffers(start: number, callback?: Function) {
 
@@ -86,7 +88,7 @@ export class Player {
 
   private stop(callback?: Function) {
     if (this.currentSource) {
-      this.playNext = false;
+      this.playID = null;
       this.currentSource.stop();
       this.currentSource = null;
       this.decodeBuffer(this.currentIndex, this.audioBuffers[this.currentIndex], callback);
@@ -104,9 +106,9 @@ export class Player {
 
     my.currentSource.start(0, offset);
 
-    this.playNext = true;
+    let playID = this.playID = now();
     this.currentSource.onended = () => {
-      if (my.playNext) {
+      if (my.playID == playID) {
         if (index + 1 <= this.maxIndex) {
           my.playBuffer(index + 1, 0);
           my.loadBuffers(index + 1);
@@ -143,11 +145,12 @@ export class Player {
     });
   }
 
-  seekTo(time: number) {
+  seekTo(time: number, callback?) {
     this.stop(() => {
       this.startTime = time;
       this.loadBuffers(Player.getIndex(time), () => {
         if (this.isPlaying()) this.playFromStartTime()
+        if (callback) callback();
       });
     });
   }

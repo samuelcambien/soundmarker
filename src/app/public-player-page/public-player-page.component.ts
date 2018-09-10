@@ -53,21 +53,6 @@ export class PublicPlayerPageComponent implements OnInit {
       this.player.seekTo(this.getSeekTime(e));
     });
 
-    // let player = this.player = Player.create({
-    //   container: '#waveform',
-    //   timebar: '#timebar',
-    //   waveColor: 'grey',
-    //   progressColor: 'orange'
-    // });
-
-    // player.on('ready', function () {
-    //
-    //   my.duration = player.backend.getDuration();
-    //
-    //   let bbox = player.drawer.wrapper.getBoundingClientRect();
-    //   my.playerWidth = bbox.width;
-    // });
-
     this.route.params.subscribe(params => {
       this.loadTrackInfo(params['track_id']);
     });
@@ -187,5 +172,15 @@ export class PublicPlayerPageComponent implements OnInit {
 
   downloadFile(propertyId: string, fileId: string) {
     ReadableStream
+  }
+
+  getTracks(): Track[] {
+    return [
+      this.track,
+      this.track,
+      this.track,
+      this.track,
+      this.track
+    ]
   }
 }

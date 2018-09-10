@@ -1,6 +1,7 @@
 import {Component, ComponentFactoryResolver, Input, OnInit, ViewChild, ViewContainerRef} from '@angular/core';
 import {Comment} from "../comment";
 import {ReplyFormComponent} from "../reply-form/reply-form.component";
+import {Player} from "../../newplayer/player";
 
 @Component({
   selector: 'app-comment',
@@ -10,7 +11,7 @@ import {ReplyFormComponent} from "../reply-form/reply-form.component";
 export class CommentComponent implements OnInit {
 
   @Input() comment: Comment;
-  @Input() player;
+  @Input() player: Player;
 
   @ViewChild('reply', { read: ViewContainerRef }) reply: ViewContainerRef;
 
@@ -32,8 +33,6 @@ export class CommentComponent implements OnInit {
 
   goToCommentTime(comment: Comment) {
 
-    this.player.backend.seekTo(comment.start, this.comment.end);
-    this.player.drawer.progress(this.player.backend.getPlayedPercents());
-    this.player.play();
+    this.player.seekTo(comment.start, this.player.play());
   }
 }

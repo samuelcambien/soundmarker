@@ -24,12 +24,14 @@ import {DragAndDropModule} from "angular-draggable-droppable";
 import {DurationDirective} from './formatting/duration.directive';
 import {DurationFormatterPipe} from './formatting/duration-formatter.pipe';
 import {NgbModule} from "@ng-bootstrap/ng-bootstrap";
-import { SoundmarkerComponent } from './soundmarker/soundmarker.component';
-import { MyCurrencyFormatterDirective } from './my-currency-formatter.directive';
-import { MyCurrencyPipe } from './my-currency.pipe';
-import { TimeInputComponent } from './comments/time-input/time-input.component';
+import {SoundmarkerComponent} from './soundmarker/soundmarker.component';
+import {MyCurrencyFormatterDirective} from './my-currency-formatter.directive';
+import {MyCurrencyPipe} from './my-currency.pipe';
+import {TimeInputComponent} from './comments/time-input/time-input.component';
 import {FileUploadModule} from "./ng2-file-upload";
-import { SplitterDirective } from './splitter.directive';
+import {SplitterDirective} from './splitter.directive';
+import { PublicPlayerListComponent } from './public-player-page/public-player-list/public-player-list.component';
+import { PublicPlayerTrackComponent } from './public-player-page/public-player-track/public-player-track.component';
 
 @NgModule({
   declarations: [
@@ -54,7 +56,9 @@ import { SplitterDirective } from './splitter.directive';
     MyCurrencyFormatterDirective,
     MyCurrencyPipe,
     TimeInputComponent,
-    SplitterDirective
+    SplitterDirective,
+    PublicPlayerListComponent,
+    PublicPlayerTrackComponent
   ],
   imports: [
     BrowserModule,
