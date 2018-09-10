@@ -1,5 +1,7 @@
 {
-  "/track/:track_id": "/track?track_id=:track_id",
+  "/track/new": "/track",
+  "/track/:id": "/track?id=:id",
+  "/track/version/:version_id": "/track-version?version_id=version_id",
   "/track/version/comments": "/track-version-comments",
   "/track/version/comments/:version_id": "/track-version-comments?version_id=:version_id",
   "/track/version/comments/replies/:parent_id": "/track-version-comments?parent_id=:parent_id"

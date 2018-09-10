@@ -1,6 +1,8 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {FileItem, FileUploader} from 'ng2-file-upload/ng2-file-upload';
+import {FileItem, FileUploader} from '../../ng2-file-upload';
 import {Mp3Encoder} from "../../mp3-encoder/mp3-encoder";
+import {RestUrl, Utils} from "../../app.component";
+import {parseHttpResponse} from "selenium-webdriver/http";
 
 @Component({
   selector: 'app-public-upload-form',
@@ -11,12 +13,15 @@ export class PublicUploadFormComponent {
 
   notes: string;
   email_from: string;
-  email_to: string;
+  email_to: [string];
+
+  project_url: string;
 
   @Input() uploader: FileUploader;
 
   protected convert(item: FileItem) {
 
+    // let type = "aiff", converter: Function;
     let type = "wav-other", converter: Function;
 
     switch (type) {
@@ -39,7 +44,6 @@ export class PublicUploadFormComponent {
     converter(item._file, (file) => {
       this.uploader.addToQueue([file]);
       this.uploader.uploadAll();
-      console.log("great success");
     });
   }
 
@@ -55,7 +59,36 @@ export class PublicUploadFormComponent {
   }
 
   onSubmit() {
-    this.uploader.queue.forEach(item => this.convert(item));
-    this.uploader.uploadAll();
+
+    Utils.sendPostRequest(RestUrl.PROJECT_NEW, {}, response => {
+
+      let project_id = response["project_id"];
+
+      this.uploader.queue.forEach(track => {
+
+        Utils.sendPostRequest(RestUrl.TRACK_NEW, {
+          project_id: project_id,
+          title: track._file.name,
+        }, response => {
+
+          let track_id = response["track_id"];
+
+          Utils.sendPostRequest(RestUrl.VERSION_NEW, {
+            track_id: 5,
+            streamable: true,
+            downloadable: false,
+          })
+        });
+
+        this.convert(track);
+        this.uploader.uploadAll();
+      });
+
+      Utils.sendPostRequest(RestUrl.PROJECT_URL, {
+        project_id: project_id,
+        sender: this.email_from,
+        receiver: this.email_to
+      }, response => this.project_url = response["project_url"])
+    });
   }
 }

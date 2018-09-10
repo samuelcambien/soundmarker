@@ -1,8 +1,10 @@
-import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {Component, ElementRef, OnInit, Renderer2, ViewChild} from '@angular/core';
 import {ActivatedRoute} from "@angular/router";
-import {Comment, CommentSorter} from "../comment";
+import {Comment, CommentSorter} from "../comments/comment";
 import {RestUrl, Utils} from "../app.component";
-import Player from "src/app/player/dist/player";
+import {saveAs} from 'file-saver/FileSaver';
+import {Player} from "../newplayer/player";
+import {Track} from "../newplayer/track";
 
 @Component({
   selector: 'app-public-player',
@@ -11,20 +13,22 @@ import Player from "src/app/player/dist/player";
 })
 export class PublicPlayerPageComponent implements OnInit {
 
-  showComments: boolean = false;
+  startPos;
+
+  showComments: boolean = true;
+
+  @ViewChild('waveform') waveform: ElementRef;
 
   @ViewChild('startTime') startTime: ElementRef;
   @ViewChild('endTime') endTime: ElementRef;
-
-  trackId: string;
-  trackTitle: string;
-  versionId: string;
 
   comments: Comment[];
 
   comment: Comment = new Comment();
 
-  player;
+  track: Track;
+
+  player: Player;
 
   public commentSorters: CommentSorter[] = [
     CommentSorter.MOST_RECENT_FIRST,
@@ -35,79 +39,55 @@ export class PublicPlayerPageComponent implements OnInit {
 
   private currentSorter: CommentSorter = CommentSorter.MOST_RECENT_FIRST;
 
-  constructor(private route: ActivatedRoute) {
+  constructor(
+    private route: ActivatedRoute,
+    private renderer: Renderer2
+  ) {
   }
 
-  private timeline: any;
-
-  private duration: any;
-
-  private playerWidth;
-  private trackUrl: string;
+  duration: any = 177;
 
   ngOnInit() {
 
-    let player = this.player = Player.create({
-      container: '#waveform',
-      timebar: '#timebar',
-      waveColor: '#E8EAED',
-      progressColor: '#b4ceff'
-   
+    this.renderer.listen(this.waveform.nativeElement, 'click', (e) => {
+      this.player.seekTo(this.getSeekTime(e));
     });
 
-    let my = this;
+    // let player = this.player = Player.create({
+    //   container: '#waveform',
+    //   timebar: '#timebar',
+    //   waveColor: 'grey',
+    //   progressColor: 'orange'
+    // });
 
-    player.on('ready', function () {
-      my.timeline = Object.create(Player.Timeline);
-
-      let timeline = my.timeline;
-
-      timeline.init({
-        player: player,
-        container: "#timebar",
-        height: 6
-      });
-
-      my.duration = my.getDuration();
-
-
-      let bbox = timeline.player.drawer.wrapper.getBoundingClientRect();
-      my.playerWidth = bbox.width;
-
-      console.log(my.playerWidth);
-      // my.playerWidth = my.getPlayerWidth();
-    });
+    // player.on('ready', function () {
+    //
+    //   my.duration = player.backend.getDuration();
+    //
+    //   let bbox = player.drawer.wrapper.getBoundingClientRect();
+    //   my.playerWidth = bbox.width;
+    // });
 
     this.route.params.subscribe(params => {
-      this.trackId = params['track_id'];
-      this.loadTrackInfo();
+      this.loadTrackInfo(params['track_id']);
     });
   }
 
-  private getDuration() {
-    return this.player.backend.getDuration();
+  private getPlayerWidth(): number {
+    return this.waveform.nativeElement.clientWidth;
   }
 
-  private getPlayerWidth() {
-    let bbox = this.timeline.player.drawer.wrapper.getBoundingClientRect();
-    this.playerWidth = bbox.width;
-  }
-
-  private loadTrackInfo() {
-    Utils.sendGetRequest(RestUrl.TRACK, [this.trackId], '"emailAddress":"george.washington@america.com"', (response) => {
-
-      this.trackTitle = response['track_title'];
-      this.versionId = response['version_id'];
-
-      this.trackUrl = response['track_url'];
-
-      this.player.loadBuffer(RestUrl.VERSION);
-      this.loadComments();
+  private loadTrackInfo(trackId: string) {
+    let my = this;
+    Utils.sendGetRequest(RestUrl.TRACK, [trackId], '"emailAddress":"george.washington@america.com"', (response) => {
+      my.track = response[0];
+      this.player = new Player("https://d3k08uu3zdbsgq.cloudfront.net/Zelmar-LetYouGo", this.duration);
+      my.loadComments();
     });
   }
 
   private loadComments() {
-    Utils.sendGetRequest(RestUrl.COMMENTS, [this.versionId], "", (response) => {
+    Utils.sendGetRequest(RestUrl.COMMENTS, [this.track.last_version], "", (response) => {
       this.comments = response;
       this.loadReplies();
     });
@@ -129,14 +109,14 @@ export class PublicPlayerPageComponent implements OnInit {
     return this.getPosition(this.endTime, this.comment.end);
   }
 
-  updateStartTime(event) {
+  updateStartTime(startPos, current) {
     this.comment.includeStart = true;
-    this.comment.start = this.getCommentTime(this.startTime, event);
+    this.comment.start = this.getCommentTime(this.startTime, startPos, current);
   }
 
-  updateEndTime(event) {
+  updateEndTime(startPos, current) {
     this.comment.includeEnd = true;
-    this.comment.end = this.getCommentTime(this.endTime, event);
+    this.comment.end = this.getCommentTime(this.endTime, startPos, current);
   }
 
   play() {
@@ -148,39 +128,64 @@ export class PublicPlayerPageComponent implements OnInit {
   }
 
   isPlaying() {
-    return this.player.isPlaying();
+    return this.player && this.player.isPlaying();
   }
 
   getCommentsSorted() {
     return this.comments ? this.comments.sort(this.currentSorter.comparator) : [];
   }
 
+  saveDragStart(element, event) {
+    console.log(event);
+  }
+
   validateDragStart() {
-    return (coords) =>
-      this.getCommentTime(this.startTime, coords) > 0 &&
-      (this.getCommentTime(this.startTime, coords) < this.comment.end || !this.comment.includeEnd) &&
-      this.getCommentTime(this.startTime, coords) <= this.duration;
+    return () => true;
+    // return (coords) =>
+    // this.getCommentTime(this.startTime, coords) > 0 &&
+    // (this.getCommentTime(this.startTime, coords) < this.comment.end || !this.comment.includeEnd) &&
+    // this.getCommentTime(this.startTime, coords) <= this.duration;
   }
 
   validateDragEnd() {
-    return (coords) =>
-      this.getCommentTime(this.endTime, coords) > 0 &&
-      this.getCommentTime(this.endTime, coords) > this.comment.start &&
-      this.getCommentTime(this.endTime, coords) <= this.duration;
+    // return (coords) =>
+    // this.getCommentTime(this.endTime, coords) > 0 &&
+    // (this.getCommentTime(this.endTime, coords) > this.comment.start || !this.comment.start) &&
+    // this.getCommentTime(this.endTime, coords) <= this.duration;
   }
 
   private getPosition(element, commentTime) {
-    return this.playerWidth && this.duration ?
-      this.playerWidth * commentTime / this.duration - element.nativeElement.offsetWidth / 2 + "px" :
+    return this.getPlayerWidth() && this.duration ?
+      this.getPlayerWidth() * commentTime / this.duration - element.nativeElement.offsetWidth / 2 + "px" :
       -element.nativeElement.offsetWidth / 2 + "px";
   }
 
-  private getCommentTime(element, event) {
-
-    return this.duration * (element.nativeElement.offsetLeft + event.x + element.nativeElement.offsetWidth / 2) / this.playerWidth;
+  private getSeekTime(event) {
+    return this.duration * (event.x - this.waveform.nativeElement.getBoundingClientRect().left) / this.getPlayerWidth();
   }
 
-  private getCommentTimeFromCoords(element, coords) {
-    return (coords.x - element.nativeElement.offsetLeft / 2) * this.duration / this.playerWidth;
+  private getCommentTime(element, startPos, event) {
+
+    return this.duration * (startPos + event.x + element.nativeElement.offsetWidth / 2) / this.getPlayerWidth();
+  }
+
+  mouseDown(event) {
+    console.log(event);
+  }
+
+  formatTime(seconds) {
+    return Utils.getTimeFormatted(seconds);
+  }
+
+  download() {
+    saveAs(new Blob([
+        Utils.sendGetRequest(RestUrl.VERSION, [], "", {})
+      ],
+      {type: "text/plain;charset=utf-8"}), "hello world.txt"
+    );
+  }
+
+  downloadFile(propertyId: string, fileId: string) {
+    ReadableStream
   }
 }

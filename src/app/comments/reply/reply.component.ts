@@ -1,5 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {Comment} from "../../comment";
+import {Comment} from "../comment";
 
 @Component({
   selector: 'app-reply',

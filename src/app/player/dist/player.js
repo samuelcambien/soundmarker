@@ -18,33 +18,33 @@
 
   var Player = {
     defaultParams: {
-      audioContext  : null,
-      audioRate     : 1,
-      autoCenter    : true,
-      backend       : 'WebAudio',
-      container     : null,
-      cursorColor   : '#333',
-      cursorWidth   : 0,
-      dragSelection : true,
-      fillParent    : true,
-      forceDecode   : false,
-      height        : 128,
-      hideScrollbar : false,
-      interact      : true,
-      loopSelection : true,
+      audioContext: null,
+      audioRate: 1,
+      autoCenter: true,
+      backend: 'WebAudio',
+      container: null,
+      cursorColor: '#333',
+      cursorWidth: 1,
+      dragSelection: true,
+      fillParent: true,
+      forceDecode: false,
+      height: 128,
+      hideScrollbar: false,
+      interact: true,
+      loopSelection: true,
       mediaContainer: null,
-      mediaControls : false,
-      mediaType     : 'audio',
-      minPxPerSec   : 20,
-      partialRender : false,
-      pixelRatio    : window.devicePixelRatio || screen.deviceXDPI / screen.logicalXDPI,
-      progressColor : '#FF857D',
-      normalize     : false,
-      renderer      : 'MultiCanvas',
-      scrollParent  : false,
-      skipLength    : 2,
-      splitChannels : false,
-      waveColor     : '#3F3F3F',
+      mediaControls: false,
+      mediaType: 'audio',
+      minPxPerSec: 20,
+      partialRender: false,
+      pixelRatio: window.devicePixelRatio || screen.deviceXDPI / screen.logicalXDPI,
+      progressColor: '#555',
+      normalize: false,
+      renderer: 'MultiCanvas',
+      scrollParent: false,
+      skipLength: 2,
+      splitChannels: false,
+      waveColor: '#999',
     },
 
     init: function (params) {
@@ -138,9 +138,15 @@
       this.backend = Object.create(Player[this.params.backend]);
       this.backend.init(this.params);
 
-      this.backend.on('finish', function () { my.fireEvent('finish'); });
-      this.backend.on('play', function () { my.fireEvent('play'); });
-      this.backend.on('pause', function () { my.fireEvent('pause'); });
+      this.backend.on('finish', function () {
+        my.fireEvent('finish');
+      });
+      this.backend.on('play', function () {
+        my.fireEvent('play');
+      });
+      this.backend.on('pause', function () {
+        my.fireEvent('pause');
+      });
 
       this.backend.on('audioprocess', function (time) {
         my.drawer.progress(my.backend.getPlayedPercents());
@@ -148,7 +154,7 @@
       });
     },
 
-    createPeakCache: function() {
+    createPeakCache: function () {
       if (this.params.partialRender) {
         this.peakCache = Object.create(Player.PeakCache);
         this.peakCache.init();
@@ -303,7 +309,7 @@
      *
      * Filters must be set with setFilters method first
      */
-    getFilters: function() {
+    getFilters: function () {
       return this.backend.filters || [];
     },
 
@@ -410,8 +416,10 @@
       this.empty();
 
       switch (this.params.backend) {
-        case 'WebAudio': return this.loadBuffer(url, peaks);
-        case 'MediaElement': return this.loadMediaElement(url, peaks, preload);
+        case 'WebAudio':
+          return this.loadBuffer(url, peaks);
+        case 'MediaElement':
+          return this.loadMediaElement(url, peaks, preload);
       }
     },
 
@@ -472,7 +480,9 @@
       // If no pre-decoded peaks provided or pre-decoded peaks are
       // provided with forceDecode flag, attempt to download the
       // audio file and decode it with Web Audio.
-      if (peaks) { this.backend.setPeaks(peaks); }
+      if (peaks) {
+        this.backend.setPeaks(peaks);
+      }
 
       if ((!peaks || this.params.forceDecode) && this.backend.supportsWebAudio()) {
         this.getArrayBuffer(url, (function (arraybuffer) {
@@ -565,7 +575,7 @@
      * The default format is 'image/png'. Other supported types are
      * 'image/jpeg' and 'image/webp'.
      */
-    exportImage: function(format, quality) {
+    exportImage: function (format, quality) {
       if (!format) {
         format = 'image/png';
       }
@@ -584,7 +594,9 @@
     },
 
     clearTmpEvents: function () {
-      this.tmpEvents.forEach(function (e) { e.un(); });
+      this.tmpEvents.forEach(function (e) {
+        e.un();
+      });
     },
 
     /**
@@ -599,7 +611,7 @@
       this.clearTmpEvents();
       this.drawer.progress(0);
       this.drawer.setWidth(0);
-      this.drawer.drawPeaks({ length: this.drawer.getWidth() }, 0);
+      this.drawer.drawPeaks({length: this.drawer.getWidth()}, 0);
     },
 
     /**
@@ -635,13 +647,13 @@
 
     debounce: function (func, wait, immediate) {
       var args, context, timeout;
-      var later = function() {
+      var later = function () {
         timeout = null;
         if (!immediate) {
           func.apply(context, args);
         }
       };
-      return function() {
+      return function () {
         context = this;
         args = arguments;
         var callNow = immediate && !timeout;
@@ -726,7 +738,9 @@
      * Attach a handler function for an event.
      */
     on: function (event, fn) {
-      if (!this.handlers) { this.handlers = {}; }
+      if (!this.handlers) {
+        this.handlers = {};
+      }
 
       var handlers = this.handlers[event];
       if (!handlers) {
@@ -746,7 +760,9 @@
      * Remove an event handler.
      */
     un: function (event, fn) {
-      if (!this.handlers) { return; }
+      if (!this.handlers) {
+        return;
+      }
 
       var handlers = this.handlers[event];
       if (handlers) {
@@ -785,7 +801,9 @@
     },
 
     fireEvent: function (event) {
-      if (!this.handlers) { return; }
+      if (!this.handlers) {
+        return;
+      }
       var handlers = this.handlers[event];
       var args = Array.prototype.slice.call(arguments, 1);
       handlers && handlers.forEach(function (fn) {
@@ -1015,7 +1033,9 @@
      * of peaks consisting of (max, min) values for each subrange.
      */
     getPeaks: function (length, first, last) {
-      if (this.peaks) { return this.peaks; }
+      if (this.peaks) {
+        return this.peaks;
+      }
 
       this.setLength(length);
 
@@ -1124,7 +1144,9 @@
     },
 
     seekTo: function (start, end) {
-      if (!this.buffer) { return; }
+      if (!this.buffer) {
+        return;
+      }
 
       this.scheduledPause = null;
 
@@ -1145,7 +1167,7 @@
         this.setState(this.PAUSED_STATE);
       }
 
-      return { start: start, end: end };
+      return {start: start, end: end};
     },
 
     getPlayedTime: function () {
@@ -1161,7 +1183,9 @@
      * relative to the beginning of a clip.
      */
     play: function (start, end) {
-      if (!this.buffer) { return; }
+      if (!this.buffer) {
+        return;
+      }
 
       // need to re-create source on each playback
       this.createSource();
@@ -1284,8 +1308,10 @@
         duration: 0,
         paused: true,
         playbackRate: 1,
-        play: function () {},
-        pause: function () {}
+        play: function () {
+        },
+        pause: function () {
+        }
       };
 
       this.mediaType = params.mediaType.toLowerCase();
@@ -1303,7 +1329,9 @@
       var playing = false;
 
       var onAudioProcess = function () {
-        if (my.isPaused()) { return; }
+        if (my.isPaused()) {
+          return;
+        }
 
         my.fireEvent('audioprocess', my.getCurrentTime());
 
@@ -1671,7 +1699,7 @@
 
     },
 
-    getScrollX: function() {
+    getScrollX: function () {
       return Math.round(this.wrapper.scrollLeft * this.params.pixelRatio);
     },
 
@@ -1700,7 +1728,9 @@
     },
 
     setHeight: function (height) {
-      if (height == this.height) { return; }
+      if (height == this.height) {
+        return;
+      }
       this.height = height;
       this.style(this.wrapper, {
         height: ~~(this.height / this.params.pixelRatio) + 'px'
@@ -1733,17 +1763,23 @@
     },
 
     /* Renderer-specific methods */
-    initDrawer: function () {},
+    initDrawer: function () {
+    },
 
-    createElements: function () {},
+    createElements: function () {
+    },
 
-    updateSize: function () {},
+    updateSize: function () {
+    },
 
-    drawWave: function (peaks, max) {},
+    drawWave: function (peaks, max) {
+    },
 
-    clearWave: function () {},
+    clearWave: function () {
+    },
 
-    updateProgress: function (position) {}
+    updateProgress: function (position) {
+    }
   };
 
   Player.util.extend(Player.Drawer, Player.Observer);
@@ -1795,14 +1831,14 @@
 
       this.waveCc.canvas.width = this.width;
       this.waveCc.canvas.height = this.height;
-      this.style(this.waveCc.canvas, { width: width + 'px'});
+      this.style(this.waveCc.canvas, {width: width + 'px'});
 
-      this.style(this.progressWave, { display: 'block'});
+      this.style(this.progressWave, {display: 'block'});
 
       if (this.progressCc) {
         this.progressCc.canvas.width = this.width;
         this.progressCc.canvas.height = this.height;
-        this.style(this.progressCc.canvas, { width: width + 'px'});
+        this.style(this.progressCc.canvas, {width: width + 'px'});
       }
 
       this.clearWave();
@@ -1822,7 +1858,7 @@
         var channels = peaks;
         if (this.params.splitChannels) {
           this.setHeight(channels.length * this.params.height * this.params.pixelRatio);
-          channels.forEach(function(channelPeaks, i) {
+          channels.forEach(function (channelPeaks, i) {
             my.drawBars(channelPeaks, i, start, end);
           });
           return;
@@ -1833,7 +1869,9 @@
 
       // Bar wave draws the bottom only as a reflection of the top,
       // so we don't need negative values
-      var hasMinVals = [].some.call(peaks, function (val) { return val < 0; });
+      var hasMinVals = [].some.call(peaks, function (val) {
+        return val < 0;
+      });
       // Skip every other value if there are negatives.
       var peakIndexScale = 1;
       if (hasMinVals) {
@@ -1865,8 +1903,10 @@
         this.progressCc.fillStyle = this.params.progressColor;
       }
 
-      [ this.waveCc, this.progressCc ].forEach(function (cc) {
-        if (!cc) { return; }
+      [this.waveCc, this.progressCc].forEach(function (cc) {
+        if (!cc) {
+          return;
+        }
 
         for (var i = (start / scale); i < (end / scale); i += step) {
           var peak = peaks[Math.floor(i * scale * peakIndexScale)] || 0;
@@ -1883,7 +1923,7 @@
         var channels = peaks;
         if (this.params.splitChannels) {
           this.setHeight(channels.length * this.params.height * this.params.pixelRatio);
-          channels.forEach(function(channelPeaks, i) {
+          channels.forEach(function (channelPeaks, i) {
             my.drawWave(channelPeaks, i, start, end);
           });
           return;
@@ -1893,7 +1933,9 @@
       }
 
       // Support arrays without negative peaks
-      var hasMinValues = [].some.call(peaks, function (val) { return val < 0; });
+      var hasMinValues = [].some.call(peaks, function (val) {
+        return val < 0;
+      });
       if (!hasMinValues) {
         var reflectedPeaks = [];
         for (var i = 0, len = peaks.length; i < len; i++) {
@@ -1927,8 +1969,10 @@
         this.progressCc.fillStyle = this.params.progressColor;
       }
 
-      [ this.waveCc, this.progressCc ].forEach(function (cc) {
-        if (!cc) { return; }
+      [this.waveCc, this.progressCc].forEach(function (cc) {
+        if (!cc) {
+          return;
+        }
 
         cc.beginPath();
         cc.moveTo(start * scale + $, halfH + offsetY);
@@ -1954,10 +1998,10 @@
     },
 
     updateProgress: function (pos) {
-      this.style(this.progressWave, { width: pos + 'px' });
+      this.style(this.progressWave, {width: pos + 'px'});
     },
 
-    getImage: function(type, quality) {
+    getImage: function (type, quality) {
       return this.waveCc.canvas.toDataURL(type, quality);
     }
   });
@@ -2077,14 +2121,14 @@
 
       entry.waveCtx.canvas.width = width;
       entry.waveCtx.canvas.height = height;
-      this.style(entry.waveCtx.canvas, { width: elementWidth + 'px'});
+      this.style(entry.waveCtx.canvas, {width: elementWidth + 'px'});
 
-      this.style(this.progressWave, { display: 'block'});
+      this.style(this.progressWave, {display: 'block'});
 
       if (this.hasProgressCanvas) {
         entry.progressCtx.canvas.width = width;
         entry.progressCtx.canvas.height = height;
-        this.style(entry.progressCtx.canvas, { width: elementWidth + 'px'});
+        this.style(entry.progressCtx.canvas, {width: elementWidth + 'px'});
       }
     },
 
@@ -2108,7 +2152,7 @@
         var channels = peaks;
         if (this.params.splitChannels) {
           this.setHeight(channels.length * this.params.height * this.params.pixelRatio);
-          channels.forEach(function(channelPeaks, i) {
+          channels.forEach(function (channelPeaks, i) {
             my.drawBars(channelPeaks, i, start, end);
           });
           return;
@@ -2119,7 +2163,9 @@
 
       // Bar wave draws the bottom only as a reflection of the top,
       // so we don't need negative values
-      var hasMinVals = [].some.call(peaks, function (val) { return val < 0; });
+      var hasMinVals = [].some.call(peaks, function (val) {
+        return val < 0;
+      });
       // Skip every other value if there are negatives.
       var peakIndexScale = 1;
       if (hasMinVals) {
@@ -2159,7 +2205,7 @@
         var channels = peaks;
         if (this.params.splitChannels) {
           this.setHeight(channels.length * this.params.height * this.params.pixelRatio);
-          channels.forEach(function(channelPeaks, i) {
+          channels.forEach(function (channelPeaks, i) {
             my.drawWave(channelPeaks, i, start, end);
           });
           return;
@@ -2169,7 +2215,9 @@
       }
 
       // Support arrays without negative peaks
-      var hasMinValues = [].some.call(peaks, function (val) { return val < 0; });
+      var hasMinValues = [].some.call(peaks, function (val) {
+        return val < 0;
+      });
       if (!hasMinValues) {
         var reflectedPeaks = [];
         for (var i = 0, len = peaks.length; i < len; i++) {
@@ -2209,7 +2257,9 @@
     },
 
     drawLineToContext: function (entry, ctx, peaks, absmax, halfH, offsetY, start, end) {
-      if (!ctx) { return; }
+      if (!ctx) {
+        return;
+      }
 
       var length = peaks.length / 2;
 
@@ -2220,7 +2270,9 @@
 
       var first = Math.round(length * entry.start),
         last = Math.round(length * entry.end);
-      if (first > end || last < start) { return; }
+      if (first > end || last < start) {
+        return;
+      }
       var canvasStart = Math.max(first, start);
       var canvasEnd = Math.min(last, end);
 
@@ -2271,7 +2323,9 @@
     },
 
     fillRectToContext: function (ctx, x, y, width, height) {
-      if (!ctx) { return; }
+      if (!ctx) {
+        return;
+      }
       ctx.fillRect(x, y, width, height);
     },
 
@@ -2283,18 +2337,18 @@
     },
 
     updateProgress: function (pos) {
-      this.style(this.progressWave, { width: pos + 'px' });
+      this.style(this.progressWave, {width: pos + 'px'});
     }
   });
 
   'use strict';
 
   Player.PeakCache = {
-    init: function() {
+    init: function () {
       this.clearPeakCache();
     },
 
-    clearPeakCache: function() {
+    clearPeakCache: function () {
       // Flat array with entries that are always in pairs to mark the
       // beginning and end of each subrange.  This is a convenience so we can
       // iterate over the pairs for easy set difference operations.
@@ -2304,7 +2358,7 @@
       this.peakCacheLength = -1;
     },
 
-    addRangeToPeakCache: function(length, start, end) {
+    addRangeToPeakCache: function (length, start, end) {
       if (length != this.peakCacheLength) {
         this.clearPeakCache();
         this.peakCacheLength = length;
@@ -2334,7 +2388,7 @@
       }
 
       // Filter out the 0-length ranges.
-      uncachedRanges = uncachedRanges.filter(function(item, pos, arr) {
+      uncachedRanges = uncachedRanges.filter(function (item, pos, arr) {
         if (pos == 0) {
           return item != arr[pos + 1];
         } else if (pos == arr.length - 1) {
@@ -2348,9 +2402,9 @@
       // wholly new points, or duplicates of points in peakCacheRanges.  If
       // duplicates are detected, remove both and extend the range.
       this.peakCacheRanges = this.peakCacheRanges.concat(uncachedRanges);
-      this.peakCacheRanges = this.peakCacheRanges.sort(function(a, b) {
+      this.peakCacheRanges = this.peakCacheRanges.sort(function (a, b) {
         return a - b;
-      }).filter(function(item, pos, arr) {
+      }).filter(function (item, pos, arr) {
         if (pos == 0) {
           return item != arr[pos + 1];
         } else if (pos == arr.length - 1) {
@@ -2364,17 +2418,17 @@
       // iteration in the functions that call this.
       var uncachedRangePairs = [];
       for (i = 0; i < uncachedRanges.length; i += 2) {
-        uncachedRangePairs.push([uncachedRanges[i], uncachedRanges[i+1]]);
+        uncachedRangePairs.push([uncachedRanges[i], uncachedRanges[i + 1]]);
       }
 
       return uncachedRangePairs;
     },
 
     // For testing
-    getCacheRanges: function() {
+    getCacheRanges: function () {
       var peakCacheRangePairs = [];
       for (var i = 0; i < this.peakCacheRanges.length; i += 2) {
-        peakCacheRangePairs.push([this.peakCacheRanges[i], this.peakCacheRanges[i+1]]);
+        peakCacheRangePairs.push([this.peakCacheRanges[i], this.peakCacheRanges[i + 1]]);
       }
       return peakCacheRangePairs;
     }
@@ -2537,7 +2591,7 @@
       }
     },
 
-    drawTimeCanvases: function() {
+    drawTimeCanvases: function () {
       var backend = this.player.backend,
         wsParams = this.player.params,
         duration = backend.getDuration(),
@@ -2548,19 +2602,21 @@
       } else {
         width = this.drawer.wrapper.scrollWidth * wsParams.pixelRatio;
       }
-      var pixelsPerSecond = width/duration;
+      var pixelsPerSecond = width / duration;
 
-      if (duration <= 0) { return; }
+      if (duration <= 0) {
+        return;
+      }
 
       var curPixel = 0,
         curSeconds = 0,
         totalSeconds = parseInt(duration, 10) + 1,
-        formatTime = function(seconds) {
+        formatTime = function (seconds) {
           if (typeof self.formatTimeCallback === 'function') {
             return self.formatTimeCallback(seconds);
           }
 
-          if (seconds/60 > 1) {
+          if (seconds / 60 > 1) {
             var minutes = parseInt(seconds / 60),
               seconds = parseInt(seconds % 60);
             seconds = (seconds < 10) ? '0' + seconds : seconds;
@@ -2689,3 +2745,38 @@
   return Player;
 
 }));
+
+
+function load() {
+  // Fetch the original image
+  fetch('./tortoise.png')
+  // Retrieve its body as ReadableStream
+    .then(response => response.body)
+    .then(rs => {
+      const reader = rs.getReader();
+      return new ReadableStream({
+        async start(controller) {
+          while (true) {
+            const { done, value } = await reader.read();
+            // When no more data needs to be consumed, break the reading
+            if (done) {
+              break;
+            }
+            // Enqueue the next data chunk into our target stream
+            controller.enqueue(value);
+          }
+          // Close the stream
+          controller.close();
+          reader.releaseLock();
+        }
+      })
+    })
+    // Create a new response out of the stream
+    .then(rs => new Response(rs))
+    // Create an object URL for the response
+    .then(response => response.blob())
+    .then(blob => URL.createObjectURL(blob))
+    // Update image
+    .then(url => image.src = url)
+    .catch(console.error);
+}

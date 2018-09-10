@@ -1,4 +1,4 @@
- <hr>
+<hr>
 
 <div class="comment container-fluid">
 
@@ -37,7 +37,7 @@
       </ng-template>
     </button>
 
-	
+
     <p class="date-tx">{{comment.time}} minutes ago</p>
 
   </div>
@@ -45,64 +45,64 @@
   <div class="row comment-text">
     <p class="comment-tx">{{comment.text}}</p>
   </div>
-  
-   <div class="row">
+
+  <div class="row">
     <div class="comment-reply" (click)="showReplyForm()">
       <p class="reply-tx"> REPLY</p>
     </div>
-   </div>
-   
-  
-  
-    <div class="row">
+  </div>
 
-  <div *ngIf="comment.replies?.length">
+  <div class="row">
 
-    <p role="button" [attr.aria-expanded]="showReplies" aria-controls="collapseExample"
-       (click)="showReplies = !showReplies"
-       class="showhidereplies collapsed">
-      <span *ngIf="!showReplies">2 replies 
-<svg width="14px" height="8px" viewBox="0 0 14 8" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    
-    <defs></defs>
-    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
-        <g id="Group" transform="translate(1.000000, -16.000000)" stroke="#aeaeae" stroke-width="1.5">
-            <g id="scroll-vertical">
-                <path d="M12,17.687 L6.75,22.937 C6.33570876,23.351026 5.66429124,23.351026 5.25,22.937 L0,17.687" id="Shape"></path>
+    <div *ngIf="comment.replies?.length">
+
+      <p role="button" [attr.aria-expanded]="showReplies" aria-controls="collapseExample"
+         (click)="showReplies = !showReplies"
+         class="showhidereplies collapsed">
+        <span *ngIf="!showReplies">
+        2 replies
+        <svg width="14px" height="8px" viewBox="0 0 14 8" version="1.1" xmlns="http://www.w3.org/2000/svg">
+          <defs></defs>
+          <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round"
+             stroke-linejoin="round">
+            <g id="Group" transform="translate(1.000000, -16.000000)" stroke="#aeaeae" stroke-width="1.5">
+              <g id="scroll-vertical">
+                <path d="M12,17.687 L6.75,22.937 C6.33570876,23.351026 5.66429124,23.351026 5.25,22.937 L0,17.687"
+                      id="Shape">
+                </path>
+              </g>
             </g>
-        </g>
-    </g>
-</svg></span>
-      <span *ngIf="showReplies">Hide 2 replies
-<svg width="14px" height="8px" viewBox="0 0 14 8" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <defs></defs>
-    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
-        <g id="Group" transform="translate(1.000000, 0.000000)" stroke="#aeaeae" stroke-width="1.5">
-            <g id="scroll-vertical">
-                <path d="M0,6.308 L5.25,1.058 C5.66429124,0.643974017 6.33570876,0.643974017 6.75,1.058 L12,6.308" id="Shape"></path>
-            </g>
-        </g>
-    </g>
-</svg></span>
-    </p>
-    
-    
+          </g>
+        </svg>
+      </span>
 
-    <div class="comment-replies" id="comment-replies" [ngbCollapse]="!showReplies">
-      <app-reply *ngFor="let reply of comment.replies" [reply]="reply"></app-reply>
+        <span *ngIf="showReplies">
+          Hide 2 replies
+          <svg width="14px" height="8px" viewBox="0 0 14 8" version="1.1" xmlns="http://www.w3.org/2000/svg">
+            <defs></defs>
+            <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round"
+               stroke-linejoin="round">
+              <g id="Group" transform="translate(1.000000, 0.000000)" stroke="#aeaeae" stroke-width="1.5">
+                <g id="scroll-vertical">
+                  <path d="M0,6.308 L5.25,1.058 C5.66429124,0.643974017 6.33570876,0.643974017 6.75,1.058 L12,6.308"
+                        id="Shape"></path>
+                </g>
+              </g>
+            </g>
+          </svg>
+        </span>
+      </p>
+
+      <div class="comment-replies" id="comment-replies" [ngbCollapse]="!showReplies">
+        <app-reply *ngFor="let reply of comment.replies" [reply]="reply"></app-reply>
+      </div>
+
     </div>
+
+    <template #reply></template>
 
   </div>
 
- 
-
-  <template #reply></template>
-  
- 
-
- 
-
 </div>
-
 
 
