@@ -1,19 +1,169 @@
+// track list
+
+.list-container {
+	max-height: 154px;
+	  overflow-y: scroll;
+  overflow-x: hidden;
+}
+
+.list-container::-webkit-scrollbar {
+  width: 4px;
+}
+
+.list-container::-webkit-scrollbar-thumb {
+  background-color: #E8EAED;
+  border-radius: 4px;
+}
+
+.list-container::-webkit-scrollbar-thumb:hover {
+  background-color: #6A6D6F;
+  cursor: pointer;
+}
+
+//header
+
 .comments-header {
 	border-bottom: 1px solid black;
 }
 
-#timebar {
-  background-color: grey;
+.waveform-container {
+  position: relative;
+  height: 70px;
 }
 
-.drag-block {
+#waveform {
+  width: 100%;
+  height: 100%;
   position: absolute;
+  top: 0;
+  left: 0;
+  fill: #E8EAED;
+}
+
+#timebar {
+  border-bottom: 5px solid #F3F3F3;
 }
 
 .timebar-container {
   position: relative;
 }
 
+#waveform {
+	cursor: text;
+}
+
+.drag-block {
+  position: absolute;
+  bottom: -9px;
+  z-index: 100;
+}
+
+.drag-block.disabled svg * {
+  stroke: #aeaeae;
+}
+
 .time {
-	margin-top: -36px;
+	margin-top: 8px;
+}
+
+.top-icon {
+	float: right;
+	margin-left: 12px;
+	cursor: pointer;
+	margin-top: 3px;
+}
+
+.top-icon .icon-stroke {
+	stroke: #6094F7;
+	stroke-width: 1.1;
+}
+
+.top-icon:hover .icon-stroke,
+.top-icon.active .icon-stroke {
+	stroke: #6094F7;
+	transition: 0.3s;
+	stroke-width: 1.6;
+}
+
+.drag-block {
+	cursor: ew-resize !important;
+}
+
+.title {
+	margin-top: 3px;
+}
+
+.icon-action {
+
+}
+
+
+.list-icon {
+	margin-top: 4px;
+}
+
+
+
+
+#comments-toggle:hover {
+	fill: #5673AB;
+	transition-duration: 0.5s;
+}
+
+.player-header {
+	margin-left: 0px;
+	margin-right: 0px;
+	
+}
+
+.player-content {
+	margin-bottom: 0px;
+	margin-top: 18px;
+}
+
+.playerknob {
+	padding: 0px;
+}
+
+.sort-icon {
+	float: right;
+}
+
+.comments-header {
+	margin: 0px;
+	margin-top: 20px;
+}
+
+.order.nav-link {
+	padding: 0px;
+}
+
+.order.nav-link.disabled svg * {
+  stroke: #E8EAED;
+}
+
+.nav-link, .dropdown-item {
+	font-family: 'avenirnext-regular';
+	font-size: 10pt;
+}
+
+.dropdown-menu {
+	border-radius: 0.5rem;
+	border: 1px solid #dadada;
+}
+
+.sendersnote {
+	margin-top: 20px;
+}
+
+.audioline {
+	margin-top: -60px;
+	margin-bottom: 4px;
+
+}
+
+hr {
+  margin-top: 0px;
+  margin-bottom: 0px;
+  border-top: 1px solid #E8EAED;
 }

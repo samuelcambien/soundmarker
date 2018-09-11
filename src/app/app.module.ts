@@ -3,8 +3,7 @@ import {NgModule} from '@angular/core';
 
 import {AppComponent} from './app.component';
 import {PublicUploadFormComponent} from './public-upload-page/public-upload-form/public-upload-form.component';
-import {FileUploadModule} from "ng2-file-upload";
-import {FormsModule} from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {PublicUploadingFilesComponent} from './public-upload-page/public-upload-progress/public-uploading-files.component';
 import {PublicUploadFinishedComponent} from './public-upload-page/public-upload-finished/public-upload-finished.component';
 import {PublicUploadPageComponent} from './public-upload-page/public-upload-page.component';
@@ -22,9 +21,19 @@ import {ReplyComponent} from './comments/reply/reply.component';
 import {CommentFormComponent} from "./comments/comment-form/comment-form.component";
 import {ReplyFormComponent} from './comments/reply-form/reply-form.component';
 import {DragAndDropModule} from "angular-draggable-droppable";
-import {DurationDirective} from './duration.directive';
-import {DurationFormatterPipe} from './duration-formatter.pipe';
+import {DurationDirective} from './formatting/duration.directive';
+import {DurationFormatterPipe} from './formatting/duration-formatter.pipe';
 import {NgbModule} from "@ng-bootstrap/ng-bootstrap";
+import {SoundmarkerComponent} from './soundmarker/soundmarker.component';
+import {MyCurrencyFormatterDirective} from './my-currency-formatter.directive';
+import {MyCurrencyPipe} from './my-currency.pipe';
+import {TimeInputComponent} from './comments/time-input/time-input.component';
+import {FileUploadModule} from "./ng2-file-upload";
+import {SplitterDirective} from './splitter.directive';
+import { PublicPlayerListComponent } from './public-player-page/public-player-list/public-player-list.component';
+import { PublicPlayerTrackComponent } from './public-player-page/public-player-track/public-player-track.component';
+import { PublicTrackPlayerComponent } from './public-player-page/public-track-player/public-track-player.component';
+import { ErrorComponent } from './public-page/public-info/topics/error/error.component';
 
 @NgModule({
   declarations: [
@@ -44,12 +53,22 @@ import {NgbModule} from "@ng-bootstrap/ng-bootstrap";
     ReplyComponent,
     ReplyFormComponent,
     DurationDirective,
-    DurationFormatterPipe
+    DurationFormatterPipe,
+    SoundmarkerComponent,
+    MyCurrencyFormatterDirective,
+    MyCurrencyPipe,
+    TimeInputComponent,
+    SplitterDirective,
+    PublicPlayerListComponent,
+    PublicPlayerTrackComponent,
+    PublicTrackPlayerComponent,
+    ErrorComponent
   ],
   imports: [
     BrowserModule,
     FileUploadModule,
     FormsModule,
+    ReactiveFormsModule,
     DragAndDropModule.forRoot(),
     NgbModule.forRoot(),
     routing

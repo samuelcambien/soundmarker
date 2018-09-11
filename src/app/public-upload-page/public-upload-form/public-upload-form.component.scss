@@ -25,6 +25,8 @@ textarea.form-control {
   margin-top: 10px;
 }
 
+
+
 // file select
 
 .note-image {
@@ -74,7 +76,7 @@ textarea.form-control {
 }
 
 .upload-songs-area::-webkit-scrollbar-thumb {
-  background-color: #D4D7D9;
+  background-color: #E8EAED;
   border-radius: 4px;
 }
 
@@ -93,14 +95,14 @@ textarea.form-control {
   padding-bottom: -4px;
 }
 
-.addsongs .note-image, .addsongs h4 {
+.addsongs .note-image, .addsongs h5 {
   -webkit-transition: 200ms ease-in;
   -moz-transition: 200ms ease-in;
   -o-transition: 200ms ease-in;
   transition: 200ms ease-in;
 }
 
-.upload-songs-area:hover .addsongs .note-image, .upload-songs-area:hover .addsongs h4 {
+.upload-songs-area:hover .addsongs .note-image, .upload-songs-area:hover .addsongs h5 {
   transform: translateY(-8px);
   -webkit-transition: 200ms ease-in;
   -moz-transition: 200ms ease-in;
@@ -125,6 +127,8 @@ textarea.form-control {
   -o-transition: 200ms ease-in;
   transition: 200ms ease-in;
 }
+
+
 
 .addmoresongs {
   text-align: left;

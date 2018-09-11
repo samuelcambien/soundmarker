@@ -1,4 +1,78 @@
 .btn.btn-link {
-  font-size: 8pt !important;
-  padding-left: 5px;
+  font-size: 10pt;
+  color: #6094F7 !important;
+  background-color: transparent !important;
+}
+
+
+.btn.btn-link:hover, .btn.btn-link:active, .btn.btn-link:focus, .btn.btn-link:visited {
+	color: #4479db !important;
+	text-decoration: none !important;
+	background-color: transparent !important;
+}
+
+.btn.btn-link:active, .btn.btn-link:focus .card-header {
+	background-color: #e7efff !important;
+}
+
+.card-header {
+	background-color: #ffffff !important;
+	border: none !important;
+	cursor: pointer;
+}
+
+.card-header:hover {
+	background-color: #e7efff !important;
+	transition: 0.3s;
+}
+
+.card-header:hover .btn.btn-link {
+	color: #4479db !important;
+	text-decoration: none !important;
+}
+
+.card-body {
+		border-bottom: none !important;
+	border-top: 1px solid #E8EAED !important; 
+}
+
+.card {
+	border-left: 1px solid #E8EAED !important;
+	border-right: 1px solid #E8EAED !important;
+	border-bottom: none !important;
+	border-top: 1px solid #E8EAED !important;
+}
+
+
+#last-card {
+border-bottom: 1px solid #E8EAED !important;
+}
+
+.help-footer {
+	background-color: #f7f8fb;
+	height: 100px;
+	width: 100%;
+	margin-top: 30px;
+	padding-top: 40px;
+}
+
+.btn-link {
+	margin-left: -10px !important;
+}
+
+button.btn-sm.collapsed:after
+{
+    content:' more' ;
+   
+}
+button.btn-sm:after
+{
+    content:' less' ;
+   
+}
+
+.info-footer {
+	background-color: #E8EAED;
+	height: 60px;
+	width: 100%;
 }

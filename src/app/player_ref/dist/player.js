@@ -38,13 +38,13 @@ var Player = {
         minPxPerSec   : 20,
         partialRender : false,
         pixelRatio    : window.devicePixelRatio || screen.deviceXDPI / screen.logicalXDPI,
-        progressColor : '#555',
+        progressColor : '#FF857D',
         normalize     : false,
         renderer      : 'MultiCanvas',
         scrollParent  : false,
         skipLength    : 2,
         splitChannels : false,
-        waveColor     : '#999',
+        waveColor     : '#F3F3F3',
     },
 
     init: function (params) {

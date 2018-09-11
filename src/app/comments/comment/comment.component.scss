@@ -5,6 +5,15 @@
 	padding-right: 24px;
 }
 
+.comment-tag {
+	float: left;
+}
+
+.comment-tag p {
+	font-family: "avenirnext-regular";
+	color: #F3F3F3;
+}
+
 .play-button {
 	float: left;
 	margin-top: -2px;
@@ -32,17 +41,35 @@
 	color: #2F2F2F;
 }
 
-.reply-tx {
+.comment-reply {
 	margin-top: -0.8rem !important;
+}
+
+hr {
+	margin-top: 1px;
+	margin-bottom: 10px;
+	margin-left: 0px;
+	margin-right: 0px;
+	padding: 0px;
+	border-top-color: #E8EAED;
+}
+
+.reply-tx {
+	
 	font-family: "avenirnext-bold";
 	font-size: 8pt;
 	cursor: pointer;
+	margin-bottom: 8px;
 }
+
+
 
 .date-tx {
 	margin-bottom: -0rem;
 	font-size: 8pt;
 	display: inline;
+	text-align: right;
+	float: right;
 	margin-left: 8px;
 	}
 	

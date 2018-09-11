@@ -1,16 +1,69 @@
 {
-  "track": {
-    "track_id": 47,
-    "version_id": 3,
-    "track_title": "piano.wav"
-  },
+  "project": [
+    {
+      "id": 47
+    }
+  ],
+  "track": [
+    {
+      "id": 1,
+      "project_id": 47,
+      "last_version": 1,
+      "title": "Let You Go",
+      "notes": "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus elementum semper nisi. Aenean vulputate eleifend tellus.",
+      "track_url": "https://d3k08uu3zdbsgq.cloudfront.net/Zelmar-LetYouGo",
+      "duration": 177
+    },
+    {
+      "id": 2,
+      "project_id": 47,
+      "last_version": 2,
+      "title": "Let Her Know",
+      "notes": "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus elementum semper nisi. Aenean vulputate eleifend tellus.",
+      "track_url": "https://d3k08uu3zdbsgq.cloudfront.net/Zelmar-LetYouGo",
+      "duration": 177
+    },
+    {
+      "id": 3,
+      "project_id": 47,
+      "last_version": 3,
+      "title": "Fuh You",
+      "notes": "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus elementum semper nisi. Aenean vulputate eleifend tellus.",
+      "track_url": "https://d3k08uu3zdbsgq.cloudfront.net/Zelmar-LetYouGo",
+      "duration": 177
+    },
+    {
+      "id": 4,
+      "project_id": 47,
+      "last_version": 4,
+      "title": "Ik Ben De Sergio",
+      "notes": "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus elementum semper nisi. Aenean vulputate eleifend tellus.",
+      "track_url": "https://d3k08uu3zdbsgq.cloudfront.net/Zelmar-LetYouGo",
+      "duration": 177
+    },
+    {
+      "id": 5,
+      "project_id": 47,
+      "last_version": 5,
+      "title": "Yellow Submarine",
+      "notes": "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus elementum semper nisi. Aenean vulputate eleifend tellus.",
+      "track_url": "https://d3k08uu3zdbsgq.cloudfront.net/Zelmar-LetYouGo",
+      "duration": 177
+    }
+  ],
+  "track-version": [
+    {
+      "aws_path": "http://localhost:8080/rest/version",
+      "duration": "0:15.3"
+    }
+  ],
   "track-version-comments": [
     {
       "version_id": 3,
       "time": 1532527794707,
       "text": "I love that bass, can you put it up a bit",
       "name": "Peter Johnson",
-      "start": 2,
+      "start": "2:45",
       "end": 5,
       "comment_id": 1
     },
@@ -24,10 +77,12 @@
     },
     {
       "parent_id": 1,
+      "time": 1535527799105,
       "text": "I love that Sadowsky, can you put it up a bit",
       "name": "Samuel Cambien"
     },
     {
+      "time": 1534527799105,
       "parent_id": 1,
       "text": "the Sadowsky sounds really awesome indeed",
       "name": "Samuel Cambien"
