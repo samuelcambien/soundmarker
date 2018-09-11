@@ -32,6 +32,8 @@ import {FileUploadModule} from "./ng2-file-upload";
 import {SplitterDirective} from './splitter.directive';
 import { PublicPlayerListComponent } from './public-player-page/public-player-list/public-player-list.component';
 import { PublicPlayerTrackComponent } from './public-player-page/public-player-track/public-player-track.component';
+import { PublicTrackPlayerComponent } from './public-player-page/public-track-player/public-track-player.component';
+import { ErrorComponent } from './public-page/public-info/topics/error/error.component';
 
 @NgModule({
   declarations: [
@@ -58,7 +60,9 @@ import { PublicPlayerTrackComponent } from './public-player-page/public-player-t
     TimeInputComponent,
     SplitterDirective,
     PublicPlayerListComponent,
-    PublicPlayerTrackComponent
+    PublicPlayerTrackComponent,
+    PublicTrackPlayerComponent,
+    ErrorComponent
   ],
   imports: [
     BrowserModule,

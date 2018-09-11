@@ -14,7 +14,7 @@ const appRoutes: Routes = [
     component: PublicUploadingFilesComponent
   },
   {
-    path: "player/:track_id",
+    path: "player/:project_id",
     component: PublicPlayerPageComponent
   }
 ];

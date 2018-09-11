@@ -1,5 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {Track} from "../../newplayer/track";
+import {Track} from "../../model/track";
 
 @Component({
   selector: 'app-public-player-list',

@@ -145,11 +145,14 @@ export class Player {
     });
   }
 
+  getCurrentPosition(): number {
+    return this.audioContext.currentTime;
+  }
+
   seekTo(time: number, callback?) {
     this.stop(() => {
       this.startTime = time;
       this.loadBuffers(Player.getIndex(time), () => {
-        if (this.isPlaying()) this.playFromStartTime()
         if (callback) callback();
       });
     });

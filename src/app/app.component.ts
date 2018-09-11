@@ -19,9 +19,11 @@ export class RestUrl {
 
   public static UPLOAD: string = RestUrl.DATA + "/upload/file";
 
-  public static PROJECT: string = RestUrl.BACKEND + "/project";
+  public static PROJECT: string = RestUrl.MOCK + "/project";
 
   public static PROJECT_NEW: string = RestUrl.PROJECT + "/new";
+
+  public static PROJECT_TRACKS: string = RestUrl.MOCK + "/project/tracks";
 
   public static TRACK: string = RestUrl.MOCK + "/track";
 

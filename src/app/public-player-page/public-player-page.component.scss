@@ -79,7 +79,8 @@
 	stroke-width: 1.1;
 }
 
-.top-icon:hover .icon-stroke {
+.top-icon:hover .icon-stroke,
+.top-icon.active .icon-stroke {
 	stroke: #6094F7;
 	transition: 0.3s;
 	stroke-width: 1.6;
