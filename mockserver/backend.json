@@ -9,7 +9,7 @@
       "id": 1,
       "project_id": 47,
       "last_version": 1,
-      "title": "Let Her Go",
+      "title": "Let You Go",
       "notes": "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus elementum semper nisi. Aenean vulputate eleifend tellus.",
       "track_url": "https://d3k08uu3zdbsgq.cloudfront.net/Zelmar-LetYouGo",
       "duration": 177
@@ -77,10 +77,12 @@
     },
     {
       "parent_id": 1,
+      "time": 1535527799105,
       "text": "I love that Sadowsky, can you put it up a bit",
       "name": "Samuel Cambien"
     },
     {
+      "time": 1534527799105,
       "parent_id": 1,
       "text": "the Sadowsky sounds really awesome indeed",
       "name": "Samuel Cambien"

@@ -1,110 +1,115 @@
- <div class="container-fluid track-bar" data-toggle="collapse" href="#collapseList" role="button" data-target=".multi-collapse" aria-expanded="false" aria-controls="collapseList collapsePlayer">
-<div class="player-header row">
-	
-	
-	
-	 <button class="mini-btn mini-play-btn btn btn-link ">
-         
+<div class="container-fluid track-bar">
 
-<svg width="27px" height="27px" viewBox="0 0 27 27" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
- 
-    <defs></defs>
-    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="Group-5">
-            <g id="Group-6">
+  <div class="player-header row">
+
+    <div *ngIf="player.isPlaying(); then pausebutton else playbutton"></div>
+
+    <ng-template #playbutton>
+
+      <button (click)="play();" class="mini-btn mini-play-btn btn btn-link">
+
+        <svg width="27px" height="27px" viewBox="0 0 27 27" version="1.1" xmlns="http://www.w3.org/2000/svg">
+          <defs></defs>
+          <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+            <g id="Group-5">
+              <g id="Group-6">
                 <circle id="Oval" fill="#6094F7" cx="13.5" cy="13.5" r="13.5"></circle>
-                <path d="M16.3141199,9.00179825 L20.7528354,16.3448585 C21.3242409,17.2901466 21.0211492,18.5196696 20.0758611,19.0910751 C19.7637352,19.2797482 19.4059591,19.3794796 19.0412399,19.3794796 L10.1638089,19.3794796 C9.05923941,19.3794796 8.16380891,18.4840491 8.16380891,17.3794796 C8.16380891,17.0147604 8.26354033,16.6569843 8.45221343,16.3448585 L12.8909289,9.00179825 C13.4623344,8.05651017 14.6918575,7.75341844 15.6371456,8.32482392 C15.9142829,8.4923472 16.1465966,8.72466097 16.3141199,9.00179825 Z" id="Triangle-2" fill="#FFFFFF" transform="translate(14.602672, 13.707802) rotate(90.000000) translate(-14.602672, -13.707802) "></path>
-            </g>
-        </g>
-    </g>
-</svg>
-        </button>
-        
-        <button class="mini-btn mini-pause-btn btn btn-link ">
-        
-<svg width="27px" height="27px" viewBox="0 0 27 27" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-   
-    <defs></defs>
-    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="Group-5">
-            <g id="Group-6">
-                <circle id="Oval" fill="#6094F7" cx="13.5" cy="13.5" r="13.5"></circle>
-                <rect id="Rectangle" fill="#FFFFFF" fill-rule="nonzero" x="9" y="8" width="3" height="12" rx="1.5"></rect>
-                <rect id="Rectangle" fill="#FFFFFF" fill-rule="nonzero" x="15" y="8" width="3" height="12" rx="1.5"></rect>
-            </g>
-        </g>
-    </g>
-</svg>
-
-        </button>
-	
-  <div class="title"><h4>{{track?.title}}</h4></div>
-  
-  <div class="top-icon icon-action ml-auto"></div>
-  
-   <div class="top-icon cloud-icon" id="cloud-icon" (click)="download()">
-
-
-    <svg width="29px" height="24px" viewBox="0 0 29 24" version="1.1" xmlns="http://www.w3.org/2000/svg"
-         xmlns:xlink="http://www.w3.org/1999/xlink">
-      <!-- Generator: Sketch 51 (57462) - http://www.bohemiancoding.com/sketch -->
-      <desc>Created with Sketch.</desc>
-      <defs></defs>
-      <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round"
-         stroke-linejoin="round">
-        <g class="icon-stroke" id="SM-Control-format" transform="translate(-110.000000, -2.000000)"
-           stroke-width="1">
-          <g id="Group" transform="translate(111.000000, 3.000000)">
-            <g id="cloud-download">
-              <path
-                d="M19.4879989,16.1333333 L21.2399988,16.1333333 C21.2399988,16.1333333 26.3999985,15.4575115 26.3999985,10.3713798 C26.4011313,8.80765081 25.7678024,7.31090519 24.6459581,6.2260582 C23.5241139,5.14121121 22.0105288,4.56184585 20.4539988,4.62147307 C18.8906671,1.2904419 15.2759143,-0.551842844 11.674631,0.147005143 C8.07334761,0.84585313 5.40291882,3.90781043 5.1887997,7.58376528 C3.92056247,7.31601307 2.59966219,7.63632183 1.59300916,8.45571847 C0.586356119,9.27511512 0.00117013486,10.5063247 0,11.8073507 C0,16.1983857 4.59119974,16.1297193 4.59119974,16.1297193 L6.8783996,16.1297193"
-                id="Shape"></path>
-              <path d="M13.2,22 L13.2,10.2666667" id="Shape"></path>
-              <polyline id="Shape" points="10.2666667 19.0666667 13.2 22 16.1333333 19.0666667"></polyline>
+                <path
+                  d="M16.3141199,9.00179825 L20.7528354,16.3448585 C21.3242409,17.2901466 21.0211492,18.5196696 20.0758611,19.0910751 C19.7637352,19.2797482 19.4059591,19.3794796 19.0412399,19.3794796 L10.1638089,19.3794796 C9.05923941,19.3794796 8.16380891,18.4840491 8.16380891,17.3794796 C8.16380891,17.0147604 8.26354033,16.6569843 8.45221343,16.3448585 L12.8909289,9.00179825 C13.4623344,8.05651017 14.6918575,7.75341844 15.6371456,8.32482392 C15.9142829,8.4923472 16.1465966,8.72466097 16.3141199,9.00179825 Z"
+                  id="Triangle-2" fill="#FFFFFF"
+                  transform="translate(14.602672, 13.707802) rotate(90.000000) translate(-14.602672, -13.707802) "></path>
+              </g>
             </g>
           </g>
-        </g>
-      </g>
-    </svg>
+        </svg>
 
-  </div>
+      </button>
 
-  <div class="top-icon text-icon" id="text-icon" (click)="showComments = !showComments">
+    </ng-template>
 
-    <svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg"
-         xmlns:xlink="http://www.w3.org/1999/xlink">
-      <!-- Generator: Sketch 51 (57462) - http://www.bohemiancoding.com/sketch -->
-      <desc>Created with Sketch.</desc>
-      <defs></defs>
-      <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round"
-         stroke-linejoin="round">
-        <g class="icon-stroke" id="SM-Control-format" transform="translate(-77.000000, -3.000000)" stroke-width="1">
-          <g id="messages-bubble-typing_1" transform="translate(78.000000, 4.000000)">
-            <circle id="Oval" cx="5.72" cy="9.24" r="1.32"></circle>
-            <circle id="Oval" cx="11" cy="9.24" r="1.32"></circle>
-            <circle id="Oval" cx="16.28" cy="9.24" r="1.32"></circle>
-            <path
-              d="M11,0 C4.92513043,0 0,4.253 0,9.5 C0.0516776117,12.1459391 1.24760765,14.6248238 3.25217391,16.241 L0.956521739,22 L7.05147826,18.359 C8.32824973,18.7838587 9.66011366,19.0000724 11,19 C17.0748696,19 22,14.747 22,9.5 C22,4.253 17.0748696,0 11,0 Z"
-              id="Shape"></path>
+    <ng-template #pausebutton>
+
+      <button (click)="player.pause()" class="mini-btn mini-pause-btn btn btn-link">
+
+        <svg width="27px" height="27px" viewBox="0 0 27 27" version="1.1" xmlns="http://www.w3.org/2000/svg">
+          <defs></defs>
+          <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+            <g id="Group-5">
+              <g id="Group-6">
+                <circle id="Oval" fill="#6094F7" cx="13.5" cy="13.5" r="13.5"></circle>
+                <rect id="Rectangle" fill="#FFFFFF" fill-rule="nonzero" x="9" y="8" width="3" height="12"
+                      rx="1.5"></rect>
+                <rect id="Rectangle" fill="#FFFFFF" fill-rule="nonzero" x="15" y="8" width="3" height="12"
+                      rx="1.5"></rect>
+              </g>
+            </g>
           </g>
-        </g>
-      </g>
-    </svg>
+        </svg>
+
+      </button>
+
+    </ng-template>
+
+    <div role="button" class="ml-auto" (click)="trackSelected()">
+
+      <div class="title"><h4>{{track?.title}}</h4></div>
+
+      <div class="top-icon icon-action"></div>
+
+    </div>
+
+    <div class="ml-auto">
+
+      <div class="top-icon cloud-icon" id="cloud-icon" (click)="download()">
+
+        <svg width="29px" height="24px" viewBox="0 0 29 24" version="1.1" xmlns="http://www.w3.org/2000/svg">
+          <desc>Created with Sketch.</desc>
+          <defs></defs>
+          <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round"
+             stroke-linejoin="round">
+            <g class="icon-stroke" id="SM-Control-format" transform="translate(-110.000000, -2.000000)"
+               stroke-width="1">
+              <g id="Group" transform="translate(111.000000, 3.000000)">
+                <g id="cloud-download">
+                  <path
+                    d="M19.4879989,16.1333333 L21.2399988,16.1333333 C21.2399988,16.1333333 26.3999985,15.4575115 26.3999985,10.3713798 C26.4011313,8.80765081 25.7678024,7.31090519 24.6459581,6.2260582 C23.5241139,5.14121121 22.0105288,4.56184585 20.4539988,4.62147307 C18.8906671,1.2904419 15.2759143,-0.551842844 11.674631,0.147005143 C8.07334761,0.84585313 5.40291882,3.90781043 5.1887997,7.58376528 C3.92056247,7.31601307 2.59966219,7.63632183 1.59300916,8.45571847 C0.586356119,9.27511512 0.00117013486,10.5063247 0,11.8073507 C0,16.1983857 4.59119974,16.1297193 4.59119974,16.1297193 L6.8783996,16.1297193"
+                    id="Shape"></path>
+                  <path d="M13.2,22 L13.2,10.2666667" id="Shape"></path>
+                  <polyline id="Shape" points="10.2666667 19.0666667 13.2 22 16.1333333 19.0666667"></polyline>
+                </g>
+              </g>
+            </g>
+          </g>
+        </svg>
+
+      </div>
+
+      <div class="top-icon text-icon" id="text-icon" (click)="showComments = !showComments">
+
+        <svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg">
+          <desc>Created with Sketch.</desc>
+          <defs></defs>
+          <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round"
+             stroke-linejoin="round">
+            <g class="icon-stroke" id="SM-Control-format" transform="translate(-77.000000, -3.000000)" stroke-width="1">
+              <g id="messages-bubble-typing_1" transform="translate(78.000000, 4.000000)">
+                <circle id="Oval" cx="5.72" cy="9.24" r="1.32"></circle>
+                <circle id="Oval" cx="11" cy="9.24" r="1.32"></circle>
+                <circle id="Oval" cx="16.28" cy="9.24" r="1.32"></circle>
+                <path
+                  d="M11,0 C4.92513043,0 0,4.253 0,9.5 C0.0516776117,12.1459391 1.24760765,14.6248238 3.25217391,16.241 L0.956521739,22 L7.05147826,18.359 C8.32824973,18.7838587 9.66011366,19.0000724 11,19 C17.0748696,19 22,14.747 22,9.5 C22,4.253 17.0748696,0 11,0 Z"
+                  id="Shape"></path>
+              </g>
+            </g>
+          </g>
+        </svg>
+
+      </div>
+
+    </div>
 
   </div>
-
- 
-
-
-  
- 
 
 
 </div>
-
- 
- 
- </div>
- 
-<hr>
  

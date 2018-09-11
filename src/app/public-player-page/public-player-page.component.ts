@@ -4,6 +4,7 @@ import {Comment} from "../comments/comment";
 import {RestUrl, Utils} from "../app.component";
 import {Track} from "../model/track";
 import {Project} from "../model/project";
+import {Player} from "../newplayer/player";
 
 @Component({
   selector: 'app-public-player',
@@ -15,7 +16,9 @@ export class PublicPlayerPageComponent implements OnInit {
   project: Project;
 
   tracks: Track[];
+  players: Map<Track, Player> = new Map();
 
+  activeTrack: Track;
   constructor(
     private route: ActivatedRoute,
   ) {
@@ -40,9 +43,16 @@ export class PublicPlayerPageComponent implements OnInit {
     Utils.sendGetRequest(RestUrl.PROJECT_TRACKS, [projectId], '', (response) => {
       my.tracks = response;
       for (let track of my.tracks) {
+        my.loadPlayer(track);
+      }
+      for (let track of my.tracks) {
         my.loadComments(track);
       }
     });
+  }
+
+  private loadPlayer(track: Track) {
+    this.players.set(track, new Player(track.track_url, track.duration));
   }
 
   private loadComments(track: Track) {
@@ -61,7 +71,11 @@ export class PublicPlayerPageComponent implements OnInit {
     });
   }
 
-  getTracks(): Track[] {
-    return this.tracks;
+  pauseOtherTracks(except: Track) {
+    for (let track of this.tracks) {
+      if (track != except) {
+        this.players.get(track).pause();
+      }
+    }
   }
 }

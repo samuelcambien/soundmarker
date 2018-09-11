@@ -1,11 +1,31 @@
 <app-public-page xmlns="http://www.w3.org/1999/html">
 
-  <div class="list-container collapse multi-collapse" id="collapseList">
+  <div class="list-container" [ngbCollapse]="activeTrack != null">
 
-    <app-public-player-list [tracks]="getTracks()"></app-public-player-list>
+    <div *ngFor="let track of tracks">
+
+      <app-public-player-track
+        [track]="track"
+        [player]="players.get(track)"
+        (selected)="activeTrack = track"
+        (playing)="pauseOtherTracks(track)"
+      >
+      </app-public-player-track>
+
+      <hr *ngIf="track != tracks[tracks.length - 1]">
+
+    </div>
 
   </div>
 
-    <app-public-track-player *ngFor="let track of tracks" [track]="track"></app-public-track-player>
+  <app-public-track-player
+    *ngFor="let track of tracks"
+    [track]="track"
+    [player]="players.get(track)"
+    [ngbCollapse]="activeTrack != track"
+    (overview)="activeTrack = null;"
+    (playing)="pauseOtherTracks(track)"
+  >
+  </app-public-track-player>
 
 </app-public-page>

@@ -1,5 +1,6 @@
 import {Component} from '@angular/core';
 import * as moment from "moment";
+import {now} from "moment";
 
 @Component({
   selector: 'app-root',
@@ -42,8 +43,8 @@ export class RestUrl {
 
 export class Utils {
 
-  public static getTimeReadable(time) {
-    // return moment.duration()
+  public static getTimeHumanized(time) {
+    return moment.duration(now() - time).humanize();
   }
 
   public static getTimeFormatted(seconds) {
@@ -59,7 +60,10 @@ export class Utils {
     trackRequest.send(params);
     trackRequest.addEventListener("load", () => {
       if (trackRequest.readyState == 4 && trackRequest.status == 200) {
-        callback(trackRequest.response);
+        console.log(
+          trackRequest.getResponseHeader("content-type")
+        );
+        callback(trackRequest.response, trackRequest);
       }
     }, false);
   }

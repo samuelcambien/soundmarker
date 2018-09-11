@@ -5,7 +5,7 @@ export class Player {
   constructor(private track_url: string, private duration) {
     this.audioContext = new AudioContext();
     this.audioContext.suspend();
-    this.loadBuffers(0);
+    this.loadBuffers(0, 1);
   }
 
   private static buffer_count: number = 6;
@@ -35,9 +35,9 @@ export class Player {
   private currentSource: AudioBufferSourceNode;
   private playID: number;
 
-  private loadBuffers(start: number, callback?: Function) {
+  loadBuffers(start: number, end?: number, callback?: Function) {
 
-    for (let index = start; index < start + Player.buffer_count && index <= this.maxIndex; index++) {
+    for (let index = start; index < (end ? end : start + Player.buffer_count) && index <= this.maxIndex; index++) {
       if (!this.audioSources[index]) {
         this.loadBuffer(index, () => {
           if (index == start && callback) callback()
@@ -135,7 +135,9 @@ export class Player {
   play() {
     this.audioContext.resume().then(() => {
       if (!this.currentSource) {
-        this.playFromStartTime();
+        this.loadBuffers(0, Player.buffer_count, () => {
+          this.playFromStartTime();
+        })
       }
     });
   }
@@ -152,7 +154,7 @@ export class Player {
   seekTo(time: number, callback?) {
     this.stop(() => {
       this.startTime = time;
-      this.loadBuffers(Player.getIndex(time), () => {
+      this.loadBuffers(Player.getIndex(time), Player.buffer_count, () => {
         if (callback) callback();
       });
     });

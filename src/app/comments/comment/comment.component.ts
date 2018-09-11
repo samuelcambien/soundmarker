@@ -2,6 +2,7 @@ import {Component, ComponentFactoryResolver, Input, OnInit, ViewChild, ViewConta
 import {Comment} from "../comment";
 import {ReplyFormComponent} from "../reply-form/reply-form.component";
 import {Player} from "../../newplayer/player";
+import {Utils} from "../../app.component";
 
 @Component({
   selector: 'app-comment',
@@ -29,6 +30,10 @@ export class CommentComponent implements OnInit {
         ReplyFormComponent
       )
     ).instance.parentId = this.comment.comment_id;
+  }
+
+  getTimeHumanized(time: number) {
+    return Utils.getTimeHumanized(time) + " ago";
   }
 
   goToCommentTime(comment: Comment) {

@@ -2,6 +2,7 @@ import {Component, Input, OnInit} from '@angular/core';
 import {Comment} from "../comment";
 import {RestUrl, Utils} from "../../app.component";
 import {FormControl, FormGroup, NgForm} from "@angular/forms";
+import {Player} from "../../newplayer/player";
 
 @Component({
   selector: 'app-comment-form',
@@ -10,13 +11,11 @@ import {FormControl, FormGroup, NgForm} from "@angular/forms";
 })
 export class CommentFormComponent implements OnInit {
 
-  commentForm = new FormGroup({
-    text: new FormControl('Type comment')
-  });
+  active: boolean = false;
 
   @Input() version_id;
   @Input() comment: Comment;
-  @Input() player: any;
+  @Input() player: Player;
 
   constructor() {
   }
@@ -34,21 +33,25 @@ export class CommentFormComponent implements OnInit {
     form.resetForm();
   }
 
-  format(seconds) {
-    // return Utils.getTimeFormatted(seconds);
-  }
-
   triggerStart() {
     if (!this.comment.start)
-      this.comment.start = this.player.backend.getCurrentTime();
+      this.comment.start = this.player.getCurrentPosition();
+    if (this.comment.includeStart)
+      this.comment.includeEnd = false;
   }
 
   triggerEnd() {
     if (!this.comment.end)
-      this.comment.end = this.player.backend.getDuration();
+      this.comment.end = this.player.getCurrentPosition();
+    if (!this.comment.includeEnd)
+      this.comment.includeStart = true;
   }
 
-  onFormSubmit() {
+  getStart() {
+    if (this.comment.includeStart) return Utils.getTimeFormatted(this.comment.start);
+  }
 
+  getEnd() {
+    if (this.comment.includeEnd) return Utils.getTimeFormatted(this.comment.end);
   }
 }

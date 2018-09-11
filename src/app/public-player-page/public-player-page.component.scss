@@ -44,11 +44,6 @@
   border-bottom: 5px solid #F3F3F3;
 }
 
-.drag-block {
-  position: absolute;
-  z-index: 10;
-}
-
 .timebar-container {
   position: relative;
 }
@@ -61,6 +56,10 @@
   position: absolute;
   bottom: -9px;
   z-index: 100;
+}
+
+.drag-block.disabled svg * {
+  stroke: #aeaeae;
 }
 
 .time {
@@ -139,6 +138,10 @@
 	padding: 0px;
 }
 
+.order.nav-link.disabled svg * {
+  stroke: #E8EAED;
+}
+
 .nav-link, .dropdown-item {
 	font-family: 'avenirnext-regular';
 	font-size: 10pt;
@@ -157,4 +160,10 @@
 	margin-top: -60px;
 	margin-bottom: 4px;
 
+}
+
+hr {
+  margin-top: 0px;
+  margin-bottom: 0px;
+  border-top: 1px solid #E8EAED;
 }

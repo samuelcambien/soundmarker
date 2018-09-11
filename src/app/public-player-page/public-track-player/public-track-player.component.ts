@@ -1,6 +1,6 @@
-import {Component, ElementRef, Input, OnInit, Renderer2, ViewChild} from '@angular/core';
+import {Component, ElementRef, EventEmitter, Input, OnInit, Output, Renderer2, ViewChild} from '@angular/core';
 import {Track} from "../../model/track";
-import {RestUrl, Utils} from "../../app.component";
+import {Utils} from "../../app.component";
 import {Player} from "../../newplayer/player";
 import {Comment, CommentSorter} from "../../comments/comment";
 import {saveAs} from 'file-saver/FileSaver';
@@ -19,7 +19,11 @@ export class PublicTrackPlayerComponent implements OnInit {
     CommentSorter.NAME_Z_A
   ];
 
+  @Input() player: Player;
   @Input() track: Track;
+
+  @Output() overview = new EventEmitter();
+  @Output() playing = new EventEmitter();
 
   @ViewChild('waveform') waveform: ElementRef;
 
@@ -28,15 +32,11 @@ export class PublicTrackPlayerComponent implements OnInit {
 
   private currentSorter: CommentSorter = CommentSorter.MOST_RECENT_FIRST;
 
-  comments: Comment[];
-
   comment: Comment = new Comment();
 
   startPos;
 
-  showComments: boolean = true;
-
-  player: Player;
+  showComments: boolean = false;
 
   constructor(
     private renderer: Renderer2
@@ -45,11 +45,12 @@ export class PublicTrackPlayerComponent implements OnInit {
 
   ngOnInit() {
 
-    this.player = new Player(this.track.track_url, this.track.duration);
-
     this.renderer.listen(this.waveform.nativeElement, 'click', (e) => {
       this.player.seekTo(this.getSeekTime(e));
     });
+
+    this.comment.start = 0;
+    this.comment.end = this.track.duration;
   }
 
   private getPlayerWidth(): number {
@@ -75,6 +76,7 @@ export class PublicTrackPlayerComponent implements OnInit {
   }
 
   play() {
+    this.playing.emit();
     this.player.play();
   }
 
@@ -87,7 +89,7 @@ export class PublicTrackPlayerComponent implements OnInit {
   }
 
   getCommentsSorted() {
-    return this.comments ? this.comments.sort(this.currentSorter.comparator) : [];
+    return this.track.comments ? this.track.comments.sort(this.currentSorter.comparator) : [];
   }
 
   saveDragStart(element, event) {
@@ -97,16 +99,17 @@ export class PublicTrackPlayerComponent implements OnInit {
   validateDragStart() {
     return () => true;
     // return (coords) =>
-    // this.getCommentTime(this.startTime, coords) > 0 &&
-    // (this.getCommentTime(this.startTime, coords) < this.comment.end || !this.comment.includeEnd) &&
-    // this.getCommentTime(this.startTime, coords) <= this.track.duration;
+    //   this.getCommentTime(this.startTime, this.startPos, coords) > 0 &&
+    //   (this.getCommentTime(this.startTime, this.startPos, coords) < this.comment.end || !this.comment.includeEnd) &&
+    //   this.getCommentTime(this.startTime, this.startPos, coords) <= this.track.duration;
   }
 
   validateDragEnd() {
+    return () => true;
     // return (coords) =>
-    // this.getCommentTime(this.endTime, coords) > 0 &&
-    // (this.getCommentTime(this.endTime, coords) > this.comment.start || !this.comment.start) &&
-    // this.getCommentTime(this.endTime, coords) <= this.track.duration;
+    //   this.getCommentTime(this.endTime, this.startPos, coords) > 0 &&
+    //   (this.getCommentTime(this.endTime, this.startPos, coords) > this.comment.start || !this.comment.start) &&
+    //   this.getCommentTime(this.endTime, this.startPos, coords) <= this.track.duration;
   }
 
   private getPosition(element, commentTime) {
@@ -133,14 +136,24 @@ export class PublicTrackPlayerComponent implements OnInit {
   }
 
   download() {
-    saveAs(new Blob([
-        Utils.sendGetRequest(RestUrl.VERSION, [], "", {})
-      ],
-      {type: "text/plain;charset=utf-8"}), "hello world.txt"
-    );
+
+    Utils.sendGetDataRequest(this.track.track_url + ".mp3", [], "", (response, trackRequest) => {
+      saveAs(new Blob(
+        [
+          trackRequest.responseText
+        ],
+        {
+          type: trackRequest.getResponseHeader("content-type")
+        }), this.track.title + ".mp3"
+      )
+    });
   }
 
   downloadFile(propertyId: string, fileId: string) {
     ReadableStream
+  }
+
+  goToOverview() {
+    this.overview.emit();
   }
 }

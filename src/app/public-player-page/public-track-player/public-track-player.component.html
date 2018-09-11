@@ -1,234 +1,233 @@
-<div class="collapse multi-collapse show" id="collapsePlayer">
+<div class="container-fluid">
 
-  <div class="container-fluid">
+  <div class="player-header row">
 
-    <div class="player-header row">
-      <div class="title"><h4>{{track?.title}}</h4></div>
+    <div class="title"><h4>{{track?.title}}</h4></div>
 
-      <div class="top-icon icon-action ml-auto"></div>
+    <div class="top-icon icon-action ml-auto"></div>
 
-      <div class="top-icon list-icon" id="list-icon" data-toggle="collapse" href="#collapseList" role="button"
-           data-target=".multi-collapse" aria-expanded="false" aria-controls="collapseList collapsePlayer">
+    <div class="top-icon list-icon" id="list-icon" role="button" (click)="goToOverview()">
 
-
-        <svg width="25px" height="20px" viewBox="0 0 25 20" version="1.1" xmlns="http://www.w3.org/2000/svg"
-             xmlns:xlink="http://www.w3.org/1999/xlink">
-          <!-- Generator: Sketch 51 (57462) - http://www.bohemiancoding.com/sketch -->
-          <desc>Created with Sketch.</desc>
-          <defs></defs>
-          <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round"
-             stroke-linejoin="round">
-            <g class="icon-stroke" id="SM-Control-format" transform="translate(-35.000000, -2.000000)" stroke-width="1">
-              <g id="list-bullets" transform="translate(36.000000, 3.000000)">
-                <circle id="Oval" cx="1.38461538" cy="1.38461538" r="1.38461538"></circle>
-                <path d="M6.23076923,1.38461538 L22.8461538,1.38461538" id="Shape"></path>
-                <circle id="Oval" cx="1.38461538" cy="9" r="1.38461538"></circle>
-                <path d="M6.23076923,9 L22.8461538,9" id="Shape"></path>
-                <circle id="Oval" cx="1.38461538" cy="16.6153846" r="1.38461538"></circle>
-                <path d="M6.23076923,16.6153846 L22.8461538,16.6153846" id="Shape"></path>
-              </g>
+      <svg width="25px" height="20px" viewBox="0 0 25 20" version="1.1" xmlns="http://www.w3.org/2000/svg">
+        <desc>Created with Sketch.</desc>
+        <defs></defs>
+        <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round"
+           stroke-linejoin="round">
+          <g class="icon-stroke" id="SM-Control-format" transform="translate(-35.000000, -2.000000)" stroke-width="1">
+            <g id="list-bullets" transform="translate(36.000000, 3.000000)">
+              <circle id="Oval" cx="1.38461538" cy="1.38461538" r="1.38461538"></circle>
+              <path d="M6.23076923,1.38461538 L22.8461538,1.38461538" id="Shape"></path>
+              <circle id="Oval" cx="1.38461538" cy="9" r="1.38461538"></circle>
+              <path d="M6.23076923,9 L22.8461538,9" id="Shape"></path>
+              <circle id="Oval" cx="1.38461538" cy="16.6153846" r="1.38461538"></circle>
+              <path d="M6.23076923,16.6153846 L22.8461538,16.6153846" id="Shape"></path>
             </g>
           </g>
-        </svg>
+        </g>
+      </svg>
 
-      </div>
+    </div>
 
-      <div class="top-icon text-icon" id="text-icon" (click)="showComments = !showComments">
+    <div class="top-icon text-icon" id="text-icon" (click)="showComments = !showComments" [class.active]="showComments">
 
-        <svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg">
-          <desc>Created with Sketch.</desc>
-          <defs></defs>
-          <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round"
-             stroke-linejoin="round">
-            <g class="icon-stroke" id="SM-Control-format" transform="translate(-77.000000, -3.000000)" stroke-width="1">
-              <g id="messages-bubble-typing_1" transform="translate(78.000000, 4.000000)">
-                <circle id="Oval" cx="5.72" cy="9.24" r="1.32"></circle>
-                <circle id="Oval" cx="11" cy="9.24" r="1.32"></circle>
-                <circle id="Oval" cx="16.28" cy="9.24" r="1.32"></circle>
+      <svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg">
+        <desc>Created with Sketch.</desc>
+        <defs></defs>
+        <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round"
+           stroke-linejoin="round">
+          <g class="icon-stroke" id="SM-Control-format" transform="translate(-77.000000, -3.000000)" stroke-width="1">
+            <g id="messages-bubble-typing_1" transform="translate(78.000000, 4.000000)">
+              <circle id="Oval" cx="5.72" cy="9.24" r="1.32"></circle>
+              <circle id="Oval" cx="11" cy="9.24" r="1.32"></circle>
+              <circle id="Oval" cx="16.28" cy="9.24" r="1.32"></circle>
+              <path
+                d="M11,0 C4.92513043,0 0,4.253 0,9.5 C0.0516776117,12.1459391 1.24760765,14.6248238 3.25217391,16.241 L0.956521739,22 L7.05147826,18.359 C8.32824973,18.7838587 9.66011366,19.0000724 11,19 C17.0748696,19 22,14.747 22,9.5 C22,4.253 17.0748696,0 11,0 Z"
+                id="Shape"></path>
+            </g>
+          </g>
+        </g>
+      </svg>
+
+    </div>
+
+    <div class="top-icon cloud-icon" id="cloud-icon" (click)="download()">
+
+      <svg width="29px" height="24px" viewBox="0 0 29 24" version="1.1" xmlns="http://www.w3.org/2000/svg"
+           xmlns:xlink="http://www.w3.org/1999/xlink">
+        <!-- Generator: Sketch 51 (57462) - http://www.bohemiancoding.com/sketch -->
+        <desc>Created with Sketch.</desc>
+        <defs></defs>
+        <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round"
+           stroke-linejoin="round">
+          <g class="icon-stroke" id="SM-Control-format" transform="translate(-110.000000, -2.000000)"
+             stroke-width="1">
+            <g id="Group" transform="translate(111.000000, 3.000000)">
+              <g id="cloud-download">
                 <path
-                  d="M11,0 C4.92513043,0 0,4.253 0,9.5 C0.0516776117,12.1459391 1.24760765,14.6248238 3.25217391,16.241 L0.956521739,22 L7.05147826,18.359 C8.32824973,18.7838587 9.66011366,19.0000724 11,19 C17.0748696,19 22,14.747 22,9.5 C22,4.253 17.0748696,0 11,0 Z"
+                  d="M19.4879989,16.1333333 L21.2399988,16.1333333 C21.2399988,16.1333333 26.3999985,15.4575115 26.3999985,10.3713798 C26.4011313,8.80765081 25.7678024,7.31090519 24.6459581,6.2260582 C23.5241139,5.14121121 22.0105288,4.56184585 20.4539988,4.62147307 C18.8906671,1.2904419 15.2759143,-0.551842844 11.674631,0.147005143 C8.07334761,0.84585313 5.40291882,3.90781043 5.1887997,7.58376528 C3.92056247,7.31601307 2.59966219,7.63632183 1.59300916,8.45571847 C0.586356119,9.27511512 0.00117013486,10.5063247 0,11.8073507 C0,16.1983857 4.59119974,16.1297193 4.59119974,16.1297193 L6.8783996,16.1297193"
                   id="Shape"></path>
+                <path d="M13.2,22 L13.2,10.2666667" id="Shape"></path>
+                <polyline id="Shape" points="10.2666667 19.0666667 13.2 22 16.1333333 19.0666667"></polyline>
               </g>
             </g>
           </g>
-        </svg>
-
-      </div>
-
-      <div class="top-icon cloud-icon" id="cloud-icon" (click)="download()">
-
-        <svg width="29px" height="24px" viewBox="0 0 29 24" version="1.1" xmlns="http://www.w3.org/2000/svg"
-             xmlns:xlink="http://www.w3.org/1999/xlink">
-          <!-- Generator: Sketch 51 (57462) - http://www.bohemiancoding.com/sketch -->
-          <desc>Created with Sketch.</desc>
-          <defs></defs>
-          <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round"
-             stroke-linejoin="round">
-            <g class="icon-stroke" id="SM-Control-format" transform="translate(-110.000000, -2.000000)"
-               stroke-width="1">
-              <g id="Group" transform="translate(111.000000, 3.000000)">
-                <g id="cloud-download">
-                  <path
-                    d="M19.4879989,16.1333333 L21.2399988,16.1333333 C21.2399988,16.1333333 26.3999985,15.4575115 26.3999985,10.3713798 C26.4011313,8.80765081 25.7678024,7.31090519 24.6459581,6.2260582 C23.5241139,5.14121121 22.0105288,4.56184585 20.4539988,4.62147307 C18.8906671,1.2904419 15.2759143,-0.551842844 11.674631,0.147005143 C8.07334761,0.84585313 5.40291882,3.90781043 5.1887997,7.58376528 C3.92056247,7.31601307 2.59966219,7.63632183 1.59300916,8.45571847 C0.586356119,9.27511512 0.00117013486,10.5063247 0,11.8073507 C0,16.1983857 4.59119974,16.1297193 4.59119974,16.1297193 L6.8783996,16.1297193"
-                    id="Shape"></path>
-                  <path d="M13.2,22 L13.2,10.2666667" id="Shape"></path>
-                  <polyline id="Shape" points="10.2666667 19.0666667 13.2 22 16.1333333 19.0666667"></polyline>
-                </g>
-              </g>
-            </g>
-          </g>
-        </svg>
-
-      </div>
+        </g>
+      </svg>
 
     </div>
 
-    <div class="player-content row">
-
-      <button *ngIf="isPlaying(); then pausebutton else playbutton"></button>
-
-      <ng-template #pausebutton>
-        <button class="pause-button col-md-2 btn btn-link playerknob" (click)="pause()">
-          <svg width="90px" height="90px" viewBox="0 0 70 70" version="1.1" xmlns="http://www.w3.org/2000/svg">
-            <defs></defs>
-            <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-              <g id="public-player-s" transform="translate(-38.000000, -142.000000)">
-                <g id="Group-2">
-                  <g id="Group-4" transform="translate(38.000000, 129.000000)">
-                    <g id="Group-5" transform="translate(0.000000, 13.000000)">
-                      <circle id="Oval" fill="#6094F7" cx="35" cy="35" r="35"></circle>
-                      <rect id="Rectangle-5" fill="#FFFFFF" x="38" y="21" width="8" height="28" rx="2"></rect>
-                      <rect id="Rectangle-5" fill="#FFFFFF" x="25" y="21" width="8" height="28" rx="2"></rect>
-                    </g>
-                  </g>
-                </g>
-              </g>
-            </g>
-          </svg>
-        </button>
-      </ng-template>
-
-      <ng-template #playbutton>
-        <button class="play-button col-md-2 btn btn-link playerknob" (click)="play()">
-          <svg width="90px" height="90px" viewBox="0 0 70 70" version="1.1" xmlns="http://www.w3.org/2000/svg">
-            <defs></defs>
-            <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-              <g id="public-player-s" transform="translate(-38.000000, -142.000000)">
-                <g id="Group-2">
-                  <g id="Group-4" transform="translate(38.000000, 129.000000)">
-                    <g id="Group-5" transform="translate(0.000000, 13.000000)">
-                      <g id="Group-6">
-                        <circle id="Oval" fill="#6094F7" cx="35" cy="35" r="35"></circle>
-                        <path
-                          d="M41.2001413,23.6040044 L53.12746,43.3356181 C54.270271,45.2261943 53.6640875,47.6852404 51.7735114,48.8280514 C51.1492596,49.2053976 50.4337074,49.4048604 49.7042691,49.4048604 L25.8496316,49.4048604 C23.6404926,49.4048604 21.8496316,47.6139994 21.8496316,45.4048604 C21.8496316,44.675422 22.0490945,43.9598698 22.4264407,43.3356181 L34.3537594,23.6040044 C35.4965703,21.7134283 37.9556165,21.1072448 39.8461926,22.2500558 C40.4004672,22.5851023 40.8650947,23.0497299 41.2001413,23.6040044 Z"
-                          id="Triangle-2" fill="#FFFFFF"
-                          transform="translate(37.777246, 35.538758) rotate(90.000000) translate(-37.777246, -35.538758) "></path>
-                      </g>
-                    </g>
-                  </g>
-                </g>
-              </g>
-            </g>
-          </svg>
-        </button>
-      </ng-template>
-
-      <div class="player-container col-md-10">
-        <div class="waveform-container">
-          <div id="waveform" #waveform>
-            <ng-container *ngTemplateOutlet="waveformsvg"></ng-container>
-          </div>
-        </div>
-        <div class="timebar-container">
-          <div id="timebar">
-            <div
-              #startTime
-              class="drag-block"
-              mwlDraggable [dragAxis]="{x: true, y:false}"
-              [validateDrag]="validateDragStart()"
-              (dragStart)="startPos=startTime.offsetLeft"
-              (dragEnd)="updateStartTime(startPos, $event)"
-              [style.left]="getStartPosition()"
-            >
-              <ng-container *ngTemplateOutlet="soundmarker"></ng-container>
-            </div>
-            <div
-              #endTime
-              class="drag-block"
-              [class.invisible]="!comment.includeEnd"
-              mwlDraggable [dragAxis]="{x: true, y:false}"
-              (dragStart)="startPos=endTime.offsetLeft"
-              (dragEnd)="updateEndTime(startPos, $event)"
-              [validateDrag]="validateDragEnd()"
-              [style.left]="getEndPosition()"
-            >
-              <ng-container *ngTemplateOutlet="soundmarker"></ng-container>
-            </div>
-
-            <ng-template #soundmarker>
-              <svg class="audioline" width="11px" height="63px" viewBox="0 0 11 63" version="1.1"
-                   xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-                <defs></defs>
-                <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round">
-                  <circle id="Oval" stroke="#000000" stroke-linejoin="round" cx="5.5" cy="57.5" r="4.5"></circle>
-                  <path d="M5.5,52.5 L5.5,0.5" id="Line" stroke="#000000" fill-rule="nonzero"></path>
-                </g>
-              </svg>
-            </ng-template>
-
-          </div>
-        </div>
-        <div class="time float-left"><h5>{{formatTime(player?.getCurrentPosition())}}</h5></div>
-        <div class="time float-right"><h5>{{formatTime(duration)}}</h5></div>
-      </div>
-
-    </div>
-
-    <div class="comments" [ngbCollapse]="!showComments">
-
-      <div class="sendersnote">
-        <p>
-          {{track?.notes}}
-        </p>
-      </div>
-
-      <div class="comments-header row">
-        <div><h3>{{comments?.length}} comments</h3></div>
-
-        <a class="order nav-link dropdown-toggle ml-auto" data-toggle="dropdown" href="#" role="button"
-           aria-haspopup="true"
-           aria-expanded="false">
-
-          <svg width="23px" height="12px" viewBox="0 0 23 12" version="1.1" xmlns="http://www.w3.org/2000/svg">
-            <defs></defs>
-            <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round">
-              <path d="M8.5,11.25 L22.5,11.25" id="Line" stroke="#000000" fill-rule="nonzero"></path>
-              <path d="M4.5,6.25 L22.5,6.25" id="Line" stroke="#000000" fill-rule="nonzero"></path>
-              <path d="M0.5,1.25 L22.5,1.25" id="Line" stroke="#000000" fill-rule="nonzero"></path>
-            </g>
-          </svg>
-        </a>
-
-        <div>
-
-          <div class="dropdown-menu dropdown-menu-right shadow">
-            <a *ngFor="let sorter of commentSorters" (click)="currentSorter = sorter" class="dropdown-item">
-              {{sorter.description}}
-            </a>
-          </div>
-        </div>
-      </div>
-
-      <app-comment-form [version_id]="track?.last_version" [comment]="comment" [player]="player"></app-comment-form>
-
-      <app-comment
-        *ngFor="let comment of getCommentsSorted()"
-        [player]="player"
-        [comment]="comment">
-      </app-comment>
-
-    </div>
   </div>
+
+  <div class="player-content row">
+
+    <button *ngIf="isPlaying(); then pausebutton else playbutton"></button>
+
+    <ng-template #pausebutton>
+      <button class="pause-button col-md-2 btn btn-link playerknob" (click)="pause()">
+        <svg width="90px" height="90px" viewBox="0 0 70 70" version="1.1" xmlns="http://www.w3.org/2000/svg">
+          <defs></defs>
+          <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+            <g id="public-player-s" transform="translate(-38.000000, -142.000000)">
+              <g id="Group-2">
+                <g id="Group-4" transform="translate(38.000000, 129.000000)">
+                  <g id="Group-5" transform="translate(0.000000, 13.000000)">
+                    <circle id="Oval" fill="#6094F7" cx="35" cy="35" r="35"></circle>
+                    <rect id="Rectangle-5" fill="#FFFFFF" x="38" y="21" width="8" height="28" rx="2"></rect>
+                    <rect id="Rectangle-5" fill="#FFFFFF" x="25" y="21" width="8" height="28" rx="2"></rect>
+                  </g>
+                </g>
+              </g>
+            </g>
+          </g>
+        </svg>
+      </button>
+    </ng-template>
+
+    <ng-template #playbutton>
+      <button class="play-button col-md-2 btn btn-link playerknob" (click)="play()">
+        <svg width="90px" height="90px" viewBox="0 0 70 70" version="1.1" xmlns="http://www.w3.org/2000/svg">
+          <defs></defs>
+          <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+            <g id="public-player-s" transform="translate(-38.000000, -142.000000)">
+              <g id="Group-2">
+                <g id="Group-4" transform="translate(38.000000, 129.000000)">
+                  <g id="Group-5" transform="translate(0.000000, 13.000000)">
+                    <g id="Group-6">
+                      <circle id="Oval" fill="#6094F7" cx="35" cy="35" r="35"></circle>
+                      <path
+                        d="M41.2001413,23.6040044 L53.12746,43.3356181 C54.270271,45.2261943 53.6640875,47.6852404 51.7735114,48.8280514 C51.1492596,49.2053976 50.4337074,49.4048604 49.7042691,49.4048604 L25.8496316,49.4048604 C23.6404926,49.4048604 21.8496316,47.6139994 21.8496316,45.4048604 C21.8496316,44.675422 22.0490945,43.9598698 22.4264407,43.3356181 L34.3537594,23.6040044 C35.4965703,21.7134283 37.9556165,21.1072448 39.8461926,22.2500558 C40.4004672,22.5851023 40.8650947,23.0497299 41.2001413,23.6040044 Z"
+                        id="Triangle-2" fill="#FFFFFF"
+                        transform="translate(37.777246, 35.538758) rotate(90.000000) translate(-37.777246, -35.538758) "></path>
+                    </g>
+                  </g>
+                </g>
+              </g>
+            </g>
+          </g>
+        </svg>
+      </button>
+    </ng-template>
+
+    <div class="player-container col-md-10">
+      <div class="waveform-container">
+        <div id="waveform" #waveform>
+          <ng-container *ngTemplateOutlet="waveformsvg"></ng-container>
+        </div>
+      </div>
+      <div class="timebar-container">
+        <div id="timebar">
+
+          <div
+            #startTime
+            class="drag-block"
+            [class.disabled]="!comment.includeStart"
+            mwlDraggable [dragAxis]="{x: true, y:false}"
+            [validateDrag]="validateDragStart()"
+            (dragStart)="startPos=startTime.offsetLeft; comment.includeStart = true"
+            (dragEnd)="updateStartTime(startPos, $event)"
+            [style.left]="getStartPosition()"
+          >
+            <ng-container *ngTemplateOutlet="soundmarker"></ng-container>
+          </div>
+
+          <div
+            #endTime
+            class="drag-block"
+            [class.disabled]="!comment.includeEnd"
+            mwlDraggable [dragAxis]="{x: true, y:false}"
+            (dragStart)="startPos=endTime.offsetLeft; comment.includeEnd = true; comment.includeStart = true"
+            (dragEnd)="updateEndTime(startPos, $event)"
+            [validateDrag]="validateDragEnd()"
+            [style.left]="getEndPosition()"
+          >
+            <ng-container *ngTemplateOutlet="soundmarker"></ng-container>
+          </div>
+
+          <ng-template #soundmarker>
+            <svg class="audioline" width="11px" height="63px" viewBox="0 0 11 63" version="1.1"
+                 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+              <defs></defs>
+              <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round">
+                <circle id="Oval" stroke="#000000" stroke-linejoin="round" cx="5.5" cy="57.5" r="4.5"></circle>
+                <path d="M5.5,52.5 L5.5,0.5" id="Line" stroke="#000000" fill-rule="nonzero"></path>
+              </g>
+            </svg>
+          </ng-template>
+
+        </div>
+      </div>
+      <div class="time float-left"><h5>{{formatTime(player?.getCurrentPosition())}}</h5></div>
+      <div class="time float-right"><h5>{{formatTime(track.duration)}}</h5></div>
+    </div>
+
+  </div>
+
+  <div class="comments" [ngbCollapse]="!showComments">
+
+    <div class="sendersnote">
+      <p>
+        {{track?.notes}}
+      </p>
+    </div>
+
+    <div class="comments-header row">
+
+      <div><h3>{{track?.comments?.length}} comments</h3></div>
+
+      <a class="order nav-link dropdown-toggle ml-auto" data-toggle="dropdown" href="#" role="button"
+         [class.disabled]="track?.comments?.length == 0"
+         aria-haspopup="true"
+         aria-expanded="false">
+
+        <svg width="23px" height="12px" viewBox="0 0 23 12" version="1.1" xmlns="http://www.w3.org/2000/svg">
+          <defs></defs>
+          <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round">
+            <path d="M8.5,11.25 L22.5,11.25" id="Line" stroke="#000000" fill-rule="nonzero"></path>
+            <path d="M4.5,6.25 L22.5,6.25" id="Line" stroke="#000000" fill-rule="nonzero"></path>
+            <path d="M0.5,1.25 L22.5,1.25" id="Line" stroke="#000000" fill-rule="nonzero"></path>
+          </g>
+        </svg>
+
+      </a>
+
+      <div class="dropdown-menu dropdown-menu-right shadow">
+        <a *ngFor="let sorter of commentSorters" (click)="currentSorter = sorter" class="dropdown-item">
+          {{sorter.description}}
+        </a>
+      </div>
+
+    </div>
+
+    <app-comment-form [version_id]="track?.last_version" [comment]="comment" [player]="player"></app-comment-form>
+
+    <app-comment
+      *ngFor="let comment of getCommentsSorted()"
+      [player]="player"
+      [comment]="comment">
+    </app-comment>
+
+  </div>
+
 </div>
 
 <ng-template #waveformsvg>
