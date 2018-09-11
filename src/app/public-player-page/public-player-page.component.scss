@@ -1,3 +1,27 @@
+// track list
+
+.list-container {
+	max-height: 154px;
+	  overflow-y: scroll;
+  overflow-x: hidden;
+}
+
+.list-container::-webkit-scrollbar {
+  width: 4px;
+}
+
+.list-container::-webkit-scrollbar-thumb {
+  background-color: #E8EAED;
+  border-radius: 4px;
+}
+
+.list-container::-webkit-scrollbar-thumb:hover {
+  background-color: #6A6D6F;
+  cursor: pointer;
+}
+
+//header
+
 .comments-header {
 	border-bottom: 1px solid black;
 }
@@ -13,7 +37,7 @@
   position: absolute;
   top: 0;
   left: 0;
-  fill: #aeaeae;
+  fill: #E8EAED;
 }
 
 #timebar {
@@ -47,6 +71,7 @@
 	float: right;
 	margin-left: 12px;
 	cursor: pointer;
+	margin-top: 3px;
 }
 
 .top-icon .icon-stroke {
@@ -64,51 +89,17 @@
 	cursor: ew-resize !important;
 }
 
-.top-icon:after{
-	position:absolute;
-   margin-top: -4px;
-   opacity: 0;
-   color: white;
-   font-family: "avenirnext-regular";
-   padding: 0px;
-   padding-left: 6px; padding-right: 6px;
-   border-radius: 3px;
-   font-size: 10pt;
-  text-align: center;
-   background-color: #b4ceff;
-    -webkit-transition:  all 0.3s; /* Safari */
-    transition: all 0.3s;
-    display: block;
+.title {
+	margin-top: 3px;
+}
+
+.icon-action {
 
 }
 
-#text-icon.top-icon:after {
-	content:"comments";
-	margin-left: -22px;
-}
-
-#cloud-icon.top-icon:after {
-	content:"download";
-	margin-left: -22px;
-}
-
-#list-icon.top-icon:after {
-	content:"overview";
-	margin-left: -20px;
-	margin-top: 6px;
-}
-
-.top-icon:hover:after {
-	opacity: 1;
-
-	margin-top: 4px;
-	   -webkit-transition:  all 0.3s; /* Safari */
-    transition: all 0.3s;
-
-}
 
 .list-icon {
-	margin-top: 1px;
+	margin-top: 4px;
 }
 
 
@@ -122,11 +113,12 @@
 .player-header {
 	margin-left: 0px;
 	margin-right: 0px;
-	margin-bottom: 18px;
+	
 }
 
 .player-content {
 	margin-bottom: 0px;
+	margin-top: 18px;
 }
 
 .playerknob {
