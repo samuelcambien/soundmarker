@@ -30,10 +30,18 @@ import {MyCurrencyPipe} from './my-currency.pipe';
 import {TimeInputComponent} from './comments/time-input/time-input.component';
 import {FileUploadModule} from "./ng2-file-upload";
 import {SplitterDirective} from './splitter.directive';
-import { PublicPlayerListComponent } from './public-player-page/public-player-list/public-player-list.component';
-import { PublicPlayerTrackComponent } from './public-player-page/public-player-track/public-player-track.component';
-import { PublicTrackPlayerComponent } from './public-player-page/public-track-player/public-track-player.component';
-import { ErrorComponent } from './public-page/public-info/topics/error/error.component';
+import {PublicPlayerListComponent} from './public-player-page/public-player-list/public-player-list.component';
+import {PublicPlayerTrackComponent} from './public-player-page/public-player-track/public-player-track.component';
+import {PublicTrackPlayerComponent} from './public-player-page/public-track-player/public-track-player.component';
+import {ErrorComponent} from './public-page/public-info/topics/error/error.component';
+import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
+import {PrivacyAndTermsComponent} from './public-page/public-info/topics/privacy-and-terms/privacy-and-terms.component';
+import {ContactComponent} from './public-page/public-info/topics/contact/contact.component';
+import {InfoFooterComponent} from './public-page/public-info/topics/info-footer/info-footer.component';
+import {TermsComponent} from './public-page/public-info/topics/privacy-and-terms/terms/terms.component';
+import {PrivacyComponent} from './public-page/public-info/topics/privacy-and-terms/privacy/privacy.component';
+import {CookieComponent} from './public-page/public-info/topics/privacy-and-terms/cookie/cookie.component';
+import {NtdComponent} from './public-page/public-info/topics/privacy-and-terms/ntd/ntd.component';
 
 @NgModule({
   declarations: [
@@ -62,15 +70,23 @@ import { ErrorComponent } from './public-page/public-info/topics/error/error.com
     PublicPlayerListComponent,
     PublicPlayerTrackComponent,
     PublicTrackPlayerComponent,
-    ErrorComponent
+    ErrorComponent,
+    PrivacyAndTermsComponent,
+    ContactComponent,
+    InfoFooterComponent,
+    TermsComponent,
+    PrivacyComponent,
+    CookieComponent,
+    NtdComponent
   ],
   imports: [
-    BrowserModule,
     FileUploadModule,
     FormsModule,
     ReactiveFormsModule,
     DragAndDropModule.forRoot(),
     NgbModule.forRoot(),
+    BrowserModule,
+    BrowserAnimationsModule,
     routing
   ],
   providers: [
