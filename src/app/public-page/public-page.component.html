@@ -1,10 +1,11 @@
-<div clas="container rounded">
+<div clas="container rounded phone-scroll">
 
-  <div class="public-page card shadow-lg rounded-lg border-0 position-static">
+  <div class="public-page card shadow-lg rounded-lg border-0">
+
 
     <app-public-info-header></app-public-info-header>
 
-    <div class="upload-container card-body bg-light rounded-lg">
+    <div class="upload-container comments-scrolltainer card-body bg-light rounded-lg">
 
       <ng-content></ng-content>
 
@@ -12,4 +13,40 @@
 
   </div>
 
+</div>
+
+<div class="modal fade info-modal-faq" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog  modal-lg">
+    <div class="modal-content">
+      <app-help-info></app-help-info>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade info-modal-aboutus " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog  modal-lg">
+    <div class="modal-content">
+      <app-about-us-info></app-about-us-info>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade info-modal-pro" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog  modal-lg">
+    <div class="modal-content">
+      <app-pro-info></app-pro-info>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade info-modal-terms" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog  modal-lg">
+    <div class="modal-content">
+      <app-error></app-error>
+    </div>
+  </div>
 </div>

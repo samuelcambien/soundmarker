@@ -25,6 +25,11 @@ textarea.form-control {
   margin-top: 10px;
 }
 
+.btn-outline-form {
+	padding-left: 9px !important;
+	padding-right: 9px !important;
+}
+
 
 
 // file select
@@ -43,10 +48,10 @@ textarea.form-control {
 }
 
 #ni1.note-image {
-  width: 60px;
-  height: 60px;
+  width: 70px;
+  height: 70px;
   margin: 0 auto;
-  margin-top: 30px;
+  margin-top: 28px;
   margin-bottom: 8px;
 }
 
@@ -89,6 +94,7 @@ textarea.form-control {
   text-align: center;
   font-size: 12pt;
   margin-bottom: 0px;
+  color: #7397FF;
 }
 
 .addsongs {
@@ -183,7 +189,7 @@ table tr td {
 
 table tr td p {
   font-size: 8pt;
-  font-family: 'avenirnext-regular';
+  font-family: 'sofia-light';
   color: #2F2F2F;
   font-size: 10pt;
   margin-bottom: 0;
@@ -230,9 +236,11 @@ table tr td p {
 
 .my-drop-zone {
   position: absolute;
-  left: 0;
-  top: 0;
+  left: 0px;
+  top: 0px;
+  right: 0px;
+  bottom: 0px;
   z-index: -1;
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
+  height: 100%;
 }

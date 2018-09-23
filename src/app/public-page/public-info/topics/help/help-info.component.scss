@@ -1,6 +1,6 @@
 .btn.btn-link {
   font-size: 10pt;
-  color: #6094F7 !important;
+  color: #7397FF !important;
   background-color: transparent !important;
 }
 
@@ -12,7 +12,7 @@
 }
 
 .btn.btn-link:active, .btn.btn-link:focus .card-header {
-	background-color: #e7efff !important;
+	background-color: #eef1ff !important;
 }
 
 .card-header {
@@ -22,7 +22,7 @@
 }
 
 .card-header:hover {
-	background-color: #e7efff !important;
+	background-color: #eef1ff !important;
 	transition: 0.3s;
 }
 
@@ -33,19 +33,19 @@
 
 .card-body {
 		border-bottom: none !important;
-	border-top: 1px solid #E8EAED !important; 
+	border-top: 1px solid #eef1ff !important; 
 }
 
 .card {
-	border-left: 1px solid #E8EAED !important;
-	border-right: 1px solid #E8EAED !important;
+	border-left: 1px solid #eef1ff !important;
+	border-right: 1px solid #eef1ff !important;
 	border-bottom: none !important;
-	border-top: 1px solid #E8EAED !important;
+	border-top: 1px solid #eef1ff !important;
 }
 
 
 #last-card {
-border-bottom: 1px solid #E8EAED !important;
+border-bottom: 1px solid #eef1ff !important;
 }
 
 .help-footer {
@@ -75,4 +75,16 @@ button.btn-sm:after
 	background-color: #E8EAED;
 	height: 60px;
 	width: 100%;
+}
+
+@media (max-width: 768px) { 
+	
+	.btn.btn-link {
+  font-size: 8pt;
+  }
+
+.card-body p {
+	font-size: 8pt;
+}
+
 }

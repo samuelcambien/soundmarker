@@ -1,8 +1,11 @@
 .public-page {
-  margin-top: 60px;
+  top: 60px;
   margin-bottom: 60px;
-  width: 750px;
+  width: 700px;
+  left: calc(50% - 350px);
   min-height: 233px;
+  max-height: calc(100% - 120px);
+  position: fixed;
 }
 
 .bg-light {
@@ -13,17 +16,39 @@
   min-height: 194px;
 }
 
-// responsive
+// responsive 
 
 @media (max-width: 768px) {
 
   .public-page {
-    margin-top: 60px;
-    width: 100%;
-    max-width: 268px;
+	  top: inherit;
+	  margin-top: 20px;
+	  min-height: 160px;
+	  max-height: none;
+   width: calc(100% - 40px);
+     left: 20px;
+     right: 20px;
+    max-width: 700px;
+    min-width: 268px;
+    margin-left: 0px;
+    margin-right: 0px;
+    position: absolute;
+    margin-bottom: 80px;
+    
+    
   }
-
-  .btn-group {
+  
+  .phone-scroll {
+	  position: relative;
+	  overflow-y: scroll;
+	  height: 100%;
+  }
+  
+  .upload-container {
+  min-height: 154px;
+}
+  
+    .btn-group {
     margin-bottom: 10px;
     width: 100%;
   }
@@ -35,5 +60,11 @@
   .progress {
     width: 96%;
   }
-}
+
+  
+  }
+  
+
+
+
 

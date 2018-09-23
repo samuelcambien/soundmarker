@@ -1,17 +1,7 @@
 @import "../public-player-page.component";
 
-.player-header {
-	padding-top: 5px;
-	height: 38px;
-}
 
-.mini-btn {
-	margin-top: 0px;
-	padding-top: 0px;
-	padding-bottom: 0px;
-	margin-left: -10px;
-	padding-left: 0px;
-}
+
 
 .title {
 	margin-top: 3px;
@@ -19,10 +9,20 @@
 
 .top-icon {
 	margin-top: 3px;
+	margin-right: 4px;
+}
+
+.track-bar {
+	padding-right: 11px !important;
 }
 
 .track-bar:hover {
-	background-color: #e7efff !important;
-	transition: 0.3s;
+	background-color: #eef1ff !important;
+	transition: 0.1s;
 	
+}
+
+.show-track-button {
+	cursor: pointer !important;
+	width: 84%;
 }

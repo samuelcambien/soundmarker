@@ -1,13 +1,36 @@
 .reply {
-  margin-left: 20px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  background-color: #fff;
+  border-radius: 0.6rem;
+  margin-top: 10px;
+  margin-bottom: 0px;
+  border-left: 2px solid #bac1da;
+  border-bottom-left-radius: 0px;
+  border-top-left-radius: 0px;
 }
 
 .name-tx {
 	margin-bottom: 0rem !important;
-	font-family: "avenirnext-bold";
-	color: #2F2F2F;
+	font-family: "sofia-medium";
+	color: #bac1da;
 }
 
 .comment-tx {
-	color: #2F2F2F;
+	color: #717db0;
+	margin-bottom: 0px !important;
+	
 }
+
+.reply-row {
+	margin-left: 0px !important;
+}
+
+.date-tx {
+	margin-bottom: -0.4rem;
+	font-size: 8pt;
+	display: inline;
+	text-align: right;
+	float: right;
+	margin-right: 15px;
+		}
