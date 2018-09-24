@@ -3,146 +3,191 @@
     <div class="soundmarker-logo"></div>
   </a>
 
-<div class="message-item dropdown ml-auto">
-  <button class="btn btn-primary btn-sm btn-note dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-    Messages <span class="badge badge-light">1</span>
-  </button>
-  <div class="messages dropdown-menu" aria-labelledby="dropdownMenuButton">
-	  <div class="messages arrow-up"></div>
-	        <div class="dropdown-container shadow">
-    <a class="dropdown-item" href="" data-toggle="modal" data-target=".info-modal-aboutus"><h5>George@baker.com uploaded 7 tracks</h5> Hey guys, I loved the session last sa... <u>read more</u></a>
-   
-	        </div>
+  <div class="ml-auto">
+    <div *ngIf="messages?.length > 0" class="message-item dropdown ml-auto">
+      <button class="btn btn-primary btn-sm btn-note dropdown-toggle" type="button" id="dropdownMenuButton"
+              data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        Messages <span class="badge badge-light">{{messages?.length}}</span>
+      </button>
+      <div class="messages dropdown-menu" aria-labelledby="dropdownMenuButton">
+        <div class="messages arrow-up"></div>
+        <div class="dropdown-container shadow">
+          <a class="dropdown-item" href="" data-toggle="modal" data-target=".info-modal-aboutus">
+            <h5>George@baker.com uploaded 7 tracks</h5>
+            Hey guys, I loved the session last sa...
+            <u>read more</u>
+          </a>
+        </div>
+      </div>
+    </div>
   </div>
-</div>
-
-
-
 
   <div class="navbar " id="navbarNavDropdown">
-	  
+
     <ul class="nav nav-pills">
-	   
-	    
+
+
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" id="menu" data-toggle="dropdown" href="" role="button" aria-haspopup="true"
            aria-expanded="false">
-	           
-	           
-<svg width="28px" height="8px" viewBox="0 0 24 8" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <g id="Page-1"  stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
-        <g id="Interface-Essential-/-Menu-/-navigation-menu-horizontal" transform="translate(0.000000, -9.000000)" class="menu-icon" stroke="#7397FF" stroke-width="1.5" class="menu-icon">
-            <g id="Group" transform="translate(0.000000, 9.000000)">
-                <g id="navigation-menu-horizontal">
+
+
+          <svg width="28px" height="8px" viewBox="0 0 24 8" version="1.1" xmlns="http://www.w3.org/2000/svg"
+               xmlns:xlink="http://www.w3.org/1999/xlink">
+            <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round"
+               stroke-linejoin="round">
+              <g id="Interface-Essential-/-Menu-/-navigation-menu-horizontal" transform="translate(0.000000, -9.000000)"
+                 class="menu-icon" stroke="#7397FF" stroke-width="1.5" class="menu-icon">
+                <g id="Group" transform="translate(0.000000, 9.000000)">
+                  <g id="navigation-menu-horizontal">
                     <circle id="Oval" cx="4" cy="4" r="2.5"></circle>
                     <circle id="Oval" cx="13" cy="4" r="2.5"></circle>
                     <circle id="Oval" cx="22" cy="4" r="2.5"></circle>
+                  </g>
                 </g>
+              </g>
             </g>
-        </g>
-    </g>
-</svg>
-           </a>
-           
+          </svg>
+        </a>
+
         <div class="more-info dropdown-menu dropdown-menu-right ">
-	        <div class="arrow-up"></div>
-	        <div class="dropdown-container shadow">
-          <a class="dropdown-item pro-dropdown" href="" data-toggle="modal" data-target=".info-modal-pro">
-	          <div class="item-icon">
+          <div class="arrow-up"></div>
+          <div class="dropdown-container shadow">
+            <a class="dropdown-item pro-dropdown" href="" data-toggle="modal" data-target=".info-modal-pro">
+              <div class="item-icon">
 
-<svg width="15px" height="14px" viewBox="0 0 15 14" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-   
-    <desc></desc>
-    <defs></defs>
-    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
-        <g id="Internet-Networks-Servers-/-Upload/Download-/-upload-dash-arrow-1" transform="translate(-145.000000, -168.000000)" class="item-icon-stroke">
-            <g id="logout" transform="translate(146.000000, 169.000000)">
-                <path d="M0,6 L8,6" id="Shape"></path>
-                <polyline id="Shape" points="7 8 9 6 7 4"></polyline>
-                <path d="M2,8.6258145 C3.17185709,11.119382 5.84104146,12.4560197 8.45564245,11.8585831 C11.0702434,11.2611465 12.948752,8.88536046 12.9989702,6.11254866 C13.0491884,3.33973686 11.2580267,0.892646862 8.66689788,0.194059773 C6.07576909,-0.504527315 3.36006417,0.72747879 2.09874166,3.1737681" id="Shape"></path>
-            </g>
-        </g>
-    </g>
-</svg></div>Pro</a>
-          <a class="dropdown-item" href="" data-toggle="modal" data-target=".info-modal-aboutus">
-	          <div class="item-icon">
+                <svg width="15px" height="14px" viewBox="0 0 15 14" version="1.1" xmlns="http://www.w3.org/2000/svg"
+                     xmlns:xlink="http://www.w3.org/1999/xlink">
 
-<svg width="15px" height="15px" viewBox="0 0 15 15" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    
-    <desc></desc>
-    <defs></defs>
-    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linejoin="round">
-        <g id="Internet-Networks-Servers-/-Upload/Download-/-upload-dash-arrow-1" transform="translate(-126.000000, -250.000000)" class="item-icon-stroke">
-            <g id="Group-3" transform="translate(127.000000, 251.000000)">
-                <circle id="Oval" stroke-linecap="round" cx="6.5" cy="6.5" r="6.5"></circle>
-                <path d="M1,8.5 L12.5,8.5" id="Shape" stroke-linecap="round"></path>
-                <path d="M1,5 L12.5,5" id="Shape" stroke-linecap="round"></path>
-                <path d="M5.21778144,0 C3.35997864,4.28022247 3.63334374,8.82338527 6,13" id="Shape"></path>
-                <path d="M8.21778144,0 C6.35997864,4.28022247 6.63334374,8.82338527 9,13" id="Shape" transform="translate(8.000000, 6.500000) scale(-1, 1) translate(-8.000000, -6.500000) "></path>
-            </g>
-        </g>
-    </g>
-</svg></div>About Us</a>
-          <a class="dropdown-item" href="" data-toggle="modal" data-target=".info-modal-faq">
-	          <div class="item-icon help">
+                  <desc></desc>
+                  <defs></defs>
+                  <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round"
+                     stroke-linejoin="round">
+                    <g id="Internet-Networks-Servers-/-Upload/Download-/-upload-dash-arrow-1"
+                       transform="translate(-145.000000, -168.000000)" class="item-icon-stroke">
+                      <g id="logout" transform="translate(146.000000, 169.000000)">
+                        <path d="M0,6 L8,6" id="Shape"></path>
+                        <polyline id="Shape" points="7 8 9 6 7 4"></polyline>
+                        <path
+                          d="M2,8.6258145 C3.17185709,11.119382 5.84104146,12.4560197 8.45564245,11.8585831 C11.0702434,11.2611465 12.948752,8.88536046 12.9989702,6.11254866 C13.0491884,3.33973686 11.2580267,0.892646862 8.66689788,0.194059773 C6.07576909,-0.504527315 3.36006417,0.72747879 2.09874166,3.1737681"
+                          id="Shape"></path>
+                      </g>
+                    </g>
+                  </g>
+                </svg>
+              </div>
+              Pro</a>
+            <a class="dropdown-item" href="" data-toggle="modal" data-target=".info-modal-aboutus">
+              <div class="item-icon">
 
-<svg width="8px" height="13px" viewBox="0 0 8 13" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <desc></desc>
-    <defs></defs>
-    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
-        <g id="Internet-Networks-Servers-/-Upload/Download-/-upload-dash-arrow-1" transform="translate(-148.000000, -203.000000)" class="item-icon-stroke">
-            <g id="Group-2" transform="translate(149.000000, 204.000000)">
-                <path d="M0,2.99962395 C0.000291330428,1.47405315 1.14545376,0.191634081 2.66126884,0.0193813162 C4.17708392,-0.152871449 5.58079247,0.839901421 5.92337884,2.32650861 C6.26596521,3.81311581 5.43832197,5.32010031 4,5.82862395 C3.40040813,6.04061159 2.9996666,6.60766086 3,7.24362395 L3,7.49962395" id="Shape"></path>
-                <path d="M3,10.499624 C2.79289322,10.499624 2.625,10.6675172 2.625,10.874624 C2.625,11.0817307 2.79289322,11.249624 3,11.249624 C3.20710678,11.249624 3.375,11.0817307 3.375,10.874624 C3.375,10.6675172 3.20710678,10.499624 3,10.499624" id="Shape"></path>
-            </g>
-        </g>
-    </g>
-</svg></div>Help</a>
+                <svg width="15px" height="15px" viewBox="0 0 15 15" version="1.1" xmlns="http://www.w3.org/2000/svg"
+                     xmlns:xlink="http://www.w3.org/1999/xlink">
 
-          <div class="dropdown-divider"></div>
-          <a class="dropdown-item" href="" data-toggle="modal" data-target=".info-modal-terms">
-	          <div class="item-icon">
-<svg width="16px" height="14px" viewBox="0 0 16 14" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    
-    <desc></desc>
-    <defs></defs>
-    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
-        <g id="Internet-Networks-Servers-/-Upload/Download-/-upload-dash-arrow-1" transform="translate(-144.000000, -233.000000)" class="item-icon-stroke">
-            <g id="book-open-text" transform="translate(145.000000, 234.000000)">
-                <path d="M7,12 L7,1.68120569 C7,1.68120569 5.47244684,0.0652089045 0.322321571,2.38489111e-05 C0.236891322,-0.00100164044 0.15469166,0.0310825234 0.0945885947,0.0889125611 C0.0338966866,0.146994009 -0.000117942773,0.225636822 1.0965076e-05,0.307578793 L1.0965076e-05,10.0112632 C-0.0014171372,10.1773201 0.136829717,10.313987 0.311121589,10.3188182 C5.47120239,10.3851884 7,12 7,12" id="Shape"></path>
-                <path d="M5,5.5 C4.02942242,5.22872863 3.02139745,5.06072447 2,5" id="Shape"></path>
-                <path d="M5,8.5 C4.02942242,8.22872863 3.02139745,8.06072447 2,8" id="Shape"></path>
-                <path d="M9,5.5 C9.97057758,5.22872863 10.9786026,5.06072447 12,5" id="Shape"></path>
-                <path d="M9,8.5 C9.97057758,8.22872863 10.9786026,8.06072447 12,8" id="Shape"></path>
-                <path d="M7,12 L7,1.68120569 C7,1.68120569 8.52755316,0.0652089045 13.6776784,2.38489111e-05 C13.7631087,-0.00100164044 13.8453083,0.0310825234 13.9054114,0.0889125611 C13.9661033,0.146994009 14.0001179,0.225636822 13.999989,0.307578793 L13.999989,10.0112632 C14.0014171,10.1773201 13.8631703,10.313987 13.6888784,10.3188182 C8.52879761,10.3851884 7,12 7,12" id="Shape"></path>
-            </g>
-        </g>
-    </g>
-</svg></div>Privacy & Terms</a>
-          <a class="dropdown-item" href="" data-toggle="modal" data-target=".info-modal-contact">
-	          <div class="item-icon">
+                  <desc></desc>
+                  <defs></defs>
+                  <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linejoin="round">
+                    <g id="Internet-Networks-Servers-/-Upload/Download-/-upload-dash-arrow-1"
+                       transform="translate(-126.000000, -250.000000)" class="item-icon-stroke">
+                      <g id="Group-3" transform="translate(127.000000, 251.000000)">
+                        <circle id="Oval" stroke-linecap="round" cx="6.5" cy="6.5" r="6.5"></circle>
+                        <path d="M1,8.5 L12.5,8.5" id="Shape" stroke-linecap="round"></path>
+                        <path d="M1,5 L12.5,5" id="Shape" stroke-linecap="round"></path>
+                        <path d="M5.21778144,0 C3.35997864,4.28022247 3.63334374,8.82338527 6,13" id="Shape"></path>
+                        <path d="M8.21778144,0 C6.35997864,4.28022247 6.63334374,8.82338527 9,13" id="Shape"
+                              transform="translate(8.000000, 6.500000) scale(-1, 1) translate(-8.000000, -6.500000) "></path>
+                      </g>
+                    </g>
+                  </g>
+                </svg>
+              </div>
+              About Us</a>
+            <a class="dropdown-item" href="" data-toggle="modal" data-target=".info-modal-faq">
+              <div class="item-icon help">
+
+                <svg width="8px" height="13px" viewBox="0 0 8 13" version="1.1" xmlns="http://www.w3.org/2000/svg"
+                     xmlns:xlink="http://www.w3.org/1999/xlink">
+                  <desc></desc>
+                  <defs></defs>
+                  <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round"
+                     stroke-linejoin="round">
+                    <g id="Internet-Networks-Servers-/-Upload/Download-/-upload-dash-arrow-1"
+                       transform="translate(-148.000000, -203.000000)" class="item-icon-stroke">
+                      <g id="Group-2" transform="translate(149.000000, 204.000000)">
+                        <path
+                          d="M0,2.99962395 C0.000291330428,1.47405315 1.14545376,0.191634081 2.66126884,0.0193813162 C4.17708392,-0.152871449 5.58079247,0.839901421 5.92337884,2.32650861 C6.26596521,3.81311581 5.43832197,5.32010031 4,5.82862395 C3.40040813,6.04061159 2.9996666,6.60766086 3,7.24362395 L3,7.49962395"
+                          id="Shape"></path>
+                        <path
+                          d="M3,10.499624 C2.79289322,10.499624 2.625,10.6675172 2.625,10.874624 C2.625,11.0817307 2.79289322,11.249624 3,11.249624 C3.20710678,11.249624 3.375,11.0817307 3.375,10.874624 C3.375,10.6675172 3.20710678,10.499624 3,10.499624"
+                          id="Shape"></path>
+                      </g>
+                    </g>
+                  </g>
+                </svg>
+              </div>
+              Help</a>
+
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="" data-toggle="modal" data-target=".info-modal-terms">
+              <div class="item-icon">
+                <svg width="16px" height="14px" viewBox="0 0 16 14" version="1.1" xmlns="http://www.w3.org/2000/svg"
+                     xmlns:xlink="http://www.w3.org/1999/xlink">
+
+                  <desc></desc>
+                  <defs></defs>
+                  <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round"
+                     stroke-linejoin="round">
+                    <g id="Internet-Networks-Servers-/-Upload/Download-/-upload-dash-arrow-1"
+                       transform="translate(-144.000000, -233.000000)" class="item-icon-stroke">
+                      <g id="book-open-text" transform="translate(145.000000, 234.000000)">
+                        <path
+                          d="M7,12 L7,1.68120569 C7,1.68120569 5.47244684,0.0652089045 0.322321571,2.38489111e-05 C0.236891322,-0.00100164044 0.15469166,0.0310825234 0.0945885947,0.0889125611 C0.0338966866,0.146994009 -0.000117942773,0.225636822 1.0965076e-05,0.307578793 L1.0965076e-05,10.0112632 C-0.0014171372,10.1773201 0.136829717,10.313987 0.311121589,10.3188182 C5.47120239,10.3851884 7,12 7,12"
+                          id="Shape"></path>
+                        <path d="M5,5.5 C4.02942242,5.22872863 3.02139745,5.06072447 2,5" id="Shape"></path>
+                        <path d="M5,8.5 C4.02942242,8.22872863 3.02139745,8.06072447 2,8" id="Shape"></path>
+                        <path d="M9,5.5 C9.97057758,5.22872863 10.9786026,5.06072447 12,5" id="Shape"></path>
+                        <path d="M9,8.5 C9.97057758,8.22872863 10.9786026,8.06072447 12,8" id="Shape"></path>
+                        <path
+                          d="M7,12 L7,1.68120569 C7,1.68120569 8.52755316,0.0652089045 13.6776784,2.38489111e-05 C13.7631087,-0.00100164044 13.8453083,0.0310825234 13.9054114,0.0889125611 C13.9661033,0.146994009 14.0001179,0.225636822 13.999989,0.307578793 L13.999989,10.0112632 C14.0014171,10.1773201 13.8631703,10.313987 13.6888784,10.3188182 C8.52879761,10.3851884 7,12 7,12"
+                          id="Shape"></path>
+                      </g>
+                    </g>
+                  </g>
+                </svg>
+              </div>
+              Privacy & Terms</a>
+            <a class="dropdown-item" href="" data-toggle="modal" data-target=".info-modal-contact">
+              <div class="item-icon">
 
 
-<svg width="15px" height="15px" viewBox="0 0 15 15" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <!-- Generator: Sketch 51.3 (57544) - http://www.bohemiancoding.com/sketch -->
-    <desc>Created with Sketch.</desc>
-    <defs></defs>
-    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
-        <g id="Internet-Networks-Servers-/-Upload/Download-/-upload-dash-arrow-1" transform="translate(-144.000000, -250.000000)" class="item-icon-stroke">
-            <g id="read-email-at" transform="translate(145.000000, 251.000000)">
-                <path d="M9.5,6.5 C9.5,8.15685425 8.15685425,9.5 6.5,9.5 C4.84314575,9.5 3.5,8.15685425 3.5,6.5 C3.5,4.84314575 4.84314575,3.5 6.5,3.5 C8.15685425,3.5 9.5,4.84314575 9.5,6.5 Z" id="Shape"></path>
-                <path d="M9.53312233,6.50002507 L9.53312233,7.8000764 C9.53312233,8.75740777 10.3092093,9.53347818 11.2665612,9.53347818 C12.223913,9.53347818 13,8.75740777 13,7.8000764 L13,6.50002507 C12.999866,3.48567409 10.9271859,0.866965636 7.99339373,0.174474894 C5.05960157,-0.518015848 2.03465597,0.897451731 0.686568408,3.59356922 C-0.661519151,6.2896867 0.0210499435,9.558872 2.33532967,11.4903611 C4.6496094,13.4218502 7.98822902,13.5087338 10.3998418,11.7002304" id="Shape"></path>
-            </g>
-        </g>
-    </g>
-</svg></div>Contact us</a>
-	        </div>
+                <svg width="15px" height="15px" viewBox="0 0 15 15" version="1.1" xmlns="http://www.w3.org/2000/svg"
+                     xmlns:xlink="http://www.w3.org/1999/xlink">
+                  <!-- Generator: Sketch 51.3 (57544) - http://www.bohemiancoding.com/sketch -->
+                  <desc>Created with Sketch.</desc>
+                  <defs></defs>
+                  <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round"
+                     stroke-linejoin="round">
+                    <g id="Internet-Networks-Servers-/-Upload/Download-/-upload-dash-arrow-1"
+                       transform="translate(-144.000000, -250.000000)" class="item-icon-stroke">
+                      <g id="read-email-at" transform="translate(145.000000, 251.000000)">
+                        <path
+                          d="M9.5,6.5 C9.5,8.15685425 8.15685425,9.5 6.5,9.5 C4.84314575,9.5 3.5,8.15685425 3.5,6.5 C3.5,4.84314575 4.84314575,3.5 6.5,3.5 C8.15685425,3.5 9.5,4.84314575 9.5,6.5 Z"
+                          id="Shape"></path>
+                        <path
+                          d="M9.53312233,6.50002507 L9.53312233,7.8000764 C9.53312233,8.75740777 10.3092093,9.53347818 11.2665612,9.53347818 C12.223913,9.53347818 13,8.75740777 13,7.8000764 L13,6.50002507 C12.999866,3.48567409 10.9271859,0.866965636 7.99339373,0.174474894 C5.05960157,-0.518015848 2.03465597,0.897451731 0.686568408,3.59356922 C-0.661519151,6.2896867 0.0210499435,9.558872 2.33532967,11.4903611 C4.6496094,13.4218502 7.98822902,13.5087338 10.3998418,11.7002304"
+                          id="Shape"></path>
+                      </g>
+                    </g>
+                  </g>
+                </svg>
+              </div>
+              Contact us</a>
+          </div>
         </div>
-           
+
       </li>
-     <!-- <li class="nav-item">
-        <a class="nav-link pro active" href="" data-toggle="modal" data-target=".info-modal-pro">Pro</a>
-      </li>-->
+      <!-- <li class="nav-item">
+         <a class="nav-link pro active" href="" data-toggle="modal" data-target=".info-modal-pro">Pro</a>
+       </li>-->
     </ul>
   </div>
 </nav>

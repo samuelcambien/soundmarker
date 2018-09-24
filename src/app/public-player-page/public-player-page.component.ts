@@ -5,6 +5,7 @@ import {RestUrl, Utils} from "../app.component";
 import {Track} from "../model/track";
 import {Project} from "../model/project";
 import {Player} from "../newplayer/player";
+import {Message} from "../message";
 
 @Component({
   selector: 'app-public-player',
@@ -78,5 +79,18 @@ export class PublicPlayerPageComponent implements OnInit {
         this.players.get(track).pause();
       }
     }
+  }
+
+  getMessage(): Message[] {
+    if (!this.tracks) return [];
+    let track = this.tracks[0];
+    const messages = [
+      new Message(
+        "george.baker@gmail.com has uploaded " + this.tracks.length + " tracks",
+        track.notes,
+        false
+      )
+    ];
+    return messages;
   }
 }

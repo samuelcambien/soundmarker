@@ -116,13 +116,18 @@ export class PublicTrackPlayerComponent implements OnInit {
     return this.player && this.player.isPlaying();
   }
 
+  getMatchingCommentsSorted() {
+    return this.getMatchingComments().sort((comment1, comment2) => comment2.time - comment1.time);
+  }
+
   getMatchingComments() {
+
+    if (!this.track.comments) return [];
 
     if (!this.search) return this.track.comments;
 
     let search = new RegExp(this.search, 'gi');
 
-    // search.compile();
     return this.track.comments.filter(
       comment => search.test(comment.text) || search.test(comment.name)
     );
