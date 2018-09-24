@@ -7,9 +7,12 @@ import {Component, OnInit} from '@angular/core';
 })
 export class PrivacyAndTermsComponent implements OnInit {
 
+  activePage: string;
+
   constructor() { }
 
   ngOnInit() {
+    this.activePage = "terms";
   }
 
 }

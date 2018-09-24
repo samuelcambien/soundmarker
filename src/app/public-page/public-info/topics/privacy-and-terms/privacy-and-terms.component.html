@@ -1,37 +1,38 @@
- <div class="shadow public-bottom-container card rounded-lg position-static shadow">
-	
-	
+<div class="shadow public-bottom-container card rounded-lg position-static shadow">
+
   <div class="container-fluid">
-	  <div class="row">
-	 <div class="col-md-3">
-		 
-		 <div class="terms-card card shadow sticky-top">
-          <a class="dropdown-item pro-dropdown active" href="" data-toggle="modal" data-target=".info-modal-pro ">Terms of Service</a>
-          <a class="dropdown-item" href="" data-toggle="modal" data-target=".info-modal-aboutus">Privacy Policy</a>
-          <a class="dropdown-item" href="" data-toggle="modal" data-target=".info-modal-faq">Cookie Policy</a>
-          <a class="dropdown-item" href="" data-toggle="modal" data-target=".info-modal-terms">NTD Policy</a>
-          
+    <div class="row">
+      <div class="col-md-3">
+
+        <div class="terms-card card shadow sticky-top">
+
+          <a class="dropdown-item" [class.active]="activePage=='terms'" (click)="activePage='terms'">Terms of Service</a>
+          <a class="dropdown-item" [class.active]="activePage=='privacy'" (click)="activePage='privacy'">Privacy Policy</a>
+          <a class="dropdown-item" [class.active]="activePage=='cookie'" (click)="activePage='cookie'">Cookie Policy</a>
+          <a class="dropdown-item" [class.active]="activePage=='ntd'" (click)="activePage='ntd'">NTD Policy</a>
 
         </div>
-		 
-	 </div> 
-	 
-    <div class="col-md-9">
-      <div class="close-info justify-content-end">
-        <button type="button" class="btn-cross close" data-dismiss="modal" aria-label="Close">
-          <span class="remove" aria-hidden="true">&times;</span>
-        </button>
+
       </div>
 
-<app-terms></app-terms>
+      <div class="col-md-9">
+        <div class="close-info justify-content-end">
+          <button type="button" class="btn-cross close" data-dismiss="modal" aria-label="Close">
+            <span class="remove" aria-hidden="true">&times;</span>
+          </button>
+        </div>
 
+        <app-terms *ngIf="activePage == 'terms'"></app-terms>
+        <app-privacy *ngIf="activePage == 'privacy'"></app-privacy>
+        <app-cookie *ngIf="activePage == 'cookie'"></app-cookie>
+        <app-ntd *ngIf="activePage == 'ntd'"></app-ntd>
+
+      </div>
 
     </div>
-    </div>
+
   </div>
-  
- 	
-<app-info-footer></app-info-footer>
-	
-	
- </div>
+
+  <app-info-footer></app-info-footer>
+
+</div>

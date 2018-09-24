@@ -58,7 +58,7 @@ export class PublicTrackPlayerComponent implements OnInit {
   }
 
   getCommentIntervalPosition() {
-    return this.getRawPosition(this.startTime, this.comment.start) + 4.5 + "px";
+    return this.getRawPosition(this.startTime, this.comment.start) + this.startTime.nativeElement.offsetWidth / 2 + "px";
   }
 
   getStartPosition() {
