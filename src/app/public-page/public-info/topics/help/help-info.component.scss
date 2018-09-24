@@ -31,9 +31,21 @@
 	text-decoration: none !important;
 }
 
+
+
 .card-body {
 		border-bottom: none !important;
 	border-top: 1px solid #eef1ff !important; 
+	
+}
+
+.card-body p {
+	color: #717db0;
+}
+
+.help-footer .container p a {
+	color: #717db0 !important;
+	text-decoration: underline !important;
 }
 
 .card {
@@ -49,11 +61,16 @@ border-bottom: 1px solid #eef1ff !important;
 }
 
 .help-footer {
-	background-color: #f7f8fb;
-	height: 100px;
+	background-color: #f9f9ff;
+	height: 110px;
 	width: 100%;
 	margin-top: 30px;
 	padding-top: 40px;
+}
+
+.help-footer .container p {
+	text-align: center;
+	color: #717db0;
 }
 
 .btn-link {
