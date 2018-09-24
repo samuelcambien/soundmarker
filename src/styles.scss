@@ -1,5 +1,5 @@
 /* 
-	
+
 COLORS
 
 MAIN BLURPLE	-- #7397ff
@@ -44,9 +44,6 @@ body {
 	transition: 0.2s;
 	-webkit-transition: 0.2s;
 }
-
-
-
 
 // typography
 
@@ -191,7 +188,7 @@ p {
 }
 
 #sm h4 {
-	font-size: 12pt ;	
+	font-size: 12pt ;
 }
 
 .hide-phone {
@@ -236,7 +233,7 @@ p {
 .comments-scrolltainer {
 	overflow-y: scroll;
   overflow-x: hidden;
-  
+
 }
 
 /*
@@ -281,9 +278,9 @@ p {
 	border: none !important;
 	z-index: 1050 !important;
 	}
-	
 
-	
+
+
 .modal-backdrop {
   position: fixed;
   top: 0;
@@ -315,9 +312,9 @@ p {
     margin: auto;
     max-width: 700px !important;
   }	
-  
 
-  
+
+
 }
 
 #sm .modal-dialog {
@@ -331,7 +328,7 @@ p {
 #sm .modal-content {
 	border-radius: 0.6rem !important;
 	border: none !important;
-	
+
 	
 }
 
@@ -354,7 +351,7 @@ p {
 	border: 1px solid #bac1da;
   background-color: #fff;
   background-clip: padding-box;
-  
+
   border-radius: 3px;
   transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 
@@ -669,3 +666,6 @@ color: white;
 	margin-top: 30px;
 }
 
+.highlight {
+  background-color: yellow;
+}

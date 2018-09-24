@@ -1,14 +1,12 @@
-
-
 <div class="comment container-fluid">
 
   <div class="row">
 
-    <div class="comment-name"><p class="name-tx">{{comment.name}}</p></div>
+    <div class="comment-name"><p class="name-tx" [innerHtml]="comment.name | titlecase | highlight: search"></p></div>
 
     <button (click)="goToCommentTime(comment)" class="btn btn-secondary btn-sm comment-play">
       <div class="play-button">
-           <svg width="14px" height="14px" viewBox="0 0 27 27" version="1.1" xmlns="http://www.w3.org/2000/svg">
+        <svg width="14px" height="14px" viewBox="0 0 27 27" version="1.1" xmlns="http://www.w3.org/2000/svg">
           <defs></defs>
           <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
             <g id="Group-5">
@@ -21,13 +19,14 @@
               </g>
             </g>
           </g>
-        </svg>      </div>
+        </svg>
+      </div>
       <div *ngIf="comment.end; then interval else start" class="comment-time"></div>
       <ng-template #start>
-        <p>{{comment.start}}</p>
+        <p>{{comment.start | timeFormat}}</p>
       </ng-template>
       <ng-template #interval>
-        <p>{{comment.start}} - {{comment.end}}</p>
+        <p>{{comment.start | timeFormat}} - {{comment.end | timeFormat}}</p>
       </ng-template>
     </button>
 
@@ -37,22 +36,21 @@
   </div>
 
   <div class="row comment-text">
-    <p class="comment-tx">{{comment.text}}</p>
+    <p class="comment-tx" [innerHtml]="comment.text | highlight: search"></p>
   </div>
 
   <div class="row reply-row">
-    <div class="comment-reply" (click)="showReplyForm()">
+
+    <div class="comment-reply" (click)="newReply()">
       <p class="reply-tx"> Reply</p>
     </div>
-  
-
- 
 
     <div *ngIf="comment.replies?.length">
 
       <p role="button" [attr.aria-expanded]="showReplies" aria-controls="collapseExample"
          (click)="showReplies = !showReplies"
          class="showhidereplies collapsed">
+
         <span *ngIf="!showReplies">
         ·  Show {{comment.replies.length}} replies
         <svg width="10px" height="6px" viewBox="0 0 14 8" version="1.1" xmlns="http://www.w3.org/2000/svg">
@@ -85,30 +83,24 @@
             </g>
           </svg>
         </span>
+
       </p>
-      
-      </div>
-      
-      </div>
-      
-       
-       
-       <div class="replies">
 
-      <div class="comment-replies" id="comment-replies" [ngbCollapse]="!showReplies">
-        <app-reply *ngFor="let reply of comment.replies" [reply]="reply"></app-reply>
-     
-
-    
     </div>
-    
-     <div class="replies">
-    
 
-    <template #reply></template>
-
-     </div>
   </div>
-       
-       </div>
 
+
+  <div class="replies">
+
+    <div class="comment-replies" id="comment-replies" [ngbCollapse]="!showReplies">
+
+      <app-reply *ngFor="let reply of this.comment.replies" [reply]="reply"></app-reply>
+
+    </div>
+
+    <app-reply-form *ngIf="reply != null" [reply]="reply" (cancel)="clearReply()"></app-reply-form>
+
+  </div>
+
+</div>

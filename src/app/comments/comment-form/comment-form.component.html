@@ -12,30 +12,30 @@
       <input type="text" required [(ngModel)]='comment.name' name="name" placeholder="Your name"
              class="comment-form-name sub-form name-box">
     </div>
-    
-    <div class="form-group col-auto">
-	    <div class="btn-group-toggle" data-toggle="buttons">
-  <label class="btn btn-sm btn-outline-form check-tag-box">
-      <input type="checkbox" [(ngModel)]="comment.includeStart" name="includeStart"  (click)="triggerStart()" >Start
-  </label>
-	    </div>
-	    </div>
-	    
-	    <div class="form-group col-auto">
-      <input type="text" [ngModel]="getStart()" (ngModel)="this.comment.start" name="start" placeholder="00:00"
-             [ngClass]="['comment-form-start-time sub-form tag-box', comment.includeStart ? 'enabled' : 'disabled']">
-    </div>
-    
 
     <div class="form-group col-auto">
-	     <div class="btn-group-toggle" data-toggle="buttons">
-  <label class="btn btn-sm btn-outline-form check-tag-box">
-      <input type="checkbox" [(ngModel)]="comment.includeEnd" name="includeEnd"  (click)="triggerEnd()">End 
-  </label>
-	     </div>
+      <div class="btn-group-toggle">
+        <label class="btn btn-sm btn-outline-form check-tag-box" [class.active]="this.comment.includeStart">
+          <input type="checkbox" [(ngModel)]="comment.includeStart" name="includeStart" (click)="triggerStart()">Start
+        </label>
+      </div>
     </div>
+
     <div class="form-group col-auto">
-      <input type="text" class="tag-box" [ngModel]="getEnd()" (ngModel)="this.comment.end" name="end" placeholder="02:57"
+      <input type="text" [ngModel]="format(this.comment.start)" (ngModel)="this.comment.start" name="start"
+             [ngClass]="['comment-form-start-time sub-form tag-box', comment.includeStart ? 'enabled' : 'disabled']">
+    </div>
+
+    <div class="form-group col-auto">
+      <div class="btn-group-toggle">
+        <label class="btn btn-sm btn-outline-form check-tag-box" [class.active]="this.comment.includeEnd">
+          <input type="checkbox" [(ngModel)]="comment.includeEnd" name="includeEnd" (click)="triggerEnd()">End
+        </label>
+      </div>
+    </div>
+
+    <div class="form-group col-auto">
+      <input type="text" class="tag-box" [ngModel]="format(this.comment.end)" (ngModel)="this.comment.end" name="end"
              [ngClass]="['comment-form-end-time sub-form tag-box', comment.includeEnd ? 'enabled' : 'disabled']">
     </div>
 

@@ -1,7 +1,3 @@
-
-
-
-
 .free-upload {
 	margin-top: 9px;
 }
@@ -26,8 +22,6 @@ textarea {
 	width: 100%;
 	margin-left: 0px;
 }
-
-
 
 .check-tag-box {
 	margin-right: 0px !important;
@@ -61,6 +55,6 @@ textarea {
 	cursor: pointer;
 }
 
-
-
-
+input.disabled {
+  color: #bac1da;
+}

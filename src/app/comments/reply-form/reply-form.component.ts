@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {Comment} from "../comment";
 import {RestUrl, Utils} from "../../app.component";
 import {NgForm} from "@angular/forms";
@@ -10,8 +10,8 @@ import {NgForm} from "@angular/forms";
 })
 export class ReplyFormComponent implements OnInit {
 
-  @Input() parentId;
-  reply: Comment = new Comment();
+  @Input() reply;
+  @Output() cancel = new EventEmitter();
 
   constructor() {
   }
@@ -21,7 +21,6 @@ export class ReplyFormComponent implements OnInit {
 
   onSubmit(form: NgForm) {
     this.reply.time = Date.now();
-    this.reply.parent_id = this.parentId;
     Utils.sendPostRequest(
       RestUrl.COMMENTS,
       JSON.stringify(this.reply)

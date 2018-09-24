@@ -128,6 +128,10 @@ export class Player {
   }
 
 
+
+
+
+
   isPlaying() {
     return this.audioContext.state == "running";
   }
@@ -149,6 +153,10 @@ export class Player {
 
   getCurrentPosition(): number {
     return this.audioContext.currentTime;
+  }
+
+  getDuration(): number {
+    return this.duration;
   }
 
   seekTo(time: number, callback?) {

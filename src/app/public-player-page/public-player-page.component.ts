@@ -48,6 +48,7 @@ export class PublicPlayerPageComponent implements OnInit {
       for (let track of my.tracks) {
         my.loadComments(track);
       }
+      if (my.tracks.length == 1) this.activeTrack = my.tracks[0];
     });
   }
 

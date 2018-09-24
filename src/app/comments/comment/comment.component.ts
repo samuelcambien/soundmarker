@@ -13,23 +13,25 @@ export class CommentComponent implements OnInit {
 
   @Input() comment: Comment;
   @Input() player: Player;
+  @Input() search: string;
 
-  @ViewChild('reply', { read: ViewContainerRef }) reply: ViewContainerRef;
+  reply: Comment;
 
   showReplies: boolean = false;
 
-  constructor(private cfr: ComponentFactoryResolver) {}
+  constructor() {
+  }
 
   ngOnInit() {
   }
 
-  showReplyForm() {
-    this.reply.clear();
-    this.reply.createComponent(
-      this.cfr.resolveComponentFactory(
-        ReplyFormComponent
-      )
-    ).instance.parentId = this.comment.comment_id;
+  newReply() {
+    this.reply = new Comment();
+    this.reply.parent_id = this.comment.comment_id;
+  }
+
+  clearReply() {
+    this.reply = null;
   }
 
   getTimeHumanized(time: number) {

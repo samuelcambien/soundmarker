@@ -42,6 +42,9 @@ import {TermsComponent} from './public-page/public-info/topics/privacy-and-terms
 import {PrivacyComponent} from './public-page/public-info/topics/privacy-and-terms/privacy/privacy.component';
 import {CookieComponent} from './public-page/public-info/topics/privacy-and-terms/cookie/cookie.component';
 import {NtdComponent} from './public-page/public-info/topics/privacy-and-terms/ntd/ntd.component';
+import { HighlightPipe } from './highlight.pipe';
+import { TimeFormatPipe } from './time-format.pipe';
+import { DraggableDirective } from './draggable.directive';
 
 @NgModule({
   declarations: [
@@ -77,7 +80,10 @@ import {NtdComponent} from './public-page/public-info/topics/privacy-and-terms/n
     TermsComponent,
     PrivacyComponent,
     CookieComponent,
-    NtdComponent
+    NtdComponent,
+    HighlightPipe,
+    TimeFormatPipe,
+    DraggableDirective
   ],
   imports: [
     FileUploadModule,

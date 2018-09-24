@@ -50,69 +50,41 @@
 
     </ng-template>
 
-    <div role="button"  (click)="trackSelected()" class="show-track-button">
+    <div role="button" (click)="trackSelected()" class="show-track-button">
 
       <div class="title"><h4>{{track?.title}}</h4></div>
-
-      
 
     </div>
 
     <div class="ml-auto hide-phone">
-	    
-	       <div class="top-icon cloud-icon" id="cloud-icon" (click)="download()">
-
-     
-
-
-<svg width="22px" height="22px" viewBox="0 0 22 22" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-   
-    <desc>Download track</desc>
-    <defs></defs>
-    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
-        <g id="Internet-Networks-Servers-/-Upload/Download-/-upload-dash-arrow-1" transform="translate(-95.000000, -20.000000)" class="icon-stroke" stroke-width="1.5">
-            <g id="Group" transform="translate(96.000000, 21.000000)">
+      <div class="top-icon cloud-icon" id="cloud-icon" (click)="download()">
+        <svg width="22px" height="22px" viewBox="0 0 22 22" version="1.1" xmlns="http://www.w3.org/2000/svg">
+          <desc>Download track</desc>
+          <defs></defs>
+          <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round"
+             stroke-linejoin="round">
+            <g id="Internet-Networks-Servers-/-Upload/Download-/-upload-dash-arrow-1"
+               transform="translate(-95.000000, -20.000000)" class="icon-stroke" stroke-width="1.5">
+              <g id="Group" transform="translate(96.000000, 21.000000)">
                 <g id="upload-brackets">
-                    <path d="M10.0008333,5 L10.0008333,15" id="Shape"></path>
-                    <polyline id="Shape" points="6.25083333 11.25 10.0008333 15 13.7508333 11.25"></polyline>
-                    <path d="M5,19.375 L1.87583333,19.375 C1.1854774,19.375 0.625833333,18.8153559 0.625833333,18.125 L0.625833333,1.875 C0.625833333,1.18464406 1.1854774,0.625 1.87583333,0.625 L5,0.625" id="Shape"></path>
-                    <path d="M15,0.625 L18.125,0.625 C18.8153559,0.625 19.375,1.18464406 19.375,1.875 L19.375,18.125 C19.375,18.8153559 18.8153559,19.375 18.125,19.375 L15,19.375" id="Shape"></path>
+                  <path d="M10.0008333,5 L10.0008333,15" id="Shape"></path>
+                  <polyline id="Shape" points="6.25083333 11.25 10.0008333 15 13.7508333 11.25"></polyline>
+                  <path
+                    d="M5,19.375 L1.87583333,19.375 C1.1854774,19.375 0.625833333,18.8153559 0.625833333,18.125 L0.625833333,1.875 C0.625833333,1.18464406 1.1854774,0.625 1.87583333,0.625 L5,0.625"
+                    id="Shape"></path>
+                  <path
+                    d="M15,0.625 L18.125,0.625 C18.8153559,0.625 19.375,1.18464406 19.375,1.875 L19.375,18.125 C19.375,18.8153559 18.8153559,19.375 18.125,19.375 L15,19.375"
+                    id="Shape"></path>
                 </g>
+              </g>
             </g>
-        </g>
-    </g>
-</svg>
-
-    </div>
-	       
-<!--
-    <div class="top-icon text-icon" id="text-icon" (click)="showComments = !showComments" [class.active]="showComments">
-
-     
-
-
-<svg width="22px" height="22px" viewBox="0 0 22 22" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-   
-    <desc></desc>
-    <defs></defs>
-    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
-        <g id="Internet-Networks-Servers-/-Upload/Download-/-upload-dash-arrow-1" transform="translate(-65.000000, -20.000000)" class="icon-stroke" stroke-width="1.5">
-            <g id="messages-bubble" transform="translate(66.000000, 21.000000)">
-                <path d="M10.6578236,1.39552634e-05 C7.2733682,-0.00487001799 4.15271669,1.82840041 2.50707282,4.78828665 C0.861428952,7.74817289 0.949909343,11.3686229 2.73817252,14.2444485 L0,20 L5.74989584,17.2595575 C9.11259725,19.3520226 13.4289699,19.0910325 16.5155083,16.6086132 C19.6020468,14.1261939 20.7857069,9.9636565 19.4677154,6.22668649 C18.1497239,2.48971647 14.6174794,-0.00681020874 10.6578236,1.39552634e-05 Z" id="Shape"></path>
-            </g>
-            <circle id="Oval" fill="#717274" cx="80.5" cy="30.5" r="1"></circle>
-            <circle id="Oval" fill="#717274" cx="76.5" cy="30.5" r="1"></circle>
-            <circle id="Oval" fill="#717274" cx="72.5" cy="30.5" r="1"></circle>
-        </g>
-    </g>
-</svg> 
-
-    </div>-->
+          </g>
+        </svg>
+      </div>
 
     </div>
 
   </div>
 
-
 </div>
- 
+

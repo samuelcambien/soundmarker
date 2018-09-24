@@ -3,11 +3,17 @@ import {Track} from "../../model/track";
 import {Player} from "../../newplayer/player";
 import {Utils} from "../../app.component";
 import {saveAs} from 'file-saver/FileSaver';
+import {animate, transition, trigger} from "@angular/animations";
 
 @Component({
   selector: 'app-public-player-track',
   templateUrl: './public-player-track.component.html',
-  styleUrls: ['./public-player-track.component.scss']
+  styleUrls: ['./public-player-track.component.scss'],
+  animations: [
+    trigger('toggleComments', [
+      transition('* => *', animate('5000s'))
+    ])
+  ]
 })
 export class PublicPlayerTrackComponent implements OnInit {
 
@@ -16,7 +22,8 @@ export class PublicPlayerTrackComponent implements OnInit {
   @Output() selected = new EventEmitter<Track>();
   @Output() playing = new EventEmitter();
 
-  constructor() { }
+  constructor() {
+  }
 
   ngOnInit() {
   }
