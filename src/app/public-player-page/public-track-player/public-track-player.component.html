@@ -514,6 +514,10 @@
     >
     </app-comment>
 
+    <div *ngIf="search && getMatchingComments().length == 0">
+      there were no matching comments
+    </div>
+
   </div>
 
 </div>
