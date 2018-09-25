@@ -42,9 +42,11 @@ import {TermsComponent} from './public-page/public-info/topics/privacy-and-terms
 import {PrivacyComponent} from './public-page/public-info/topics/privacy-and-terms/privacy/privacy.component';
 import {CookieComponent} from './public-page/public-info/topics/privacy-and-terms/cookie/cookie.component';
 import {NtdComponent} from './public-page/public-info/topics/privacy-and-terms/ntd/ntd.component';
-import { HighlightPipe } from './highlight.pipe';
-import { TimeFormatPipe } from './time-format.pipe';
-import { DraggableDirective } from './draggable.directive';
+import {HighlightPipe} from './highlight.pipe';
+import {TimeFormatPipe} from './time-format.pipe';
+import {DraggableDirective} from './draggable.directive';
+import {PublicIntroductionComponent} from './public-page/public-info/topics/public-introduction/public-introduction.component';
+import {PlayerIntroductionComponent} from './public-page/public-info/topics/player-introduction/player-introduction.component';
 
 @NgModule({
   declarations: [
@@ -83,7 +85,9 @@ import { DraggableDirective } from './draggable.directive';
     NtdComponent,
     HighlightPipe,
     TimeFormatPipe,
-    DraggableDirective
+    DraggableDirective,
+    PublicIntroductionComponent,
+    PlayerIntroductionComponent
   ],
   imports: [
     FileUploadModule,
