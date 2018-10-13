@@ -13,15 +13,21 @@
     RewriteCond %{REQUEST_URI} "/file/upload" [OR]
     RewriteCond %{REQUEST_URI} "/file/new" [OR]
     RewriteCond %{REQUEST_URI} "/track/url" [OR]
-    RewriteCond %{REQUEST_URI} "/track/47" [OR]
+    RewriteCond %{REQUEST_URI} "/track/file/download/" [OR]
+    RewriteCond %{REQUEST_URI} "/track" [OR]
     RewriteCond %{REQUEST_URI} "/player/47" [OR]
     RewriteCond %{REQUEST_URI} "/track/new" [OR]
     RewriteCond %{REQUEST_URI} "/track/version" [OR]
+    RewriteCond %{REQUEST_URI} "/track/version/comments" [OR]
+    RewriteCond %{REQUEST_URI} "/track/version/comment" [OR]
     RewriteCond %{REQUEST_URI} "/project/new" [OR]
     RewriteCond %{REQUEST_URI} "/project/password" [OR]
-    RewriteCond %{REQUEST_URI} "/project/delete"
+    RewriteCond %{REQUEST_URI} "/project/delete" [OR]
+    RewriteCond %{REQUEST_URI} "/project/([a-z0-9/-]+)$" [OR]
+    RewriteCond %{REQUEST_URI} "/file/chunk/([a-z0-9/-]+)$" [OR]
+    RewriteCond %{REQUEST_URI} "/ad" [OR]
     RewriteRule ^ index.php [L]
-
+    
     # Prefer .php over .html
     DirectoryIndex index.php index.html index.shtml index.htm Index.html Index.htm Index.shtml default.htm Default.htm default.html Default.html default.shtml Default.shtml page1.html index.pl index.cgi index.php3 index.phtml home.htm home.html home.shtml index.wml index.pcgi quickstart.html
     Header set Access-Control-Allow-Origin "*"
