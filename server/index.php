@@ -356,7 +356,7 @@ Flight::json(array(
 
 ////////////////////////////// Routes - /track/file/download GET //////////////////////////////
 Flight::route('GET /track/file/download', function() {
-$file_id = Flight::request()->data->getData()["file_id"];
+$file_id = Flight::request()->data->file_id;
 
 $db = Flight::db();
 $sql = "SELECT aws_path FROM File WHERE file_id = '$file_id'";
