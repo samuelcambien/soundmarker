@@ -2,6 +2,115 @@
 require 'flight/Flight.php';
 require 'vendor/autoload.php';
 
+// Unique ID
+class UUID {
+  public static function v3($namespace, $name) {
+    if(!self::is_valid($namespace)) return false;
+
+    // Get hexadecimal components of namespace
+    $nhex = str_replace(array('-','{','}'), '', $namespace);
+
+    // Binary Value
+    $nstr = '';
+
+    // Convert Namespace UUID to bits
+    for($i = 0; $i < strlen($nhex); $i+=2) {
+      $nstr .= chr(hexdec($nhex[$i].$nhex[$i+1]));
+    }
+
+    // Calculate hash value
+    $hash = md5($nstr . $name);
+
+    return sprintf('%08s-%04s-%04x-%04x-%12s',
+
+      // 32 bits for "time_low"
+      substr($hash, 0, 8),
+
+      // 16 bits for "time_mid"
+      substr($hash, 8, 4),
+
+      // 16 bits for "time_hi_and_version",
+      // four most significant bits holds version number 3
+      (hexdec(substr($hash, 12, 4)) & 0x0fff) | 0x3000,
+
+      // 16 bits, 8 bits for "clk_seq_hi_res",
+      // 8 bits for "clk_seq_low",
+      // two most significant bits holds zero and one for variant DCE1.1
+      (hexdec(substr($hash, 16, 4)) & 0x3fff) | 0x8000,
+
+      // 48 bits for "node"
+      substr($hash, 20, 12)
+    );
+  }
+
+  public static function v4() {
+    return sprintf('%04x%04x-%04x-%04x-%04x-%04x%04x%04x',
+
+      // 32 bits for "time_low"
+      mt_rand(0, 0xffff), mt_rand(0, 0xffff),
+
+      // 16 bits for "time_mid"
+      mt_rand(0, 0xffff),
+
+      // 16 bits for "time_hi_and_version",
+      // four most significant bits holds version number 4
+      mt_rand(0, 0x0fff) | 0x4000,
+
+      // 16 bits, 8 bits for "clk_seq_hi_res",
+      // 8 bits for "clk_seq_low",
+      // two most significant bits holds zero and one for variant DCE1.1
+      mt_rand(0, 0x3fff) | 0x8000,
+
+      // 48 bits for "node"
+      mt_rand(0, 0xffff), mt_rand(0, 0xffff), mt_rand(0, 0xffff)
+    );
+  }
+
+  public static function v5($namespace, $name) {
+    if(!self::is_valid($namespace)) return false;
+
+    // Get hexadecimal components of namespace
+    $nhex = str_replace(array('-','{','}'), '', $namespace);
+
+    // Binary Value
+    $nstr = '';
+
+    // Convert Namespace UUID to bits
+    for($i = 0; $i < strlen($nhex); $i+=2) {
+      $nstr .= chr(hexdec($nhex[$i].$nhex[$i+1]));
+    }
+
+    // Calculate hash value
+    $hash = sha1($nstr . $name);
+
+    return sprintf('%08s-%04s-%04x-%04x-%12s',
+
+      // 32 bits for "time_low"
+      substr($hash, 0, 8),
+
+      // 16 bits for "time_mid"
+      substr($hash, 8, 4),
+
+      // 16 bits for "time_hi_and_version",
+      // four most significant bits holds version number 5
+      (hexdec(substr($hash, 12, 4)) & 0x0fff) | 0x5000,
+
+      // 16 bits, 8 bits for "clk_seq_hi_res",
+      // 8 bits for "clk_seq_low",
+      // two most significant bits holds zero and one for variant DCE1.1
+      (hexdec(substr($hash, 16, 4)) & 0x3fff) | 0x8000,
+
+      // 48 bits for "node"
+      substr($hash, 20, 12)
+    );
+  }
+
+  public static function is_valid($uuid) {
+    return preg_match('/^\{?[0-9a-f]{8}\-?[0-9a-f]{4}\-?[0-9a-f]{4}\-?'.
+                      '[0-9a-f]{4}\-?[0-9a-f]{12}\}?$/i', $uuid) === 1;
+  }
+}
+
 ////////////////////////////// Setup DB //////////////////////////////
 // Setup DB
 Flight::register('db', 'PDO', array('mysql:host='.$_SERVER["RDS_HOSTNAME"].';dbname='.$_SERVER["RDS_DB_NAME"], $_SERVER["RDS_USERNAME"], $_SERVER["RDS_PASSWORD"]), function($db) {
@@ -43,17 +152,23 @@ Flight::route('/player/47', function(){
 Flight::route('POST /project/new', function() {
 
 // Todo: check if user_id exists first (foreign_key needs to be valid) -> put in dB
+// Add expiration date
 $user_id = Flight::request()->data->user_id;
-$project_title = Flight::request()->data->project_title;
-$project_password = Flight::request()->data->project_password;
+$project_title = (Flight::request()->data->project_title ?: "");
+$project_password = (Flight::request()->data->project_password ?: "");
 
 $db = Flight::db();
 $sql = "INSERT INTO Project (title, password, active) VALUES ('$project_title', '$project_password', '1')";
 $result = $db->query($sql);
+$project_id = $db->lastInsertId();
+
+$v3uuid = UUID::v3($project_id, 'Soundm@rk3r');
+$sql = "UPDATE Project SET hash = '$v3uuid' WHERE project_id = '$project_id'";
+$result = $db->query($sql);
 
 // return ok
 Flight::json(array(
-   'project_id' => $db->lastInsertId()
+   'project_id' => $project_id
 ), 200);
 });
 
@@ -96,8 +211,8 @@ Flight::json(array(
 Flight::route('POST /track/new', function() {
 
 $project_id = Flight::request()->data->project_id;
-$track_title = Flight::request()->data->track_title;
-$track_artist = Flight::request()->data->track_artist;
+$track_title = (Flight::request()->data->track_title ?: "");
+$track_artist = (Flight::request()->data->track_artist ?: "");
 
 $db = Flight::db();
 if ($project_id) {
@@ -119,14 +234,14 @@ Flight::route('POST /track/version', function() {
 
 // Todo: add SVG?
 $track_id = Flight::request()->data->track_id;
-$streamable = Flight::request()->data->streamable;
-$downloadable = Flight::request()->data->downloadable;
-$visibility = Flight::request()->data->visibility;
-$version_notes = Flight::request()->data->version_notes;
-$version_title = Flight::request()->data->version_title;
+$downloadable = (Flight::request()->data->downloadable ?: 0);
+$visibility = (Flight::request()->data->visibility ?: 1);
+$version_notes = (Flight::request()->data->version_notes ?: "");
+$version_title = (Flight::request()->data->version_title ?: "");
+$wave_png = Flight::request()->data->wave_png;
 
 $db = Flight::db();
-$sql = "INSERT INTO Version (track_id, streamable, downloadable, visibility, notes, version_title) VALUES ('$track_id', '$streamable', 'downloadable', '$visibility', '$version_notes', '$version_title')";
+$sql = "INSERT INTO Version (track_id, downloadable, visibility, notes, version_title, wave_png) VALUES ('$track_id', 'downloadable', '$visibility', '$version_notes', '$version_title', '$wave_png')";
 $result = $db->query($sql);
 
 // return ok
@@ -141,30 +256,18 @@ Flight::route('POST /file/new', function() {
 // Todo: check if files actually get uploaded 
 // And put in DB
 $version_id = Flight::request()->data->version_id;
-$stream_identifier = Flight::request()->data->stream_identifier;
+c = (Flight::request()->data->identifier ?: 0);
+$track_length = (Flight::request()->data->track_length ?: 0);
+$chunk_length = (Flight::request()->data->chunk_length ?: 0);
+$file_size = (Flight::request()->data->track_length ?: 0);
+$file_name = (Flight::request()->data->chunk_length ?: "");
+$metadata = (Flight::request()->data->metadata ?: "");
+$extension = (Flight::request()->data->extension ?: "");
 
 $db = Flight::db();
-$sql = "INSERT INTO File (version_id, filename) VALUES ('$version_id', 'bla')";
+$sql = "INSERT INTO File (version_id, file_name, file_size, metadata, extension, chunk_length, track_length, identifier) VALUES ('$version_id', '$file_name', '$file_size', '$extension', '$chunk_length', '$track_length', '$track_length')";
 $result = $db->query($sql);
 $file_id = $db->lastInsertId();
-
-// get the variables
-// $s3 = Flight::get("s3");
-// $s3bucket = Flight::get("s3bucket");
-
-// try {
-//     // Upload data.
-//     $result = $s3->putObject([
-//         'Bucket' => $s3bucket,
-//         'Key'    => $file_id,
-//         'Body'   => "Flight::request()->files[0]", // figuring out right way to get the file from the JSON
-//         'ACL'    => 'public-read'
-//     ]);
-//     // Print the URL to the object.
-//     echo $result['ObjectURL'] . PHP_EOL;
-// } catch (S3Exception $e) {
-//     echo $e->getMessage() . PHP_EOL;
-// }
 
 // return ok
 Flight::json(array(
@@ -174,16 +277,6 @@ Flight::json(array(
 
 ////////////////////////////// Routes - /file/chunk/$file_id POST //////////////////////////////
 Flight::route('POST /file/chunk/@file_id/@idno/@ext', function() {
-
-// // Todo: check if files actually get uploaded 
-// // And put in DB
-// $version_id = Flight::request()->data->version_id;
-// $stream_identifier = Flight::request()->data->stream_identifier;
-
-// $db = Flight::db();
-// $sql = "INSERT INTO File (version_id, filename) VALUES ('$version_id', 'bla')";
-// $result = $db->query($sql);
-// $file_id = $db->lastInsertId();
 
 // get the variables
 $s3 = Flight::get("s3");
@@ -277,14 +370,20 @@ Flight::route('GET /project', function() {
 // ), 200);
 });
 
-////////////////////////////// Routes - /project/url POST //////////////////////////////
+////////////////////////////// Routes - /project/url GET //////////////////////////////
 
-Flight::route('POST /project/url', function() {
+Flight::route('GET /project/url', function() {
 
-// // return ok
-// Flight::json(array(
-//    'project_id' => $project_id
-// ), 200);
+$project_id = Flight::request()->data->project_id;
+
+$db = Flight::db();
+$sql = "SELECT hash FROM Project WHERE project_id = '$project_id'";
+$result = $db->query($sql);
+
+// return ok
+Flight::json(array(
+   'project_url' => 'http://soundmarker-env.mc3wuhhgpz.eu-central-1.elasticbeanstalk.com/project/'. $result->fetch()[0] 
+), 200);
 });
 
 ////////////////////////////// Routes - /track/version/download GET //////////////////////////////
