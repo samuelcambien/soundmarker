@@ -271,6 +271,7 @@ Flight::json(array(
 ////////////////////////////// Routes - /file/chunk/$file_id POST //////////////////////////////
 Flight::route('GET /project/@project_hash', function() {
 
+// safe if no proper product hash
 $db = Flight::db();
 $sql = "SELECT project_id FROM Project WHERE hash = '$project_hash'";
 $result = $db->query($sql);
@@ -356,13 +357,13 @@ Flight::route('GET /track/file/download', function() {
 $file_id = Flight::request()->data->file_id;
 
 $db = Flight::db();
-$sql = "SELECT aws_path FROM File WHERE file_id = '$file_id'";
+$sql = "SELECT aws_path FROM File WHERE file_id = '1'";
 $result = $db->query($sql);
 $aws_path = $result->fetch()[0];
 
 // return ok
 Flight::json(array(
-   'project_id' => $aws_path
+   'aws_path' => $aws_path
 ), 200);
 });
 
@@ -374,13 +375,12 @@ $sql = "SELECT html, ad_id FROM Ad WHERE priority = '1'";
 $result = $db->query($sql);
 $array = array_rand($result->fetch(), 1);
 
-$html = $array[0]["html"];
-$ad_id = $array[0]["ad_id"];
+// $html = $array[0]["html"];
+// $ad_id = $array[0]["ad_id"];
 
 // return ok
 Flight::json(array(
-   'html' => $html,
-   'ad_id' => $ad_id
+   'html' => $array[0]
 ), 200);
 });
 
