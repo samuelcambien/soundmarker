@@ -270,8 +270,9 @@ Flight::json(array(
 
 ////////////////////////////// Routes - /file/chunk/$file_id POST //////////////////////////////
 Flight::route('GET /project/@project_hash', function() {
+
+$db = Flight::db();
 try {
-    $db = Flight::db();
     $sql = "SELECT project_id FROM Project WHERE hash = '$project_hash'";
     $result = $db->query($sql);
     $project_id = $result->fetch()[0];
@@ -284,14 +285,18 @@ try {
     Flight::json(array(
        'project_id' => $project_id, 'tracks' => json_encode($tracks)
     ), 200);
-} catch (Exception $e) {
-    Flight::error("400");
+
+} catch (PDOException $pdoException) {
+    Flight::error($pdoException);
+} catch (Exception $exception) {
+        Flight::error($exception);
+} finally {
+    $db = null;
 }
 });
 
 ////////////////////////////// Routes - /track GET //////////////////////////////
-Flight::route('GET /track', function() {
-$track_id = Flight::request()->data->track_id;
+Flight::route('GET /track/@track_id', function() {
 
 $db = Flight::db();
 $sql = "SELECT version_id, notes, downloadable, visibility, version_title, wave_png FROM Version WHERE track_id = '$track_id'";
@@ -305,8 +310,7 @@ Flight::json(array(
 });
 
 ////////////////////////////// Routes - /track/version GET //////////////////////////////
-Flight::route('GET /track/version', function() {
-$version_id = Flight::request()->data->version_id;
+Flight::route('GET /track/version/@version_id', function() {
 
 $db = Flight::db();
 $sql = "SELECT file_id, extension, metadata, aws_path, file_name, file_size, identifier, chunk_length, track_length FROM File WHERE version_id = '$version_id'";
@@ -320,8 +324,7 @@ Flight::json(array(
 });
 
 ////////////////////////////// Routes - /track/version/comments GET //////////////////////////////
-Flight::route('GET /track/version/comments', function() {
-$version_id = Flight::request()->data->version_id;
+Flight::route('GET /track/version/comments/@version_id', function() {
 
 $db = Flight::db();
 $sql = "SELECT comment_id, notes, start_time, end_time, checked, parent_comment_id, name FROM Comment WHERE version_id = '$version_id'";
@@ -355,8 +358,7 @@ Flight::json(array(
 });
 
 ////////////////////////////// Routes - /track/file/download GET //////////////////////////////
-Flight::route('GET /track/file/download', function() {
-$file_id = Flight::request()->data->file_id;
+Flight::route('GET /track/file/download/@file_id', function() {
 
 $db = Flight::db();
 $sql = "SELECT aws_path FROM File WHERE file_id = '$file_id'";
@@ -365,7 +367,7 @@ $aws_path = $result->fetch()[0];
 
 // return ok
 Flight::json(array(
-   'aws_path' => $aws_path, 'file_id' => $file_id, 'data' => Flight::request()->data->getData()
+   'aws_path' => $aws_path
 ), 200);
 });
 
@@ -375,7 +377,7 @@ Flight::route('GET /ad', function() {
 $db = Flight::db();
 $sql = "SELECT html FROM Ad WHERE priority = '1'";
 $result = $db->query($sql);
-$array = array_rand($result->fetch_array(MYSQLI_BOTH), 1);
+$array = array_rand($result->fetchAll(), 1);
 
 $html = $array[0]["html"];
 $ad_id = $array[0]["ad_id"];
@@ -408,9 +410,9 @@ Flight::json(array(
 ), 200);
 });
 
-////////////////////////////// Routes - /project/url GET //////////////////////////////
+////////////////////////////// Routes - /project/url POST //////////////////////////////
 
-Flight::route('GET /project/url', function() {
+Flight::route('POST /project/url', function() {
 
 $project_id = Flight::request()->data->project_id;
 
