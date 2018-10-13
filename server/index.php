@@ -366,6 +366,24 @@ Flight::json(array(
 ), 200);
 });
 
+////////////////////////////// Routes - /ad GET //////////////////////////////
+Flight::route('GET /ad', function() {
+
+$db = Flight::db();
+$sql = "SELECT html, ad_id FROM Ad WHERE priority = '1'";
+$result = $db->query($sql);
+$array = array_rand($result->fetch(), 1);
+
+$html = $array[0]["html"];
+$ad_id = $array[0]["ad_id"];
+
+// return ok
+Flight::json(array(
+   'html' => $html,
+   'ad_id' => $ad_id
+), 200);
+});
+
 ////////////////////////////// Routes - /track/url GET //////////////////////////////
 // still necessary?
 Flight::route('GET /track/url', function() {
