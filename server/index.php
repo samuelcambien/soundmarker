@@ -207,7 +207,7 @@ $version_title = (Flight::request()->data->version_title ?: "");
 $wave_png = Flight::request()->data->wave_png;
 
 $db = Flight::db();
-$sql = "INSERT INTO Version (track_id, downloadable, visibility, notes, version_title, wave_png) VALUES ('$track_id', 'downloadable', '$visibility', '$version_notes', '$version_title', '$wave_png')";
+$sql = "INSERT INTO Version (track_id, downloadable, visibility, notes, version_title, wave_png) VALUES ('$track_id', '$downloadable', '$visibility', '$version_notes', '$version_title', '$wave_png')";
 $result = $db->query($sql);
 
 // return ok
@@ -306,7 +306,7 @@ Flight::route('GET /track/version', function() {
 $version_id = Flight::request()->data->version_id;
 
 $db = Flight::db();
-$sql = "SELECT extension, metadata, aws_path, file_name, file_size, identifier, chunk_length, track_length FROM File WHERE version_id = '$version_id'";
+$sql = "SELECT file_id, extension, metadata, aws_path, file_name, file_size, identifier, chunk_length, track_length FROM File WHERE version_id = '$version_id'";
 $result = $db->query($sql);
 $files = $result->fetch_array(MYSQLI_NUM);
 
@@ -316,7 +316,58 @@ Flight::json(array(
 ), 200);
 });
 
+////////////////////////////// Routes - /track/version/comments GET //////////////////////////////
+Flight::route('GET /track/version/comments', function() {
+$version_id = Flight::request()->data->version_id;
+
+$db = Flight::db();
+$sql = "SELECT comment_id, notes, start_time, end_time, checked, parent_comment_id, name FROM Comment WHERE version_id = '$version_id'";
+$result = $db->query($sql);
+$comments = $result->fetch_array(MYSQLI_NUM);
+
+// return ok
+Flight::json(array(
+   'comments' => json_encode($comments)
+), 200);
+});
+
+////////////////////////////// Routes - /track/version/comment POST //////////////////////////////
+Flight::route('POST /track/version/comment', function() {
+
+$version_id = Flight::request()->data->version_id;
+$notes = (Flight::request()->data->notes ?: "");
+$name = (Flight::request()->data->name ?: "");
+$start_time = (Flight::request()->data->start_time ?: "");
+$end_time = (Flight::request()->data->end_time ?: "");
+$parent_comment_id = (Flight::request()->data->parent_comment_id ?: "");
+
+$db = Flight::db();
+$sql = "INSERT INTO Comment (version_id, notes, name, start_time, end_time, parent_comment_id) VALUES ('$version_id', '$notes', '$name', '$start_time', '$end_time', '$parent_comment_id')";
+$result = $db->query($sql);
+
+// return ok
+Flight::json(array(
+   'comment_id' => $db->lastInsertId()
+), 200);
+});
+
+////////////////////////////// Routes - /track/file/download GET //////////////////////////////
+Flight::route('GET /track/file/download', function() {
+$file_id = Flight::request()->data->file_id;
+
+$db = Flight::db();
+$sql = "SELECT aws_path FROM File WHERE file_id = '$file_id'";
+$result = $db->query($sql);
+$aws_path = $result->fetch()[0];
+
+// return ok
+Flight::json(array(
+   'project_id' => $aws_path
+), 200);
+});
+
 ////////////////////////////// Routes - /track/url GET //////////////////////////////
+// still necessary?
 Flight::route('GET /track/url', function() {
 $track_id = Flight::request()->data->track_id;
 
@@ -337,52 +388,6 @@ Flight::json(array(
 ), 200);
 });
 
-////////////////////////////// Routes - /track/version/comments GET //////////////////////////////
-Flight::route('GET /track/version/comments', function() {
-// $track_id = Flight::request()->data->track_id;
-
-// return ok
-// Flight::json(array(
-//    'track_url' => "https://d3k08uu3zdbsgq.cloudfront.net/Bruno-LetHerKnow.wav",
-//    'track_hash' => "hash"
-// ), 200);
-// });
-
-// Flight::route('GET /track/47', function() {
-// $track_id = Flight::request()->data->track_id;
-
-// // return ok
-// Flight::json(array(
-//    'track_url' => "https://d3k08uu3zdbsgq.cloudfront.net/06pianoconverted.mp3",
-//    'track_hash' => "hash"
-// ), 200);
-});
-
-////////////////////////////// Routes - /track/version/comment POST //////////////////////////////
-Flight::route('POST /track/version/comment', function() {
-
-// // return ok
-// Flight::json(array(
-//    'file_id' => $file_id
-// ), 200);
-});
-
-////////////////////////////// Routes - /project GET //////////////////////////////
-
-Flight::route('GET /project', function() {
-
-// $project_id = Flight::request()->data->project_id;
-
-// $db = Flight::db();
-// $sql = "UPDATE Project SET active = '0' WHERE project_id = '$project_id'";
-// $result = $db->query($sql);
-
-// // return ok
-// Flight::json(array(
-//    'project_id' => $project_id
-// ), 200);
-});
-
 ////////////////////////////// Routes - /project/url GET //////////////////////////////
 
 Flight::route('GET /project/url', function() {
@@ -397,26 +402,6 @@ $result = $db->query($sql);
 Flight::json(array(
    'project_url' => 'http://soundmarker-env.mc3wuhhgpz.eu-central-1.elasticbeanstalk.com/project/'. $result->fetch()[0] 
 ), 200);
-});
-
-////////////////////////////// Routes - /track/version/download GET //////////////////////////////
-
-Flight::route('GET /track/version/download', function() {
-
-// // return ok
-// Flight::json(array(
-//    'project_id' => $project_id
-// ), 200);
-});
-
-////////////////////////////// Routes - /track/version GET //////////////////////////////
-
-Flight::route('GET /track/version', function() {
-    
-// // return ok
-// Flight::json(array(
-//    'project_id' => $project_id
-// ), 200);
 });
 
 ////////////////////////////// Routes - /project/password POST //////////////////////////////
