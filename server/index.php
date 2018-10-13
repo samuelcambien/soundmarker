@@ -279,7 +279,7 @@ try {
 
     $sql = "SELECT track_id, title FROM Track WHERE project_id = '$project_id'";
     $result = $db->query($sql);
-    $tracks = $result->fetch_array(MYSQLI_NUM);
+    $tracks = $result->fetchAll();
 
     // return ok
     Flight::json(array(
