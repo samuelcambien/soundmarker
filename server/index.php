@@ -242,7 +242,7 @@ Flight::json(array(
 });
 
 ////////////////////////////// Routes - /file/chunk/$file_id POST //////////////////////////////
-Flight::route('POST /file/chunk/@file_id/@idno/@ext', function() {
+Flight::route('POST /file/chunk/@file_id/@idno/@ext', function($file_id, $idno, $ext) {
 
 // get the variables
 $s3 = Flight::get("s3");
@@ -269,7 +269,7 @@ Flight::json(array(
 });
 
 ////////////////////////////// Routes - /file/chunk/$file_id POST //////////////////////////////
-Flight::route('GET /project/@project_hash', function() {
+Flight::route('GET /project/@project_hash', function($project_hash) {
 
 $db = Flight::db();
 try {
@@ -296,7 +296,7 @@ try {
 });
 
 ////////////////////////////// Routes - /track GET //////////////////////////////
-Flight::route('GET /track/@track_id', function() {
+Flight::route('GET /track/@track_id', function($track_id) {
 
 $db = Flight::db();
 $sql = "SELECT version_id, notes, downloadable, visibility, version_title, wave_png FROM Version WHERE track_id = '$track_id'";
@@ -310,7 +310,7 @@ Flight::json(array(
 });
 
 ////////////////////////////// Routes - /track/version GET //////////////////////////////
-Flight::route('GET /track/version/@version_id', function() {
+Flight::route('GET /track/version/@version_id', function($version_id) {
 
 $db = Flight::db();
 $sql = "SELECT file_id, extension, metadata, aws_path, file_name, file_size, identifier, chunk_length, track_length FROM File WHERE version_id = '$version_id'";
@@ -324,7 +324,7 @@ Flight::json(array(
 });
 
 ////////////////////////////// Routes - /track/version/comments GET //////////////////////////////
-Flight::route('GET /track/version/comments/@version_id', function() {
+Flight::route('GET /track/version/comments/@version_id', function($version_id) {
 
 $db = Flight::db();
 $sql = "SELECT comment_id, notes, start_time, end_time, checked, parent_comment_id, name FROM Comment WHERE version_id = '$version_id'";
@@ -358,7 +358,7 @@ Flight::json(array(
 });
 
 ////////////////////////////// Routes - /track/file/download GET //////////////////////////////
-Flight::route('GET /track/file/download/@file_id', function() {
+Flight::route('GET /track/file/download/@file_id', function($file_id) {
 
 $db = Flight::db();
 $sql = "SELECT aws_path FROM File WHERE file_id = '$file_id'";
@@ -377,14 +377,14 @@ Flight::route('GET /ad', function() {
 $db = Flight::db();
 $sql = "SELECT html FROM Ad WHERE priority = '1'";
 $result = $db->query($sql);
-$array = array_rand($result->fetchAll(), 1);
+$array = $result->fetchAll();
 
 $html = $array[0]["html"];
 $ad_id = $array[0]["ad_id"];
 
 // return ok
 Flight::json(array(
-   'html' => $html, 'ad_id' => $ad_id
+   'html' => $html, 'ad_id' => json_encode($array[0])
 ), 200);
 });
 
