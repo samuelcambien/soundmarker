@@ -378,20 +378,19 @@ Flight::route('GET /ad', function() {
 $db = Flight::db();
 $sql = "SELECT html, ad_id, impressions FROM Ad WHERE priority = '1'";
 $result = $db->query($sql);
-$array = array_rand($result->fetchAll(), 1);
+$array = $result->fetchAll();
 
 $html = $array[0]["html"];
 $ad_id = $array[0]["ad_id"];
 $impressions = $array[0]["impressions"]+1;
 
-
-$sql = "UPDATE Ad SET impressions = '$impressions' WHERE ad_id = '$ad_id'";
-$result = $db->query($sql);
-
 // return ok
 Flight::json(array(
    'html' => $html, 'ad_id' => $ad_id
 ), 200);
+
+$sql = "UPDATE Ad SET impressions = '$impressions' WHERE ad_id = '$ad_id'";
+$result = $db->query($sql);
 });
 
 ////////////////////////////// Routes - /ad POST //////////////////////////////
@@ -419,7 +418,7 @@ $result = $db->query($sql);
 // get next ad
 $sql = "SELECT html, ad_id FROM Ad WHERE priority != '1'";
 $result = $db->query($sql);
-$array = array_rand($result->fetchAll(),1);
+$array = $result->fetchAll();
 
 $html = $array[0]["html"];
 $ad_id = $array[0]["ad_id"];
