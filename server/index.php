@@ -390,7 +390,7 @@ $result = $db->query($sql);
 
 // return ok
 Flight::json(array(
-   'html' => $html, 'ad_id' => $ad_id)
+   'html' => $html, 'ad_id' => $ad_id
 ), 200);
 });
 
@@ -426,7 +426,7 @@ $ad_id = $array[0]["ad_id"];
 
 // return ok
 Flight::json(array(
-   'html' => $html, 'ad_id' => $ad_id)
+   'html' => $html, 'ad_id' => $ad_id
 ), 200);
 });
 
