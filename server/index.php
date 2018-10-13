@@ -38,7 +38,7 @@ Flight::route('/player/47', function(){
 });
 
 
-////////////////////////////// Routes - /project/new //////////////////////////////
+////////////////////////////// Routes - /project/new POST //////////////////////////////
 
 Flight::route('POST /project/new', function() {
 
@@ -58,7 +58,7 @@ Flight::json(array(
 });
 
 
-////////////////////////////// Routes - /project/password //////////////////////////////
+////////////////////////////// Routes - /project/password POST //////////////////////////////
 
 Flight::route('POST /project/password', function() {
 
@@ -75,7 +75,7 @@ Flight::json(array(
 
 });
 
-////////////////////////////// Routes - /project/delete //////////////////////////////
+////////////////////////////// Routes - /project/delete POST //////////////////////////////
 
 Flight::route('POST /project/delete', function() {
 
@@ -91,7 +91,7 @@ Flight::json(array(
 ), 200);
 });
 
-////////////////////////////// Routes - /track/new //////////////////////////////
+////////////////////////////// Routes - /track/new POST //////////////////////////////
 
 Flight::route('POST /track/new', function() {
 
@@ -113,7 +113,7 @@ Flight::json(array(
 ), 200);
 });
 
-////////////////////////////// Routes - /track/version //////////////////////////////
+////////////////////////////// Routes - /track/version POST //////////////////////////////
 
 Flight::route('POST /track/version', function() {
 
@@ -135,11 +135,11 @@ Flight::json(array(
 ), 200);
 });
 
-////////////////////////////// Routes - /file/new //////////////////////////////
+////////////////////////////// Routes - /file/new POST //////////////////////////////
 Flight::route('POST /file/new', function() {
 
 // Todo: check if files actually get uploaded 
-    // And put in DB
+// And put in DB
 $version_id = Flight::request()->data->version_id;
 $stream_identifier = Flight::request()->data->stream_identifier;
 
@@ -149,6 +149,43 @@ $result = $db->query($sql);
 $file_id = $db->lastInsertId();
 
 // get the variables
+// $s3 = Flight::get("s3");
+// $s3bucket = Flight::get("s3bucket");
+
+// try {
+//     // Upload data.
+//     $result = $s3->putObject([
+//         'Bucket' => $s3bucket,
+//         'Key'    => $file_id,
+//         'Body'   => "Flight::request()->files[0]", // figuring out right way to get the file from the JSON
+//         'ACL'    => 'public-read'
+//     ]);
+//     // Print the URL to the object.
+//     echo $result['ObjectURL'] . PHP_EOL;
+// } catch (S3Exception $e) {
+//     echo $e->getMessage() . PHP_EOL;
+// }
+
+// return ok
+Flight::json(array(
+   'file_id' => $file_id
+), 200);
+});
+
+////////////////////////////// Routes - /file/chunk/$file_id POST //////////////////////////////
+Flight::route('POST /file/chunk/@file_id/@idno/@ext', function() {
+
+// // Todo: check if files actually get uploaded 
+// // And put in DB
+// $version_id = Flight::request()->data->version_id;
+// $stream_identifier = Flight::request()->data->stream_identifier;
+
+// $db = Flight::db();
+// $sql = "INSERT INTO File (version_id, filename) VALUES ('$version_id', 'bla')";
+// $result = $db->query($sql);
+// $file_id = $db->lastInsertId();
+
+// get the variables
 $s3 = Flight::get("s3");
 $s3bucket = Flight::get("s3bucket");
 
@@ -156,7 +193,7 @@ try {
     // Upload data.
     $result = $s3->putObject([
         'Bucket' => $s3bucket,
-        'Key'    => $file_id,
+        'Key'    => $file_id . $idno .'.' . $ext,
         'Body'   => "Flight::request()->files[0]", // figuring out right way to get the file from the JSON
         'ACL'    => 'public-read'
     ]);
@@ -168,12 +205,12 @@ try {
 
 // return ok
 Flight::json(array(
-   'file_id' => $file_id
+   'ok' => 'ok'
 ), 200);
 });
 
 
-////////////////////////////// Routes - /track/url //////////////////////////////
+////////////////////////////// Routes - /track/url GET //////////////////////////////
 Flight::route('GET /track/url', function() {
 $track_id = Flight::request()->data->track_id;
 
@@ -192,6 +229,82 @@ Flight::json(array(
    'track_url' => "https://d3k08uu3zdbsgq.cloudfront.net/06pianoconverted.mp3",
    'track_hash' => "hash"
 ), 200);
+});
+
+////////////////////////////// Routes - /track/version/comments GET //////////////////////////////
+Flight::route('GET /track/version/comments', function() {
+// $track_id = Flight::request()->data->track_id;
+
+// return ok
+// Flight::json(array(
+//    'track_url' => "https://d3k08uu3zdbsgq.cloudfront.net/Bruno-LetHerKnow.wav",
+//    'track_hash' => "hash"
+// ), 200);
+// });
+
+// Flight::route('GET /track/47', function() {
+// $track_id = Flight::request()->data->track_id;
+
+// // return ok
+// Flight::json(array(
+//    'track_url' => "https://d3k08uu3zdbsgq.cloudfront.net/06pianoconverted.mp3",
+//    'track_hash' => "hash"
+// ), 200);
+});
+
+////////////////////////////// Routes - /track/version/comment POST //////////////////////////////
+Flight::route('POST /track/version/comment', function() {
+
+// // return ok
+// Flight::json(array(
+//    'file_id' => $file_id
+// ), 200);
+});
+
+////////////////////////////// Routes - /project GET //////////////////////////////
+
+Flight::route('GET /project', function() {
+
+// $project_id = Flight::request()->data->project_id;
+
+// $db = Flight::db();
+// $sql = "UPDATE Project SET active = '0' WHERE project_id = '$project_id'";
+// $result = $db->query($sql);
+
+// // return ok
+// Flight::json(array(
+//    'project_id' => $project_id
+// ), 200);
+});
+
+////////////////////////////// Routes - /project/url POST //////////////////////////////
+
+Flight::route('POST /project/url', function() {
+
+// // return ok
+// Flight::json(array(
+//    'project_id' => $project_id
+// ), 200);
+});
+
+////////////////////////////// Routes - /track/version/download GET //////////////////////////////
+
+Flight::route('GET /track/version/download', function() {
+
+// // return ok
+// Flight::json(array(
+//    'project_id' => $project_id
+// ), 200);
+});
+
+////////////////////////////// Routes - /track/version GET //////////////////////////////
+
+Flight::route('GET /track/version', function() {
+    
+// // return ok
+// Flight::json(array(
+//    'project_id' => $project_id
+// ), 200);
 });
 
 ////////////////////////////// Start Flight //////////////////////////////
