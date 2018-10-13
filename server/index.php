@@ -172,40 +172,6 @@ Flight::json(array(
 ), 200);
 });
 
-
-////////////////////////////// Routes - /project/password POST //////////////////////////////
-
-Flight::route('POST /project/password', function() {
-
-$project_id = Flight::request()->data->project_id;
-
-$db = Flight::db();
-$sql = "SELECT password FROM Project WHERE project_id = '$project_id'";
-$result = $db->query($sql);
-
-Flight::json(array(
-   'project_id' => $project_id,
-   'project_password' => $result->fetch()[0] 
-), 200);
-
-});
-
-////////////////////////////// Routes - /project/delete POST //////////////////////////////
-
-Flight::route('POST /project/delete', function() {
-
-$project_id = Flight::request()->data->project_id;
-
-$db = Flight::db();
-$sql = "UPDATE Project SET active = '0' WHERE project_id = '$project_id'";
-$result = $db->query($sql);
-
-// return ok
-Flight::json(array(
-   'project_id' => $project_id
-), 200);
-});
-
 ////////////////////////////// Routes - /track/new POST //////////////////////////////
 
 Flight::route('POST /track/new', function() {
@@ -302,6 +268,53 @@ Flight::json(array(
 ), 200);
 });
 
+////////////////////////////// Routes - /file/chunk/$file_id POST //////////////////////////////
+Flight::route('GET /project/@project_hash', function() {
+
+$db = Flight::db();
+$sql = "SELECT project_id FROM Project WHERE hash = '$project_hash'";
+$result = $db->query($sql);
+$project_id = $result->fetch()[0];
+
+$sql = "SELECT track_id, title FROM Project WHERE project_id = '$project_id'";
+$result = $db->query($sql);
+$tracks = $result->fetch_array(MYSQLI_NUM);
+
+// return ok
+Flight::json(array(
+   'project_id' => $project_id, 'tracks' => json_encode($tracks)
+), 200);
+});
+
+////////////////////////////// Routes - /track GET //////////////////////////////
+Flight::route('GET /track', function() {
+$track_id = Flight::request()->data->track_id;
+
+$db = Flight::db();
+$sql = "SELECT version_id, notes, downloadable, visibility, version_title, wave_png FROM Version WHERE track_id = '$track_id'";
+$result = $db->query($sql);
+$versions = $result->fetch_array(MYSQLI_NUM);
+
+// return ok
+Flight::json(array(
+   'versions' => $versions
+), 200);
+});
+
+////////////////////////////// Routes - /track/version GET //////////////////////////////
+Flight::route('GET /track/version', function() {
+$version_id = Flight::request()->data->version_id;
+
+$db = Flight::db();
+$sql = "SELECT extension, metadata, aws_path, file_name, file_size, identifier, chunk_length, track_length FROM File WHERE version_id = '$version_id'";
+$result = $db->query($sql);
+$files = $result->fetch_array(MYSQLI_NUM);
+
+// return ok
+Flight::json(array(
+   'files' => json_encode($files)
+), 200);
+});
 
 ////////////////////////////// Routes - /track/url GET //////////////////////////////
 Flight::route('GET /track/url', function() {
@@ -404,6 +417,39 @@ Flight::route('GET /track/version', function() {
 // Flight::json(array(
 //    'project_id' => $project_id
 // ), 200);
+});
+
+////////////////////////////// Routes - /project/password POST //////////////////////////////
+
+Flight::route('POST /project/password', function() {
+
+$project_id = Flight::request()->data->project_id;
+
+$db = Flight::db();
+$sql = "SELECT password FROM Project WHERE project_id = '$project_id'";
+$result = $db->query($sql);
+
+Flight::json(array(
+   'project_id' => $project_id,
+   'project_password' => $result->fetch()[0] 
+), 200);
+
+});
+
+////////////////////////////// Routes - /project/delete POST //////////////////////////////
+
+Flight::route('POST /project/delete', function() {
+
+$project_id = Flight::request()->data->project_id;
+
+$db = Flight::db();
+$sql = "UPDATE Project SET active = '0' WHERE project_id = '$project_id'";
+$result = $db->query($sql);
+
+// return ok
+Flight::json(array(
+   'project_id' => $project_id
+), 200);
 });
 
 ////////////////////////////// Start Flight //////////////////////////////
