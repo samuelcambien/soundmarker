@@ -285,7 +285,7 @@ try {
        'project_id' => $project_id, 'tracks' => json_encode($tracks)
     ), 200);
 } catch (Exception $e) {
-    Flight::error(400);
+    Flight::error("400");
 }
 });
 
@@ -356,7 +356,7 @@ Flight::json(array(
 
 ////////////////////////////// Routes - /track/file/download GET //////////////////////////////
 Flight::route('GET /track/file/download', function() {
-$file_id = Flight::request()->data->file_id;
+$file_id = Flight::request()->data->getData()["file_id"];
 
 $db = Flight::db();
 $sql = "SELECT aws_path FROM File WHERE file_id = '$file_id'";
@@ -365,7 +365,7 @@ $aws_path = $result->fetch()[0];
 
 // return ok
 Flight::json(array(
-   'aws_path' => $aws_path, 'file_id' => $file_id, 'data' => Flight::request()->data
+   'aws_path' => $aws_path, 'file_id' => $file_id, 'data' => Flight::request()->data->getData()
 ), 200);
 });
 
@@ -375,14 +375,14 @@ Flight::route('GET /ad', function() {
 $db = Flight::db();
 $sql = "SELECT html FROM Ad WHERE priority = '1'";
 $result = $db->query($sql);
-//$array = array_rand($result->fetch(), 1);
+$array = array_rand($result->fetch_array(MYSQLI_BOTH), 1);
 
-// $html = $array[0]["html"];
-// $ad_id = $array[0]["ad_id"];
+$html = $array[0]["html"];
+$ad_id = $array[0]["ad_id"];
 
 // return ok
 Flight::json(array(
-   'html' => $result->fetch()[0]
+   'html' => $html, 'ad_id' => $ad_id
 ), 200);
 });
 
