@@ -285,7 +285,7 @@ try {
        'project_id' => $project_id, 'tracks' => json_encode($tracks)
     ), 200);
 } catch (Exception $e) {
-    Flight::error();
+    Flight::error(400);
 }
 });
 
@@ -365,7 +365,7 @@ $aws_path = $result->fetch()[0];
 
 // return ok
 Flight::json(array(
-   'aws_path' => $aws_path, 'file_id' => $file_id
+   'aws_path' => $aws_path, 'file_id' => $file_id, 'data' => Flight::request()->data
 ), 200);
 });
 
@@ -373,16 +373,16 @@ Flight::json(array(
 Flight::route('GET /ad', function() {
 
 $db = Flight::db();
-$sql = "SELECT html, ad_id FROM Ad WHERE priority = '1'";
+$sql = "SELECT html FROM Ad WHERE priority = '1'";
 $result = $db->query($sql);
-$array = array_rand($result->fetch(), 1);
+//$array = array_rand($result->fetch(), 1);
 
 // $html = $array[0]["html"];
 // $ad_id = $array[0]["ad_id"];
 
 // return ok
 Flight::json(array(
-   'html' => json_encode($array[0]), 'html2' => json_encode($result->fetch()), 'html3' => json_encode($result->fetch()[0])
+   'html' => $result->fetch()[0]
 ), 200);
 });
 

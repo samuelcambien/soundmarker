@@ -23,8 +23,8 @@
     RewriteCond %{REQUEST_URI} "/project/new" [OR]
     RewriteCond %{REQUEST_URI} "/project/password" [OR]
     RewriteCond %{REQUEST_URI} "/project/delete" [OR]
-    RewriteCond %{REQUEST_URI} "/project/([a-z0-9/-]+)$" [OR]
-    RewriteCond %{REQUEST_URI} "/file/chunk/([a-z0-9/-]+)$" [OR]
+    RewriteCond %{REQUEST_URI} "/project/$" [OR]
+    RewriteCond %{REQUEST_URI} "/file/chunk/$" [OR]
     RewriteCond %{REQUEST_URI} "/ad" [OR]
     RewriteRule ^ index.php [L]
     
