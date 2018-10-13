@@ -277,7 +277,7 @@ try {
     $result = $db->query($sql);
     $project_id = $result->fetch()[0];
 
-    $sql = "SELECT track_id, title FROM Project WHERE project_id = '$project_id'";
+    $sql = "SELECT track_id, title FROM Track WHERE project_id = '$project_id'";
     $result = $db->query($sql);
     $tracks = $result->fetch_array(MYSQLI_NUM);
 
@@ -375,7 +375,7 @@ Flight::json(array(
 Flight::route('GET /ad', function() {
 
 $db = Flight::db();
-$sql = "SELECT html FROM Ad WHERE priority = '1'";
+$sql = "SELECT html, ad_id FROM Ad WHERE priority = '1'";
 $result = $db->query($sql);
 $array = $result->fetchAll();
 
