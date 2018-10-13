@@ -256,7 +256,7 @@ Flight::route('POST /file/new', function() {
 // Todo: check if files actually get uploaded 
 // And put in DB
 $version_id = Flight::request()->data->version_id;
-c = (Flight::request()->data->identifier ?: 0);
+$identifier = (Flight::request()->data->identifier ?: 0);
 $track_length = (Flight::request()->data->track_length ?: 0);
 $chunk_length = (Flight::request()->data->chunk_length ?: 0);
 $file_size = (Flight::request()->data->track_length ?: 0);
