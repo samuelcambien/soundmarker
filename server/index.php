@@ -374,15 +374,15 @@ Flight::json(array(
 ////////////////////////////// Routes - /ad GET //////////////////////////////
 Flight::route('GET /ad', function() {
 
-// make sure impressions is lower than limit
 $db = Flight::db();
-$sql = "SELECT html, ad_id, impressions FROM Ad WHERE priority = '1'";
+$sql = "SELECT html, ad_id, impressions FROM Ad WHERE priority = '1' AND impressions < limit";
 $result = $db->query($sql);
 $array = $result->fetchAll();
 
-$html = $array[0]["html"];
-$ad_id = $array[0]["ad_id"];
-$impressions = $array[0]["impressions"]+1;
+$rand = rand(0,(count($array)-1));
+$html = $array[$rand]["html"];
+$ad_id = $array[$rand]["ad_id"];
+$impressions = $array[$rand]["impressions"]+1;
 
 // return ok
 Flight::json(array(
@@ -398,14 +398,12 @@ $result = $db->query($sql);
 
 Flight::route('POST /ad', function() {
 
-// make sure impressions is lower than limit
-// check randomness
 $ad_id = Flight::request()->data->ad_id;
 $exposure_time = Flight::request()->data->exposure_time;
 $clicks = Flight::request()->data->clicks;
 
 $db = Flight::db();
-$sql = "SELECT clicks, exposure_time FROM Ad WHERE ad_id = '$ad_id' AND impressions < limit";
+$sql = "SELECT clicks, exposure_time FROM Ad WHERE ad_id = '$ad_id'";
 $result = $db->query($sql);
 
 $clicksnew = $result->fetch()[0]["clicks"] + $clicks;
@@ -417,12 +415,14 @@ $sql = "UPDATE Ad SET clicks = '$clicksnew' WHERE ad_id = '$ad_id'";
 $result = $db->query($sql);
 
 // get next ad
-$sql = "SELECT html, ad_id FROM Ad WHERE priority != '1'";
+$sql = "SELECT html, ad_id, impressions FROM Ad WHERE priority != '1' AND impressions < limit";
 $result = $db->query($sql);
 $array = $result->fetchAll();
 
-$html = $array[0]["html"];
-$ad_id = $array[0]["ad_id"];
+$rand = rand(0,(count($array)-1));
+$html = $array[$rand]["html"];
+$ad_id = $array[$rand]["ad_id"];
+$impressions = $array[$rand]["impressions"]+1;
 
 // return ok
 Flight::json(array(
