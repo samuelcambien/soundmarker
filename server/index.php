@@ -386,9 +386,10 @@ $impressions = $array[0]["impressions"]+1;
 
 // return ok
 Flight::json(array(
-   'html' => $html, 'ad_id' => $ad_id
+   'html' => $html, 'ad_id' => $ad_id, 'count' => count($array)
 ), 200);
 
+// store impression for new ad
 $sql = "UPDATE Ad SET impressions = '$impressions' WHERE ad_id = '$ad_id'";
 $result = $db->query($sql);
 });
@@ -404,7 +405,7 @@ $exposure_time = Flight::request()->data->exposure_time;
 $clicks = Flight::request()->data->clicks;
 
 $db = Flight::db();
-$sql = "SELECT clicks, exposure_time FROM Ad WHERE ad_id = '$ad_id'";
+$sql = "SELECT clicks, exposure_time FROM Ad WHERE ad_id = '$ad_id' AND impressions < limit";
 $result = $db->query($sql);
 
 $clicksnew = $result->fetch()[0]["clicks"] + $clicks;
@@ -427,6 +428,10 @@ $ad_id = $array[0]["ad_id"];
 Flight::json(array(
    'html' => $html, 'ad_id' => $ad_id
 ), 200);
+
+// store impression for new ad
+$sql = "UPDATE Ad SET impressions = '$impressions' WHERE ad_id = '$ad_id' AND impressions < limit";
+$result = $db->query($sql);
 });
 
 ////////////////////////////// Routes - /track/url GET //////////////////////////////
