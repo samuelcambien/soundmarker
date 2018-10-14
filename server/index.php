@@ -375,7 +375,7 @@ Flight::json(array(
 Flight::route('GET /ad', function() {
 
 $db = Flight::db();
-$sql = "SELECT html, ad_id, impressions FROM Ad WHERE priority = '1' AND impressions < limit";
+$sql = "SELECT html, ad_id, impressions FROM Ad WHERE priority = '1' AND impressions < limits";
 $result = $db->query($sql);
 $array = $result->fetchAll();
 
@@ -415,7 +415,7 @@ $sql = "UPDATE Ad SET clicks = '$clicksnew' WHERE ad_id = '$ad_id'";
 $result = $db->query($sql);
 
 // get next ad
-$sql = "SELECT html, ad_id, impressions FROM Ad WHERE priority != '1' AND impressions < limit";
+$sql = "SELECT html, ad_id, impressions FROM Ad WHERE priority != '1' AND impressions < limits";
 $result = $db->query($sql);
 $array = $result->fetchAll();
 
