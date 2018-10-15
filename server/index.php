@@ -301,11 +301,11 @@ Flight::route('GET /track/@track_id', function($track_id) {
 $db = Flight::db();
 $sql = "SELECT version_id, notes, downloadable, visibility, version_title, wave_png FROM Version WHERE track_id = '$track_id'";
 $result = $db->query($sql);
-$versions = $result->fetch_array(MYSQLI_NUM);
+$versions = $result->fetchAll();
 
 // return ok
 Flight::json(array(
-   'versions' => $versions
+   'versions' => json_encode($versions)
 ), 200);
 });
 
@@ -315,7 +315,7 @@ Flight::route('GET /track/version/@version_id', function($version_id) {
 $db = Flight::db();
 $sql = "SELECT file_id, extension, metadata, aws_path, file_name, file_size, identifier, chunk_length, track_length FROM File WHERE version_id = '$version_id'";
 $result = $db->query($sql);
-$files = $result->fetch_array(MYSQLI_NUM);
+$files = $result->fetchAll();
 
 // return ok
 Flight::json(array(
@@ -329,7 +329,7 @@ Flight::route('GET /track/version/comments/@version_id', function($version_id) {
 $db = Flight::db();
 $sql = "SELECT comment_id, notes, start_time, end_time, checked, parent_comment_id, name FROM Comment WHERE version_id = '$version_id'";
 $result = $db->query($sql);
-$comments = $result->fetch_array(MYSQLI_NUM);
+$comments = $result->fetchAll();
 
 // return ok
 Flight::json(array(
