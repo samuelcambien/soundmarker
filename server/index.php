@@ -168,7 +168,7 @@ $result = $db->query($sql);
 
 // return ok
 Flight::json(array(
-   'project_id' => $project_id
+   'project_id' => $project_id, 'hash' => $v3uuid
 ), 200);
 });
 
