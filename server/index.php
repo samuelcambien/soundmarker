@@ -162,13 +162,13 @@ $sql = "INSERT INTO Project (title, password, active) VALUES ('$project_title', 
 $result = $db->query($sql);
 $project_id = $db->lastInsertId();
 
-$v3uuid = UUID::v3($project_id, 'Soundm@rk3r');
-$sql = "UPDATE Project SET hash = '$v3uuid' WHERE project_id = '$project_id'";
+$v4uuid = UUID::v4();
+$sql = "UPDATE Project SET hash = '$v4uuid' WHERE project_id = '$project_id'";
 $result = $db->query($sql);
 
 // return ok
 Flight::json(array(
-   'project_id' => $project_id, 'hash' => $v3uuid
+   'project_id' => $project_id, 'hash' => $v4uuid
 ), 200);
 });
 
