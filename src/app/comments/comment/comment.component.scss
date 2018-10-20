@@ -1,9 +1,61 @@
+.comment-toolbar {
+	top:0px;
+	bottom: 0px;
+	width: 38px;
+	border-radius: 0.6rem;
+	border-top-left-radius: 1.2rem;
+	border-top-right-radius: 0rem;
+	border-bottom-right-radius: 0rem;
+	background-color: #e2e7f5;
+	padding-left: 10px;
+	padding-top: 10px;
+}
+
+.comment-infobar {
+		padding-top: 10px;
+	padding-bottom: 10px;
+	padding-right: 25px;
+	padding-left: 10px;
+}
+
+.comment-play-button {
+	cursor: pointer;
+}
+
+.comment-check {
+	width: 18px;
+	height: 18px;
+	border-radius: 2rem;
+	border: 1.5px solid #bac1da;
+	margin-top: 1px;
+	transition: 0.2s;
+	-webkit-transition: 0.2s;
+	cursor: pointer;
+	// visibility: hidden;
+}
+
+.comment-check:hover {
+	background-color: #bac1da;
+		transition: 0.2s;
+	-webkit-transition: 0.2s;
+}
+
+.comment-options {
+	margin-top: -5px;
+	cursor: pointer
+	
+	
+}
+
+.comment-time {
+	margin-bottom: 0px !important;
+}
+
 .comment {
 	background-color: #eef1ff;
 	border-radius: 0.6rem;
 	margin-top: 10px;
-	padding-top: 10px;
-	padding-bottom: 15px;
+    border-top-left-radius: 1.2rem;
 }
 
 .replies {
@@ -13,18 +65,19 @@
 .comment .row {
 	margin-left: 0px;
 }
-
+/*
 .comment-play {
-	height: 14px;
+	max-height: 13px !important;
 	min-width: 32px;
-	margin-left: 10px;
     padding: 0px !important;
+    padding-top: 1px;
     margin-top: 2px;
     padding-left: 6px;
-    background: #bac1da !important;
-    border: 1px solid #bac1da !important;
+    background: #cbd1e9 !important;
+    border: none !important;
     border-radius: 0.8rem;
-}
+    
+}*/
 
 .comment-tag {
 	float: left;
@@ -35,11 +88,13 @@
 	
 }
 
+/*
+
 .play-button {
 	float: left;
-	margin-top: -1px;
+	margin-top: 0px;
 	margin-right: 3px;
-	margin-left: -1px;
+	margin-left: 0px;
 }
 
 .comment-time p {
@@ -57,12 +112,12 @@
 	    margin-left: 18px;
     margin-right: 10px;
     margin-top: 0px;
-}
+} */
 
 .name-tx {
-	margin-bottom: 0rem !important;
+	margin-bottom: 2px !important;
 	font-family: "sofia-medium";
-	color: #bac1da;
+	color: #7397ff;
 }
 
 .comment-tx {
@@ -83,7 +138,7 @@ hr {
 }
 
 .reply-row {
-	margin-top: -2px !important;
+	margin-top: 0px !important;
 	margin-bottom: -2px !important;
 }
 
@@ -106,7 +161,7 @@ user-select: none; /* Standard */
 	display: inline;
 	text-align: right;
 	float: right;
-	margin-right: 15px;
+	margin-right: 20px;
 	}
 	
 .showhidereplies {

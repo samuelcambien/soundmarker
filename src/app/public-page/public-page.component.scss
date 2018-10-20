@@ -1,8 +1,8 @@
 .public-page {
   top: 60px;
   margin-bottom: 60px;
-  width: 700px;
-  left: calc(50% - 350px);
+  width: 640px;
+  left: 60px;
   min-height: 233px;
   max-height: calc(100% - 120px);
   position: fixed;
@@ -19,16 +19,67 @@
 // responsive 
 
 @media (max-width: 768px) {
+	
+	.public-page {
+		  top: inherit;
+	  margin-top: 60px;
+	  min-height: 160px;
+	  max-height: calc(100% - 120px);
+   width: calc(100% - 120px);
+     left: 60px;
+     right: 60px;
+    max-width: 640px;
+    min-width: 536px;
+    margin-left: 0px;
+    margin-right: 0px;
+    position: fixed;
+    margin-bottom: 60px;
+    }
+    
+}
+
+@media (max-width: 696px) {
+	
+	.public-page {
+	left: inherit;
+	right: inherit;
+	 margin-left: auto;
+    margin-right: auto;
+    }
+}
+
+@media (max-width: 666px) {
+	.public-page {
+		 top: inherit;
+	  margin-top: 50px;
+	  max-height: calc(100% - 100px);
+    }
+}
+
+@media (max-width: 636px) {
+	.public-page {
+	  margin-top: 40px;
+	  max-height: calc(100% - 80px);
+    }
+}
+
+@media (max-width: 606px) {
+	.public-page {
+	  margin-top: 30px;
+	   max-height: calc(100% - 60px);
+    }
+}
+
+@media (max-width: 576px) {
 
   .public-page {
-	  top: inherit;
 	  margin-top: 20px;
 	  min-height: 160px;
 	  max-height: none;
    width: calc(100% - 40px);
      left: 20px;
      right: 20px;
-    max-width: 700px;
+    max-width: 536px;
     min-width: 268px;
     margin-left: 0px;
     margin-right: 0px;
@@ -39,7 +90,6 @@
   }
   
   .phone-scroll {
-	  position: relative;
 	  overflow-y: scroll;
 	  height: 100%;
   }

@@ -1,6 +1,6 @@
 <div class="container-fluid player-container">
 
-  <div id="popup-playbar" class="shadow">
+  <div id="popup-playbar" class="shadow hide-phone">
 
     <div class="row popup-row">
 
@@ -311,72 +311,18 @@
 
     </div>
 
-    <div class="title">
+    <div class="title unselectable">
       <h4>{{track?.title}}</h4> <p>{{player?.getCurrentPosition() | timeFormat}} / {{track.duration | timeFormat}}</p>
     </div>
 
-    <div class="top-icon hide-phone icon-action ml-auto"></div>
-
-    <div *ngIf="enableOverview" class="top-icon hide-phone list-icon" id="list-icon" role="button" (click)="goToOverview()"
-         data-toggle="tooltip" data-placement="top" title="Overview">
-
-
-      <svg width="24px" height="22px" viewBox="0 0 24 22" version="1.1" xmlns="http://www.w3.org/2000/svg"
-           xmlns:xlink="http://www.w3.org/1999/xlink">
-        <!-- Generator: Sketch 51 (57462) - http://www.bohemiancoding.com/sketch -->
-        <desc>Created with Sketch.</desc>
-        <defs></defs>
-        <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round">
-          <g id="Internet-Networks-Servers-/-Upload/Download-/-upload-dash-arrow-1"
-             transform="translate(-34.000000, -20.000000)" class="icon-stroke" stroke-width="1.5">
-            <g id="folder-music-1" transform="translate(35.000000, 21.000000)" stroke-linejoin="round">
-              <path
-                d="M19.9375,7.27272727 L19.9375,4.54545455 C19.9375,3.79233898 19.3218915,3.18181818 18.5625,3.18181818 L7.5625,3.18181818 L7.5625,1.81818182 C7.5625,1.06506625 6.94689153,0.454545455 6.1875,0.454545455 L2.0625,0.454545455 C1.30310847,0.454545455 0.6875,1.06506625 0.6875,1.81818182 L0.6875,18 C0.698195433,18.7675739 1.27536665,19.4110187 2.04282426,19.5109493 C2.81028188,19.6108799 3.53537435,19.1370026 3.7455,18.3981818 L5.9015,8.25818182 C6.0713586,7.67459902 6.60994576,7.27279232 7.22241667,7.27272727 L19.9375,7.27272727 C20.3646849,7.27258154 20.7676733,7.46935193 21.0280458,7.80521683 C21.2884183,8.14108174 21.3765956,8.57788578 21.2666667,8.98727273 L19.25,18.5327273 C19.0896055,19.1300535 18.5441281,19.5456672 17.9208333,19.5454545 L2.24308333,19.5454545"
-                id="Shape"></path>
-            </g>
-            <path d="M42.4509086,37.75 L50.5672633,37.75" id="Line" fill-rule="nonzero"></path>
-            <path d="M43.5,34.5 L51.5,34.5" id="Line" fill-rule="nonzero"></path>
-            <path d="M44.4509086,31.25 L52.5672633,31.25" id="Line" fill-rule="nonzero"></path>
-          </g>
-        </g>
-      </svg>
-
-    </div>
-
-    <div class="top-icon hide-phone text-icon" id="text-icon" (click)="showComments = !showComments"
-         [class.active]="showComments">
+    <div class="player-toolbar hide-phone  ml-auto">
+	    
+	     <div class="top-icon cloud-icon" id="cloud-icon" (click)="download()">
 
 
       <svg width="22px" height="22px" viewBox="0 0 22 22" version="1.1" xmlns="http://www.w3.org/2000/svg"
            xmlns:xlink="http://www.w3.org/1999/xlink">
-        <!-- Generator: Sketch 51 (57462) - http://www.bohemiancoding.com/sketch -->
-        <desc>Created with Sketch.</desc>
-        <defs></defs>
-        <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round"
-           stroke-linejoin="round">
-          <g id="Internet-Networks-Servers-/-Upload/Download-/-upload-dash-arrow-1"
-             transform="translate(-65.000000, -20.000000)" class="icon-stroke" stroke-width="1.5">
-            <g id="messages-bubble" transform="translate(66.000000, 21.000000)">
-              <path
-                d="M10.6578236,1.39552634e-05 C7.2733682,-0.00487001799 4.15271669,1.82840041 2.50707282,4.78828665 C0.861428952,7.74817289 0.949909343,11.3686229 2.73817252,14.2444485 L0,20 L5.74989584,17.2595575 C9.11259725,19.3520226 13.4289699,19.0910325 16.5155083,16.6086132 C19.6020468,14.1261939 20.7857069,9.9636565 19.4677154,6.22668649 C18.1497239,2.48971647 14.6174794,-0.00681020874 10.6578236,1.39552634e-05 Z"
-                id="Shape"></path>
-            </g>
-            <circle id="Oval" fill="#717274" cx="80.5" cy="30.5" r="1"></circle>
-            <circle id="Oval" fill="#717274" cx="76.5" cy="30.5" r="1"></circle>
-            <circle id="Oval" fill="#717274" cx="72.5" cy="30.5" r="1"></circle>
-          </g>
-        </g>
-      </svg>
-
-    </div>
-
-    <div class="top-icon hide-phone cloud-icon" id="cloud-icon" (click)="download()">
-
-
-      <svg width="22px" height="22px" viewBox="0 0 22 22" version="1.1" xmlns="http://www.w3.org/2000/svg"
-           xmlns:xlink="http://www.w3.org/1999/xlink">
-        <!-- Generator: Sketch 51 (57462) - http://www.bohemiancoding.com/sketch -->
-        <desc>Created with Sketch.</desc>
+        <desc></desc>
         <defs></defs>
         <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round"
            stroke-linejoin="round">
@@ -398,6 +344,63 @@
         </g>
       </svg>
 
+    </div>
+	     
+	     <div class="top-icon text-icon" id="text-icon" (click)="showComments = !showComments"
+         [class.active]="showComments">
+
+
+      <svg width="22px" height="22px" viewBox="0 0 22 22" version="1.1" xmlns="http://www.w3.org/2000/svg"
+           xmlns:xlink="http://www.w3.org/1999/xlink">
+        <desc></desc>
+        <defs></defs>
+        <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round"
+           stroke-linejoin="round">
+          <g id="Internet-Networks-Servers-/-Upload/Download-/-upload-dash-arrow-1"
+             transform="translate(-65.000000, -20.000000)" class="icon-stroke" stroke-width="1.5">
+            <g id="messages-bubble" transform="translate(66.000000, 21.000000)">
+              <path
+                d="M10.6578236,1.39552634e-05 C7.2733682,-0.00487001799 4.15271669,1.82840041 2.50707282,4.78828665 C0.861428952,7.74817289 0.949909343,11.3686229 2.73817252,14.2444485 L0,20 L5.74989584,17.2595575 C9.11259725,19.3520226 13.4289699,19.0910325 16.5155083,16.6086132 C19.6020468,14.1261939 20.7857069,9.9636565 19.4677154,6.22668649 C18.1497239,2.48971647 14.6174794,-0.00681020874 10.6578236,1.39552634e-05 Z"
+                id="Shape"></path>
+            </g>
+            <circle id="Oval" fill="#717274" cx="80.5" cy="30.5" r="1"></circle>
+            <circle id="Oval" fill="#717274" cx="76.5" cy="30.5" r="1"></circle>
+            <circle id="Oval" fill="#717274" cx="72.5" cy="30.5" r="1"></circle>
+          </g>
+        </g>
+      </svg>
+
+    </div>
+
+    <div *ngIf="enableOverview" class="top-icon list-icon" id="list-icon" role="button" (click)="goToOverview()"
+         data-toggle="tooltip" data-placement="top" title="Overview">
+
+
+      <svg width="24px" height="22px" viewBox="0 0 24 22" version="1.1" xmlns="http://www.w3.org/2000/svg"
+           xmlns:xlink="http://www.w3.org/1999/xlink">
+        <desc></desc>
+        <defs></defs>
+        <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round">
+          <g id="Internet-Networks-Servers-/-Upload/Download-/-upload-dash-arrow-1"
+             transform="translate(-34.000000, -20.000000)" class="icon-stroke" stroke-width="1.5">
+            <g id="folder-music-1" transform="translate(35.000000, 21.000000)" stroke-linejoin="round">
+              <path
+                d="M19.9375,7.27272727 L19.9375,4.54545455 C19.9375,3.79233898 19.3218915,3.18181818 18.5625,3.18181818 L7.5625,3.18181818 L7.5625,1.81818182 C7.5625,1.06506625 6.94689153,0.454545455 6.1875,0.454545455 L2.0625,0.454545455 C1.30310847,0.454545455 0.6875,1.06506625 0.6875,1.81818182 L0.6875,18 C0.698195433,18.7675739 1.27536665,19.4110187 2.04282426,19.5109493 C2.81028188,19.6108799 3.53537435,19.1370026 3.7455,18.3981818 L5.9015,8.25818182 C6.0713586,7.67459902 6.60994576,7.27279232 7.22241667,7.27272727 L19.9375,7.27272727 C20.3646849,7.27258154 20.7676733,7.46935193 21.0280458,7.80521683 C21.2884183,8.14108174 21.3765956,8.57788578 21.2666667,8.98727273 L19.25,18.5327273 C19.0896055,19.1300535 18.5441281,19.5456672 17.9208333,19.5454545 L2.24308333,19.5454545"
+                id="Shape"></path>
+            </g>
+            <path d="M42.4509086,37.75 L50.5672633,37.75" id="Line" fill-rule="nonzero"></path>
+            <path d="M43.5,34.5 L51.5,34.5" id="Line" fill-rule="nonzero"></path>
+            <path d="M44.4509086,31.25 L52.5672633,31.25" id="Line" fill-rule="nonzero"></path>
+          </g>
+        </g>
+      </svg>
+
+    </div>
+
+    
+
+   
+    
     </div>
 
   </div>
@@ -449,7 +452,7 @@
             <svg class="audioline" width="11px" height="63px" viewBox="0 0 11 63" version="1.1"
                  xmlns="http://www.w3.org/2000/svg">
               <defs></defs>
-              <g id="Page-1" stroke="none" stroke-width="1.5" fill="none" fill-rule="evenodd" stroke-linecap="round">
+              <g id="Page-1" stroke="none" stroke-width="1.5" class="audioline-fill" fill-rule="evenodd" stroke-linecap="round">
                 <circle id="Oval" stroke-linejoin="round" cx="5.5" cy="57.5" r="4.5"></circle>
                 <path d="M5.5,52.5 L5.5,0.5" id="Line" fill-rule="nonzero"></path>
               </g>
@@ -478,9 +481,8 @@
 
     <div class="comments-header row">
 
-      <h4 class="comments-title">{{getMatchingComments()?.length}} comments </h4><h4 class="checked-comments-title">|
-      Checked
-      comments</h4>
+      <h4 class="comments-title">{{getMatchingComments()?.length}} comments </h4><h4 class="checked-comments-title hide-pro">|
+      Checked</h4>
 
       <div class="comment-search ml-auto hide-phone" [class.active]="search">
 
@@ -489,8 +491,8 @@
 
         <span class="search-icon">
           <svg width="16px" height="16px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg">
-            <!-- Generator: Sketch 51 (57462) - http://www.bohemiancoding.com/sketch -->
-            <desc>Created with Sketch.</desc>
+           
+            <desc></desc>
             <defs></defs>
             <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round"
                stroke-linejoin="round">
@@ -502,10 +504,22 @@
             </g>
           </svg>
         </span>
+        
+  
 
-        <span *ngIf="search" class="clear-search" (click)="search = null">&times;</span>
+        <span *ngIf="search" class="clear-search ml-auto" (click)="search = null">&times;</span>
 
       </div>
+      
+      
+	      <div class="comment-sort sub-form hide-phone">
+	         <select>
+		      <option>Most recent</option>
+		      <option>Track time</option>
+		      <option>Name</option>
+			 </select>
+	      </div>
+      
 
     </div>
 
@@ -519,8 +533,9 @@
     >
     </app-comment>
 
-    <div *ngIf="search && getMatchingComments().length == 0">
-      there were no matching comments
+    <div *ngIf="search && getMatchingComments().length == 0" class="no-comments">
+	  
+      <p>We couldn't find any comments related to your search.</p>
     </div>
 
   </div>
@@ -529,7 +544,7 @@
 
 <ng-template #waveformsvg>
   <svg class="wave-svg" version="1.1" id="Laag_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-	 viewBox="0 0 320 38.1" enable-background="new 0 0 320 38.1" xml:space="preserve">
+	 viewBox="0 0 320 38.1" xml:space="preserve" preserveAspectRatio="none">
     <g>
 	<path d="M29.4,5.4c0,0.9,0,1.8,0.1,2.7c0-0.9,0-1.8,0.1-2.7C29.4,5.4,29.4,5.4,29.4,5.4z"/>
 	<path d="M0.1,38.1h319.5c0-1.3-0.1-2.7-0.1-4c0-1.1-0.1-2.2-0.1-3.3c-0.1-2.4-0.1-4.8-0.1-7.3c0-1.9-0.1-3.8-0.1-5.7

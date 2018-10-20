@@ -1,12 +1,77 @@
-<div class="comment container-fluid">
+
+
+<div class="comment">
+	<div class="row">
+	
+	<div class="comment-toolbar">
+		
+		<div (click)="goToCommentTime(comment)" class="comment-play-button">
+      <div class="play-button">
+        <svg width="18px" height="18px" viewBox="0 0 27 27" version="1.1" xmlns="http://www.w3.org/2000/svg">
+          <defs></defs>
+          <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+            <g id="Group-5">
+              <g id="Group-6">
+                <circle id="Oval" fill="#7397ff" cx="13.5" cy="13.5" r="13.5"></circle>
+                <path
+                  d="M16.3141199,9.00179825 L20.7528354,16.3448585 C21.3242409,17.2901466 21.0211492,18.5196696 20.0758611,19.0910751 C19.7637352,19.2797482 19.4059591,19.3794796 19.0412399,19.3794796 L10.1638089,19.3794796 C9.05923941,19.3794796 8.16380891,18.4840491 8.16380891,17.3794796 C8.16380891,17.0147604 8.26354033,16.6569843 8.45221343,16.3448585 L12.8909289,9.00179825 C13.4623344,8.05651017 14.6918575,7.75341844 15.6371456,8.32482392 C15.9142829,8.4923472 16.1465966,8.72466097 16.3141199,9.00179825 Z"
+                  id="Triangle-2" fill="#FFFFFF"
+                  transform="translate(14.602672, 13.707802) rotate(90.000000) translate(-14.602672, -13.707802) "></path>
+              </g>
+            </g>
+          </g>
+        </svg>
+      </div>
+    </div>
+    
+    <div class="comment-check"></div>
+    
+    <div class="comment-options">
+    
+    
+          <svg width="17px" height="5px" viewBox="0 0 24 8" version="1.1" xmlns="http://www.w3.org/2000/svg"
+               xmlns:xlink="http://www.w3.org/1999/xlink">
+            <g id="Page-1" stroke="none" stroke-width="1" fill="#bac1da" fill-rule="evenodd" stroke-linecap="round"
+               stroke-linejoin="round">
+              <g id="Interface-Essential-/-Menu-/-navigation-menu-horizontal" transform="translate(0.000000, -9.000000)"
+                 class="menu-icon" stroke="#bac1da" stroke-width="1.5" class="menu-icon">
+                <g id="Group" transform="translate(0.000000, 9.000000)">
+                  <g id="navigation-menu-horizontal">
+                    <circle id="Oval" cx="4" cy="4" r="2.5"></circle>
+                    <circle id="Oval" cx="13" cy="4" r="2.5"></circle>
+                    <circle id="Oval" cx="22" cy="4" r="2.5"></circle>
+                  </g>
+                </g>
+              </g>
+            </g>
+          </svg>
+          
+          </div>
+		
+	</div>
+	
+	
+	
+	<div class="comment-infobar col">
+		
+
+		
+		
 
   <div class="row">
 
     <div class="comment-name"><p class="name-tx" [innerHtml]="comment.name | titlecase | highlight: search"></p></div>
-
+    <div *ngIf="comment.end; then interval else start" ></div>
+      <ng-template #start>
+        <p class="comment-time">&nbsp;[{{comment.start | timeFormat}}] </p>
+      </ng-template>
+      <ng-template #interval>
+        <p class="comment-time">&nbsp;[{{comment.start | timeFormat}} - {{comment.end | timeFormat}}] </p>
+      </ng-template>
+<!--
     <button (click)="goToCommentTime(comment)" class="btn btn-secondary btn-sm comment-play">
       <div class="play-button">
-        <svg width="14px" height="14px" viewBox="0 0 27 27" version="1.1" xmlns="http://www.w3.org/2000/svg">
+        <svg width="13px" height="13px" viewBox="0 0 27 27" version="1.1" xmlns="http://www.w3.org/2000/svg">
           <defs></defs>
           <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
             <g id="Group-5">
@@ -29,13 +94,14 @@
         <p>{{comment.start | timeFormat}} - {{comment.end | timeFormat}}</p>
       </ng-template>
     </button>
+-->
 
-
-    <p class="date-tx ml-auto">{{getTimeHumanized(comment.time)}}</p>
+    <p class="date-tx ml-auto hide-phone">{{getTimeHumanized(comment.time)}}</p>
 
   </div>
 
   <div class="row comment-text">
+	 
     <p class="comment-tx" [innerHtml]="comment.text | highlight: search"></p>
   </div>
 
@@ -100,7 +166,8 @@
     </div>
 
     <app-reply-form *ngIf="reply != null" [reply]="reply" (cancel)="clearReply()"></app-reply-form>
-
+ 
   </div>
-
+	</div>
+	</div>
 </div>

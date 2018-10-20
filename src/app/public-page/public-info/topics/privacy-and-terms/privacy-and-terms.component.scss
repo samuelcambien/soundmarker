@@ -3,7 +3,7 @@
 
 
 .terms-card {
-	margin-top: 30px;
+	margin-top: 10px;
 	margin-bottom: 30px;
 	border-radius: 0.6rem;
 	background-color: #7397FF;
@@ -11,7 +11,7 @@
 	padding: 10px;
 	padding-bottom: 12px;
 	display: block;
-	top: 25px;
+	top: 30px;
 }
 
 .dropdown-item {
@@ -33,6 +33,12 @@
 	background: #6388f5;
 		transition: 0.2s;
 	-webkit-transition: 0.2s;
+}
+
+.dropdown-item span {
+	margin-right: 10px;
+	display: inline-block;
+	vertical-align: middle;
 }
 
 
