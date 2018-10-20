@@ -65,24 +65,33 @@ export class PublicUploadFormComponent {
         let project_id = response["project_id"];
         this.uploader.queue.forEach(track => {
 
-          Utils.sendPostRequest(RestUrl.TRACK_NEW, {
-            project_id: project_id,
-            title: track._file.name
-          }).then(response =>
-            Utils.sendPostRequest(RestUrl.VERSION_NEW, {
-              track_id: response["track_id"]
-            })
-          ).then(response =>
-            Utils.sendPostRequest(RestUrl.UPLOAD, {
-              version_id: response["version_id"],
-              identifier: 0,
-              track_length: 15,
-              chunk_length: 10,
-              file_name: track._file.name,
-              file_size: 5000,
-              waveform_png: 123456789
-            })
-          );
+          Mp3Encoder.decode(track._file)
+            .then(buffer => buffer);
+
+          // require("audio-decode")(buffer, (err, buf: AudioBuffer) =>
+          //   Mp3Encoder.convertWavOther(new File([
+          //     require('audiobuffer-to-wav')(buf)
+          //   ], file.name), callback)
+          // );
+
+          // Utils.sendPostRequest(RestUrl.TRACK_NEW, {
+          //   project_id: project_id,
+          //   title: track._file.name
+          // }).then(response =>
+          //   Utils.sendPostRequest(RestUrl.VERSION_NEW, {
+          //     track_id: response["track_id"]
+          //   })
+          // ).then(response =>
+          //   Utils.sendPostRequest(RestUrl.UPLOAD, {
+          //     version_id: response["version_id"],
+          //     identifier: 0,
+          //     track_length: 15,
+          //     chunk_length: 10,
+          //     file_name: track._file.name,
+          //     file_size: 5000,
+          //     waveform_png: 123456789
+          //   })
+          // );
 
           this.convert(track);
 

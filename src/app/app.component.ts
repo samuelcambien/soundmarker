@@ -21,15 +21,15 @@ export class RestUrl {
 
   public static UPLOAD: string = RestUrl.DATA + "/file/new";
 
-  public static PROJECT: string = RestUrl.BACKEND + "/project";
+  public static PROJECT: string = RestUrl.MOCK + "/project";
 
   public static PROJECT_SHARE: string = RestUrl.BACKEND + "/project/url";
 
   public static PROJECT_NEW: string = RestUrl.PROJECT + "/new";
 
-  public static PROJECT_TRACKS: string = RestUrl.BACKEND + "/project/tracks";
+  public static PROJECT_TRACKS: string = RestUrl.MOCK + "/project/tracks";
 
-  public static TRACK: string = RestUrl.BACKEND + "/track";
+  public static TRACK: string = RestUrl.MOCK + "/track";
 
   public static TRACK_NEW: string = RestUrl.TRACK + "/new";
 

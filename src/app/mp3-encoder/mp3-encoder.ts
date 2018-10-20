@@ -122,10 +122,12 @@ export class Mp3Encoder {
     return mp3Data;
   }
 
-  public static convertFile(file: File, converter: Function) {
-    let reader: FileReader = new FileReader();
-    reader.onload = () => converter(reader.result);
-    reader.readAsArrayBuffer(file);
+  public static convertFile(file: File, converter?: Function): Promise<any> {
+    return new Promise<any>(resolve => {
+      let reader: FileReader = new FileReader();
+      reader.onload = () => resolve(reader.result);
+      reader.readAsArrayBuffer(file);
+    })
   }
 
   static getName(name: String): String {
@@ -138,39 +140,38 @@ export class Mp3Encoder {
     return name.split(/(.*)\.(.*)/)[2];
   }
 
-  public static convertWav16bit(file: File, callback: Function) {
-    Mp3Encoder.convertFile(file, (buffer: ArrayBuffer) =>
-      callback(
-        Mp3Encoder.encodeMp3(buffer, file.name)
-      )
-    );
+  public static convertWav16bit(file: File): Promise<any> {
+
+    return Mp3Encoder.convertFile(file)
+      .then((buffer: ArrayBuffer) => Mp3Encoder.encodeMp3(buffer, file.name));
   }
 
-  public static convertWavOther(file: File, callback: Function) {
-    Mp3Encoder.convertFile(file, (buffer: ArrayBuffer) => {
-      let wav = new WaveFile();
-      wav.fromBuffer(new Uint8Array(buffer));
-      wav.toBitDepth('16', false);
-      Mp3Encoder.convertWav16bit(new File([
-        wav.toBuffer()
-      ], file.name), callback);
-    });
+  public static convertWavOther(file: File, callback: Function): Promise<any> {
+    return Mp3Encoder.convertFile(file)
+      .then((buffer: ArrayBuffer) => {
+        let wav = new WaveFile();
+        wav.fromBuffer(new Uint8Array(buffer));
+        wav.toBitDepth('16', false);
+        Mp3Encoder.convertWav16bit(new File([
+          wav.toBuffer()
+        ], file.name));
+      });
   }
 
   public static convertFlac(file: File, callback: Function) {
     // require("flac.js");
-    Mp3Encoder.convertFile(file, (buffer: ArrayBuffer) => {
-      let decode = require("audio-decode")(buffer, (err, buf: AudioBuffer) =>
+    return Mp3Encoder.convertFile(file, (buffer: ArrayBuffer) => {
+
+      this.decode(buffer).then((buf: AudioBuffer) =>
         Mp3Encoder.convertWavOther(new File([
           require('audiobuffer-to-wav')(buf)
         ], file.name), callback)
-      )
-      console.log(decode);
+      );
     });
   }
 
-  public static decode(buffer: ArrayBuffer, callback: Function) {
-
+  public static decode(buffer: ArrayBuffer): Promise<any> {
+    return require("audio-decode")(buffer);
   }
 
   public static convertAlac(file: File, callback: Function) {
