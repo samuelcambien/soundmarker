@@ -168,3 +168,13 @@ export class Player {
     });
   }
 }
+
+export class Playback {
+
+  private start: number;
+  private end: number;
+
+  play() {
+
+  }
+}

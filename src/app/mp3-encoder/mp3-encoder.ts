@@ -159,13 +159,18 @@ export class Mp3Encoder {
 
   public static convertFlac(file: File, callback: Function) {
     // require("flac.js");
-    Mp3Encoder.convertFile(file, (buffer: ArrayBuffer) =>
-      require("audio-decode")(buffer, (err, buf: AudioBuffer) =>
+    Mp3Encoder.convertFile(file, (buffer: ArrayBuffer) => {
+      let decode = require("audio-decode")(buffer, (err, buf: AudioBuffer) =>
         Mp3Encoder.convertWavOther(new File([
           require('audiobuffer-to-wav')(buf)
         ], file.name), callback)
       )
-    );
+      console.log(decode);
+    });
+  }
+
+  public static decode(buffer: ArrayBuffer, callback: Function) {
+
   }
 
   public static convertAlac(file: File, callback: Function) {
@@ -179,14 +184,14 @@ export class Mp3Encoder {
     // var AV = require('av');
     // require('mp3');
 
-    Mp3Encoder.convertFile(file, (buffer: ArrayBuffer) =>
-      require("audio-decode")(buffer, (buf: AudioBuffer) => {
-
-        Mp3Encoder.convertWavOther(new File([
-          require('audiobuffer-to-wav')(buf)
-        ], file.name), callback)
-      })
-    );
+    // Mp3Encoder.convertFile(file, (buffer: ArrayBuffer) =>
+    //   require("audio-decode")(buffer, (buf: AudioBuffer) => {
+    //     require("alac");
+    //     Mp3Encoder.convertWavOther(new File([
+    //       require('audiobuffer-to-wav')(buf)
+    //     ], file.name), callback)
+    //   })
+    // );
 
     // console.log(
     //   require("src/app/mp3-encoder/alac")

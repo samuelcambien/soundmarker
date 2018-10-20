@@ -16,7 +16,7 @@ const appRoutes: Routes = [
     component: PublicUploadingFilesComponent
   },
   {
-    path: "player/:project_id",
+    path: "player/:project_hash",
     component: PublicPlayerPageComponent,
     children: [
       {

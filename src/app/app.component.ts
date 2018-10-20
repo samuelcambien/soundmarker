@@ -1,6 +1,7 @@
 import {Component} from '@angular/core';
 import * as moment from "moment";
 import {now} from "moment";
+import {Observable} from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -16,17 +17,19 @@ export class RestUrl {
 
   private static BACKEND: string = "http://soundmarker-env.mc3wuhhgpz.eu-central-1.elasticbeanstalk.com";
 
-  private static DATA: string = "http://localhost:8080/rest";
+  private static DATA: string = RestUrl.BACKEND;
 
-  public static UPLOAD: string = RestUrl.DATA + "/upload/file";
+  public static UPLOAD: string = RestUrl.DATA + "/file/new";
 
-  public static PROJECT: string = RestUrl.MOCK + "/project";
+  public static PROJECT: string = RestUrl.BACKEND + "/project";
+
+  public static PROJECT_SHARE: string = RestUrl.BACKEND + "/project/url";
 
   public static PROJECT_NEW: string = RestUrl.PROJECT + "/new";
 
-  public static PROJECT_TRACKS: string = RestUrl.MOCK + "/project/tracks";
+  public static PROJECT_TRACKS: string = RestUrl.BACKEND + "/project/tracks";
 
-  public static TRACK: string = RestUrl.MOCK + "/track";
+  public static TRACK: string = RestUrl.BACKEND + "/track";
 
   public static TRACK_NEW: string = RestUrl.TRACK + "/new";
 
@@ -68,28 +71,40 @@ export class Utils {
     }, false);
   }
 
-  public static sendGetRequest(url, data, params, callback): void {
-    let trackRequest = new XMLHttpRequest();
-    for (let entry of data) {
-      url += "/" + entry;
-    }
-    trackRequest.open("GET", url, true);
-    trackRequest.send(params);
-    trackRequest.addEventListener("readystatechange", () => {
-      if (trackRequest.readyState == 4 && trackRequest.status == 200) {
-        callback(JSON.parse(trackRequest.responseText));
-      }
-    }, false);
+  public static sendGetRequest(url, data, params): Promise<any> {
+
+    return new Promise<any>((resolve, reject) => {
+        let trackRequest = new XMLHttpRequest();
+        for (let entry of data) {
+          url += "/" + entry;
+        }
+        trackRequest.open("GET", url, true);
+        trackRequest.onload = () => resolve(JSON.parse(trackRequest.responseText));
+        trackRequest.onerror = () => reject(trackRequest.statusText);
+        // trackRequest.addEventListener("readystatechange", () => {
+        //   if (trackRequest.readyState == 4 && trackRequest.status == 200) {
+        //     resolve(JSON.parse(trackRequest.responseText));
+        //   } else {
+        //     reject()
+        //   }
+        // }, false);
+        trackRequest.send(params);
+      });
   }
 
-  public static sendPostRequest(url, data, callback?): void {
-    let trackRequest = new XMLHttpRequest();
-    trackRequest.open("POST", url, true);
-    trackRequest.send(JSON.stringify(data));
-    trackRequest.addEventListener("readystatechange", () => {
-      if (trackRequest.readyState == 4 && trackRequest.status == 200  ) {
-        callback(JSON.parse(trackRequest.responseText));
-      }
-    }, false);
+  public static sendPostRequest(url, data, callback?): Promise<any> {
+
+    return new Promise((resolve, reject) => {
+      let trackRequest = new XMLHttpRequest();
+      trackRequest.onload = () => resolve(JSON.parse(trackRequest.responseText));
+      trackRequest.onerror = () => reject(trackRequest.statusText);
+      trackRequest.open("POST", url, true);
+      // trackRequest.addEventListener("readystatechange", () => {
+      //   if (trackRequest.readyState == 4 && trackRequest.status == 200) {
+      //     callback(JSON.parse(trackRequest.responseText));
+      //   }
+      // }, false);
+      trackRequest.send(JSON.stringify(data));
+    });
   }
 }

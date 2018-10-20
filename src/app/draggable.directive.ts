@@ -5,20 +5,20 @@ import {Directive, EventEmitter, HostListener, Output} from "@angular/core";
 })
 export class DraggableDirective {
 
-  @Output() dragStart = new EventEmitter<PointerEvent>();
-  @Output() dragMove = new EventEmitter<PointerEvent>();
-  @Output() dragEnd = new EventEmitter<PointerEvent>();
+  @Output() dragStart = new EventEmitter<MouseEvent>();
+  @Output() dragMove = new EventEmitter<MouseEvent>();
+  @Output() dragEnd = new EventEmitter<MouseEvent>();
 
   private dragging = false;
 
   @HostListener('pointerdown', ['$event'])
-  onPointerDown(event: PointerEvent): void {
+  onPointerDown(event: MouseEvent): void {
     this.dragging = true;
     this.dragStart.emit(event);
   }
 
   @HostListener('document:pointermove', ['$event'])
-  onPointerMove(event: PointerEvent): void {
+  onPointerMove(event: MouseEvent): void {
     if (!this.dragging) {
       return;
     }
@@ -27,7 +27,7 @@ export class DraggableDirective {
   }
 
   @HostListener('document:pointerup', ['$event'])
-  onPointerUp(event: PointerEvent): void {
+  onPointerUp(event: MouseEvent): void {
     if (!this.dragging) {
       return;
     }
