@@ -1,11 +1,15 @@
-<nav class="wide-nav navbar navbar-expand-sm navbar-light bg-white shadow-topbar">
+<nav class="wide-nav navbar navbar-expand-sm   shadow-topbar">
   <a class="navbar-brand" href="#">
     <div class="soundmarker-logo"></div>
   </a>
 
   <div class="ml-auto">
+	 
+	  
+	  
     <div *ngIf="messages?.length > 0" class="message-item dropdown ml-auto">
-      <button class="btn btn-primary btn-sm btn-note dropdown-toggle" type="button" id="dropdownMenuButton"
+	    
+      <!-- <button class="btn btn-primary btn-sm btn-note dropdown-toggle" type="button" id="dropdownMenuButton"
               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         Messages <span class="badge badge-light">{{messages?.length}}</span>
       </button>
@@ -18,11 +22,53 @@
             <u>read more</u>
           </a>
         </div>
-      </div>
-    </div>
-  </div>
+      </div>-->
+     
+      
+      <div class="btn-group btn-group-sm btn-group-toggle show-messages" data-toggle="buttons" id="dropdownMenuButton">
+	          <label class="btn btn-link">
+               <span>
+						
 
-  <div class="navbar " id="navbarNavDropdown">
+<svg width="14px" height="18px" viewBox="0 0 14 18" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
+        <g id="Internet-Networks-Servers-/-Upload/Download-/-upload-dash-arrow-1" transform="translate(-119.000000, -136.000000)" stroke="#7397ff" stroke-width="1.5">
+            <g id="Group-2" transform="translate(120.000000, 137.000000)">
+                <path d="M0,13 L12,13" id="Shape"></path>
+                <path d="M12,13 C12,13 10.8,11.9006734 10.8,7.94949495 C10.8,4.79292929 8.7504,2 6,2 C3.2496,2 1.2,4.79292929 1.2,7.94949495 C1.2,11.9217172 0,13 0,13" id="Shape"></path>
+                <path d="M7,15 C7,15.5522847 6.55228475,16 6,16 C5.44771525,16 5,15.5522847 5,15" id="Shape"></path>
+                <path d="M6,2 L6,0.5" id="Shape"></path>
+            </g>
+        </g>
+    </g>
+</svg>
+					</span>
+            </label>
+      
+      
+      <div class="messages dropdown-menu" aria-labelledby="dropdownMenuButton">
+        <div class="messages arrow-up"></div>
+        <div class="dropdown-container shadow">
+          <a class="dropdown-item" href="" data-toggle="modal" data-target=".info-modal-aboutus">
+            <h5>George@baker.com uploaded 7 tracks</h5>
+            Hey guys, I loved the session last sa...
+            <u>read more</u>
+          </a>
+        </div>
+      </div>
+      </div>
+      
+      <div class="notifications"><p>1</p></div>
+      
+      </div>
+       
+      
+    
+  </div>
+  
+ 
+
+  <div class="navbar main-menu-icon" id="navbarNavDropdown">
 
     <ul class="nav nav-pills">
 

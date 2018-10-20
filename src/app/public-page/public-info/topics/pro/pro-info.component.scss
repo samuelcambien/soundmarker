@@ -1,7 +1,11 @@
+
+
+
 .login-container {
-  border-bottom: 1px solid #dadada;
-  padding-top: 16px;
-  padding-bottom: 16px;
+  border-bottom: 1px solid #eef1ff;
+  padding: 25px;
+  margin-bottom: 20px;
+  
 }
 
 .mail-login, .mail-login .form-control {
@@ -18,7 +22,7 @@
 
 .form-inline, .form-row {
   width: 100%;
-  margin: 0;
+  margin-left: 0px;
 }
 
 .btn {
@@ -30,18 +34,97 @@
 }
 
 .prow {
-	padding: 10px !important;
+	padding-left: 15px !important;
+	padding-right: 15px !important;
+	padding-top: 15px !important;
+}
+
+.pro-card-btn {
+	background-color: white;
+	width: 100%;
+	margin-bottom: 25px;
+	color: #7397ff !important;
+	font-family: 'sofia-medium';
+	transition: all .2s ease-in-out;
+}
+
+.pro-card-btn:hover {
+	transition: all .2s ease-in-out;
+	transform: scale(1.02); 
+	
 }
 
 .card-body p {
 	color: #717db0;
 }
 
-.inf-card, .card-body {
+.card-body {
 	padding-bottom: 0px !important;
 	margin-bottom: 0px !important;
-	padding-top: 0px !important;
 	margin-top: 0px !important;
 	padding-left: 0px !important;
 	padding-right: 0px !important;
+}
+
+.pricing-card {
+	padding-left: 25px;
+	padding-right: 25px;
+	background: #7397ff;
+}
+
+.card-body h2 {
+	color: white;
+}
+
+.pricing-title {
+	color: white !important;
+}
+
+@media (max-width: 576px) {
+	
+.card-title.pricing-title {
+	font-size: 50pt !important;
+	line-height: 48pt !important;
+}
+
+.permonth.pricing-title {
+	font-size: 10pt !important;
+}
+
+.card-body h5 {
+	font-size: 10pt !important;
+}
+
+.card-body p {
+	font-size: 10pt !important;
+}
+
+}
+
+.permonth {
+	margin-top: 46px;
+	margin-left: 6px;
+}
+
+.pricing-card .card-body ul {
+	padding: 0;
+    list-style-type: none;
+}
+
+.pricing-card .card-body ul li {
+	font-size: 10pt;
+	line-height: 22pt;
+	color: white;
+}
+
+.pro-footer {
+	width: 100%;
+	background-color: #f9f9ff;
+	padding-top: 40px;
+	padding-bottom: 30px;
+}
+
+.pro-footer p {
+	color: #717db0;
+	text-align: center;
 }

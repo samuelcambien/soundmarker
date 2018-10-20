@@ -4,15 +4,17 @@
 	border-radius: 0.6rem;
 }
 
-.info-card {
-	margin-left: 5px;
-	margin-right: 5px;
-	
+
+
+
+.dark-card {
+	background-color: #7397ff;
 }
 
-.col-sm-4 {
-	padding: 0px;
+.dark-card .card-body h2, .dark-card .card-body p {
+	color: #ffffff;
 }
+
 
 
 
@@ -25,10 +27,7 @@
 	color: #717db0;
 }
 
-.info-heading p {
-	color: #717db0;
-	font-size: 12pt;
-}
+
 
 .info-svg {
 	width: 120px;
@@ -45,4 +44,16 @@
 
 .row {
 	padding-left: 15px; padding-right: 15px;
+}
+
+@media (max-width: 576px) {
+
+.card-body h5 {
+	font-size: 10pt !important;
+}
+
+.card-body p {
+	font-size: 10pt !important;
+}
+
 }

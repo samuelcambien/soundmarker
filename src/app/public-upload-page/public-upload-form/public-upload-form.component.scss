@@ -10,7 +10,15 @@ textarea {
 }
 
 .free-upload {
-  width: 100%;
+  margin-right: -1px !important;
+  padding: 0px !important;
+  margin-bottom: 0px !important;
+  height: 29px;
+}
+
+.plane-icon {
+	margin-top: -1px;
+	margin-left: -1px;
 }
 
 textarea.form-control {
@@ -26,10 +34,18 @@ textarea.form-control {
 }
 
 .btn-outline-form {
-	padding-left: 9px !important;
-	padding-right: 9px !important;
+	padding-left: 9.4px !important;
+	padding-right: 9.4px !important;
+	
 }
 
+.free-upload:disabled  {
+	opacity: 0.2;
+}
+
+.allow-downloads {
+	width: 100%;
+}
 
 
 // file select
@@ -164,7 +180,7 @@ table tr {
 
 }
 
-table button {
+table .cross {
   opacity: 0;
   -webkit-transition: 100ms;
   -moz-transition: 100ms;
@@ -172,7 +188,7 @@ table button {
   transition: 100ms;
 }
 
-table tr:hover button {
+table tr:hover .cross {
   opacity: 1;
 }
 
@@ -190,7 +206,7 @@ table tr td {
 table tr td p {
   font-size: 8pt;
   font-family: 'sofia-light';
-  color: #2F2F2F;
+  color: #717db0;
   font-size: 10pt;
   margin-bottom: 0;
   padding-bottom: 0;
@@ -201,23 +217,22 @@ table tr td p {
 
 }
 
-.btn-cross {
+.cross {
   background: -webkit-linear-gradient(left, rgba(255, 255, 255, 0) 0%, #ffffff 100%);
   color: red;
-  font-size: 14pt;
-  margin-right: 0px;
+  font-size: 16pt;
+  margin-left: -16px;
   border: 0;
-  padding: 2px;
-
+  padding: 1px;
+  font-family: 'sofia-regular';
 }
 
 .btn-cross:focus {
   outline: 0;
 }
 
-.remove {
-  font-size: 20pt;
-  color: #FF857D;
+.delete {
+  color: pink;
 }
 
 // upload fields

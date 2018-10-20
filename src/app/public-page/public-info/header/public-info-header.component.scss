@@ -1,13 +1,44 @@
+
+.show-messages {
+	height: 29px;
+	padding-top: 0px;
+	margin-right: -5px;
+	border-radius: 0.2rem;
+}
+
+.show-messages:hover {
+	background-color: #eef1ff;
+}
+
 .navbar {
 	height: 48px;
   padding: 0rem 0.6rem;
   border-top-left-radius: 0.6rem;
   border-top-right-radius: 0.6rem;
  border-bottom: 1px solid #eef1ff;
-  
 }
 
+.navbar .main-menu-icon {
+	border-bottom: none;
+}
 
+.notifications {
+	background: pink;
+	border-radius: 50%;
+	color: white;
+	padding: 0px;
+	height: 13px;
+	width: 13px;
+	position: absolute;
+	margin-left: 22px;
+	margin-top: -32px;
+}
+
+.notifications p {
+	font-size: 8pt;
+	color: white;
+	text-align: center;
+}
 
 .arrow-up {
   width: 0; 
@@ -21,7 +52,7 @@
 }
 
 .messages.arrow-up {
-	margin-right: 100px;
+	margin-right: 64px;
 }
 
 .btn-note {
@@ -54,7 +85,7 @@
 
 
 .soundmarker-logo {
-  background: url(../../public-info/header/sm-logo-topbar.svg);
+  background: url(../../public-info/header/sm-logo-topbar-beta.svg);
   width: 154px;
   height: 46px;
   background-size: 100%;
@@ -69,7 +100,7 @@
 
 .nav-link {
    color: #5673AB ;
-   padding: .42rem .42rem !important;
+   padding: .40rem .42rem !important;
    background: none !important;
 }
 
@@ -134,7 +165,7 @@
 	background: transparent;
 	transition:visibility 0s linear 0.05s,opacity 0.05s linear;
 	width: 340px;
-	left: -192px;
+	left: -254px;
 }
 
 .dropdown-divider {
@@ -185,6 +216,8 @@
 #menu {
 	margin-top: 0px;
 }
+
+
 
 
 // responsive
