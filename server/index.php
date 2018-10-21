@@ -204,7 +204,7 @@ $downloadable = isset(json_decode(Flight::request()->getBody())->downloadable) ?
 $visibility = isset(json_decode(Flight::request()->getBody())->visibility) ? json_decode(Flight::request()->getBody())->visibility : 1;
 $version_notes = isset(json_decode(Flight::request()->getBody())->version_notes) ? json_decode(Flight::request()->getBody())->version_notes : "";
 $version_title = isset(json_decode(Flight::request()->getBody())->version_title) ? json_decode(Flight::request()->getBody())->version_title : "";
-$wave_png = json_decode(Flight::request()->getBody())->wave_png;
+$wave_png = isset(json_decode(Flight::request()->getBody())->wave_png) ? json_decode(Flight::request()->getBody())->wave_png : "";
 
 $db = Flight::db();
 $sql = "INSERT INTO Version (track_id, downloadable, visibility, notes, version_title, wave_png) VALUES ('$track_id', '$downloadable', '$visibility', '$version_notes', '$version_title', '$wave_png')";
