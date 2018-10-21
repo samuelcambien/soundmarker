@@ -177,8 +177,8 @@ Flight::json(array(
 Flight::route('POST /track/new', function() {
 
 $project_id = Flight::request()->data->project_id;
-$track_title = (Flight::request()->data->track_title ?: "");
-$track_artist = (Flight::request()->data->track_artist ?: "");
+$track_title = Flight::request()->data->track_title ? Flight::request()->data->track_title : "");
+$track_artist = Flight::request()->data->track_artist ? Flight::request()->data->track_artist : "");
 
 $db = Flight::db();
 if ($project_id) {
@@ -200,10 +200,10 @@ Flight::route('POST /track/version', function() {
 
 // Todo: add SVG?
 $track_id = Flight::request()->data->track_id;
-$downloadable = (Flight::request()->data->downloadable ?: 0);
-$visibility = (Flight::request()->data->visibility ?: 1);
-$version_notes = (Flight::request()->data->version_notes ?: "");
-$version_title = (Flight::request()->data->version_title ?: "");
+$downloadable = Flight::request()->data->downloadable ? Flight::request()->data->downloadable : 0);
+$visibility = Flight::request()->data->visibility ? Flight::request()->data->visibility : 1);
+$version_notes = Flight::request()->data->version_notes ? Flight::request()->data->version_notes : "");
+$version_title = Flight::request()->data->version_title ? Flight::request()->data->version_title : "");
 $wave_png = Flight::request()->data->wave_png;
 
 $db = Flight::db();
@@ -222,13 +222,13 @@ Flight::route('POST /file/new', function() {
 // Todo: check if files actually get uploaded 
 // And put in DB
 $version_id = Flight::request()->data->version_id;
-$identifier = (Flight::request()->data->identifier ?: 0);
-$track_length = (Flight::request()->data->track_length ?: 0);
-$chunk_length = (Flight::request()->data->chunk_length ?: 0);
-$file_size = (Flight::request()->data->track_length ?: 0);
-$file_name = (Flight::request()->data->chunk_length ?: "");
-$metadata = (Flight::request()->data->metadata ?: "");
-$extension = (Flight::request()->data->extension ?: "");
+$identifier = Flight::request()->data->identifier ? Flight::request()->data->identifier : 0);
+$track_length = Flight::request()->data->track_length ? Flight::request()->data->track_length : 0);
+$chunk_length = Flight::request()->data->chunk_length ? Flight::request()->data->chunk_length : 0);
+$file_size = Flight::request()->data->file_size ? Flight::request()->data->file_size : 0);
+$file_name = Flight::request()->data->file_name ? Flight::request()->data->file_name : "");
+$metadata = Flight::request()->data->metadata ? Flight::request()->data->metadata : "");
+$extension = Flight::request()->data->extension ? Flight::request()->data->extension : "");
 
 $db = Flight::db();
 $sql = "INSERT INTO File (version_id, file_name, file_size, metadata, extension, chunk_length, track_length, identifier) VALUES ('$version_id', '$file_name', '$file_size', '$extension', '$chunk_length', '$track_length', '$track_length' , '$identifier')";
@@ -341,11 +341,11 @@ Flight::json(array(
 Flight::route('POST /track/version/comment', function() {
 
 $version_id = Flight::request()->data->version_id;
-$notes = (Flight::request()->data->notes ?: "");
-$name = (Flight::request()->data->name ?: "");
-$start_time = (Flight::request()->data->start_time ?: "");
-$end_time = (Flight::request()->data->end_time ?: "");
-$parent_comment_id = (Flight::request()->data->parent_comment_id ?: "");
+$notes = Flight::request()->data->notes ? Flight::request()->data->notes : "");
+$name = Flight::request()->data->name ? Flight::request()->data->name : "");
+$start_time = Flight::request()->data->start_time ? Flight::request()->data->start_time : "");
+$end_time = Flight::request()->data->end_time ? Flight::request()->data->end_time : "");
+$parent_comment_id = Flight::request()->data->parent_comment_id ? Flight::request()->data->parent_comment_id : "");
 
 $db = Flight::db();
 $sql = "INSERT INTO Comment (version_id, notes, name, start_time, end_time, parent_comment_id) VALUES ('$version_id', '$notes', '$name', '$start_time', '$end_time', '$parent_comment_id')";
