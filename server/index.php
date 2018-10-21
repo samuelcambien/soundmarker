@@ -344,7 +344,7 @@ $comments = $result->fetchAll();
 
 // return ok
 Flight::json(array(
-   'comments' => $comments
+   'comments' => array($comments)
 ), 200);
 });
 
