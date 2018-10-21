@@ -177,8 +177,8 @@ Flight::json(array(
 Flight::route('POST /track/new', function() {
 
 $project_id = json_decode(Flight::request()->getBody())->project_id;
-$track_title = json_decode(isset(Flight::request()->getBody())->track_title) ? json_decode(Flight::request()->getBody())->track_title : "";
-$track_artist = json_decode(isset(Flight::request()->getBody())->track_artist) ? json_decode(Flight::request()->getBody())->track_artist : "";
+$track_title = isset(json_decode(Flight::request()->getBody())->track_title) ? json_decode(Flight::request()->getBody())->track_title : "";
+$track_artist = isset(json_decode(Flight::request()->getBody())->track_artist) ? json_decode(Flight::request()->getBody())->track_artist : "";
 
 $db = Flight::db();
 if ($project_id) {
@@ -200,10 +200,10 @@ Flight::route('POST /track/version', function() {
 
 // Todo: add SVG?
 $track_id = json_decode(Flight::request()->getBody())->track_id;
-$downloadable = json_decode(isset(Flight::request()->getBody())->downloadable) ? json_decode(Flight::request()->getBody())->downloadable : 0;
-$visibility = json_decode(isset(Flight::request()->getBody())->visibility) ? json_decode(Flight::request()->getBody())->visibility : 1;
-$version_notes = json_decode(isset(Flight::request()->getBody())->version_notes) ? json_decode(Flight::request()->getBody())->version_notes : "";
-$version_title = json_decode(isset(Flight::request()->getBody())->version_title) ? json_decode(Flight::request()->getBody())->version_title : "";
+$downloadable = isset(json_decode(Flight::request()->getBody())->downloadable) ? json_decode(Flight::request()->getBody())->downloadable : 0;
+$visibility = isset(json_decode(Flight::request()->getBody())->visibility) ? json_decode(Flight::request()->getBody())->visibility : 1;
+$version_notes = isset(json_decode(Flight::request()->getBody())->version_notes) ? json_decode(Flight::request()->getBody())->version_notes : "";
+$version_title = isset(json_decode(Flight::request()->getBody())->version_title) ? json_decode(Flight::request()->getBody())->version_title : "";
 $wave_png = json_decode(Flight::request()->getBody())->wave_png;
 
 $db = Flight::db();
