@@ -460,7 +460,7 @@ Flight::json(array(
 
 Flight::route('POST /project/url', function() {
 
-$project_id = Flight::request()->data->project_id;
+$project_id = parseInt(Flight::request()->data->project_id);
 
 $db = Flight::db();
 $sql = "SELECT hash FROM Project WHERE project_id = '$project_id'";
