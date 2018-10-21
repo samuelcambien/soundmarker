@@ -232,7 +232,7 @@ $extension = isset(json_decode(Flight::request()->getBody())->extension) ? json_
 $aws_path = "https://s3-eu-west-1.amazonaws.com/soundmarkersass-local-robin/" . $file_name . "." . $extension;
 
 $db = Flight::db();
-$sql = "INSERT INTO File (version_id, file_name, file_size, metadata, extension, chunk_length, track_length, identifier, aws_path) VALUES ('$version_id', '$file_name', '$file_size', '$extension', '$chunk_length', '$track_length', '$track_length' , '$identifier', '$aws_path')";
+$sql = "INSERT INTO File (version_id, file_name, file_size, metadata, extension, chunk_length, track_length, identifier, aws_path) VALUES ('$version_id', '$file_name', '$file_size', '$metadata', '$extension', '$chunk_length', '$track_length' , '$identifier', '$aws_path')";
 $result = $db->query($sql);
 $file_id = $db->lastInsertId();
 
@@ -372,9 +372,9 @@ Flight::json(array(
 Flight::route('GET /track/file/download/@file_id', function($file_id) {
 
 $db = Flight::db();
-$sql = "SELECT aws_path, file_name, extension  FROM File WHERE file_id = '$file_id'";
+$sql = "SELECT aws_path  FROM File WHERE file_id = '$file_id'";
 $result = $db->query($sql);
-$aws_path = $result->fetch()[0]["aws_path"] . $result->fetch()[0]["file_name"] . "." . $result->fetch()[0]["extension"];
+$aws_path = $result->fetch()[0];
 
 // return ok
 Flight::json(array(
