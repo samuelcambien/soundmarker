@@ -125,7 +125,7 @@ Flight::register('db', 'PDO', array('mysql:host='.$_SERVER["RDS_HOSTNAME"].';dbn
 use Aws\S3\S3Client;
 use Aws\S3\Exception\S3Exception;
 
-$credentials = new Aws\Credentials\Credentials("AKIAJ2I2I4CLJHCP3NPQ", "H31YdXr6TwoC8lRCSrFhA4n5JXZsiBIuqezP9P+b");
+$credentials = new Aws\Credentials\Credentials($_SERVER["AWScredentials-username"], $_SERVER["AWScredentials-password"]);
 $s3bucket = 'soundmarkersass-local-robin';
 
 $s3 = new Aws\S3\S3Client([
@@ -162,7 +162,7 @@ $sql = "INSERT INTO Project (title, password, active) VALUES ('$project_title', 
 $result = $db->query($sql);
 $project_id = $db->lastInsertId();
 
-$uuid = uniqid('', true);
+$uuid = str_replace(".","-",uniqid('', true));
 $sql = "UPDATE Project SET hash = '$uuid' WHERE project_id = '$project_id'";
 $result = $db->query($sql);
 
@@ -253,19 +253,18 @@ try {
     $result = $s3->putObject([
         'Bucket' => $s3bucket,
         'Key'    => $file_id . $idno .'.' . $ext,
-        'Body'   => "Flight::request()->files[0]", // figuring out right way to get the file from the JSON
+        'Body'   => Flight::request()->files[0], // figuring out right way to get the file from the JSON
         'ACL'    => 'public-read'
     ]);
-    // Print the URL to the object.
-    // echo $result['ObjectURL'] . PHP_EOL;
     // return ok
     Flight::json(array(
        'ok' => $result['ObjectURL'] . PHP_EOL
     ), 200);
 } catch (S3Exception $e) {
-    echo $e->getMessage() . PHP_EOL;
+    Flight::json(array(
+       'notok' => $e->getMessage() . PHP_EOL
+    ), 200);
 }
-
 
 });
 
