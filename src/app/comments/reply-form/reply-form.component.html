@@ -1,19 +1,27 @@
-<form #myForm="ngForm" (ngSubmit)="onSubmit(myForm)" class="reply-form">
-  <div class="form-row top">
+
+
+<form #myForm="ngForm" (ngSubmit)="onSubmit(myForm)" class="reply-form container-fluid">
+  <div class="top">
+	  
+	  
   
     <textarea type="text" required name="text" [(ngModel)]='reply.text' name="text" placeholder="Type comment"
-              class="form-row comment-form-text form-control form-control-sm" rows="1"></textarea>
+              class="comment-form-text form-control form-control-sm" rows="1"></textarea>
 
   </div>
+  
   <div class="form-row sub">
+	  
     <div class="form-group col-md-3">
       <input type="text" required name="name" [(ngModel)]='reply.name' placeholder="Your name"
-             class="row comment-form-name sub-form form-control form-control-sm" id="name-box"/>
+             class="comment-form-name sub-form name-box" id="name-box"/>
     </div>
-    <label class="form-check-label cancel">
+    
+    <label class="form-check-label cancel ml-auto" (click)="cancel.emit()">
       <p>Cancel</p>
     </label>
-    <div class="form-group col">
+    
+    <div class="form-group">
       <button type="submit" class="btn btn-primary btn-sm" [disabled]="!myForm.valid">Add comment</button>
     </div>
   </div>

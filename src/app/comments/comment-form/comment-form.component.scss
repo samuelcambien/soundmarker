@@ -1,18 +1,11 @@
-.comment-form-text {
-	
-	
-}
-
 .free-upload {
 	margin-top: 9px;
 }
 
 textarea {
   resize: none;
-   padding-left: 0px ;
+  padding-left: 0px ;
 }
-
-
 
 .input-group-text {
 	border: none;
@@ -20,51 +13,48 @@ textarea {
 
 .form-row.sub {
 	margin-top: 12px;
-	margin-bottom: -6px;
+	margin-bottom: -15px;
+	margin-right: 0px !important;
+  max-height: 100px;
 }
 
-.input-group-text-sm {
-	font-size: 10pt !important;
+.name-box {
+	width: 100%;
+	margin-left: 0px;
 }
 
-.form-row.top {
-	margin-left: 5px !important;
-}
-
-.form-group.col-md-4 {
-	margin-right: 16px;
-}
-
-
-
-#tag-box {
-		     border-radius: 3px !important;
+.check-tag-box {
+	margin-right: 0px !important;
+	border-bottom-right-radius: 0px !important;
+	border-top-right-radius: 0px !important;
 }
 
 .tag-box {
-	margin-left: 0px;
-	 }
-	 
-	 .cancel p {
-padding-top: 6px;	
-
+	width: 54px;
+	margin-left: -10px !important;
+	border-bottom-left-radius: 0px !important;
+	border-top-left-radius: 0px !important;
+	border-left: 0px !important;
 }
 
 .cancel {
 	margin-right: 8px;
+	cursor: pointer;
+}	 
 
+.cancel:hover {
+	cursor: pointer;
+}
+.cancel p {
+	padding-top: 6px;
+	color: #7397FF;	
 }
 
-
-.input-group-text.time {
-	padding-right: 0.50rem !important;
-	padding-left: 0.50rem !important;
+.cancel p:hover {
+	color: #4479db;
+	cursor: pointer;
 }
 
-.col-md-15 {
-	width: 86px;
-}
-
-.hor-spacer-sm {
-	width: 40px !important;
+input.disabled {
+  color: #bac1da;
 }

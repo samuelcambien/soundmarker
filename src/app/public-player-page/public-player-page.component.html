@@ -1,4 +1,4 @@
-<app-public-page xmlns="http://www.w3.org/1999/html">
+<app-public-page [messages]="[getMessage()]" xmlns="http://www.w3.org/1999/html">
 
   <div class="list-container" [ngbCollapse]="activeTrack != null">
 
@@ -22,9 +22,10 @@
     *ngFor="let track of tracks"
     [track]="track"
     [player]="players.get(track)"
+    [enableOverview]="tracks.length > 1"
     [ngbCollapse]="activeTrack != track"
     (overview)="activeTrack = null;"
-    (playing)="pauseOtherTracks(track)"
+    (plaing)="pauseOtherTracks(track)"
   >
   </app-public-track-player>
 

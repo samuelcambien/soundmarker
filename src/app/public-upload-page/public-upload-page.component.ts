@@ -11,7 +11,7 @@ enum Status {
   templateUrl: './public-upload-page.component.html',
   styleUrls: ['./public-upload-page.component.scss']
 })
-export class PublicUploadPageComponent implements OnInit {
+export class PublicUploadPageComponent implements OnInit  {
 
   uploader: FileUploader = new FileUploader({
     url: UPLOAD_FILES_ENDPOINT,

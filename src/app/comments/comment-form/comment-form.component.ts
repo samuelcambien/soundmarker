@@ -36,22 +36,26 @@ export class CommentFormComponent implements OnInit {
   triggerStart() {
     if (!this.comment.start)
       this.comment.start = this.player.getCurrentPosition();
-    if (this.comment.includeStart)
+    if (this.comment.includeStart) {
       this.comment.includeEnd = false;
+      this.resetEnd();
+    }
   }
 
   triggerEnd() {
     if (!this.comment.end)
       this.comment.end = this.player.getCurrentPosition();
+    if (this.comment.includeEnd)
+      this.resetEnd();
     if (!this.comment.includeEnd)
       this.comment.includeStart = true;
   }
 
-  getStart() {
-    if (this.comment.includeStart) return Utils.getTimeFormatted(this.comment.start);
+  private resetEnd() {
+    this.comment.end = this.player.getDuration();
   }
 
-  getEnd() {
-    if (this.comment.includeEnd) return Utils.getTimeFormatted(this.comment.end);
+  format(time: string) {
+    return Utils.getTimeFormatted(time);
   }
 }

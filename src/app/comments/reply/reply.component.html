@@ -1,9 +1,11 @@
-<div class="row">
+
   <div class="reply container-fluid">
-    <div>
+	  
+    <div class="row reply-row">
       <p class="name-tx">{{reply.name}}</p>
-      <p class="date-tx">{{getTimeHumanized(reply.time)}}</p>
+      <p class="date-tx ml-auto hide-phone">{{getTimeHumanized(reply.time)}}</p>
+    
     </div>
-    <div><p class="comment-tx"> {{reply.text}}</p></div>
-  </div>
+    <div><p class="row reply-row comment-tx"> {{reply.text}}</p></div>
+  
 </div>

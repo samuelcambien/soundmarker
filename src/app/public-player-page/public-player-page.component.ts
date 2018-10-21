@@ -5,6 +5,7 @@ import {RestUrl, Utils} from "../app.component";
 import {Track} from "../model/track";
 import {Project} from "../model/project";
 import {Player} from "../newplayer/player";
+import {Message} from "../message";
 
 @Component({
   selector: 'app-public-player',
@@ -19,36 +20,35 @@ export class PublicPlayerPageComponent implements OnInit {
   players: Map<Track, Player> = new Map();
 
   activeTrack: Track;
+
   constructor(
     private route: ActivatedRoute,
   ) {
   }
 
   ngOnInit() {
-
     this.route.params.subscribe(params => {
-      this.loadProjectInfo(params['project_id']);
+      this.loadProjectInfo(params['project_hash']);
     });
   }
 
   private loadProjectInfo(projectId: number) {
-    Utils.sendGetRequest(RestUrl.PROJECT, [projectId], '', (response) => {
-      this.project = response;
-      this.loadTracks(this.project.id);
-    });
-  }
 
-  private loadTracks(projectId: string) {
-    let my = this;
-    Utils.sendGetRequest(RestUrl.PROJECT_TRACKS, [projectId], '', (response) => {
-      my.tracks = response;
-      for (let track of my.tracks) {
-        my.loadPlayer(track);
-      }
-      for (let track of my.tracks) {
-        my.loadComments(track);
-      }
-    });
+    Utils.sendGetRequest(RestUrl.PROJECT, [projectId], '')
+      .then((response: Project) => {
+        this.project = response;
+        return Utils.sendGetRequest(RestUrl.PROJECT_TRACKS, [this.project.id], '')
+
+      }).then((response: Track[]) => {
+        this.tracks = response;
+
+        for (let track of this.tracks) {
+          this.loadPlayer(track);
+          this.loadComments(track);
+        }
+
+        if (this.tracks.length == 1) this.activeTrack = this.tracks[0];
+      });
   }
 
   private loadPlayer(track: Track) {
@@ -56,19 +56,20 @@ export class PublicPlayerPageComponent implements OnInit {
   }
 
   private loadComments(track: Track) {
-    let my = this;
-    Utils.sendGetRequest(RestUrl.COMMENTS, [track.last_version], "", (response) => {
-      track.comments = response;
-      for (let comment of track.comments) {
-        my.loadReplies(comment);
-      }
-    });
+    Utils.sendGetRequest(RestUrl.COMMENTS, [track.last_version], "")
+      .then(response => {
+        track.comments = response;
+        for (let comment of track.comments) {
+          this.loadReplies(comment);
+        }
+      });
   }
 
   private loadReplies(comment: Comment) {
-    Utils.sendGetRequest(RestUrl.REPLIES, [comment.comment_id], "", (response) => {
-      comment.replies = response;
-    });
+    Utils.sendGetRequest(RestUrl.REPLIES, [comment.comment_id], "")
+      .then(response => {
+        comment.replies = response;
+      });
   }
 
   pauseOtherTracks(except: Track) {
@@ -77,5 +78,18 @@ export class PublicPlayerPageComponent implements OnInit {
         this.players.get(track).pause();
       }
     }
+  }
+
+  getMessage(): Message[] {
+    if (!this.tracks) return [];
+    let track = this.tracks[0];
+    const messages = [
+      new Message(
+        "george.baker@gmail.com has uploaded " + this.tracks.length + " tracks",
+        track.notes,
+        false
+      )
+    ];
+    return messages;
   }
 }

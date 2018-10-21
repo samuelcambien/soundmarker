@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
+import {Message} from "../message";
 
 @Component({
   selector: 'app-public-page',
@@ -6,6 +7,8 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./public-page.component.scss']
 })
 export class PublicPageComponent implements OnInit {
+
+  @Input() messages: Message[];
 
   constructor() { }
 

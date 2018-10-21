@@ -1,22 +1,33 @@
  <div class="shadow public-bottom-container card rounded-lg position-static shadow">
 	 
-	<div class="container">
+	<div class="container-fluid">
 		<div class="col-sm-12">
-			<div class="close-info justify-content-end">
-				<button type="button" class="btn-cross close" data-dismiss="modal" aria-label="Close">
-                        <span class="remove" aria-hidden="true">&times;</span>
+			<button type="button" class="close-modal-btn shadow-sm" data-dismiss="modal" aria-label="Close">
+                        <span class="remove" aria-hidden="true">
+
+
+<svg width="13px" height="13px" viewBox="0 0 13 13" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
+        <g id="Internet-Networks-Servers-/-Upload/Download-/-upload-dash-arrow-1" transform="translate(-19.000000, -228.000000)" stroke="#ffffff" stroke-width="1.5">
+            <path d="M31,229.205453 L20,240.205453" id="Shape"></path>
+            <path d="M20,229.205453 L31,240.205453" id="Shape"></path>
+        </g>
+    </g>
+</svg></span>
                       </button>
-			</div>
 			
-				 <h1>Help - FAQ</h1>
-				 
+			<div class="info-heading">
+			
+				 <h1>How can<br>we help you?</h1>
+				 <p>We hope you can find your answers in<br>our frequently asked questions.</p>
+			</div>
 			</div>
 	</div>
 	
 	
     <div class="container spacing"></div>
 	
-	<div class="container">
+	<div class="container-fluid">
 		<div class="accordion col-md-12" id="accordionExample">
 			
   <div class="card">
@@ -160,15 +171,50 @@
 	
 	<div class="help-footer">
 	<div class="container">
-	<p>For more answers get in touch via <a href="">support@soundmarker.com</a> </p>
+	<p>Didn't find what you're looking for?<br>feel free to open <a href="" data-toggle="collapse" href="#NewTicket" role="button" aria-expanded="false" aria-controls="NewTicket">a new ticket.</a></p>
+	</div>
+	<div class="collapse ticket-form " id="NewTicket">
+		<div class="container-fluid">
+			<div class="col-sm-12 ">
+				<div class="card ticket-card shadow-sm rounded-sm border-0">
+					<h2>New support ticket</h2>
+					<form>
+						<div class="form-group row">
+							<div class="col">
+								<label class="contact-label"><h5>Your first name</h5></label>
+								<input type="name" class="form-control-lg" id=" " placeholder="Jeacques">
+			    			</div>
+							<div class="col">
+								<label class="contact-label"><h5>Your last name</h5></label>
+								<input type="name" class="form-control-lg" id=" " placeholder="Dutronc">
+			    			</div>	
+						</div>	
+						<div class="form-group">
+							<label class="contact-label"><h5>Your email address</h5></label>
+							<input type="email" class="form-control-lg" id=" " placeholder="you@example.com">
+		    			</div>
+						<div class="form-group">
+							<label class="contact-label"><h5>Subject</h5></label>
+							<input type="text" class="form-control-lg" id=" " placeholder="">
+						</div>
+						<div class="form-group">
+							<label class="contact-label"><h5>How can we help?</h5></label>
+							<textarea class="form-control-lg" id=" " rows="3" placeholder=""></textarea>
+		  				</div>
+		  				<div class="form-group">
+			  				<div class="ml-auto">
+				  				<button data-toggle="collapse" href="#NewTicket" role="button" aria-expanded="false" aria-controls="NewTicket" class="btn btn-light btn-lg">Cancel</button>
+			  					<button type="submit" class="btn btn-primary btn-lg">Submit</button>
+				  			</div>
+		  				</div>
+					</form>
+				</div>
+			</div>	
+		</div>
 	</div>
 	</div>
 	
-	<div class="info-footer">
-		
-		
-		
-	</div>
+	<app-info-footer></app-info-footer>
 	
 	
  </div>

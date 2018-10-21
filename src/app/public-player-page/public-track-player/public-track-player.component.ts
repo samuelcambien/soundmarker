@@ -2,7 +2,7 @@ import {Component, ElementRef, EventEmitter, Input, OnInit, Output, Renderer2, V
 import {Track} from "../../model/track";
 import {Utils} from "../../app.component";
 import {Player} from "../../newplayer/player";
-import {Comment, CommentSorter} from "../../comments/comment";
+import {Comment} from "../../comments/comment";
 import {saveAs} from 'file-saver/FileSaver';
 
 @Component({
@@ -12,15 +12,9 @@ import {saveAs} from 'file-saver/FileSaver';
 })
 export class PublicTrackPlayerComponent implements OnInit {
 
-  public commentSorters: CommentSorter[] = [
-    CommentSorter.MOST_RECENT_FIRST,
-    CommentSorter.MOST_RECENT_LAST,
-    CommentSorter.NAME_A_Z,
-    CommentSorter.NAME_Z_A
-  ];
-
   @Input() player: Player;
   @Input() track: Track;
+  @Input() enableOverview: boolean;
 
   @Output() overview = new EventEmitter();
   @Output() playing = new EventEmitter();
@@ -30,13 +24,15 @@ export class PublicTrackPlayerComponent implements OnInit {
   @ViewChild('startTime') startTime: ElementRef;
   @ViewChild('endTime') endTime: ElementRef;
 
-  private currentSorter: CommentSorter = CommentSorter.MOST_RECENT_FIRST;
-
   comment: Comment = new Comment();
 
+  search: string;
+
   startPos;
+  endPos;
 
   showComments: boolean = false;
+  private MINIMAL_INTERVAL: number = 2;
 
   constructor(
     private renderer: Renderer2
@@ -57,22 +53,54 @@ export class PublicTrackPlayerComponent implements OnInit {
     return this.waveform.nativeElement.clientWidth;
   }
 
+  private getPlayerPosition(): number {
+    return this.waveform.nativeElement.getBoundingClientRect().x;
+  }
+
+  getCommentIntervalPosition() {
+    return this.getRawPosition(this.startTime, this.comment.start) + this.startTime.nativeElement.offsetWidth / 2 + "px";
+  }
+
   getStartPosition() {
-    return this.getPosition(this.startTime, this.comment.start);
+    return this.startPos ? this.startPos : this.getPosition(this.startTime, this.comment.start);
   }
 
   getEndPosition() {
-    return this.getPosition(this.endTime, this.comment.end);
+    return this.endPos ? this.endPos : this.getPosition(this.endTime, this.comment.end);
   }
 
-  updateStartTime(startPos, current) {
+  getStartPositionRaw(): number {
+    return this.getRawPosition(this.startTime, this.comment.start);
+  }
+
+  getEndPositionRaw(): number {
+    return this.getRawPosition(this.endTime, this.comment.end);
+  }
+
+  updateStartTime(event) {
     this.comment.includeStart = true;
-    this.comment.start = this.getCommentTime(this.startTime, startPos, current);
+    this.comment.start = this.getValidStartTime(
+      this.getCommentTime(this.startTime, event)
+    );
   }
 
-  updateEndTime(startPos, current) {
+  private getValidStartTime(commentTime: number) {
+    if (commentTime < 0) return 0;
+    if (commentTime > this.comment.end - this.MINIMAL_INTERVAL) return this.comment.end - this.MINIMAL_INTERVAL;
+    return commentTime;
+  }
+
+  updateEndTime(endPos, current) {
     this.comment.includeEnd = true;
-    this.comment.end = this.getCommentTime(this.endTime, startPos, current);
+    this.comment.end = this.getValidEndTime(
+      this.getCommentTime(this.endTime, current)
+    );
+  }
+
+  private getValidEndTime(commentTime: number) {
+    if (commentTime < this.comment.start + this.MINIMAL_INTERVAL) return this.comment.start + this.MINIMAL_INTERVAL;
+    if (commentTime > this.track.duration) return this.track.duration;
+    return commentTime;
   }
 
   play() {
@@ -88,51 +116,44 @@ export class PublicTrackPlayerComponent implements OnInit {
     return this.player && this.player.isPlaying();
   }
 
-  getCommentsSorted() {
-    return this.track.comments ? this.track.comments.sort(this.currentSorter.comparator) : [];
+  getMatchingCommentsSorted() {
+    return this.getMatchingComments().sort((comment1, comment2) => comment2.time - comment1.time);
   }
 
-  saveDragStart(element, event) {
-    console.log(event);
-  }
+  getMatchingComments() {
 
-  validateDragStart() {
-    return () => true;
-    // return (coords) =>
-    //   this.getCommentTime(this.startTime, this.startPos, coords) > 0 &&
-    //   (this.getCommentTime(this.startTime, this.startPos, coords) < this.comment.end || !this.comment.includeEnd) &&
-    //   this.getCommentTime(this.startTime, this.startPos, coords) <= this.track.duration;
-  }
+    if (!this.track.comments) return [];
 
-  validateDragEnd() {
-    return () => true;
-    // return (coords) =>
-    //   this.getCommentTime(this.endTime, this.startPos, coords) > 0 &&
-    //   (this.getCommentTime(this.endTime, this.startPos, coords) > this.comment.start || !this.comment.start) &&
-    //   this.getCommentTime(this.endTime, this.startPos, coords) <= this.track.duration;
+    if (!this.search) return this.track.comments;
+
+    let search = new RegExp(this.search, 'gi');
+
+    return this.track.comments.filter(
+      comment => search.test(comment.text) || search.test(comment.name)
+    );
   }
 
   private getPosition(element, commentTime) {
+    return this.getRawPosition(element, commentTime) + "px";
+  }
+
+  private getRawPosition(element, commentTime): number {
     return this.getPlayerWidth() && this.track.duration ?
-      this.getPlayerWidth() * commentTime / this.track.duration - element.nativeElement.offsetWidth / 2 + "px" :
-      -element.nativeElement.offsetWidth / 2 + "px";
+      this.getPlayerWidth() * commentTime / this.track.duration - element.nativeElement.offsetWidth / 2 :
+      -element.nativeElement.offsetWidth / 2;
   }
 
   private getSeekTime(event) {
     return this.track.duration * (event.x - this.waveform.nativeElement.getBoundingClientRect().left) / this.getPlayerWidth();
   }
 
-  private getCommentTime(element, startPos, event) {
+  private getCommentTime(element, event) {
 
-    return this.track.duration * (startPos + event.x + element.nativeElement.offsetWidth / 2) / this.getPlayerWidth();
+    return this.track.duration * (event.x + element.nativeElement.offsetWidth / 2 - this.getPlayerPosition()) / this.getPlayerWidth();
   }
 
   mouseDown(event) {
     console.log(event);
-  }
-
-  formatTime(seconds) {
-    return Utils.getTimeFormatted(seconds);
   }
 
   download() {
@@ -155,5 +176,13 @@ export class PublicTrackPlayerComponent implements OnInit {
 
   goToOverview() {
     this.overview.emit();
+  }
+
+  getCommentIntervalWidth() {
+    return this.getEndPositionRaw() - this.getStartPositionRaw() + "px";
+  }
+
+  playInterval() {
+
   }
 }

@@ -128,6 +128,10 @@ export class Player {
   }
 
 
+
+
+
+
   isPlaying() {
     return this.audioContext.state == "running";
   }
@@ -151,6 +155,10 @@ export class Player {
     return this.audioContext.currentTime;
   }
 
+  getDuration(): number {
+    return this.duration;
+  }
+
   seekTo(time: number, callback?) {
     this.stop(() => {
       this.startTime = time;
@@ -158,5 +166,15 @@ export class Player {
         if (callback) callback();
       });
     });
+  }
+}
+
+export class Playback {
+
+  private start: number;
+  private end: number;
+
+  play() {
+
   }
 }
