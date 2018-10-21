@@ -229,10 +229,10 @@ $file_size = isset(json_decode(Flight::request()->getBody())->file_size) ? json_
 $file_name = isset(json_decode(Flight::request()->getBody())->file_name) ? json_decode(Flight::request()->getBody())->file_name : "";
 $metadata = isset(json_decode(Flight::request()->getBody())->metadata) ? json_decode(Flight::request()->getBody())->metadata : "";
 $extension = isset(json_decode(Flight::request()->getBody())->extension) ? json_decode(Flight::request()->getBody())->extension : "";
-$aws_path = "https://s3-eu-west-1.amazonaws.com/soundmarkersass-local-robin/";
+$aws_path = "https://s3-eu-west-1.amazonaws.com/soundmarkersass-local-robin/" . $file_name . "." . $extension;
 
 $db = Flight::db();
-$sql = "INSERT INTO File (version_id, file_name, file_size, metadata, extension, chunk_length, track_length, identifier) VALUES ('$version_id', '$file_name', '$file_size', '$extension', '$chunk_length', '$track_length', '$track_length' , '$identifier')";
+$sql = "INSERT INTO File (version_id, file_name, file_size, metadata, extension, chunk_length, track_length, identifier, aws_path) VALUES ('$version_id', '$file_name', '$file_size', '$extension', '$chunk_length', '$track_length', '$track_length' , '$identifier', '$aws_path')";
 $result = $db->query($sql);
 $file_id = $db->lastInsertId();
 
@@ -246,6 +246,11 @@ Flight::json(array(
 Flight::route('POST /file/chunk/@file_id/@idno/@ext', function($file_id, $idno, $ext) {
 
 try {
+  $db = Flight::db();
+  $sql = "SELECT extension, metadata, aws_path, file_name, file_size, identifier, chunk_length, track_length FROM File WHERE file_id = '$file_id'";
+  $result = $db->query($sql);
+  $files = $result->fetchAll();
+
   // get the variables
   $s3 = Flight::get("s3");
   $s3bucket = Flight::get("s3bucket");
@@ -253,7 +258,7 @@ try {
     // Upload data.
     $result = $s3->putObject([
         'Bucket' => $s3bucket,
-        'Key'    => $file_id . $idno .'.' . $ext,
+        'Key'    => $file_id . $files[0]["file_name"] .'.' . $files[0]["extension"],
         'Body'   => Flight::request()->getBody(), // figuring out right way to get the file from the JSON
         'ACL'    => 'public-read'
     ]);
