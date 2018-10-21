@@ -463,7 +463,7 @@ Flight::route('POST /project/url', function() {
 $project_id = intval(Flight::request()->data->project_id);
 
 $db = Flight::db();
-$sql = "SELECT hash FROM Project WHERE project_id = '$project_id'";
+$sql = "SELECT hash FROM Project WHERE project_id = '174'";
 $result = $db->query($sql);
 
 // return ok
