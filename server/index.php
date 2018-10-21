@@ -253,7 +253,7 @@ try {
     $result = $s3->putObject([
         'Bucket' => $s3bucket,
         'Key'    => $file_id . $idno .'.' . $ext,
-        'Body'   => fopen(Flight::request()->files[0], 'r'), // figuring out right way to get the file from the JSON
+        'Body'   => file_get_contents(Flight::request()->files[0]), // figuring out right way to get the file from the JSON
         'ACL'    => 'public-read'
     ]);
     // return ok
