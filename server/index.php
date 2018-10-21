@@ -125,7 +125,7 @@ Flight::register('db', 'PDO', array('mysql:host='.$_SERVER["RDS_HOSTNAME"].';dbn
 use Aws\S3\S3Client;
 use Aws\S3\Exception\S3Exception;
 
-$credentials = new Aws\Credentials\Credentials($_SERVER["AWScredentials-username"], $_SERVER["AWScredentials-password"]);
+$credentials = new Aws\Credentials\Credentials("AKIAJ2I2I4CLJHCP3NPQ", "H31YdXr6TwoC8lRCSrFhA4n5JXZsiBIuqezP9P+b");
 $s3bucket = 'soundmarkersass-local-robin';
 
 $s3 = new Aws\S3\S3Client([
