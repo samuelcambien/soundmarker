@@ -229,6 +229,7 @@ $file_size = isset(json_decode(Flight::request()->getBody())->file_size) ? json_
 $file_name = isset(json_decode(Flight::request()->getBody())->file_name) ? json_decode(Flight::request()->getBody())->file_name : "";
 $metadata = isset(json_decode(Flight::request()->getBody())->metadata) ? json_decode(Flight::request()->getBody())->metadata : "";
 $extension = isset(json_decode(Flight::request()->getBody())->extension) ? json_decode(Flight::request()->getBody())->extension : "";
+$aws_path = "https://s3-eu-west-1.amazonaws.com/soundmarkersass-local-robin/";
 
 $db = Flight::db();
 $sql = "INSERT INTO File (version_id, file_name, file_size, metadata, extension, chunk_length, track_length, identifier) VALUES ('$version_id', '$file_name', '$file_size', '$extension', '$chunk_length', '$track_length', '$track_length' , '$identifier')";
@@ -468,7 +469,8 @@ $result = $db->query($sql);
 
 // return ok
 Flight::json(array(
-   'project_url' => 'http://soundmarker-env.mc3wuhhgpz.eu-central-1.elasticbeanstalk.com/project/'. $result->fetch()[0]
+   'project_url' => 'http://soundmarker-env.mc3wuhhgpz.eu-central-1.elasticbeanstalk.com/project/'. $result->fetch()[0],
+   'project_hash' => $result->fetch()[0]
 ), 200);
 });
 
