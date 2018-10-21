@@ -153,7 +153,7 @@ Flight::route('POST /project/new', function() {
 
 // Todo: check if user_id exists first (foreign_key needs to be valid) -> put in dB
 // Add expiration date
-$user_id = Flight::request()->getBody()->user_id ? Flight::request()->getBody()->user_id : "";
+$user_id = isset(Flight::request()->getBody()->user_id) ? Flight::request()->getBody()->user_id : "";
 $project_title = Flight::request()->getBody()->project_title ? Flight::request()->getBody()->project_title : "";
 $project_password = Flight::request()->getBody()->project_password ? Flight::request()->getBody()->project_password : "";
 
