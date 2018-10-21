@@ -460,15 +460,18 @@ Flight::json(array(
 
 Flight::route('POST /project/url', function() {
 
-$project_id = intval(Flight::request()->data->project_id);
+$project_id = Flight::request()->data->project_id;
 
 $db = Flight::db();
-$sql = "SELECT hash FROM Project WHERE project_id = '174'";
+$sql = "SELECT hash FROM Project WHERE project_id = '$project_id'";
 $result = $db->query($sql);
 
 // return ok
 Flight::json(array(
-   'project_url' => 'http://soundmarker-env.mc3wuhhgpz.eu-central-1.elasticbeanstalk.com/project/'. $result->fetch()[0] 
+   'project_url' => 'http://soundmarker-env.mc3wuhhgpz.eu-central-1.elasticbeanstalk.com/project/'. $result->fetch()[0],
+   'projectest' => Flight::request()->data->project_id,
+   'projectest2' => Flight::request()->getBody(),
+   'projectest3' => Flight::request()->getBody()->project_id
 ), 200);
 });
 
