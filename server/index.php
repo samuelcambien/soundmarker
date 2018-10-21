@@ -285,7 +285,7 @@ try {
 
     $sql = "SELECT track_id, title FROM Track WHERE project_id = '$project_id'";
     $result = $db->query($sql);
-    $tracks = $result->fetchAll();
+    $tracks = $result->fetchAll(PDO::FETCH_ASSOC);
 
     // return ok
     Flight::json(array(
@@ -312,7 +312,7 @@ Flight::route('GET /track/@track_id', function($track_id) {
 $db = Flight::db();
 $sql = "SELECT version_id, notes, downloadable, visibility, version_title, wave_png FROM Version WHERE track_id = '$track_id'";
 $result = $db->query($sql);
-$versions = $result->fetchAll();
+$versions = $result->fetchAll(PDO::FETCH_ASSOC);
 
 // return ok
 Flight::json(array(
@@ -340,7 +340,7 @@ Flight::route('GET /track/version/comments/@version_id', function($version_id) {
 $db = Flight::db();
 $sql = "SELECT comment_id, notes, start_time, end_time, checked, parent_comment_id, name FROM Comment WHERE version_id = '$version_id'";
 $result = $db->query($sql);
-$comments = $result->fetchAll();
+$comments = $result->fetchAll(PDO::FETCH_ASSOC);
 
 // return ok
 Flight::json(array(
@@ -372,9 +372,9 @@ Flight::json(array(
 Flight::route('GET /track/file/download/@file_id', function($file_id) {
 
 $db = Flight::db();
-$sql = "SELECT aws_path FROM File WHERE file_id = '$file_id'";
+$sql = "SELECT aws_path, file_name, extension  FROM File WHERE file_id = '$file_id'";
 $result = $db->query($sql);
-$aws_path = $result->fetch()[0];
+$aws_path = $result->fetch()[0]["aws_path"] . $result->fetch()[0]["file_name"] . "." . $result->fetch()[0]["extension"];
 
 // return ok
 Flight::json(array(
@@ -388,7 +388,7 @@ Flight::route('GET /ad', function() {
 $db = Flight::db();
 $sql = "SELECT html, ad_id, impressions FROM Ad WHERE priority = '1' AND impressions <= limits";
 $result = $db->query($sql);
-$array = $result->fetchAll();
+$array = $result->fetchAll(PDO::FETCH_ASSOC);
 
 $rand = rand(0,(count($array)-1));
 $html = $array[$rand]["html"];
@@ -428,7 +428,7 @@ $result = $db->query($sql);
 // get next ad
 $sql = "SELECT html, ad_id, impressions FROM Ad WHERE priority != '0' AND impressions <= limits";
 $result = $db->query($sql);
-$array = $result->fetchAll();
+$array = $result->fetchAll(PDO::FETCH_ASSOC);
 
 $rand = rand(0,(count($array)-1));
 $html = $array[$rand]["html"];
