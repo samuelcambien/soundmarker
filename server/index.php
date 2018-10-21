@@ -253,7 +253,7 @@ try {
     $result = $s3->putObject([
         'Bucket' => $s3bucket,
         'Key'    => $file_id . $idno .'.' . $ext,
-        'Body'   => addslashes(file_get_contents(Flight::request()->files['uploadedfile']['tmp_name'])), // figuring out right way to get the file from the JSON
+        'Body'   => Flight::request()->getBody(), // figuring out right way to get the file from the JSON
         'ACL'    => 'public-read'
     ]);
     // return ok
