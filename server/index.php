@@ -326,11 +326,11 @@ Flight::route('GET /track/version/@version_id', function($version_id) {
 $db = Flight::db();
 $sql = "SELECT file_id, extension, metadata, aws_path, file_name, file_size, identifier, chunk_length, track_length FROM File WHERE version_id = '$version_id'";
 $result = $db->query($sql);
-$files = $result->fetchAll(PDO::FETCH_CLASS, "File");
+$files = $result->fetchAll(PDO::FETCH_ASSOC);
 
 // return ok
 Flight::json(array(
-   'files' => array($files)
+   'files' => $files
 ), 200);
 });
 
@@ -344,7 +344,7 @@ $comments = $result->fetchAll();
 
 // return ok
 Flight::json(array(
-   'comments' => array($comments)
+   'comments' => $comments
 ), 200);
 });
 
