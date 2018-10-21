@@ -257,15 +257,16 @@ try {
         'ACL'    => 'public-read'
     ]);
     // Print the URL to the object.
-    echo $result['ObjectURL'] . PHP_EOL;
+    // echo $result['ObjectURL'] . PHP_EOL;
+    // return ok
+    Flight::json(array(
+       'ok' => $result['ObjectURL'] . PHP_EOL
+    ), 200);
 } catch (S3Exception $e) {
     echo $e->getMessage() . PHP_EOL;
 }
 
-// return ok
-Flight::json(array(
-   'ok' => 'ok'
-), 200);
+
 });
 
 ////////////////////////////// Routes - /file/chunk/$file_id POST //////////////////////////////
