@@ -153,9 +153,9 @@ Flight::route('POST /project/new', function() {
 
 // Todo: check if user_id exists first (foreign_key needs to be valid) -> put in dB
 // Add expiration date
-$user_id = isset(Flight::request()->getBody()->user_id) ? Flight::request()->getBody()->user_id : "";
-$project_title = isset(Flight::request()->getBody()->project_title) ? Flight::request()->getBody()->project_title : "";
-$project_password = isset(Flight::request()->getBody()->project_password) ? Flight::request()->getBody()->project_password : "";
+$user_id = isset(json_decode(Flight::request()->getBody())->user_id) ? json_decode(Flight::request()->getBody())->user_id : "";
+$project_title = isset(json_decode(Flight::request()->getBody())->project_title) ? json_decode(Flight::request()->getBody())->project_title : "";
+$project_password = isset(json_decode(Flight::request()->getBody())->project_password) ? json_decode(Flight::request()->getBody())->project_password : "";
 
 $db = Flight::db();
 $sql = "INSERT INTO Project (title, password, active) VALUES ('$project_title', '$project_password', '1')";
@@ -176,9 +176,9 @@ Flight::json(array(
 
 Flight::route('POST /track/new', function() {
 
-$project_id = Flight::request()->getBody()->project_id;
-$track_title = isset(Flight::request()->getBody()->track_title) ? Flight::request()->getBody()->track_title : "";
-$track_artist = isset(Flight::request()->getBody()->track_artist) ? Flight::request()->getBody()->track_artist : "";
+$project_id = json_decode(Flight::request()->getBody())->project_id;
+$track_title = json_decode(isset(Flight::request()->getBody())->track_title) ? json_decode(Flight::request()->getBody())->track_title : "";
+$track_artist = json_decode(isset(Flight::request()->getBody())->track_artist) ? json_decode(Flight::request()->getBody())->track_artist : "";
 
 $db = Flight::db();
 if ($project_id) {
@@ -199,12 +199,12 @@ Flight::json(array(
 Flight::route('POST /track/version', function() {
 
 // Todo: add SVG?
-$track_id = Flight::request()->getBody()->track_id;
-$downloadable = isset(Flight::request()->getBody()->downloadable) ? Flight::request()->getBody()->downloadable : 0;
-$visibility = isset(Flight::request()->getBody()->visibility) ? Flight::request()->getBody()->visibility : 1;
-$version_notes = isset(Flight::request()->getBody()->version_notes) ? Flight::request()->getBody()->version_notes : "";
-$version_title = isset(Flight::request()->getBody()->version_title) ? Flight::request()->getBody()->version_title : "";
-$wave_png = Flight::request()->getBody()->wave_png;
+$track_id = json_decode(Flight::request()->getBody())->track_id;
+$downloadable = json_decode(isset(Flight::request()->getBody())->downloadable) ? json_decode(Flight::request()->getBody())->downloadable : 0;
+$visibility = json_decode(isset(Flight::request()->getBody())->visibility) ? json_decode(Flight::request()->getBody())->visibility : 1;
+$version_notes = json_decode(isset(Flight::request()->getBody())->version_notes) ? json_decode(Flight::request()->getBody())->version_notes : "";
+$version_title = json_decode(isset(Flight::request()->getBody())->version_title) ? json_decode(Flight::request()->getBody())->version_title : "";
+$wave_png = json_decode(Flight::request()->getBody())->wave_png;
 
 $db = Flight::db();
 $sql = "INSERT INTO Version (track_id, downloadable, visibility, notes, version_title, wave_png) VALUES ('$track_id', '$downloadable', '$visibility', '$version_notes', '$version_title', '$wave_png')";
@@ -221,14 +221,14 @@ Flight::route('POST /file/new', function() {
 
 // Todo: check if files actually get uploaded 
 // And put in DB
-$version_id = Flight::request()->getBody()->version_id;
-$identifier = isset(Flight::request()->getBody()->identifier) ? Flight::request()->getBody()->identifier : 0;
-$track_length = isset(Flight::request()->getBody()->track_length) ? Flight::request()->getBody()->track_length : 0;
-$chunk_length = isset(Flight::request()->getBody()->chunk_length) ? Flight::request()->getBody()->chunk_length : 0;
-$file_size = isset(Flight::request()->getBody()->file_size) ? Flight::request()->getBody()->file_size : 0;
-$file_name = isset(Flight::request()->getBody()->file_name) ? Flight::request()->getBody()->file_name : "";
-$metadata = isset(Flight::request()->getBody()->metadata) ? Flight::request()->getBody()->metadata : "";
-$extension = isset(Flight::request()->getBody()->extension) ? Flight::request()->getBody()->extension : "";
+$version_id = json_decode(Flight::request()->getBody())->version_id;
+$identifier = isset(json_decode(Flight::request()->getBody())->identifier) ? json_decode(Flight::request()->getBody())->identifier : 0;
+$track_length = isset(json_decode(Flight::request()->getBody())->track_length) ? json_decode(Flight::request()->getBody())->track_length : 0;
+$chunk_length = isset(json_decode(Flight::request()->getBody())->chunk_length) ? json_decode(Flight::request()->getBody())->chunk_length : 0;
+$file_size = isset(json_decode(Flight::request()->getBody())->file_size) ? json_decode(Flight::request()->getBody())->file_size : 0;
+$file_name = isset(json_decode(Flight::request()->getBody())->file_name) ? json_decode(Flight::request()->getBody())->file_name : "";
+$metadata = isset(json_decode(Flight::request()->getBody())->metadata) ? json_decode(Flight::request()->getBody())->metadata : "";
+$extension = isset(json_decode(Flight::request()->getBody())->extension) ? json_decode(Flight::request()->getBody())->extension : "";
 
 $db = Flight::db();
 $sql = "INSERT INTO File (version_id, file_name, file_size, metadata, extension, chunk_length, track_length, identifier) VALUES ('$version_id', '$file_name', '$file_size', '$extension', '$chunk_length', '$track_length', '$track_length' , '$identifier')";
@@ -340,12 +340,12 @@ Flight::json(array(
 ////////////////////////////// Routes - /track/version/comment POST //////////////////////////////
 Flight::route('POST /track/version/comment', function() {
 
-$version_id = Flight::request()->getBody()->version_id;
-$notes = isset(Flight::request()->getBody()->notes) ? Flight::request()->getBody()->notes : "";
-$name = isset(Flight::request()->getBody()->name) ? Flight::request()->getBody()->name : "";
-$start_time = isset(Flight::request()->getBody()->start_time) ? Flight::request()->getBody()->start_time : "";
-$end_time = isset(Flight::request()->getBody()->end_time) ? Flight::request()->getBody()->end_time : "";
-$parent_comment_id = isset(Flight::request()->getBody()->parent_comment_id) ? Flight::request()->getBody()->parent_comment_id : "";
+$version_id = json_decode(Flight::request()->getBody())->version_id;
+$notes = isset(json_decode(Flight::request()->getBody())->notes) ? json_decode(Flight::request()->getBody())->notes : "";
+$name = isset(json_decode(Flight::request()->getBody())->name) ? json_decode(Flight::request()->getBody())->name : "";
+$start_time = isset(json_decode(Flight::request()->getBody())->start_time) ? json_decode(Flight::request()->getBody())->start_time : "";
+$end_time = isset(json_decode(Flight::request()->getBody())->end_time) ? json_decode(Flight::request()->getBody())->end_time : "";
+$parent_comment_id = isset(json_decode(Flight::request()->getBody())->parent_comment_id) ? json_decode(Flight::request()->getBody())->parent_comment_id : "";
 
 $db = Flight::db();
 $sql = "INSERT INTO Comment (version_id, notes, name, start_time, end_time, parent_comment_id) VALUES ('$version_id', '$notes', '$name', '$start_time', '$end_time', '$parent_comment_id')";
@@ -398,9 +398,9 @@ $result = $db->query($sql);
 
 Flight::route('POST /ad', function() {
 
-$ad_id = Flight::request()->getBody()->ad_id;
-$exposure_time = Flight::request()->getBody()->exposure_time;
-$clicks = Flight::request()->getBody()->clicks;
+$ad_id = json_decode(Flight::request()->getBody())->ad_id;
+$exposure_time = json_decode(Flight::request()->getBody())->exposure_time;
+$clicks = json_decode(Flight::request()->getBody())->clicks;
 
 $db = Flight::db();
 $sql = "SELECT clicks, exposure_time FROM Ad WHERE ad_id = '$ad_id'";
@@ -437,7 +437,7 @@ $result = $db->query($sql);
 ////////////////////////////// Routes - /track/url GET //////////////////////////////
 // still necessary?
 Flight::route('GET /track/url', function() {
-$track_id = Flight::request()->getBody()->track_id;
+$track_id = json_decode(Flight::request()->getBody())->track_id;
 
 // return ok
 Flight::json(array(
@@ -447,7 +447,7 @@ Flight::json(array(
 });
 
 Flight::route('GET /track/47', function() {
-$track_id = Flight::request()->getBody()->track_id;
+$track_id = json_decode(Flight::request()->getBody())->track_id;
 
 // return ok
 Flight::json(array(
@@ -460,7 +460,7 @@ Flight::json(array(
 
 Flight::route('POST /project/url', function() {
 
-$project_id = Flight::request()->getBody()->project_id;
+$project_id = json_decode(Flight::request()->getBody())->project_id;
 
 $db = Flight::db();
 $sql = "SELECT hash FROM Project WHERE project_id = '$project_id'";
@@ -476,7 +476,7 @@ Flight::json(array(
 
 Flight::route('POST /project/password', function() {
 
-$project_id = Flight::request()->getBody()->project_id;
+$project_id = json_decode(Flight::request()->getBody())->project_id;
 
 $db = Flight::db();
 $sql = "SELECT password FROM Project WHERE project_id = '$project_id'";
@@ -493,7 +493,7 @@ Flight::json(array(
 
 Flight::route('POST /project/delete', function() {
 
-$project_id = Flight::request()->getBody()->project_id;
+$project_id = json_decode(Flight::request()->getBody())->project_id;
 
 $db = Flight::db();
 $sql = "UPDATE Project SET active = '0' WHERE project_id = '$project_id'";
