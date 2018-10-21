@@ -125,7 +125,7 @@ Flight::register('db', 'PDO', array('mysql:host='.$_SERVER["RDS_HOSTNAME"].';dbn
 use Aws\S3\S3Client;
 use Aws\S3\Exception\S3Exception;
 
-$credentials = new Aws\Credentials\Credentials($_SERVER["AWScredentials-username"], $_SERVER["AWScredentials-password"]);
+$credentials = new Aws\Credentials\Credentials("AKIAJ2I2I4CLJHCP3NPQ", "H31YdXr6TwoC8lRCSrFhA4n5JXZsiBIuqezP9P+b");
 $s3bucket = 'soundmarkersass-local-robin';
 
 $s3 = new Aws\S3\S3Client([
@@ -244,11 +244,11 @@ Flight::json(array(
 ////////////////////////////// Routes - /file/chunk/$file_id POST //////////////////////////////
 Flight::route('POST /file/chunk/@file_id/@idno/@ext', function($file_id, $idno, $ext) {
 
-// get the variables
-$s3 = Flight::get("s3");
-$s3bucket = Flight::get("s3bucket");
-
 try {
+  // get the variables
+  $s3 = Flight::get("s3");
+  $s3bucket = Flight::get("s3bucket");
+
     // Upload data.
     $result = $s3->putObject([
         'Bucket' => $s3bucket,
