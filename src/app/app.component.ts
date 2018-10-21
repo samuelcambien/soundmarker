@@ -21,15 +21,17 @@ export class RestUrl {
 
   public static UPLOAD: string = RestUrl.DATA + "/file/new";
 
-  public static PROJECT: string = RestUrl.MOCK + "/project";
+  public static UPLOAD_CHUNK: string = RestUrl.DATA + "/file/chunk";
+
+  public static PROJECT: string = RestUrl.BACKEND + "/project";
 
   public static PROJECT_SHARE: string = RestUrl.BACKEND + "/project/url";
 
   public static PROJECT_NEW: string = RestUrl.PROJECT + "/new";
 
-  public static PROJECT_TRACKS: string = RestUrl.MOCK + "/project/tracks";
+  public static PROJECT_TRACKS: string = RestUrl.BACKEND + "/project/tracks";
 
-  public static TRACK: string = RestUrl.MOCK + "/track";
+  public static TRACK: string = RestUrl.BACKEND + "/track";
 
   public static TRACK_NEW: string = RestUrl.TRACK + "/new";
 
@@ -74,36 +76,41 @@ export class Utils {
   public static sendGetRequest(url, data, params): Promise<any> {
 
     return new Promise<any>((resolve, reject) => {
-        let trackRequest = new XMLHttpRequest();
-        for (let entry of data) {
-          url += "/" + entry;
-        }
-        trackRequest.open("GET", url, true);
-        trackRequest.onload = () => resolve(JSON.parse(trackRequest.responseText));
-        trackRequest.onerror = () => reject(trackRequest.statusText);
-        // trackRequest.addEventListener("readystatechange", () => {
-        //   if (trackRequest.readyState == 4 && trackRequest.status == 200) {
-        //     resolve(JSON.parse(trackRequest.responseText));
-        //   } else {
-        //     reject()
-        //   }
-        // }, false);
-        trackRequest.send(params);
-      });
+      let trackRequest = new XMLHttpRequest();
+      for (let entry of data) {
+        url += "/" + entry;
+      }
+      trackRequest.open("GET", url, true);
+      trackRequest.onload = () => resolve(JSON.parse(trackRequest.responseText));
+      trackRequest.onerror = () => reject(trackRequest.statusText);
+      trackRequest.send(params);
+    });
   }
 
-  public static sendPostRequest(url, data, callback?): Promise<any> {
+  public static sendPostDataRequest(url, data, params?): Promise<any> {
 
     return new Promise((resolve, reject) => {
       let trackRequest = new XMLHttpRequest();
+      if (params) for (let entry of params) {
+        url += "/" + entry;
+      }
+      trackRequest.open("POST", url, true);
       trackRequest.onload = () => resolve(JSON.parse(trackRequest.responseText));
       trackRequest.onerror = () => reject(trackRequest.statusText);
+      trackRequest.send(data);
+    });
+  }
+
+  public static sendPostRequest(url, data, params?): Promise<any> {
+
+    return new Promise((resolve, reject) => {
+      let trackRequest = new XMLHttpRequest();
+      if (params) for (let entry of params) {
+        url += "/" + entry;
+      }
       trackRequest.open("POST", url, true);
-      // trackRequest.addEventListener("readystatechange", () => {
-      //   if (trackRequest.readyState == 4 && trackRequest.status == 200) {
-      //     callback(JSON.parse(trackRequest.responseText));
-      //   }
-      // }, false);
+      trackRequest.onload = () => resolve(JSON.parse(trackRequest.responseText));
+      trackRequest.onerror = () => reject(trackRequest.statusText);
       trackRequest.send(JSON.stringify(data));
     });
   }
