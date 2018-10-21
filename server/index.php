@@ -274,8 +274,8 @@ try {
 
 });
 
-////////////////////////////// Routes - /file/chunk/$file_id POST //////////////////////////////
-Flight::route('GET /project/@project_hash', function($project_hash) {
+////////////////////////////// Routes - /project/get/@project_hash POST //////////////////////////////
+Flight::route('GET /project/get/@project_hash', function($project_hash) {
 
 $db = Flight::db();
 try {
@@ -289,7 +289,7 @@ try {
 
     // return ok
     Flight::json(array(
-       'project_id' => $project_id, 'tracks' => json_encode($tracks)
+       'project_id' => $project_id, 'tracks' => $tracks
     ), 200);
 
 } catch (PDOException $pdoException) {
@@ -299,6 +299,11 @@ try {
 } finally {
     $db = null;
 }
+});
+
+////////////////////////////// Routes - Global //////////////////////////////
+Flight::route('/project/@project_hash', function(){
+    include 'index.html';
 });
 
 ////////////////////////////// Routes - /track GET //////////////////////////////
@@ -311,7 +316,7 @@ $versions = $result->fetchAll();
 
 // return ok
 Flight::json(array(
-   'versions' => json_encode($versions)
+   'versions' => $versions
 ), 200);
 });
 
@@ -325,7 +330,7 @@ $files = $result->fetchAll();
 
 // return ok
 Flight::json(array(
-   'files' => json_encode($files)
+   'files' => $files
 ), 200);
 });
 
@@ -339,7 +344,7 @@ $comments = $result->fetchAll();
 
 // return ok
 Flight::json(array(
-   'comments' => json_encode($comments)
+   'comments' => $comments
 ), 200);
 });
 
