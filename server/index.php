@@ -329,7 +329,7 @@ $result = $db->query($sql);
 $files = $result->fetchAll();
 
 // return ok
-Flight::json('files' => array($files), 200);
+Flight::json(array($files), 200);
 });
 
 ////////////////////////////// Routes - /track/version/comments GET //////////////////////////////
