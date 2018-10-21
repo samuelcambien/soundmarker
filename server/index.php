@@ -462,6 +462,8 @@ Flight::route('POST /project/url', function() {
 
 $project_id = Flight::request()->data->project_id;
 
+$test = json_decode(Flight::request()->getBody());
+
 $db = Flight::db();
 $sql = "SELECT hash FROM Project WHERE project_id = '$project_id'";
 $result = $db->query($sql);
@@ -470,7 +472,7 @@ $result = $db->query($sql);
 Flight::json(array(
    'project_url' => 'http://soundmarker-env.mc3wuhhgpz.eu-central-1.elasticbeanstalk.com/project/'. $result->fetch()[0],
    'projectest' => Flight::request()->data->project_id,
-   'projectest2' => Flight::request()->getBody()["project_id"]
+   'projectest2' => $test->project_id
 ), 200);
 });
 
