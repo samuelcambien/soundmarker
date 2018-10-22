@@ -275,7 +275,7 @@ try {
 });
 
 ////////////////////////////// Routes - /project/get/@project_hash POST //////////////////////////////
-Flight::route('POST /project/get/@project_hash', function($project_hash) {
+Flight::route('POST /project/get/url', function() {
 
 $project_id = isset(json_decode(Flight::request()->getBody())->project_id) ? json_decode(Flight::request()->getBody())->project_id : "";
 
@@ -390,7 +390,7 @@ Flight::route('GET /ad', function() {
 $db = Flight::db();
 $sql = "SELECT html, ad_id, impressions FROM Ad WHERE priority = '1' AND impressions <= limits";
 $result = $db->query($sql);
-$array = $result->fetchAll(PDO::FETCH_ASSOC);
+$array = $result->fetchAll();
 
 $rand = rand(0,(count($array)-1));
 $html = $array[$rand]["html"];
