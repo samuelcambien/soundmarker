@@ -258,7 +258,7 @@ try {
     // Upload data.
     $result = $s3->putObject([
         'Bucket' => $s3bucket,
-        'Key'    => $files[0]["version_id"] . $files[0]["file_name"] .'.' . $files[0]["extension"],
+        'Key'    => $files[0]["version_id"] . "/" . $files[0]["file_name"] .'.' . $files[0]["extension"],
         'Body'   => Flight::request()->getBody(), // figuring out right way to get the file from the JSON
         'ACL'    => 'public-read'
     ]);
