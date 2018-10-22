@@ -275,7 +275,9 @@ try {
 });
 
 ////////////////////////////// Routes - /project/get/@project_hash POST //////////////////////////////
-Flight::route('GET /project/get/@project_hash', function($project_hash) {
+Flight::route('POST /project/get/@project_hash', function($project_hash) {
+
+$project_id = isset(json_decode(Flight::request()->getBody())->project_id) ? json_decode(Flight::request()->getBody())->project_id : "";
 
 $db = Flight::db();
 try {
