@@ -247,7 +247,7 @@ Flight::route('POST /file/chunk/@file_id/@idno/@ext', function($file_id, $idno, 
 
 try {
   $db = Flight::db();
-  $sql = "SELECT version_id, extension, metadata, aws_path, file_name, file_size, identifier, chunk_length, track_length FROM File WHERE file_id = '$file_id'";
+  $sql = "SELECT version_id, extension, metadata, aws_path, file_name, file_size, identifier, chunk_length FROM File WHERE file_id = '$file_id'";
   $result = $db->query($sql);
   $files = $result->fetchAll();
 
@@ -337,7 +337,7 @@ Flight::route('/project/@project_hash', function(){
 Flight::route('GET /track/@track_id', function($track_id) {
 
 $db = Flight::db();
-$sql = "SELECT version_id, notes, downloadable, visibility, version_title, wave_png FROM Version WHERE track_id = '$track_id'";
+$sql = "SELECT version_id, notes, downloadable, visibility, version_title, track_length, wave_png FROM Version WHERE track_id = '$track_id'";
 $result = $db->query($sql);
 $versions = $result->fetchAll(PDO::FETCH_ASSOC);
 
@@ -351,7 +351,7 @@ Flight::json(array(
 Flight::route('GET /track/version/@version_id', function($version_id) {
 
 $db = Flight::db();
-$sql = "SELECT file_id, extension, metadata, aws_path, file_name, file_size, identifier, chunk_length, track_length FROM File WHERE version_id = '$version_id'";
+$sql = "SELECT file_id, extension, metadata, aws_path, file_name, file_size, identifier, chunk_length FROM File WHERE version_id = '$version_id'";
 $result = $db->query($sql);
 $files = $result->fetchAll(PDO::FETCH_ASSOC);
 
