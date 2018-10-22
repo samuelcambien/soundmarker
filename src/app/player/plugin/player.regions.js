@@ -68,8 +68,8 @@ Player.Regions = {
             pxMove = 0;
 
             if (region) {
-                region.fireEvent('update-end', e);
-                my.player.fireEvent('region-update-end', region, e);
+                region.fireEvent('update-end_time', e);
+                my.player.fireEvent('region-update-end_time', region, e);
             }
 
             region = null;
@@ -215,7 +215,7 @@ Player.Region = {
         var regionEl = document.createElement('region');
         regionEl.className = 'player-region';
         regionEl.title = this.formatTime(this.start, this.end);
-        regionEl.setAttribute('data-id', this.id);
+        regionEl.setAttribute('data-project_id', this.id);
 
         for (var attrname in this.attributes) {
             regionEl.setAttribute('data-region-' + attrname, this.attributes[attrname]);
@@ -233,8 +233,8 @@ Player.Region = {
         if (this.resize) {
             var handleLeft = regionEl.appendChild(document.createElement('handle'));
             var handleRight = regionEl.appendChild(document.createElement('handle'));
-            handleLeft.className = 'player-handle player-handle-start';
-            handleRight.className = 'player-handle player-handle-end';
+            handleLeft.className = 'player-handle player-handle-start_time';
+            handleRight.className = 'player-handle player-handle-end_time';
             var css = {
                 cursor: 'col-resize',
                 position: 'absolute',
@@ -392,7 +392,7 @@ Player.Region = {
                 startTime = my.player.drawer.handleEvent(e, true) * duration;
 
                 if (e.target.tagName.toLowerCase() == 'handle') {
-                    if (e.target.classList.contains('player-handle-start')) {
+                    if (e.target.classList.contains('player-handle-start_time')) {
                         resize = 'start';
                     } else {
                         resize = 'end';
@@ -409,8 +409,8 @@ Player.Region = {
                     drag = false;
                     resize = false;
 
-                    my.fireEvent('update-end', e);
-                    my.player.fireEvent('region-update-end', my, e);
+                    my.fireEvent('update-end_time', e);
+                    my.player.fireEvent('region-update-end_time', my, e);
                 }
             };
             var onMove = function (e) {

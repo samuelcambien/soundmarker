@@ -305,7 +305,7 @@ Player.WebAudio = {
         this.source = this.ac.createBufferSource();
 
         //adjust for old browsers.
-        this.source.start = this.source.start || this.source.noteGrainOn;
+        this.source.start_time = this.source.start || this.source.noteGrainOn;
         this.source.stop = this.source.stop || this.source.noteOff;
 
         this.source.playbackRate.value = this.playbackRate;

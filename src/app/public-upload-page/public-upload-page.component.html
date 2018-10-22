@@ -1,10 +1,13 @@
 <app-public-page>
 
-  <div [ngSwitch]="status">
-    <app-public-upload-form *ngSwitchCase="statusEnum.SELECT_SONGS" [uploader]="uploader"></app-public-upload-form>
-    <app-public-uploading-files *ngSwitchCase="statusEnum.UPLOADING_SONGS"
+  <div>
+    <app-public-upload-form [class.hidden]="stage != statusEnum.SELECT_SONGS" [uploader]="uploader"
+                            (uploading)="stage = statusEnum.UPLOADING_SONGS"
+                            (finished)="stage = statusEnum.GREAT_SUCCESS">
+    </app-public-upload-form>
+    <app-public-uploading-files [class.hidden]="stage != statusEnum.UPLOADING_SONGS"
                                 [uploader]="uploader"></app-public-uploading-files>
-    <app-public-upload-finished *ngSwitchCase="statusEnum.GREAT_SUCCESS"></app-public-upload-finished>
+    <app-public-upload-finished [class.hidden]="stage != statusEnum.GREAT_SUCCESS"></app-public-upload-finished>
   </div>
 
 </app-public-page>

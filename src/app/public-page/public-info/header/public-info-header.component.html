@@ -1,6 +1,6 @@
 <nav class="wide-nav navbar navbar-expand-sm   shadow-topbar">
   <a class="navbar-brand" href="#">
-    <div class="soundmarker-logo" placement="right" ngbTooltip="powered by Zelmar" triggers="click:blur"></div>
+    <div class="soundmarker-logo" placement="right" ngbTooltip="powered by Zelmar" (click)="goToPage()"></div>
   </a>
 
   <div class="ml-auto">
@@ -9,7 +9,7 @@
 	  
     <div *ngIf="messages?.length > 0" class="message-item dropdown ml-auto">
 	    
-      <!-- <button class="btn btn-primary btn-sm btn-note dropdown-toggle" type="button" id="dropdownMenuButton"
+      <!-- <button class="btn btn-primary btn-sm btn-note dropdown-toggle" type="button" project_id="dropdownMenuButton"
               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         Messages <span class="badge badge-light">{{messages?.length}}</span>
       </button>

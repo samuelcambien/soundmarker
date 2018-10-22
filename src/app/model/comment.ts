@@ -2,16 +2,14 @@ export class Comment {
 
   public comment_id;
   public version_id;
-  public parent_id;
-  public time;
+  public parent_comment_id;
+  public comment_time;
   public name: string;
-  public tag: string;
-  public start;
-  public startFormatted;
-  public includeStart: boolean;
-  public end;
-  public includeEnd: boolean;
-  public text: string;
+  public start_time;
+  public include_start: boolean;
+  public end_time;
+  public include_end: boolean;
+  public notes: string;
   public replies: Comment[];
 
   constructor() {
@@ -27,12 +25,12 @@ export class CommentSorter {
   }
 
   public static MOST_RECENT_FIRST: CommentSorter = new CommentSorter(
-    (a, b) => b.time - a.time,
+    (a, b) => b.comment_time - a.comment_time,
     "Most Recent First"
   );
 
   public static MOST_RECENT_LAST: CommentSorter = new CommentSorter(
-    (a, b) => a.time - b.time,
+    (a, b) => a.comment_time - b.comment_time,
     "Most Recent Last"
   );
 

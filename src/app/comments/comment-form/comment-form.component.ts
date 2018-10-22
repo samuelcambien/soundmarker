@@ -1,8 +1,9 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {Comment} from "../comment";
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Comment} from "../../model/comment";
 import {RestUrl, Utils} from "../../app.component";
 import {FormControl, FormGroup, NgForm} from "@angular/forms";
 import {Player} from "../../newplayer/player";
+import {RestCall} from "../../rest/rest-call";
 
 @Component({
   selector: 'app-comment-form',
@@ -16,6 +17,7 @@ export class CommentFormComponent implements OnInit {
   @Input() version_id;
   @Input() comment: Comment;
   @Input() player: Player;
+  @Output() newComment = new EventEmitter<Comment>();
 
   constructor() {
   }
@@ -24,35 +26,36 @@ export class CommentFormComponent implements OnInit {
   }
 
   onSubmit(form: NgForm) {
-    this.comment.time = Date.now();
+    this.comment.comment_time = Date.now();
     this.comment.version_id = this.version_id;
-    Utils.sendPostRequest(
-      RestUrl.COMMENTS,
-      JSON.stringify(this.comment)
-    );
+    if (!this.comment.include_start) delete this.comment.start_time;
+    if (!this.comment.include_end) delete this.comment.end_time;
+    RestCall.addComment(this.comment);
+    this.active = false;
     form.resetForm();
+    this.newComment.emit(this.comment);
   }
 
   triggerStart() {
-    if (!this.comment.start)
-      this.comment.start = this.player.getCurrentPosition();
-    if (this.comment.includeStart) {
-      this.comment.includeEnd = false;
+    if (!this.comment.start_time)
+      this.comment.start_time = this.player.getCurrentPosition();
+    if (this.comment.include_start) {
+      this.comment.include_end = false;
       this.resetEnd();
     }
   }
 
   triggerEnd() {
-    if (!this.comment.end)
-      this.comment.end = this.player.getCurrentPosition();
-    if (this.comment.includeEnd)
+    if (!this.comment.end_time)
+      this.comment.end_time = this.player.getCurrentPosition();
+    if (this.comment.include_end)
       this.resetEnd();
-    if (!this.comment.includeEnd)
-      this.comment.includeStart = true;
+    if (!this.comment.include_end)
+      this.comment.include_start = true;
   }
 
   private resetEnd() {
-    this.comment.end = this.player.getDuration();
+    this.comment.end_time = this.player.getDuration();
   }
 
   format(time: string) {

@@ -88,7 +88,7 @@ Player.ELAN = {
                         };
 
                         if (this.Types.ALIGNABLE_ANNOTATION == annot.type) {
-                            // Add start & end to alignable annotation
+                            // Add start_time & end_time to alignable annotation
                             annot.start = timeOrder[node.getAttribute('TIME_SLOT_REF1')];
                             annot.end = timeOrder[node.getAttribute('TIME_SLOT_REF2')];
 
@@ -114,7 +114,7 @@ Player.ELAN = {
             }, this);
         }, this);
 
-        // Sort alignable annotations by start & end
+        // Sort alignable annotations by start_time & end_time
         data.alignableAnnotations.sort(function (a, b) {
             var d = a.start - b.start;
             if (d == 0) {
@@ -204,8 +204,8 @@ Player.ELAN = {
                 if (annotation) {
                     td.id = 'player-annotation-' + annotation.id;
                     td.dataset.ref = alignable.id;
-                    td.dataset.start = alignable.start;
-                    td.dataset.end = alignable.end;
+                    td.dataset.start_time = alignable.start;
+                    td.dataset.end_time = alignable.end;
                     td.textContent = annotation.value;
                 }
                 td.className = 'player-tier-' + tier.id;
