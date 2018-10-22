@@ -365,7 +365,7 @@ Flight::json(array(
 Flight::route('GET /track/version/comments/@version_id', function($version_id) {
 
 $db = Flight::db();
-$sql = "SELECT comment_id, notes, start_time, end_time, checked, parent_comment_id, name FROM Comment WHERE version_id = '$version_id'";
+$sql = "SELECT comment_id, notes, start_time, end_time, checked, parent_comment_id, name, include_end, include_start, comment_time FROM Comment WHERE version_id = '$version_id'";
 $result = $db->query($sql);
 $comments = $result->fetchAll(PDO::FETCH_ASSOC);
 
