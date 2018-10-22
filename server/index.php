@@ -442,9 +442,10 @@ $result = $db->query($sql);
 $html = $result->fetch()[0];
 
 // return ok
-Flight::json(array(
-   'html' => $html
-), 200);
+// Flight::json(array(
+//    'html' => $html
+// ), 200);
+echo stripslashes($html);
 });
 
 ////////////////////////////// Routes - /ad POST //////////////////////////////
