@@ -397,12 +397,26 @@ $impressions = $array[$rand]["impressions"]+1;
 
 // return ok
 Flight::json(array(
-   'html' => $html, 'ad_id' => $ad_id
+   'ad_id' => $ad_id
 ), 200);
 
 // store impression for new ad
 $sql = "UPDATE Ad SET impressions = '$impressions' WHERE ad_id = '$ad_id'";
 $result = $db->query($sql);
+});
+
+////////////////////////////// Routes - /ad/@ad_id GET //////////////////////////////
+Flight::route('GET /ad/@ad_id', function($ad_id) {
+
+$db = Flight::db();
+$sql = "SELECT html FROM Ad WHERE ad_id = '$ad_id'";
+$result = $db->query($sql);
+$html = $result->fetch()[0];
+
+// return ok
+Flight::json(array(
+   'html' => $html
+), 200);
 });
 
 ////////////////////////////// Routes - /ad POST //////////////////////////////
