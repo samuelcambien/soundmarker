@@ -384,9 +384,12 @@ $name = isset(json_decode(Flight::request()->getBody())->name) ? json_decode(Fli
 $start_time = isset(json_decode(Flight::request()->getBody())->start_time) ? json_decode(Flight::request()->getBody())->start_time : "";
 $end_time = isset(json_decode(Flight::request()->getBody())->end_time) ? json_decode(Flight::request()->getBody())->end_time : "";
 $parent_comment_id = isset(json_decode(Flight::request()->getBody())->parent_comment_id) ? json_decode(Flight::request()->getBody())->parent_comment_id : "";
+$include_start = isset(json_decode(Flight::request()->getBody())->include_start) ? json_decode(Flight::request()->getBody())->include_start : "";
+$include_end = isset(json_decode(Flight::request()->getBody())->include_end) ? json_decode(Flight::request()->getBody())->include_end : "";
+$comment_time = isset(json_decode(Flight::request()->getBody())->comment_time) ? json_decode(Flight::request()->getBody())->comment_time : "";
 
 $db = Flight::db();
-$sql = "INSERT INTO Comment (version_id, notes, name, start_time, end_time, parent_comment_id) VALUES ('$version_id', '$notes', '$name', '$start_time', '$end_time', '$parent_comment_id')";
+$sql = "INSERT INTO Comment (version_id, notes, name, start_time, end_time, parent_comment_id, include_start, include_end, comment_time) VALUES ('$version_id', '$notes', '$name', '$start_time', '$end_time', '$parent_comment_id', '$include_start', '$include_end', '$comment_time')";
 $result = $db->query($sql);
 
 // return ok
