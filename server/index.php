@@ -204,10 +204,11 @@ $downloadable = isset(json_decode(Flight::request()->getBody())->downloadable) ?
 $visibility = isset(json_decode(Flight::request()->getBody())->visibility) ? json_decode(Flight::request()->getBody())->visibility : 1;
 $version_notes = isset(json_decode(Flight::request()->getBody())->version_notes) ? json_decode(Flight::request()->getBody())->version_notes : "";
 $version_title = isset(json_decode(Flight::request()->getBody())->version_title) ? json_decode(Flight::request()->getBody())->version_title : "";
+$track_length = isset(json_decode(Flight::request()->getBody())->track_length) ? json_decode(Flight::request()->getBody())->track_length : 0;
 $wave_png = isset(json_decode(Flight::request()->getBody())->wave_png) ? json_decode(Flight::request()->getBody())->wave_png : "";
 
 $db = Flight::db();
-$sql = "INSERT INTO Version (track_id, downloadable, visibility, notes, version_title, wave_png) VALUES ('$track_id', '$downloadable', '$visibility', '$version_notes', '$version_title', '$wave_png')";
+$sql = "INSERT INTO Version (track_id, downloadable, visibility, notes, version_title, track_length, wave_png) VALUES ('$track_id', '$downloadable', '$visibility', '$version_notes', '$version_title', '$track_length', '$wave_png')";
 $result = $db->query($sql);
 
 // return ok
@@ -223,7 +224,6 @@ Flight::route('POST /file/new', function() {
 // And put in DB
 $version_id = json_decode(Flight::request()->getBody())->version_id;
 $identifier = isset(json_decode(Flight::request()->getBody())->identifier) ? json_decode(Flight::request()->getBody())->identifier : 0;
-$track_length = isset(json_decode(Flight::request()->getBody())->track_length) ? json_decode(Flight::request()->getBody())->track_length : 0;
 $chunk_length = isset(json_decode(Flight::request()->getBody())->chunk_length) ? json_decode(Flight::request()->getBody())->chunk_length : 0;
 $file_size = isset(json_decode(Flight::request()->getBody())->file_size) ? json_decode(Flight::request()->getBody())->file_size : 0;
 $file_name = isset(json_decode(Flight::request()->getBody())->file_name) ? json_decode(Flight::request()->getBody())->file_name : "";
@@ -232,7 +232,7 @@ $extension = isset(json_decode(Flight::request()->getBody())->extension) ? json_
 $aws_path = "https://s3-eu-west-1.amazonaws.com/soundmarkersass-local-robin/" . $version_id . "/" . $file_name;
 
 $db = Flight::db();
-$sql = "INSERT INTO File (version_id, file_name, file_size, metadata, extension, chunk_length, track_length, identifier, aws_path) VALUES ('$version_id', '$file_name', '$file_size', '$metadata', '$extension', '$chunk_length', '$track_length' , '$identifier', '$aws_path')";
+$sql = "INSERT INTO File (version_id, file_name, file_size, metadata, extension, chunk_length, identifier, aws_path) VALUES ('$version_id', '$file_name', '$file_size', '$metadata', '$extension', '$chunk_length', '$identifier', '$aws_path')";
 $result = $db->query($sql);
 $file_id = $db->lastInsertId();
 
