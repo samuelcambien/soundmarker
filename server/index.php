@@ -281,6 +281,31 @@ $project_id = isset(json_decode(Flight::request()->getBody())->project_id) ? jso
 
 $db = Flight::db();
 try {
+    $sql = "SELECT hash FROM Project WHERE project_id = '$project_id'";
+    $result = $db->query($sql);
+    $hash = $result->fetch()[0];
+
+    // return ok
+    Flight::json(array(
+       'project_hash' => $hash
+    ), 200);
+
+} catch (PDOException $pdoException) {
+    Flight::error($pdoException);
+} catch (Exception $exception) {
+        Flight::error($exception);
+} finally {
+    $db = null;
+}
+});
+
+////////////////////////////// Routes - /project/get/@project_hash POST //////////////////////////////
+Flight::route('GET /project/get/@project_hash', function($project_hash) {
+
+// $project_id = isset(json_decode(Flight::request()->getBody())->project_id) ? json_decode(Flight::request()->getBody())->project_id : "";
+
+$db = Flight::db();
+try {
     $sql = "SELECT project_id FROM Project WHERE hash = '$project_hash'";
     $result = $db->query($sql);
     $project_id = $result->fetch()[0];
@@ -387,6 +412,7 @@ Flight::json(array(
 ////////////////////////////// Routes - /ad GET //////////////////////////////
 Flight::route('GET /ad', function() {
 
+// if nothing returns, show default one, no error
 $db = Flight::db();
 $sql = "SELECT html, ad_id, impressions FROM Ad WHERE priority = '1' AND impressions <= limits";
 $result = $db->query($sql);
