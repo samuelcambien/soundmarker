@@ -2,7 +2,7 @@
 
   <div class="list-container" [ngbCollapse]="activeTrack != null">
 
-    <div *ngFor="let track of tracks">
+    <div *ngFor="let track of project.tracks">
 
       <app-public-player-track
         [track]="track"
@@ -12,17 +12,17 @@
       >
       </app-public-player-track>
 
-      <hr *ngIf="track != tracks[tracks.length - 1]">
+      <hr *ngIf="track != project.tracks[project.tracks.length - 1]">
 
     </div>
 
   </div>
 
   <app-public-track-player
-    *ngFor="let track of tracks"
+    *ngFor="let track of project.tracks"
     [track]="track"
     [player]="players.get(track)"
-    [enableOverview]="tracks.length > 1"
+    [enableOverview]="project.tracks.length > 1"
     [ngbCollapse]="activeTrack != track"
     (overview)="activeTrack = null;"
     (plaing)="pauseOtherTracks(track)"

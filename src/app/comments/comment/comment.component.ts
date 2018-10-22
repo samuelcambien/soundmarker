@@ -1,6 +1,5 @@
-import {Component, ComponentFactoryResolver, Input, OnInit, ViewChild, ViewContainerRef} from '@angular/core';
-import {Comment} from "../comment";
-import {ReplyFormComponent} from "../reply-form/reply-form.component";
+import {Component, Input, OnInit} from '@angular/core';
+import {Comment} from "../../model/comment";
 import {Player} from "../../newplayer/player";
 import {Utils} from "../../app.component";
 
@@ -27,7 +26,8 @@ export class CommentComponent implements OnInit {
 
   newReply() {
     this.reply = new Comment();
-    this.reply.parent_id = this.comment.comment_id;
+    this.reply.parent_comment_id = this.comment.comment_id;
+    this.reply.version_id = this.comment.version_id;
   }
 
   clearReply() {
@@ -40,6 +40,6 @@ export class CommentComponent implements OnInit {
 
   goToCommentTime(comment: Comment) {
 
-    this.player.seekTo(comment.start, this.player.play());
+    this.player.seekTo(comment.start_time, this.player.play());
   }
 }

@@ -1,18 +1,13 @@
 import * as lamejs from "lamejs";
+
+
+import WaveFile from "wavefile";
 // import * as flac from "node-flac";
 // import * as wav from "node-wav";
 // import * as AV from 'av';
 // import * as decode from 'audio-decode';
 // import * as lena from 'audio-lena/flac';
 // import * as flac from 'flac.js';
-
-import * as audiofile from './audiofile.js';
-import * as AV from './av.js';
-
-import * as stream from 'binary-io';
-
-
-import WaveFile from "wavefile";
 
 declare var require;
 
@@ -40,7 +35,7 @@ export class Mp3Encoder {
     return new File([encoded], "test.mp3");
   }
 
-  static encodeMp3(buffer: ArrayBuffer, name: String): Promise<File> {
+  static encodeMp3(buffer: ArrayBuffer, name: string): Promise<File> {
 
     return new Promise<File>(resolve => {
 
@@ -141,12 +136,12 @@ export class Mp3Encoder {
     })
   }
 
-  static getName(name: String): String {
+  static getName(name: string): string {
 
     return name.split(/(.*)\.(.*)/)[1];
   }
 
-  static getExtension(name: String): String {
+  static getExtension(name: string): string {
 
     return name.split(/(.*)\.(.*)/)[2];
   }
@@ -290,7 +285,7 @@ export class Mp3Encoder {
 //
 //
 //   // try {
-//   //   require("audio-play")(buf, {end: 2}, () => console.log("great success"));
+//   //   require("audio-play")(buf, {end_time: 2}, () => console.log("great success"));
 //   // } catch (e) {
 //   //   throw e;
 //   // }

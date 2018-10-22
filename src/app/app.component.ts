@@ -19,15 +19,17 @@ export class RestUrl {
 
   private static DATA: string = RestUrl.BACKEND;
 
+  public static AD: string = RestUrl.BACKEND + "/ad";
+
   public static UPLOAD: string = RestUrl.DATA + "/file/new";
 
   public static UPLOAD_CHUNK: string = RestUrl.DATA + "/file/chunk";
 
-  public static PROJECT: string = RestUrl.BACKEND + "/project";
+  public static PROJECT: string = RestUrl.BACKEND + "/project/get";
 
-  public static PROJECT_SHARE: string = RestUrl.BACKEND + "/project/url";
+  public static PROJECT_SHARE: string = RestUrl.BACKEND + "/project/get/url";
 
-  public static PROJECT_NEW: string = RestUrl.PROJECT + "/new";
+  public static PROJECT_NEW: string = RestUrl.BACKEND + "/project/new";
 
   public static PROJECT_TRACKS: string = RestUrl.BACKEND + "/project/tracks";
 
@@ -43,6 +45,8 @@ export class RestUrl {
 
   public static COMMENTS: string = RestUrl.TRACK + "/version/comments";
 
+  public static COMMENT: string = RestUrl.TRACK + "/version/comment";
+
   public static REPLIES: string = RestUrl.COMMENTS + "/replies";
 }
 
@@ -56,34 +60,30 @@ export class Utils {
     return moment.utc(moment.duration({'seconds': seconds}).asMilliseconds()).format("mm:ss");
   }
 
-  public static sendGetDataRequest(url, data, params, callback): void {
-    let trackRequest = new XMLHttpRequest();
-    for (let entry of data) {
-      url += "/" + entry;
-    }
-    trackRequest.open("GET", url, true);
-    trackRequest.send(params);
-    trackRequest.addEventListener("load", () => {
-      if (trackRequest.readyState == 4 && trackRequest.status == 200) {
-        console.log(
-          trackRequest.getResponseHeader("content-type")
-        );
-        callback(trackRequest.response, trackRequest);
+  public static sendGetDataRequest(url, params?): Promise<any> {
+    return new Promise<any>((resolve, reject) => {
+      let trackRequest = new XMLHttpRequest();
+      for (let entry of params) {
+        url += "/" + entry;
       }
-    }, false);
+      trackRequest.open("GET", url, true);
+      trackRequest.onload = () => resolve(trackRequest.responseText);
+      trackRequest.onerror = () => reject(trackRequest.statusText);
+      trackRequest.send();
+    });
   }
 
-  public static sendGetRequest(url, data, params): Promise<any> {
+  public static sendGetRequest(url, params?): Promise<any> {
 
     return new Promise<any>((resolve, reject) => {
       let trackRequest = new XMLHttpRequest();
-      for (let entry of data) {
+      if (params) for (let entry of params) {
         url += "/" + entry;
       }
       trackRequest.open("GET", url, true);
       trackRequest.onload = () => resolve(JSON.parse(trackRequest.responseText));
       trackRequest.onerror = () => reject(trackRequest.statusText);
-      trackRequest.send(params);
+      trackRequest.send();
     });
   }
 
@@ -109,6 +109,7 @@ export class Utils {
         url += "/" + entry;
       }
       trackRequest.open("POST", url, true);
+      // trackRequest.setRequestHeader("Content-Type", "application/json");
       trackRequest.onload = () => resolve(JSON.parse(trackRequest.responseText));
       trackRequest.onerror = () => reject(trackRequest.statusText);
       trackRequest.send(JSON.stringify(data));
