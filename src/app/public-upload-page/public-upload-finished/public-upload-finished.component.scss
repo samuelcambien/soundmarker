@@ -4,10 +4,16 @@
 	margin-right: -12px;
 }
 
+h4, a {
+	color: #7397ff;
+}
+
 #copy-link {
 	border-bottom-left-radius: 3px !important;
 	border-top-left-radius: 3px !important;
 	border-right: none !important;
+		border-top-right-radius: 0px !important;
+	border-bottom-right-radius: 0px !important;
 }
 
 .copy-link-btn {

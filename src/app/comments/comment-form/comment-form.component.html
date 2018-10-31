@@ -1,5 +1,5 @@
 <form #myForm="ngForm" (ngSubmit)="onSubmit(myForm)" class="comment-form"
-      [ngFormOptions]="{ updateOn: 'change'}">
+      [ngFormOptions]="{ updateOn: 'change'}" >
 
   <div class="top">
     <textarea type="text" required [(ngModel)]='comment.text' name="text" placeholder="Type comment"
@@ -8,7 +8,7 @@
 
   <div class="form-row sub" [ngbCollapse]="!active">
 
-    <div class="form-group col-md-3">
+    <div class="form-group name col-md-3">
       <input type="text" required [(ngModel)]='comment.name' name="name" placeholder="Your name"
              class="comment-form-name sub-form name-box">
     </div>
@@ -21,7 +21,7 @@
       </div>
     </div>
 
-    <div class="form-group col-auto">
+    <div class="form-group col-auto hide-phone">
       <input type="text" [ngModel]="format(this.comment.start)" (ngModel)="this.comment.start" name="start"
              [ngClass]="['comment-form-start-time sub-form tag-box', comment.includeStart ? 'enabled' : 'disabled']">
     </div>
@@ -34,16 +34,18 @@
       </div>
     </div>
 
-    <div class="form-group col-auto">
+    <div class="form-group col-auto hide-phone">
       <input type="text" class="tag-box" [ngModel]="format(this.comment.end)" (ngModel)="this.comment.end" name="end"
              [ngClass]="['comment-form-end-time sub-form tag-box', comment.includeEnd ? 'enabled' : 'disabled']">
     </div>
+    
+    <div class="form-group ml-auto">
 
-    <label class="form-check-label cancel ml-auto" (click)="active = false">
+    <label class="form-check-label cancel " (click)="active = false">
       <p>Cancel</p>
     </label>
 
-    <div class="form-group ">
+    
       <button type="submit" class="btn btn-primary btn-sm" [disabled]="!myForm.valid">Add comment</button>
     </div>
 

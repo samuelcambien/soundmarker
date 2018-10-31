@@ -84,7 +84,7 @@
 }
 
 .comment-tag p {
-	font-family: "sofia-light";
+	font-family: "sofia-regular";
 	
 }
 
@@ -122,6 +122,7 @@
 
 .comment-tx {
 	color: #717db0;
+	padding-right: 15px;
 }
 
 .comment-reply {
@@ -144,7 +145,7 @@ hr {
 
 .reply-tx {
 	margin-bottom: 0px;
-	font-family: 'sofia-light';
+	font-family: 'sofia-regular';
 	font-size: 8pt;
 	cursor: pointer;
 	-webkit-user-select: none; /* Safari */        
