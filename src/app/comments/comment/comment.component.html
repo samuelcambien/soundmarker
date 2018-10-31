@@ -24,9 +24,9 @@
       </div>
     </div>
     
-    <div class="comment-check"></div>
+    <div class="comment-check hide-pro"></div>
     
-    <div class="comment-options">
+    <div class="comment-options hide-pro">
     
     
           <svg width="17px" height="5px" viewBox="0 0 24 8" version="1.1" xmlns="http://www.w3.org/2000/svg"
@@ -96,7 +96,7 @@
     </button>
 -->
 
-    <p class="date-tx ml-auto hide-phone">{{getTimeHumanized(comment.time)}}</p>
+    <p class="date-tx ml-auto hide-phone" placement="top" ngbTooltip="17-02-18 13:23">{{getTimeHumanized(comment.time)}}</p>
 
   </div>
 
@@ -118,7 +118,7 @@
          class="showhidereplies collapsed">
 
         <span *ngIf="!showReplies">
-        ·  Show {{comment.replies.length}} replies
+        ·  Show {{comment.replies.length}} <span *ngIf="comment.replies.length > 1; else reply">replies </span> <ng-template #reply>reply </ng-template>
         <svg width="10px" height="6px" viewBox="0 0 14 8" version="1.1" xmlns="http://www.w3.org/2000/svg">
           <defs></defs>
           <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round"
@@ -135,7 +135,7 @@
       </span>
 
         <span *ngIf="showReplies">
-          ·  Hide {{comment.replies.length}} replies
+          ·  Hide {{comment.replies.length}} <span *ngIf="comment.replies.length > 1; else reply">replies </span> <ng-template #reply>reply </ng-template>
           <svg width="10px" height="6px" viewBox="0 0 14 8" version="1.1" xmlns="http://www.w3.org/2000/svg">
             <defs></defs>
             <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round"

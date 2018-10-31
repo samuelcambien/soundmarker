@@ -1,9 +1,18 @@
+
+
 .btn.btn-link {
-  font-size: 10pt;
+	 font-size: 10pt;
   color: #7397FF !important;
   background-color: transparent !important;
 }
 
+.mb-0 .btn.btn-link {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: 100%;
+  text-align: left;
+}
 
 .btn.btn-link:hover, .btn.btn-link:active, .btn.btn-link:focus, .btn.btn-link:visited {
 	color: #4479db !important;
@@ -31,12 +40,9 @@
 	text-decoration: none !important;
 }
 
-
-
 .card-body {
-		border-bottom: none !important;
+	border-bottom: none !important;
 	border-top: 1px solid #eef1ff !important; 
-	
 }
 
 .card-body p {
@@ -54,7 +60,6 @@
 	border-bottom: none !important;
 	border-top: 1px solid #eef1ff !important;
 }
-
 
 #last-card {
 border-bottom: 1px solid #eef1ff !important;
@@ -85,14 +90,15 @@ border-bottom: 1px solid #eef1ff !important;
 
 .btn-link {
 	margin-left: -10px !important;
+	  
 }
 
-button.btn-sm.collapsed:after
+button.btn-more.collapsed:after
 {
     content:' more' ;
    
 }
-button.btn-sm:after
+button.btn-more:after
 {
     content:' less' ;
    
