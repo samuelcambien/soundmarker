@@ -138,8 +138,8 @@ try {
     $emailstring_text = html_entity_decode($db->query($sql)->fetch()[0], ENT_COMPAT, 'ISO-8859-1');
     
     // Replace strings
-    str_replace("$sendermail$","robinreumers@gmail.com",$emailstring);
-    str_replace("$sendermail$","robinreumers@gmail.com",$emailstring_text);
+    str_replace("&sendermail&","robinreumers@gmail.com",$emailstring);
+    str_replace("&sendermail&","robinreumers@gmail.com",$emailstring_text);
 
     // Replace sender@example.com with your "From" address.
     // This address must be verified with Amazon SES.
