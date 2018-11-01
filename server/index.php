@@ -147,7 +147,7 @@ try {
     try {
         $result = Flight::get("SesClient")->sendEmail([
             'Destination' => [
-                'ToAddresses' => [$recipient_emails],
+                'ToAddresses' => [$receiver],
             ],
             'ReplyToAddresses' => [$sender],
             'Source' => $sender,
