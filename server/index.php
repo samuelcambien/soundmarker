@@ -141,22 +141,13 @@ try {
     str_replace("&sendermail&","robinreumers@gmail.com",$emailstring);
     str_replace("&sendermail&","robinreumers@gmail.com",$emailstring_text);
 
-    // Replace sender@example.com with your "From" address.
-    // This address must be verified with Amazon SES.
-    // $sender_email = 'robinreumers@gmail.com';
-
-    // Replace these sample addresses with the addresses of your recipients. If
-    // your account is still in the sandbox, these addresses must be verified.
-    $recipient_emails = [$receiver];
-    $configuration_set = 'ConfigSet';
-
     $subject = 'Your tracks have been shared succesfully via Soundmarker';
     $char_set = 'UTF-8';
 
     try {
         $result = Flight::get("SesClient")->sendEmail([
             'Destination' => [
-                'ToAddresses' => $recipient_emails,
+                'ToAddresses' => [$recipient_emails],
             ],
             'ReplyToAddresses' => [$sender],
             'Source' => $sender,
@@ -178,7 +169,7 @@ try {
             ],
             // If you aren't using a configuration set, comment or delete the
             // following line
-            'ConfigurationSetName' => $configuration_set,
+            // 'ConfigurationSetName' => $configuration_set,
         ]);
         $messageId = $result['MessageId'];
     } catch (AwsException $e) {
