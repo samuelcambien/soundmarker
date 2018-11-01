@@ -2,126 +2,41 @@
 require 'flight/Flight.php';
 require 'vendor/autoload.php';
 
-// Unique ID
-// class UUID {
-//   public static function v3($namespace, $name) {
-//     if(!self::is_valid($namespace)) return false;
+/*
+GLOBALE DECLARATIONS
+*/
+///////////////////////////////////////////////////////////////// Unique ID ///////////////////////////////////////////////////////////
+ class UUID {
+  public static function v4() {
+    return sprintf('%04x%04x-%04x-%04x-%04x-%04x%04x%04x',
 
-//     // Get hexadecimal components of namespace
-//     $nhex = str_replace(array('-','{','}'), '', $namespace);
+      // 32 bits for "time_low"
+      mt_rand(0, 0xffff), mt_rand(0, 0xffff),
 
-//     // Binary Value
-//     $nstr = '';
+      // 16 bits for "time_mid"
+      mt_rand(0, 0xffff),
 
-//     // Convert Namespace UUID to bits
-//     for($i = 0; $i < strlen($nhex); $i+=2) {
-//       $nstr .= chr(hexdec($nhex[$i].$nhex[$i+1]));
-//     }
+      // 16 bits for "time_hi_and_version",
+      // four most significant bits holds version number 4
+      mt_rand(0, 0x0fff) | 0x4000,
 
-//     // Calculate hash value
-//     $hash = md5($nstr . $name);
+      // 16 bits, 8 bits for "clk_seq_hi_res",
+      // 8 bits for "clk_seq_low",
+      // two most significant bits holds zero and one for variant DCE1.1
+      mt_rand(0, 0x3fff) | 0x8000,
 
-//     return sprintf('%08s-%04s-%04x-%04x-%12s',
+      // 48 bits for "node"
+      mt_rand(0, 0xffff), mt_rand(0, 0xffff), mt_rand(0, 0xffff)
+    );
+  }
+}
 
-//       // 32 bits for "time_low"
-//       substr($hash, 0, 8),
-
-//       // 16 bits for "time_mid"
-//       substr($hash, 8, 4),
-
-//       // 16 bits for "time_hi_and_version",
-//       // four most significant bits holds version number 3
-//       (hexdec(substr($hash, 12, 4)) & 0x0fff) | 0x3000,
-
-//       // 16 bits, 8 bits for "clk_seq_hi_res",
-//       // 8 bits for "clk_seq_low",
-//       // two most significant bits holds zero and one for variant DCE1.1
-//       (hexdec(substr($hash, 16, 4)) & 0x3fff) | 0x8000,
-
-//       // 48 bits for "node"
-//       substr($hash, 20, 12)
-//     );
-//   }
-
-//   public static function v4() {
-//     return sprintf('%04x%04x-%04x-%04x-%04x-%04x%04x%04x',
-
-//       // 32 bits for "time_low"
-//       mt_rand(0, 0xffff), mt_rand(0, 0xffff),
-
-//       // 16 bits for "time_mid"
-//       mt_rand(0, 0xffff),
-
-//       // 16 bits for "time_hi_and_version",
-//       // four most significant bits holds version number 4
-//       mt_rand(0, 0x0fff) | 0x4000,
-
-//       // 16 bits, 8 bits for "clk_seq_hi_res",
-//       // 8 bits for "clk_seq_low",
-//       // two most significant bits holds zero and one for variant DCE1.1
-//       mt_rand(0, 0x3fff) | 0x8000,
-
-//       // 48 bits for "node"
-//       mt_rand(0, 0xffff), mt_rand(0, 0xffff), mt_rand(0, 0xffff)
-//     );
-//   }
-
-//   public static function v5($namespace, $name) {
-//     if(!self::is_valid($namespace)) return false;
-
-//     // Get hexadecimal components of namespace
-//     $nhex = str_replace(array('-','{','}'), '', $namespace);
-
-//     // Binary Value
-//     $nstr = '';
-
-//     // Convert Namespace UUID to bits
-//     for($i = 0; $i < strlen($nhex); $i+=2) {
-//       $nstr .= chr(hexdec($nhex[$i].$nhex[$i+1]));
-//     }
-
-//     // Calculate hash value
-//     $hash = sha1($nstr . $name);
-
-//     return sprintf('%08s-%04s-%04x-%04x-%12s',
-
-//       // 32 bits for "time_low"
-//       substr($hash, 0, 8),
-
-//       // 16 bits for "time_mid"
-//       substr($hash, 8, 4),
-
-//       // 16 bits for "time_hi_and_version",
-//       // four most significant bits holds version number 5
-//       (hexdec(substr($hash, 12, 4)) & 0x0fff) | 0x5000,
-
-//       // 16 bits, 8 bits for "clk_seq_hi_res",
-//       // 8 bits for "clk_seq_low",
-//       // two most significant bits holds zero and one for variant DCE1.1
-//       (hexdec(substr($hash, 16, 4)) & 0x3fff) | 0x8000,
-
-//       // 48 bits for "node"
-//       substr($hash, 20, 12)
-//     );
-//   }
-
-//   public static function is_valid($uuid) {
-//     return preg_match('/^\{?[0-9a-f]{8}\-?[0-9a-f]{4}\-?[0-9a-f]{4}\-?'.
-//                       '[0-9a-f]{4}\-?[0-9a-f]{12}\}?$/i', $uuid) === 1;
-//   }
-// }
-
-////////////////////////////// Setup DB //////////////////////////////
-// Setup DB
+///////////////////////////////////////////////////////////////// Setup DB ////////////////////////////////////////////////////////////
 Flight::register('db', 'PDO', array('mysql:host='.$_SERVER["RDS_HOSTNAME"].';dbname='.$_SERVER["RDS_DB_NAME"], $_SERVER["RDS_USERNAME"], $_SERVER["RDS_PASSWORD"]), function($db) {
         $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 });
-// SELECT o.*, p.product_id productId, p.name productName, p.price productPrice
-//  FROM orders o
-//  JOIN products p ON o.product = p.product_id
-//  WHERE order_id = :oId
 
-////////////////////////////// Setup S3 client //////////////////////////////
+////////////////////////////////////////////////////////////// Setup S3 client ////////////////////////////////////////////////////////
 use Aws\S3\S3Client;
 use Aws\S3\Exception\S3Exception;
 
@@ -137,18 +52,48 @@ $s3 = new Aws\S3\S3Client([
 Flight::set("s3", $s3);
 Flight::set("s3bucket", $s3bucket);
 
-////////////////////////////// Routes - Global //////////////////////////////
+///////////////////////////////////////////////////////////// Setup SES client ////////////////////////////////////////////////////////
+use Aws\Ses\SesClient;
+use Aws\Exception\AwsException;
+
+$SesClient = new SesClient([
+    'profile' => 'default',
+    'version' => '2010-12-01',
+    'region'  => 'eu-west-1'
+]);
+
+Flight::set("SesClient", $SesClient);
+
+
+
+
+
+
+
+/*
+ROUTING TO FRONT-END
+*/
+/////////////////////////////////////////////////////////// Routes - Global Index /////////////////////////////////////////////////////
 Flight::route('/', function(){
     include 'index.html';
 });
-
-Flight::route('/player/47', function(){
+Flight::route('/project/@project_hash', function(){
     include 'index.html';
 });
 
 
-////////////////////////////// Routes - /project/new POST //////////////////////////////
 
+
+
+
+
+
+
+
+/*
+PROJECT
+*/
+//////////////////////////////////////////////////////// Routes - /project/new POST ///////////////////////////////////////////////////
 Flight::route('POST /project/new', function() {
 
 // Todo: check if user_id exists first (foreign_key needs to be valid) -> put in dB
@@ -162,7 +107,7 @@ $sql = "INSERT INTO Project (title, password, active) VALUES ('$project_title', 
 $result = $db->query($sql);
 $project_id = $db->lastInsertId();
 
-$uuid = str_replace(".","-",uniqid('', true));
+$uuid = UUID::v4().UUID::v4();
 $sql = "UPDATE Project SET hash = '$uuid' WHERE project_id = '$project_id'";
 $result = $db->query($sql);
 
@@ -172,8 +117,184 @@ Flight::json(array(
 ), 200);
 });
 
-////////////////////////////// Routes - /track/new POST //////////////////////////////
+//////////////////////////////////////////////// Routes - /project/get/@project_hash POST /////////////////////////////////////////////
+Flight::route('POST /project/get/url', function() {
 
+$project_id = isset(json_decode(Flight::request()->getBody())->project_id) ? json_decode(Flight::request()->getBody())->project_id : "";
+$db = Flight::db();
+try {
+    $sql = "SELECT hash FROM Project WHERE project_id = '$project_id'";
+    $result = $db->query($sql);
+    $hash = $result->fetch()[0];
+
+    // https://www.functions-online.com/htmlentities.html
+    // htmlentities('', ENT_COMPAT, 'ISO-8859-1');
+    // html_entity_decode('', ENT_COMPAT, 'ISO-8859-1');
+    // Send Email
+    $sql = "SELECT email_string FROM Emails WHERE email_name = 'soundmarker-initial-email-to-sender'";
+    $result = $db->query($sql);
+    $emailstring = html_entity_decode($result->fetch()[0], ENT_COMPAT, 'ISO-8859-1');
+    str_replace("$sendermail$","robinreumers@gmail.com",$emailstring);
+
+    // Replace sender@example.com with your "From" address.
+    // This address must be verified with Amazon SES.
+    $sender_email = 'robinreumers@gmail.com';
+
+    // Replace these sample addresses with the addresses of your recipients. If
+    // your account is still in the sandbox, these addresses must be verified.
+    $recipient_emails = ['robin@leapwingaudio.com'];
+
+    // Specify a configuration set. If you do not want to use a configuration
+    // set, comment the following variable, and the
+    // 'ConfigurationSetName' => $configuration_set argument below.
+    $configuration_set = 'ConfigSet';
+
+    $subject = 'Amazon SES test (AWS SDK for PHP)';
+    $plaintext_body = 'Text version' ;
+    // $html_body =  '<h1>AWS Amazon Simple Email Service Test Email</h1>'.
+    //               '<p>This email was sent with <a href="https://aws.amazon.com/ses/">'.
+    //               'Amazon SES</a> using the <a href="https://aws.amazon.com/sdk-for-php/">'.
+    //               'AWS SDK for PHP</a>.</p>';
+    $char_set = 'UTF-8';
+
+    try {
+        $result = Flight::get("SesClient")->sendEmail([
+            'Destination' => [
+                'ToAddresses' => $recipient_emails,
+            ],
+            'ReplyToAddresses' => [$sender_email],
+            'Source' => $sender_email,
+            'Message' => [
+              'Body' => [
+                  'Html' => [
+                      'Charset' => $char_set,
+                      'Data' => $emailstring,
+                  ],
+                  'Text' => [
+                      'Charset' => $char_set,
+                      'Data' => $plaintext_body,
+                  ],
+              ],
+              'Subject' => [
+                  'Charset' => $char_set,
+                  'Data' => $subject,
+              ],
+            ],
+            // If you aren't using a configuration set, comment or delete the
+            // following line
+            'ConfigurationSetName' => $configuration_set,
+        ]);
+        $messageId = $result['MessageId'];
+        echo("Email sent! Message ID: $messageId"."\n");
+    } catch (AwsException $e) {
+        // output error message if fails
+        echo $e->getMessage();
+        echo("The email was not sent. Error message: ".$e->getAwsErrorMessage()."\n");
+        echo "\n";
+    }
+
+
+    // return ok
+    Flight::json(array(
+       'project_hash' => $hash
+    ), 200);
+
+} catch (PDOException $pdoException) {
+    Flight::error($pdoException);
+} catch (Exception $exception) {
+        Flight::error($exception);
+} finally {
+    $db = null;
+}
+});
+
+//////////////////////////////////////////////// Routes - /project/get/@project_hash POST /////////////////////////////////////////////
+Flight::route('GET /project/get/@project_hash', function($project_hash) {
+
+$db = Flight::db();
+try {
+    $sql = "SELECT project_id FROM Project WHERE hash = '$project_hash'";
+    $result = $db->query($sql);
+    $project_id = $result->fetch()[0];
+
+    $sql = "SELECT track_id, title FROM Track WHERE project_id = '$project_id'";
+    $result = $db->query($sql);
+    $tracks = $result->fetchAll(PDO::FETCH_ASSOC);
+
+    // return ok
+    Flight::json(array(
+       'project_id' => $project_id, 'tracks' => $tracks
+    ), 200);
+
+} catch (PDOException $pdoException) {
+    Flight::error($pdoException);
+} catch (Exception $exception) {
+        Flight::error($exception);
+} finally {
+    $db = null;
+}
+});
+
+///////////////////////////////////////////////////// Routes - /project/password POST /////////////////////////////////////////////////
+Flight::route('POST /project/password', function() {
+
+$project_id = json_decode(Flight::request()->getBody())->project_id;
+
+$db = Flight::db();
+$sql = "SELECT password FROM Project WHERE project_id = '$project_id'";
+$result = $db->query($sql);
+
+Flight::json(array(
+   'project_id' => $project_id,
+   'project_password' => $result->fetch()[0] 
+), 200);
+
+});
+
+//////////////////////////////////////////////////// Routes - /project/delete POST ////////////////////////////////////////////////////
+Flight::route('POST /project/delete', function() {
+
+$project_id = json_decode(Flight::request()->getBody())->project_id;
+
+$db = Flight::db();
+$sql = "UPDATE Project SET active = '0' WHERE project_id = '$project_id'";
+$result = $db->query($sql);
+
+// return ok
+Flight::json(array(
+   'project_id' => $project_id
+), 200);
+});
+
+////////////////////////////// Routes - /project/url POST //////////////////////////////
+Flight::route('POST /project/url', function() {
+
+$project_id = json_decode(Flight::request()->getBody())->project_id;
+
+$db = Flight::db();
+$sql = "SELECT hash FROM Project WHERE project_id = '$project_id'";
+$result = $db->query($sql);
+
+// return ok
+Flight::json(array(
+   'project_url' => 'http://soundmarker-env.mc3wuhhgpz.eu-central-1.elasticbeanstalk.com/project/'. $result->fetch()[0],
+   'project_hash' => $result->fetch()[0]
+), 200);
+});
+
+
+
+
+
+
+
+
+
+
+/*
+TRACK
+*/
+/////////////////////////////////////////////////////// Routes - /track/new POST //////////////////////////////////////////////////////
 Flight::route('POST /track/new', function() {
 
 $project_id = json_decode(Flight::request()->getBody())->project_id;
@@ -194,11 +315,9 @@ Flight::json(array(
 ), 200);
 });
 
-////////////////////////////// Routes - /track/version POST //////////////////////////////
-
+//////////////////////////////////////////////////// Routes - /track/version POST /////////////////////////////////////////////////////
 Flight::route('POST /track/version', function() {
 
-// Todo: add SVG?
 $track_id = json_decode(Flight::request()->getBody())->track_id;
 $downloadable = isset(json_decode(Flight::request()->getBody())->downloadable) ? json_decode(Flight::request()->getBody())->downloadable : 0;
 $visibility = isset(json_decode(Flight::request()->getBody())->visibility) ? json_decode(Flight::request()->getBody())->visibility : 1;
@@ -217,11 +336,100 @@ Flight::json(array(
 ), 200);
 });
 
-////////////////////////////// Routes - /file/new POST //////////////////////////////
+///////////////////////////////////////////////////////// Routes - /track GET /////////////////////////////////////////////////////////
+Flight::route('GET /track/@track_id', function($track_id) {
+
+$db = Flight::db();
+$sql = "SELECT version_id, notes, downloadable, visibility, version_title, track_length, wave_png FROM Version WHERE track_id = '$track_id'";
+$result = $db->query($sql);
+$versions = $result->fetchAll(PDO::FETCH_ASSOC);
+
+// return ok
+Flight::json(array(
+   'versions' => $versions
+), 200);
+});
+
+///////////////////////////////////////////////////// Routes - /track/version GET /////////////////////////////////////////////////////
+Flight::route('GET /track/version/@version_id', function($version_id) {
+
+$db = Flight::db();
+$sql = "SELECT file_id, extension, metadata, aws_path, file_name, file_size, identifier, chunk_length FROM File WHERE version_id = '$version_id'";
+$result = $db->query($sql);
+$files = $result->fetchAll(PDO::FETCH_ASSOC);
+
+// return ok
+Flight::json(array(
+   'files' => $files
+), 200);
+});
+
+///////////////////////////////////////////////// Routes - /track/version/comments GET ////////////////////////////////////////////////
+Flight::route('GET /track/version/comments/@version_id', function($version_id) {
+
+$db = Flight::db();
+$sql = "SELECT comment_id, notes, start_time, end_time, checked, parent_comment_id, name, include_end, include_start, comment_time FROM Comment WHERE version_id = '$version_id'";
+$result = $db->query($sql);
+$comments = $result->fetchAll(PDO::FETCH_ASSOC);
+
+// return ok
+Flight::json(array(
+   'comments' => $comments
+), 200);
+});
+
+///////////////////////////////////////////////// Routes - /track/version/comment POST ////////////////////////////////////////////////
+Flight::route('POST /track/version/comment', function() {
+
+$version_id = json_decode(Flight::request()->getBody())->version_id;
+$notes = isset(json_decode(Flight::request()->getBody())->notes) ? json_decode(Flight::request()->getBody())->notes : "";
+$name = isset(json_decode(Flight::request()->getBody())->name) ? json_decode(Flight::request()->getBody())->name : "";
+$start_time = isset(json_decode(Flight::request()->getBody())->start_time) ? json_decode(Flight::request()->getBody())->start_time : "";
+$end_time = isset(json_decode(Flight::request()->getBody())->end_time) ? json_decode(Flight::request()->getBody())->end_time : "";
+$parent_comment_id = isset(json_decode(Flight::request()->getBody())->parent_comment_id) ? json_decode(Flight::request()->getBody())->parent_comment_id : "";
+$include_start = isset(json_decode(Flight::request()->getBody())->include_start) ? json_decode(Flight::request()->getBody())->include_start : "";
+$include_end = isset(json_decode(Flight::request()->getBody())->include_end) ? json_decode(Flight::request()->getBody())->include_end : "";
+$comment_time = isset(json_decode(Flight::request()->getBody())->comment_time) ? json_decode(Flight::request()->getBody())->comment_time : "";
+
+$db = Flight::db();
+$sql = "INSERT INTO Comment (version_id, notes, name, start_time, end_time, parent_comment_id, include_start, include_end, comment_time) VALUES ('$version_id', '$notes', '$name', '$start_time', '$end_time', '$parent_comment_id', '$include_start', '$include_end', '$comment_time')";
+$result = $db->query($sql);
+
+// return ok
+Flight::json(array(
+   'comment_id' => $db->lastInsertId()
+), 200);
+});
+
+////////////////////////////////////////////////// Routes - /track/file/download GET //////////////////////////////////////////////////
+Flight::route('GET /track/file/download/@file_id', function($file_id) {
+
+$db = Flight::db();
+$sql = "SELECT aws_path  FROM File WHERE file_id = '$file_id'";
+$result = $db->query($sql);
+$aws_path = $result->fetch()[0];
+
+// return ok
+Flight::json(array(
+   'aws_path' => $aws_path
+), 200);
+});
+
+
+
+
+
+
+
+
+
+
+/*
+FILE
+*/
+/////////////////////////////////////////////////////// Routes - /file/new POST ///////////////////////////////////////////////////////
 Flight::route('POST /file/new', function() {
 
-// Todo: check if files actually get uploaded 
-// And put in DB
 $version_id = json_decode(Flight::request()->getBody())->version_id;
 $identifier = isset(json_decode(Flight::request()->getBody())->identifier) ? json_decode(Flight::request()->getBody())->identifier : 0;
 $chunk_length = isset(json_decode(Flight::request()->getBody())->chunk_length) ? json_decode(Flight::request()->getBody())->chunk_length : 0;
@@ -242,7 +450,7 @@ Flight::json(array(
 ), 200);
 });
 
-////////////////////////////// Routes - /file/chunk/$file_id POST //////////////////////////////
+////////////////////////////////////////////////// Routes - /file/chunk/$file_id POST /////////////////////////////////////////////////
 Flight::route('POST /file/chunk/@file_id/@idno/@ext', function($file_id, $idno, $ext) {
 
 try {
@@ -274,148 +482,22 @@ try {
 
 });
 
-////////////////////////////// Routes - /project/get/@project_hash POST //////////////////////////////
-Flight::route('POST /project/get/url', function() {
 
-$project_id = isset(json_decode(Flight::request()->getBody())->project_id) ? json_decode(Flight::request()->getBody())->project_id : "";
 
-$db = Flight::db();
-try {
-    $sql = "SELECT hash FROM Project WHERE project_id = '$project_id'";
-    $result = $db->query($sql);
-    $hash = $result->fetch()[0];
 
-    // return ok
-    Flight::json(array(
-       'project_hash' => $hash
-    ), 200);
 
-} catch (PDOException $pdoException) {
-    Flight::error($pdoException);
-} catch (Exception $exception) {
-        Flight::error($exception);
-} finally {
-    $db = null;
-}
-});
 
-////////////////////////////// Routes - /project/get/@project_hash POST //////////////////////////////
-Flight::route('GET /project/get/@project_hash', function($project_hash) {
 
-// $project_id = isset(json_decode(Flight::request()->getBody())->project_id) ? json_decode(Flight::request()->getBody())->project_id : "";
 
-$db = Flight::db();
-try {
-    $sql = "SELECT project_id FROM Project WHERE hash = '$project_hash'";
-    $result = $db->query($sql);
-    $project_id = $result->fetch()[0];
 
-    $sql = "SELECT track_id, title FROM Track WHERE project_id = '$project_id'";
-    $result = $db->query($sql);
-    $tracks = $result->fetchAll(PDO::FETCH_ASSOC);
 
-    // return ok
-    Flight::json(array(
-       'project_id' => $project_id, 'tracks' => $tracks
-    ), 200);
-
-} catch (PDOException $pdoException) {
-    Flight::error($pdoException);
-} catch (Exception $exception) {
-        Flight::error($exception);
-} finally {
-    $db = null;
-}
-});
-
-////////////////////////////// Routes - Global //////////////////////////////
-Flight::route('/project/@project_hash', function(){
-    include 'index.html';
-});
-
-////////////////////////////// Routes - /track GET //////////////////////////////
-Flight::route('GET /track/@track_id', function($track_id) {
-
-$db = Flight::db();
-$sql = "SELECT version_id, notes, downloadable, visibility, version_title, track_length, wave_png FROM Version WHERE track_id = '$track_id'";
-$result = $db->query($sql);
-$versions = $result->fetchAll(PDO::FETCH_ASSOC);
-
-// return ok
-Flight::json(array(
-   'versions' => $versions
-), 200);
-});
-
-////////////////////////////// Routes - /track/version GET //////////////////////////////
-Flight::route('GET /track/version/@version_id', function($version_id) {
-
-$db = Flight::db();
-$sql = "SELECT file_id, extension, metadata, aws_path, file_name, file_size, identifier, chunk_length FROM File WHERE version_id = '$version_id'";
-$result = $db->query($sql);
-$files = $result->fetchAll(PDO::FETCH_ASSOC);
-
-// return ok
-Flight::json(array(
-   'files' => $files
-), 200);
-});
-
-////////////////////////////// Routes - /track/version/comments GET //////////////////////////////
-Flight::route('GET /track/version/comments/@version_id', function($version_id) {
-
-$db = Flight::db();
-$sql = "SELECT comment_id, notes, start_time, end_time, checked, parent_comment_id, name, include_end, include_start, comment_time FROM Comment WHERE version_id = '$version_id'";
-$result = $db->query($sql);
-$comments = $result->fetchAll(PDO::FETCH_ASSOC);
-
-// return ok
-Flight::json(array(
-   'comments' => $comments
-), 200);
-});
-
-////////////////////////////// Routes - /track/version/comment POST //////////////////////////////
-Flight::route('POST /track/version/comment', function() {
-
-$version_id = json_decode(Flight::request()->getBody())->version_id;
-$notes = isset(json_decode(Flight::request()->getBody())->notes) ? json_decode(Flight::request()->getBody())->notes : "";
-$name = isset(json_decode(Flight::request()->getBody())->name) ? json_decode(Flight::request()->getBody())->name : "";
-$start_time = isset(json_decode(Flight::request()->getBody())->start_time) ? json_decode(Flight::request()->getBody())->start_time : "";
-$end_time = isset(json_decode(Flight::request()->getBody())->end_time) ? json_decode(Flight::request()->getBody())->end_time : "";
-$parent_comment_id = isset(json_decode(Flight::request()->getBody())->parent_comment_id) ? json_decode(Flight::request()->getBody())->parent_comment_id : "";
-$include_start = isset(json_decode(Flight::request()->getBody())->include_start) ? json_decode(Flight::request()->getBody())->include_start : "";
-$include_end = isset(json_decode(Flight::request()->getBody())->include_end) ? json_decode(Flight::request()->getBody())->include_end : "";
-$comment_time = isset(json_decode(Flight::request()->getBody())->comment_time) ? json_decode(Flight::request()->getBody())->comment_time : "";
-
-$db = Flight::db();
-$sql = "INSERT INTO Comment (version_id, notes, name, start_time, end_time, parent_comment_id, include_start, include_end, comment_time) VALUES ('$version_id', '$notes', '$name', '$start_time', '$end_time', '$parent_comment_id', '$include_start', '$include_end', '$comment_time')";
-$result = $db->query($sql);
-
-// return ok
-Flight::json(array(
-   'comment_id' => $db->lastInsertId()
-), 200);
-});
-
-////////////////////////////// Routes - /track/file/download GET //////////////////////////////
-Flight::route('GET /track/file/download/@file_id', function($file_id) {
-
-$db = Flight::db();
-$sql = "SELECT aws_path  FROM File WHERE file_id = '$file_id'";
-$result = $db->query($sql);
-$aws_path = $result->fetch()[0];
-
-// return ok
-Flight::json(array(
-   'aws_path' => $aws_path
-), 200);
-});
-
-////////////////////////////// Routes - /ad GET //////////////////////////////
+/*
+ADS
+*/
+/////////////////////////////////////////////////////////// Routes - /ad GET //////////////////////////////////////////////////////////
 Flight::route('GET /ad', function() {
 
-// if nothing returns, show default one, no error
+// TODO: if nothing returns, show default one, no error
 $db = Flight::db();
 $sql = "SELECT html, ad_id, impressions FROM Ad WHERE priority = '1' AND impressions <= limits";
 $result = $db->query($sql);
@@ -436,7 +518,7 @@ $sql = "UPDATE Ad SET impressions = '$impressions' WHERE ad_id = '$ad_id'";
 $result = $db->query($sql);
 });
 
-////////////////////////////// Routes - /ad/@ad_id GET //////////////////////////////
+/////////////////////////////////////////////////////// Routes - /ad/@ad_id GET ///////////////////////////////////////////////////////
 Flight::route('GET /ad/@ad_id', function($ad_id) {
 
 $db = Flight::db();
@@ -444,15 +526,10 @@ $sql = "SELECT html FROM Ad WHERE ad_id = '$ad_id'";
 $result = $db->query($sql);
 $html = $result->fetch()[0];
 
-// return ok
-// Flight::json(array(
-//    'html' => $html
-// ), 200);
 echo stripslashes($html);
 });
 
-////////////////////////////// Routes - /ad POST //////////////////////////////
-
+////////////////////////////////////////////////////////// Routes - /ad POST //////////////////////////////////////////////////////////
 Flight::route('POST /ad', function() {
 
 $ad_id = json_decode(Flight::request()->getBody())->ad_id;
@@ -491,77 +568,17 @@ $sql = "UPDATE Ad SET impressions = '$impressions' WHERE ad_id = '$ad_id' AND im
 $result = $db->query($sql);
 });
 
-////////////////////////////// Routes - /track/url GET //////////////////////////////
-// still necessary?
-Flight::route('GET /track/url', function() {
-$track_id = json_decode(Flight::request()->getBody())->track_id;
 
-// return ok
-Flight::json(array(
-   'track_url' => "https://d3k08uu3zdbsgq.cloudfront.net/Bruno-LetHerKnow.wav",
-   'track_hash' => "hash"
-), 200);
-});
 
-Flight::route('GET /track/47', function() {
-$track_id = json_decode(Flight::request()->getBody())->track_id;
 
-// return ok
-Flight::json(array(
-   'track_url' => "https://d3k08uu3zdbsgq.cloudfront.net/06pianoconverted.mp3",
-   'track_hash' => "hash"
-), 200);
-});
 
-////////////////////////////// Routes - /project/url POST //////////////////////////////
 
-Flight::route('POST /project/url', function() {
 
-$project_id = json_decode(Flight::request()->getBody())->project_id;
 
-$db = Flight::db();
-$sql = "SELECT hash FROM Project WHERE project_id = '$project_id'";
-$result = $db->query($sql);
 
-// return ok
-Flight::json(array(
-   'project_url' => 'http://soundmarker-env.mc3wuhhgpz.eu-central-1.elasticbeanstalk.com/project/'. $result->fetch()[0],
-   'project_hash' => $result->fetch()[0]
-), 200);
-});
 
-////////////////////////////// Routes - /project/password POST //////////////////////////////
-
-Flight::route('POST /project/password', function() {
-
-$project_id = json_decode(Flight::request()->getBody())->project_id;
-
-$db = Flight::db();
-$sql = "SELECT password FROM Project WHERE project_id = '$project_id'";
-$result = $db->query($sql);
-
-Flight::json(array(
-   'project_id' => $project_id,
-   'project_password' => $result->fetch()[0] 
-), 200);
-
-});
-
-////////////////////////////// Routes - /project/delete POST //////////////////////////////
-
-Flight::route('POST /project/delete', function() {
-
-$project_id = json_decode(Flight::request()->getBody())->project_id;
-
-$db = Flight::db();
-$sql = "UPDATE Project SET active = '0' WHERE project_id = '$project_id'";
-$result = $db->query($sql);
-
-// return ok
-Flight::json(array(
-   'project_id' => $project_id
-), 200);
-});
-
-////////////////////////////// Start Flight //////////////////////////////
+/*
+FLIGHT
+*/
+///////////////////////////////////////////////////////////// Start Flight ////////////////////////////////////////////////////////////
 Flight::start();
