@@ -53,16 +53,16 @@ Flight::set("s3", $s3);
 Flight::set("s3bucket", $s3bucket);
 
 ///////////////////////////////////////////////////////////// Setup SES client ////////////////////////////////////////////////////////
-use Aws\Ses\SesClient;
-use Aws\Exception\AwsException;
+// use Aws\Ses\SesClient;
+// use Aws\Exception\AwsException;
 
-$SesClient = new SesClient([
-    'profile' => 'default',
-    'version' => '2010-12-01',
-    'region'  => 'eu-west-1'
-]);
+// $SesClient = new SesClient([
+//     'profile' => 'default',
+//     'version' => '2010-12-01',
+//     'region'  => 'eu-west-1'
+// ]);
 
-Flight::set("SesClient", $SesClient);
+// Flight::set("SesClient", $SesClient);
 
 
 
@@ -130,69 +130,60 @@ try {
     // https://www.functions-online.com/htmlentities.html
     // htmlentities('', ENT_COMPAT, 'ISO-8859-1');
     // html_entity_decode('', ENT_COMPAT, 'ISO-8859-1');
-    // Send Email
-    $sql = "SELECT email_string FROM Emails WHERE email_name = 'soundmarker-initial-email-to-sender'";
+    // Send Email to Sender
+    $sql = "SELECT email_string, email_string_text FROM Emails WHERE email_name = 'soundmarker-initial-email-to-sender'";
     $result = $db->query($sql);
-    $emailstring = html_entity_decode($result->fetch()[0], ENT_COMPAT, 'ISO-8859-1');
+    $emailstring = html_entity_decode($result->fetch()[0]["email_string"], ENT_COMPAT, 'ISO-8859-1');
+    $emailstring_text = html_entity_decode($result->fetch()[0]["email_string_text"], ENT_COMPAT, 'ISO-8859-1');
     str_replace("$sendermail$","robinreumers@gmail.com",$emailstring);
+    str_replace("$sendermail$","robinreumers@gmail.com",$emailstring_text);
 
     // Replace sender@example.com with your "From" address.
     // This address must be verified with Amazon SES.
-    $sender_email = 'robinreumers@gmail.com';
+    // $sender_email = 'robinreumers@gmail.com';
 
-    // Replace these sample addresses with the addresses of your recipients. If
-    // your account is still in the sandbox, these addresses must be verified.
-    $recipient_emails = ['robin@leapwingaudio.com'];
+    // // Replace these sample addresses with the addresses of your recipients. If
+    // // your account is still in the sandbox, these addresses must be verified.
+    // $recipient_emails = ['robin@leapwingaudio.com'];
+    // $configuration_set = 'ConfigSet';
 
-    // Specify a configuration set. If you do not want to use a configuration
-    // set, comment the following variable, and the
-    // 'ConfigurationSetName' => $configuration_set argument below.
-    $configuration_set = 'ConfigSet';
+    // $subject = 'Your tracks have been shared succesfully via Soundmarker';
+    // $char_set = 'UTF-8';
 
-    $subject = 'Amazon SES test (AWS SDK for PHP)';
-    $plaintext_body = 'Text version' ;
-    // $html_body =  '<h1>AWS Amazon Simple Email Service Test Email</h1>'.
-    //               '<p>This email was sent with <a href="https://aws.amazon.com/ses/">'.
-    //               'Amazon SES</a> using the <a href="https://aws.amazon.com/sdk-for-php/">'.
-    //               'AWS SDK for PHP</a>.</p>';
-    $char_set = 'UTF-8';
-
-    try {
-        $result = Flight::get("SesClient")->sendEmail([
-            'Destination' => [
-                'ToAddresses' => $recipient_emails,
-            ],
-            'ReplyToAddresses' => [$sender_email],
-            'Source' => $sender_email,
-            'Message' => [
-              'Body' => [
-                  'Html' => [
-                      'Charset' => $char_set,
-                      'Data' => $emailstring,
-                  ],
-                  'Text' => [
-                      'Charset' => $char_set,
-                      'Data' => $plaintext_body,
-                  ],
-              ],
-              'Subject' => [
-                  'Charset' => $char_set,
-                  'Data' => $subject,
-              ],
-            ],
-            // If you aren't using a configuration set, comment or delete the
-            // following line
-            'ConfigurationSetName' => $configuration_set,
-        ]);
-        $messageId = $result['MessageId'];
-        echo("Email sent! Message ID: $messageId"."\n");
-    } catch (AwsException $e) {
-        // output error message if fails
-        echo $e->getMessage();
-        echo("The email was not sent. Error message: ".$e->getAwsErrorMessage()."\n");
-        echo "\n";
-    }
-
+    // try {
+    //     $result = Flight::get("SesClient")->sendEmail([
+    //         'Destination' => [
+    //             'ToAddresses' => $recipient_emails,
+    //         ],
+    //         'ReplyToAddresses' => [$sender_email],
+    //         'Source' => $sender_email,
+    //         'Message' => [
+    //           'Body' => [
+    //               'Html' => [
+    //                   'Charset' => $char_set,
+    //                   'Data' => $emailstring,
+    //               ],
+    //               'Text' => [
+    //                   'Charset' => $char_set,
+    //                   'Data' => $emailstring_text,
+    //               ],
+    //           ],
+    //           'Subject' => [
+    //               'Charset' => $char_set,
+    //               'Data' => $subject,
+    //           ],
+    //         ],
+    //         // If you aren't using a configuration set, comment or delete the
+    //         // following line
+    //         'ConfigurationSetName' => $configuration_set,
+    //     ]);
+    //     $messageId = $result['MessageId'];
+    // } catch (AwsException $e) {
+    //     // output error message if fails
+    //     echo $e->getMessage();
+    //     echo("The email was not sent. Error message: ".$e->getAwsErrorMessage()."\n");
+    //     echo "\n";
+    // }
 
     // return ok
     Flight::json(array(
