@@ -56,13 +56,10 @@ Flight::set("s3bucket", $s3bucket);
 use Aws\Ses\SesClient;
 use Aws\Exception\AwsException;
 
-$sescredentials = new Aws\Credentials\Credentials("AKIAJJPUCGESRSNO7BQQ", "3ONR+rj4vVxmAmgbJrlniQGWb3Hufcfi9LsTid0A");
-
 $SesClient = new SesClient([
-    'profile' => 'default',
+    'profile' => 'project1',
     'version' => '2010-12-01',
     'region'  => 'eu-west-1',
-    'credentials' => $sescredentials
 ]);
 
 Flight::set("SesClient", $SesClient);
