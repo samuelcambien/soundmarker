@@ -119,6 +119,9 @@ Flight::json(array(
 Flight::route('POST /project/get/url', function() {
 
 $project_id = isset(json_decode(Flight::request()->getBody())->project_id) ? json_decode(Flight::request()->getBody())->project_id : "";
+$sender = isset(json_decode(Flight::request()->getBody())->sender) ? json_decode(Flight::request()->getBody())->sender : "";
+$receiver = isset(json_decode(Flight::request()->getBody())->receiver) ? json_decode(Flight::request()->getBody())->receiver : "";
+
 $db = Flight::db();
 try {
     $sql = "SELECT hash FROM Project WHERE project_id = '$project_id'";
@@ -129,20 +132,22 @@ try {
     // htmlentities('', ENT_COMPAT, 'ISO-8859-1');
     // html_entity_decode('', ENT_COMPAT, 'ISO-8859-1');
     // Send Email to Sender
-    $sql = "SELECT email_string, email_string_text FROM Emails WHERE email_name = 'soundmarker-initial-email-to-sender'";
-    $result = $db->query($sql);
-    $emailstring = html_entity_decode($result->fetch()[0]["email_string"], ENT_COMPAT, 'ISO-8859-1');
-    $emailstring_text = html_entity_decode($result->fetch()[0]["email_string_text"], ENT_COMPAT, 'ISO-8859-1');
+    $sql = "SELECT email_string FROM Emails WHERE email_name = 'soundmarker-initial-email-to-sender'";
+    $emailstring = html_entity_decode($db->query($sql)->fetch()[0], ENT_COMPAT, 'ISO-8859-1');
+    $sql = "SELECT email_string_text FROM Emails WHERE email_name = 'soundmarker-initial-email-to-sender'";
+    $emailstring_text = html_entity_decode($db->query($sql)->fetch()[0], ENT_COMPAT, 'ISO-8859-1');
+    
+    // Replace strings
     str_replace("$sendermail$","robinreumers@gmail.com",$emailstring);
     str_replace("$sendermail$","robinreumers@gmail.com",$emailstring_text);
 
     // Replace sender@example.com with your "From" address.
     // This address must be verified with Amazon SES.
-    $sender_email = 'robinreumers@gmail.com';
+    // $sender_email = 'robinreumers@gmail.com';
 
     // Replace these sample addresses with the addresses of your recipients. If
     // your account is still in the sandbox, these addresses must be verified.
-    $recipient_emails = ['robin@leapwingaudio.com'];
+    $recipient_emails = [$receiver];
     $configuration_set = 'ConfigSet';
 
     $subject = 'Your tracks have been shared succesfully via Soundmarker';
@@ -153,8 +158,8 @@ try {
             'Destination' => [
                 'ToAddresses' => $recipient_emails,
             ],
-            'ReplyToAddresses' => [$sender_email],
-            'Source' => $sender_email,
+            'ReplyToAddresses' => [$sender],
+            'Source' => $sender,
             'Message' => [
               'Body' => [
                   'Html' => [
