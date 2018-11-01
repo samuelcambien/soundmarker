@@ -276,7 +276,7 @@ Player = {
     },
 
     /**
-     * Get the current mute status.
+     * Get the current mute stage.
      */
     getMute: function () {
         return this.isMuted;

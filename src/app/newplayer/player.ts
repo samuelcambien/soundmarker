@@ -2,7 +2,7 @@ import {now} from "moment";
 
 export class Player {
 
-  constructor(private track_url: string, private duration) {
+  constructor(private track_url: string, private duration: number) {
     this.audioContext = new AudioContext();
     this.audioContext.suspend();
     this.loadBuffers(0, 1);
@@ -50,7 +50,7 @@ export class Player {
 
     let my = this;
 
-    fetch(this.track_url + index.toString().padStart(3, '0') + ".mp3")
+    fetch(this.track_url + index.toString() + ".mp3")
       .then(response => {
 
         let array: Uint8Array = new Uint8Array();

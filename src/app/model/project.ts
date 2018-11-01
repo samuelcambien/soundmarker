@@ -2,6 +2,6 @@ import {Track} from "./track";
 
 export class Project {
 
-  id: string;
+  project_id: string;
   tracks: Track[];
 }

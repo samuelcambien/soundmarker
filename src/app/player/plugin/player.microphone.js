@@ -75,7 +75,7 @@ Player.Microphone = {
 
     /**
      * Allow user to select audio input device, eg. microphone, and
-     * start the visualization.
+     * start_time the visualization.
      */
     start: function() {
         navigator.mediaDevices.getUserMedia(this.constraints).then(
@@ -90,7 +90,7 @@ Player.Microphone = {
      */
     togglePlay: function() {
         if (!this.active) {
-            // start it first
+            // start_time it first
             this.start();
         } else {
             // toggle paused
@@ -218,7 +218,7 @@ Player.Microphone = {
         this.stream = stream;
         this.active = true;
 
-        // start visualization
+        // start_time visualization
         this.play();
 
         // notify listeners

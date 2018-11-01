@@ -1,5 +1,5 @@
 import {Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
-import {CommentSorter} from "../comments/comment";
+import {CommentSorter} from "../model/comment";
 import {ActivatedRoute} from "@angular/router";
 import {RestUrl, Utils} from "../app.component";
 
@@ -28,14 +28,14 @@ export class SoundmarkerComponent implements OnInit {
   validateDragStart() {
     // return (coords) =>
     // this.getCommentTime(this.startTime, coords) > 0 &&
-    // (this.getCommentTime(this.startTime, coords) < this.comment.end || !this.comment.includeEnd) &&
+    // (this.getCommentTime(this.startTime, coords) < this.comment.end_time || !this.comment.include_end) &&
     // this.getCommentTime(this.startTime, coords) <= this.duration;
   }
 
   validateDragEnd() {
     // return (coords) =>
     // this.getCommentTime(this.endTime, coords) > 0 &&
-    // (this.getCommentTime(this.endTime, coords) > this.comment.start || !this.comment.start) &&
+    // (this.getCommentTime(this.endTime, coords) > this.comment.start_time || !this.comment.start_time) &&
     // this.getCommentTime(this.endTime, coords) <= this.duration;
   }
 

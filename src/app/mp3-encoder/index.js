@@ -64,8 +64,8 @@ module.exports = (buffer, opts, cb) => {
 			});
 
 			// emitted after the last packet of the stream
-			stream.on('end', function () {
-				console.log('got "end":', decoder[191]);
+			stream.on('end_time', function () {
+				console.log('got "end_time":', decoder[191]);
 			});
 		});
 

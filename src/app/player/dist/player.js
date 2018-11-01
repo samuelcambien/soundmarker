@@ -298,7 +298,7 @@
     },
 
     /**
-     * Get the current mute status.
+     * Get the current mute stage.
      */
     getMute: function () {
       return this.isMuted;
@@ -1124,7 +1124,7 @@
       this.source = this.ac.createBufferSource();
 
       //adjust for old browsers.
-      this.source.start = this.source.start || this.source.noteGrainOn;
+      this.source.start_time = this.source.start || this.source.noteGrainOn;
       this.source.stop = this.source.stop || this.source.noteOff;
 
       this.source.playbackRate.value = this.playbackRate;
@@ -2350,7 +2350,7 @@
 
     clearPeakCache: function () {
       // Flat array with entries that are always in pairs to mark the
-      // beginning and end of each subrange.  This is a convenience so we can
+      // beginning and end_time of each subrange.  This is a convenience so we can
       // iterate over the pairs for easy set difference operations.
       this.peakCacheRanges = [];
       // Length of the entire cachable region, used for resetting the cache
@@ -2367,14 +2367,14 @@
       // Return ranges that weren't in the cache before the call.
       var uncachedRanges = [];
       var i = 0;
-      // Skip ranges before the current start.
+      // Skip ranges before the current start_time.
       while (i < this.peakCacheRanges.length && this.peakCacheRanges[i] < start) {
         i++;
       }
-      // If |i| is even, |start| falls after an existing range.  Otherwise,
-      // |start| falls between an existing range, and the uncached region
+      // If |i| is even, |start_time| falls after an existing range.  Otherwise,
+      // |start_time| falls between an existing range, and the uncached region
       // starts when we encounter the next node in |peakCacheRanges| or
-      // |end|, whichever comes first.
+      // |end_time|, whichever comes first.
       if (i % 2 == 0) {
         uncachedRanges.push(start);
       }
@@ -2382,7 +2382,7 @@
         uncachedRanges.push(this.peakCacheRanges[i]);
         i++;
       }
-      // If |i| is even, |end| is after all existing ranges.
+      // If |i| is even, |end_time| is after all existing ranges.
       if (i % 2 == 0) {
         uncachedRanges.push(end);
       }

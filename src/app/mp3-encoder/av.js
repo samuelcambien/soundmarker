@@ -64,7 +64,7 @@ var AV = require('./aurora.js');
 
           stream.advance(1); // private
           ret.chanConfig = stream.read(3);
-          stream.advance(4); // original/copy, home, copywrite, and copywrite start
+          stream.advance(4); // original/copy, home, copywrite, and copywrite start_time
 
           ret.frameLength = stream.read(13);
           stream.advance(11); // fullness
@@ -500,7 +500,7 @@ var AV = require('./aurora.js');
               case SCE_ELEMENT:
               case LFE_ELEMENT:
                 var ics = new ICStream(this.config);
-                ics.id = id;
+                ics.project_id = id;
                 elements.push(ics);
                 ics.decode(stream, config, false);
                 break;
@@ -508,7 +508,7 @@ var AV = require('./aurora.js');
               // channel pair element
               case CPE_ELEMENT:
                 var cpe = new CPEElement(this.config);
-                cpe.id = id;
+                cpe.project_id = id;
                 elements.push(cpe);
                 cpe.decode(stream, config);
                 break;
