@@ -53,16 +53,16 @@ Flight::set("s3", $s3);
 Flight::set("s3bucket", $s3bucket);
 
 ///////////////////////////////////////////////////////////// Setup SES client ////////////////////////////////////////////////////////
-// use Aws\Ses\SesClient;
-// use Aws\Exception\AwsException;
+use Aws\Ses\SesClient;
+use Aws\Exception\AwsException;
 
-// $SesClient = new SesClient([
-//     'profile' => 'default',
-//     'version' => '2010-12-01',
-//     'region'  => 'eu-west-1'
-// ]);
+$SesClient = new SesClient([
+    'profile' => 'default',
+    'version' => '2010-12-01',
+    'region'  => 'eu-west-1'
+]);
 
-// Flight::set("SesClient", $SesClient);
+Flight::set("SesClient", $SesClient);
 
 
 
@@ -77,9 +77,7 @@ ROUTING TO FRONT-END
 Flight::route('/', function(){
     include 'index.html';
 });
-Flight::route('/project/@project_hash', function(){
-    include 'index.html';
-});
+
 
 
 
@@ -140,50 +138,50 @@ try {
 
     // Replace sender@example.com with your "From" address.
     // This address must be verified with Amazon SES.
-    // $sender_email = 'robinreumers@gmail.com';
+    $sender_email = 'robinreumers@gmail.com';
 
-    // // Replace these sample addresses with the addresses of your recipients. If
-    // // your account is still in the sandbox, these addresses must be verified.
-    // $recipient_emails = ['robin@leapwingaudio.com'];
-    // $configuration_set = 'ConfigSet';
+    // Replace these sample addresses with the addresses of your recipients. If
+    // your account is still in the sandbox, these addresses must be verified.
+    $recipient_emails = ['robin@leapwingaudio.com'];
+    $configuration_set = 'ConfigSet';
 
-    // $subject = 'Your tracks have been shared succesfully via Soundmarker';
-    // $char_set = 'UTF-8';
+    $subject = 'Your tracks have been shared succesfully via Soundmarker';
+    $char_set = 'UTF-8';
 
-    // try {
-    //     $result = Flight::get("SesClient")->sendEmail([
-    //         'Destination' => [
-    //             'ToAddresses' => $recipient_emails,
-    //         ],
-    //         'ReplyToAddresses' => [$sender_email],
-    //         'Source' => $sender_email,
-    //         'Message' => [
-    //           'Body' => [
-    //               'Html' => [
-    //                   'Charset' => $char_set,
-    //                   'Data' => $emailstring,
-    //               ],
-    //               'Text' => [
-    //                   'Charset' => $char_set,
-    //                   'Data' => $emailstring_text,
-    //               ],
-    //           ],
-    //           'Subject' => [
-    //               'Charset' => $char_set,
-    //               'Data' => $subject,
-    //           ],
-    //         ],
-    //         // If you aren't using a configuration set, comment or delete the
-    //         // following line
-    //         'ConfigurationSetName' => $configuration_set,
-    //     ]);
-    //     $messageId = $result['MessageId'];
-    // } catch (AwsException $e) {
-    //     // output error message if fails
-    //     echo $e->getMessage();
-    //     echo("The email was not sent. Error message: ".$e->getAwsErrorMessage()."\n");
-    //     echo "\n";
-    // }
+    try {
+        $result = Flight::get("SesClient")->sendEmail([
+            'Destination' => [
+                'ToAddresses' => $recipient_emails,
+            ],
+            'ReplyToAddresses' => [$sender_email],
+            'Source' => $sender_email,
+            'Message' => [
+              'Body' => [
+                  'Html' => [
+                      'Charset' => $char_set,
+                      'Data' => $emailstring,
+                  ],
+                  'Text' => [
+                      'Charset' => $char_set,
+                      'Data' => $emailstring_text,
+                  ],
+              ],
+              'Subject' => [
+                  'Charset' => $char_set,
+                  'Data' => $subject,
+              ],
+            ],
+            // If you aren't using a configuration set, comment or delete the
+            // following line
+            'ConfigurationSetName' => $configuration_set,
+        ]);
+        $messageId = $result['MessageId'];
+    } catch (AwsException $e) {
+        // output error message if fails
+        echo $e->getMessage();
+        echo("The email was not sent. Error message: ".$e->getAwsErrorMessage()."\n");
+        echo "\n";
+    }
 
     // return ok
     Flight::json(array(
@@ -257,7 +255,7 @@ Flight::json(array(
 ), 200);
 });
 
-////////////////////////////// Routes - /project/url POST //////////////////////////////
+//////////////////////////////////////////////////// Routes - /project/url POST ///////////////////////////////////////////////////////
 Flight::route('POST /project/url', function() {
 
 $project_id = json_decode(Flight::request()->getBody())->project_id;
@@ -271,6 +269,11 @@ Flight::json(array(
    'project_url' => 'http://soundmarker-env.mc3wuhhgpz.eu-central-1.elasticbeanstalk.com/project/'. $result->fetch()[0],
    'project_hash' => $result->fetch()[0]
 ), 200);
+});
+
+/////////////////////////////////////////////// Routes - /project/@project_hash POST //////////////////////////////////////////////////
+Flight::route('/project/@project_hash', function(){
+    include 'index.html';
 });
 
 
