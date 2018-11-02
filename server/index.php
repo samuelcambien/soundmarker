@@ -152,8 +152,8 @@ try {
     $projectdatef = $projectdate->format('Y-m-d H:i:s');
     $sql = "UPDATE Project SET expiration_date = '$projectdatef' WHERE project_id = '$project_id'";
     $result = $db->query($sql);
-    $emailstring = str_replace("%projectdate%",$projectdatef,$emailstring);
-    $emailstring_text = str_replace("%projectdate%",$projectdatef,$emailstring_text);
+    $emailstring = str_replace("%projectdate%",$projectdate->format('F j Y'),$emailstring);
+    $emailstring_text = str_replace("%projectdate%",$projectdate->format('F j Y'),$emailstring_text);
     // Replace strings -> %projectlink%
     $sql = "SELECT hash FROM Project WHERE project_id = '$project_id'";
     $projectlink = "http://soundmarker-env.mc3wuhhgpz.eu-central-1.elasticbeanstalk.com/project/" . $db->query($sql)->fetch()[0];
@@ -165,12 +165,13 @@ try {
     // Replace strings -> %trackamount%
     $sql = "SELECT track_id FROM Track WHERE project_id = '$project_id'";
     $tracks = $db->query($sql)->fetchAll(PDO::FETCH_ASSOC);
-    // foreach ($tracks as &$track) {
-    //     $sqlversion = "SELECT version_id FROM Version WHERE track_id = '$track'";
-    //     $version[] = $db->query($sqlversion)->fetchAll(PDO::FETCH_ASSOC);
-    // }
-    $emailstring = str_replace("%trackamount%",json_encode($tracks),$emailstring);
-    $emailstring_text = str_replace("%trackamount%",json_encode($tracks),$emailstring_text);   
+    foreach ($tracks as &$track) {
+        $trackid = $track["track_id"];
+        $sqlversion = "SELECT version_id FROM Version WHERE track_id = '$trackid'";
+        $version[] = $db->query($sqlversion)->fetchAll(PDO::FETCH_ASSOC);
+    }
+    $emailstring = str_replace("%trackamount%",json_encode($version),$emailstring);
+    $emailstring_text = str_replace("%trackamount%",json_encode($version),$emailstring_text);   
 //    $sql = "SELECT file_name FROM File WHERE project_id = '$project_id'";
 
     $subject = 'Your tracks have been shared succesfully via Soundmarker';
