@@ -164,14 +164,16 @@ try {
         $sqlversion = "SELECT version_id FROM Version WHERE track_id = '$trackid'";
         $versions[] = $db->query($sqlversion)->fetchAll(PDO::FETCH_ASSOC);
     }
-    foreach ($versions[] as &$version) {
-        $versionid = $version["version_id"];
-        $sqlfiles = "SELECT file_name FROM File WHERE version_id = '$versionid'";
-        $files[] = $db->query($sqlfiles)->fetchAll(PDO::FETCH_ASSOC);
+    foreach ($versions as &$versions2) {
+      foreach ($versions2 as &$version) {
+          $versionid = $version["version_id"];
+          $sqlfiles = "SELECT file_name FROM File WHERE version_id = '$versionid'";
+          $files[] = $db->query($sqlfiles)->fetchAll(PDO::FETCH_ASSOC);
+      }
     }
     $filesunique = array_unique($files);
-    $emailstring = str_replace("%trackamount%",(string) array_count_values($filesunique),$emailstring);
-    $emailstring_text = str_replace("%trackamount%",(string) array_count_values($filesunique),$emailstring_text);   
+    $emailstring = str_replace("%trackamount%",strval(array_count_values($filesunique)),$emailstring);
+    $emailstring_text = str_replace("%trackamount%",strval(array_count_values($filesunique)),$emailstring_text);   
     // Replace strings -> %tracktitle%
     $emailstring = str_replace("%tracktitle%",json_encode($filesunique),$emailstring);
     $emailstring_text = str_replace("%tracktitle%",json_encode($filesunique),$emailstring_text);   
