@@ -165,12 +165,12 @@ try {
     // Replace strings -> %trackamount%
     $sql = "SELECT track_id FROM Track WHERE project_id = '$project_id'";
     $tracks = $db->query($sql)->fetchAll(PDO::FETCH_ASSOC);
-    foreach ($tracks as &$track) {
-        $sqlversion = "SELECT version_id FROM Version WHERE track_id = '$track'";
-        $version[] = $db->query($sql)->fetchAll(PDO::FETCH_ASSOC);
-    }
-    str_replace("%trackamount%",json_encode($version),$emailstring);
-    str_replace("%trackamount%",json_encode($version),$emailstring_text);   
+    // foreach ($tracks as &$track) {
+    //     $sqlversion = "SELECT version_id FROM Version WHERE track_id = '$track'";
+    //     $version[] = $db->query($sqlversion)->fetchAll(PDO::FETCH_ASSOC);
+    // }
+    str_replace("%trackamount%",json_encode($tracks),$emailstring);
+    str_replace("%trackamount%",json_encode($tracks),$emailstring_text);   
 //    $sql = "SELECT file_name FROM File WHERE project_id = '$project_id'";
 
     $subject = 'Your tracks have been shared succesfully via Soundmarker';
