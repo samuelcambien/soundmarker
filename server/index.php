@@ -152,16 +152,16 @@ try {
     $projectdatef = $projectdate->format('Y-m-d H:i:s');
     $sql = "UPDATE Project SET expiration_date = '$projectdatef' WHERE project_id = '$project_id'";
     $result = $db->query($sql);
-    str_replace("%projectdate%",$projectdatef,$emailstring);
-    str_replace("%projectdate%",$projectdatef,$emailstring_text);
+    $emailstring = str_replace("%projectdate%",$projectdatef,$emailstring);
+    $emailstring_text = str_replace("%projectdate%",$projectdatef,$emailstring_text);
     // Replace strings -> %projectlink%
     $sql = "SELECT hash FROM Project WHERE project_id = '$project_id'";
     $projectlink = "http://soundmarker-env.mc3wuhhgpz.eu-central-1.elasticbeanstalk.com/project/" . $db->query($sql)->fetch()[0];
-    str_replace("%projectlink%",$projectlink,$emailstring);
-    str_replace("%projectlink%",$projectlink,$emailstring_text);
+    $emailstring = str_replace("%projectlink%",$projectlink,$emailstring);
+    $emailstring_text = str_replace("%projectlink%",$projectlink,$emailstring_text);
     // Replace strings -> %recipientmail%
-    str_replace("%recipientmail%",$receiver,$emailstring);
-    str_replace("%recipientmail%",$receiver,$emailstring_text);
+    $emailstring = str_replace("%recipientmail%",$receiver,$emailstring);
+    $emailstring_text = str_replace("%recipientmail%",$receiver,$emailstring_text);
     // Replace strings -> %trackamount%
     $sql = "SELECT track_id FROM Track WHERE project_id = '$project_id'";
     $tracks = $db->query($sql)->fetchAll(PDO::FETCH_ASSOC);
@@ -169,8 +169,8 @@ try {
     //     $sqlversion = "SELECT version_id FROM Version WHERE track_id = '$track'";
     //     $version[] = $db->query($sqlversion)->fetchAll(PDO::FETCH_ASSOC);
     // }
-    str_replace("%trackamount%",json_encode($tracks),$emailstring);
-    str_replace("%trackamount%",json_encode($tracks),$emailstring_text);   
+    $emailstring = str_replace("%trackamount%",json_encode($tracks),$emailstring);
+    $emailstring_text = str_replace("%trackamount%",json_encode($tracks),$emailstring_text);   
 //    $sql = "SELECT file_name FROM File WHERE project_id = '$project_id'";
 
     $subject = 'Your tracks have been shared succesfully via Soundmarker';
