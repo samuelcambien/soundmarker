@@ -197,7 +197,7 @@ try {
                 'ToAddresses' => [$sender],
             ],
             'ReplyToAddresses' => ["noreply@soundmarker.com"],
-            'Source' => "noreply@soundmarker.com",
+            'Source' => "Soundmarker <noreply@soundmarker.com>",
             'Message' => [
               'Body' => [
                   'Html' => [
@@ -260,7 +260,7 @@ try {
                 'ToAddresses' => [$receiver],
             ],
             'ReplyToAddresses' => [$sender],
-            'Source' => "noreply@soundmarker.com",
+            'Source' => "Soundmarker <noreply@soundmarker.com>",
             'Message' => [
               'Body' => [
                   'Html' => [
