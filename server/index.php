@@ -168,15 +168,23 @@ try {
       foreach ($versions2 as &$version) {
           $versionid = $version["version_id"];
           $sqlfiles = "SELECT file_name FROM File WHERE version_id = '$versionid'";
-          $files[] = $db->query($sqlfiles)->fetchAll(PDO::FETCH_ASSOC);
+          $files[] = $db->query($sqlfiles)->fetchAll(PDO::FETCH_ASSOC)[0];
       }
     }
-    $filesunique = array_unique($files);
-    $emailstring = str_replace("%trackamount%",strval(array_count_values($filesunique)),$emailstring);
-    $emailstring_text = str_replace("%trackamount%",strval(array_count_values($filesunique)),$emailstring_text);   
+    if (count($files) == 1) {
+      $trackcount = count($files). " track";
+    } else {
+      $trackcount = count($files). " tracks";
+    }
+    $emailstring = str_replace("%trackamount%",$trackcount,$emailstring);
+    $emailstring_text = str_replace("%trackamount%",$trackcount,$emailstring_text);   
     // Replace strings -> %tracktitle%
-    $emailstring = str_replace("%tracktitle%",json_encode($filesunique),$emailstring);
-    $emailstring_text = str_replace("%tracktitle%",json_encode($filesunique),$emailstring_text);   
+    $tracktitle = "";
+    foreach ($files as &$file) {
+        $tracktitle .= $file["file_name"] . "\n";
+    }
+    $emailstring = str_replace("%tracktitle%",$tracktitle,$emailstring);
+    $emailstring_text = str_replace("%tracktitle%",$tracktitle,$emailstring_text);   
 
     $subject = 'Your tracks have been shared succesfully via Soundmarker';
     $char_set = 'UTF-8';
