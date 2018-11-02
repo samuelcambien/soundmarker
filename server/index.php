@@ -172,6 +172,7 @@ try {
       }
     }
     $filesunique = array_unique($files);
+    
     $emailstring = str_replace("%trackamount%",strval(array_count_values($filesunique)),$emailstring);
     $emailstring_text = str_replace("%trackamount%",strval(array_count_values($filesunique)),$emailstring_text);   
     // Replace strings -> %tracktitle%
