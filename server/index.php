@@ -118,9 +118,12 @@ Flight::json(array(
 //////////////////////////////////////////////// Routes - /project/get/@project_hash POST /////////////////////////////////////////////
 Flight::route('POST /project/get/url', function() {
 
+// set expiration date
+// calculate amount of tracks and get track names
 $project_id = isset(json_decode(Flight::request()->getBody())->project_id) ? json_decode(Flight::request()->getBody())->project_id : "";
 $sender = isset(json_decode(Flight::request()->getBody())->sender) ? json_decode(Flight::request()->getBody())->sender : "";
 $receiver = isset(json_decode(Flight::request()->getBody())->receiver) ? json_decode(Flight::request()->getBody())->receiver : "";
+$expiration = isset(json_decode(Flight::request()->getBody())->expiration) ? json_decode(Flight::request()->getBody())->expiration : 0;
 
 $db = Flight::db();
 try {
@@ -132,14 +135,42 @@ try {
     // htmlentities('', ENT_COMPAT, 'ISO-8859-1');
     // html_entity_decode('', ENT_COMPAT, 'ISO-8859-1');
     // Send Email to Sender
+    // $projectdate$
+    // $projectlink$
+    // $recipientmail$
+    // $projectlink$
+    // $trackamount$
+    // $tracktitle$
     $sql = "SELECT email_string FROM Emails WHERE email_name = 'soundmarker-initial-email-to-sender'";
     $emailstring = html_entity_decode($db->query($sql)->fetch()[0], ENT_COMPAT, 'ISO-8859-1');
     $sql = "SELECT email_string_text FROM Emails WHERE email_name = 'soundmarker-initial-email-to-sender'";
     $emailstring_text = html_entity_decode($db->query($sql)->fetch()[0], ENT_COMPAT, 'ISO-8859-1');
     
     // Replace strings
-    str_replace("&sendermail&","robinreumers@gmail.com",$emailstring);
-    str_replace("&sendermail&","robinreumers@gmail.com",$emailstring_text);
+    // Replace strings -> &projectdate&
+    $projectdate = new DateTime()->modify('+'.$expiration.' day');
+    $sql = "UPDATE Project SET expiration_date = '$projectdate' WHERE project_id = '$project_id'";
+    $result = $db->query($sql);
+    str_replace("&projectdate&",$projectdate,$emailstring);
+    str_replace("&projectdate&",$projectdate,$emailstring_text);
+    // Replace strings -> &projectlink&
+    $sql = "SELECT hash FROM Project WHERE project_id = '$project_id'";
+    $projectlink = "http://soundmarker-env.mc3wuhhgpz.eu-central-1.elasticbeanstalk.com/project/" . $db->query($sql)->fetch()[0];
+    str_replace("&projectlink&",$projectlink,$emailstring);
+    str_replace("&projectlink&",$projectlink,$emailstring_text);
+    // Replace strings -> &recipientmail&
+    str_replace("&recipientmail&",$receiver,$emailstring);
+    str_replace("&recipientmail&",$receiver,$emailstring_text);
+    // Replace strings -> &trackamount&
+    $sql = "SELECT track_id FROM Track WHERE project_id = '$project_id'";
+    $tracks = $db->query($sql)->fetchAll(PDO::FETCH_ASSOC);
+    foreach ($tracks as &$track) {
+        $sqlversion = "SELECT version_id FROM Version WHERE track_id = '$track'";
+        $version[] = $db->query($sql)->fetchAll(PDO::FETCH_ASSOC);
+    }
+    str_replace("&trackamount&",json_encode($version),$emailstring);
+    str_replace("&trackamount&",json_encode($version),$emailstring_text);   
+//    $sql = "SELECT file_name FROM File WHERE project_id = '$project_id'";
 
     $subject = 'Your tracks have been shared succesfully via Soundmarker';
     $char_set = 'UTF-8';
@@ -150,7 +181,7 @@ try {
                 'ToAddresses' => [$receiver],
             ],
             'ReplyToAddresses' => [$sender],
-            'Source' => $sender,
+            'Source' => "noreply@soundmarker.com",
             'Message' => [
               'Body' => [
                   'Html' => [
@@ -167,16 +198,12 @@ try {
                   'Data' => $subject,
               ],
             ],
-            // If you aren't using a configuration set, comment or delete the
-            // following line
-            // 'ConfigurationSetName' => $configuration_set,
         ]);
         $messageId = $result['MessageId'];
     } catch (AwsException $e) {
         // output error message if fails
         echo $e->getMessage();
         echo("The email was not sent. Error message: ".$e->getAwsErrorMessage()."\n");
-        echo "\n";
     }
 
     // return ok
