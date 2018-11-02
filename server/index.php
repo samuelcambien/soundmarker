@@ -124,6 +124,8 @@ $project_id = isset(json_decode(Flight::request()->getBody())->project_id) ? jso
 $sender = isset(json_decode(Flight::request()->getBody())->sender) ? json_decode(Flight::request()->getBody())->sender : "";
 $receiver = isset(json_decode(Flight::request()->getBody())->receiver) ? json_decode(Flight::request()->getBody())->receiver : "";
 $expiration = isset(json_decode(Flight::request()->getBody())->expiration) ? json_decode(Flight::request()->getBody())->expiration : "1 week";
+// check notes????
+$notes = isset(json_decode(Flight::request()->getBody())->notes) ? json_decode(Flight::request()->getBody())->notes : "";
 
 $db = Flight::db();
 try {
@@ -192,6 +194,66 @@ try {
     try {
         $result = Flight::get("SesClient")->sendEmail([
             'Destination' => [
+                'ToAddresses' => [$sender],
+            ],
+            'ReplyToAddresses' => ["noreply@soundmarker.com"],
+            'Source' => "noreply@soundmarker.com",
+            'Message' => [
+              'Body' => [
+                  'Html' => [
+                      'Charset' => $char_set,
+                      'Data' => $emailstring,
+                  ],
+                  'Text' => [
+                      'Charset' => $char_set,
+                      'Data' => $emailstring_text,
+                  ],
+              ],
+              'Subject' => [
+                  'Charset' => $char_set,
+                  'Data' => $subject,
+              ],
+            ],
+        ]);
+        $messageId = $result['MessageId'];
+    } catch (AwsException $e) {
+        // output error message if fails
+        echo $e->getMessage();
+        echo("The email was not sent. Error message: ".$e->getAwsErrorMessage()."\n");
+    }
+
+    // Send Email to Recipient
+    $sql = "SELECT email_string FROM Emails WHERE email_name = 'soundmarker-initial-email-to-recipient'";
+    $emailstring = html_entity_decode($db->query($sql)->fetch()[0], ENT_COMPAT, 'ISO-8859-1');
+    $sql = "SELECT email_string_text FROM Emails WHERE email_name = 'soundmarker-initial-email-to-recipient'";
+    $emailstring_text = html_entity_decode($db->query($sql)->fetch()[0], ENT_COMPAT, 'ISO-8859-1');
+    
+    // Replace strings
+    // Replace strings -> %projectdate%
+    $emailstring = str_replace("%projectdate%",$projectdate->format('F jS Y'),$emailstring);
+    $emailstring_text = str_replace("%projectdate%",$projectdate->format('F jS Y'),$emailstring_text);
+    // Replace strings -> %projectlink%
+    $emailstring = str_replace("%projectlink%",$projectlink,$emailstring);
+    $emailstring_text = str_replace("%projectlink%",$projectlink,$emailstring_text);
+    // Replace strings -> %recipientmail%
+    $emailstring = str_replace("%recipientmail%",$receiver,$emailstring);
+    $emailstring_text = str_replace("%recipientmail%",$receiver,$emailstring_text);
+    // Replace strings -> %trackamount%
+    $emailstring = str_replace("%trackamount%",$trackcount,$emailstring);
+    $emailstring_text = str_replace("%trackamount%",$trackcount,$emailstring_text);   
+    // Replace strings -> %tracktitle%
+    $emailstring = str_replace("%tracktitle%",$tracktitle,$emailstring);
+    $emailstring_text = str_replace("%tracktitle%",$tracktitle,$emailstring_text);   
+    // Replace strings -> %projectnotes%
+    $emailstring = str_replace("%projectnotes%",$notes,$emailstring);
+    $emailstring_text = str_replace("%projectnotes%",$notes,$emailstring_text);   
+
+    $subject = $sender . ' has shared '. $trackcount . ' with you via Soundmarker';
+    $char_set = 'UTF-8';
+
+    try {
+        $result = Flight::get("SesClient")->sendEmail([
+            'Destination' => [
                 'ToAddresses' => [$receiver],
             ],
             'ReplyToAddresses' => [$sender],
@@ -219,7 +281,6 @@ try {
         echo $e->getMessage();
         echo("The email was not sent. Error message: ".$e->getAwsErrorMessage()."\n");
     }
-
     // return ok
     Flight::json(array(
        'project_hash' => $hash
