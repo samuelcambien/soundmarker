@@ -152,8 +152,8 @@ try {
     $projectdatef = $projectdate->format('Y-m-d H:i:s');
     $sql = "UPDATE Project SET expiration_date = '$projectdatef' WHERE project_id = '$project_id'";
     $result = $db->query($sql);
-    str_replace("%projectdate%",$projectdate,$emailstring);
-    str_replace("%projectdate%",$projectdate,$emailstring_text);
+    str_replace("%projectdate%",$projectdatef,$emailstring);
+    str_replace("%projectdate%",$projectdatef,$emailstring_text);
     // Replace strings -> %projectlink%
     $sql = "SELECT hash FROM Project WHERE project_id = '$project_id'";
     $projectlink = "http://soundmarker-env.mc3wuhhgpz.eu-central-1.elasticbeanstalk.com/project/" . $db->query($sql)->fetch()[0];
