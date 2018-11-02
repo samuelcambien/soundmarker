@@ -247,6 +247,9 @@ try {
     // Replace strings -> %projectnotes%
     $emailstring = str_replace("%projectnotes%",$notes,$emailstring);
     $emailstring_text = str_replace("%projectnotes%",$notes,$emailstring_text);   
+    // Replace strings -> %sendermail%
+    $emailstring = str_replace("%sendermail%",$sender,$emailstring);
+    $emailstring_text = str_replace("%sendermail%",$sender,$emailstring_text);   
 
     $subject = $sender . ' has shared '. $trackcount . ' with you via Soundmarker';
     $char_set = 'UTF-8';
