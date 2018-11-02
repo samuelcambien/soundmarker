@@ -123,7 +123,7 @@ Flight::route('POST /project/get/url', function() {
 $project_id = isset(json_decode(Flight::request()->getBody())->project_id) ? json_decode(Flight::request()->getBody())->project_id : "";
 $sender = isset(json_decode(Flight::request()->getBody())->sender) ? json_decode(Flight::request()->getBody())->sender : "";
 $receiver = isset(json_decode(Flight::request()->getBody())->receiver) ? json_decode(Flight::request()->getBody())->receiver : "";
-$expiration = isset(json_decode(Flight::request()->getBody())->expiration) ? json_decode(Flight::request()->getBody())->expiration : 0;
+$expiration = isset(json_decode(Flight::request()->getBody())->expiration) ? json_decode(Flight::request()->getBody())->expiration : "1 week";
 
 $db = Flight::db();
 try {
@@ -148,8 +148,7 @@ try {
     
     // Replace strings
     // Replace strings -> %projectdate%
-    $projectdate = new DateTime();
-    $projectdate->modify('+'.$expiration.' day');
+    $projectdate = new \DateTime('+'.$expiration);
     $sql = "UPDATE Project SET expiration_date = '$projectdate' WHERE project_id = '$project_id'";
     $result = $db->query($sql);
     str_replace("%projectdate%",$projectdate,$emailstring);
