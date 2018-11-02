@@ -148,7 +148,8 @@ try {
     
     // Replace strings
     // Replace strings -> %projectdate%
-    $projectdate = new DateTime()->modify('+'.$expiration.' day');
+    $projectdate = new DateTime();
+    $projectdate->modify('+'.$expiration.' day');
     $sql = "UPDATE Project SET expiration_date = '$projectdate' WHERE project_id = '$project_id'";
     $result = $db->query($sql);
     str_replace("%projectdate%",$projectdate,$emailstring);
