@@ -186,6 +186,7 @@ try {
     $emailstring = str_replace("%tracktitle%",$tracktitle,$emailstring);
     $emailstring_text = str_replace("%tracktitle%",$tracktitle,$emailstring_text);   
 
+
     $subject = 'Your tracks have been shared succesfully via Soundmarker';
     $char_set = 'UTF-8';
 
