@@ -135,12 +135,6 @@ try {
     // htmlentities('', ENT_COMPAT, 'ISO-8859-1');
     // html_entity_decode('', ENT_COMPAT, 'ISO-8859-1');
     // Send Email to Sender
-    // $projectdate$
-    // $projectlink$
-    // $recipientmail$
-    // $projectlink$
-    // $trackamount$
-    // $tracktitle$
     $sql = "SELECT email_string FROM Emails WHERE email_name = 'soundmarker-initial-email-to-sender'";
     $emailstring = html_entity_decode($db->query($sql)->fetch()[0], ENT_COMPAT, 'ISO-8859-1');
     $sql = "SELECT email_string_text FROM Emails WHERE email_name = 'soundmarker-initial-email-to-sender'";
@@ -170,13 +164,17 @@ try {
         $sqlversion = "SELECT version_id FROM Version WHERE track_id = '$trackid'";
         $versions[] = $db->query($sqlversion)->fetchAll(PDO::FETCH_ASSOC);
     }
-    foreach ($versions as &$version) {
+    foreach ($versions[] as &$version) {
         $versionid = $version["version_id"];
         $sqlfiles = "SELECT file_name FROM File WHERE version_id = '$versionid'";
         $files[] = $db->query($sqlfiles)->fetchAll(PDO::FETCH_ASSOC);
     }
-    $emailstring = str_replace("%trackamount%",json_encode($files),$emailstring);
-    $emailstring_text = str_replace("%trackamount%",json_encode($files),$emailstring_text);   
+    $filesunique = array_unique($files);
+    $emailstring = str_replace("%trackamount%",(string) array_count_values($filesunique),$emailstring);
+    $emailstring_text = str_replace("%trackamount%",(string) array_count_values($filesunique),$emailstring_text);   
+    // Replace strings -> %tracktitle%
+    $emailstring = str_replace("%tracktitle%",json_encode($filesunique),$emailstring);
+    $emailstring_text = str_replace("%tracktitle%",json_encode($filesunique),$emailstring_text);   
 
     $subject = 'Your tracks have been shared succesfully via Soundmarker';
     $char_set = 'UTF-8';
