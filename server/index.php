@@ -286,14 +286,11 @@ try {
     }
 
     // Create notifications
-    // Notification -> Warning Expire
+    // Notification -> Expired
     $senddate = $projectdate->modify('-3 days');
     $senddatef = $senddate->format('Y-m-d H:i:s');
     $db = Flight::db();
-    $sql = "INSERT INTO Notification (emailaddress, senddate, type, status) VALUES ('$sender', '$senddatef', '0', '0')";
-    $result = $db->query($sql);
-    // Notification -> Expired
-    $sql = "INSERT INTO Notification (emailaddress, senddate, type, status) VALUES ('$sender', '$projectdatef', '0', '0')";
+    $sql = "INSERT INTO Notification (emailaddress, senddate, type, status, type_id) VALUES ('$sender', '$projectdatef', '0', '0', '$project_id')";
     $result = $db->query($sql);
 
     // return ok
