@@ -32,9 +32,11 @@ GLOBALE DECLARATIONS
 // }
 
 ///////////////////////////////////////////////////////////////// Setup DB ////////////////////////////////////////////////////////////
-Flight::register('db', 'PDO', array('mysql:host='.$_SERVER["RDS_HOSTNAME"].';dbname='.$_SERVER["RDS_DB_NAME"], $_SERVER["RDS_USERNAME"], $_SERVER["RDS_PASSWORD"]), function($db) {
-        $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-});
+// Flight::register('db', 'PDO', array('mysql:host='.$_SERVER["RDS_HOSTNAME"].';dbname='.$_SERVER["RDS_DB_NAME"], $_SERVER["RDS_USERNAME"], $_SERVER["RDS_PASSWORD"]), function($db) {
+//         $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+// });
+
+$dbh = new PDO('mysql:host='.$_SERVER["RDS_HOSTNAME"].';dbname='.$_SERVER["RDS_DB_NAME"], $_SERVER["RDS_USERNAME"], $_SERVER["RDS_PASSWORD"]);
 
 ////////////////////////////////////////////////////////////// Setup S3 client ////////////////////////////////////////////////////////
 // use Aws\S3\S3Client;
@@ -76,7 +78,7 @@ $SesClient = new SesClient([
 // /////////////////////////////////////////////////////////// Routes - Global Index /////////////////////////////////////////////////////
 // Flight::route('/', function(){
 //     include 'index.html';
-// });
+
 
 
 
@@ -104,10 +106,9 @@ $emailaddress = "robinreumers@gmail.com";
 $senddate = new \DateTime('+7 days');
 $senddatef = $senddate->format('Y-m-d H:i:s');
 
-$db = Flight::db();
 $sql = "INSERT INTO Notification (emailaddress, senddate) VALUES ('$emailaddress', '$senddatef')";
-$result = $db->query($sql);
-$project_id = $db->lastInsertId();
+$result = $dbh->query($sql);
+// $project_id = $db->lastInsertId();
 
 // $uuid = UUID::v4().UUID::v4();
 // $sql = "UPDATE Project SET hash = '$uuid' WHERE project_id = '$project_id'";
@@ -672,12 +673,12 @@ $project_id = $db->lastInsertId();
 
 
 
-
-
+// });
 
 
 /*
 FLIGHT
 */
 ///////////////////////////////////////////////////////////// Start Flight ////////////////////////////////////////////////////////////
-Flight::start();
+// Flight::start();
+?>

@@ -284,6 +284,18 @@ try {
         echo $e->getMessage();
         echo("The email was not sent. Error message: ".$e->getAwsErrorMessage()."\n");
     }
+
+    // Create notifications
+    // Notification -> Warning Expire
+    $senddate = $projectdate->modify('-3 days');
+    $senddatef = $senddate->format('Y-m-d H:i:s');
+    $db = Flight::db();
+    $sql = "INSERT INTO Notification (emailaddress, senddate, type, status) VALUES ('$sender', '$senddatef', '0', '0')";
+    $result = $db->query($sql);
+    // Notification -> Expired
+    $sql = "INSERT INTO Notification (emailaddress, senddate, type, status) VALUES ('$sender', '$projectdatef', '0', '0')";
+    $result = $db->query($sql);
+
     // return ok
     Flight::json(array(
        'project_hash' => $hash
