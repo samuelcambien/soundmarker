@@ -564,7 +564,8 @@ try {
 
     // Upload data.
     $result = $s3->putObject([
-        'Bucket' => $_SERVER["s3bucket"],
+        //'Bucket' => $_SERVER["s3bucket"],
+        'Bucket' => "soundmarkersass-local-robin",
         'Key'    => $files[0]["version_id"] . "/" . $files[0]["file_name"] . $idno .'.' . $files[0]["extension"],
         'Body'   => Flight::request()->getBody(), // figuring out right way to get the file from the JSON
         'ACL'    => 'public-read'
