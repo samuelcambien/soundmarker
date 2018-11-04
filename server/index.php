@@ -47,7 +47,6 @@ $s3 = new Aws\S3\S3Client([
 ]);
 
 Flight::set("s3", $s3);
-Flight::set("s3bucket", $_SERVER["s3bucket"]);
 
 ///////////////////////////////////////////////////////////// Setup SES client ////////////////////////////////////////////////////////
 use Aws\Ses\SesClient;
@@ -562,11 +561,10 @@ try {
 
   // get the variables
   $s3 = Flight::get("s3");
-  $s3bucket = Flight::get("s3bucket");
 
     // Upload data.
     $result = $s3->putObject([
-        'Bucket' => $s3bucket,
+        'Bucket' => $_SERVER["s3bucket"],
         'Key'    => $files[0]["version_id"] . "/" . $files[0]["file_name"] . $idno .'.' . $files[0]["extension"],
         'Body'   => Flight::request()->getBody(), // figuring out right way to get the file from the JSON
         'ACL'    => 'public-read'
