@@ -40,13 +40,11 @@ Flight::register('db', 'PDO', array('mysql:host='.$_SERVER["RDS_HOSTNAME"].';dbn
 use Aws\S3\S3Client;
 use Aws\S3\Exception\S3Exception;
 
-$credentials = new Aws\Credentials\Credentials($_SERVER['AWScredentials-username'], $_SERVER['AWScredentials-password']);
 $s3bucket = 'soundmarkersass-local-robin';
 
 $s3 = new Aws\S3\S3Client([
     'version'     => 'latest',
     'region'      => 'eu-west-1',
-    'credentials' => $credentials
 ]);
 
 Flight::set("s3", $s3);
@@ -57,7 +55,7 @@ use Aws\Ses\SesClient;
 use Aws\Exception\AwsException;
 
 $SesClient = new SesClient([
-    'profile' => 'project1',
+    'profile' => 'default',
     'version' => '2010-12-01',
     'region'  => 'eu-west-1',
 ]);

@@ -7,7 +7,7 @@ use Aws\Ses\SesClient;
 use Aws\Exception\AwsException;
 
 $SesClient = new SesClient([
-    'profile' => 'project1',
+    'profile' => 'default',
     'version' => '2010-12-01',
     'region'  => 'eu-west-1',
 ]);
