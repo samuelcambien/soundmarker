@@ -22,11 +22,51 @@ $sql = "SELECT notification_id, emailaddress, senddate, type_id FROM Notificatio
 $notifications = $db->query($sql)->fetchAll(PDO::FETCH_ASSOC);
 foreach ($notifications as &$notification) {
     if ($notification["senddate"] < $currentdatef) {
+        $project_id = $notification["type_id"];
 
         $sql = "SELECT email_string FROM Emails WHERE email_name = 'soundmarker-expiration-expired-email-to sender'";
         $emailstring = html_entity_decode($db->query($sql)->fetch()[0], ENT_COMPAT, 'ISO-8859-1');
         $sql = "SELECT email_string_text FROM Emails WHERE email_name = 'soundmarker-expiration-expired-email-to sender'";
         $emailstring_text = html_entity_decode($db->query($sql)->fetch()[0], ENT_COMPAT, 'ISO-8859-1');
+
+        // Replace strings
+        // Replace strings -> %projectlink%
+        $sql = "SELECT hash FROM Project WHERE project_id = '$project_id'";
+        $projectlink = "http://soundmarker-env.mc3wuhhgpz.eu-central-1.elasticbeanstalk.com/project/" . $db->query($sql)->fetch()[0];
+        $emailstring = str_replace("%projectlink%",$projectlink,$emailstring);
+        $emailstring_text = str_replace("%projectlink%",$projectlink,$emailstring_text);
+        // Replace strings -> %recipientmail%
+        $emailstring = str_replace("%recipientmail%",$receiver,$emailstring);
+        $emailstring_text = str_replace("%recipientmail%",$receiver,$emailstring_text);
+        // Replace strings -> %trackamount%
+        $sql = "SELECT track_id FROM Track WHERE project_id = '$project_id'";
+        $tracks = $db->query($sql)->fetchAll(PDO::FETCH_ASSOC);
+        foreach ($tracks as &$track) {
+            $trackid = $track["track_id"];
+            $sqlversion = "SELECT version_id FROM Version WHERE track_id = '$trackid'";
+            $versions[] = $db->query($sqlversion)->fetchAll(PDO::FETCH_ASSOC);
+        }
+        foreach ($versions as &$versions2) {
+          foreach ($versions2 as &$version) {
+              $versionid = $version["version_id"];
+              $sqlfiles = "SELECT file_name FROM File WHERE version_id = '$versionid'";
+              $files[] = $db->query($sqlfiles)->fetchAll(PDO::FETCH_ASSOC)[0];
+          }
+        }
+        if (count($files) == 1) {
+          $trackcount = count($files). " track";
+        } else {
+          $trackcount = count($files). " tracks";
+        }
+        $emailstring = str_replace("%trackamount%",$trackcount,$emailstring);
+        $emailstring_text = str_replace("%trackamount%",$trackcount,$emailstring_text);   
+        // Replace strings -> %tracktitle%
+        $tracktitle = "";
+        foreach ($files as &$file) {
+            $tracktitle .= $file["file_name"] . "\n";
+        }
+        $emailstring = str_replace("%tracktitle%",$tracktitle,$emailstring);
+        $emailstring_text = str_replace("%tracktitle%",$tracktitle,$emailstring_text);   
 
         $subject = 'Your tracks have expired';
         $char_set = 'UTF-8';
@@ -60,6 +100,11 @@ foreach ($notifications as &$notification) {
             echo $e->getMessage();
             echo("The email was not sent. Error message: ".$e->getAwsErrorMessage()."\n");
         }
+
+        // Set notification status to 1
+        $notification_id = $notification["notification_id"];
+        $sql = "UPDATE Notification SET status = '1' WHERE notification_id = '$notification_id'";
+        $result = $db->query($sql);
     }
 }
 ?>
