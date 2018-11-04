@@ -41,7 +41,7 @@ use Aws\S3\S3Client;
 use Aws\S3\Exception\S3Exception;
 
 $s3 = new Aws\S3\S3Client([
-    'profile'     => 's3'
+    'profile'     => 's3',
     'version'     => 'latest',
     'region'      => 'eu-west-1',
 ]);
