@@ -7,7 +7,7 @@ use Aws\Ses\SesClient;
 use Aws\Exception\AwsException;
 
 $SesClient = new SesClient([
-    'profile' => 'default',
+    'profile' => 'ses',
     'version' => '2010-12-01',
     'region'  => 'eu-west-1',
 ]);
@@ -28,7 +28,7 @@ foreach ($notifications as &$notification) {
         $sql = "SELECT email_string_text FROM Emails WHERE email_name = 'soundmarker-expiration-expired-email-to sender'";
         $emailstring_text = html_entity_decode($db->query($sql)->fetch()[0], ENT_COMPAT, 'ISO-8859-1');
 
-        $subject = 'Your tracks have been shared succesfully via Soundmarker';
+        $subject = 'Your tracks have expired';
         $char_set = 'UTF-8';
         try {
             $result = $SesClient->sendEmail([

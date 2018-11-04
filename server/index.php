@@ -40,22 +40,21 @@ Flight::register('db', 'PDO', array('mysql:host='.$_SERVER["RDS_HOSTNAME"].';dbn
 use Aws\S3\S3Client;
 use Aws\S3\Exception\S3Exception;
 
-$s3bucket = 'soundmarkersass-local-robin';
-
 $s3 = new Aws\S3\S3Client([
+    'profile'     => 's3'
     'version'     => 'latest',
     'region'      => 'eu-west-1',
 ]);
 
 Flight::set("s3", $s3);
-Flight::set("s3bucket", $s3bucket);
+Flight::set("s3bucket", $_SERVER["s3bucket"]);
 
 ///////////////////////////////////////////////////////////// Setup SES client ////////////////////////////////////////////////////////
 use Aws\Ses\SesClient;
 use Aws\Exception\AwsException;
 
 $SesClient = new SesClient([
-    'profile' => 'default',
+    'profile' => 'ses',
     'version' => '2010-12-01',
     'region'  => 'eu-west-1',
 ]);
