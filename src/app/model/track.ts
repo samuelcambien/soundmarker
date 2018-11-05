@@ -1,12 +1,13 @@
-import {Comment} from "../comments/comment";
+import {Comment} from "./comment";
+import {Version} from "./version";
 
 export class Track {
 
-  id: string;
+  track_id: string;
   title: string;
   artist: string;
   notes: string;
-  last_version: string;
+  versions: Version[];
   duration: number;
   track_url: string;
   comments: Comment[];

@@ -1,27 +1,31 @@
-import {Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
+import {Component, ElementRef, EventEmitter, Input, Output, ViewChild} from '@angular/core';
 import {FileItem, FileUploader} from '../../ng2-file-upload';
 import {Mp3Encoder} from "../../mp3-encoder/mp3-encoder";
-import {RestUrl, Utils} from "../../app.component";
 import * as Player from "../../player/dist/player.js";
+import {RestCall} from "../../rest/rest-call";
 
 @Component({
   selector: 'app-public-upload-form',
   templateUrl: './public-upload-form.component.html',
   styleUrls: ['./public-upload-form.component.scss']
 })
-export class PublicUploadFormComponent implements OnInit {
+export class PublicUploadFormComponent {
 
   notes: string;
   email_from: string;
   email_to: [string];
 
-  sharemode: "email" | "Link";
+  sharemode: "email" | "link" = "email";
+  expiration: "week" | "month" = "week";
+  downloadable: boolean = false;
 
   project_url: string;
 
   player;
 
   @Input() uploader: FileUploader;
+  @Output() uploading = new EventEmitter();
+  @Output() finished = new EventEmitter();
 
   @ViewChild('waveform') waveform: ElementRef;
 
@@ -63,109 +67,85 @@ export class PublicUploadFormComponent implements OnInit {
 
   onSubmit() {
 
-    console.log(this.sharemode);
+    this.uploading.emit();
 
-    Utils.sendPostRequest(RestUrl.PROJECT_NEW, {})
+    RestCall.createNewProject()
       .then(response => {
 
         let project_id = response["project_id"];
-        this.uploader.queue.forEach(track => this.processTrack(project_id, track));
-
-        Utils.sendPostRequest(RestUrl.PROJECT_SHARE, {
-          project_id: project_id,
-          sender: this.email_from,
-          receiver: this.email_to
-        }).then(response =>
-          this.project_url = response["project_url"]
-        );
+        Promise.all(this.uploader.queue.map(track => this.processTrack(project_id, track)))
+          .then(() => RestCall.shareProject(project_id, this.email_from, this.email_to))
+          .then(response => this.project_url = response["project_url"])
+          .then(() => this.finished.emit());
       });
   }
 
-  private processTrack(project_id, track) {
+  private processTrack(projectId, track: FileItem): Promise<any> {
 
-    let my = this;
+    let length = 0;
 
-    Promise.all([
-      this.createNewVersion(project_id, track),
+    return Promise.all([
+      RestCall.createNewTrack(projectId, track),
       this.getAudioBuffer(track)
     ]).then(result => {
+      return {trackId: result[0]["track_id"], buffer: result[1]}
+    }).then(({trackId, buffer}) =>
+      RestCall.createNewVersion(trackId, this.notes, buffer.duration, this.getWaveform(buffer))
+    ).then(response => {
+        let versionId = response["version_id"];
+        let file_name = Mp3Encoder.getName(track._file.name);
+        let extension = Mp3Encoder.getExtension(track._file.name);
 
-      let versionId = result[0]["version_id"];
-      let audioBuffer: AudioBuffer = result[1];
-      let length = audioBuffer.duration;
-      Player.init({
-        container: "#waveform"
-      });
-      Player.loadDecodedBuffer(audioBuffer);
+        let uploads = [];
 
-      let waveform = my.waveform.nativeElement.querySelector("canvas").toDataURL("image/png");
-
-      this.uploadDownloadFile(track._file, versionId, length);
-      this.convert(track)
-        .then(file =>
-          this.uploadStreamFile(file, versionId, length)
+        if (this.downloadable)
+          uploads.push(
+            this.uploadDownloadFile(track._file, file_name, extension, track._file.size, versionId, length)
+          );
+        uploads.push(
+          this.convert(track)
+            .then(file =>
+              this.uploadStreamFile(file, file_name, "mp3", file.size, versionId, length)
+            )
         );
+
+        return Promise.all(uploads);
+      });
+  }
+
+  private getWaveform(buffer: AudioBuffer): string {
+
+    Player.init({
+      container: "#waveform"
     });
+    Player.loadDecodedBuffer(buffer);
+
+    return this.waveform.nativeElement.querySelector("canvas").toDataURL("image/png");
   }
 
-  private createNewVersion(project_id, track): Promise<any> {
-    return Utils.sendPostRequest(RestUrl.TRACK_NEW, {
-      project_id: project_id,
-      title: track._file.name
-    }).then(response =>
-      Utils.sendPostRequest(RestUrl.VERSION_NEW, {
-        track_id: response["track_id"]
-      })
-    );
-  }
-
-  private getAudioBuffer(track) {
+  private getAudioBuffer(track): Promise<AudioBuffer> {
     return Mp3Encoder.read(track._file).then((buffer: ArrayBuffer) => Mp3Encoder.decode(buffer));
   }
 
-  private uploadDownloadFile(file: File, versionId: string, length: number): Promise<any> {
-    return this.uploadFile(file, versionId, length)
-      .then(({fileId, buffer}) =>
-        this.uploadChunk(buffer, fileId, 0, "wav")
-      );
-  }
+  private uploadDownloadFile(file: File, file_name: string, extension: string, size: number, versionId: string, length: number): Promise<any> {
 
-  private uploadStreamFile(file: File, versionId: string, length: number): Promise<any> {
-
-    return this.uploadFile(file, versionId, length)
+    return RestCall.createNewFile(file, file_name, extension, size, versionId, length)
       .then(({fileId, buffer}) => {
-        let chunk_byte_length = 192 / 8 * 1000 * 10;
-        console.log(chunk_byte_length);
-        for (let i = 0; i * chunk_byte_length < buffer.byteLength; i++) {
-          this.uploadChunk(buffer.slice(i * chunk_byte_length, (i + 1) * chunk_byte_length), fileId, i, "mp3");
-        }
+        let chunk_byte_length = 44100;
+        // for (let i = 0; i * chunk_byte_length < buffer.byteLength; i++) {
+        RestCall.uploadChunk(buffer, fileId, 0, extension)
+        // }
       });
   }
 
-  private uploadFile(file: File, versionId: string, length: number): Promise<{ fileId: string, buffer: ArrayBuffer }> {
-    return Promise.all([
-      Utils.sendPostRequest(RestUrl.UPLOAD, {
-        version_id: versionId,
-        identifier: 0,
-        track_length: length,
-        chunk_length: 10,
-        file_name: file.name,
-        file_size: file.size
-      }),
-      Mp3Encoder.read(file)
-    ]).then(result => {
-      return {fileId: result[0]["file_id"], buffer: result[1]};
-    });
-  }
+  private uploadStreamFile(file: File, file_name: string, extension: string, size: number, versionId: string, length: number): Promise<any> {
 
-  private uploadChunk(buffer: ArrayBuffer, fileId: string, index: number, ext: string): Promise<any> {
-    return Utils.sendPostDataRequest(RestUrl.UPLOAD_CHUNK, buffer, [fileId, index, ext]);
-  }
-
-  ngOnInit(): void {
-    // console.log("Player: " + Player);
-    // this.player = new Player.Player();
-    // this.player.init();
-    // console.log("player: " + this.player);
+    return RestCall.createNewFile(file, file_name, extension, size, versionId, length)
+      .then(({fileId, buffer}) => {
+        let chunk_byte_length = 192 / 8 * 1000 * 10;
+        for (let i = 0; i * chunk_byte_length < buffer.byteLength; i++) {
+          RestCall.uploadChunk(buffer.slice(i * chunk_byte_length, (i + 1) * chunk_byte_length), fileId, i, extension);
+        }
+      });
   }
 }

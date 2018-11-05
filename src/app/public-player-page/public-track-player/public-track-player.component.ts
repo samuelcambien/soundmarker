@@ -2,7 +2,7 @@ import {Component, ElementRef, EventEmitter, Input, OnInit, Output, Renderer2, V
 import {Track} from "../../model/track";
 import {Utils} from "../../app.component";
 import {Player} from "../../newplayer/player";
-import {Comment} from "../../comments/comment";
+import {Comment} from "../../model/comment";
 import {saveAs} from 'file-saver/FileSaver';
 
 @Component({
@@ -45,8 +45,8 @@ export class PublicTrackPlayerComponent implements OnInit {
       this.player.seekTo(this.getSeekTime(e));
     });
 
-    this.comment.start = 0;
-    this.comment.end = this.track.duration;
+    this.comment.start_time = 0;
+    this.comment.end_time = this.track.duration;
   }
 
   private getPlayerWidth(): number {
@@ -58,47 +58,47 @@ export class PublicTrackPlayerComponent implements OnInit {
   }
 
   getCommentIntervalPosition() {
-    return this.getRawPosition(this.startTime, this.comment.start) + this.startTime.nativeElement.offsetWidth / 2 + "px";
+    return this.getRawPosition(this.startTime, this.comment.start_time) + this.startTime.nativeElement.offsetWidth / 2 + "px";
   }
 
   getStartPosition() {
-    return this.startPos ? this.startPos : this.getPosition(this.startTime, this.comment.start);
+    return this.startPos ? this.startPos : this.getPosition(this.startTime, this.comment.start_time);
   }
 
   getEndPosition() {
-    return this.endPos ? this.endPos : this.getPosition(this.endTime, this.comment.end);
+    return this.endPos ? this.endPos : this.getPosition(this.endTime, this.comment.end_time);
   }
 
   getStartPositionRaw(): number {
-    return this.getRawPosition(this.startTime, this.comment.start);
+    return this.getRawPosition(this.startTime, this.comment.start_time);
   }
 
   getEndPositionRaw(): number {
-    return this.getRawPosition(this.endTime, this.comment.end);
+    return this.getRawPosition(this.endTime, this.comment.end_time);
   }
 
   updateStartTime(event) {
-    this.comment.includeStart = true;
-    this.comment.start = this.getValidStartTime(
+    this.comment.include_start = true;
+    this.comment.start_time = this.getValidStartTime(
       this.getCommentTime(this.startTime, event)
     );
   }
 
   private getValidStartTime(commentTime: number) {
     if (commentTime < 0) return 0;
-    if (commentTime > this.comment.end - this.MINIMAL_INTERVAL) return this.comment.end - this.MINIMAL_INTERVAL;
+    if (commentTime > this.comment.end_time - this.MINIMAL_INTERVAL) return this.comment.end_time - this.MINIMAL_INTERVAL;
     return commentTime;
   }
 
   updateEndTime(endPos, current) {
-    this.comment.includeEnd = true;
-    this.comment.end = this.getValidEndTime(
+    this.comment.include_end = true;
+    this.comment.end_time = this.getValidEndTime(
       this.getCommentTime(this.endTime, current)
     );
   }
 
   private getValidEndTime(commentTime: number) {
-    if (commentTime < this.comment.start + this.MINIMAL_INTERVAL) return this.comment.start + this.MINIMAL_INTERVAL;
+    if (commentTime < this.comment.start_time + this.MINIMAL_INTERVAL) return this.comment.start_time + this.MINIMAL_INTERVAL;
     if (commentTime > this.track.duration) return this.track.duration;
     return commentTime;
   }
@@ -117,7 +117,7 @@ export class PublicTrackPlayerComponent implements OnInit {
   }
 
   getMatchingCommentsSorted() {
-    return this.getMatchingComments().sort((comment1, comment2) => comment2.time - comment1.time);
+    return this.getMatchingComments().sort((comment1, comment2) => comment2.comment_time - comment1.comment_time);
   }
 
   getMatchingComments() {
@@ -129,7 +129,7 @@ export class PublicTrackPlayerComponent implements OnInit {
     let search = new RegExp(this.search, 'gi');
 
     return this.track.comments.filter(
-      comment => search.test(comment.text) || search.test(comment.name)
+      comment => search.test(comment.notes) || search.test(comment.name)
     );
   }
 
@@ -158,16 +158,16 @@ export class PublicTrackPlayerComponent implements OnInit {
 
   download() {
 
-    Utils.sendGetDataRequest(this.track.track_url + ".mp3", [], "", (response, trackRequest) => {
-      saveAs(new Blob(
-        [
-          trackRequest.responseText
-        ],
-        {
-          type: trackRequest.getResponseHeader("content-type")
-        }), this.track.title + ".mp3"
-      )
-    });
+    // Utils.sendGetDataRequest(this.track.track_url + ".mp3", [], "", (response, trackRequest) => {
+    //   saveAs(new Blob(
+    //     [
+    //       trackRequest.responseText
+    //     ],
+    //     {
+    //       type: trackRequest.getResponseHeader("content-type")
+    //     }), this.track.title + ".mp3"
+    //   )
+    // });
   }
 
   downloadFile(propertyId: string, fileId: string) {
@@ -184,5 +184,10 @@ export class PublicTrackPlayerComponent implements OnInit {
 
   playInterval() {
 
+  }
+
+  addComment(comment: Comment) {
+    this.comment = new Comment()
+    this.track.comments.push(comment);
   }
 }

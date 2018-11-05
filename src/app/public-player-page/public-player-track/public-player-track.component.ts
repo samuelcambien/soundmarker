@@ -38,15 +38,15 @@ export class PublicPlayerTrackComponent implements OnInit {
   }
 
   download() {
-    Utils.sendGetDataRequest(this.track.track_url + ".mp3", [], "", (response, trackRequest) => {
-      saveAs(new Blob(
-        [
-          trackRequest.responseText
-        ],
-        {
-          type: trackRequest.getResponseHeader("content-type")
-        }), this.track.title + ".mp3"
-      )
-    });
+    // Utils.sendGetDataRequest(this.track.track_url + ".mp3", [], "", (response, trackRequest) => {
+    //   saveAs(new Blob(
+    //     [
+    //       trackRequest.responseText
+    //     ],
+    //     {
+    //       type: trackRequest.getResponseHeader("content-type")
+    //     }), this.track.title + ".mp3"
+    //   )
+    // });
   }
 }

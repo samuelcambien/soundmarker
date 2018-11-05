@@ -32,7 +32,7 @@
 	    
 	    
    
-    <h5>Uploading tracks</h5><h6> {{uploader.progress}}% </h6>
+    <h5>Uploading tracks</h5><h6> {{uploader.progress * 0.99}}% </h6>
     <div class="progress">
       <div class="progress-bar" role="progressbar" [ngStyle]="{ 'width': uploader.progress + '%' }"></div>
     </div>

@@ -2,7 +2,7 @@
       [ngFormOptions]="{ updateOn: 'change'}" >
 
   <div class="top">
-    <textarea type="text" required [(ngModel)]='comment.text' name="text" placeholder="Type comment"
+    <textarea type="text" required [(ngModel)]="comment.notes" name="text" placeholder="Type comment"
               class="comment-form-text form-control form-control-sm" rows="1" (click)="active = true"></textarea>
   </div>
 
@@ -15,37 +15,37 @@
 
     <div class="form-group col-auto">
       <div class="btn-group-toggle">
-        <label class="btn btn-sm btn-outline-form check-tag-box" [class.active]="this.comment.includeStart">
-          <input type="checkbox" [(ngModel)]="comment.includeStart" name="includeStart" (click)="triggerStart()">Start
+        <label class="btn btn-sm btn-outline-form check-tag-box" [class.active]="this.comment.include_start">
+          <input type="checkbox" [(ngModel)]="comment.include_start" name="include_start" (click)="triggerStart()">Start
         </label>
       </div>
     </div>
 
     <div class="form-group col-auto hide-phone">
-      <input type="text" [ngModel]="format(this.comment.start)" (ngModel)="this.comment.start" name="start"
-             [ngClass]="['comment-form-start-time sub-form tag-box', comment.includeStart ? 'enabled' : 'disabled']">
+      <input type="text" [ngModel]="format(this.comment.start_time)" (ngModel)="this.comment.start_time" name="start"
+             [ngClass]="['comment-form-start-time sub-form tag-box', comment.include_start ? 'enabled' : 'disabled']">
     </div>
 
     <div class="form-group col-auto">
       <div class="btn-group-toggle">
-        <label class="btn btn-sm btn-outline-form check-tag-box" [class.active]="this.comment.includeEnd">
-          <input type="checkbox" [(ngModel)]="comment.includeEnd" name="includeEnd" (click)="triggerEnd()">End
+        <label class="btn btn-sm btn-outline-form check-tag-box" [class.active]="this.comment.include_end">
+          <input type="checkbox" [(ngModel)]="comment.include_end" name="include_end" (click)="triggerEnd()">End
         </label>
       </div>
     </div>
 
     <div class="form-group col-auto hide-phone">
-      <input type="text" class="tag-box" [ngModel]="format(this.comment.end)" (ngModel)="this.comment.end" name="end"
-             [ngClass]="['comment-form-end-time sub-form tag-box', comment.includeEnd ? 'enabled' : 'disabled']">
+      <input type="text" class="tag-box" [ngModel]="format(this.comment.end_time)" (ngModel)="this.comment.end_time" name="end"
+             [ngClass]="['comment-form-end-time sub-form tag-box', comment.include_end ? 'enabled' : 'disabled']">
     </div>
-    
+
     <div class="form-group ml-auto">
 
     <label class="form-check-label cancel " (click)="active = false">
       <p>Cancel</p>
     </label>
 
-    
+
       <button type="submit" class="btn btn-primary btn-sm" [disabled]="!myForm.valid">Add comment</button>
     </div>
 

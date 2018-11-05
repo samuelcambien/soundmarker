@@ -27,10 +27,9 @@ export class PublicUploadPageComponent implements OnInit  {
   });
 
   statusEnum = Status;
-  status: Status = Status.SELECT_SONGS;
+  stage: Status = Status.SELECT_SONGS;
 
   ngOnInit() {
-    this.uploader.onCompleteAll = () => this.status = Status.GREAT_SUCCESS;
-    this.uploader.onProgressAll = () => this.status = Status.UPLOADING_SONGS;
+    console.log(this.stage);
   }
 }
