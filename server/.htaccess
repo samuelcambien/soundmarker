@@ -5,6 +5,11 @@
 
     RewriteEngine On
 
+    # Redirect to https
+    RewriteCond %{HTTP_HOST} ^soundmarker\.com [NC]
+    RewriteCond %{HTTP:X-Forwarded-Proto} ^http$
+    RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
     # Redirect Trailing Slashes If Not A Folder...
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteRule ^(.*)/$ /$1 [L,R=301]
@@ -35,14 +40,28 @@
 
 # password protect single file
 <Files "index.html">
+#SetEnvIf Host soundmarker-env.mc3wuhhgpz.eu-central-1.elasticbeanstalk.com passreq
+
 AuthType Basic
-AuthName "Restricted Files"
+AuthName "Private section"
 AuthUserFile /etc/httpd/.htpasswd
 Require user soundmarker
+
+#Order allow,deny
+#Allow from all
+#Deny from env=passreq
+#Satisfy any
 </Files>
 <FilesMatch "^$">
+#SetEnvIf Host soundmarker-env.mc3wuhhgpz.eu-central-1.elasticbeanstalk.com passreq
+
 AuthType Basic
-AuthName "Restricted Files"
+AuthName "Private section"
 AuthUserFile /etc/httpd/.htpasswd
 Require user soundmarker
+
+#Order allow,deny
+#Allow from all
+#Deny from env=passreq
+#Satisfy any
 </FilesMatch>
