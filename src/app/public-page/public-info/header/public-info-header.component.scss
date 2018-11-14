@@ -1,13 +1,7 @@
+// Navbar
 
-.show-messages {
-	height: 29px;
-	padding-top: 0px;
-	margin-right: -5px;
-	border-radius: 0.2rem;
-}
-
-.show-messages:hover {
-	background-color: #eef1ff;
+.wide-nav {
+	min-width: 320px !important;
 }
 
 .navbar {
@@ -16,10 +10,40 @@
   border-top-left-radius: 0.6rem;
   border-top-right-radius: 0.6rem;
  border-bottom: 1px solid #eef1ff;
+
 }
 
-.navbar .main-menu-icon {
+// Logo
+
+// Icons
+
+
+
+// Dropdowns
+
+.navbar .main-menu-icon, .navbar .messages-icon {
 	border-bottom: none;
+	cursor: pointer;
+}
+
+.main-menu-icon {
+	width: 43px;
+	
+}
+
+.messages-icon {
+	margin-right: -22px;
+	width: 52px;
+}
+
+.message-dropdown p {
+	color: #717db0;
+	line-height: normal;
+	margin-bottom: 0px;
+	  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .notifications {
@@ -27,11 +51,12 @@
 	border-radius: 50%;
 	color: white;
 	padding: 0px;
-	height: 13px;
-	width: 13px;
+	height: 6px;
+	width: 6px;
 	position: absolute;
-	margin-left: 22px;
+	margin-left: 16px;
 	margin-top: -32px;
+	overflow: hidden;
 }
 
 .notifications p {
@@ -45,14 +70,18 @@
   height: 0; 
   border-left: 6px solid transparent;
   border-right: 6px solid transparent;
+  border-bottom: 6px solid #ffffff;
   float: right;
-  margin-right: 18px;
   margin-top: -6px;
-  border-bottom: 6px solid #7397FF;
+  
 }
 
-.messages.arrow-up {
-	margin-right: 64px;
+.more-info .arrow-up {
+	 margin-right: 36px;
+}
+
+.messages .arrow-up {
+	margin-right: 53px;
 }
 
 .btn-note {
@@ -69,12 +98,25 @@
 .nav-item {
 	margin-right: -10px; 
 	height: 29px;
-	width: 44px;
+	
 	border-radius: 0.2rem;
 	padding-right: 6px;
 	margin-left: 4px;
 	transition: 0.1s;
 	-webkit-transition: 0.1s;
+}
+
+.messages-icon .nav .nav-item {
+	width: 30px;
+	padding-left: 2px;
+	margin-right: 0px;
+	padding-right: 10px;
+	margin-left: -10px;
+}
+
+.main-menu-icon .nav .nav-item {
+	width: 43px;
+	margin-left: -10px;
 }
 
 .nav-item:hover {
@@ -94,7 +136,7 @@
 }
 
 .nav-link, .dropdown-item {
-	font-family: 'sofia-light';
+	font-family: 'sofia-regular';
 	font-size: 10pt;
 }
 
@@ -104,9 +146,11 @@
    background: none !important;
 }
 
+
+
  .nav-link.pro.active {
 	color: #fff !important;
-	font-family: 'sofia-light';
+	font-family: 'sofia-regular';
 }
 
 
@@ -122,30 +166,19 @@
 
 
 
-.nav-item:hover .more-info.dropdown-menu {
+.nav-item:hover .dropdown-menu {
 	visibility: visible;
 	opacity: 1;
-	transition-delay:0s;
-	
-}
-
-.message-item:hover .messages.dropdown-menu {
-	visibility: visible;
-	opacity: 1;
-	transition-delay:0s;
-	
-}
-
-.dropdown-container {
-	border-radius: 0.6rem;
-	border: none;
-	background: #7397FF;
-	padding-top: 12px;
-	padding-bottom: 12px;
+	transition-delay:0.2s;
+	transition-duration: 0.1s;
 }
 
 
-.more-info.dropdown-menu {
+
+
+
+
+.dropdown-menu {
 	padding-top: 18px;
 	opacity: 0;
 	visibility: hidden;
@@ -153,29 +186,53 @@
 	border: none;
 	background: transparent;
 	transition:visibility 0s linear 0.05s,opacity 0.05s linear;
-	width: 170px;
+}
+
+.more-info.dropdown-menu {
+	width: 140px;
+	left: -96px;
 }
 
 .messages.dropdown-menu {
-	padding-top: 16px;
-	opacity: 0;
-	visibility: hidden;
-	display: block;
+	width: 220px;
+	left: -146px;
+}
+
+.dropdown-container {
+	border-radius: 0.3rem;
 	border: none;
-	background: transparent;
-	transition:visibility 0s linear 0.05s,opacity 0.05s linear;
-	width: 340px;
-	left: -254px;
+	// background: #7397FF;
+	background: #ffffff;
+	padding-top: 12px;
+	padding-bottom: 12px;
+}
+
+.more-info.dropdown-menu .dropdown-container {
+	width: 140px;
+	
+}
+
+
+
+
+
+.dropdown-item {
+	color: #7397FF !important;
+	font-family: 'sofia-regular';
+	padding-top: 7px;
+	padding-bottom: 7px;
+	margin-left: 10px;
+	margin-right: 10px;
+	border-radius: 0.3rem;
+	width: calc(100% - 20px);
+	padding-left: 10px;
 }
 
 .dropdown-divider {
 	border-color: #eef1ff !important;
 	background-color: #eef1ff;
-}
-
-.dropdown-item {
-	color: #fff !important;
-	font-family: 'sofia-light';
+	margin-top: 10px;
+	margin-bottom: 10px;
 }
 
 .dropdown-menu-right {
@@ -185,9 +242,10 @@
 }
 
 .dropdown-item:active, .dropdown-item:focus, .dropdown-item:hover {
-	background: #6388f5;
+	background: #eef1ff;
 		transition: 0.1s;
 	-webkit-transition: 0.1s;
+	
 }
 
 .dropdown-icons {
@@ -202,11 +260,6 @@
     float: left;
     margin-top: 2px;
 	
-}
-
-.item-icon-stroke {
-	stroke: #fff;
-	stroke-width: 1;
 }
 
 .item-icon.help {

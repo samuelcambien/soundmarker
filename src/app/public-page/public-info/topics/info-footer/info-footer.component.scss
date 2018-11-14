@@ -1,9 +1,12 @@
 
 .info-footer {
 	background-color: #eef1ff;
-	height: 80px;
+	min-height: 80px;
 	width: 100%;
-	padding: 20px;
+	padding-top: 20px;
+	padding-bottom: 20px;
+	padding-left: 10px;
+	padding-right: 10px;
 }
 
 .leapwing-svg {
@@ -13,6 +16,34 @@
 	width: 110px;
 }
 
+a:hover {
+	text-decoration: none;
+}
+
+.link-col a { 
+	text-align: left;
+	color: #717db0 !important;
+	font-size: 10pt;
+	line-height: normal;
+	margin-top: 0px;
+	transition: all .2s ease-in-out;
+	cursor: pointer;
+}
+
+.link-col a:hover {
+	color: #7397ff !important;
+	transition: all .2s ease-in-out;
+}
+
+.si-fill {
+	fill: #717db0;
+}
+
+.si:hover .si-fill {
+	fill: #7397ff;
+	transition: all .2s ease-in-out;
+}
+
 .social-icons {
 	float: right;
 }
@@ -20,13 +51,19 @@
 .si {
 	float: left;
 	width: 20px;
-	margin-left: 12px;
-	margin-top: 10px;
+	margin-top: -20px;
+	margin-bottom: -10px;
+	transition: all .2s ease-in-out;
+	cursor: pointer;
+}
+
+@media (max-width: 576px) {
+	.social-icons,  {
+	float: left;
+	margin-top: 5px;
+}
+	
 }
 
 
-a {
-	padding: 0 !important;
-	margin: 0 !important;
-}
 

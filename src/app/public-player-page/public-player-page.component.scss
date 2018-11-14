@@ -1,3 +1,16 @@
+#phonesearch {
+	width: 100%;
+	height: 48px;
+	background: #ffffff;
+	position: fixed;
+	margin-bottom: 48px;
+	 z-index: 1000;
+	 bottom:0px;
+	 left: 0px;
+	 padding: 10px;
+}
+
+
 .player-toolbar {
 	
 }
@@ -41,13 +54,15 @@
 	padding-top: 5px !important;
 }
 
-.comment-sort select {
- color: #bac1da;
- background: white;
- border: none;
- outline: none;
- 
+.title h4 {
+	width: 300px;
+	overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-align: left;
 }
+
+
 .clear-search {
 	position: relative;
 	top: -27px;
@@ -86,22 +101,27 @@
 }
 
 #phone-popup-playbar {
-	  background-color: #7397FF; /* Black background color */
+	  background-color: #7397ff; 
     position: fixed; /* Make it stick/fixed */
     bottom: 0px;
     width: 100%; /* Full width */
     left: 0px;
     right: 0px;
     transition: top 0.1s; /* Transition effect when sliding down (and up) */
-    height: 60px;
+    height: 48px;
     display: none;
     z-index: 1000;
+  
 
 }
 
 
 
 @media (max-width: 576px) {
+	
+	.title h4 {
+	margin-right: 10px;
+	}
 
 	.player-container {
 		padding-left: 0px !important;
@@ -118,12 +138,25 @@
 		padding-bottom: 15px !important;
 	}
 
-
+	.list-container {
+	max-height: none !important;
+	}
 
 	.player-content {
 		padding-left: 15px !important;
 		padding-right: 15px !important;
 	}
+	
+	.comment-search {
+	margin-bottom: 10px;
+	width: 100%;
+}
+
+.search-box {
+	width: 100%;
+	
+}
+	
 }
 
 .phone-popup-row {
@@ -131,8 +164,8 @@
 }
 
 .phone-popup-row .col {
-	margin-top: 15px;
-	margin-bottom: 15px;
+	margin-top: 10px;
+	margin-bottom: 10px;
 
 }
 
@@ -155,7 +188,8 @@
 }
 
 .popup-play-btn {
-	margin-top: -8px;
+	margin-top: -9px;
+	
 }
 
 .popup-title {
@@ -235,7 +269,7 @@
 	color: #7397FF;
 	margin-right: -8px;
 	margin-top: -4px;
-	font-family: 'sofia-light';
+	font-family: 'sofia-regular';
 
 }
 
@@ -464,7 +498,7 @@ margin-left: 11px;
 }
 
 .nav-link, .dropdown-item {
-	font-family: 'sofia-light';
+	font-family: 'sofia-regular';
 	font-size: 10pt;
 }
 
