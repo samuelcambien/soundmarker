@@ -2,6 +2,20 @@
 require 'flight/Flight.php';
 require 'vendor/autoload.php';
 
+//http://localhost/leapwingaudio/oauth/authorize/?response_type=code&client_id=QgPUPDCi9inuUfsW3DGsZ5GRbhXJKmOBDEvsh8Kq
+
+//http://localhost/leapwingaudio/oauth/authorize/?response_type=code&client_id=QgPUPDCi9inuUfsW3DGsZ5GRbhXJKmOBDEvsh8Kq&redirect_uri=https://myredirecturi.com/cb&state=sdfsd
+
+//https://www.leapwingaudio.com/oauth/authorize/?response_type=code&client_id=O7mazXp53IMKB7kF7meEH4AiuPJDTJwIuZEBw3dT&redirect_uri=https://localhost/soundmarkerversion/redirect.php&state=bla
+
+//https://myredirecturi.com/cb?code=gthm1pkpqwn6apbtlpcy0tp04nuddkr0vl0wipil
+
+//curl -u QgPUPDCi9inuUfsW3DGsZ5GRbhXJKmOBDEvsh8Kq:r8Vlnoiq1YS13ySfQQYAcNbQrHiJP3agb6CzuUZw http://localhost/leapwingaudio/oauth/token -d 'grant_type=authorization_code&code=4uxyst8dvmhm6rkvnlkhj7yewq8k4snobpgbhbsl&redirect_uri=https://myredirecturi.com/cb'
+
+// curl -H "Authorization: Basic UWdQVVBEQ2k5aW51VWZzVzNER3NaNUdSYmhYSkttT0JERXZzaDhLcTpyOFZsbm9pcTFZUzEzeVNmUVFZQWNOYlFySGlKUDNhZ2I2Q3p1VVp3" http://localhost/leapwingaudio/oauth/token -d 'grant_type=password&username=robin&password=pass'
+
+// http://localhost/leapwingaudio/oauth/authorize?response_type=code&client_id=QgPUPDCi9inuUfsW3DGsZ5GRbhXJKmOBDEvsh8Kq&redirect_uri=https://redirect-uri.com/cb
+
 /*
 GLOBALE DECLARATIONS
 */
@@ -32,7 +46,9 @@ GLOBALE DECLARATIONS
 }
 
 ///////////////////////////////////////////////////////////////// Setup DB ////////////////////////////////////////////////////////////
-Flight::register('db', 'PDO', array('mysql:host='.$_SERVER["RDS_HOSTNAME"].';dbname='.$_SERVER["RDS_DB_NAME"], $_SERVER["RDS_USERNAME"], $_SERVER["RDS_PASSWORD"]), function($db) {
+require 'credentials.php';
+
+Flight::register('db', 'PDO', array('mysql:host='.$rdshostname.';dbname='.$rdsdb_name, $rdsusername, $rdspassword), function($db) {
         $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 });
 
@@ -150,7 +166,7 @@ try {
       $emailstring_text = str_replace("%projectdate%",$projectdate->format('F jS Y'),$emailstring_text);
       // Replace strings -> %projectlink%
       $sql = "SELECT hash FROM Project WHERE project_id = '$project_id'";
-      $projectlink = "http://soundmarker-env.mc3wuhhgpz.eu-central-1.elasticbeanstalk.com/project/" . $db->query($sql)->fetch()[0];
+      $projectlink = $serverurl."/project/" . $db->query($sql)->fetch()[0];
       $emailstring = str_replace("%projectlink%",$projectlink,$emailstring);
       $emailstring_text = str_replace("%projectlink%",$projectlink,$emailstring_text);
       // Replace strings -> %recipientmail%
@@ -375,7 +391,7 @@ $result = $db->query($sql);
 
 // return ok
 Flight::json(array(
-   'project_url' => 'http://soundmarker-env.mc3wuhhgpz.eu-central-1.elasticbeanstalk.com/project/'. $result->fetch()[0],
+   'project_url' => $serverurl.'/project/'. $result->fetch()[0],
    'project_hash' => $result->fetch()[0]
 ), 200);
 });
@@ -533,6 +549,7 @@ FILE
 /////////////////////////////////////////////////////// Routes - /file/new POST ///////////////////////////////////////////////////////
 Flight::route('POST /file/new', function() {
 
+require 'credentials.php';
 $version_id = json_decode(Flight::request()->getBody())->version_id;
 $identifier = isset(json_decode(Flight::request()->getBody())->identifier) ? json_decode(Flight::request()->getBody())->identifier : 0;
 $chunk_length = isset(json_decode(Flight::request()->getBody())->chunk_length) ? json_decode(Flight::request()->getBody())->chunk_length : 0;
@@ -540,7 +557,7 @@ $file_size = isset(json_decode(Flight::request()->getBody())->file_size) ? json_
 $file_name = isset(json_decode(Flight::request()->getBody())->file_name) ? json_decode(Flight::request()->getBody())->file_name : "";
 $metadata = isset(json_decode(Flight::request()->getBody())->metadata) ? json_decode(Flight::request()->getBody())->metadata : "";
 $extension = isset(json_decode(Flight::request()->getBody())->extension) ? json_decode(Flight::request()->getBody())->extension : "";
-$aws_path = "https://s3-eu-west-1.amazonaws.com/soundmarkersass-local-robin/" . $version_id . "/" . $file_name;
+$aws_path = $awss3path.$version_id . "/" . $file_name;
 
 $db = Flight::db();
 $sql = "INSERT INTO File (version_id, file_name, file_size, metadata, extension, chunk_length, identifier, aws_path) VALUES ('$version_id', '$file_name', '$file_size', '$metadata', '$extension', '$chunk_length', '$identifier', '$aws_path')";
@@ -556,6 +573,7 @@ Flight::json(array(
 ////////////////////////////////////////////////// Routes - /file/chunk/$file_id POST /////////////////////////////////////////////////
 Flight::route('POST /file/chunk/@file_id/@idno/@ext', function($file_id, $idno, $ext) {
 
+require 'credentials.php';
 try {
   $db = Flight::db();
   $sql = "SELECT version_id, extension, metadata, aws_path, file_name, file_size, identifier, chunk_length FROM File WHERE file_id = '$file_id'";
@@ -567,8 +585,7 @@ try {
 
     // Upload data.
     $result = $s3->putObject([
-        //'Bucket' => $_SERVER["s3bucket"],
-        'Bucket' => "soundmarkersass-local-robin",
+        'Bucket' => $awss3bucket,
         'Key'    => $files[0]["version_id"] . "/" . $files[0]["file_name"] . $idno .'.' . $files[0]["extension"],
         'Body'   => Flight::request()->getBody(), // figuring out right way to get the file from the JSON
         'ACL'    => 'public-read'
