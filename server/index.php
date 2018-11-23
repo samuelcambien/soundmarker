@@ -106,6 +106,7 @@ PROJECT
 //////////////////////////////////////////////////////// Routes - /project/new POST ///////////////////////////////////////////////////
 Flight::route('POST /project/new', function() {
 
+require 'credentials.php';
 // Todo: check if user_id exists first (foreign_key needs to be valid) -> put in dB
 // Add expiration date
 $user_id = isset(json_decode(Flight::request()->getBody())->user_id) ? json_decode(Flight::request()->getBody())->user_id : "";
@@ -130,6 +131,7 @@ Flight::json(array(
 //////////////////////////////////////////////// Routes - /project/get/@project_hash POST /////////////////////////////////////////////
 Flight::route('POST /project/get/url', function() {
 
+require 'credentials.php';
 // set expiration date
 // calculate amount of tracks and get track names
 $project_id = isset(json_decode(Flight::request()->getBody())->project_id) ? json_decode(Flight::request()->getBody())->project_id : "";
@@ -383,6 +385,7 @@ Flight::json(array(
 //////////////////////////////////////////////////// Routes - /project/url POST ///////////////////////////////////////////////////////
 Flight::route('POST /project/url', function() {
 
+require 'credentials.php';
 $project_id = json_decode(Flight::request()->getBody())->project_id;
 
 $db = Flight::db();
@@ -416,6 +419,7 @@ TRACK
 /////////////////////////////////////////////////////// Routes - /track/new POST //////////////////////////////////////////////////////
 Flight::route('POST /track/new', function() {
 
+require 'credentials.php';
 $project_id = json_decode(Flight::request()->getBody())->project_id;
 $track_title = isset(json_decode(Flight::request()->getBody())->track_title) ? json_decode(Flight::request()->getBody())->track_title : "";
 $track_artist = isset(json_decode(Flight::request()->getBody())->track_artist) ? json_decode(Flight::request()->getBody())->track_artist : "";
@@ -458,6 +462,7 @@ Flight::json(array(
 ///////////////////////////////////////////////////////// Routes - /track GET /////////////////////////////////////////////////////////
 Flight::route('GET /track/@track_id', function($track_id) {
 
+require 'credentials.php';
 $db = Flight::db();
 $sql = "SELECT version_id, notes, downloadable, visibility, version_title, track_length, wave_png FROM Version WHERE track_id = '$track_id'";
 $result = $db->query($sql);
@@ -472,6 +477,7 @@ Flight::json(array(
 ///////////////////////////////////////////////////// Routes - /track/version GET /////////////////////////////////////////////////////
 Flight::route('GET /track/version/@version_id', function($version_id) {
 
+require 'credentials.php';
 $db = Flight::db();
 $sql = "SELECT file_id, extension, metadata, aws_path, file_name, file_size, identifier, chunk_length FROM File WHERE version_id = '$version_id'";
 $result = $db->query($sql);
