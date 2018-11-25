@@ -1,0 +1,80 @@
+<IfModule mod_rewrite.c>
+    <IfModule mod_negotiation.c>
+        Options -MultiViews
+    </IfModule>
+
+    RewriteEngine On
+
+    # Redirect to https
+    # RewriteCond %{HTTP_HOST} ^beta.soundmarker\.com [NC]
+#    RewriteCond %{HTTP:X-Forwarded-Proto} ^http$
+#    RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+    # Redirect Trailing Slashes If Not A Folder...
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^(.*)/$ /$1 [L,R=301]
+
+    # Show password
+    #SetEnvIf Host soundmarker-env.mc3wuhhgpz.eu-central-1.elasticbeanstalk.com passreq
+
+#    AuthType Basic
+#    AuthName "Private section"
+#    AuthUserFile /etc/httpd/.htpasswd
+#    Require user soundmarker
+
+    #Order allow,deny
+    #Allow from all
+    #Deny from env=passreq
+    #Satisfy any
+
+    # Handle Front Controller...
+    RewriteCond %{REQUEST_URI} "/file/upload" [OR]
+    RewriteCond %{REQUEST_URI} "/file/new" [OR]
+    RewriteCond %{REQUEST_URI} "/track/url" [OR]
+    RewriteCond %{REQUEST_URI} "/track/file/download/" [OR]
+    RewriteCond %{REQUEST_URI} "/track" [OR]
+    RewriteCond %{REQUEST_URI} "/player/47" [OR]
+    RewriteCond %{REQUEST_URI} "/track/new" [OR]
+    RewriteCond %{REQUEST_URI} "/track/version" [OR]
+    RewriteCond %{REQUEST_URI} "/track/version/comments" [OR]
+    RewriteCond %{REQUEST_URI} "/track/version/comment" [OR]
+    RewriteCond %{REQUEST_URI} "/project/new" [OR]
+    RewriteCond %{REQUEST_URI} "/project/password" [OR]
+    RewriteCond %{REQUEST_URI} "/project/delete" [OR]
+    RewriteCond %{REQUEST_URI} "/project/([a-z0-9/-]+)$" [OR]
+    RewriteCond %{REQUEST_URI} "/file/chunk/([a-z0-9/-]+)$" [OR]
+    RewriteCond %{REQUEST_URI} "/ad"
+    RewriteRule ^ index.php [L]
+
+    # Prefer .php over .html
+    DirectoryIndex index.php index.html index.shtml index.htm Index.html Index.htm Index.shtml default.htm Default.htm default.html Default.html default.shtml Default.shtml page1.html index.pl index.cgi index.php3 index.phtml home.htm home.html home.shtml index.wml index.pcgi quickstart.html
+    Header set Access-Control-Allow-Origin "*"
+</IfModule>
+
+# password protect single file
+<Files "index.html">
+#SetEnvIf Host soundmarker-env.mc3wuhhgpz.eu-central-1.elasticbeanstalk.com passreq
+
+AuthType Basic
+AuthName "Private section"
+AuthUserFile /etc/httpd/.htpasswd
+Require user soundmarker
+
+#Order allow,deny
+#Allow from all
+#Deny from env=passreq
+#Satisfy any
+</Files>
+<FilesMatch "^$">
+#SetEnvIf Host soundmarker-env.mc3wuhhgpz.eu-central-1.elasticbeanstalk.com passreq
+
+AuthType Basic
+AuthName "Private section"
+AuthUserFile /etc/httpd/.htpasswd
+Require user soundmarker
+
+#Order allow,deny
+#Allow from all
+#Deny from env=passreq
+#Satisfy any
+</FilesMatch>
