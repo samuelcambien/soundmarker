@@ -31,6 +31,9 @@ export class PublicTrackPlayerComponent implements OnInit {
   startPos;
   endPos;
 
+  phoneSearch: boolean;
+  phoneOrder: boolean;
+
   showComments: boolean = false;
   private MINIMAL_INTERVAL: number = 2;
 
