@@ -2,20 +2,6 @@
 require 'flight/Flight.php';
 require 'vendor/autoload.php';
 
-//http://localhost/leapwingaudio/oauth/authorize/?response_type=code&client_id=QgPUPDCi9inuUfsW3DGsZ5GRbhXJKmOBDEvsh8Kq
-
-//http://localhost/leapwingaudio/oauth/authorize/?response_type=code&client_id=QgPUPDCi9inuUfsW3DGsZ5GRbhXJKmOBDEvsh8Kq&redirect_uri=https://myredirecturi.com/cb&state=sdfsd
-
-//https://www.leapwingaudio.com/oauth/authorize/?response_type=code&client_id=O7mazXp53IMKB7kF7meEH4AiuPJDTJwIuZEBw3dT&redirect_uri=https://localhost/soundmarkerversion/redirect.php&state=bla
-
-//https://myredirecturi.com/cb?code=gthm1pkpqwn6apbtlpcy0tp04nuddkr0vl0wipil
-
-//curl -u QgPUPDCi9inuUfsW3DGsZ5GRbhXJKmOBDEvsh8Kq:r8Vlnoiq1YS13ySfQQYAcNbQrHiJP3agb6CzuUZw http://localhost/leapwingaudio/oauth/token -d 'grant_type=authorization_code&code=4uxyst8dvmhm6rkvnlkhj7yewq8k4snobpgbhbsl&redirect_uri=https://myredirecturi.com/cb'
-
-// curl -H "Authorization: Basic UWdQVVBEQ2k5aW51VWZzVzNER3NaNUdSYmhYSkttT0JERXZzaDhLcTpyOFZsbm9pcTFZUzEzeVNmUVFZQWNOYlFySGlKUDNhZ2I2Q3p1VVp3" http://localhost/leapwingaudio/oauth/token -d 'grant_type=password&username=robin&password=pass'
-
-// http://localhost/leapwingaudio/oauth/authorize?response_type=code&client_id=QgPUPDCi9inuUfsW3DGsZ5GRbhXJKmOBDEvsh8Kq&redirect_uri=https://redirect-uri.com/cb
-
 /*
 GLOBALE DECLARATIONS
 */
