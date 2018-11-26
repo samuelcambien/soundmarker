@@ -1,6 +1,5 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {Comment} from "../../model/comment";
-import {RestUrl, Utils} from "../../app.component";
 import {NgForm} from "@angular/forms";
 import {RestCall} from "../../rest/rest-call";
 
@@ -13,6 +12,7 @@ export class ReplyFormComponent implements OnInit {
 
   @Input() reply: Comment;
   @Output() cancel = new EventEmitter();
+  @Output() newReply = new EventEmitter<Comment>();
 
   constructor() {
   }
@@ -23,6 +23,6 @@ export class ReplyFormComponent implements OnInit {
   onSubmit(form: NgForm) {
     this.reply.comment_time = Date.now();
     RestCall.addComment(this.reply);
-    form.resetForm();
+    this.newReply.emit(this.reply);
   }
 }

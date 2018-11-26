@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 
 @Component({
   selector: 'app-public-upload-finished',
@@ -7,9 +7,14 @@ import { Component, OnInit } from '@angular/core';
 })
 export class PublicUploadFinishedComponent implements OnInit {
 
+  @Input() link;
+
   constructor() { }
 
   ngOnInit() {
   }
 
+  getLink() {
+    return "http://localhost:4200/project/" + this.link;
+  }
 }

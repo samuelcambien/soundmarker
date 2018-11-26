@@ -1,8 +1,8 @@
-<app-public-page [messages]="[getMessage()]" xmlns="http://www.w3.org/1999/html">
+<app-public-page [message]="this.message" xmlns="http://www.w3.org/1999/html">
 
   <div class="list-container" [ngbCollapse]="activeTrack != null">
 
-    <div *ngFor="let track of project.tracks">
+    <div *ngFor="let track of project?.tracks; let last = last;">
 
       <app-public-player-track
         [track]="track"
@@ -12,20 +12,20 @@
       >
       </app-public-player-track>
 
-      <hr *ngIf="track != project.tracks[project.tracks.length - 1]">
+      <hr *ngIf="track != last">
 
     </div>
 
   </div>
 
   <app-public-track-player
-    *ngFor="let track of project.tracks"
+    *ngFor="let track of project?.tracks"
     [track]="track"
     [player]="players.get(track)"
     [enableOverview]="project.tracks.length > 1"
     [ngbCollapse]="activeTrack != track"
     (overview)="activeTrack = null;"
-    (plaing)="pauseOtherTracks(track)"
+    (playing)="pauseOtherTracks(track)"
   >
   </app-public-track-player>
 

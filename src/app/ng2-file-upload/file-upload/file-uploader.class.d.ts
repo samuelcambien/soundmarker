@@ -36,6 +36,8 @@ export interface FileUploaderOptions {
     formatDataFunctionIsAsync?: boolean;
 }
 export declare class FileUploader {
+    files: number;
+    uploaded: number;
     authToken: string;
     isUploading: boolean;
     queue: FileItem[];
