@@ -728,7 +728,7 @@ button:hover, button:active, button:focus, button:visited {
 	 padding: 1rem 1.75rem !important;
   font-size: 10pt !important;
   font-family: 'sofia-regular';
-  line-height: 1.5;
+  line-height: 1.5; 
 
 }
 
@@ -885,4 +885,71 @@ color: white;
 
 .highlight {
   background-color: pink;
+}
+
+.ng-select.custom {
+    border:0px;
+    min-height: 0px;
+    border-radius: 0.2rem !important;
+    font-size: 10pt;
+    height: 29px !important;
+    max-height: 29px !important;
+    font-family: 'sofia-regular';
+    color: #7397ff;
+    text-decoration: none !important;
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+.ng-select.custom .ng-select-container, .ng-select.custom.ng-select-single .ng-select-container  {
+	background-color: #eef1ff !important;
+	min-height: 29px !important;
+	 height: 29px !important;
+    max-height: 29px !important;
+    border: none;
+    color: #7397ff;
+    border-radius: 0.2rem !important;
+    font-family: 'sofia-regular';
+    width: 40px !important;
+    min-width: 110px !important;
+    text-decoration: none !important;
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+.ng-select.custom .ng-control  {            
+     height: 29px !important;
+    max-height: 29px !important;
+    background-color: #eef1ff !important;
+    font-family: 'sofia-regular';
+}
+
+.ng-dropdown-panel.ng-select-bottom {
+	border: none;
+	border-bottom: none !important;
+	color: #717db0 !important;
+}
+
+.ng-arrow {
+	    border-color: #7397ff transparent transparent !important;
+    border-style: solid !important;
+    border-width: 5px 5px 2.5px;
+	// border-color: #7397ff !important;
+}
+
+.ng-dropdown-panel {
+  -webkit-box-shadow: 0 0rem 3rem rgba(0, 0, 0, 0.10) !important;
+	  -moz-box-shadow: 0 0rem 3rem rgba(0, 0, 0, 0.10) !important;
+	  box-shadow: 0 0rem 3rem rgba(0, 0, 0, 0.10) !important;
+	  }
+
+.ng-dropdown-panel .ng-dropdown-panel-items .ng-option.ng-option-marked {
+	color: #7397ff !important;
+	font-weight: 100 !important;
+	background-color: #eef1ff !important;
+}
+
+.ng-dropdown-panel .ng-dropdown-panel-items .ng-option {
+	color: #7397ff !important;
+	font-weight: normal !important;
 }

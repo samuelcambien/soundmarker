@@ -540,7 +540,7 @@
       <div class="comment-sort hide-phone" placement="top" ngbTooltip="Order by"
       >
         <!--[class.disabled]="track.comments.length < 2"-->
-        <ng-select [items]="commentSorters"
+        <ng-select class="custom" [items]="commentSorters"
                    bindLabel="description"
                    [clearable]="false"
                    [searchable]="false"
