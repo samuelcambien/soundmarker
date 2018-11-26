@@ -24,9 +24,8 @@
       </div>
 
       <div class="popup-title"><h4>{{track?.title}}</h4></div>
-      <div class="popup-time"><p>{{player?.getCurrentPosition() | timeFormat}} / {{track.duration | timeFormat}}</p>
-      </div>
 
+      <div class="popup-time"><p>{{getCurrentTime()}} / {{track.duration | timeFormat}}</p></div>
 
       <div class="top-icon icon-action ml-auto"></div>
 
@@ -336,7 +335,7 @@
 
     <div class="title unselectable">
       <h4>{{track?.title}}</h4>
-      <p>{{player?.getCurrentPosition() | timeFormat}} / {{track.duration | timeFormat}}</p>
+      <p>{{decentPlayer?.getCurrentTime() | timeFormat}} / {{version?.track_length | timeFormat}}</p>
     </div>
 
     <div class="player-toolbar hide-phone  ml-auto">
@@ -433,8 +432,9 @@
     <div class="player-container col-md-12">
 
       <div class="waveform-container">
+
         <div id="waveform" #waveform>
-          <ng-container *ngTemplateOutlet="waveformsvg"></ng-container>
+
         </div>
         <!-- <div class="progress-container">
            <div id="progress" #waveform>
@@ -537,7 +537,9 @@
 
       </div>
 
-      <div class="comment-sort hide-phone" placement="top" ngbTooltip="Order by">
+      <div class="comment-sort hide-phone" placement="top" ngbTooltip="Order by"
+      >
+        <!--[class.disabled]="track.comments.length < 2"-->
         <ng-select [items]="commentSorters"
                    bindLabel="description"
                    [clearable]="false"
@@ -548,14 +550,14 @@
 
     </div>
 
-    <app-comment-form [version_id]="track?.versions[0]?.version_id" [comment]="comment" [player]="player"
+    <app-comment-form [version_id]="version?.version_id" [comment]="comment" [player]="decentPlayer"
                       (newComment)="addComment($event)">
     </app-comment-form>
 
     <app-comment
       *ngFor="let comment of getMatchingCommentsSorted()"
       [comment]="comment"
-      [player]="player"
+      [player]="decentPlayer"
       [search]="search"
     >
     </app-comment>

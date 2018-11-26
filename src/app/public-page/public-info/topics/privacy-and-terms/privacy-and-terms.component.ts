@@ -1,4 +1,5 @@
 import {Component, OnInit} from '@angular/core';
+import {NgbActiveModal} from "@ng-bootstrap/ng-bootstrap";
 
 @Component({
   selector: 'app-privacy-and-terms',
@@ -9,10 +10,13 @@ export class PrivacyAndTermsComponent implements OnInit {
 
   activePage: string;
 
-  constructor() { }
+  constructor(private activeModal: NgbActiveModal) { }
 
   ngOnInit() {
     this.activePage = "terms";
   }
 
+  close() {
+    this.activeModal.close();
+  }
 }

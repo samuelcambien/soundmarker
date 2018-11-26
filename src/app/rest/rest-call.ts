@@ -1,6 +1,8 @@
 import {RestUrl, Utils} from "../app.component";
 import {Mp3Encoder} from "../mp3-encoder/mp3-encoder";
 import {Comment} from "../model/comment";
+import {Project} from "../model/project";
+import {Version} from "../model/version";
 
 export class RestCall {
 
@@ -69,11 +71,11 @@ export class RestCall {
     return Utils.sendGetDataRequest(RestUrl.AD, [id]);
   }
 
-  public static getProject(projectHash: string): Promise<any> {
+  public static getProject(projectHash: string): Promise<Project> {
     return Utils.sendGetRequest(RestUrl.PROJECT, [projectHash]);
   }
 
-  public static getTrack(trackId: string): Promise<any> {
+  public static getTrack(trackId: string): Promise<Version[]> {
     return Utils.sendGetRequest(RestUrl.TRACK, [trackId]);
   }
 

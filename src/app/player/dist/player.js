@@ -2039,9 +2039,6 @@
           width: '0',
           display: 'none',
           boxSizing: 'border-box',
-          borderRightStyle: 'solid',
-          borderRightWidth: this.params.cursorWidth + 'px',
-          borderRightColor: this.params.cursorColor
         })
       );
 

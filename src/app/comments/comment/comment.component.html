@@ -5,7 +5,7 @@
 	
 	<div class="comment-toolbar">
 		
-		<div (click)="goToCommentTime(comment)" class="comment-play-button">
+		<div (click)="goToCommentTime(comment)" class="comment-play-button" [class.disabled]="!comment.include_start">
       <div class="play-button">
         <svg width="18px" height="18px" viewBox="0 0 27 27" version="1.1" xmlns="http://www.w3.org/2000/svg">
           <defs></defs>
@@ -61,9 +61,9 @@
   <div class="row">
 
     <div class="comment-name"><p class="name-tx" [innerHtml]="comment.name | titlecase | highlight: search"></p></div>
-    <!--<div *ngif="comment.include_start">-->
-      <div *ngIf="comment.end_time; then interval else start" ></div>
-    <!--</div>-->
+    <div *ngIf="comment.include_start">
+      <div *ngIf="comment.include_end; then interval else start" ></div>
+    </div>
       <ng-template #start>
         <p class="comment-time">&nbsp;[{{comment.start_time | timeFormat}}] </p>
       </ng-template>
@@ -109,7 +109,7 @@
 
   <div class="row reply-row">
 
-    <div class="comment-reply" (click)="newReply()">
+    <div class="comment-reply" (click)="createReply()">
       <p class="reply-tx"> Reply</p>
     </div>
 
@@ -167,7 +167,7 @@
 
     </div>
 
-    <app-reply-form *ngIf="reply != null" [reply]="reply" (cancel)="clearReply()"></app-reply-form>
+    <app-reply-form *ngIf="reply != null" [reply]="reply" (cancel)="clearReply()" (newReply)="newReply()"></app-reply-form>
  
   </div>
 	</div>

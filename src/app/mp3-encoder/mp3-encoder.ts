@@ -217,7 +217,7 @@ export class Mp3Encoder {
     // );
   }
 
-  public static convertAiff(file: File, callback: Function) {
+  public static convertAiff(file: File) {
 
 
     Mp3Encoder.read(file);

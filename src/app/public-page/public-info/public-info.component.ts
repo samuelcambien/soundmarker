@@ -1,30 +1,13 @@
-import {Component, OnInit} from '@angular/core';
-
-@Component({
-  selector: 'app-public-info',
-  styleUrls: ['./public-info.component.scss']
-})
-export abstract class PublicInfoComponent implements OnInit {
-
-  title: string;
-
-  constructor(title: string) {
-    this.title = title;
-  }
-
-  ngOnInit() {
-  }
-}
+import {Component} from '@angular/core';
 
 @Component({
   selector: 'app-about-us-info',
   templateUrl: './topics/about-us/about-us-info.component.html',
   styleUrls: ['./topics/about-us/about-us-info.component.scss']
 })
-export class AboutUsInfoComponent extends PublicInfoComponent implements OnInit {
+export class AboutUsInfoComponent {
 
   constructor() {
-    super("About Us");
   }
 
   ngOnInit() {
@@ -36,10 +19,9 @@ export class AboutUsInfoComponent extends PublicInfoComponent implements OnInit 
   templateUrl: './topics/help/help-info.component.html',
   styleUrls: ['./topics/help/help-info.component.scss']
 })
-export class HelpInfoComponent extends PublicInfoComponent implements OnInit {
+export class HelpInfoComponent {
 
   constructor() {
-    super("Help");
   }
 }
 
@@ -48,10 +30,9 @@ export class HelpInfoComponent extends PublicInfoComponent implements OnInit {
   templateUrl: './topics/pro/pro-info.component.html',
   styleUrls: ['./topics/pro/pro-info.component.scss']
 })
-export class ProInfoComponent extends PublicInfoComponent implements OnInit {
+export class ProInfoComponent {
 
   constructor() {
-    super("Pro");
   }
 
   ngOnInit() {

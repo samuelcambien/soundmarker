@@ -2549,7 +2549,7 @@
           atom('moov.trak.tkhd', function () {
             this.stream.advance(4);
             this.stream.advance(8);
-            this.track.id = this.stream.readUInt32();
+            this.track.project_id = this.stream.readUInt32();
             return this.stream.advance(this.len - 16);
           });
 

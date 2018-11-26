@@ -11,7 +11,7 @@ import {Utils} from "../../app.component";
 export class CommentComponent implements OnInit {
 
   @Input() comment: Comment;
-  @Input() player: Player;
+  @Input() player;
   @Input() search: string;
 
   reply: Comment;
@@ -24,14 +24,20 @@ export class CommentComponent implements OnInit {
   ngOnInit() {
   }
 
-  newReply() {
+  createReply() {
     this.reply = new Comment();
     this.reply.parent_comment_id = this.comment.comment_id;
     this.reply.version_id = this.comment.version_id;
+    this.showReplies = true;
   }
 
   clearReply() {
     this.reply = null;
+  }
+
+  newReply() {
+    this.comment.replies.push(this.reply);
+    this.clearReply();
   }
 
   getTimeHumanized(time: number) {
@@ -40,6 +46,8 @@ export class CommentComponent implements OnInit {
 
   goToCommentTime(comment: Comment) {
 
-    this.player.seekTo(comment.start_time, this.player.play());
+    comment.include_end ?
+      this.player.play(comment.start_time, comment.end_time) :
+      this.player.play(comment.start_time);
   }
 }

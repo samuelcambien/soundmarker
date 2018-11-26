@@ -42,7 +42,7 @@ var ADTSDemuxer = AV.Demuxer.extend(function() {
         
         stream.advance(1); // private
         ret.chanConfig = stream.read(3);
-        stream.advance(4); // original/copy, home, copywrite, and copywrite start
+        stream.advance(4); // original/copy, home, copywrite, and copywrite start_time
         
         ret.frameLength = stream.read(13);
         stream.advance(11); // fullness
@@ -475,7 +475,7 @@ var AACDecoder = AV.Decoder.extend(function() {
                 case SCE_ELEMENT:
                 case LFE_ELEMENT:
                     var ics = new ICStream(this.config);
-                    ics.id = id;
+                    ics.project_id = id;
                     elements.push(ics);
                     ics.decode(stream, config, false);
                     break;
@@ -483,7 +483,7 @@ var AACDecoder = AV.Decoder.extend(function() {
                 // channel pair element
                 case CPE_ELEMENT:
                     var cpe = new CPEElement(this.config);
-                    cpe.id = id;
+                    cpe.project_id = id;
                     elements.push(cpe);
                     cpe.decode(stream, config);
                     break;

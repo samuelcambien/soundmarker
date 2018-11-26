@@ -16,7 +16,7 @@ export class CommentFormComponent implements OnInit {
 
   @Input() version_id;
   @Input() comment: Comment;
-  @Input() player: Player;
+  @Input() player;
   @Output() newComment = new EventEmitter<Comment>();
 
   constructor() {
@@ -25,20 +25,19 @@ export class CommentFormComponent implements OnInit {
   ngOnInit() {
   }
 
-  onSubmit(form: NgForm) {
+  onSubmit() {
     this.comment.comment_time = Date.now();
     this.comment.version_id = this.version_id;
     if (!this.comment.include_start) delete this.comment.start_time;
     if (!this.comment.include_end) delete this.comment.end_time;
-    RestCall.addComment(this.comment);
     this.active = false;
-    form.resetForm();
     this.newComment.emit(this.comment);
+    this.comment = new Comment();
   }
 
   triggerStart() {
     if (!this.comment.start_time)
-      this.comment.start_time = this.player.getCurrentPosition();
+      this.comment.start_time = this.player.getCurrentTime();
     if (this.comment.include_start) {
       this.comment.include_end = false;
       this.resetEnd();
@@ -47,7 +46,7 @@ export class CommentFormComponent implements OnInit {
 
   triggerEnd() {
     if (!this.comment.end_time)
-      this.comment.end_time = this.player.getCurrentPosition();
+      this.comment.end_time = this.player.getCurrentTime();
     if (this.comment.include_end)
       this.resetEnd();
     if (!this.comment.include_end)
@@ -56,6 +55,10 @@ export class CommentFormComponent implements OnInit {
 
   private resetEnd() {
     this.comment.end_time = this.player.getDuration();
+  }
+
+  updateStartTime() {
+    console.log(this.comment.start_time);
   }
 
   format(time: string) {

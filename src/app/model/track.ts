@@ -7,8 +7,7 @@ export class Track {
   title: string;
   artist: string;
   notes: string;
-  versions: Version[];
+  versions: Promise<Version[]>;
   duration: number;
-  track_url: string;
   comments: Comment[];
 }

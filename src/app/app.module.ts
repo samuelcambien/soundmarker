@@ -23,7 +23,7 @@ import {ReplyFormComponent} from './comments/reply-form/reply-form.component';
 import {DragAndDropModule} from "angular-draggable-droppable";
 import {DurationDirective} from './formatting/duration.directive';
 import {DurationFormatterPipe} from './formatting/duration-formatter.pipe';
-import {NgbModule} from "@ng-bootstrap/ng-bootstrap";
+import {NgbActiveModal, NgbModule} from "@ng-bootstrap/ng-bootstrap";
 import {SoundmarkerComponent} from './soundmarker/soundmarker.component';
 import {MyCurrencyFormatterDirective} from './my-currency-formatter.directive';
 import {MyCurrencyPipe} from './my-currency.pipe';
@@ -47,6 +47,8 @@ import {TimeFormatPipe} from './time-format.pipe';
 import {DraggableDirective} from './draggable.directive';
 import {PublicIntroductionComponent} from './public-page/public-info/topics/public-introduction/public-introduction.component';
 import {PlayerIntroductionComponent} from './public-page/public-info/topics/player-introduction/player-introduction.component';
+import {NgSelectModule} from '@ng-select/ng-select';
+import {ClipboardModule} from "ngx-clipboard";
 
 @NgModule({
   declarations: [
@@ -91,22 +93,27 @@ import {PlayerIntroductionComponent} from './public-page/public-info/topics/play
   ],
   imports: [
     FileUploadModule,
+    NgSelectModule,
     FormsModule,
     ReactiveFormsModule,
     DragAndDropModule.forRoot(),
     NgbModule.forRoot(),
     BrowserModule,
     BrowserAnimationsModule,
+    ClipboardModule,
     routing
   ],
   providers: [
+    NgbActiveModal
   ],
   bootstrap: [AppComponent],
   entryComponents: [
     AboutUsInfoComponent,
     ProInfoComponent,
     HelpInfoComponent,
-    ReplyFormComponent
+    ReplyFormComponent,
+    PublicIntroductionComponent,
+    PrivacyAndTermsComponent
   ]
 })
 export class AppModule {
