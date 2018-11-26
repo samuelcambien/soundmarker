@@ -26,7 +26,7 @@ CONTENTS
 
 body {
 	// background: #eef1ff !important;
-	background-color: #eef1ff;
+	background-color: #FCFAFF;
 	height: 100%;
 	width: 100%;
 	 overflow: hidden;
@@ -442,19 +442,17 @@ line-height: 25pt;
   padding: 0px;
 }
       
-  #sm .modal-lg .modal-content .public-bottom-container {
-	  border-radius: 0px !important;
+#sm .modal-lg .modal-content .public-bottom-container {
+  border-radius: 0px !important;
 	  
-  }
+}
   
-   .close-modal-btn {
-	margin-right: 10px;
+.close-modal-btn {
+  margin-right: 10px;
 	margin-top: 10px;
-   }
+}
       
 }
-
-
 
 #sm .modal-dialog {
 	margin: 60px ;
@@ -466,15 +464,8 @@ line-height: 25pt;
 
 #sm .modal-content {
 	border-radius: 0.6rem !important;
-	border: none !important;
-
-	
+	border: none !important;	
 }
-
-
-
-
-
 
 // forms
 
@@ -562,7 +553,7 @@ line-height: 25pt;
 }
 
 #sm .btn:focus, #sm .nav-link:focus {
-	 -webkit-box-shadow: none;
+ -webkit-box-shadow: none;
   box-shadow: none;
 }
 
@@ -607,11 +598,11 @@ line-height: 25pt;
 }
 
 .select-button {
-	transition: 0.1s;
-	-webkit-transition: 0.1s;
-	border-color: #eef1ff !important;
-	color: #7397ff;
-	border: 1px solid #eef1ff;
+ transition: 0.1s;
+ -webkit-transition: 0.1s;
+ border-color: #eef1ff !important;
+ color: #7397ff;
+ border: 1px solid #eef1ff;
 	background-color: #eef1ff;
 	border-radius: 3px;
 	font-size: 10pt;
@@ -623,10 +614,10 @@ line-height: 25pt;
 }
 
 .select-button:hover {
-		 background-color: #dfe5ff;
-  border: 1px solid #dfe5ff;
-	transition: 0.1s;
-	-webkit-transition: 0.1s;
+ background-color: #dfe5ff;
+ border: 1px solid #dfe5ff;
+ transition: 0.1s;
+ -webkit-transition: 0.1s;
 }
 
 .select-button select {
@@ -636,19 +627,20 @@ line-height: 25pt;
  outline: none;
  cursor: pointer;
  transition: 0.1s;
-	-webkit-transition: 0.1s;
+ -webkit-transition: 0.1s;
+	
 }
 
 .select-button:hover select {
  background: #dfe5ff;
  transition: 0.1s;
-	-webkit-transition: 0.1s;
+ -webkit-transition: 0.1s;
 }
 
 .sub-form:hover {
-	border-color: #bac1da !important;
-	transition: 0.1s;
-	-webkit-transition: 0.1s;
+ border-color: #bac1da !important;
+ transition: 0.1s;
+ -webkit-transition: 0.1s;
 }
 
 .sub-form:focus, .sub-form:active {
@@ -697,9 +689,6 @@ select:-webkit-autofill:focus {
     transition: background-color 5000s ease-in-out 0s;
 }
 
-
-
-
 // buttons 
 
 
@@ -723,14 +712,11 @@ button:hover, button:active, button:focus, button:visited {
 }
 
 #sm .btn-lg {
-	 padding: 1rem 1.75rem !important;
+  padding: 1rem 1.75rem !important;
   font-size: 10pt !important;
   font-family: 'sofia-regular';
   line-height: 1.5;
-
 }
-
-
 
 #sm .btn-outline-form.disabled, .btn-outline-form:disabled {
   color: #6c757d;
@@ -743,8 +729,6 @@ button:hover, button:active, button:focus, button:visited {
   background-color: #7397FF;
   border: 1px solid #7397FF;
 }
-
-
 
 #sm .btn-primary {
   background-color: #7397FF;
@@ -798,11 +782,7 @@ color: white;
   margin-bottom: 10px;
 }
 
-
-
 }
-
-
 
 // utilities
 
