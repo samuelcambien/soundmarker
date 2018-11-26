@@ -16,11 +16,10 @@
 
         <ul class="nav nav-pills">
 
-          <li class="nav-item dropdown">
 
-            <a class="nav-link nav-link-messages dropdown-toggle" id="menu" data-toggle="dropdown" href="" role="button"
-               aria-haspopup="true"
-               aria-expanded="false">
+      <li class="nav-item dropdown">
+        <a class="nav-link nav-link-messages dropdown-toggle" id="messages" data-toggle="dropdown" href="" role="button" aria-haspopup="true"
+           aria-expanded="false">
 
               <svg width="12px" height="16px" viewBox="0 0 14 18" version="1.1" xmlns="http://www.w3.org/2000/svg"
                    xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -44,9 +43,9 @@
 
             <span class="notifications"></span>
 
-            <div class="messages dropdown-menu dropdown-menu-right ">
-              <div class="arrow-up"></div>
-              <div class="dropdown-container shadow-dropdown">
+        <div class="messages dropdown-menu dropdown-menu-right" aria-labelledby="messages">
+          <div class="arrow-up"></div>
+          <div class="dropdown-container shadow-dropdown">
 
 
                 <!-- <a class="dropdown-item message-dropdown" href="" data-toggle="modal" data-target=".info-modal-pro">
@@ -79,8 +78,7 @@
 
 
       <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" id="menu" data-toggle="dropdown" href="" role="button" aria-haspopup="true"
-           aria-expanded="false">
+        <a class="nav-link dropdown-toggle" id="menu" data-toggle="dropdown" href="" role="button" aria-haspopup="true" aria-expanded="false">
 
 
           <svg width="28px" height="8px" viewBox="0 0 24 8" version="1.1" xmlns="http://www.w3.org/2000/svg"
@@ -101,7 +99,7 @@
           </svg>
         </a>
 
-        <div class="more-info dropdown-menu dropdown-menu-right ">
+        <div class="more-info dropdown-menu dropdown-menu-right" aria-labelledby="menu">
           <div class="arrow-up"></div>
           <div class="dropdown-container shadow-dropdown">
             <a class="dropdown-item pro-dropdown" href="" data-toggle="modal" data-target=".info-modal-pro">
