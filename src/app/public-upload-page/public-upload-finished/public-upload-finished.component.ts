@@ -15,6 +15,6 @@ export class PublicUploadFinishedComponent implements OnInit {
   }
 
   getLink() {
-    return "http://soundmarker-env.mc3wuhhgpz.eu-central-1.elasticbeanstalk.com/project/" + this.link;
+    return "http://localhost:4200/project/" + this.link;
   }
 }

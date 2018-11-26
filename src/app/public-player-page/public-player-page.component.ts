@@ -8,6 +8,7 @@ import {Message} from "../message";
 import {RestCall} from "../rest/rest-call";
 import {File} from "../model/file";
 import {Version} from "../model/version";
+import {Observable} from "rxjs";
 
 @Component({
   selector: 'app-public-player',
@@ -19,6 +20,8 @@ export class PublicPlayerPageComponent implements OnInit {
   project: Project;
 
   players: Map<Track, any> = new Map();
+
+  message: Promise<Message>;
 
   activeTrack: Track;
 
@@ -35,29 +38,32 @@ export class PublicPlayerPageComponent implements OnInit {
 
   private loadProjectInfo(projectHash: string) {
 
-    RestCall.getProject(projectHash)
-      .then((project: Project) => {
-        this.project = project;
-        for (let track of project.tracks) {
-          track.versions = RestCall.getTrack(track.track_id)
-            .then(response => response["versions"]);
-          track.versions
-            .then((versions: Version[]) => {
-              versions.forEach(version => {
-                if (version.downloadable == 0) version.downloadable = false
+    this.message = new Promise<Message>(resolve =>
+      RestCall.getProject(projectHash)
+        .then((project: Project) => {
+          this.project = project;
+          for (let track of project.tracks) {
+            track.versions = RestCall.getTrack(track.track_id)
+              .then(response => response["versions"]);
+            track.versions
+              .then((versions: Version[]) => {
+                resolve(this.getMessage(project, versions[0]));
+                versions.forEach(version => {
+                  if (version.downloadable == 0) version.downloadable = false
+                });
+                versions[0].files = RestCall.getVersion(versions[0].version_id)
+                  .then(response => versions[0].files = response["files"]);
+                versions[0].files.then(() => {
+                  this.loadComments(track);
+                  // this.loadPlayer(track, versions[0], versions[0].files[0]);
+                })
               });
-              versions[0].files = RestCall.getVersion(versions[0].version_id)
-                .then(response => versions[0].files = response["files"]);
-              versions[0].files.then(() => {
-                this.loadComments(track);
-                // this.loadPlayer(track, versions[0], versions[0].files[0]);
-              })
-            });
 
-          if (project.tracks.length == 1)
-          this.activeTrack = project.tracks[0];
-        }
-      });
+            if (project.tracks.length == 1)
+              this.activeTrack = project.tracks[0];
+          }
+        })
+    );
   }
 
   private loadPlayer(track: Track, version: Version, file: File) {
@@ -92,13 +98,10 @@ export class PublicPlayerPageComponent implements OnInit {
     }
   }
 
-  getMessage(): Message[] {
-    return [
-      new Message(
-        "george.baker@gmail.com has uploaded 3 tracks",
-        "",
-        false
-      )
-    ];
+  getMessage(project: Project, version: Version): Message {
+    return new Message(
+      project.tracks.length + " tracks added" + (project.email_from ? " by " + project.email_from : ""),
+      version.notes,
+      false);
   }
 }

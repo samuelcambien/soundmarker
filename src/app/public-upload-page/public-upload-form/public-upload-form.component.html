@@ -78,7 +78,7 @@
     <div class="col-md-8">
       <div class="form-row">
         <div class="form-group col">
-                <textarea [(ngModel)]="notes" type="text" placeholder="Notes" class="form-control form-control-sm"
+                <textarea #notes_element [(ngModel)]="notes" type="text" placeholder="Notes" class="form-control form-control-sm"
                           rows="{{sharemode == 'email' ? 3 : 5 }}"></textarea>
         </div>
       </div>

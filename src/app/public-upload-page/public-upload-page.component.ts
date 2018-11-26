@@ -33,6 +33,7 @@ export class PublicUploadPageComponent implements OnInit  {
   @ViewChild('waveform') waveform: ElementRef;
 
   ngOnInit() {
-    console.log(this.stage);
+    this.uploader.files = 0;
+    this.uploader.uploaded = 0;
   }
 }

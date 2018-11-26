@@ -1,4 +1,4 @@
-import {Component, ElementRef, EventEmitter, Input, Output} from '@angular/core';
+import {Component, ElementRef, EventEmitter, Input, Output, ViewChild} from '@angular/core';
 import {FileItem, FileUploader} from '../../ng2-file-upload';
 import {Mp3Encoder} from "../../mp3-encoder/mp3-encoder";
 import {RestCall} from "../../rest/rest-call";
@@ -13,7 +13,7 @@ export class PublicUploadFormComponent {
 
   notes: string;
   email_from: string;
-  email_to: [string];
+  email_to: string;
 
   sharemode: "email" | "link" = "email";
   expiration: "week" | "month" = "week";
@@ -29,6 +29,8 @@ export class PublicUploadFormComponent {
   @Output() link = new EventEmitter<string>();
 
   @Input() waveform: ElementRef;
+
+  @ViewChild('notes_element') notes_element: ElementRef;
 
   protected convert(item: FileItem): Promise<File> {
 
@@ -79,7 +81,7 @@ export class PublicUploadFormComponent {
 
         let project_id = response["project_id"];
         Promise.all(this.uploader.queue.map(track => this.processTrack(project_id, track)))
-          .then(() => RestCall.shareProject(project_id, this.email_from, this.email_to))
+          .then(() => RestCall.shareProject(project_id, this.email_from, this.email_to ? this.email_to.split(",") : []))
           .then(response => {
             this.finished.emit();
             this.link.emit(response["project_hash"]);
@@ -98,7 +100,7 @@ export class PublicUploadFormComponent {
       return {trackId: result[0]["track_id"], buffer: result[1]}
     }).then(({trackId, buffer}) =>
       this.getWaveform(buffer).then(waveform =>
-        RestCall.createNewVersion(trackId, this.notes, buffer.duration, waveform)
+        RestCall.createNewVersion(trackId, this.notes_element.nativeElement.value, buffer.duration, waveform)
       )
     ).then(response => {
       let versionId = response["version_id"];
@@ -107,16 +109,19 @@ export class PublicUploadFormComponent {
 
       let uploads = [];
 
-      if (this.downloadable)
+      if (this.downloadable) {
         uploads.push(
           this.uploadDownloadFile(track._file, file_name, extension, track._file.size, versionId, length)
         );
+        this.uploader.files++;
+      }
       uploads.push(
         this.convert(track)
           .then(file =>
             this.uploadStreamFile(file, file_name, "mp3", file.size, versionId, length)
           )
       );
+      this.uploader.files++;
 
       return Promise.all(uploads);
     });
@@ -153,6 +158,7 @@ export class PublicUploadFormComponent {
         let chunk_byte_length = 44100;
         // for (let i = 0; i * chunk_byte_length < buffer.byteLength; i++) {
         RestCall.uploadChunk(buffer, fileId, 0, extension)
+          .then(() => this.uploader.uploaded++);
         // }
       });
   }
@@ -163,7 +169,8 @@ export class PublicUploadFormComponent {
       .then(({fileId, buffer}) => {
         let chunk_byte_length = 192 / 8 * 1000 * 1000000;
         for (let i = 0; i * chunk_byte_length < buffer.byteLength; i++) {
-          RestCall.uploadChunk(buffer.slice(i * chunk_byte_length, (i + 1) * chunk_byte_length), fileId, i, extension);
+          RestCall.uploadChunk(buffer.slice(i * chunk_byte_length, (i + 1) * chunk_byte_length), fileId, i, extension)
+            .then(() => this.uploader.uploaded++);
         }
       });
   }

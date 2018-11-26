@@ -23,7 +23,7 @@ export class RestCall {
     return Utils.sendPostRequest(RestUrl.VERSION_NEW, {
       track_id: trackId,
       track_length: length,
-      version_notes: versionNotes,
+      notes: versionNotes,
       wave_png: waveform
     });
   }

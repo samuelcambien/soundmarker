@@ -13,7 +13,8 @@ import {TermsAcceptedServiceService} from "../../../terms-accepted-service.servi
 })
 export class PublicInfoHeaderComponent implements OnInit {
 
-  @Input() messages: Message[];
+  @Input() messages: Promise<Message>;
+  message;
 
   constructor(private modalService: NgbModal, private termsAcceptedService: TermsAcceptedServiceService) {
   }
@@ -26,6 +27,7 @@ export class PublicInfoHeaderComponent implements OnInit {
     if (!this.termsAcceptedService.termsAccepted()) {
       this.openIntroduction();
     }
+    if (this.messages) this.messages.then(message => this.message = message);
   }
 
   goToPage() {
