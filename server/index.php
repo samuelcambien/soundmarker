@@ -159,8 +159,8 @@ try {
       $emailstring = str_replace("%projectlink%",$projectlink,$emailstring);
       $emailstring_text = str_replace("%projectlink%",$projectlink,$emailstring_text);
       // Replace strings -> %recipientmail%
-      $emailstring = str_replace("%recipientmail%",$receiver,$emailstring);
-      $emailstring_text = str_replace("%recipientmail%",$receiver,$emailstring_text);
+      $emailstring = str_replace("%recipientmail%",implode("\n", $receiver),$emailstring);
+      $emailstring_text = str_replace("%recipientmail%",implode("\n", $receiver),$emailstring_text);
       // Replace strings -> %trackamount%
       $sql = "SELECT track_id FROM Track WHERE project_id = '$project_id'";
       $tracks = $db->query($sql)->fetchAll(PDO::FETCH_ASSOC);
@@ -239,8 +239,8 @@ try {
       $emailstring = str_replace("%projectlink%",$projectlink,$emailstring);
       $emailstring_text = str_replace("%projectlink%",$projectlink,$emailstring_text);
       // Replace strings -> %recipientmail%
-      $emailstring = str_replace("%recipientmail%",$receiver,$emailstring);
-      $emailstring_text = str_replace("%recipientmail%",$receiver,$emailstring_text);
+      $emailstring = str_replace("%recipientmail%",implode("\n", $receiver),$emailstring);
+      $emailstring_text = str_replace("%recipientmail%",implode("\n", $receiver),$emailstring_text);
       // Replace strings -> %trackamount%
       $emailstring = str_replace("%trackamount%",$trackcount,$emailstring);
       $emailstring_text = str_replace("%trackamount%",$trackcount,$emailstring_text);   
