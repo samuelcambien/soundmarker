@@ -98,9 +98,10 @@ require 'credentials.php';
 $user_id = isset(json_decode(Flight::request()->getBody())->user_id) ? json_decode(Flight::request()->getBody())->user_id : "";
 $project_title = isset(json_decode(Flight::request()->getBody())->project_title) ? json_decode(Flight::request()->getBody())->project_title : "";
 $project_password = isset(json_decode(Flight::request()->getBody())->project_password) ? json_decode(Flight::request()->getBody())->project_password : "";
+$ipaddr = $_SERVER['REMOTE_ADDR'] . " - " . $_SERVER['HTTP_X_FORWARDED_FOR'];
 
 $db = Flight::db();
-$sql = "INSERT INTO Project (title, password, active) VALUES ('$project_title', '$project_password', '1')";
+$sql = "INSERT INTO Project (title, password, active, ipaddr) VALUES ('$project_title', '$project_password', '1', '$ipaddr')";
 $result = $db->query($sql);
 $project_id = $db->lastInsertId();
 
@@ -190,7 +191,7 @@ try {
       $emailstring = str_replace("%tracktitle%",$tracktitle,$emailstring);
       $emailstring_text = str_replace("%tracktitle%",$tracktitle,$emailstring_text);   
 
-      $subject = 'Your tracks have been shared succesfully via Soundmarker';
+      $subject = 'Your tracks have been shared successfully via Soundmarker';
       $char_set = 'UTF-8';
 
       try {
@@ -292,7 +293,7 @@ try {
       $senddate = $projectdate->modify('-3 days');
       $senddatef = $senddate->format('Y-m-d H:i:s');
       $db = Flight::db();
-      $sql = "INSERT INTO Notification (emailaddress, senddate, type, status, type_id) VALUES ('$sender', '$projectdatef', '0', '0', '$project_id')";
+      $sql = "INSERT INTO Notification (emailaddress, senddate, type, status, type_id, recipientemail) VALUES ('$sender', '$projectdatef', '0', '0', '$project_id', '$receiver')";
       $result = $db->query($sql);
     }
 

@@ -18,7 +18,7 @@ $db = new PDO('mysql:host='.$_SERVER["RDS_HOSTNAME"].';dbname='.$_SERVER["RDS_DB
 // Get expired notification email
 $currentdate = new \DateTime();
 $currentdatef = $currentdate->format('Y-m-d H:i:s');
-$sql = "SELECT notification_id, emailaddress, senddate, type_id FROM Notification WHERE type = '0' AND status = '0'";
+$sql = "SELECT notification_id, emailaddress, senddate, type_id, recipientemail FROM Notification WHERE type = '0' AND status = '0'";
 $notifications = $db->query($sql)->fetchAll(PDO::FETCH_ASSOC);
 foreach ($notifications as &$notification) {
     if ($notification["senddate"] < $currentdatef) {
@@ -36,9 +36,9 @@ foreach ($notifications as &$notification) {
         $emailstring = str_replace("%projectlink%",$projectlink,$emailstring);
         $emailstring_text = str_replace("%projectlink%",$projectlink,$emailstring_text);
         // Replace strings -> %recipientmail%
-        // not capturing recipients?
-        // $emailstring = str_replace("%recipientmail%",$receiver,$emailstring);
-        // $emailstring_text = str_replace("%recipientmail%",$receiver,$emailstring_text);
+        $receiver = $notification["recipientemail"];
+        $emailstring = str_replace("%recipientmail%",$receiver,$emailstring);
+        $emailstring_text = str_replace("%recipientmail%",$receiver,$emailstring_text);
         // Replace strings -> %trackamount%
         $sql = "SELECT track_id FROM Track WHERE project_id = '$project_id'";
         $tracks = $db->query($sql)->fetchAll(PDO::FETCH_ASSOC);
