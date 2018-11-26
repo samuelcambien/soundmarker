@@ -46,8 +46,10 @@ export class CommentComponent implements OnInit {
 
   goToCommentTime(comment: Comment) {
 
-    comment.include_end ?
-      this.player.play(comment.start_time, comment.end_time) :
-      this.player.play(comment.start_time);
+    if (comment.include_start) {
+      comment.include_end ?
+        this.player.play(comment.start_time, comment.end_time) :
+        this.player.play(comment.start_time);
+    }
   }
 }

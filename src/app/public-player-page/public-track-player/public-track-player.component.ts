@@ -156,10 +156,10 @@ export class PublicTrackPlayerComponent implements OnInit {
     this.version.files.then((files) => {
       this.decentPlayer = wave.create(
         {
-          container: "#waveform"
+          container: "#waveform_" + this.track.track_id
         }
       );
-      this.decentPlayer.load(files[0].aws_path + "0.mp3");
+      this.decentPlayer.load(files.filter(file => file.extension == "mp3")[0].aws_path + "0.mp3");
 
       // this.renderer.listen(this.waveform.nativeElement, 'click', (e) => {
       //   this.decentPlayer.seekTo(this.getSeekTime(e));
@@ -179,7 +179,7 @@ export class PublicTrackPlayerComponent implements OnInit {
   }
 
   getCurrentTime() {
-    return this.decentPlayer != null ? Math.round(this.decentPlayer.getCurrentTime()) : 0;
+    return this.decentPlayer != null ? this.decentPlayer.getCurrentTime() : 0;
   }
 
   private getPosition(element, commentTime) {

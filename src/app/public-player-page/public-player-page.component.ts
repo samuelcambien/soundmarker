@@ -18,7 +18,7 @@ export class PublicPlayerPageComponent implements OnInit {
 
   project: Project;
 
-  players: Map<Track, Player> = new Map();
+  players: Map<Track, any> = new Map();
 
   activeTrack: Track;
 
@@ -43,6 +43,9 @@ export class PublicPlayerPageComponent implements OnInit {
             .then(response => response["versions"]);
           track.versions
             .then((versions: Version[]) => {
+              versions.forEach(version => {
+                if (version.downloadable == 0) version.downloadable = false
+              });
               versions[0].files = RestCall.getVersion(versions[0].version_id)
                 .then(response => versions[0].files = response["files"]);
               versions[0].files.then(() => {
@@ -51,7 +54,8 @@ export class PublicPlayerPageComponent implements OnInit {
               })
             });
 
-          if (project.tracks.length == 1) this.activeTrack = project.tracks[0];
+          if (project.tracks.length == 1)
+          this.activeTrack = project.tracks[0];
         }
       });
   }

@@ -23,7 +23,7 @@
       autoCenter: true,
       backend: 'WebAudio',
       container: null,
-      cursorColor: '#333',
+      cursorColor: '#bac1da',
       cursorWidth: 1,
       dragSelection: true,
       fillParent: true,
@@ -38,13 +38,13 @@
       minPxPerSec: 20,
       partialRender: false,
       pixelRatio: window.devicePixelRatio || screen.deviceXDPI / screen.logicalXDPI,
-      progressColor: '#555',
+      progressColor: '#bac1da',
       normalize: false,
       renderer: 'MultiCanvas',
       scrollParent: false,
       skipLength: 2,
       splitChannels: false,
-      waveColor: '#999',
+      waveColor: '#eef1ff',
     },
 
     init: function (params) {
@@ -2281,6 +2281,8 @@
         var h = Math.round(peak / absmax * halfH);
         ctx.lineTo((i - first) * scale + this.halfPixel, halfH - h + offsetY);
       }
+
+      ctx.lineTo((canvasEnd - first - 1) * scale + this.halfPixel, halfH + offsetY + 2);
 
       ctx.closePath();
       ctx.fill();

@@ -3,6 +3,8 @@ import {Track} from "../../model/track";
 import {Player} from "../../newplayer/player";
 import {saveAs} from 'file-saver/FileSaver';
 import {animate, transition, trigger} from "@angular/animations";
+import {Version} from "../../model/version";
+import {Utils} from "../../app.component";
 
 @Component({
   selector: 'app-public-player-track',
@@ -21,10 +23,13 @@ export class PublicPlayerTrackComponent implements OnInit {
   @Output() selected = new EventEmitter<Track>();
   @Output() playing = new EventEmitter();
 
+  version: Version;
+
   constructor() {
   }
 
   ngOnInit() {
+    this.track.versions.then(versions => this.version = versions[0]);
   }
 
   play() {
