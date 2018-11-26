@@ -15,7 +15,7 @@ export class RestUrl {
 
   private static MOCK: string = "http://localhost:3000";
 
-  private static BACKEND: string = "http://soundmarker-env.mc3wuhhgpz.eu-central-1.elasticbeanstalk.com";
+  private static BACKEND: string = "http://localhost";
 
   private static DATA: string = RestUrl.BACKEND;
 

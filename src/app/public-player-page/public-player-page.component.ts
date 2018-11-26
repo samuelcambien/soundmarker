@@ -1,7 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute} from "@angular/router";
 import {Comment} from "../model/comment";
-import {RestUrl, Utils} from "../app.component";
 import {Track} from "../model/track";
 import {Project} from "../model/project";
 import {Player} from "../newplayer/player";
@@ -9,6 +8,7 @@ import {Message} from "../message";
 import {RestCall} from "../rest/rest-call";
 import {File} from "../model/file";
 import {Version} from "../model/version";
+import {Observable} from "rxjs";
 
 @Component({
   selector: 'app-public-player',
@@ -19,7 +19,9 @@ export class PublicPlayerPageComponent implements OnInit {
 
   project: Project;
 
-  players: Map<Track, Player> = new Map();
+  players: Map<Track, any> = new Map();
+
+  message: Promise<Message>;
 
   activeTrack: Track;
 
@@ -36,23 +38,32 @@ export class PublicPlayerPageComponent implements OnInit {
 
   private loadProjectInfo(projectHash: string) {
 
-    RestCall.getProject(projectHash)
-      .then((response: Project) => {
-        this.project = response;
+    this.message = new Promise<Message>(resolve =>
+      RestCall.getProject(projectHash)
+        .then((project: Project) => {
+          this.project = project;
+          for (let track of project.tracks) {
+            track.versions = RestCall.getTrack(track.track_id)
+              .then(response => response["versions"]);
+            track.versions
+              .then((versions: Version[]) => {
+                resolve(this.getMessage(project, versions[0]));
+                versions.forEach(version => {
+                  if (version.downloadable == 0) version.downloadable = false
+                });
+                versions[0].files = RestCall.getVersion(versions[0].version_id)
+                  .then(response => versions[0].files = response["files"]);
+                versions[0].files.then(() => {
+                  this.loadComments(track);
+                  // this.loadPlayer(track, versions[0], versions[0].files[0]);
+                })
+              });
 
-        for (let track of this.project.tracks) {
-          RestCall.getTrack(track.track_id)
-            .then(response => track.versions = response["versions"])
-            .then(() => RestCall.getVersion(track.versions[0].version_id))
-            .then(response => track.versions[0].files = response["files"])
-            .then(() => {
-              this.loadComments(track);
-              this.loadPlayer(track, track.versions[0], track.versions[0].files[0]);
-            });
-        }
-
-        if (this.project.tracks.length == 1) this.activeTrack = this.project.tracks[0];
-      });
+            if (project.tracks.length == 1)
+              this.activeTrack = project.tracks[0];
+          }
+        })
+    );
   }
 
   private loadPlayer(track: Track, version: Version, file: File) {
@@ -60,15 +71,19 @@ export class PublicPlayerPageComponent implements OnInit {
   }
 
   private loadComments(track: Track) {
-    RestCall.getComments(track.versions[0].version_id)
-      .then(response => {
-        let allComments: Comment[] = response["comments"];
-        track.comments = allComments.filter(comment => comment.parent_comment_id == 0);
-        for (let comment of track.comments) {
-          comment.version_id = track.versions[0].version_id;
-          this.loadReplies(comment, allComments);
-        }
-      });
+    track.versions.then((versions: Version[]) => {
+      RestCall.getComments(versions[0].version_id)
+        .then(response => {
+          let allComments: Comment[] = response["comments"];
+          track.comments = allComments.filter(comment => comment.parent_comment_id == 0);
+          for (let comment of track.comments) {
+            if (comment.include_end == 0) comment.include_end = false;
+            if (comment.include_start == 0) comment.include_start = false;
+            comment.version_id = versions[0].version_id;
+            this.loadReplies(comment, allComments);
+          }
+        })
+    });
   }
 
   private loadReplies(comment: Comment, allComments: Comment[]) {
@@ -83,16 +98,10 @@ export class PublicPlayerPageComponent implements OnInit {
     }
   }
 
-  getMessage(): Message[] {
-    // if (!this.project.tracks) return [];
-    // let track = this.project.tracks[0];
-    const messages = [
-      new Message(
-        "george.baker@gmail.com has uploaded 3 tracks",
-        "",
-        false
-      )
-    ];
-    return messages;
+  getMessage(project: Project, version: Version): Message {
+    return new Message(
+      project.tracks.length + " tracks added" + (project.email_from ? " by " + project.email_from : ""),
+      version.notes,
+      false);
   }
 }

@@ -165,14 +165,14 @@
 }
 
 
-
+/*
 .nav-item:hover .dropdown-menu {
 	visibility: visible;
 	opacity: 1;
 	transition-delay:0.2s;
 	transition-duration: 0.1s;
 }
-
+*/
 
 
 
@@ -180,9 +180,9 @@
 
 .dropdown-menu {
 	padding-top: 18px;
-	opacity: 0;
-	visibility: hidden;
-	display: block;
+	
+	
+	
 	border: none;
 	background: transparent;
 	transition:visibility 0s linear 0.05s,opacity 0.05s linear;

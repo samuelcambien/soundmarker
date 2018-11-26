@@ -1,4 +1,4 @@
-<form #myForm="ngForm" (ngSubmit)="onSubmit(myForm)" class="comment-form"
+<form #myForm="ngForm" (ngSubmit)="onSubmit()" class="comment-form"
       [ngFormOptions]="{ updateOn: 'change'}" >
 
   <div class="top">
@@ -22,7 +22,7 @@
     </div>
 
     <div class="form-group col-auto hide-phone">
-      <input type="text" [ngModel]="format(this.comment.start_time)" (ngModel)="this.comment.start_time" name="start"
+      <input type="text" [ngModel]="this.comment.start_time | timeFormat" (ngModel)="this.comment.start_time" (change)="updateStartTime()" name="start"
              [ngClass]="['comment-form-start-time sub-form tag-box', comment.include_start ? 'enabled' : 'disabled']">
     </div>
 

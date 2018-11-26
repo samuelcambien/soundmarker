@@ -49,9 +49,7 @@
 	margin-bottom: 1px;
 	line-height: 1.2;
 	margin-left: 8px;
-	padding-right: 4px;
-	padding-left: 0px !important;
-	padding-top: 5px !important;
+	
 }
 
 .title h4 {
@@ -241,6 +239,28 @@
 
 //header
 
+.ng-select.custom {
+    border:0px;
+    min-height: 0px;
+    border-radius: 0;
+    font-size: 10pt;
+    height: 29px !important;
+    max-height: 29px !important;
+    background-color: #eef1ff !important;
+}
+
+.ng-select.custom .ng-select-container, .ng-select.custom.ng-select-single .ng-select-container  {
+	background-color: #eef1ff !important;
+	min-height: 29px !important;
+	 height: 29px !important;
+    max-height: 29px !important;
+}
+
+.ng-select.custom .ng-control  {            
+     height: 29px !important;
+    max-height: 29px !important;
+    background-color: #eef1ff !important;
+}
 
 
 .comments-header {

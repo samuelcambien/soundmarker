@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {FileUploader} from "../ng2-file-upload";
 
 const UPLOAD_FILES_ENDPOINT = 'http://localhost:8080/rest/upload/file';
@@ -25,11 +25,15 @@ export class PublicUploadPageComponent implements OnInit  {
       ) < 0
     }],
   });
+  link: string;
 
   statusEnum = Status;
   stage: Status = Status.SELECT_SONGS;
 
+  @ViewChild('waveform') waveform: ElementRef;
+
   ngOnInit() {
-    console.log(this.stage);
+    this.uploader.files = 0;
+    this.uploader.uploaded = 0;
   }
 }

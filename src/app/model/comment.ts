@@ -6,13 +6,14 @@ export class Comment {
   public comment_time;
   public name: string;
   public start_time;
-  public include_start: boolean;
+  public include_start;
   public end_time;
-  public include_end: boolean;
+  public include_end;
   public notes: string;
   public replies: Comment[];
 
   constructor() {
+    this.replies = [];
   }
 }
 
@@ -24,23 +25,21 @@ export class CommentSorter {
   ) {
   }
 
-  public static MOST_RECENT_FIRST: CommentSorter = new CommentSorter(
+  public static MOST_RECENT: CommentSorter = new CommentSorter(
     (a, b) => b.comment_time - a.comment_time,
-    "Most Recent First"
+    "Most recent"
   );
 
-  public static MOST_RECENT_LAST: CommentSorter = new CommentSorter(
-    (a, b) => a.comment_time - b.comment_time,
-    "Most Recent Last"
+  public static TRACK_TIME: CommentSorter = new CommentSorter(
+    (a, b) => {
+      if (a.include_start && !b.include_start) return -1;
+      if (b.include_start && !a.include_start) return 1;
+      return a.start_time - b.start_time
+    }, "Track time"
   );
 
-  public static NAME_A_Z: CommentSorter = new CommentSorter(
-    (a, b) => a.name.toLowerCase() > b.name.toLowerCase() ? 1 : 0,
-    "Name A-Z"
-  );
-
-  public static NAME_Z_A: CommentSorter = new CommentSorter(
-    (a, b) => b.name.toLowerCase() > a.name.toLowerCase() ? 1 : 0,
-    "Name Z-A"
+  public static NAME: CommentSorter = new CommentSorter(
+    (a, b) => a.name.toLowerCase() > b.name.toLowerCase() ? 1 : -1,
+    "Name"
   );
 }
