@@ -293,7 +293,8 @@ try {
       $senddate = $projectdate->modify('-3 days');
       $senddatef = $senddate->format('Y-m-d H:i:s');
       $db = Flight::db();
-      $sql = "INSERT INTO Notification (emailaddress, senddate, type, status, type_id, recipientemail) VALUES ('$sender', '$projectdatef', '0', '0', '$project_id', '$receiver')";
+      $receiverstring = implode("\n", $receiver);
+      $sql = "INSERT INTO Notification (emailaddress, senddate, type, status, type_id, recipientemail) VALUES ('$sender', '$projectdatef', '0', '0', '$project_id', '$receiverstring')";
       $result = $db->query($sql);
     }
 
