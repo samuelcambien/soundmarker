@@ -260,7 +260,7 @@ try {
       try {
           $result = Flight::get("SesClient")->sendEmail([
               'Destination' => [
-                  'ToAddresses' => [$receiver],
+                  'ToAddresses' => $receiver,
               ],
               'ReplyToAddresses' => [$sender],
               'Source' => "Soundmarker <noreply@soundmarker.com>",

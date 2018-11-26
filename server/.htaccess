@@ -39,7 +39,7 @@
 </IfModule>
 
 # password protect single file
-<If "%{ENV:EnvType} == 'Staging'">
+# <If "%{ENV:EnvType} == 'Staging'">
 <Files "index.html">
 AuthType Basic
 AuthName "Private section"

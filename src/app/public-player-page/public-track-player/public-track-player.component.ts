@@ -51,9 +51,6 @@ export class PublicTrackPlayerComponent implements OnInit {
 
   decentPlayer;
 
-  phoneSearch: boolean;
-  phoneOrder: boolean;
-
   constructor(
   ) {
   }
