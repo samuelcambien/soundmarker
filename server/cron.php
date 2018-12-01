@@ -25,7 +25,7 @@ $s3 = new Aws\S3\S3Client([
 ]);
 
 // Delete files from AWS S3
-$sql = "SELECT project_id, expiration_date FROM Project WHERE active = '1' AND user_id IS NULL AND expiration_date < CURDATE()";
+$sql = "SELECT project_id FROM Project WHERE active = '1' AND user_id IS NULL AND expiration_date < CURDATE()";
 $projectstobedeleted = $db->query($sql)->fetchAll(PDO::FETCH_ASSOC);
 foreach ($projectstobedeleted as &$projecttobedeleted) {
   // get all tracks from project

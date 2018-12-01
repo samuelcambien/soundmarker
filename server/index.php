@@ -20,7 +20,7 @@ use Aws\S3\Exception\S3Exception;
 $s3 = new Aws\S3\S3Client([
     'profile'     => 's3',
     'version'     => 'latest',
-    'region'      => 'eu-west-1',
+    'region'      => $config['AWS_S3_REGION'],
 ]);
 
 Flight::set("s3", $s3);
@@ -205,13 +205,13 @@ $expiration = isset($getbody->expiration) ? $getbody->expiration : "1 week";
 // check notes????
 $notes = isset($getbody->notes) ? $getbody->notes : "";
 
+$db = Flight::db();
 // Update expiration date
 $projectdate = new \DateTime('+'.$expiration);
 $projectdatef = $projectdate->format('Y-m-d H:i:s');
 $sql = "UPDATE Project SET expiration_date = '$projectdatef' WHERE project_id = '$project_id'";
 $result = $db->query($sql);
 
-$db = Flight::db();
 $sql = "SELECT hash FROM Project WHERE project_id = '$project_id'";
 $result = $db->query($sql);
 $hash = $result->fetch()[0];
