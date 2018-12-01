@@ -20,7 +20,6 @@
     RewriteCond %{REQUEST_URI} "/track/url" [OR]
     RewriteCond %{REQUEST_URI} "/track/file/download/" [OR]
     RewriteCond %{REQUEST_URI} "/track" [OR]
-    RewriteCond %{REQUEST_URI} "/player/47" [OR]
     RewriteCond %{REQUEST_URI} "/track/new" [OR]
     RewriteCond %{REQUEST_URI} "/track/version" [OR]
     RewriteCond %{REQUEST_URI} "/track/version/comments" [OR]
@@ -35,11 +34,10 @@
 
     # Prefer .php over .html
     DirectoryIndex index.php index.html index.shtml index.htm Index.html Index.htm Index.shtml default.htm Default.htm default.html Default.html default.shtml Default.shtml page1.html index.pl index.cgi index.php3 index.phtml home.htm home.html home.shtml index.wml index.pcgi quickstart.html
-    Header set Access-Control-Allow-Origin "*"
 </IfModule>
 
 # password protect single file
-# <If "%{ENV:EnvType} == 'Staging'">
+<If "%{ENV:EnvType} == 'Staging'">
 <Files "index.html">
 AuthType Basic
 AuthName "Private section"
@@ -52,4 +50,4 @@ AuthName "Private section"
 AuthUserFile /etc/httpd/.htpasswd
 Require user soundmarker
 </FilesMatch>
-# </If>
+</If>

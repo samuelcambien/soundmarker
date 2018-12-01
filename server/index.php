@@ -1,40 +1,15 @@
 <?php
 require 'flight/Flight.php';
 require 'vendor/autoload.php';
+require 'credentials.php';
+require 'helpers/uuid.php';
 
 /*
 GLOBALE DECLARATIONS
 */
-///////////////////////////////////////////////////////////////// Unique ID ///////////////////////////////////////////////////////////
- class UUID {
-  public static function v4() {
-    return sprintf('%04x%04x-%04x-%04x-%04x-%04x%04x%04x',
-
-      // 32 bits for "time_low"
-      mt_rand(0, 0xffff), mt_rand(0, 0xffff),
-
-      // 16 bits for "time_mid"
-      mt_rand(0, 0xffff),
-
-      // 16 bits for "time_hi_and_version",
-      // four most significant bits holds version number 4
-      mt_rand(0, 0x0fff) | 0x4000,
-
-      // 16 bits, 8 bits for "clk_seq_hi_res",
-      // 8 bits for "clk_seq_low",
-      // two most significant bits holds zero and one for variant DCE1.1
-      mt_rand(0, 0x3fff) | 0x8000,
-
-      // 48 bits for "node"
-      mt_rand(0, 0xffff), mt_rand(0, 0xffff), mt_rand(0, 0xffff)
-    );
-  }
-}
-
 ///////////////////////////////////////////////////////////////// Setup DB ////////////////////////////////////////////////////////////
-require 'credentials.php';
-
-Flight::register('db', 'PDO', array('mysql:host='.$rdshostname.';dbname='.$rdsdb_name, $rdsusername, $rdspassword), function($db) {
+Flight::set("config", $config);
+Flight::register('db', 'PDO', array('mysql:host='.$config["RDS_HOSTNAME"].';dbname='.$config["RDS_DB_NAME"], $config["RDS_USERNAME"], $config["RDS_PASSWORD"]), function($db) {
         $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 });
 
@@ -62,6 +37,41 @@ $SesClient = new SesClient([
 
 Flight::set("SesClient", $SesClient);
 
+session_start();
+$access_token = json_decode($_SESSION["USER"])->access_token;
+
+// Error handling
+Flight::map('error', function(Exception $ex){
+    // Handle error
+    Flight::json(array(
+       'error' => $ex->getTraceAsString()
+    ), 200);
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -73,7 +83,65 @@ ROUTING TO FRONT-END
 */
 /////////////////////////////////////////////////////////// Routes - Global Index /////////////////////////////////////////////////////
 Flight::route('/', function(){
-    include 'index.html';
+
+$config = Flight::get("config");
+$now = new DateTime();
+require 'helpers/oauth.php';
+session_start();
+$access_token = json_decode($_SESSION["USER"])->access_token;
+
+if ($_SESSION["status"] != "free") {
+  if ($_SESSION['ENDTIME'] < $now->getTimestamp() OR $_SESSION["status"] == "") {
+    $response = getSubscriptions($access_token, $config, $now);
+    if ($response->error) { 
+      if (isset(json_decode($_SESSION["USER"])->refresh_token)) {
+      // get refresh token
+      $curl_post_data = array(
+         'grant_type'    => 'refresh_token',
+         'refresh_token' => json_decode($_SESSION["USER"])->refresh_token,
+         'client_id'     => $config['OAUTH_CLIENT_ID'], // Only needed if server is running CGI
+         'client_secret' => $config['OAUTH_CLIENT_SECRET'] // Only need if server is running CGI
+      );
+
+      $curl = curl_init( $config['oauth_server_location'] . '/oauth/token/' );
+
+      // Uncomment if you want to use CLIENTID AND SECRET IN THE HEADER
+      //curl_setopt($curl, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
+      //curl_setopt($curl, CURLOPT_USERPWD, $client_id.':'.$client_secret); // Your credentials goes here
+      curl_setopt( $curl, CURLOPT_RETURNTRANSFER, true );
+      curl_setopt( $curl, CURLOPT_POST, true );
+      curl_setopt( $curl, CURLOPT_POSTFIELDS, $curl_post_data );
+      curl_setopt( $curl, CURLOPT_SSL_VERIFYPEER, false );
+      curl_setopt( $curl, CURLOPT_VERBOSE, true);
+      curl_setopt( $curl, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US; rv:1.9.1.2) Gecko/20090729 Firefox/3.5.2 GTB5' );
+      curl_setopt( $curl, CURLOPT_REFERER, $config['OAUTH_SERVER_LOCATION'].'/1' );
+
+      $curl_response = curl_exec( $curl );
+      curl_close( $curl );
+
+        if (isset(json_decode($curl_response)->access_token)) {
+          $_SESSION['USER'] = $curl_response;
+          $_SESSION['ENDTIME'] = $now->getTimestamp() + 60*60*24;
+          $response = getSubscriptions($access_token);
+          header("Refresh:0");
+        } else {
+          $_SESSION["status"] = "free";
+        }
+      } else {
+        $_SESSION["status"] = "free";
+      }
+    } 
+  }
+} else {
+}
+print_r($_SESSION["status"]);
+// $_SESSION['PROJECT'][] = "300";
+// print_r($_SESSION['PROJECT']);
+
+// if (in_array("300", $_SESSION['PROJECT'])) {
+//     echo "Got mac";
+// }
+include 'index.html';
 });
 
 
@@ -92,12 +160,14 @@ PROJECT
 //////////////////////////////////////////////////////// Routes - /project/new POST ///////////////////////////////////////////////////
 Flight::route('POST /project/new', function() {
 
-require 'credentials.php';
+$config = Flight::get("config");
 // Todo: check if user_id exists first (foreign_key needs to be valid) -> put in dB
 // Add expiration date
-$user_id = isset(json_decode(Flight::request()->getBody())->user_id) ? json_decode(Flight::request()->getBody())->user_id : "";
-$project_title = isset(json_decode(Flight::request()->getBody())->project_title) ? json_decode(Flight::request()->getBody())->project_title : "";
-$project_password = isset(json_decode(Flight::request()->getBody())->project_password) ? json_decode(Flight::request()->getBody())->project_password : "";
+$getbody = json_decode(Flight::request()->getBody());
+
+$user_id = isset($getbody->user_id) ? $getbody->user_id : "";
+$project_title = isset($getbody->project_title) ? $getbody->project_title : "";
+$project_password = isset($getbody->project_password) ? $getbody->project_password : "";
 $ipaddr = $_SERVER['REMOTE_ADDR'] . " - " . $_SERVER['HTTP_X_FORWARDED_FOR'];
 
 $db = Flight::db();
@@ -109,6 +179,8 @@ $uuid = UUID::v4().UUID::v4();
 $sql = "UPDATE Project SET hash = '$uuid' WHERE project_id = '$project_id'";
 $result = $db->query($sql);
 
+$_SESSION['user_projects'][] = $project_id;
+
 // return ok
 Flight::json(array(
    'project_id' => $project_id
@@ -118,203 +190,200 @@ Flight::json(array(
 //////////////////////////////////////////////// Routes - /project/get/@project_hash POST /////////////////////////////////////////////
 Flight::route('POST /project/get/url', function() {
 
-require 'credentials.php';
+// check if user_projects
+$config = Flight::get("config");
 // set expiration date
 // calculate amount of tracks and get track names
-$project_id = isset(json_decode(Flight::request()->getBody())->project_id) ? json_decode(Flight::request()->getBody())->project_id : "";
-$sender = isset(json_decode(Flight::request()->getBody())->sender) ? json_decode(Flight::request()->getBody())->sender : "";
-$receiver = isset(json_decode(Flight::request()->getBody())->receiver) ? json_decode(Flight::request()->getBody())->receiver : "";
-$expiration = isset(json_decode(Flight::request()->getBody())->expiration) ? json_decode(Flight::request()->getBody())->expiration : "1 week";
+$getbody = json_decode(Flight::request()->getBody());
+
+$project_id = isset($getbody->project_id) ? $getbody->project_id : "";
+$sender = isset($getbody->sender) ? $getbody->sender : "";
+$receiver = isset($getbody->receiver) ? $getbody->receiver : "";
+$expiration = isset($getbody->expiration) ? $getbody->expiration : "1 week";
 // check notes????
-$notes = isset(json_decode(Flight::request()->getBody())->notes) ? json_decode(Flight::request()->getBody())->notes : "";
+$notes = isset($getbody->notes) ? $getbody->notes : "";
+
+// Update expiration date
+$projectdate = new \DateTime('+'.$expiration);
+$projectdatef = $projectdate->format('Y-m-d H:i:s');
+$sql = "UPDATE Project SET expiration_date = '$projectdatef' WHERE project_id = '$project_id'";
+$result = $db->query($sql);
 
 $db = Flight::db();
-try {
-    $sql = "SELECT hash FROM Project WHERE project_id = '$project_id'";
-    $result = $db->query($sql);
-    $hash = $result->fetch()[0];
+$sql = "SELECT hash FROM Project WHERE project_id = '$project_id'";
+$result = $db->query($sql);
+$hash = $result->fetch()[0];
 
-    // only send if opted in for email
-    if ($receiver) {
-      // https://www.functions-online.com/htmlentities.html
-      // htmlentities('', ENT_COMPAT, 'ISO-8859-1');
-      // html_entity_decode('', ENT_COMPAT, 'ISO-8859-1');
-      // Send Email to Sender
-      $sql = "SELECT email_string FROM Emails WHERE email_name = 'soundmarker-initial-email-to-sender'";
-      $emailstring = html_entity_decode($db->query($sql)->fetch()[0], ENT_COMPAT, 'ISO-8859-1');
-      $sql = "SELECT email_string_text FROM Emails WHERE email_name = 'soundmarker-initial-email-to-sender'";
-      $emailstring_text = html_entity_decode($db->query($sql)->fetch()[0], ENT_COMPAT, 'ISO-8859-1');
-      
-      // Replace strings
-      // Replace strings -> %projectdate%
-      $projectdate = new \DateTime('+'.$expiration);
-      $projectdatef = $projectdate->format('Y-m-d H:i:s');
-      $sql = "UPDATE Project SET expiration_date = '$projectdatef' WHERE project_id = '$project_id'";
-      $result = $db->query($sql);
-      $emailstring = str_replace("%projectdate%",$projectdate->format('F jS Y'),$emailstring);
-      $emailstring_text = str_replace("%projectdate%",$projectdate->format('F jS Y'),$emailstring_text);
-      // Replace strings -> %projectlink%
-      $sql = "SELECT hash FROM Project WHERE project_id = '$project_id'";
-      $projectlink = $serverurl."/project/" . $db->query($sql)->fetch()[0];
-      $emailstring = str_replace("%projectlink%",$projectlink,$emailstring);
-      $emailstring_text = str_replace("%projectlink%",$projectlink,$emailstring_text);
-      // Replace strings -> %recipientmail%
-      $emailstring = str_replace("%recipientmail%",implode("\n", $receiver),$emailstring);
-      $emailstring_text = str_replace("%recipientmail%",implode("\n", $receiver),$emailstring_text);
-      // Replace strings -> %trackamount%
-      $sql = "SELECT track_id FROM Track WHERE project_id = '$project_id'";
-      $tracks = $db->query($sql)->fetchAll(PDO::FETCH_ASSOC);
-      foreach ($tracks as &$track) {
-          $trackid = $track["track_id"];
-          $sqlversion = "SELECT version_id FROM Version WHERE track_id = '$trackid'";
-          $versions[] = $db->query($sqlversion)->fetchAll(PDO::FETCH_ASSOC);
-      }
-      foreach ($versions as &$versions2) {
-        foreach ($versions2 as &$version) {
-            $versionid = $version["version_id"];
-            $sqlfiles = "SELECT file_name FROM File WHERE version_id = '$versionid'";
-            $files[] = $db->query($sqlfiles)->fetchAll(PDO::FETCH_ASSOC)[0];
-        }
-      }
-      if (count($files) == 1) {
-        $trackcount = count($files). " track";
-      } else {
-        $trackcount = count($files). " tracks";
-      }
-      $emailstring = str_replace("%trackamount%",$trackcount,$emailstring);
-      $emailstring_text = str_replace("%trackamount%",$trackcount,$emailstring_text);   
-      // Replace strings -> %tracktitle%
-      $tracktitle = "";
-      foreach ($files as &$file) {
-          $tracktitle .= $file["file_name"] . "\n";
-      }
-      $emailstring = str_replace("%tracktitle%",$tracktitle,$emailstring);
-      $emailstring_text = str_replace("%tracktitle%",$tracktitle,$emailstring_text);   
-
-      $subject = 'Your tracks have been shared successfully via Soundmarker';
-      $char_set = 'UTF-8';
-
-      try {
-          $result = Flight::get("SesClient")->sendEmail([
-              'Destination' => [
-                  'ToAddresses' => [$sender],
-              ],
-              'ReplyToAddresses' => ["noreply@soundmarker.com"],
-              'Source' => "Soundmarker <noreply@soundmarker.com>",
-              'Message' => [
-                'Body' => [
-                    'Html' => [
-                        'Charset' => $char_set,
-                        'Data' => $emailstring,
-                    ],
-                    'Text' => [
-                        'Charset' => $char_set,
-                        'Data' => $emailstring_text,
-                    ],
-                ],
-                'Subject' => [
-                    'Charset' => $char_set,
-                    'Data' => $subject,
-                ],
-              ],
-          ]);
-          $messageId = $result['MessageId'];
-      } catch (AwsException $e) {
-          // output error message if fails
-          echo $e->getMessage();
-          echo("The email was not sent. Error message: ".$e->getAwsErrorMessage()."\n");
-      }
-
-      // Send Email to Recipient
-      $sql = "SELECT email_string FROM Emails WHERE email_name = 'soundmarker-initial-email-to-recipient'";
-      $emailstring = html_entity_decode($db->query($sql)->fetch()[0], ENT_COMPAT, 'ISO-8859-1');
-      $sql = "SELECT email_string_text FROM Emails WHERE email_name = 'soundmarker-initial-email-to-recipient'";
-      $emailstring_text = html_entity_decode($db->query($sql)->fetch()[0], ENT_COMPAT, 'ISO-8859-1');
-      
-      // Replace strings
-      // Replace strings -> %projectdate%
-      $emailstring = str_replace("%projectdate%",$projectdate->format('F jS Y'),$emailstring);
-      $emailstring_text = str_replace("%projectdate%",$projectdate->format('F jS Y'),$emailstring_text);
-      // Replace strings -> %projectlink%
-      $emailstring = str_replace("%projectlink%",$projectlink,$emailstring);
-      $emailstring_text = str_replace("%projectlink%",$projectlink,$emailstring_text);
-      // Replace strings -> %recipientmail%
-      $emailstring = str_replace("%recipientmail%",implode("\n", $receiver),$emailstring);
-      $emailstring_text = str_replace("%recipientmail%",implode("\n", $receiver),$emailstring_text);
-      // Replace strings -> %trackamount%
-      $emailstring = str_replace("%trackamount%",$trackcount,$emailstring);
-      $emailstring_text = str_replace("%trackamount%",$trackcount,$emailstring_text);   
-      // Replace strings -> %tracktitle%
-      $emailstring = str_replace("%tracktitle%",$tracktitle,$emailstring);
-      $emailstring_text = str_replace("%tracktitle%",$tracktitle,$emailstring_text);   
-      // Replace strings -> %projectnotes%
-      $emailstring = str_replace("%projectnotes%",$notes,$emailstring);
-      $emailstring_text = str_replace("%projectnotes%",$notes,$emailstring_text);   
-      // Replace strings -> %sendermail%
-      $emailstring = str_replace("%sendermail%",$sender,$emailstring);
-      $emailstring_text = str_replace("%sendermail%",$sender,$emailstring_text);   
-
-      $subject = $sender . ' has shared '. $trackcount . ' with you via Soundmarker';
-      $char_set = 'UTF-8';
-
-      try {
-          $result = Flight::get("SesClient")->sendEmail([
-              'Destination' => [
-                  'ToAddresses' => $receiver,
-              ],
-              'ReplyToAddresses' => [$sender],
-              'Source' => "Soundmarker <noreply@soundmarker.com>",
-              'Message' => [
-                'Body' => [
-                    'Html' => [
-                        'Charset' => $char_set,
-                        'Data' => $emailstring,
-                    ],
-                    'Text' => [
-                        'Charset' => $char_set,
-                        'Data' => $emailstring_text,
-                    ],
-                ],
-                'Subject' => [
-                    'Charset' => $char_set,
-                    'Data' => $subject,
-                ],
-              ],
-          ]);
-          $messageId = $result['MessageId'];
-      } catch (AwsException $e) {
-          // output error message if fails
-          echo $e->getMessage();
-          echo("The email was not sent. Error message: ".$e->getAwsErrorMessage()."\n");
-      }
-
-      // Create notifications
-      // Notification -> Expired
-      $senddate = $projectdate->modify('-3 days');
-      $senddatef = $senddate->format('Y-m-d H:i:s');
-      $db = Flight::db();
-      $receiverstring = implode("\n", $receiver);
-      $sql = "INSERT INTO Notification (emailaddress, senddate, type, status, type_id, recipientemail) VALUES ('$sender', '$projectdatef', '0', '0', '$project_id', '$receiverstring')";
-      $result = $db->query($sql);
+// only send if opted in for email
+if ($receiver) {
+  // https://www.functions-online.com/htmlentities.html
+  // htmlentities('', ENT_COMPAT, 'ISO-8859-1');
+  // html_entity_decode('', ENT_COMPAT, 'ISO-8859-1');
+  // Send Email to Sender
+  $sql = "SELECT email_string FROM Emails WHERE email_name = 'soundmarker-initial-email-to-sender'";
+  $emailstring = html_entity_decode($db->query($sql)->fetch()[0], ENT_COMPAT, 'ISO-8859-1');
+  $sql = "SELECT email_string_text FROM Emails WHERE email_name = 'soundmarker-initial-email-to-sender'";
+  $emailstring_text = html_entity_decode($db->query($sql)->fetch()[0], ENT_COMPAT, 'ISO-8859-1');
+  
+  // Replace strings
+  // Replace strings -> %projectdate%
+  $emailstring = str_replace("%projectdate%",$projectdate->format('F jS Y'),$emailstring);
+  $emailstring_text = str_replace("%projectdate%",$projectdate->format('F jS Y'),$emailstring_text);
+  // Replace strings -> %projectlink%
+  $sql = "SELECT hash FROM Project WHERE project_id = '$project_id'";
+  $projectlink = $config['SERVER_URL']."/project/" . $db->query($sql)->fetch()[0];
+  $emailstring = str_replace("%projectlink%",$projectlink,$emailstring);
+  $emailstring_text = str_replace("%projectlink%",$projectlink,$emailstring_text);
+  // Replace strings -> %recipientmail%
+  $emailstring = str_replace("%recipientmail%",implode("\n", $receiver),$emailstring);
+  $emailstring_text = str_replace("%recipientmail%",implode("\n", $receiver),$emailstring_text);
+  // Replace strings -> %trackamount%
+  $sql = "SELECT track_id FROM Track WHERE project_id = '$project_id'";
+  $tracks = $db->query($sql)->fetchAll(PDO::FETCH_ASSOC);
+  foreach ($tracks as &$track) {
+      $trackid = $track["track_id"];
+      $sqlversion = "SELECT version_id FROM Version WHERE track_id = '$trackid'";
+      $versions[] = $db->query($sqlversion)->fetchAll(PDO::FETCH_ASSOC);
+  }
+  foreach ($versions as &$versions2) {
+    foreach ($versions2 as &$version) {
+        $versionid = $version["version_id"];
+        $sqlfiles = "SELECT file_name FROM File WHERE version_id = '$versionid'";
+        $files[] = $db->query($sqlfiles)->fetchAll(PDO::FETCH_ASSOC)[0];
     }
+  }
+  if (count($files) == 1) {
+    $trackcount = count($files). " track";
+  } else {
+    $trackcount = count($files). " tracks";
+  }
+  $emailstring = str_replace("%trackamount%",$trackcount,$emailstring);
+  $emailstring_text = str_replace("%trackamount%",$trackcount,$emailstring_text);   
+  // Replace strings -> %tracktitle%
+  $tracktitle = "";
+  foreach ($files as &$file) {
+      $tracktitle .= $file["file_name"] . "\n";
+  }
+  $emailstring = str_replace("%tracktitle%",$tracktitle,$emailstring);
+  $emailstring_text = str_replace("%tracktitle%",$tracktitle,$emailstring_text);   
 
-    // return ok
-    Flight::json(array(
-       'project_hash' => $hash
-    ), 200);
+  $subject = 'Your tracks have been shared successfully via Soundmarker';
+  $char_set = 'UTF-8';
 
-} catch (PDOException $pdoException) {
-    Flight::error($pdoException);
-} catch (Exception $exception) {
-        Flight::error($exception);
-} finally {
-    $db = null;
+  try {
+      $result = Flight::get("SesClient")->sendEmail([
+          'Destination' => [
+              'ToAddresses' => [$sender],
+          ],
+          'ReplyToAddresses' => ["noreply@soundmarker.com"],
+          'Source' => "Soundmarker <noreply@soundmarker.com>",
+          'Message' => [
+            'Body' => [
+                'Html' => [
+                    'Charset' => $char_set,
+                    'Data' => $emailstring,
+                ],
+                'Text' => [
+                    'Charset' => $char_set,
+                    'Data' => $emailstring_text,
+                ],
+            ],
+            'Subject' => [
+                'Charset' => $char_set,
+                'Data' => $subject,
+            ],
+          ],
+      ]);
+      $messageId = $result['MessageId'];
+  } catch (AwsException $e) {
+      // output error message if fails
+      echo $e->getMessage();
+      echo("The email was not sent. Error message: ".$e->getAwsErrorMessage()."\n");
+  }
+
+  // Send Email to Recipient
+  $sql = "SELECT email_string FROM Emails WHERE email_name = 'soundmarker-initial-email-to-recipient'";
+  $emailstring = html_entity_decode($db->query($sql)->fetch()[0], ENT_COMPAT, 'ISO-8859-1');
+  $sql = "SELECT email_string_text FROM Emails WHERE email_name = 'soundmarker-initial-email-to-recipient'";
+  $emailstring_text = html_entity_decode($db->query($sql)->fetch()[0], ENT_COMPAT, 'ISO-8859-1');
+  
+  // Replace strings
+  // Replace strings -> %projectdate%
+  $emailstring = str_replace("%projectdate%",$projectdate->format('F jS Y'),$emailstring);
+  $emailstring_text = str_replace("%projectdate%",$projectdate->format('F jS Y'),$emailstring_text);
+  // Replace strings -> %projectlink%
+  $emailstring = str_replace("%projectlink%",$projectlink,$emailstring);
+  $emailstring_text = str_replace("%projectlink%",$projectlink,$emailstring_text);
+  // Replace strings -> %recipientmail%
+  $emailstring = str_replace("%recipientmail%",implode("\n", $receiver),$emailstring);
+  $emailstring_text = str_replace("%recipientmail%",implode("\n", $receiver),$emailstring_text);
+  // Replace strings -> %trackamount%
+  $emailstring = str_replace("%trackamount%",$trackcount,$emailstring);
+  $emailstring_text = str_replace("%trackamount%",$trackcount,$emailstring_text);   
+  // Replace strings -> %tracktitle%
+  $emailstring = str_replace("%tracktitle%",$tracktitle,$emailstring);
+  $emailstring_text = str_replace("%tracktitle%",$tracktitle,$emailstring_text);   
+  // Replace strings -> %projectnotes%
+  $emailstring = str_replace("%projectnotes%",$notes,$emailstring);
+  $emailstring_text = str_replace("%projectnotes%",$notes,$emailstring_text);   
+  // Replace strings -> %sendermail%
+  $emailstring = str_replace("%sendermail%",$sender,$emailstring);
+  $emailstring_text = str_replace("%sendermail%",$sender,$emailstring_text);   
+
+  $subject = $sender . ' has shared '. $trackcount . ' with you via Soundmarker';
+  $char_set = 'UTF-8';
+
+  try {
+      $result = Flight::get("SesClient")->sendEmail([
+          'Destination' => [
+              'ToAddresses' => $receiver,
+          ],
+          'ReplyToAddresses' => [$sender],
+          'Source' => "Soundmarker <noreply@soundmarker.com>",
+          'Message' => [
+            'Body' => [
+                'Html' => [
+                    'Charset' => $char_set,
+                    'Data' => $emailstring,
+                ],
+                'Text' => [
+                    'Charset' => $char_set,
+                    'Data' => $emailstring_text,
+                ],
+            ],
+            'Subject' => [
+                'Charset' => $char_set,
+                'Data' => $subject,
+            ],
+          ],
+      ]);
+      $messageId = $result['MessageId'];
+  } catch (AwsException $e) {
+      // output error message if fails
+      echo $e->getMessage();
+      echo("The email was not sent. Error message: ".$e->getAwsErrorMessage()."\n");
+  }
+
+  // Create notifications
+  // Notification -> Expired
+  $senddate = $projectdate->modify('-3 days');
+  $senddatef = $senddate->format('Y-m-d H:i:s');
+  $db = Flight::db();
+  $receiverstring = implode("\n", $receiver);
+  $sql = "INSERT INTO Notification (emailaddress, senddate, type, status, type_id, recipientemail) VALUES ('$sender', '$projectdatef', '0', '0', '$project_id', '$receiverstring')";
+  $result = $db->query($sql);
 }
+
+// return ok
+Flight::json(array(
+   'project_hash' => $hash
+), 200);
 });
 
 //////////////////////////////////////////////// Routes - /project/get/@project_hash POST /////////////////////////////////////////////
 Flight::route('GET /project/get/@project_hash', function($project_hash) {
 
+$config = Flight::get("config");
 $db = Flight::db();
 try {
     $sql = "SELECT project_id FROM Project WHERE hash = '$project_hash'";
@@ -342,7 +411,10 @@ try {
 ///////////////////////////////////////////////////// Routes - /project/password POST /////////////////////////////////////////////////
 Flight::route('POST /project/password', function() {
 
-$project_id = json_decode(Flight::request()->getBody())->project_id;
+// Check if user_projects
+$config = Flight::get("config");
+$getbody = json_decode(Flight::request()->getBody());
+$project_id = $getbody->project_id;
 
 $db = Flight::db();
 $sql = "SELECT password FROM Project WHERE project_id = '$project_id'";
@@ -358,7 +430,10 @@ Flight::json(array(
 //////////////////////////////////////////////////// Routes - /project/delete POST ////////////////////////////////////////////////////
 Flight::route('POST /project/delete', function() {
 
-$project_id = json_decode(Flight::request()->getBody())->project_id;
+// Check if user projects
+$config = Flight::get("config");
+$getbody = json_decode(Flight::request()->getBody());
+$project_id = $getbody->project_id;
 
 $db = Flight::db();
 $sql = "UPDATE Project SET active = '0' WHERE project_id = '$project_id'";
@@ -373,8 +448,10 @@ Flight::json(array(
 //////////////////////////////////////////////////// Routes - /project/url POST ///////////////////////////////////////////////////////
 Flight::route('POST /project/url', function() {
 
-require 'credentials.php';
-$project_id = json_decode(Flight::request()->getBody())->project_id;
+// Check if user projects
+$config = Flight::get("config");
+$getbody = json_decode(Flight::request()->getBody());
+$project_id = $getbody->project_id;
 
 $db = Flight::db();
 $sql = "SELECT hash FROM Project WHERE project_id = '$project_id'";
@@ -382,7 +459,7 @@ $result = $db->query($sql);
 
 // return ok
 Flight::json(array(
-   'project_url' => $serverurl.'/project/'. $result->fetch()[0],
+   'project_url' => $config['SERVER_URL'].'/project/'. $result->fetch()[0],
    'project_hash' => $result->fetch()[0]
 ), 200);
 });
@@ -407,10 +484,13 @@ TRACK
 /////////////////////////////////////////////////////// Routes - /track/new POST //////////////////////////////////////////////////////
 Flight::route('POST /track/new', function() {
 
-require 'credentials.php';
-$project_id = json_decode(Flight::request()->getBody())->project_id;
-$track_title = isset(json_decode(Flight::request()->getBody())->track_title) ? json_decode(Flight::request()->getBody())->track_title : "";
-$track_artist = isset(json_decode(Flight::request()->getBody())->track_artist) ? json_decode(Flight::request()->getBody())->track_artist : "";
+// check if user projects
+$config = Flight::get("config");
+$getbody = json_decode(Flight::request()->getBody());
+
+$project_id = $getbody->project_id;
+$track_title = isset($getbody->track_title) ? $getbody->track_title : "";
+$track_artist = isset($getbody->track_artist) ? $getbody->track_artist : "";
 
 $db = Flight::db();
 if ($project_id) {
@@ -419,6 +499,8 @@ if ($project_id) {
     $sql = "INSERT INTO Track (title, artist) VALUES ('$track_title', '$track_artist')";
 }
 $result = $db->query($sql);
+
+$_SESSION['user_tracks'][] = $db->lastInsertId();
 
 // return ok
 Flight::json(array(
@@ -429,17 +511,23 @@ Flight::json(array(
 //////////////////////////////////////////////////// Routes - /track/version POST /////////////////////////////////////////////////////
 Flight::route('POST /track/version', function() {
 
-$track_id = json_decode(Flight::request()->getBody())->track_id;
-$downloadable = isset(json_decode(Flight::request()->getBody())->downloadable) ? json_decode(Flight::request()->getBody())->downloadable : 0;
-$visibility = isset(json_decode(Flight::request()->getBody())->visibility) ? json_decode(Flight::request()->getBody())->visibility : 1;
-$version_notes = isset(json_decode(Flight::request()->getBody())->version_notes) ? json_decode(Flight::request()->getBody())->version_notes : "";
-$version_title = isset(json_decode(Flight::request()->getBody())->version_title) ? json_decode(Flight::request()->getBody())->version_title : "";
-$track_length = isset(json_decode(Flight::request()->getBody())->track_length) ? json_decode(Flight::request()->getBody())->track_length : 0;
-$wave_png = isset(json_decode(Flight::request()->getBody())->wave_png) ? json_decode(Flight::request()->getBody())->wave_png : "";
+// check if user tracks
+$config = Flight::get("config");
+$getbody = json_decode(Flight::request()->getBody());
+
+$track_id = $getbody->track_id;
+$downloadable = isset($getbody->downloadable) ? $getbody->downloadable : 0;
+$visibility = isset($getbody->visibility) ? $getbody->visibility : 1;
+$version_notes = isset($getbody->version_notes) ? $getbody->version_notes : "";
+$version_title = isset($getbody->version_title) ? $getbody->version_title : "";
+$track_length = isset($getbody->track_length) ? $getbody->track_length : 0;
+$wave_png = isset($getbody->wave_png) ? $getbody->wave_png : "";
 
 $db = Flight::db();
 $sql = "INSERT INTO Version (track_id, downloadable, visibility, notes, version_title, track_length, wave_png) VALUES ('$track_id', '$downloadable', '$visibility', '$version_notes', '$version_title', '$track_length', '$wave_png')";
 $result = $db->query($sql);
+
+$_SESSION['user_versions'][] = $db->lastInsertId();
 
 // return ok
 Flight::json(array(
@@ -450,7 +538,8 @@ Flight::json(array(
 ///////////////////////////////////////////////////////// Routes - /track GET /////////////////////////////////////////////////////////
 Flight::route('GET /track/@track_id', function($track_id) {
 
-require 'credentials.php';
+// Check if user is allowed to get that info
+$config = Flight::get("config");
 $db = Flight::db();
 $sql = "SELECT version_id, notes, downloadable, visibility, version_title, track_length, wave_png FROM Version WHERE track_id = '$track_id'";
 $result = $db->query($sql);
@@ -465,7 +554,8 @@ Flight::json(array(
 ///////////////////////////////////////////////////// Routes - /track/version GET /////////////////////////////////////////////////////
 Flight::route('GET /track/version/@version_id', function($version_id) {
 
-require 'credentials.php';
+// Check again if user is allowed to get that info
+$config = Flight::get("config");
 $db = Flight::db();
 $sql = "SELECT file_id, extension, metadata, aws_path, file_name, file_size, identifier, chunk_length FROM File WHERE version_id = '$version_id'";
 $result = $db->query($sql);
@@ -480,6 +570,8 @@ Flight::json(array(
 ///////////////////////////////////////////////// Routes - /track/version/comments GET ////////////////////////////////////////////////
 Flight::route('GET /track/version/comments/@version_id', function($version_id) {
 
+// Can user get this?
+$config = Flight::get("config");
 $db = Flight::db();
 $sql = "SELECT comment_id, notes, start_time, end_time, checked, parent_comment_id, name, include_end, include_start, comment_time FROM Comment WHERE version_id = '$version_id'";
 $result = $db->query($sql);
@@ -494,15 +586,19 @@ Flight::json(array(
 ///////////////////////////////////////////////// Routes - /track/version/comment POST ////////////////////////////////////////////////
 Flight::route('POST /track/version/comment', function() {
 
-$version_id = json_decode(Flight::request()->getBody())->version_id;
-$notes = isset(json_decode(Flight::request()->getBody())->notes) ? json_decode(Flight::request()->getBody())->notes : "";
-$name = isset(json_decode(Flight::request()->getBody())->name) ? json_decode(Flight::request()->getBody())->name : "";
-$start_time = isset(json_decode(Flight::request()->getBody())->start_time) ? json_decode(Flight::request()->getBody())->start_time : "";
-$end_time = isset(json_decode(Flight::request()->getBody())->end_time) ? json_decode(Flight::request()->getBody())->end_time : "";
-$parent_comment_id = isset(json_decode(Flight::request()->getBody())->parent_comment_id) ? json_decode(Flight::request()->getBody())->parent_comment_id : "";
-$include_start = isset(json_decode(Flight::request()->getBody())->include_start) ? json_decode(Flight::request()->getBody())->include_start : "";
-$include_end = isset(json_decode(Flight::request()->getBody())->include_end) ? json_decode(Flight::request()->getBody())->include_end : "";
-$comment_time = isset(json_decode(Flight::request()->getBody())->comment_time) ? json_decode(Flight::request()->getBody())->comment_time : "";
+// Can user post comments for this version?
+$config = Flight::get("config");
+$getbody = json_decode(Flight::request()->getBody());
+
+$version_id = $getbody->version_id;
+$notes = isset($getbody->notes) ? $getbody->notes : "";
+$name = isset($getbody->name) ? $getbody->name : "";
+$start_time = isset($getbody->start_time) ? $getbody->start_time : "";
+$end_time = isset($getbody->end_time) ? $getbody->end_time : "";
+$parent_comment_id = isset($getbody->parent_comment_id) ? $getbody->parent_comment_id : "";
+$include_start = isset($getbody->include_start) ? $getbody->include_start : "";
+$include_end = isset($getbody->include_end) ? $getbody->include_end : "";
+$comment_time = isset($getbody->comment_time) ? $getbody->comment_time : "";
 
 $db = Flight::db();
 $sql = "INSERT INTO Comment (version_id, notes, name, start_time, end_time, parent_comment_id, include_start, include_end, comment_time) VALUES ('$version_id', '$notes', '$name', '$start_time', '$end_time', '$parent_comment_id', '$include_start', '$include_end', '$comment_time')";
@@ -517,6 +613,8 @@ Flight::json(array(
 ////////////////////////////////////////////////// Routes - /track/file/download GET //////////////////////////////////////////////////
 Flight::route('GET /track/file/download/@file_id', function($file_id) {
 
+// Can user get access to this?
+$config = Flight::get("config");
 $db = Flight::db();
 $sql = "SELECT aws_path  FROM File WHERE file_id = '$file_id'";
 $result = $db->query($sql);
@@ -543,57 +641,54 @@ FILE
 /////////////////////////////////////////////////////// Routes - /file/new POST ///////////////////////////////////////////////////////
 Flight::route('POST /file/new', function() {
 
-require 'credentials.php';
-$version_id = json_decode(Flight::request()->getBody())->version_id;
-$identifier = isset(json_decode(Flight::request()->getBody())->identifier) ? json_decode(Flight::request()->getBody())->identifier : 0;
-$chunk_length = isset(json_decode(Flight::request()->getBody())->chunk_length) ? json_decode(Flight::request()->getBody())->chunk_length : 0;
-$file_size = isset(json_decode(Flight::request()->getBody())->file_size) ? json_decode(Flight::request()->getBody())->file_size : 0;
-$file_name = isset(json_decode(Flight::request()->getBody())->file_name) ? json_decode(Flight::request()->getBody())->file_name : "";
-$metadata = isset(json_decode(Flight::request()->getBody())->metadata) ? json_decode(Flight::request()->getBody())->metadata : "";
-$extension = isset(json_decode(Flight::request()->getBody())->extension) ? json_decode(Flight::request()->getBody())->extension : "";
-$aws_path = $awss3path.$version_id . "/" . $file_name;
+$config = Flight::get("config");
+$getbody = json_decode(Flight::request()->getBody());
+
+$version_id = $getbody->version_id;
+$identifier = isset($getbody->identifier) ? $getbody->identifier : 0;
+$chunk_length = isset($getbody->chunk_length) ? $getbody->chunk_length : 0;
+$file_size = isset($getbody->file_size) ? $getbody->file_size : 0;
+$file_name = isset($getbody->file_name) ? $getbody->file_name : "";
+$metadata = isset($getbody->metadata) ? $getbody->metadata : "";
+$extension = isset($getbody->extension) ? $getbody->extension : "";
+$aws_path = $config['AWS_S3_PATH'].$version_id . "/" . $file_name;
 
 $db = Flight::db();
 $sql = "INSERT INTO File (version_id, file_name, file_size, metadata, extension, chunk_length, identifier, aws_path) VALUES ('$version_id', '$file_name', '$file_size', '$metadata', '$extension', '$chunk_length', '$identifier', '$aws_path')";
 $result = $db->query($sql);
-$file_id = $db->lastInsertId();
+
+$_SESSION['user_files'][] = $db->lastInsertId();
 
 // return ok
 Flight::json(array(
-   'file_id' => $file_id
+   'file_id' => $db->lastInsertId()
 ), 200);
 });
 
 ////////////////////////////////////////////////// Routes - /file/chunk/$file_id POST /////////////////////////////////////////////////
 Flight::route('POST /file/chunk/@file_id/@idno/@ext', function($file_id, $idno, $ext) {
 
-require 'credentials.php';
-try {
-  $db = Flight::db();
-  $sql = "SELECT version_id, extension, metadata, aws_path, file_name, file_size, identifier, chunk_length FROM File WHERE file_id = '$file_id'";
-  $result = $db->query($sql);
-  $files = $result->fetchAll();
+// Can user upload?
+$config = Flight::get("config");
+$db = Flight::db();
+$sql = "SELECT version_id, extension, metadata, aws_path, file_name, file_size, identifier, chunk_length FROM File WHERE file_id = '$file_id'";
+$result = $db->query($sql);
+$files = $result->fetchAll();
 
-  // get the variables
-  $s3 = Flight::get("s3");
+// get the variables
+$s3 = Flight::get("s3");
 
-    // Upload data.
-    $result = $s3->putObject([
-        'Bucket' => $awss3bucket,
-        'Key'    => $files[0]["version_id"] . "/" . $files[0]["file_name"] . $idno .'.' . $files[0]["extension"],
-        'Body'   => Flight::request()->getBody(), // figuring out right way to get the file from the JSON
-        'ACL'    => 'public-read'
-    ]);
-    // return ok
-    Flight::json(array(
-       'ok' => $result['ObjectURL'] . PHP_EOL
-    ), 200);
-} catch (S3Exception $e) {
-    Flight::json(array(
-       'notok' => $e->getMessage() . PHP_EOL
-    ), 200);
-}
-
+  // Upload data.
+  $result = $s3->putObject([
+      'Bucket' => $config['AWS_S3_BUCKET'],
+      'Key'    => $files[0]["version_id"] . "/" . $files[0]["file_name"] . $idno .'.' . $files[0]["extension"],
+      'Body'   => Flight::request()->getBody(), // figuring out right way to get the file from the JSON
+      'ACL'    => 'public-read'
+  ]);
+  // return ok
+  Flight::json(array(
+     'ok' => $result['ObjectURL'] . PHP_EOL
+  ), 200);
 });
 
 
@@ -611,6 +706,7 @@ ADS
 /////////////////////////////////////////////////////////// Routes - /ad GET //////////////////////////////////////////////////////////
 Flight::route('GET /ad', function() {
 
+$config = Flight::get("config");
 // TODO: if nothing returns, show default one, no error
 $db = Flight::db();
 $sql = "SELECT html, ad_id, impressions FROM Ad WHERE priority = '1' AND impressions <= limits";
@@ -635,6 +731,7 @@ $result = $db->query($sql);
 /////////////////////////////////////////////////////// Routes - /ad/@ad_id GET ///////////////////////////////////////////////////////
 Flight::route('GET /ad/@ad_id', function($ad_id) {
 
+$config = Flight::get("config");
 $db = Flight::db();
 $sql = "SELECT html FROM Ad WHERE ad_id = '$ad_id'";
 $result = $db->query($sql);
@@ -646,9 +743,12 @@ echo stripslashes($html);
 ////////////////////////////////////////////////////////// Routes - /ad POST //////////////////////////////////////////////////////////
 Flight::route('POST /ad', function() {
 
-$ad_id = json_decode(Flight::request()->getBody())->ad_id;
-$exposure_time = json_decode(Flight::request()->getBody())->exposure_time;
-$clicks = json_decode(Flight::request()->getBody())->clicks;
+$config = Flight::get("config");
+$getbody = json_decode(Flight::request()->getBody());
+
+$ad_id = $getbody->ad_id;
+$exposure_time = $getbody->exposure_time;
+$clicks = $getbody->clicks;
 
 $db = Flight::db();
 $sql = "SELECT clicks, exposure_time FROM Ad WHERE ad_id = '$ad_id'";

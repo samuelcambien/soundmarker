@@ -15,7 +15,7 @@ export class RestUrl {
 
   private static MOCK: string = "http://localhost:3000";
 
-  private static BACKEND: string = "http://localhost";
+  private static BACKEND: string = "http://localhost/soundmarker-sass/server";
 
   private static DATA: string = RestUrl.BACKEND;
 
