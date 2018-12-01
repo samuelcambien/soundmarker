@@ -90,10 +90,10 @@ Flight::route('/', function(){
 $config = Flight::get("config");
 $now = new DateTime();
 require 'helpers/oauth.php';
-$access_token = json_decode($_SESSION["USER"])->access_token;
 
 if ($_SESSION["status"] != "free") {
   if ($_SESSION['ENDTIME'] < $now->getTimestamp() OR $_SESSION["status"] == "") {
+    $access_token = json_decode($_SESSION["USER"])->access_token;
     $response = getSubscriptions($access_token, $config, $now);
     if ($response->error) { 
       if (isset(json_decode($_SESSION["USER"])->refresh_token)) {
@@ -134,8 +134,7 @@ if ($_SESSION["status"] != "free") {
       }
     } 
   }
-} else {
-}
+} 
 print_r($_SESSION["status"]);
 // $_SESSION['PROJECT'][] = "300";
 // print_r($_SESSION['PROJECT']);
