@@ -30,7 +30,7 @@ $projectstobedeleted = $db->query($sql)->fetchAll(PDO::FETCH_ASSOC);
 foreach ($projectstobedeleted as &$projecttobedeleted) {
   // get all versions from project
   $deletethisproject = $projecttobedeleted["project_id"];
-  $sqlversion = "SELECT version_id FROM Project WHERE project_id = '$deletethisproject'";
+  $sqlversion = "SELECT version_id FROM Version WHERE project_id = '$deletethisproject'";
   $versionstobedeleted = $db->query($sqlversion)->fetchAll(PDO::FETCH_ASSOC);
   foreach ($versionstobedeleted as &$versiontobedeleted) {
       $iterator = $s3->getIterator('ListObjects', array(
