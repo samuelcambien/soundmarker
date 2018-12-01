@@ -137,8 +137,6 @@ if (isset($_SESSION["status"]) && isset($_SESSION['ENDTIME'])) {
     }
   } 
 }
-print_r($_SESSION);
-echo session_id();
 // $_SESSION['PROJECT'][] = "300";
 // print_r($_SESSION['PROJECT']);
 
