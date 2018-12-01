@@ -91,50 +91,52 @@ $config = Flight::get("config");
 $now = new DateTime();
 require 'helpers/oauth.php';
 
-if ($_SESSION["status"] != "free") {
-  if ($_SESSION['ENDTIME'] < $now->getTimestamp() OR $_SESSION["status"] == "") {
-    $access_token = json_decode($_SESSION["USER"])->access_token;
-    $response = getSubscriptions($access_token, $config, $now);
-    if ($response->error) { 
-      if (isset(json_decode($_SESSION["USER"])->refresh_token)) {
-      // get refresh token
-      $curl_post_data = array(
-         'grant_type'    => 'refresh_token',
-         'refresh_token' => json_decode($_SESSION["USER"])->refresh_token,
-         'client_id'     => $config['OAUTH_CLIENT_ID'], // Only needed if server is running CGI
-         'client_secret' => $config['OAUTH_CLIENT_SECRET'] // Only need if server is running CGI
-      );
+if (isset($_SESSION["status"]) && isset($_SESSION['ENDTIME'])) {
+  if ($_SESSION["status"] != "free") {
+    if ($_SESSION['ENDTIME'] < $now->getTimestamp() OR $_SESSION["status"] == "") {
+      $access_token = json_decode($_SESSION["USER"])->access_token;
+      $response = getSubscriptions($access_token, $config, $now);
+      if ($response->error) { 
+        if (isset(json_decode($_SESSION["USER"])->refresh_token)) {
+        // get refresh token
+        $curl_post_data = array(
+           'grant_type'    => 'refresh_token',
+           'refresh_token' => json_decode($_SESSION["USER"])->refresh_token,
+           'client_id'     => $config['OAUTH_CLIENT_ID'], // Only needed if server is running CGI
+           'client_secret' => $config['OAUTH_CLIENT_SECRET'] // Only need if server is running CGI
+        );
 
-      $curl = curl_init( $config['oauth_server_location'] . '/oauth/token/' );
+        $curl = curl_init( $config['oauth_server_location'] . '/oauth/token/' );
 
-      // Uncomment if you want to use CLIENTID AND SECRET IN THE HEADER
-      //curl_setopt($curl, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
-      //curl_setopt($curl, CURLOPT_USERPWD, $client_id.':'.$client_secret); // Your credentials goes here
-      curl_setopt( $curl, CURLOPT_RETURNTRANSFER, true );
-      curl_setopt( $curl, CURLOPT_POST, true );
-      curl_setopt( $curl, CURLOPT_POSTFIELDS, $curl_post_data );
-      curl_setopt( $curl, CURLOPT_SSL_VERIFYPEER, false );
-      curl_setopt( $curl, CURLOPT_VERBOSE, true);
-      curl_setopt( $curl, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US; rv:1.9.1.2) Gecko/20090729 Firefox/3.5.2 GTB5' );
-      curl_setopt( $curl, CURLOPT_REFERER, $config['OAUTH_SERVER_LOCATION'].'/1' );
+        // Uncomment if you want to use CLIENTID AND SECRET IN THE HEADER
+        //curl_setopt($curl, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
+        //curl_setopt($curl, CURLOPT_USERPWD, $client_id.':'.$client_secret); // Your credentials goes here
+        curl_setopt( $curl, CURLOPT_RETURNTRANSFER, true );
+        curl_setopt( $curl, CURLOPT_POST, true );
+        curl_setopt( $curl, CURLOPT_POSTFIELDS, $curl_post_data );
+        curl_setopt( $curl, CURLOPT_SSL_VERIFYPEER, false );
+        curl_setopt( $curl, CURLOPT_VERBOSE, true);
+        curl_setopt( $curl, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US; rv:1.9.1.2) Gecko/20090729 Firefox/3.5.2 GTB5' );
+        curl_setopt( $curl, CURLOPT_REFERER, $config['OAUTH_SERVER_LOCATION'].'/1' );
 
-      $curl_response = curl_exec( $curl );
-      curl_close( $curl );
+        $curl_response = curl_exec( $curl );
+        curl_close( $curl );
 
-        if (isset(json_decode($curl_response)->access_token)) {
-          $_SESSION['USER'] = $curl_response;
-          $_SESSION['ENDTIME'] = $now->getTimestamp() + 60*60*24;
-          $response = getSubscriptions($access_token);
-          header("Refresh:0");
+          if (isset(json_decode($curl_response)->access_token)) {
+            $_SESSION['USER'] = $curl_response;
+            $_SESSION['ENDTIME'] = $now->getTimestamp() + 60*60*24;
+            $response = getSubscriptions($access_token);
+            header("Refresh:0");
+          } else {
+            $_SESSION["status"] = "free";
+          }
         } else {
           $_SESSION["status"] = "free";
         }
-      } else {
-        $_SESSION["status"] = "free";
-      }
-    } 
-  }
-} 
+      } 
+    }
+  } 
+}
 print_r($_SESSION);
 // $_SESSION['PROJECT'][] = "300";
 // print_r($_SESSION['PROJECT']);
