@@ -39,17 +39,17 @@ Flight::set("SesClient", $SesClient);
 
 if(!isset($_SESSION)) 
 { 
-    session_start(); 
+  session_start(); 
 } 
 $access_token = json_decode($_SESSION["USER"])->access_token;
 
 // Error handling
-// Flight::map('error', function(Exception $ex){
-//     // Handle error
-//     Flight::json(array(
-//        'error' => $ex->getTraceAsString()
-//     ), 400);
-// });
+Flight::map('error', function(Exception $ex){
+    // Handle error
+    Flight::json(array(
+       'error' => $ex->getTraceAsString()
+    ), 400);
+});
 
 
 
@@ -90,7 +90,6 @@ Flight::route('/', function(){
 $config = Flight::get("config");
 $now = new DateTime();
 require 'helpers/oauth.php';
-session_start();
 $access_token = json_decode($_SESSION["USER"])->access_token;
 
 if ($_SESSION["status"] != "free") {
