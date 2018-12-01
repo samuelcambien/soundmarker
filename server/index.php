@@ -41,12 +41,12 @@ session_start();
 $access_token = json_decode($_SESSION["USER"])->access_token;
 
 // Error handling
-Flight::map('error', function(Exception $ex){
-    // Handle error
-    Flight::json(array(
-       'error' => $ex->getTraceAsString()
-    ), 200);
-});
+// Flight::map('error', function(Exception $ex){
+//     // Handle error
+//     Flight::json(array(
+//        'error' => $ex->getTraceAsString()
+//     ), 400);
+// });
 
 
 
