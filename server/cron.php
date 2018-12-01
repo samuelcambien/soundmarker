@@ -1,6 +1,7 @@
 <?php
 require 'flight/Flight.php';
 require 'vendor/autoload.php';
+require 'credentials.php';
 
 ///////////////////////////////////////////////////////////// Setup SES client ////////////////////////////////////////////////////////
 use Aws\Ses\SesClient;
@@ -12,8 +13,42 @@ $SesClient = new SesClient([
     'region'  => 'eu-west-1',
 ]);
 
-
 $db = new PDO('mysql:host='.$_SERVER["RDS_HOSTNAME"].';dbname='.$_SERVER["RDS_DB_NAME"], $_SERVER["RDS_USERNAME"], $_SERVER["RDS_PASSWORD"]);
+
+use Aws\S3\S3Client;
+use Aws\S3\Exception\S3Exception;
+
+$s3 = new Aws\S3\S3Client([
+    'profile'     => 's3',
+    'version'     => 'latest',
+    'region'      => 'eu-west-1',
+]);
+
+// Delete files from AWS S3
+$sql = "SELECT project_id FROM Project WHERE active = '1' AND user_id IS NULL AND expiration_date < CURDATE()";
+$projectstobedeleted = $db->query($sql)->fetchAll(PDO::FETCH_ASSOC);
+foreach ($projectstobedeleted as &$projecttobedeleted) {
+  // get all versions from project
+  $deletethisproject = $projecttobedeleted["project_id"];
+  $sqlversion = "SELECT version_id FROM Project WHERE project_id = '$deletethisproject'";
+  $versionstobedeleted = $db->query($sqlversion)->fetchAll(PDO::FETCH_ASSOC);
+  foreach ($versionstobedeleted as &$versiontobedeleted) {
+      $iterator = $s3->getIterator('ListObjects', array(
+          'Bucket' => $config['AWS_S3_BUCKET'],
+          'Prefix' => $versiontobedeleted["version_id"].'/' 
+      ));
+
+      foreach($iterator as $i=>$val)
+      {
+        $result = $s3->deleteObject([
+            'Bucket' => $config['AWS_S3_BUCKET'],
+            'Key'    => $val["Key"]
+        ]);
+      }  
+  }
+  $sqlsetproject = "UPDATE Project SET active = '0' WHERE project_id = '$deletethisproject'";
+  $result = $db->query($sqlsetproject);
+}
 
 // Get expired notification email
 $currentdate = new \DateTime();
