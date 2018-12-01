@@ -135,7 +135,7 @@ if ($_SESSION["status"] != "free") {
     } 
   }
 } 
-print_r($_SESSION["status"]);
+print_r($_SESSION);
 // $_SESSION['PROJECT'][] = "300";
 // print_r($_SESSION['PROJECT']);
 
