@@ -37,7 +37,10 @@ $SesClient = new SesClient([
 
 Flight::set("SesClient", $SesClient);
 
-session_start();
+if(!isset($_SESSION)) 
+{ 
+    session_start(); 
+} 
 $access_token = json_decode($_SESSION["USER"])->access_token;
 
 // Error handling
