@@ -9,6 +9,7 @@ $config['RDS_PASSWORD'] = (($_SERVER["RDS_PASSWORD"]) != "") ? $_SERVER["RDS_PAS
 $config['SERVER_URL'] = (($_SERVER["SERVER_URL"]) != "") ? $_SERVER["SERVER_URL"] : 'http://localhost:4200';
 $config['PHPSERVER_URL'] = (($_SERVER["PHPSERVER_URL"]) != "") ? $_SERVER["PHPSERVER_URL"] : 'http://localhost/soundmarker-sass/server/';
 $config['AWS_S3_PATH'] = (($_SERVER["AWSS3_PATH"]) != "") ? $_SERVER["AWSS3_PATH"] : 'https://s3-eu-west-1.amazonaws.com/soundmarkersass-local-robin/';
+$config['AWS_S3_REGION'] = (($_SERVER["AWS_S3_REGION"]) != "") ? $_SERVER["AWS_S3_REGION"] : 'eu-west-1';
 $config['AWS_S3_BUCKET'] = (($_SERVER["AWSS3_BUCKET"]) != "") ? $_SERVER["AWSS3_BUCKET"] : 'soundmarkersass-local-robin';
 $config['OAUTH_CLIENT_ID'] = (($_SERVER["OAUTH_CLIENT_ID"]) != "") ? $_SERVER["OAUTH_CLIENT_ID"] : 'O7mazXp53IMKB7kF7meEH4AiuPJDTJwIuZEBw3dT';
 $config['OAUTH_CLIENT_SECRET'] = (($_SERVER["OAUTH_CLIENT_SECRET"]) != "") ? $_SERVER["OAUTH_CLIENT_SECRET"] : '40MdwYAlVET0OKjIUx62skLbPgFhCkxkkVAz8gDD';
