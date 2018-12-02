@@ -387,27 +387,38 @@ Flight::route('GET /project/get/@project_hash', function($project_hash) {
 
 $config = Flight::get("config");
 $db = Flight::db();
-try {
-    $sql = "SELECT project_id FROM Project WHERE hash = '$project_hash'";
-    $result = $db->query($sql);
-    $project_id = $result->fetch()[0];
+$sql = "SELECT project_id, active, expiration_date, user_id FROM Project WHERE hash = '$project_hash'";
+$response = $db->query($sql)->fetchAll(PDO::FETCH_ASSOC);
 
-    $sql = "SELECT track_id, title FROM Track WHERE project_id = '$project_id'";
-    $result = $db->query($sql);
-    $tracks = $result->fetchAll(PDO::FETCH_ASSOC);
+$project_id = $response[0]["project_id"];
+$active = $response[0]["active"];
+$expiration_date = $response[0]["expiration_date"];
+$user_id = $response[0]["user_id"];
 
-    // return ok
-    Flight::json(array(
-       'project_id' => $project_id, 'tracks' => $tracks
-    ), 200);
+$lastmonth = new \DateTime('-1 month');
+$lastmonthf = $lastmonth->format('Y-m-d H:i:s');
 
-} catch (PDOException $pdoException) {
-    Flight::error($pdoException);
-} catch (Exception $exception) {
-        Flight::error($exception);
-} finally {
-    $db = null;
+if ($user_id) {
+  $status = "pro";
+} elseif ($active == 0 && $expiration_date < $lastmonthf) {
+  $status = "expired";
+} elseif ($active == 0) {
+  $status = "commentsonly";
+} else {
+  $status = "active";
 }
+
+$sql = "SELECT track_id, title FROM Track WHERE project_id = '$project_id'";
+$result = $db->query($sql);
+$tracks = $result->fetchAll(PDO::FETCH_ASSOC);
+if ($status == "expired") {
+  $tracks = "";
+}
+
+// return ok
+Flight::json(array(
+   'project_id' => $project_id, 'status' => $status, 'tracks' => $tracks
+), 200);
 });
 
 ///////////////////////////////////////////////////// Routes - /project/password POST /////////////////////////////////////////////////
