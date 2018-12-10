@@ -143,7 +143,7 @@ export class Mp3Encoder {
 
   static getExtension(name: string): string {
 
-    return name.split(/(.*)\.(.*)/)[2];
+    return name.split(/(.*)\.(.*)/)[2].toLowerCase();
   }
 
   public static convertWav16bit(buffer: ArrayBuffer, name: string): Promise<any> {
@@ -169,6 +169,10 @@ export class Mp3Encoder {
           new File([require('audiobuffer-to-wav')(buf)], name)
         )
       ).then(buffer => Mp3Encoder.convertWavOther(buffer, name));
+  }
+
+  public static convertMp3(buffer: ArrayBuffer, name: string): Promise<any> {
+    return new Promise(resolve => resolve(new File([buffer], name)));
   }
 
   public static decode(buffer: ArrayBuffer): Promise<any> {

@@ -19,12 +19,20 @@ export class RestCall {
     });
   }
 
-  public static createNewVersion(trackId: string, versionNotes: string, length: number, waveform: string): Promise<any> {
+  public static createNewVersion(trackId: string, versionNotes: string, length: number, waveform: string, downloadable): Promise<any> {
     return Utils.sendPostRequest(RestUrl.VERSION_NEW, {
       track_id: trackId,
       track_length: length,
       notes: versionNotes,
-      wave_png: waveform
+      wave_png: waveform,
+      downloadable: downloadable
+    });
+  }
+
+  public static createWaveform(trackId: string, waveform: string): Promise<any> {
+    return Utils.sendPostMockRequest("http://localhost:3000/waveform", {
+      version_id: trackId,
+      peaks: waveform
     });
   }
 
@@ -81,6 +89,10 @@ export class RestCall {
 
   public static getVersion(versionId: string): Promise<any> {
     return Utils.sendGetRequest(RestUrl.VERSION, [versionId]);
+  }
+
+  public static getWaveform(versionId: string): Promise<any> {
+    return Utils.sendGetRequest("http://localhost:3000/waveform", [versionId]);
   }
 
   public static getComments(versionId: string): Promise<any> {

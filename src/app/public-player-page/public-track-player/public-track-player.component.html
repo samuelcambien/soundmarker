@@ -83,7 +83,7 @@
 
       </div>
 
-      <div *ngIf="version.downloadable" class="top-icon cloud-icon" id="cloud-icon" (click)="download()">
+      <div *ngIf="version?.downloadable" class="top-icon cloud-icon" id="cloud-icon" (click)="download()">
 
 
         <svg width="22px" height="22px" viewBox="0 0 22 22" version="1.1" xmlns="http://www.w3.org/2000/svg"
@@ -151,7 +151,7 @@
       <div class="col">
 
 
-        <div *ngIf="version.downloadable" class="top-icon cloud-icon" id="cloud-icon" (click)="download()">
+        <div *ngIf="version?.downloadable" class="top-icon cloud-icon" id="cloud-icon" (click)="download()">
 
 
           <svg width="22px" height="22px" viewBox="0 0 22 22" version="1.1" xmlns="http://www.w3.org/2000/svg"
@@ -335,12 +335,12 @@
 
     <div class="title unselectable">
       <h4>{{track?.title}}</h4>
-      <p>{{decentPlayer?.getCurrentTime() | timeFormat}} / {{version?.track_length | timeFormat}}</p>
+      <p>{{getCurrentTime() | timeFormat}} / {{version?.track_length | timeFormat}}</p>
     </div>
 
     <div class="player-toolbar hide-phone  ml-auto">
 
-      <div *ngIf="version.downloadable" class="top-icon cloud-icon margin-tooltip " id="cloud-icon" (click)="download()" placement="top"
+      <div *ngIf="version?.downloadable" class="top-icon cloud-icon margin-tooltip " id="cloud-icon" (click)="download()" placement="top"
            ngbTooltip="Download">
 
 

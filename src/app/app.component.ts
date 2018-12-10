@@ -115,4 +115,19 @@ export class Utils {
       trackRequest.send(JSON.stringify(data));
     });
   }
+
+  public static sendPostMockRequest(url, data, params?): Promise<any> {
+
+    return new Promise((resolve, reject) => {
+      let trackRequest = new XMLHttpRequest();
+      if (params) for (let entry of params) {
+        url += "/" + entry;
+      }
+      trackRequest.open("POST", url, true);
+      trackRequest.setRequestHeader("Content-Type", "application/json");
+      trackRequest.onload = () => resolve(JSON.parse(trackRequest.responseText));
+      trackRequest.onerror = () => reject(trackRequest.statusText);
+      trackRequest.send(JSON.stringify(data));
+    });
+  }
 }

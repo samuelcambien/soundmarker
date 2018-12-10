@@ -22,6 +22,7 @@ export class PublicTrackPlayerComponent implements OnInit {
   @Output() playing = new EventEmitter();
 
   @ViewChild('waveform') waveform: ElementRef;
+  @ViewChild('progress') progress: ElementRef;
 
   @ViewChild('startTime') startTime: ElementRef;
   @ViewChild('endTime') endTime: ElementRef;
@@ -51,8 +52,9 @@ export class PublicTrackPlayerComponent implements OnInit {
   phoneSearch: boolean;
   phoneOrder: boolean;
 
-  constructor(
-  ) {
+  peaks;
+
+  constructor() {
   }
 
   ngOnInit() {
@@ -60,7 +62,13 @@ export class PublicTrackPlayerComponent implements OnInit {
       this.version = versions[0];
       this.comment.start_time = 0;
       this.comment.end_time = versions[0].track_length;
-      this.loadWaveForm(this.waveform);
+      this.track.versions
+        .then((versions: Version[]) => {
+          RestCall.getWaveform(versions[0].version_id)
+            .then(response => this.peaks = response[0]["peaks"]);
+          this.loadWaveForm(this.waveform, this.peaks);
+          // this.loadWaveForm(this.progress, this.peaks);
+        })
     });
   }
 
@@ -131,6 +139,7 @@ export class PublicTrackPlayerComponent implements OnInit {
 
   isPlaying() {
     return this.decentPlayer && this.decentPlayer.isPlaying();
+    // return this.player && this.player.isPlaying();
   }
 
   getMatchingCommentsSorted() {
@@ -151,35 +160,40 @@ export class PublicTrackPlayerComponent implements OnInit {
     );
   }
 
-  public loadWaveForm(waveform: ElementRef) {
+  public loadWaveForm(waveform: ElementRef, wavePng) {
 
     this.version.files.then((files) => {
       this.decentPlayer = wave.create(
         {
-          container: "#waveform_" + this.track.track_id
+          // container: this.waveform.nativeElement,
+          container: "#waveform_" + this.track.track_id,
+          peaks: this.peaks,
+          duration: this.version.track_length,
+          aws_path: files.filter(file => file.extension == "mp3")[0].aws_path
         }
       );
-      this.decentPlayer.load(files.filter(file => file.extension == "mp3")[0].aws_path + "0.mp3");
+      this.decentPlayer.drawBuffer();
+      this.decentPlayer.backend.load();
+      //   files.filter(file => file.extension == "mp3")[0].aws_path + "0.mp3",
+      //   this.peaks);
 
       // this.renderer.listen(this.waveform.nativeElement, 'click', (e) => {
       //   this.decentPlayer.seekTo(this.getSeekTime(e));
       // });
     });
 
-    // var context = this.waveform.nativeElement.getContext('2d');
+    // var context = waveform.nativeElement.getContext('2d');
     // var image = new Image();
     // image.onload = () => {
-    //   context.drawImage(image, 0, 0, this.waveform.nativeElement.width, this.waveform.nativeElement.height);
+    //   context.drawImage(image, 0, 0, waveform.nativeElement.width, waveform.nativeElement.height);
     // };
-    // this.track.versions
-    //   .then((versions: Version[]) => {
-    //     image.src = versions[0].wave_png;
-    //
-    //   });
+    // image.src = wavePng;
   }
 
   getCurrentTime() {
+    // return 0;
     return this.decentPlayer != null ? this.decentPlayer.getCurrentTime() : 0;
+    // return this.player != null ? this.player.getCurrentPosition() : 0;
   }
 
   private getPosition(element, commentTime) {
