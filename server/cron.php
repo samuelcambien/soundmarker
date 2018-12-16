@@ -149,4 +149,61 @@ foreach ($notifications as &$notification) {
         $result = $db->query($sql);
     }
 }
+
+// Send daily updates
+// Go through Daily Updates and get project_ids, then check first if they're not expired
+$sql = "SELECT project_id, emailaddress, last_comment_id FROM DailyUpdates";
+$updates = $db->query($sql)->fetchAll(PDO::FETCH_ASSOC);
+$count = 0;
+foreach ($updates as &$update) {
+  $project_id = $update["project_id"];
+  $last_comment_ids = $update["last_comment_id"];
+
+  // Check if expired
+  $lastmonth = new \DateTime('-1 month');
+  $lastmonthf = $lastmonth->format('Y-m-d H:i:s');
+  $project_ids = "SELECT project_id, expiration_date FROM Project WHERE project_id = '$project_id'";
+  $project_idsreturn = $db->query($project_ids)->fetchAll(PDO::FETCH_ASSOC)[0];
+  $project_id_notexpired = $project_idsreturn["project_id"];
+  $expiration_date = $project_idsreturn["expiration_date"];
+
+  if (($project_id_notexpired == $project_id) && ($expiration_date >= $lastmonthf)) {
+  $sql = "SELECT track_id FROM Track WHERE project_id = '$project_id'";
+  $tracks = $db->query($sql)->fetchAll(PDO::FETCH_ASSOC);
+  foreach ($tracks as &$track) {
+      $trackid = $track["track_id"];
+      $sqlversion = "SELECT version_id FROM Version WHERE track_id = '$trackid'";
+      $versions[] = $db->query($sqlversion)->fetchAll(PDO::FETCH_ASSOC);
+  }
+  foreach ($versions as &$versions2) {
+    foreach ($versions2 as &$version) {
+        $versionid = $version["version_id"];
+        $version_ids = "SELECT comment_id FROM Comment WHERE version_id = '$versionid' ORDER BY comment_id DESC";
+        $comment_id = $db->query($version_ids)->fetchAll(PDO::FETCH_ASSOC)[0]["comment_id"];
+
+          // compare and check if there are new comments
+          $last_comment_idsdec = json_decode($last_comment_ids, true);
+          if ((count($last_comment_idsdec) == 0) && $comment_id > 0) { 
+            $count++;
+          }
+          foreach ($last_comment_idsdec as &$last_comment_id) {
+            if ((intval($comment_id) > intval($last_comment_id[$versionid]))) {
+              if (intval($last_comment_id[$versionid]) > 0) {
+              $count++;
+              break 1;
+              }
+            }
+          }
+        $comments[] = [$versionid => $comment_id];
+    }
+  }
+
+  $commentsjson = json_encode($comments);
+  // Set daily updates to trackcount to check.
+  $sql = "UPDATE DailyUpdates SET last_comment_id = '$commentsjson' WHERE project_id = '$project_id'";
+  $result = $db->query($sql);
+  $sql = "UPDATE DailyUpdates SET count = '$count' WHERE project_id = '$project_id'";
+  $result = $db->query($sql);
+  }
+}
 ?>
