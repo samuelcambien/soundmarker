@@ -158,6 +158,7 @@ $count = 0;
 foreach ($updates as &$update) {
   $project_id = $update["project_id"];
   $last_comment_ids = $update["last_comment_id"];
+  $emailaddress = $update["emailaddress"];
 
   // Check if expired
   $lastmonth = new \DateTime('-1 month');
@@ -202,8 +203,95 @@ foreach ($updates as &$update) {
   // Set daily updates to trackcount to check.
   $sql = "UPDATE DailyUpdates SET last_comment_id = '$commentsjson' WHERE project_id = '$project_id'";
   $result = $db->query($sql);
-  $sql = "UPDATE DailyUpdates SET count = '$count' WHERE project_id = '$project_id'";
-  $result = $db->query($sql);
+
+  // If we do have new comments
+  if ($count > 0) {
+      $sql = "SELECT email_string FROM Emails WHERE email_name = 'soundmarker-daily-updates'";
+      $emailstring = html_entity_decode($db->query($sql)->fetch()[0], ENT_COMPAT, 'ISO-8859-1');
+      $sql = "SELECT email_string_text FROM Emails WHERE email_name = 'soundmarker-daily-updates'";
+      $emailstring_text = html_entity_decode($db->query($sql)->fetch()[0], ENT_COMPAT, 'ISO-8859-1');
+
+      // Replace strings
+      $emailstring = str_replace("%commentamount%",$count,$emailstring);
+      $emailstring_text = str_replace("%commentamount%",$count,$emailstring_text);   
+
+      $emailstring = str_replace("%projectdate%",$expiration_date,$emailstring);
+      $emailstring_text = str_replace("%projectdate%",$expiration_date,$emailstring_text);   
+
+      // Replace strings -> %projectlink%
+      $sql = "SELECT hash FROM Project WHERE project_id = '$project_id'";
+      $projectlink = "http://soundmarker-env.mc3wuhhgpz.eu-central-1.elasticbeanstalk.com/project/" . $db->query($sql)->fetch()[0];
+      $emailstring = str_replace("%projectlink%",$projectlink,$emailstring);
+      $emailstring_text = str_replace("%projectlink%",$projectlink,$emailstring_text);
+
+      // Replace strings -> %trackamount%
+      $sql = "SELECT track_id FROM Track WHERE project_id = '$project_id'";
+      $tracks = $db->query($sql)->fetchAll(PDO::FETCH_ASSOC);
+      foreach ($tracks as &$track) {
+          $trackid = $track["track_id"];
+          $sqlversion = "SELECT version_id FROM Version WHERE track_id = '$trackid'";
+          $versions[] = $db->query($sqlversion)->fetchAll(PDO::FETCH_ASSOC);
+      }
+      foreach ($versions as &$versions2) {
+        foreach ($versions2 as &$version) {
+            $versionid = $version["version_id"];
+            $sqlfiles = "SELECT file_name FROM File WHERE version_id = '$versionid'";
+            $files[] = $db->query($sqlfiles)->fetchAll(PDO::FETCH_ASSOC)[0];
+        }
+      }
+      if (count($files) == 1) {
+        $trackcount = count($files). " track";
+      } else {
+        $trackcount = count($files). " tracks";
+      }
+      $emailstring = str_replace("%trackamount%",$trackcount,$emailstring);
+      $emailstring_text = str_replace("%trackamount%",$trackcount,$emailstring_text);   
+      // Replace strings -> %tracktitle%
+      $tracktitle = "";
+      foreach ($files as &$file) {
+          $tracktitle .= $file["file_name"] . "\n";
+      }
+      $emailstring = str_replace("%tracktitle%",$tracktitle,$emailstring);
+      $emailstring_text = str_replace("%tracktitle%",$tracktitle,$emailstring_text);   
+
+      // Todo: remove recipientmail from template
+      // Todo: add unsubscribe link: %unsubscribelink%
+      // Todo: move cron to daily cron instead of hourly
+      // Add new json REST call for new dailyupdates
+
+      $subject = 'Daily status update from Soundmarker';
+      $char_set = 'UTF-8';
+      try {
+          $result = $SesClient->sendEmail([
+              'Destination' => [
+                  'ToAddresses' => [$emailaddress],
+              ],
+              'ReplyToAddresses' => ["noreply@soundmarker.com"],
+              'Source' => "Soundmarker <noreply@soundmarker.com>",
+              'Message' => [
+                'Body' => [
+                    'Html' => [
+                        'Charset' => $char_set,
+                        'Data' => $emailstring,
+                    ],
+                    'Text' => [
+                        'Charset' => $char_set,
+                        'Data' => $emailstring_text,
+                    ],
+                ],
+                'Subject' => [
+                    'Charset' => $char_set,
+                    'Data' => $subject,
+                ],
+              ],
+          ]);
+          $messageId = $result['MessageId'];
+      } catch (AwsException $e) {
+          // output error message if fails
+          echo $e->getMessage();
+          echo("The email was not sent. Error message: ".$e->getAwsErrorMessage()."\n");
+      }
   }
+ }
 }
 ?>
