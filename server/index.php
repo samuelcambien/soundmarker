@@ -374,6 +374,10 @@ if ($receiver) {
   $receiverstring = implode("\n", $receiver);
   $sql = "INSERT INTO Notification (emailaddress, senddate, type, status, type_id, recipientemail) VALUES ('$sender', '$projectdatef', '0', '0', '$project_id', '$receiverstring')";
   $result = $db->query($sql);
+
+  // Create DailyUpdates in dB
+  $sql = "INSERT INTO DailyUpdates (emailaddress, project_id) VALUES ('$sender', '$project_id')";
+  $result = $db->query($sql);
 }
 
 // return ok
@@ -531,13 +535,13 @@ $getbody = json_decode(Flight::request()->getBody());
 $track_id = $getbody->track_id;
 $downloadable = isset($getbody->downloadable) ? $getbody->downloadable : 0;
 $visibility = isset($getbody->visibility) ? $getbody->visibility : 1;
-$version_notes = isset($getbody->version_notes) ? $getbody->version_notes : "";
+$notes = isset($getbody->notes) ? $getbody->notes : "";
 $version_title = isset($getbody->version_title) ? $getbody->version_title : "";
 $track_length = isset($getbody->track_length) ? $getbody->track_length : 0;
 $wave_png = isset($getbody->wave_png) ? $getbody->wave_png : "";
 
 $db = Flight::db();
-$sql = "INSERT INTO Version (track_id, downloadable, visibility, notes, version_title, track_length, wave_png) VALUES ('$track_id', '$downloadable', '$visibility', '$version_notes', '$version_title', '$track_length', '$wave_png')";
+$sql = "INSERT INTO Version (track_id, downloadable, visibility, notes, version_title, track_length, wave_png) VALUES ('$track_id', '$downloadable', '$visibility', '$notes', '$version_title', '$track_length', '$wave_png')";
 $result = $db->query($sql);
 
 $_SESSION['user_versions'][] = $db->lastInsertId();
@@ -703,6 +707,13 @@ $s3 = Flight::get("s3");
      'ok' => $result['ObjectURL'] . PHP_EOL
   ), 200);
 });
+
+
+
+
+// SELECT * FROM `Comment` WHERE version_id IN ('188', '160', '159')
+
+
 
 
 
