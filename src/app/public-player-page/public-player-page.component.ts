@@ -53,9 +53,9 @@ export class PublicPlayerPageComponent implements OnInit {
                 });
                 versions[0].files = RestCall.getVersion(versions[0].version_id)
                   .then(response => versions[0].files = response["files"]);
-                versions[0].files.then(() => {
+                versions[0].files.then((files) => {
+                  // this.loadPlayer(track, versions[0], files[0]);
                   this.loadComments(track);
-                  // this.loadPlayer(track, versions[0], versions[0].files[0]);
                 })
               });
 

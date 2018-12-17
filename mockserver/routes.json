@@ -1,6 +1,7 @@
 {
   "/track/new": "/track",
   "/track/:id": "/track?id=:id",
+  "/waveform/:version_id": "/waveform?version_id=:version_id",
   "/project/tracks/:project_id": "/track?project_id=:project_id",
   "/track/version/:version_id": "/track-version?version_id=version_id",
   "/track/version/comments": "/track-version-comments",

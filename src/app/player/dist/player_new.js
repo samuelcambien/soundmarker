@@ -1024,7 +1024,7 @@
       this.mergedPeaks = [];
       // Set the last element of the sparse array so the peak arrays are
       // appropriately sized for other calculations.
-      var channels = this.buffer ? this.buffer.numberOfChannels : 1;
+      var channels = buffer ? buffer.numberOfChannels : 1;
       for (var c = 0; c < channels; c++) {
         this.splitPeaks[c] = [];
         this.splitPeaks[c][2 * (length - 1)] = 0;
@@ -1051,13 +1051,13 @@
 
       this.setLength(length);
 
-      var sampleSize = this.buffer.length / length;
+      var sampleSize = buffer.length / length;
       var sampleStep = ~~(sampleSize / 10) || 1;
-      var channels = this.buffer.numberOfChannels;
+      var channels = buffer.numberOfChannels;
 
       for (var c = 0; c < channels; c++) {
         var peaks = this.splitPeaks[c];
-        var chan = this.buffer.getChannelData(c);
+        var chan = buffer.getChannelData(c);
 
         for (var i = first; i <= last; i++) {
           var start = ~~(i * sampleSize);
@@ -1108,7 +1108,7 @@
         this.pause();
       }
       this.unAll();
-      this.buffer = null;
+      buffer = null;
       this.disconnectFilters();
       this.disconnectSource();
       this.gainNode.disconnect();
@@ -1124,15 +1124,16 @@
       }
     },
 
-    load: function (buffer) {
+    load: function () {
       this.startPosition = 0;
       this.lastPlay = this.ac.currentTime;
-      this.buffer = buffer;
+      this.loadChunk(0);
+      this.loadChunk(1);
     },
 
     loadChunk: function (index) {
 
-      return fetch(this.aws_path + index.toString().padStart(3, '0') + ".mp3")
+      return fetch(this.aws_path + index.toString() + ".mp3")
         .then(response => this.readResponse(response.body.getReader(), new Uint8Array(), 0))
         .then((completeArray) => {
           this.audioBuffers[index] = this.copy(completeArray.buffer);
@@ -1164,8 +1165,7 @@
 
     decodeBuffer: function (index, arrayBuffer) {
       this.audioBuffers[index] = this.copy(arrayBuffer);
-      return this.ac.decodeAudioData(arrayBuffer)
-        .then((audioBuffer) => this.decodedBuffers[index] = audioBuffer);
+      return this.ac.decodeAudioData(arrayBuffer).then((audioBuffer) => this.decodedBuffers[index] = audioBuffer);
     },
 
     createSource: function (index) {
@@ -1198,10 +1198,10 @@
         return this.params.duration;
       }
 
-      if (!this.buffer) {
+      if (!buffer) {
         return 0;
       }
-      return this.buffer.duration;
+      return buffer.duration;
     },
 
     seekTo: function (start, end) {
@@ -1257,16 +1257,17 @@
 
     playSource(index, start, end) {
 
-      this.disconnectSource(this.source);
-
       this.scheduledPause = end;
 
       this.source = this.sources[index];
 
-      this.source.start(0, start, end - start);
+      var delay = this.source.buffer.duration;
 
-      // var delay = this.source.buffer.duration;
-      // this.nextSource.start(delay - start, 0, end - delay + start);
+      // var delay = 10;
+      console.log("delay: " + delay);
+
+      this.source.start(0, start, end - start);
+      // this.nextSource.start(delay, 0);
 
       if (this.ac.state == 'suspended') {
         this.ac.resume && this.ac.resume();
@@ -1278,7 +1279,7 @@
 
       this.source.onended = () => {
         if (this.isPlaying()) {
-          this.playSource(index + 1, 0, end - this.source.buffer.duration + start);
+          // this.playSource(index + 1, 0, end - this.source.buffer.duration);
         }
         this.sources[index] = this.createSource(index);
       };
@@ -1493,7 +1494,7 @@
       this.media = media;
       this.peaks = peaks;
       this.onPlayEnd = null;
-      this.buffer = null;
+      buffer = null;
       this.setPlaybackRate(this.playbackRate);
     },
 
@@ -1502,7 +1503,7 @@
     },
 
     getDuration: function () {
-      var duration = (this.buffer || this.media).duration;
+      var duration = (buffer || this.media).duration;
       if (duration >= Infinity) { // streaming audio
         duration = this.media.seekable.end(0);
       }
@@ -1575,7 +1576,7 @@
     },
 
     getPeaks: function (length, start, end) {
-      if (this.buffer) {
+      if (buffer) {
         return Player.WebAudio.getPeaks.call(this, length, start, end);
       }
       return this.peaks || [];

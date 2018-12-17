@@ -18,7 +18,7 @@ CONTENTS
 - forms
 - buttons
 - utilities
-- pages						
+- pages
 --- public
 ------ bottom info
 --- pro
@@ -33,6 +33,11 @@ body {
 	width: 100%;
 	 overflow: hidden;
 	 min-width: 320px !important;
+}
+
+.waveform {
+  visibility: hidden;
+  width: 743px;
 }
 
 .soundmarker-container {

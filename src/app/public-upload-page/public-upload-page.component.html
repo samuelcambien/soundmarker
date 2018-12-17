@@ -2,7 +2,6 @@
 
   <div>
     <app-public-upload-form [class.hidden]="stage != statusEnum.SELECT_SONGS" [uploader]="uploader"
-                            [waveform]="waveform"
                             (uploading)="stage = statusEnum.UPLOADING_SONGS"
                             (finished)="stage = statusEnum.GREAT_SUCCESS"
                             (link)="link = $event">

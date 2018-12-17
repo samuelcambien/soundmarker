@@ -49,6 +49,7 @@ import {PublicIntroductionComponent} from './public-page/public-info/topics/publ
 import {PlayerIntroductionComponent} from './public-page/public-info/topics/player-introduction/player-introduction.component';
 import {NgSelectModule} from '@ng-select/ng-select';
 import {ClipboardModule} from "ngx-clipboard";
+import { TimeFormatDirective } from './time-format.directive';
 
 @NgModule({
   declarations: [
@@ -89,7 +90,8 @@ import {ClipboardModule} from "ngx-clipboard";
     TimeFormatPipe,
     DraggableDirective,
     PublicIntroductionComponent,
-    PlayerIntroductionComponent
+    PlayerIntroductionComponent,
+    TimeFormatDirective
   ],
   imports: [
     FileUploadModule,

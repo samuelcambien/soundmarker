@@ -35,66 +35,68 @@ export class Player {
   private currentSource: AudioBufferSourceNode;
   private playID: number;
 
-  loadBuffers(start: number, end?: number, callback?: Function) {
+  loadBuffers(start: number, end?: number) {
 
-    for (let index = start; index < (end ? end : start + Player.buffer_count) && index <= this.maxIndex; index++) {
-      if (!this.audioSources[index]) {
-        this.loadBuffer(index, () => {
-          if (index == start && callback) callback()
-        });
-      } else if (index == start && callback) callback()
-    }
-  }
-
-  private loadBuffer(index: number, callback?: Function) {
-
-    let my = this;
-
-    fetch(this.track_url + index.toString() + ".mp3")
-      .then(response => {
-
-        let array: Uint8Array = new Uint8Array();
-        my.readResponse(response.body.getReader(), array, 0, (completeArray) => {
-          my.audioBuffers[index] = Player.copy(completeArray.buffer);
-          my.decodeBuffer(index, completeArray.buffer, callback);
-        });
-      });
-  }
-
-  private readResponse(reader: ReadableStreamReader, array: Uint8Array, index, callback: Function) {
-    reader.read().then(({value, done}) => {
-      if (!done) {
-        let extendedArray = new Uint8Array(array.length + value.length);
-        extendedArray.set(array);
-        extendedArray.set(value, array.length);
-        index++;
-        this.readResponse(reader, extendedArray, index, callback);
-      } else {
-        callback(array);
+    return new Promise(resolve => {
+      for (let index = start; index < (end ? end : start + Player.buffer_count) && index <= this.maxIndex; index++) {
+        if (!this.audioSources[index]) {
+          this.loadBuffer(index)
+            .then(() => {
+              if (index == start) resolve();
+            });
+        } else if (index == start) resolve();
       }
     });
   }
 
-  private decodeBuffer(index: number, arrayBuffer: ArrayBuffer, callback?) {
+  private loadBuffer(index: number): Promise<any> {
+
+    return fetch(this.track_url + index.toString() + ".mp3")
+      .then(response => this.readResponse(response.body.getReader(), new Uint8Array(), 0))
+      .then((completeArray) => {
+        this.audioBuffers[index] = Player.copy(completeArray.buffer);
+        this.decodeBuffer(index, completeArray.buffer);
+      });
+  }
+
+  private readResponse(reader: ReadableStreamReader, array: Uint8Array, index): Promise<any> {
+    return new Promise<any>(resolve => {
+      reader.read().then(({value, done}) => {
+        if (!done) {
+          let extendedArray = new Uint8Array(array.length + value.length);
+          extendedArray.set(array);
+          extendedArray.set(value, array.length);
+          index++;
+          this.readResponse(reader, extendedArray, index);
+        } else {
+          resolve(array);
+        }
+      })
+    });
+  }
+
+  private decodeBuffer(index: number, arrayBuffer: ArrayBuffer): Promise<any> {
     this.audioBuffers[index] = Player.copy(arrayBuffer);
-    this.audioContext.decodeAudioData(arrayBuffer, (audioBuffer: AudioBuffer) => {
+    return this.audioContext.decodeAudioData(arrayBuffer, (audioBuffer: AudioBuffer) => {
       let audioSource: AudioBufferSourceNode = this.audioContext.createBufferSource();
       audioSource.connect(this.audioContext.destination);
       audioSource.buffer = audioBuffer;
       this.audioSources[index] = audioSource;
-      if (callback) callback();
     });
   }
 
-  private stop(callback?: Function) {
-    if (this.currentSource) {
-      this.playID = null;
-      this.currentSource.stop();
-      this.currentSource = null;
-      this.decodeBuffer(this.currentIndex, this.audioBuffers[this.currentIndex], callback);
-    } else {
-      callback();
-    }
+  private stop(): Promise<any> {
+    return new Promise<any>(resolve => {
+      if (this.currentSource) {
+        this.playID = null;
+        this.currentSource.stop();
+        this.currentSource = null;
+        this.decodeBuffer(this.currentIndex, this.audioBuffers[this.currentIndex])
+          .then(() => resolve());
+      } else {
+        resolve();
+      }
+    });
   }
 
   private playBuffer(index: number, offset: number) {
@@ -104,9 +106,15 @@ export class Player {
     my.currentSource = my.audioSources[index];
     my.currentIndex = index;
 
+    my.currentSource.addEventListener("start", () => console.log("start"));
+    // my.currentSource.buffer.duration
+
     my.currentSource.start(0, offset);
 
+    // my.currentSource.buffer.copyToChannel()
+
     let playID = this.playID = now();
+    // this.currentSource.buffer.copyToChannel()
     this.currentSource.onended = () => {
       if (my.playID == playID) {
         if (index + 1 <= this.maxIndex) {
@@ -128,10 +136,6 @@ export class Player {
   }
 
 
-
-
-
-
   isPlaying() {
     return this.audioContext.state == "running";
   }
@@ -139,9 +143,10 @@ export class Player {
   play() {
     this.audioContext.resume().then(() => {
       if (!this.currentSource) {
-        this.loadBuffers(0, Player.buffer_count, () => {
-          this.playFromStartTime();
-        })
+        this.loadBuffers(0, Player.buffer_count)
+          .then(() => {
+            this.playFromStartTime();
+          })
       }
     });
   }
@@ -159,22 +164,10 @@ export class Player {
     return this.duration;
   }
 
-  seekTo(time: number, callback?) {
-    this.stop(() => {
+  seekTo(time: number): Promise<any> {
+    return this.stop().then(() => {
       this.startTime = time;
-      this.loadBuffers(Player.getIndex(time), Player.buffer_count, () => {
-        if (callback) callback();
-      });
+      return this.loadBuffers(Player.getIndex(time), Player.buffer_count);
     });
-  }
-}
-
-export class Playback {
-
-  private start: number;
-  private end: number;
-
-  play() {
-
   }
 }
