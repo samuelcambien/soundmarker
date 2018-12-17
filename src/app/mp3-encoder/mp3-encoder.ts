@@ -136,6 +136,14 @@ export class Mp3Encoder {
     })
   }
 
+  public static readBinary(file: File): Promise<ArrayBuffer> {
+    return new Promise<any>(resolve => {
+      let reader: FileReader = new FileReader();
+      reader.onload = () => resolve(reader.result);
+      reader.readAsArrayBuffer(file);
+    })
+  }
+
   static getName(name: string): string {
 
     return name.split(/(.*)\.(.*)/)[1];
@@ -146,12 +154,12 @@ export class Mp3Encoder {
     return name.split(/(.*)\.(.*)/)[2].toLowerCase();
   }
 
-  public static convertWav16bit(buffer: ArrayBuffer, name: string): Promise<any> {
+  public static convertWav16bit(buffer: ArrayBuffer, name: string): Promise<File> {
 
     return Mp3Encoder.encodeMp3(buffer, name);
   }
 
-  public static convertWavOther(buffer: ArrayBuffer, name: string): Promise<any> {
+  public static convertWavOther(buffer: ArrayBuffer, name: string): Promise<File> {
 
     let wav = new WaveFile();
     wav.fromBuffer(new Uint8Array(buffer));
@@ -161,7 +169,7 @@ export class Mp3Encoder {
       .then(buffer => Mp3Encoder.convertWav16bit(buffer, name));
   }
 
-  public static convertFlac(buffer: ArrayBuffer, name: string): Promise<any> {
+  public static convertFlac(buffer: ArrayBuffer, name: string): Promise<File> {
 
     return Mp3Encoder.decode(buffer)
       .then((buf: AudioBuffer) =>
@@ -171,11 +179,13 @@ export class Mp3Encoder {
       ).then(buffer => Mp3Encoder.convertWavOther(buffer, name));
   }
 
-  public static convertMp3(buffer: ArrayBuffer, name: string): Promise<any> {
+  public static convertMp3(buffer: ArrayBuffer, name: string): Promise<File> {
     return new Promise(resolve => resolve(new File([buffer], name)));
+
+    // return Mp3Encoder.convertFlac(buffer, name);
   }
 
-  public static decode(buffer: ArrayBuffer): Promise<any> {
+  public static decode(buffer: ArrayBuffer): Promise<AudioBuffer> {
     return require("audio-decode")(buffer);
   }
 

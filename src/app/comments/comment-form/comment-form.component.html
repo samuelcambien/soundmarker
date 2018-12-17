@@ -22,7 +22,8 @@
     </div>
 
     <div class="form-group col-auto hide-phone">
-      <input type="text" [ngModel]="this.comment.start_time | timeFormat" (ngModel)="this.comment.start_time" (change)="updateStartTime()" name="start"
+      <input type="text" [ngModel]="this.comment.start_time | timeFormat" (change)="updateStartTime()" name="start"
+             appTimeFormat
              [ngClass]="['comment-form-start-time sub-form tag-box', comment.include_start ? 'enabled' : 'disabled']">
     </div>
 

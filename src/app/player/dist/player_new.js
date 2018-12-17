@@ -1169,7 +1169,8 @@
     },
 
     createSource: function (index) {
-      var source = this.ac.createMediaStreamSource();
+
+      var source = this.ac.createBufferSource();
 
       //adjust for old browsers.
       source.start = source.start || source.noteGrainOn;
@@ -1260,8 +1261,13 @@
 
       this.source = this.sources[index];
 
+      var delay = this.source.buffer.duration;
+
+      // var delay = 10;
+      console.log("delay: " + delay);
+
       this.source.start(0, start, end - start);
-      this.scheduleNextBuffer(index + 1, this.buffer_size - start, end);
+      // this.nextSource.start(delay, 0);
 
       if (this.ac.state == 'suspended') {
         this.ac.resume && this.ac.resume();
@@ -1279,10 +1285,6 @@
       };
 
       this.loadChunk(index + 1);
-    },
-
-    scheduleNextBuffer(index, delay, end) {
-      this.sources[index].start(delay, 0, end - delay);
     },
 
     /**
@@ -2353,13 +2355,13 @@
       ctx.beginPath();
       ctx.moveTo((canvasStart - first) * scale + this.halfPixel, halfH + offsetY);
 
-      for (var i = canvasStart; i < canvasEnd; i++) {
+      for (var i = canvasStart; i < length; i++) {
         var peak = peaks[2 * i] || 0;
         var h = Math.round(peak / absmax * halfH);
         ctx.lineTo((i - first) * scale + this.halfPixel, halfH - h + offsetY);
       }
 
-      ctx.lineTo((canvasEnd - first - 1) * scale + this.halfPixel, halfH + offsetY + 2);
+      ctx.lineTo((canvasEnd - first) * scale + this.halfPixel, halfH + offsetY + 2);
 
       ctx.closePath();
       ctx.fill();

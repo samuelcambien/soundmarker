@@ -53,7 +53,7 @@ export class RestCall {
     });
   }
 
-  public static uploadChunk(buffer: ArrayBuffer, fileId: string, index: number, ext: string): Promise<any> {
+  public static uploadChunk(buffer, fileId: string, index: number, ext: string): Promise<any> {
     return Utils.sendPostDataRequest(RestUrl.UPLOAD_CHUNK, buffer, [fileId, index, ext]);
   }
 

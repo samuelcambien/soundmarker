@@ -60,6 +60,11 @@ export class Utils {
     return moment.utc(moment.duration({'seconds': seconds}).asMilliseconds()).format("mm:ss");
   }
 
+  public static parseTime(value: string): number {
+    console.log(moment.duration(value, ));
+    return moment.duration(value).asSeconds();
+  }
+
   public static sendGetDataRequest(url, params?): Promise<any> {
     return new Promise<any>((resolve, reject) => {
       let trackRequest = new XMLHttpRequest();

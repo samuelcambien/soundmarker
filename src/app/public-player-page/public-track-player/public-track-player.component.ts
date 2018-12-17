@@ -62,13 +62,8 @@ export class PublicTrackPlayerComponent implements OnInit {
       this.version = versions[0];
       this.comment.start_time = 0;
       this.comment.end_time = versions[0].track_length;
-      this.track.versions
-        .then((versions: Version[]) => {
-          RestCall.getWaveform(versions[0].version_id)
-            .then(response => this.peaks = response[0]["peaks"]);
-          this.loadWaveForm(this.waveform, this.peaks);
-          // this.loadWaveForm(this.progress, this.peaks);
-        })
+      // this.peaks = RestCall.getWaveform(this.version.version_id);
+      this.loadWaveForm();
     });
   }
 
@@ -134,7 +129,6 @@ export class PublicTrackPlayerComponent implements OnInit {
 
   pause() {
     this.decentPlayer.pause();
-    // this.player.pause();
   }
 
   isPlaying() {
@@ -160,38 +154,26 @@ export class PublicTrackPlayerComponent implements OnInit {
     );
   }
 
-  public loadWaveForm(waveform: ElementRef, wavePng) {
+  public loadWaveForm() {
 
     this.version.files.then((files) => {
       this.decentPlayer = wave.create(
         {
-          // container: this.waveform.nativeElement,
           container: "#waveform_" + this.track.track_id,
-          peaks: this.peaks,
+          peaks: this.version.wave_png,
           duration: this.version.track_length,
-          aws_path: files.filter(file => file.extension == "mp3")[0].aws_path
+          // aws_path: files.filter(file => file.extension == "mp3")[0].aws_path
+          aws_path: "https://d3k08uu3zdbsgq.cloudfront.net/Zelmar-LetYouGo"
         }
       );
       this.decentPlayer.drawBuffer();
       this.decentPlayer.backend.load();
-      //   files.filter(file => file.extension == "mp3")[0].aws_path + "0.mp3",
-      //   this.peaks);
-
-      // this.renderer.listen(this.waveform.nativeElement, 'click', (e) => {
-      //   this.decentPlayer.seekTo(this.getSeekTime(e));
-      // });
+      this.decentPlayer.backend.loadChunk(0)
+        .then(() => this.decentPlayer.backend.loadChunk(1));
     });
-
-    // var context = waveform.nativeElement.getContext('2d');
-    // var image = new Image();
-    // image.onload = () => {
-    //   context.drawImage(image, 0, 0, waveform.nativeElement.width, waveform.nativeElement.height);
-    // };
-    // image.src = wavePng;
   }
 
   getCurrentTime() {
-    // return 0;
     return this.decentPlayer != null ? this.decentPlayer.getCurrentTime() : 0;
     // return this.player != null ? this.player.getCurrentPosition() : 0;
   }

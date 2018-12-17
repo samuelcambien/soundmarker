@@ -107,9 +107,11 @@ export class Player {
     my.currentIndex = index;
 
     my.currentSource.addEventListener("start", () => console.log("start"));
-    my.currentSource.buffer.duration
+    // my.currentSource.buffer.duration
 
     my.currentSource.start(0, offset);
+
+    // my.currentSource.buffer.copyToChannel()
 
     let playID = this.playID = now();
     // this.currentSource.buffer.copyToChannel()

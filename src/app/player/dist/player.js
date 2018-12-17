@@ -85,6 +85,8 @@
       // Holds any running audio downloads
       this.currentAjax = null;
 
+      this.duration = this.params.duration;
+
       this.createDrawer();
       this.createBackend();
       this.createPeakCache();
@@ -818,6 +820,8 @@
   'use strict';
 
   Player.WebAudio = {
+    buffer_count: 5,
+    buffer_size: 10,
     scriptBufferSize: 256,
     PLAYING_STATE: 0,
     PAUSED_STATE: 1,
@@ -849,6 +853,13 @@
       this.params = params;
       this.ac = params.audioContext || this.getAudioContext();
 
+      this.setPeaks(params.peaks);
+      this.aws_path = params.aws_path;
+
+      this.audioBuffers = [];
+      this.decodedBuffers = [];
+      this.sources = [];
+
       this.lastPlay = this.ac.currentTime;
       this.startPosition = 0;
       this.scheduledPause = null;
@@ -865,7 +876,7 @@
 
       this.setState(this.PAUSED_STATE);
       this.setPlaybackRate(this.params.audioRate);
-      this.setLength(0);
+      // this.setLength(0);
     },
 
     disconnectFilters: function () {
@@ -1033,6 +1044,7 @@
      * of peaks consisting of (max, min) values for each subrange.
      */
     getPeaks: function (length, first, last) {
+
       if (this.peaks) {
         return this.peaks;
       }
@@ -1085,9 +1097,9 @@
       return this.state.getPlayedPercents.call(this);
     },
 
-    disconnectSource: function () {
-      if (this.source) {
-        this.source.disconnect();
+    disconnectSource: function (source) {
+      if (source) {
+        source.disconnect();
       }
     },
 
@@ -1116,20 +1128,64 @@
       this.startPosition = 0;
       this.lastPlay = this.ac.currentTime;
       this.buffer = buffer;
-      this.createSource();
     },
 
-    createSource: function () {
-      this.disconnectSource();
-      this.source = this.ac.createBufferSource();
+    loadChunk: function (index) {
+
+      return fetch(this.aws_path + index.toString().padStart(3, '0') + ".mp3")
+        .then(response => this.readResponse(response.body.getReader(), new Uint8Array(), 0))
+        .then((completeArray) => {
+          this.audioBuffers[index] = this.copy(completeArray.buffer);
+          return this.decodeBuffer(index, completeArray.buffer);
+        }).then(() => this.sources[index] = this.createSource(index));
+    },
+
+    readResponse: function (reader, array, index) {
+      return new Promise(resolve => {
+        reader.read().then(({value, done}) => {
+          if (!done) {
+            let extendedArray = new Uint8Array(array.length + value.length);
+            extendedArray.set(array);
+            extendedArray.set(value, array.length);
+            index++;
+            resolve(this.readResponse(reader, extendedArray, index));
+          } else {
+            resolve(array);
+          }
+        });
+      });
+    },
+
+    copy: function (src) {
+      var dst = new ArrayBuffer(src.byteLength);
+      new Uint8Array(dst).set(new Uint8Array(src));
+      return dst;
+    },
+
+    decodeBuffer: function (index, arrayBuffer) {
+      this.audioBuffers[index] = this.copy(arrayBuffer);
+      return this.ac.decodeAudioData(arrayBuffer)
+        .then((audioBuffer) => this.decodedBuffers[index] = audioBuffer);
+    },
+
+    createSource: function (index) {
+
+      var source = this.ac.createBufferSource();
 
       //adjust for old browsers.
-      this.source.start = this.source.start || this.source.noteGrainOn;
-      this.source.stop = this.source.stop || this.source.noteOff;
+      source.start = source.start || source.noteGrainOn;
+      source.stop = source.stop || source.noteOff;
 
-      this.source.playbackRate.value = this.playbackRate;
-      this.source.buffer = this.buffer;
-      this.source.connect(this.analyser);
+      source.playbackRate.value = this.playbackRate;
+      source.buffer = this.decodedBuffers[index];
+      source.connect(this.analyser);
+
+      return source;
+    },
+
+    isPlaying: function () {
+
+      return this.state === this.states[this.PLAYING_STATE];
     },
 
     isPaused: function () {
@@ -1137,6 +1193,11 @@
     },
 
     getDuration: function () {
+
+      if (this.params.duration) {
+        return this.params.duration;
+      }
+
       if (!this.buffer) {
         return 0;
       }
@@ -1144,9 +1205,9 @@
     },
 
     seekTo: function (start, end) {
-      if (!this.buffer) {
-        return;
-      }
+      // if (!buffer) {
+      //   return;
+      // }
 
       this.scheduledPause = null;
 
@@ -1183,21 +1244,29 @@
      * relative to the beginning of a clip.
      */
     play: function (start, end) {
-      if (!this.buffer) {
-        return;
-      }
-
-      // need to re-create source on each playback
-      this.createSource();
 
       var adjustedTime = this.seekTo(start, end);
 
       start = adjustedTime.start;
       end = adjustedTime.end;
 
+      var index = Math.floor(start / this.buffer_size);
+
+      this.playSource(index, start % this.buffer_size, end);
+    },
+
+    playSource(index, start, end) {
+
+      this.disconnectSource(this.source);
+
       this.scheduledPause = end;
 
+      this.source = this.sources[index];
+
       this.source.start(0, start, end - start);
+
+      // var delay = this.source.buffer.duration;
+      // this.nextSource.start(delay - start, 0, end - delay + start);
 
       if (this.ac.state == 'suspended') {
         this.ac.resume && this.ac.resume();
@@ -1206,6 +1275,15 @@
       this.setState(this.PLAYING_STATE);
 
       this.fireEvent('play');
+
+      this.source.onended = () => {
+        if (this.isPlaying()) {
+          this.playSource(index + 1, 0, end - this.source.buffer.duration + start);
+        }
+        this.sources[index] = this.createSource(index);
+      };
+
+      this.loadChunk(index + 1);
     },
 
     /**
@@ -1352,7 +1430,6 @@
      *  @param  {String}        preload     HTML 5 preload attribute value
      */
     load: function (url, container, peaks, preload) {
-      var my = this;
 
       var media = document.createElement(this.mediaType);
       media.controls = this.params.mediaControls;
@@ -2085,6 +2162,7 @@
       );
       entry.waveCtx = entry.wave.getContext('2d');
 
+
       if (this.hasProgressCanvas) {
         entry.progress = this.progressWave.appendChild(
           this.style(document.createElement('canvas'), {
@@ -2276,13 +2354,13 @@
       ctx.beginPath();
       ctx.moveTo((canvasStart - first) * scale + this.halfPixel, halfH + offsetY);
 
-      for (var i = canvasStart; i < canvasEnd; i++) {
+      for (var i = canvasStart; i < length; i++) {
         var peak = peaks[2 * i] || 0;
         var h = Math.round(peak / absmax * halfH);
         ctx.lineTo((i - first) * scale + this.halfPixel, halfH - h + offsetY);
       }
 
-      ctx.lineTo((canvasEnd - first - 1) * scale + this.halfPixel, halfH + offsetY + 2);
+      ctx.lineTo((canvasEnd - first) * scale + this.halfPixel, halfH + offsetY + 2);
 
       ctx.closePath();
       ctx.fill();
@@ -2744,38 +2822,3 @@
   return Player;
 
 }));
-
-
-function load() {
-  // Fetch the original image
-  fetch('./tortoise.png')
-  // Retrieve its body as ReadableStream
-    .then(response => response.body)
-    .then(rs => {
-      const reader = rs.getReader();
-      return new ReadableStream({
-        async start(controller) {
-          while (true) {
-            const { done, value } = await reader.read();
-            // When no more data needs to be consumed, break the reading
-            if (done) {
-              break;
-            }
-            // Enqueue the next data chunk into our target stream
-            controller.enqueue(value);
-          }
-          // Close the stream
-          controller.close();
-          reader.releaseLock();
-        }
-      })
-    })
-    // Create a new response out of the stream
-    .then(rs => new Response(rs))
-    // Create an object URL for the response
-    .then(response => response.blob())
-    .then(blob => URL.createObjectURL(blob))
-    // Update image
-    .then(url => image.src = url)
-    .catch(console.error);
-}
