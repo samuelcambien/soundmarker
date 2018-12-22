@@ -808,7 +808,7 @@ $result = $db->query($sql);
 
 
 
-///////////////////////////////////////////////////////// Routes - /track GET /////////////////////////////////////////////////////////
+////////////////////////////////////////////////////// Routes - /unsubscribe GET //////////////////////////////////////////////////////
 Flight::route('GET /unsubscribe/@update_id/@project_id', function($update_id, $project_id) {
 
 // Check if user is allowed to get that info
@@ -817,13 +817,29 @@ $db = Flight::db();
 $sql = "DELETE FROM DailyUpdates WHERE update_id = '$update_id' AND project_id = '$project_id'";
 $result = $db->query($sql);
 
+// Render a display -> front end
+
 // return ok
 Flight::json(array(
    'ok' => "ok"
 ), 200);
 });
 
+/////////////////////////////////////////////////////// Routes - /subscribe GET ///////////////////////////////////////////////////////
 
+Flight::route('GET /subscribe/@project_id/@emailaddress', function($project_id, $emailaddress) {
+
+// Check if user is allowed to get that info
+$config = Flight::get("config");
+$db = Flight::db();
+$sql = "INSERT INTO DailyUpdates (project_id, emailaddress) VALUES ('$project_id', '$emailaddress')";
+$result = $db->query($sql);
+
+// return ok
+Flight::json(array(
+   'ok' => "ok"
+), 200);
+});
 
 
 

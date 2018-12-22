@@ -259,8 +259,6 @@ foreach ($updates as &$update) {
       $emailstring = str_replace("%unsubscribelink%",$config['SERVER_URL'].'/unsubscribe/'.$update_id.'/'.$project_id,$emailstring);
       $emailstring_text = str_replace("%unsubscribelink%",$config['SERVER_URL'].'/unsubscribe/'.$update_id.'/'.$project_id,$emailstring_text);   
       
-      // Todo: remove recipientmail from template
-      // Todo: add unsubscribe link: %unsubscribelink%
       // Todo: move cron to daily cron instead of hourly
       // Add new json REST call for new dailyupdates
       // Too many tracks shown in email (both mp3 and wav I assume)
