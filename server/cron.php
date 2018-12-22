@@ -152,10 +152,11 @@ foreach ($notifications as &$notification) {
 
 // Send daily updates
 // Go through Daily Updates and get project_ids, then check first if they're not expired
-$sql = "SELECT project_id, emailaddress, last_comment_id FROM DailyUpdates";
+$sql = "SELECT update_id, project_id, emailaddress, last_comment_id FROM DailyUpdates";
 $updates = $db->query($sql)->fetchAll(PDO::FETCH_ASSOC);
 $count = 0;
 foreach ($updates as &$update) {
+  $update_id = $update["update_id"];
   $project_id = $update["project_id"];
   $last_comment_ids = $update["last_comment_id"];
   $emailaddress = $update["emailaddress"];
@@ -254,10 +255,16 @@ foreach ($updates as &$update) {
       $emailstring = str_replace("%tracktitle%",$tracktitle,$emailstring);
       $emailstring_text = str_replace("%tracktitle%",$tracktitle,$emailstring_text);   
 
+      // Replace strings -> %unsubscribelink%
+      $emailstring = str_replace("%unsubscribelink%",$config['SERVER_URL'].'/unsubscribe/'.$update_id.'/'.$project_id,$emailstring);
+      $emailstring_text = str_replace("%unsubscribelink%",$config['SERVER_URL'].'/unsubscribe/'.$update_id.'/'.$project_id,$emailstring_text);   
+      
       // Todo: remove recipientmail from template
       // Todo: add unsubscribe link: %unsubscribelink%
       // Todo: move cron to daily cron instead of hourly
       // Add new json REST call for new dailyupdates
+      // Too many tracks shown in email (both mp3 and wav I assume)
+      // Show how many comments were sent properly (now always shows 1 per version)
 
       $subject = 'Daily status update from Soundmarker';
       $char_set = 'UTF-8';

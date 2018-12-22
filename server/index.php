@@ -538,7 +538,7 @@ $visibility = isset($getbody->visibility) ? $getbody->visibility : 1;
 $notes = isset($getbody->notes) ? $getbody->notes : "";
 $version_title = isset($getbody->version_title) ? $getbody->version_title : "";
 $track_length = isset($getbody->track_length) ? $getbody->track_length : 0;
-$wave_png = isset($getbody->wave_png) ? $getbody->wave_png : "";
+$wave_png = isset($getbody->wave_png) ? json_encode($getbody->wave_png) : "";
 
 $db = Flight::db();
 $sql = "INSERT INTO Version (track_id, downloadable, visibility, notes, version_title, track_length, wave_png) VALUES ('$track_id', '$downloadable', '$visibility', '$notes', '$version_title', '$track_length', '$wave_png')";
@@ -807,6 +807,21 @@ $result = $db->query($sql);
 });
 
 
+
+///////////////////////////////////////////////////////// Routes - /track GET /////////////////////////////////////////////////////////
+Flight::route('GET /unsubscribe/@update_id/@project_id', function($update_id, $project_id) {
+
+// Check if user is allowed to get that info
+$config = Flight::get("config");
+$db = Flight::db();
+$sql = "DELETE FROM DailyUpdates WHERE update_id = '$update_id' AND project_id = '$project_id'";
+$result = $db->query($sql);
+
+// return ok
+Flight::json(array(
+   'ok' => "ok"
+), 200);
+});
 
 
 
