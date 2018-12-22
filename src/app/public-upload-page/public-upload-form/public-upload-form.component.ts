@@ -1,21 +1,21 @@
-import {Component, ElementRef, EventEmitter, Input, Output, ViewChild} from '@angular/core';
+import {Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
 import {FileItem, FileUploader} from '../../ng2-file-upload';
 import {Mp3Encoder} from "../../mp3-encoder/mp3-encoder";
 import {RestCall} from "../../rest/rest-call";
-import {SoundCloudWaveform} from "../../waveform/waveform";
+import * as wave from "../../player/dist/player.js"
 
 @Component({
   selector: 'app-public-upload-form',
   templateUrl: './public-upload-form.component.html',
   styleUrls: ['./public-upload-form.component.scss']
 })
-export class PublicUploadFormComponent {
+export class PublicUploadFormComponent implements OnInit {
 
   notes: string;
   email_from: string;
   email_to: string;
 
-  sharemode: "email" | "link" = "email";
+  sharemode: "email" | "link" = "link";
   expiration: "week" | "month" = "week";
   downloadable: boolean = false;
 
@@ -27,8 +27,6 @@ export class PublicUploadFormComponent {
   @Output() uploading = new EventEmitter();
   @Output() finished = new EventEmitter();
   @Output() link = new EventEmitter<string>();
-
-  @Input() waveform: ElementRef;
 
   @ViewChild('notes_element') notes_element: ElementRef;
 
@@ -54,7 +52,7 @@ export class PublicUploadFormComponent {
         break;
       case "mp3":
       default:
-        converter = (file) => new Promise(resolve => resolve(file));
+        converter = Mp3Encoder.convertMp3;
         break;
     }
 
@@ -99,52 +97,47 @@ export class PublicUploadFormComponent {
     ]).then(result => {
       return {trackId: result[0]["track_id"], buffer: result[1]}
     }).then(({trackId, buffer}) =>
-      this.getWaveform(buffer).then(waveform =>
-        RestCall.createNewVersion(trackId, this.notes_element.nativeElement.value, buffer.duration, waveform)
-      )
-    ).then(response => {
-      let versionId = response["version_id"];
-      let file_name = Mp3Encoder.getName(track._file.name);
-      let extension = Mp3Encoder.getExtension(track._file.name);
+      RestCall.createNewVersion(
+        trackId, this.notes_element.nativeElement.value, buffer.duration, this.getWaveform(buffer), this.downloadable ? "1" : "0"
+      ).then(response => {
+        let versionId = response["version_id"];
+        let file_name = Mp3Encoder.getName(track._file.name);
+        let extension = Mp3Encoder.getExtension(track._file.name);
 
-      let uploads = [];
+        let uploads = [];
 
-      if (this.downloadable) {
+        // RestCall.createWaveform(trackId, this.getWaveform(buffer));
+
+        if (this.downloadable) {
+          uploads.push(
+            this.uploadDownloadFile(track._file, file_name, extension, track._file.size, versionId, length)
+          );
+          this.uploader.files++;
+        }
         uploads.push(
-          this.uploadDownloadFile(track._file, file_name, extension, track._file.size, versionId, length)
+          this.convert(track)
+            .then(file =>
+              this.uploadStreamFile(track._file, file_name, "mp3", track._file.size, versionId, length)
+            )
         );
         this.uploader.files++;
-      }
-      uploads.push(
-        this.convert(track)
-          .then(file =>
-            this.uploadStreamFile(file, file_name, "mp3", file.size, versionId, length)
-          )
-      );
-      this.uploader.files++;
 
-      return Promise.all(uploads);
-    });
+        return Promise.all(uploads);
+      }));
   }
 
-  private getWaveform(buffer: AudioBuffer): Promise<string> {
+  private getWaveform(buffer: AudioBuffer): string {
 
-    let canvas = document.createElement('canvas');
-    canvas.width = 700;
-    canvas.height = 40;
+    let wavediv: HTMLDivElement = document.createElement('div');
+    wavediv.classList.add("waveform");
+    window.document.body.appendChild(wavediv);
 
-    // Player.init({
-    //   container: canvas
-    // });
-    // Player.loadDecodedBuffer(buffer);
-
-    // return this.waveform.nativeElement.querySelector("canvas").toDataURL("image/png");
-
-    return new Promise<string>(resolve => {
-      new SoundCloudWaveform().generate(buffer, {
-        onComplete: resolve
-      })
+    const waveform = wave.create({
+      container: wavediv
     });
+    waveform.loadDecodedBuffer(buffer);
+
+    return waveform.backend.getPeaks(227, 0, 227);
   }
 
   private getAudioBuffer(track): Promise<AudioBuffer> {
@@ -155,11 +148,8 @@ export class PublicUploadFormComponent {
 
     return RestCall.createNewFile(file, file_name, extension, size, versionId, length)
       .then(({fileId, buffer}) => {
-        let chunk_byte_length = 44100;
-        // for (let i = 0; i * chunk_byte_length < buffer.byteLength; i++) {
         RestCall.uploadChunk(buffer, fileId, 0, extension)
           .then(() => this.uploader.uploaded++);
-        // }
       });
   }
 
@@ -167,11 +157,29 @@ export class PublicUploadFormComponent {
 
     return RestCall.createNewFile(file, file_name, extension, size, versionId, length)
       .then(({fileId, buffer}) => {
-        let chunk_byte_length = 192 / 8 * 1000 * 1000000;
-        for (let i = 0; i * chunk_byte_length < buffer.byteLength; i++) {
-          RestCall.uploadChunk(buffer.slice(i * chunk_byte_length, (i + 1) * chunk_byte_length), fileId, i, extension)
-            .then(() => this.uploader.uploaded++);
-        }
+        RestCall.uploadChunk(buffer, fileId, 0, extension)
+          .then(() => this.uploader.uploaded++);
       });
+  }
+
+  private searchSyncWord(uint8Array: Uint8Array, startIndex: number) {
+
+    for (let i = startIndex; i < uint8Array.length; i++) {
+      if (uint8Array[i] == 255 && uint8Array[i + 1] == 251) {
+        return i;
+      }
+    }
+  }
+
+  constructor(private _host: ElementRef) {
+
+  }
+
+  ngOnInit(): void {
+    console.log("");
+    // wave.init({
+    //   container: canvas
+    // });
+    // wave.loadDecodedBuffer(buffer);
   }
 }
