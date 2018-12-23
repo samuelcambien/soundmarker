@@ -80,11 +80,8 @@ export class PublicTrackPlayerComponent implements OnInit, AfterViewChecked {
       this.version = versions[0];
       this.comment.start_time = 0;
       this.comment.end_time = versions[0].track_length;
-      RestCall.getWaveform(this.track.track_id)
-        .then((response) => {
-          this.peaks = response[0]["peaks"];
-          this.loadWaveForm();
-        });
+      this.peaks = this.version.wave_png;
+      this.loadWaveForm();
     });
   }
 
@@ -232,23 +229,14 @@ export class PublicTrackPlayerComponent implements OnInit, AfterViewChecked {
     return this.version ? this.version.track_length : 100;
   }
 
-  mouseDown(event) {
-    console.log(event);
-  }
-
   download() {
 
-    Utils.sendGetDataRequest(this.files.filter(file => file.identifier == 1)[0].aws_path, [])
-      .then((response) => {
-      saveAs(new Blob(
-        [
-          response
-        ],
-        {
-          // type: trackRequest.getResponseHeader("content-type")
-        }), this.track.title + ".mp3"
-      )
-    });
+    window.open(
+      this.files
+        .filter(file => file.identifier == 0)
+        .map(file => file.aws_path + "0." + file.extension)
+        [0]
+    );
   }
 
   downloadFile(propertyId: string, fileId: string) {
