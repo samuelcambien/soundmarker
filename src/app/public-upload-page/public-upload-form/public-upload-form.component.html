@@ -51,7 +51,6 @@
         </div>
 
         <div class="tabletainer">
-
           <table class="table">
             <tbody>
 
@@ -67,9 +66,7 @@
         </div>
 
         <input class="upload-songs-input" id="public-uploader" type="file" ng2FileSelect [uploader]="uploader" multiple
-
                accept="audio/*"/>
-
 
       </div>
 
@@ -78,7 +75,8 @@
     <div class="col-md-8">
       <div class="form-row">
         <div class="form-group col">
-                <textarea #notes_element [(ngModel)]="notes" type="text" placeholder="Notes" class="form-control form-control-sm"
+                <textarea #notes_element [(ngModel)]="notes" type="text" placeholder="Notes"
+                          class="form-control form-control-sm"
                           rows="{{sharemode == 'email' ? 3 : 5 }}"></textarea>
         </div>
       </div>
@@ -94,7 +92,8 @@
       </div>
       <div class="form-row radios">
         <div class="col">
-          <div class="btn-group btn-group-sm btn-group-toggle" name="email" ngbRadioGroup [(ngModel)]="sharemode" placement="top" ngbTooltip="Share via" container="body">
+          <div class="btn-group btn-group-sm btn-group-toggle" name="email" ngbRadioGroup [(ngModel)]="sharemode"
+               placement="top" ngbTooltip="Share via" container="body">
             <label ngbButtonLabel class="btn btn-outline-form active">
               <input ngbButton class="slide-selector left-btn" type="radio" [value]="'email'">Email
             </label>
@@ -104,7 +103,8 @@
           </div>
         </div>
         <div class="col">
-          <div class="btn-group btn-group-sm btn-group-toggle" name="expiration" ngbRadioGroup [(ngModel)]="expiration" placement="top" ngbTooltip="Expire after a">
+          <div class="btn-group btn-group-sm btn-group-toggle" name="expiration" ngbRadioGroup [(ngModel)]="expiration"
+               placement="top" ngbTooltip="Expire after a">
             <label ngbButtonLabel class="btn btn-outline-form active">
               <input ngbButton class="slide-selector left-btn" type="radio" [value]="'week'">Week
             </label>
@@ -114,9 +114,11 @@
           </div>
         </div>
         <div class="col">
-          <div class="btn-group btn-group-sm btn-group-toggle allow-downloads" placement="top" ngbTooltip="Select to allow">
+          <div class="btn-group btn-group-sm btn-group-toggle allow-downloads" placement="top"
+               ngbTooltip="Select to allow">
             <label ngbButtonLabel class="btn btn-outline-form">
-              <input ngbButton class="slide-selector" type="checkbox" [(ngModel)]="downloadable" name="usage">Allow downloads
+              <input ngbButton class="slide-selector" type="checkbox" [(ngModel)]="downloadable" name="usage">Allow
+              downloads
             </label>
           </div>
         </div>
@@ -127,7 +129,8 @@
 
             <div class="show-phone">Share tracks</div>
 
-            <svg width="30px" height="30px" viewBox="0 0 38 38" class="plane-icon hide-phone" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+            <svg width="30px" height="30px" viewBox="0 0 38 38" class="plane-icon hide-phone" version="1.1"
+                 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
               <desc></desc>
               <defs></defs>
               <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
@@ -155,8 +158,6 @@
 </form>
 
 <div ng2FileDrop
-     [ngClass]="{'nv-file-over': hasBaseDropZoneOver}"
-     (fileOver)="fileOverBase($event)"
      [uploader]="uploader"
      class="well my-drop-zone">
 </div>

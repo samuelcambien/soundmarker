@@ -1,18 +1,32 @@
-import {Component, ElementRef, EventEmitter, Input, OnInit, Output, Renderer2, ViewChild} from '@angular/core';
+import {
+  AfterViewChecked,
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  EventEmitter,
+  Input,
+  NgZone,
+  OnInit,
+  Output,
+  ViewChild
+} from '@angular/core';
 import {Track} from "../../model/track";
 import {Player} from "../../newplayer/player";
 import {Comment, CommentSorter} from "../../model/comment";
 import {saveAs} from 'file-saver/FileSaver';
 import {Version} from "../../model/version";
+import {File} from "../../model/file";
 import * as wave from "../../player/dist/player.js";
 import {RestCall} from "../../rest/rest-call";
+import {PlayerService} from "../../player.service";
+import {Utils} from "../../app.component";
 
 @Component({
   selector: 'app-public-track-player',
   templateUrl: './public-track-player.component.html',
   styleUrls: ['./public-track-player.component.scss']
 })
-export class PublicTrackPlayerComponent implements OnInit {
+export class PublicTrackPlayerComponent implements OnInit, AfterViewChecked {
 
   @Input() player: Player;
   @Input() track: Track;
@@ -22,7 +36,7 @@ export class PublicTrackPlayerComponent implements OnInit {
   @Output() playing = new EventEmitter();
 
   @ViewChild('waveform') waveform: ElementRef;
-  @ViewChild('progress') progress: ElementRef;
+
 
   @ViewChild('startTime') startTime: ElementRef;
   @ViewChild('endTime') endTime: ElementRef;
@@ -39,6 +53,8 @@ export class PublicTrackPlayerComponent implements OnInit {
 
   search: string;
 
+  _progress: number;
+
   startPos;
   endPos;
 
@@ -47,15 +63,16 @@ export class PublicTrackPlayerComponent implements OnInit {
 
   version: Version;
 
-  decentPlayer;
-
   phoneSearch: boolean;
   phoneOrder: boolean;
 
   peaks;
+  private files: File[];
 
-  constructor(
-  ) {
+  constructor(private playerService: PlayerService, private cdRef:ChangeDetectorRef, zone: NgZone) {
+    setInterval(() => {
+      this._progress = this.getCurrentTime();
+    }, 1);
   }
 
   ngOnInit() {
@@ -63,8 +80,11 @@ export class PublicTrackPlayerComponent implements OnInit {
       this.version = versions[0];
       this.comment.start_time = 0;
       this.comment.end_time = versions[0].track_length;
-      // this.peaks = RestCall.getWaveform(this.version.version_id);
-      this.loadWaveForm();
+      RestCall.getWaveform(this.track.track_id)
+        .then((response) => {
+          this.peaks = response[0]["peaks"];
+          this.loadWaveForm();
+        });
     });
   }
 
@@ -124,22 +144,26 @@ export class PublicTrackPlayerComponent implements OnInit {
 
   play() {
     this.playing.emit();
-    this.decentPlayer.play();
+    this.getPlayer().play();
     // this.player.play();
   }
 
   pause() {
-    this.decentPlayer.pause();
+    this.getPlayer().pause();
   }
 
   isPlaying() {
-    return this.decentPlayer && this.decentPlayer.isPlaying();
-    // return this.player && this.player.isPlaying();
+    return this.getPlayer() && this.getPlayer().isPlaying();
   }
 
   getMatchingCommentsSorted() {
 
     return this.getMatchingComments().sort(this.currentSorter.comparator);
+  }
+
+  ngAfterViewChecked() {
+
+    this.cdRef.detectChanges();
   }
 
   getMatchingComments() {
@@ -158,25 +182,31 @@ export class PublicTrackPlayerComponent implements OnInit {
   public loadWaveForm() {
 
     this.version.files.then((files) => {
-      this.decentPlayer = wave.create(
+      this.files = files;
+      this.playerService.addPlayer(this.track.track_id, wave.create(
         {
           container: "#waveform_" + this.track.track_id,
-          peaks: this.version.wave_png,
+          // peaks: this.version.wave_png,
+          peaks: this.peaks,
           duration: this.version.track_length,
-          // aws_path: files.filter(file => file.extension == "mp3")[0].aws_path
-          aws_path: "https://d3k08uu3zdbsgq.cloudfront.net/Zelmar-LetYouGo"
+          aws_path: files.filter(file => file.identifier == 1)[0].aws_path
+          // aws_path: "https://d3k08uu3zdbsgq.cloudfront.net/Zelmar-LetYouGo"
         }
-      );
-      this.decentPlayer.drawBuffer();
-      this.decentPlayer.backend.load();
-      this.decentPlayer.backend.loadChunk(0)
-        .then(() => this.decentPlayer.backend.loadChunk(1));
+      ));
+      // this.getPlayer().load(files.filter(file => file.extension == "m4a")[0].aws_path + "0.m4a");
+      // this.getPlayer().load("https://s3-eu-west-1.amazonaws.com/soundmarkersass-local-robin/608/06%20-%20Redbone0.mp3");
+      this.getPlayer().drawBuffer();
+      this.getPlayer().backend.load();
+      this.getPlayer().backend.loadChunk(0);
     });
   }
 
-  getCurrentTime() {
-    return this.decentPlayer != null ? this.decentPlayer.getCurrentTime() : 0;
-    // return this.player != null ? this.player.getCurrentPosition() : 0;
+  getCurrentTime(): number {
+    return this.getPlayer() != null ? this.getPlayer().getCurrentTime() : 0;
+  }
+
+  getCurrentTimeRounded() {
+    return Math.round(this.getCurrentTime());
   }
 
   private getPosition(element, commentTime) {
@@ -208,20 +238,21 @@ export class PublicTrackPlayerComponent implements OnInit {
 
   download() {
 
-    // Utils.sendGetDataRequest(this.track.track_url + ".mp3", [], "", (response, trackRequest) => {
-    //   saveAs(new Blob(
-    //     [
-    //       trackRequest.responseText
-    //     ],
-    //     {
-    //       type: trackRequest.getResponseHeader("content-type")
-    //     }), this.track.title + ".mp3"
-    //   )
-    // });
+    Utils.sendGetDataRequest(this.files.filter(file => file.identifier == 1)[0].aws_path, [])
+      .then((response) => {
+      saveAs(new Blob(
+        [
+          response
+        ],
+        {
+          // type: trackRequest.getResponseHeader("content-type")
+        }), this.track.title + ".mp3"
+      )
+    });
   }
 
   downloadFile(propertyId: string, fileId: string) {
-    ReadableStream
+    this.download()
   }
 
   goToOverview() {
@@ -245,5 +276,9 @@ export class PublicTrackPlayerComponent implements OnInit {
       this.comment.start_time = 0;
       this.comment.end_time = this.getTrackLength();
     });
+  }
+
+  getPlayer() {
+    return this.playerService.getPlayer(this.track.track_id);
   }
 }

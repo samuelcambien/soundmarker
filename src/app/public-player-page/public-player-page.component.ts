@@ -9,6 +9,7 @@ import {RestCall} from "../rest/rest-call";
 import {File} from "../model/file";
 import {Version} from "../model/version";
 import {Observable} from "rxjs";
+import {PlayerService} from "../player.service";
 
 @Component({
   selector: 'app-public-player',
@@ -19,14 +20,13 @@ export class PublicPlayerPageComponent implements OnInit {
 
   project: Project;
 
-  players: Map<Track, any> = new Map();
-
   message: Promise<Message>;
 
   activeTrack: Track;
 
   constructor(
     private route: ActivatedRoute,
+    private playerService: PlayerService
   ) {
   }
 
@@ -67,7 +67,11 @@ export class PublicPlayerPageComponent implements OnInit {
   }
 
   private loadPlayer(track: Track, version: Version, file: File) {
-    this.players.set(track, new Player(file.aws_path, version.track_length));
+    // this.playerService.addPlayer(track.track_id, new Player(file.aws_path, version.track_length));
+  }
+
+  getPlayer(trackId: string) {
+    return this.playerService.getPlayer(trackId);
   }
 
   private loadComments(track: Track) {
@@ -93,9 +97,14 @@ export class PublicPlayerPageComponent implements OnInit {
   pauseOtherTracks(except: Track) {
     for (let track of this.project.tracks) {
       if (track != except) {
-        this.players.get(track).pause();
+        this.playerService.getPlayer(track.track_id).pause();
       }
     }
+  }
+
+  selectTrack(track: Track) {
+    this.activeTrack = track;
+    this.getPlayer(track.track_id).redraw();
   }
 
   getMessage(project: Project, version: Version): Message {

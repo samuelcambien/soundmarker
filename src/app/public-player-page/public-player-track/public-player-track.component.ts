@@ -5,6 +5,7 @@ import {saveAs} from 'file-saver/FileSaver';
 import {animate, transition, trigger} from "@angular/animations";
 import {Version} from "../../model/version";
 import {Utils} from "../../app.component";
+import {PlayerService} from "../../player.service";
 
 @Component({
   selector: 'app-public-player-track',
@@ -25,7 +26,7 @@ export class PublicPlayerTrackComponent implements OnInit {
 
   version: Version;
 
-  constructor() {
+  constructor(private playerService: PlayerService) {
   }
 
   ngOnInit() {
@@ -34,7 +35,7 @@ export class PublicPlayerTrackComponent implements OnInit {
 
   play() {
     this.playing.emit();
-    this.player.play();
+    this.playerService.getPlayer(this.track.track_id).play();
   }
 
   trackSelected() {

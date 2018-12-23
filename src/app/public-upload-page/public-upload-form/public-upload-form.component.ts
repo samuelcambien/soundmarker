@@ -3,6 +3,7 @@ import {FileItem, FileUploader} from '../../ng2-file-upload';
 import {Mp3Encoder} from "../../mp3-encoder/mp3-encoder";
 import {RestCall} from "../../rest/rest-call";
 import * as wave from "../../player/dist/player.js"
+import {Version} from "../../model/version";
 
 @Component({
   selector: 'app-public-upload-form',
@@ -18,8 +19,6 @@ export class PublicUploadFormComponent implements OnInit {
   sharemode: "email" | "link" = "link";
   expiration: "week" | "month" = "week";
   downloadable: boolean = false;
-
-  project_url: string;
 
   player;
 
@@ -38,6 +37,7 @@ export class PublicUploadFormComponent implements OnInit {
       case "wav-16bit":
         converter = Mp3Encoder.convertWav16bit;
         break;
+      case "m4a":
       case "wav-other":
         converter = Mp3Encoder.convertWavOther;
         break;
@@ -57,17 +57,6 @@ export class PublicUploadFormComponent implements OnInit {
     }
 
     return converter(item._file, item._file.name);
-  }
-
-  public hasBaseDropZoneOver: boolean = false;
-  public hasAnotherDropZoneOver: boolean = false;
-
-  public fileOverBase(e: any): void {
-    this.hasBaseDropZoneOver = e;
-  }
-
-  public fileOverAnother(e: any): void {
-    this.hasAnotherDropZoneOver = e;
   }
 
   onSubmit() {
@@ -90,23 +79,12 @@ export class PublicUploadFormComponent implements OnInit {
   private processTrack(projectId, track: FileItem): Promise<any> {
 
     let length = 0;
-
-    return Promise.all([
-      RestCall.createNewTrack(projectId, track),
-      this.getAudioBuffer(track)
-    ]).then(result => {
-      return {trackId: result[0]["track_id"], buffer: result[1]}
-    }).then(({trackId, buffer}) =>
-      RestCall.createNewVersion(
-        trackId, this.notes_element.nativeElement.value, buffer.duration, this.getWaveform(buffer), this.downloadable ? "1" : "0"
-      ).then(response => {
-        let versionId = response["version_id"];
+    let uploads = [];
+    return this.processTrackMetadata(projectId, track)
+      .then(version => {
+        let versionId = version["version_id"];
         let file_name = Mp3Encoder.getName(track._file.name);
         let extension = Mp3Encoder.getExtension(track._file.name);
-
-        let uploads = [];
-
-        // RestCall.createWaveform(trackId, this.getWaveform(buffer));
 
         if (this.downloadable) {
           uploads.push(
@@ -114,16 +92,32 @@ export class PublicUploadFormComponent implements OnInit {
           );
           this.uploader.files++;
         }
+
         uploads.push(
           this.convert(track)
-            .then(file =>
-              this.uploadStreamFile(track._file, file_name, "mp3", track._file.size, versionId, length)
+            .then(converted =>
+              this.uploadStreamFile(converted, file_name, "mp3", track._file.size, versionId, length)
             )
         );
         this.uploader.files++;
 
         return Promise.all(uploads);
-      }));
+      });
+  }
+
+  processTrackMetadata(projectId: string, track: FileItem): Promise<Version> {
+    return Promise.all([
+      RestCall.createNewTrack(projectId, track),
+      this.getAudioBuffer(track)
+    ]).then(result => {
+      return {trackId: result[0]["track_id"], buffer: result[1]}
+    }).then(({trackId, buffer}) => {
+      let waveform = this.getWaveform(buffer);
+      return RestCall.createWaveform(trackId, waveform)
+        .then(() => RestCall.createNewVersion(
+          trackId, this.notes_element.nativeElement.value, buffer.duration, waveform, this.downloadable ? "1" : "0"
+        ));
+    });
   }
 
   private getWaveform(buffer: AudioBuffer): string {
@@ -146,20 +140,20 @@ export class PublicUploadFormComponent implements OnInit {
 
   private uploadDownloadFile(file: File, file_name: string, extension: string, size: number, versionId: string, length: number): Promise<any> {
 
-    return RestCall.createNewFile(file, file_name, extension, size, versionId, length)
+    return RestCall.createNewFile(file, file_name, extension, size, versionId, 0, length)
       .then(({fileId, buffer}) => {
-        RestCall.uploadChunk(buffer, fileId, 0, extension)
+        return RestCall.uploadChunk(buffer, fileId, 0, extension)
           .then(() => this.uploader.uploaded++);
       });
   }
 
   private uploadStreamFile(file: File, file_name: string, extension: string, size: number, versionId: string, length: number): Promise<any> {
 
-    return RestCall.createNewFile(file, file_name, extension, size, versionId, length)
-      .then(({fileId, buffer}) => {
+    return RestCall.createNewFile(file, file_name, extension, size, versionId, 1, length)
+      .then(({fileId, buffer}) =>
         RestCall.uploadChunk(buffer, fileId, 0, extension)
-          .then(() => this.uploader.uploaded++);
-      });
+          .then(() => this.uploader.uploaded++)
+      );
   }
 
   private searchSyncWord(uint8Array: Uint8Array, startIndex: number) {
