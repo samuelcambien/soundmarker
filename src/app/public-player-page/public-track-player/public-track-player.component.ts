@@ -266,7 +266,7 @@ export class PublicTrackPlayerComponent implements OnInit, AfterViewChecked {
     });
   }
 
-  private getPlayer() {
+  getPlayer() {
     return this.playerService.getPlayer(this.track.track_id);
   }
 }
