@@ -19,7 +19,7 @@ export class RestCall {
     });
   }
 
-  public static createNewVersion(trackId: string, versionNotes: string, length: number, waveform: string, downloadable): Promise<any> {
+  public static createNewVersion(trackId: string, versionNotes: string, length: number, waveform: string, downloadable): Promise<Version> {
     return Utils.sendPostRequest(RestUrl.VERSION_NEW, {
       track_id: trackId,
       track_length: length,
@@ -36,11 +36,11 @@ export class RestCall {
     });
   }
 
-  public static createNewFile(file: File, file_name: string, extension: string, size: number, versionId: string, length: number): Promise<{ fileId: string, buffer: ArrayBuffer }> {
+  public static createNewFile(file: File, file_name: string, extension: string, size: number, versionId: string, identifier: number, length: number): Promise<{ fileId: string, buffer: ArrayBuffer }> {
     return Promise.all([
       Utils.sendPostRequest(RestUrl.UPLOAD, {
         version_id: versionId,
-        identifier: 0,
+        identifier: identifier,
         track_length: length,
         chunk_length: 10,
         file_name: file_name,

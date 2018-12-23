@@ -22,9 +22,12 @@
       audioRate: 1,
       autoCenter: true,
       backend: 'WebAudio',
+      buffer_size: 10,
       container: null,
       cursorColor: '#bac1da',
       cursorWidth: 1,
+      chunksMax: 6,
+      chunksMin: 2,
       dragSelection: true,
       fillParent: true,
       forceDecode: false,
@@ -94,6 +97,11 @@
       this.isDestroyed = false;
     },
 
+    redraw: function () {
+      this.drawBuffer();
+      this.drawer.progress(this.backend.getPlayedPercents());
+    },
+
     createDrawer: function () {
       var my = this;
 
@@ -101,8 +109,7 @@
       this.drawer.init(this.container, this.params);
 
       this.drawer.on('redraw', function () {
-        my.drawBuffer();
-        my.drawer.progress(my.backend.getPlayedPercents());
+        this.redraw(my);
       });
 
       // Click-to-seek
@@ -325,6 +332,7 @@
     },
 
     drawBuffer: function () {
+
       var nominalWidth = Math.round(
         this.getDuration() * this.params.minPxPerSec * this.params.pixelRatio
       );
@@ -820,8 +828,6 @@
   'use strict';
 
   Player.WebAudio = {
-    buffer_count: 5,
-    buffer_size: 10,
     scriptBufferSize: 256,
     PLAYING_STATE: 0,
     PAUSED_STATE: 1,
@@ -855,6 +861,7 @@
 
       this.setPeaks(params.peaks);
       this.aws_path = params.aws_path;
+      this.buffer_size = params.buffer_size;
 
       this.audioBuffers = [];
       this.decodedBuffers = [];
@@ -938,8 +945,19 @@
     addOnAudioProcess: function () {
       var my = this;
 
-      this.scriptNode.onaudioprocess = function () {
+      this.scriptNode.onaudioprocess = function (e) {
         var time = my.getCurrentTime();
+
+        // if (!my.nextSource && time + e.inputBuffer.duration >= my.chunkEnd) {
+        //   my.sources[my.currentIndex + 1].start();
+        //   my.nextSource = my.sources[my.currentIndex + 1];
+        // } else if (my.nextSource) {
+        //   my.chunkEnd += my.nextSource.buffer.duration;
+        //   my.currentIndex++;
+        //   my.currentSource = my.nextSource;
+        //   my.nextSource = null;
+        //   my.loadChunk(my.currentIndex + 1);
+        // }
 
         if (time >= my.getDuration()) {
           my.setState(my.FINISHED_STATE);
@@ -1132,7 +1150,7 @@
 
     loadChunk: function (index) {
 
-      return fetch(this.aws_path + index.toString().padStart(3, '0') + ".mp3")
+      return fetch(this.aws_path + index.toString() + ".mp3")
         .then(response => this.readResponse(response.body.getReader(), new Uint8Array(), 0))
         .then((completeArray) => {
           this.audioBuffers[index] = this.copy(completeArray.buffer);
@@ -1163,9 +1181,16 @@
     },
 
     decodeBuffer: function (index, arrayBuffer) {
-      this.audioBuffers[index] = this.copy(arrayBuffer);
-      return this.ac.decodeAudioData(arrayBuffer)
-        .then((audioBuffer) => this.decodedBuffers[index] = audioBuffer);
+      return new Promise(resolve => {
+        this.audioBuffers[index] = this.copy(arrayBuffer);
+        this.ac.decodeAudioData(
+          arrayBuffer,
+          (audioBuffer) => {
+            this.decodedBuffers[index] = audioBuffer;
+            return resolve(audioBuffer);
+          }, (e) => console.log(e)
+        )
+      })
     },
 
     createSource: function (index) {
@@ -1205,9 +1230,6 @@
     },
 
     seekTo: function (start, end) {
-      // if (!buffer) {
-      //   return;
-      // }
 
       this.scheduledPause = null;
 
@@ -1250,9 +1272,17 @@
       start = adjustedTime.start;
       end = adjustedTime.end;
 
-      var index = Math.floor(start / this.buffer_size);
+      // var index = Math.floor(start / this.buffer_size);
+      // start = start % this.buffer_size;
 
-      this.playSource(index, start % this.buffer_size, end);
+      this.sources[0] = this.createSource(0);
+      this.playSource(0, start, end);
+
+      if (this.ac.state == 'suspended') {
+        this.ac.resume && this.ac.resume();
+      }
+      this.setState(this.PLAYING_STATE);
+      this.fireEvent('play');
     },
 
     playSource(index, start, end) {
@@ -1262,28 +1292,12 @@
       this.scheduledPause = end;
 
       this.source = this.sources[index];
+      this.currentIndex = index;
 
       this.source.start(0, start, end - start);
-
-      // var delay = this.source.buffer.duration;
       // this.nextSource.start(delay - start, 0, end - delay + start);
 
-      if (this.ac.state == 'suspended') {
-        this.ac.resume && this.ac.resume();
-      }
-
-      this.setState(this.PLAYING_STATE);
-
-      this.fireEvent('play');
-
-      this.source.onended = () => {
-        if (this.isPlaying()) {
-          this.playSource(index + 1, 0, end - this.source.buffer.duration + start);
-        }
-        this.sources[index] = this.createSource(index);
-      };
-
-      this.loadChunk(index + 1);
+      // this.loadChunk(index + 1);
     },
 
     /**

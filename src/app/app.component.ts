@@ -100,7 +100,11 @@ export class Utils {
         url += "/" + entry;
       }
       trackRequest.open("POST", url, true);
-      trackRequest.onload = () => resolve(JSON.parse(trackRequest.responseText));
+      trackRequest.onreadystatechange = () => {
+        if (trackRequest.readyState === 4) {
+          resolve(JSON.parse(trackRequest.responseText));
+        }
+      };
       trackRequest.onerror = () => reject(trackRequest.statusText);
       trackRequest.send(data);
     });

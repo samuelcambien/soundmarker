@@ -24,10 +24,14 @@ export class PublicInfoHeaderComponent implements OnInit {
   }
 
   ngOnInit() {
-    if (!this.termsAcceptedService.termsAccepted()) {
-      this.openIntroduction();
-    }
+    // if (!this.termsAcceptedService.termsAccepted()) {
+    //   this.openIntroduction();
+    // }
     if (this.messages) this.messages.then(message => this.message = message);
+  }
+
+  subscribe() {
+
   }
 
   goToPage() {
