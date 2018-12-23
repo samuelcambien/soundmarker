@@ -111,13 +111,11 @@ export class PublicUploadFormComponent implements OnInit {
       this.getAudioBuffer(track)
     ]).then(result => {
       return {trackId: result[0]["track_id"], buffer: result[1]}
-    }).then(({trackId, buffer}) => {
-      let waveform = this.getWaveform(buffer);
-      return RestCall.createWaveform(trackId, waveform)
-        .then(() => RestCall.createNewVersion(
-          trackId, this.notes_element.nativeElement.value, buffer.duration, waveform, this.downloadable ? "1" : "0"
-        ));
-    });
+    }).then(({trackId, buffer}) =>
+      RestCall.createNewVersion(
+        trackId, this.notes_element.nativeElement.value, buffer.duration, this.getWaveform(buffer), this.downloadable ? "1" : "0"
+      )
+    );
   }
 
   private getWaveform(buffer: AudioBuffer): string {
