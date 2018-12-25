@@ -663,62 +663,75 @@ if (array_search($track_id, $_SESSION['user_tracks'])) {
 ///////////////////////////////////////////////////////// Routes - /track GET /////////////////////////////////////////////////////////
 Flight::route('GET /track/@track_id', function($track_id) {
 
-// if user is able to edit this track
-// if (array_search($track_id, $_SESSION['user_tracks'])) {
-  $config = Flight::get("config");
-  $db = Flight::db();
-  $sql = "SELECT version_id, notes, downloadable, visibility, version_title, track_length, wave_png FROM Version WHERE track_id = '$track_id'";
-  $result = $db->query($sql);
-  $versions = $result->fetchAll(PDO::FETCH_ASSOC);
+$config = Flight::get("config");
+$db = Flight::db();
+$sql = "SELECT version_id, notes, downloadable, visibility, version_title, track_length, wave_png FROM Version WHERE track_id = '$track_id'";
+$result = $db->query($sql);
+$versions = $result->fetchAll(PDO::FETCH_ASSOC);
 
-  // return ok
-  Flight::json(array(
-     'versions' => $versions
-  ), 200);
-// } else {
-//   // return not allowed
-//   Flight::json(array(
-//      'return' => 'notallowed'
-//   ), 200);
-// }
+foreach ($versions as &$version) {
+  $_SESSION["view_versions"][] = $version["version_id"];
+}
+
+// return ok
+Flight::json(array(
+   'versions' => $versions
+), 200);
 });
 
 ///////////////////////////////////////////////////// Routes - /track/version GET /////////////////////////////////////////////////////
 Flight::route('GET /track/version/@version_id', function($version_id) {
 
-// Check again if user is allowed to get that info
-$config = Flight::get("config");
-$db = Flight::db();
-$sql = "SELECT file_id, extension, metadata, aws_path, file_name, file_size, identifier, chunk_length FROM File WHERE version_id = '$version_id'";
-$result = $db->query($sql);
-$files = $result->fetchAll(PDO::FETCH_ASSOC);
+// if user is allow to see this version
+if (array_search($version_id, $_SESSION['view_versions'])) {
+  $config = Flight::get("config");
+  $db = Flight::db();
+  $sql = "SELECT file_id, extension, metadata, aws_path, file_name, file_size, identifier, chunk_length FROM File WHERE version_id = '$version_id'";
+  $result = $db->query($sql);
+  $files = $result->fetchAll(PDO::FETCH_ASSOC);
 
-// return ok
-Flight::json(array(
-   'files' => $files
-), 200);
+  foreach ($files as &$file) {
+    $_SESSION["view_files"][] = $file["file_id"];
+  }
+
+  // return ok
+  Flight::json(array(
+     'files' => $files
+  ), 200);
+} else {
+  // return not allowed
+  Flight::json(array(
+     'return' => 'notallowed'
+  ), 200);
+}
 });
 
 ///////////////////////////////////////////////// Routes - /track/version/comments GET ////////////////////////////////////////////////
 Flight::route('GET /track/version/comments/@version_id', function($version_id) {
 
-// Can user get this?
-$config = Flight::get("config");
-$db = Flight::db();
-$sql = "SELECT comment_id, notes, start_time, end_time, checked, parent_comment_id, name, include_end, include_start, comment_time FROM Comment WHERE version_id = '$version_id'";
-$result = $db->query($sql);
-$comments = $result->fetchAll(PDO::FETCH_ASSOC);
+// if user is allow to see this version
+if (array_search($version_id, $_SESSION['view_versions'])) {
+  $config = Flight::get("config");
+  $db = Flight::db();
+  $sql = "SELECT comment_id, notes, start_time, end_time, checked, parent_comment_id, name, include_end, include_start, comment_time FROM Comment WHERE version_id = '$version_id'";
+  $result = $db->query($sql);
+  $comments = $result->fetchAll(PDO::FETCH_ASSOC);
 
-// return ok
-Flight::json(array(
-   'comments' => $comments
-), 200);
+  // return ok
+  Flight::json(array(
+     'comments' => $comments
+  ), 200);
+} else {
+  // return not allowed
+  Flight::json(array(
+     'return' => 'notallowed'
+  ), 200);
+}
 });
 
 ///////////////////////////////////////////////// Routes - /track/version/comment POST ////////////////////////////////////////////////
 Flight::route('POST /track/version/comment', function() {
 
-// Can user post comments for this version?
 $config = Flight::get("config");
 $getbody = json_decode(Flight::request()->getBody());
 
@@ -732,14 +745,23 @@ $include_start = isset($getbody->include_start) ? $getbody->include_start : "";
 $include_end = isset($getbody->include_end) ? $getbody->include_end : "";
 $comment_time = isset($getbody->comment_time) ? $getbody->comment_time : "";
 
-$db = Flight::db();
-$sql = "INSERT INTO Comment (version_id, notes, name, start_time, end_time, parent_comment_id, include_start, include_end, comment_time) VALUES ('$version_id', '$notes', '$name', '$start_time', '$end_time', '$parent_comment_id', '$include_start', '$include_end', '$comment_time')";
-$result = $db->query($sql);
+// if user is allow to see this version
+if (array_search($version_id, $_SESSION['view_versions'])) {
+  $db = Flight::db();
+  $sql = "INSERT INTO Comment (version_id, notes, name, start_time, end_time, parent_comment_id, include_start, include_end, comment_time) VALUES ('$version_id', '$notes', '$name', '$start_time', '$end_time', '$parent_comment_id', '$include_start', '$include_end', '$comment_time')";
+  $result = $db->query($sql);
 
-// return ok
-Flight::json(array(
-   'comment_id' => $db->lastInsertId()
-), 200);
+  $_SESSION["view_comments"][] = $db->lastInsertId();
+  // return ok
+  Flight::json(array(
+     'comment_id' => $db->lastInsertId()
+  ), 200);
+} else {
+  // return not allowed
+  Flight::json(array(
+     'return' => 'notallowed'
+  ), 200);
+} 
 });
 
 ///////////////////////////////////////////////// Routes - /track/version/delete/comment POST ///////////////////////////////////////////
@@ -751,33 +773,48 @@ $getbody = json_decode(Flight::request()->getBody());
 
 $comment_id = $getbody->comment_id;
 
-$db = Flight::db();
-$sql = "DELETE FROM Comment WHERE comment_id = '$comment_id'";
-$result = $db->query($sql);
+// if user is allow to delete this comment
+if (array_search($comment_id, $_SESSION['view_comments'])) {
+  $db = Flight::db();
+  $sql = "DELETE FROM Comment WHERE comment_id = '$comment_id'";
+  $result = $db->query($sql);
 
-// return ok
-Flight::json(array(
-   'return' => 'ok'
-), 200);
+  // return ok
+  Flight::json(array(
+     'return' => 'ok'
+  ), 200);
+} else {
+  // return not allowed
+  Flight::json(array(
+     'return' => 'notallowed'
+  ), 200);
+} 
 });
 
 
 ////////////////////////////////////////////////// Routes - /track/file/download GET //////////////////////////////////////////////////
 Flight::route('GET /track/file/download/@file_id', function($file_id) {
 
-// Can user get access to this?
 $config = Flight::get("config");
-$db = Flight::db();
-$sql = "SELECT aws_path  FROM File WHERE file_id = '$file_id'";
-$result = $db->query($sql);
-$aws_path = $result->fetch()[0];
 
-// return ok
-Flight::json(array(
-   'aws_path' => $aws_path
-), 200);
+// if user is allow to view this file
+if (array_search($file_id, $_SESSION['view_files'])) {
+  $db = Flight::db();
+  $sql = "SELECT aws_path  FROM File WHERE file_id = '$file_id'";
+  $result = $db->query($sql);
+  $aws_path = $result->fetch()[0];
+
+  // return ok
+  Flight::json(array(
+     'aws_path' => $aws_path
+  ), 200);
 });
-
+} else {
+  // return not allowed
+  Flight::json(array(
+     'return' => 'notallowed'
+  ), 200);
+} 
 
 
 
@@ -805,30 +842,40 @@ $metadata = isset($getbody->metadata) ? $getbody->metadata : "";
 $extension = isset($getbody->extension) ? $getbody->extension : "";
 $aws_path = $config['AWS_S3_PATH'].$version_id . "/" . $file_name;
 
-$db = Flight::db();
-$sql = "INSERT INTO File (version_id, file_name, file_size, metadata, extension, chunk_length, identifier, aws_path) VALUES ('$version_id', '$file_name', '$file_size', '$metadata', '$extension', '$chunk_length', '$identifier', '$aws_path')";
-$result = $db->query($sql);
+// if user is able to upload file
+if (array_search($version_id, $_SESSION['user_versions'])) {
+  $db = Flight::db();
+  $sql = "INSERT INTO File (version_id, file_name, file_size, metadata, extension, chunk_length, identifier, aws_path) VALUES ('$version_id', '$file_name', '$file_size', '$metadata', '$extension', '$chunk_length', '$identifier', '$aws_path')";
+  $result = $db->query($sql);
 
-$_SESSION['user_files'][] = $db->lastInsertId();
+  $_SESSION['user_files'][] = $db->lastInsertId();
 
-// return ok
-Flight::json(array(
-   'file_id' => $db->lastInsertId()
-), 200);
+  // return ok
+  Flight::json(array(
+     'file_id' => $db->lastInsertId()
+  ), 200);
+} else {
+  // return not allowed
+  Flight::json(array(
+     'return' => 'notallowed'
+  ), 200);
+} 
 });
 
 ////////////////////////////////////////////////// Routes - /file/chunk/$file_id POST /////////////////////////////////////////////////
 Flight::route('POST /file/chunk/@file_id/@idno/@ext', function($file_id, $idno, $ext) {
 
-// Can user upload?
 $config = Flight::get("config");
-$db = Flight::db();
-$sql = "SELECT version_id, extension, metadata, aws_path, file_name, file_size, identifier, chunk_length FROM File WHERE file_id = '$file_id'";
-$result = $db->query($sql);
-$files = $result->fetchAll();
 
-// get the variables
-$s3 = Flight::get("s3");
+// if user is able to upload file
+if (array_search($file_id, $_SESSION['user_files'])) {
+  $db = Flight::db();
+  $sql = "SELECT version_id, extension, metadata, aws_path, file_name, file_size, identifier, chunk_length FROM File WHERE file_id = '$file_id'";
+  $result = $db->query($sql);
+  $files = $result->fetchAll();
+
+  // get the variables
+  $s3 = Flight::get("s3");
 
   // Upload data.
   $result = $s3->putObject([
@@ -841,12 +888,13 @@ $s3 = Flight::get("s3");
   Flight::json(array(
      'ok' => $result['ObjectURL'] . PHP_EOL
   ), 200);
+} else {
+  // return not allowed
+  Flight::json(array(
+     'return' => 'notallowed'
+  ), 200);
+} 
 });
-
-
-
-
-// SELECT * FROM `Comment` WHERE version_id IN ('188', '160', '159')
 
 
 
