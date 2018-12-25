@@ -166,7 +166,8 @@ $project_password = isset($getbody->project_password) ? $getbody->project_passwo
 $ipaddr = $_SERVER['REMOTE_ADDR'] . " - " . $_SERVER['HTTP_X_FORWARDED_FOR'];
 
 $db = Flight::db();
-$sql = "INSERT INTO Project (user_id, title, password, active, ipaddr) VALUES ('$_SESSION['USER']', $project_title', '$project_password', '1', '$ipaddr')";
+$session_userid = $_SESSION['USER'];
+$sql = "INSERT INTO Project (user_id, title, password, active, ipaddr) VALUES ('$session_userid', $project_title', '$project_password', '1', '$ipaddr')";
 $result = $db->query($sql);
 $project_id = $db->lastInsertId();
 
