@@ -160,14 +160,13 @@ $config = Flight::get("config");
 // Todo: check if user_id exists first (foreign_key needs to be valid) -> put in dB
 $getbody = json_decode(Flight::request()->getBody());
 
-// $user_id = isset($getbody->user_id) ? $getbody->user_id : ""; // check user id
+$user_id = isset($_SESSION['USER']) ? $_SESSION['USER'] : "";
 $project_title = isset($getbody->project_title) ? $getbody->project_title : "";
 $project_password = isset($getbody->project_password) ? $getbody->project_password : "";
 $ipaddr = $_SERVER['REMOTE_ADDR'] . " - " . $_SERVER['HTTP_X_FORWARDED_FOR'];
 
 $db = Flight::db();
-$session_userid = $_SESSION['USER'];
-$sql = "INSERT INTO Project (user_id, title, password, active, ipaddr) VALUES ('$session_userid', $project_title', '$project_password', '1', '$ipaddr')";
+$sql = "INSERT INTO Project (user_id, title, password, active, ipaddr) VALUES ('$user_id', '$project_title', '$project_password', '1', '$ipaddr')";
 $result = $db->query($sql);
 $project_id = $db->lastInsertId();
 
@@ -179,7 +178,7 @@ $_SESSION['user_projects'][] = $project_id;
 
 // return ok
 Flight::json(array(
-   'project_id' => $project_id, 'userproject' => $_SESSION['user_projects']
+   'project_id' => $project_id, 'userproject' => $test
 ), 200);
 });
 
@@ -193,16 +192,24 @@ $project_id = isset($getbody->project_id) ? $getbody->project_id : "";
 $project_title = isset($getbody->project_title) ? $getbody->project_title : "";
 $project_password = isset($getbody->project_password) ? $getbody->project_password : "";
 
-$db = Flight::db();
-$sql = "UPDATE Project SET title = '$project_title' WHERE project_id = '$project_id'";
-$result = $db->query($sql);
-$sql = "UPDATE Project SET password = '$project_password' WHERE project_id = '$project_id'";
-$result = $db->query($sql);
+// if user is able to edit this project -> update with user permissions
+if (array_search($project_id, $_SESSION['user_projects'])) {
+  $db = Flight::db();
+  $sql = "UPDATE Project SET title = '$project_title' WHERE project_id = '$project_id'";
+  $result = $db->query($sql);
+  $sql = "UPDATE Project SET password = '$project_password' WHERE project_id = '$project_id'";
+  $result = $db->query($sql);
 
-// return ok
-Flight::json(array(
-   'ok' => 'ok'
-), 200);
+  // return ok
+  Flight::json(array(
+     'return' => 'ok'
+  ), 200);
+} else {
+  // return not allowed
+  Flight::json(array(
+     'return' => 'notallowed'
+  ), 200);
+}
 });
 
 //////////////////////////////////////////////// Routes - /project/get/@project_hash POST /////////////////////////////////////////////
@@ -221,201 +228,208 @@ $expiration = isset($getbody->expiration) ? $getbody->expiration : "1 week";
 // check notes????
 $notes = isset($getbody->notes) ? $getbody->notes : "";
 
-$db = Flight::db();
-// Update expiration date
-$projectdate = new \DateTime('+'.$expiration);
-$projectdatef = $projectdate->format('Y-m-d H:i:s');
-$sql = "UPDATE Project SET expiration_date = '$projectdatef' WHERE project_id = '$project_id'";
-$result = $db->query($sql);
-
-$sql = "SELECT hash FROM Project WHERE project_id = '$project_id'";
-$result = $db->query($sql);
-$hash = $result->fetch()[0];
-
-// only send if opted in for email
-if ($receiver) {
-  // https://www.functions-online.com/htmlentities.html
-  // htmlentities('', ENT_COMPAT, 'ISO-8859-1');
-  // html_entity_decode('', ENT_COMPAT, 'ISO-8859-1');
-  // Send Email to Sender
-  $sql = "SELECT email_string FROM Emails WHERE email_name = 'soundmarker-initial-email-to-sender'";
-  $emailstring = html_entity_decode($db->query($sql)->fetch()[0], ENT_COMPAT, 'ISO-8859-1');
-  $sql = "SELECT email_string_text FROM Emails WHERE email_name = 'soundmarker-initial-email-to-sender'";
-  $emailstring_text = html_entity_decode($db->query($sql)->fetch()[0], ENT_COMPAT, 'ISO-8859-1');
-  
-  // Replace strings
-  // Replace strings -> %projectdate%
-  $emailstring = str_replace("%projectdate%",$projectdate->format('F jS Y'),$emailstring);
-  $emailstring_text = str_replace("%projectdate%",$projectdate->format('F jS Y'),$emailstring_text);
-  // Replace strings -> %projectlink%
-  $sql = "SELECT hash FROM Project WHERE project_id = '$project_id'";
-  $projectlink = $config['SERVER_URL']."/project/" . $db->query($sql)->fetch()[0];
-  $emailstring = str_replace("%projectlink%",$projectlink,$emailstring);
-  $emailstring_text = str_replace("%projectlink%",$projectlink,$emailstring_text);
-  // Replace strings -> %recipientmail%
-  $emailstring = str_replace("%recipientmail%",implode("\n", $receiver),$emailstring);
-  $emailstring_text = str_replace("%recipientmail%",implode("\n", $receiver),$emailstring_text);
-  // Replace strings -> %trackamount%
-  $sql = "SELECT track_id FROM Track WHERE project_id = '$project_id'";
-  $tracks = $db->query($sql)->fetchAll(PDO::FETCH_ASSOC);
-  foreach ($tracks as &$track) {
-      $trackid = $track["track_id"];
-      $sqlversion = "SELECT version_id FROM Version WHERE track_id = '$trackid'";
-      $versions[] = $db->query($sqlversion)->fetchAll(PDO::FETCH_ASSOC);
-  }
-  foreach ($versions as &$versions2) {
-    foreach ($versions2 as &$version) {
-        $versionid = $version["version_id"];
-        $sqlfiles = "SELECT file_name FROM File WHERE version_id = '$versionid'";
-        $files[] = $db->query($sqlfiles)->fetchAll(PDO::FETCH_ASSOC)[0];
-    }
-  }
-  if (count($files) == 1) {
-    $trackcount = count($files). " track";
-  } else {
-    $trackcount = count($files). " tracks";
-  }
-  $emailstring = str_replace("%trackamount%",$trackcount,$emailstring);
-  $emailstring_text = str_replace("%trackamount%",$trackcount,$emailstring_text);   
-  // Replace strings -> %tracktitle%
-  $tracktitle = "";
-  foreach ($files as &$file) {
-      $tracktitle .= $file["file_name"] . "<br>";
-  }
-  $emailstring = str_replace("%tracktitle%",$tracktitle,$emailstring);
-  $emailstring_text = str_replace("%tracktitle%",$tracktitle,$emailstring_text);   
-
-  $subject = 'Your tracks have been shared successfully via Soundmarker';
-  $char_set = 'UTF-8';
-
-  try {
-      $result = Flight::get("SesClient")->sendEmail([
-          'Destination' => [
-              'ToAddresses' => [$sender],
-          ],
-          'ReplyToAddresses' => ["noreply@soundmarker.com"],
-          'Source' => "Soundmarker <noreply@soundmarker.com>",
-          'Message' => [
-            'Body' => [
-                'Html' => [
-                    'Charset' => $char_set,
-                    'Data' => $emailstring,
-                ],
-                'Text' => [
-                    'Charset' => $char_set,
-                    'Data' => $emailstring_text,
-                ],
-            ],
-            'Subject' => [
-                'Charset' => $char_set,
-                'Data' => $subject,
-            ],
-          ],
-      ]);
-      $messageId = $result['MessageId'];
-  } catch (AwsException $e) {
-      // output error message if fails
-      echo $e->getMessage();
-      echo("The email was not sent. Error message: ".$e->getAwsErrorMessage()."\n");
-  }
-
-  // Send Email to Recipient
-  $sql = "SELECT email_string FROM Emails WHERE email_name = 'soundmarker-initial-email-to-recipient'";
-  $emailstring = html_entity_decode($db->query($sql)->fetch()[0], ENT_COMPAT, 'ISO-8859-1');
-  $sql = "SELECT email_string_text FROM Emails WHERE email_name = 'soundmarker-initial-email-to-recipient'";
-  $emailstring_text = html_entity_decode($db->query($sql)->fetch()[0], ENT_COMPAT, 'ISO-8859-1');
-  
-  // Replace strings
-  // Replace strings -> %projectdate%
-  $emailstring = str_replace("%projectdate%",$projectdate->format('F jS Y'),$emailstring);
-  $emailstring_text = str_replace("%projectdate%",$projectdate->format('F jS Y'),$emailstring_text);
-  // Replace strings -> %projectlink%
-  $emailstring = str_replace("%projectlink%",$projectlink,$emailstring);
-  $emailstring_text = str_replace("%projectlink%",$projectlink,$emailstring_text);
-  // Replace strings -> %recipientmail%
-  $emailstring = str_replace("%recipientmail%",implode("\n", $receiver),$emailstring);
-  $emailstring_text = str_replace("%recipientmail%",implode("\n", $receiver),$emailstring_text);
-  // Replace strings -> %trackamount%
-  $emailstring = str_replace("%trackamount%",$trackcount,$emailstring);
-  $emailstring_text = str_replace("%trackamount%",$trackcount,$emailstring_text);   
-  // Replace strings -> %tracktitle%
-  $emailstring = str_replace("%tracktitle%",$tracktitle,$emailstring);
-  $emailstring_text = str_replace("%tracktitle%",$tracktitle,$emailstring_text);   
-  // Replace strings -> %projectnotes%
-  $emailstring = str_replace("%projectnotes%",$notes,$emailstring);
-  $emailstring_text = str_replace("%projectnotes%",$notes,$emailstring_text);   
-  // Replace strings -> %sendermail%
-  $emailstring = str_replace("%sendermail%",$sender,$emailstring);
-  $emailstring_text = str_replace("%sendermail%",$sender,$emailstring_text);   
-
-  $subject = $sender . ' has shared '. $trackcount . ' with you via Soundmarker';
-  $char_set = 'UTF-8';
-
-  try {
-      $result = Flight::get("SesClient")->sendEmail([
-          'Destination' => [
-              'ToAddresses' => $receiver,
-          ],
-          'ReplyToAddresses' => [$sender],
-          'Source' => "Soundmarker <noreply@soundmarker.com>",
-          'Message' => [
-            'Body' => [
-                'Html' => [
-                    'Charset' => $char_set,
-                    'Data' => $emailstring,
-                ],
-                'Text' => [
-                    'Charset' => $char_set,
-                    'Data' => $emailstring_text,
-                ],
-            ],
-            'Subject' => [
-                'Charset' => $char_set,
-                'Data' => $subject,
-            ],
-          ],
-      ]);
-      $messageId = $result['MessageId'];
-  } catch (AwsException $e) {
-      // output error message if fails
-      echo $e->getMessage();
-      echo("The email was not sent. Error message: ".$e->getAwsErrorMessage()."\n");
-  }
-
-  // Create notifications
-  // Notification -> Expired
-  $senddate = $projectdate->modify('-3 days');
-  $senddatef = $senddate->format('Y-m-d H:i:s');
+// if user is able to edit this project -> update with user permissions
+if (array_search($project_id, $_SESSION['user_projects'])) {
   $db = Flight::db();
-  $receiverstring = implode("\n", $receiver);
-  $sql = "INSERT INTO Notification (emailaddress, senddate, type, status, type_id, recipientemail) VALUES ('$sender', '$projectdatef', '0', '0', '$project_id', '$receiverstring')";
+  // Update expiration date
+  $projectdate = new \DateTime('+'.$expiration);
+  $projectdatef = $projectdate->format('Y-m-d H:i:s');
+  $sql = "UPDATE Project SET expiration_date = '$projectdatef' WHERE project_id = '$project_id'";
   $result = $db->query($sql);
 
-  // Create DailyUpdates in dB
-  $sql = "INSERT INTO DailyUpdates (emailaddress, project_id) VALUES ('$sender', '$project_id')";
+  $sql = "SELECT hash FROM Project WHERE project_id = '$project_id'";
   $result = $db->query($sql);
+  $hash = $result->fetch()[0];
+
+  // only send if opted in for email
+  if ($receiver) {
+    // https://www.functions-online.com/htmlentities.html
+    // htmlentities('', ENT_COMPAT, 'ISO-8859-1');
+    // html_entity_decode('', ENT_COMPAT, 'ISO-8859-1');
+    // Send Email to Sender
+    $sql = "SELECT email_string FROM Emails WHERE email_name = 'soundmarker-initial-email-to-sender'";
+    $emailstring = html_entity_decode($db->query($sql)->fetch()[0], ENT_COMPAT, 'ISO-8859-1');
+    $sql = "SELECT email_string_text FROM Emails WHERE email_name = 'soundmarker-initial-email-to-sender'";
+    $emailstring_text = html_entity_decode($db->query($sql)->fetch()[0], ENT_COMPAT, 'ISO-8859-1');
+    
+    // Replace strings
+    // Replace strings -> %projectdate%
+    $emailstring = str_replace("%projectdate%",$projectdate->format('F jS Y'),$emailstring);
+    $emailstring_text = str_replace("%projectdate%",$projectdate->format('F jS Y'),$emailstring_text);
+    // Replace strings -> %projectlink%
+    $sql = "SELECT hash FROM Project WHERE project_id = '$project_id'";
+    $projectlink = $config['SERVER_URL']."/project/" . $db->query($sql)->fetch()[0];
+    $emailstring = str_replace("%projectlink%",$projectlink,$emailstring);
+    $emailstring_text = str_replace("%projectlink%",$projectlink,$emailstring_text);
+    // Replace strings -> %recipientmail%
+    $emailstring = str_replace("%recipientmail%",implode("\n", $receiver),$emailstring);
+    $emailstring_text = str_replace("%recipientmail%",implode("\n", $receiver),$emailstring_text);
+    // Replace strings -> %trackamount%
+    $sql = "SELECT track_id FROM Track WHERE project_id = '$project_id'";
+    $tracks = $db->query($sql)->fetchAll(PDO::FETCH_ASSOC);
+    foreach ($tracks as &$track) {
+        $trackid = $track["track_id"];
+        $sqlversion = "SELECT version_id FROM Version WHERE track_id = '$trackid'";
+        $versions[] = $db->query($sqlversion)->fetchAll(PDO::FETCH_ASSOC);
+    }
+    foreach ($versions as &$versions2) {
+      foreach ($versions2 as &$version) {
+          $versionid = $version["version_id"];
+          $sqlfiles = "SELECT file_name FROM File WHERE version_id = '$versionid'";
+          $files[] = $db->query($sqlfiles)->fetchAll(PDO::FETCH_ASSOC)[0];
+      }
+    }
+    if (count($files) == 1) {
+      $trackcount = count($files). " track";
+    } else {
+      $trackcount = count($files). " tracks";
+    }
+    $emailstring = str_replace("%trackamount%",$trackcount,$emailstring);
+    $emailstring_text = str_replace("%trackamount%",$trackcount,$emailstring_text);   
+    // Replace strings -> %tracktitle%
+    $tracktitle = "";
+    foreach ($files as &$file) {
+        $tracktitle .= $file["file_name"] . "<br>";
+    }
+    $emailstring = str_replace("%tracktitle%",$tracktitle,$emailstring);
+    $emailstring_text = str_replace("%tracktitle%",$tracktitle,$emailstring_text);   
+
+    $subject = 'Your tracks have been shared successfully via Soundmarker';
+    $char_set = 'UTF-8';
+
+    try {
+        $result = Flight::get("SesClient")->sendEmail([
+            'Destination' => [
+                'ToAddresses' => [$sender],
+            ],
+            'ReplyToAddresses' => ["noreply@soundmarker.com"],
+            'Source' => "Soundmarker <noreply@soundmarker.com>",
+            'Message' => [
+              'Body' => [
+                  'Html' => [
+                      'Charset' => $char_set,
+                      'Data' => $emailstring,
+                  ],
+                  'Text' => [
+                      'Charset' => $char_set,
+                      'Data' => $emailstring_text,
+                  ],
+              ],
+              'Subject' => [
+                  'Charset' => $char_set,
+                  'Data' => $subject,
+              ],
+            ],
+        ]);
+        $messageId = $result['MessageId'];
+    } catch (AwsException $e) {
+        // output error message if fails
+        echo $e->getMessage();
+        echo("The email was not sent. Error message: ".$e->getAwsErrorMessage()."\n");
+    }
+
+    // Send Email to Recipient
+    $sql = "SELECT email_string FROM Emails WHERE email_name = 'soundmarker-initial-email-to-recipient'";
+    $emailstring = html_entity_decode($db->query($sql)->fetch()[0], ENT_COMPAT, 'ISO-8859-1');
+    $sql = "SELECT email_string_text FROM Emails WHERE email_name = 'soundmarker-initial-email-to-recipient'";
+    $emailstring_text = html_entity_decode($db->query($sql)->fetch()[0], ENT_COMPAT, 'ISO-8859-1');
+    
+    // Replace strings
+    // Replace strings -> %projectdate%
+    $emailstring = str_replace("%projectdate%",$projectdate->format('F jS Y'),$emailstring);
+    $emailstring_text = str_replace("%projectdate%",$projectdate->format('F jS Y'),$emailstring_text);
+    // Replace strings -> %projectlink%
+    $emailstring = str_replace("%projectlink%",$projectlink,$emailstring);
+    $emailstring_text = str_replace("%projectlink%",$projectlink,$emailstring_text);
+    // Replace strings -> %recipientmail%
+    $emailstring = str_replace("%recipientmail%",implode("\n", $receiver),$emailstring);
+    $emailstring_text = str_replace("%recipientmail%",implode("\n", $receiver),$emailstring_text);
+    // Replace strings -> %trackamount%
+    $emailstring = str_replace("%trackamount%",$trackcount,$emailstring);
+    $emailstring_text = str_replace("%trackamount%",$trackcount,$emailstring_text);   
+    // Replace strings -> %tracktitle%
+    $emailstring = str_replace("%tracktitle%",$tracktitle,$emailstring);
+    $emailstring_text = str_replace("%tracktitle%",$tracktitle,$emailstring_text);   
+    // Replace strings -> %projectnotes%
+    $emailstring = str_replace("%projectnotes%",$notes,$emailstring);
+    $emailstring_text = str_replace("%projectnotes%",$notes,$emailstring_text);   
+    // Replace strings -> %sendermail%
+    $emailstring = str_replace("%sendermail%",$sender,$emailstring);
+    $emailstring_text = str_replace("%sendermail%",$sender,$emailstring_text);   
+
+    $subject = $sender . ' has shared '. $trackcount . ' with you via Soundmarker';
+    $char_set = 'UTF-8';
+
+    try {
+        $result = Flight::get("SesClient")->sendEmail([
+            'Destination' => [
+                'ToAddresses' => $receiver,
+            ],
+            'ReplyToAddresses' => [$sender],
+            'Source' => "Soundmarker <noreply@soundmarker.com>",
+            'Message' => [
+              'Body' => [
+                  'Html' => [
+                      'Charset' => $char_set,
+                      'Data' => $emailstring,
+                  ],
+                  'Text' => [
+                      'Charset' => $char_set,
+                      'Data' => $emailstring_text,
+                  ],
+              ],
+              'Subject' => [
+                  'Charset' => $char_set,
+                  'Data' => $subject,
+              ],
+            ],
+        ]);
+        $messageId = $result['MessageId'];
+    } catch (AwsException $e) {
+        // output error message if fails
+        echo $e->getMessage();
+        echo("The email was not sent. Error message: ".$e->getAwsErrorMessage()."\n");
+    }
+
+    // Create notifications
+    // Notification -> Expired
+    $senddate = $projectdate->modify('-3 days');
+    $senddatef = $senddate->format('Y-m-d H:i:s');
+    $db = Flight::db();
+    $receiverstring = implode("\n", $receiver);
+    $sql = "INSERT INTO Notification (emailaddress, senddate, type, status, type_id, recipientemail) VALUES ('$sender', '$projectdatef', '0', '0', '$project_id', '$receiverstring')";
+    $result = $db->query($sql);
+
+    // Create DailyUpdates in dB
+    $sql = "INSERT INTO DailyUpdates (emailaddress, project_id) VALUES ('$sender', '$project_id')";
+    $result = $db->query($sql);
+  }
+
+  // return ok
+  Flight::json(array(
+     'project_hash' => $hash
+  ), 200);
+} else {
+  // return not allowed
+  Flight::json(array(
+     'return' => 'notallowed'
+  ), 200);
 }
-
-// return ok
-Flight::json(array(
-   'project_hash' => $hash
-), 200);
 });
 
 //////////////////////////////////////////////// Routes - /project/get/@project_hash GET /////////////////////////////////////////////
-// Get only for non password protected calls
 Flight::route('GET /project/get/@project_hash', function($project_hash) {
 
-// check for password if password is set?
 $config = Flight::get("config");
 $db = Flight::db();
-$sql = "SELECT project_id, active, expiration_date, user_id FROM Project WHERE hash = '$project_hash'";
+$sql = "SELECT project_id, active, expiration_date, user_id, password FROM Project WHERE hash = '$project_hash'";
 $response = $db->query($sql)->fetchAll(PDO::FETCH_ASSOC);
 
 $project_id = $response[0]["project_id"];
 $active = $response[0]["active"];
 $expiration_date = $response[0]["expiration_date"];
 $user_id = $response[0]["user_id"];
+$project_password = $response[0]["password"];
 
 $lastmonth = new \DateTime('-1 month');
 $lastmonthf = $lastmonth->format('Y-m-d H:i:s');
@@ -437,10 +451,57 @@ if ($status == "expired") {
   $tracks = "";
 }
 
-// return ok
-Flight::json(array(
-   'project_id' => $project_id, 'status' => $status, 'tracks' => $tracks
-), 200);
+// if project is password protected
+if ($project_password) {
+  if (array_search($project_id, $_SESSION['approved_user_projects'])) {
+    // return ok
+    Flight::json(array(
+       'project_id' => $project_id, 'status' => $status, 'tracks' => $tracks
+    ), 200);  
+  } else {
+    // return ok
+    Flight::json(array(
+       'return' => 'passwordmissing'
+    ), 200);  
+  }
+} else {
+  // return ok
+  Flight::json(array(
+     'project_id' => $project_id, 'status' => $status, 'tracks' => $tracks
+  ), 200);  
+}
+});
+
+//////////////////////////////////////////////// Routes - /project/set/viewpassword POST /////////////////////////////////////////////
+Flight::route('POST /project/set/viewpassword', function() {
+
+$config = Flight::get("config");
+$getbody = json_decode(Flight::request()->getBody());
+$project_id = $getbody->project_id;
+$project_password = $getbody->password;
+
+// if user is able to edit this project password
+if (array_search($project_id, $_SESSION['user_projects'])) {
+  $db = Flight::db();
+  $sql = "SELECT password FROM Project WHERE project_id = '$project_id'";
+  $result = $db->query($sql);
+
+  if ($result->fetch()[0] == $project_password) {
+      $_SESSION['approved_user_projects'][] = $project_id;
+      Flight::json(array(
+       'return' => 'ok'
+      ), 200);
+  } else {
+      Flight::json(array(
+       'return' => 'nook'
+      ), 200);    
+  }
+} else {
+  // return not allowed
+  Flight::json(array(
+     'return' => 'notallowed'
+  ), 200);
+}
 });
 
 ///////////////////////////////////////////////////// Routes - /project/password POST /////////////////////////////////////////////////
@@ -451,15 +512,22 @@ $config = Flight::get("config");
 $getbody = json_decode(Flight::request()->getBody());
 $project_id = $getbody->project_id;
 
-$db = Flight::db();
-$sql = "SELECT password FROM Project WHERE project_id = '$project_id'";
-$result = $db->query($sql);
+// if user is able to edit this project password
+if (array_search($project_id, $_SESSION['user_projects'])) {
+  $db = Flight::db();
+  $sql = "SELECT password FROM Project WHERE project_id = '$project_id'";
+  $result = $db->query($sql);
 
-Flight::json(array(
-   'project_id' => $project_id,
-   'project_password' => $result->fetch()[0] 
-), 200);
-
+  Flight::json(array(
+     'project_id' => $project_id,
+     'project_password' => $result->fetch()[0] 
+  ), 200);
+} else {
+  // return not allowed
+  Flight::json(array(
+     'return' => 'notallowed'
+  ), 200);
+}
 });
 
 //////////////////////////////////////////////////// Routes - /project/delete POST ////////////////////////////////////////////////////
