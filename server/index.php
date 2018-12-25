@@ -670,7 +670,7 @@ $result = $db->query($sql);
 $versions = $result->fetchAll(PDO::FETCH_ASSOC);
 
 foreach ($versions as &$version) {
-  $_SESSION["view_versions"][] = $version["version_id"];
+  $_SESSION['view_versions'][] = [$version["version_id"]];
 }
 
 // return ok
@@ -682,16 +682,16 @@ Flight::json(array(
 ///////////////////////////////////////////////////// Routes - /track/version GET /////////////////////////////////////////////////////
 Flight::route('GET /track/version/@version_id', function($version_id) {
 
+$config = Flight::get("config");
 // if user is allow to see this version
 if (array_search($version_id, $_SESSION['view_versions'])) {
-  $config = Flight::get("config");
   $db = Flight::db();
   $sql = "SELECT file_id, extension, metadata, aws_path, file_name, file_size, identifier, chunk_length FROM File WHERE version_id = '$version_id'";
   $result = $db->query($sql);
   $files = $result->fetchAll(PDO::FETCH_ASSOC);
 
   foreach ($files as &$file) {
-    $_SESSION["view_files"][] = $file["file_id"];
+    $_SESSION["view_files"][] = [$file["file_id"]];
   }
 
   // return ok
