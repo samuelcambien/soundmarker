@@ -684,7 +684,7 @@ Flight::route('GET /track/version/@version_id', function($version_id) {
 
 $config = Flight::get("config");
 // if user is allow to see this version
-if (array_search($version_id, $_SESSION['view_versions'])) {
+if (in_array($version_id, $_SESSION['view_versions'])) {
   $db = Flight::db();
   $sql = "SELECT file_id, extension, metadata, aws_path, file_name, file_size, identifier, chunk_length FROM File WHERE version_id = '$version_id'";
   $result = $db->query($sql);
@@ -710,7 +710,7 @@ if (array_search($version_id, $_SESSION['view_versions'])) {
 Flight::route('GET /track/version/comments/@version_id', function($version_id) {
 
 // if user is allow to see this version
-if (array_search($version_id, $_SESSION['view_versions'])) {
+if (in_array($version_id, $_SESSION['view_versions'])) {
   $config = Flight::get("config");
   $db = Flight::db();
   $sql = "SELECT comment_id, notes, start_time, end_time, checked, parent_comment_id, name, include_end, include_start, comment_time FROM Comment WHERE version_id = '$version_id'";
@@ -774,7 +774,7 @@ $getbody = json_decode(Flight::request()->getBody());
 $comment_id = $getbody->comment_id;
 
 // if user is allow to delete this comment
-if (array_search($comment_id, $_SESSION['view_comments'])) {
+if (in_array($comment_id, $_SESSION['view_comments'])) {
   $db = Flight::db();
   $sql = "DELETE FROM Comment WHERE comment_id = '$comment_id'";
   $result = $db->query($sql);
@@ -798,7 +798,7 @@ Flight::route('GET /track/file/download/@file_id', function($file_id) {
 $config = Flight::get("config");
 
 // if user is allow to view this file
-if (array_search($file_id, $_SESSION['view_files'])) {
+if (in_array($file_id, $_SESSION['view_files'])) {
   $db = Flight::db();
   $sql = "SELECT aws_path  FROM File WHERE file_id = '$file_id'";
   $result = $db->query($sql);
