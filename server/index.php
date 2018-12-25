@@ -808,14 +808,13 @@ if (array_search($file_id, $_SESSION['view_files'])) {
   Flight::json(array(
      'aws_path' => $aws_path
   ), 200);
-});
 } else {
   // return not allowed
   Flight::json(array(
      'return' => 'notallowed'
   ), 200);
 } 
-
+});
 
 
 
