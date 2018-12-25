@@ -669,9 +669,10 @@ $sql = "SELECT version_id, notes, downloadable, visibility, version_title, track
 $result = $db->query($sql);
 $versions = $result->fetchAll(PDO::FETCH_ASSOC);
 
-foreach ($versions as &$version) {
-  $_SESSION['view_versions'][] = [$version["version_id"]];
-}
+$_SESSION["view_versions"][] = $versions;
+// foreach ($versions as &$version) {
+//   $_SESSION['view_versions'][] = $version["version_id"];
+// }
 
 // return ok
 Flight::json(array(
@@ -690,9 +691,10 @@ if (array_search($version_id, $_SESSION['view_versions'])) {
   $result = $db->query($sql);
   $files = $result->fetchAll(PDO::FETCH_ASSOC);
 
-  foreach ($files as &$file) {
-    $_SESSION["view_files"][] = [$file["file_id"]];
-  }
+  $_SESSION["view_files"][] = $files;
+  // foreach ($files as &$file) {
+  //   $_SESSION["view_files"][] = $file["file_id"];
+  // }
 
   // return ok
   Flight::json(array(
