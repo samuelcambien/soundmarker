@@ -105,7 +105,7 @@ foreach ($notifications as &$notification) {
         // Replace strings -> %tracktitle%
         $tracktitle = "";
         foreach ($files as &$file) {
-            $tracktitle .= $file["file_name"] . "\n";
+            $tracktitle .= $file["file_name"] . "<br>";
         }
         $emailstring = str_replace("%tracktitle%",$tracktitle,$emailstring);
         $emailstring_text = str_replace("%tracktitle%",$tracktitle,$emailstring_text);   
@@ -149,13 +149,16 @@ foreach ($notifications as &$notification) {
         $result = $db->query($sql);
     }
 }
+unset($versions);
+unset($versions2);
+unset($tracks);
 
 // Send daily updates
 // Go through Daily Updates and get project_ids, then check first if they're not expired
 $sql = "SELECT update_id, project_id, emailaddress, last_comment_id FROM DailyUpdates";
 $updates = $db->query($sql)->fetchAll(PDO::FETCH_ASSOC);
-$count = 0;
 foreach ($updates as &$update) {
+  $count = 0;
   $update_id = $update["update_id"];
   $project_id = $update["project_id"];
   $last_comment_ids = $update["last_comment_id"];
@@ -174,33 +177,60 @@ foreach ($updates as &$update) {
   $tracks = $db->query($sql)->fetchAll(PDO::FETCH_ASSOC);
   foreach ($tracks as &$track) {
       $trackid = $track["track_id"];
-      $sqlversion = "SELECT version_id FROM Version WHERE track_id = '$trackid'";
+      $sqlversion = "SELECT version_id FROM Version WHERE track_id = '$trackid' ORDER BY version_id ASC";
       $versions[] = $db->query($sqlversion)->fetchAll(PDO::FETCH_ASSOC);
   }
   foreach ($versions as &$versions2) {
     foreach ($versions2 as &$version) {
         $versionid = $version["version_id"];
-        $version_ids = "SELECT comment_id FROM Comment WHERE version_id = '$versionid' ORDER BY comment_id DESC";
-        $comment_id = $db->query($version_ids)->fetchAll(PDO::FETCH_ASSOC)[0]["comment_id"];
+        $version_ids = "SELECT comment_id, version_id FROM Comment WHERE version_id = '$versionid' ORDER BY comment_id DESC";
+        $comment_ids = $db->query($version_ids)->fetchAll(PDO::FETCH_ASSOC);
+        $last_comment_idsdec = json_decode($last_comment_ids, true);
 
-          // compare and check if there are new comments
-          $last_comment_idsdec = json_decode($last_comment_ids, true);
-          if ((count($last_comment_idsdec) == 0) && $comment_id > 0) { 
-            $count++;
-          }
-          foreach ($last_comment_idsdec as &$last_comment_id) {
-            if ((intval($comment_id) > intval($last_comment_id[$versionid]))) {
-              if (intval($last_comment_id[$versionid]) > 0) {
-              $count++;
-              break 1;
+          // Loop through all the comments for this project.
+          foreach ($comment_ids as &$comment) {
+          $comment_id = $comment["comment_id"];
+
+            // First compare to what what in the DB already
+            if (count($last_comment_idsdec) == 0) {
+               $count++;
+            } else {
+              foreach ($last_comment_idsdec as &$comment2) {
+                if ($comment2["version"] == $versionid) {
+                  if ($comment_id > $comment2["comment"]) {
+                  $count++;
+                  }
+                } 
+              }
+            }
+
+            // Then compare with what we have done, we we only update the DB with the latest version
+            // Only update DB with the last comment_id so we can compare next time
+            if (count($comments) == 0) {
+               $comments[] = ["version" => $versionid, "comment" => $comment_id];
+               // $count++;
+            } else {
+              foreach ($comments as &$comment1) {
+                if ($comment1["version"] == $versionid) {
+                  if ($comment_id > $comment1["comment"]) {
+                  $comments[] = ["version" => $versionid, "comment" => $comment_id];
+                  // $count++;
+                  }
+                } else {
+                  $comments[] = ["version" => $versionid, "comment" => $comment_id];
+                }
               }
             }
           }
-        $comments[] = [$versionid => $comment_id];
     }
   }
+  unset($versions);
+  unset($versions2);
+  unset($tracks);
+
 
   $commentsjson = json_encode($comments);
+    unset($comments);
   // Set daily updates to trackcount to check.
   $sql = "UPDATE DailyUpdates SET last_comment_id = '$commentsjson' WHERE project_id = '$project_id'";
   $result = $db->query($sql);
@@ -259,6 +289,10 @@ foreach ($updates as &$update) {
       $emailstring = str_replace("%unsubscribelink%",$config['SERVER_URL'].'/unsubscribe/'.$update_id.'/'.$project_id,$emailstring);
       $emailstring_text = str_replace("%unsubscribelink%",$config['SERVER_URL'].'/unsubscribe/'.$update_id.'/'.$project_id,$emailstring_text);   
       
+      unset($versions);
+      unset($versions2);
+      unset($tracks);
+      unset($files);
       // Todo: move cron to daily cron instead of hourly
       // Add new json REST call for new dailyupdates
       // Too many tracks shown in email (both mp3 and wav I assume)
