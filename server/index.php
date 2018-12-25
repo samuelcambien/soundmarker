@@ -137,12 +137,6 @@ if (isset($_SESSION["status"]) && isset($_SESSION['ENDTIME'])) {
     }
   } 
 }
-// $_SESSION['PROJECT'][] = "300";
-// print_r($_SESSION['PROJECT']);
-
-// if (in_array("300", $_SESSION['PROJECT'])) {
-//     echo "Got mac";
-// }
 include 'index.html';
 });
 
@@ -164,16 +158,15 @@ Flight::route('POST /project/new', function() {
 
 $config = Flight::get("config");
 // Todo: check if user_id exists first (foreign_key needs to be valid) -> put in dB
-// Add expiration date
 $getbody = json_decode(Flight::request()->getBody());
 
-$user_id = isset($getbody->user_id) ? $getbody->user_id : "";
+// $user_id = isset($getbody->user_id) ? $getbody->user_id : ""; // check user id
 $project_title = isset($getbody->project_title) ? $getbody->project_title : "";
 $project_password = isset($getbody->project_password) ? $getbody->project_password : "";
 $ipaddr = $_SERVER['REMOTE_ADDR'] . " - " . $_SERVER['HTTP_X_FORWARDED_FOR'];
 
 $db = Flight::db();
-$sql = "INSERT INTO Project (title, password, active, ipaddr) VALUES ('$project_title', '$project_password', '1', '$ipaddr')";
+$sql = "INSERT INTO Project (user_id, title, password, active, ipaddr) VALUES ('$_SESSION['USER']', $project_title', '$project_password', '1', '$ipaddr')";
 $result = $db->query($sql);
 $project_id = $db->lastInsertId();
 
@@ -185,7 +178,29 @@ $_SESSION['user_projects'][] = $project_id;
 
 // return ok
 Flight::json(array(
-   'project_id' => $project_id
+   'project_id' => $project_id, 'userproject' => $_SESSION['user_projects']
+), 200);
+});
+
+//////////////////////////////////////////////////////// Routes - /project/edit POST ///////////////////////////////////////////////////
+Flight::route('POST /project/edit', function() {
+
+$config = Flight::get("config");
+$getbody = json_decode(Flight::request()->getBody());
+
+$project_id = isset($getbody->project_id) ? $getbody->project_id : "";
+$project_title = isset($getbody->project_title) ? $getbody->project_title : "";
+$project_password = isset($getbody->project_password) ? $getbody->project_password : "";
+
+$db = Flight::db();
+$sql = "UPDATE Project SET title = '$project_title' WHERE project_id = '$project_id'";
+$result = $db->query($sql);
+$sql = "UPDATE Project SET password = '$project_password' WHERE project_id = '$project_id'";
+$result = $db->query($sql);
+
+// return ok
+Flight::json(array(
+   'ok' => 'ok'
 ), 200);
 });
 
@@ -386,9 +401,11 @@ Flight::json(array(
 ), 200);
 });
 
-//////////////////////////////////////////////// Routes - /project/get/@project_hash POST /////////////////////////////////////////////
+//////////////////////////////////////////////// Routes - /project/get/@project_hash GET /////////////////////////////////////////////
+// Get only for non password protected calls
 Flight::route('GET /project/get/@project_hash', function($project_hash) {
 
+// check for password if password is set?
 $config = Flight::get("config");
 $db = Flight::db();
 $sql = "SELECT project_id, active, expiration_date, user_id FROM Project WHERE hash = '$project_hash'";
@@ -627,6 +644,26 @@ Flight::json(array(
 ), 200);
 });
 
+///////////////////////////////////////////////// Routes - /track/version/delete/comment POST ///////////////////////////////////////////
+Flight::route('POST /track/version/delete/comment', function() {
+
+// Can user delete comments for this version?
+$config = Flight::get("config");
+$getbody = json_decode(Flight::request()->getBody());
+
+$comment_id = $getbody->comment_id;
+
+$db = Flight::db();
+$sql = "DELETE FROM Comment WHERE comment_id = '$comment_id'";
+$result = $db->query($sql);
+
+// return ok
+Flight::json(array(
+   'return' => 'ok'
+), 200);
+});
+
+
 ////////////////////////////////////////////////// Routes - /track/file/download GET //////////////////////////////////////////////////
 Flight::route('GET /track/file/download/@file_id', function($file_id) {
 
@@ -821,7 +858,7 @@ $result = $db->query($sql);
 
 // return ok
 Flight::json(array(
-   'ok' => "ok"
+   'return' => "ok"
 ), 200);
 });
 
@@ -837,7 +874,7 @@ $result = $db->query($sql);
 
 // return ok
 Flight::json(array(
-   'ok' => "ok"
+   'return' => "ok"
 ), 200);
 });
 
