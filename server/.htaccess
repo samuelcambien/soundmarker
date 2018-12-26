@@ -21,6 +21,7 @@
     RewriteCond %{REQUEST_URI} "/track/file/download/" [OR]
     RewriteCond %{REQUEST_URI} "/track" [OR]
     RewriteCond %{REQUEST_URI} "/track/new" [OR]
+    RewriteCond %{REQUEST_URI} "/track/visibility" [OR]
     RewriteCond %{REQUEST_URI} "/track/version" [OR]
     RewriteCond %{REQUEST_URI} "/track/version/edit" [OR]
     RewriteCond %{REQUEST_URI} "/track/version/comments" [OR]
