@@ -212,6 +212,30 @@ if (array_search($project_id, $_SESSION['user_projects'])) {
 }
 });
 
+//////////////////////////////////////////////////////// Routes - /project/all GET ///////////////////////////////////////////////////
+Flight::route('GET /project/all', function() {
+
+$config = Flight::get("config");
+
+$db = Flight::db();
+$user_id = isset($_SESSION['USER']) ? $_SESSION['USER'] : "";
+if (isset($_SESSION['USER'])) {
+  $sql = "SELECT project_id, title, expiration_date, hash FROM Project WHERE user_id = '$user_id' AND active = '1'";
+  $result = $db->query($sql)->fetchAll(PDO::FETCH_ASSOC);
+
+  // return ok
+  Flight::json(array(
+     'projects' => $result
+  ), 200);
+} else {
+  // return ok
+  Flight::json(array(
+     'return' => 'notloggedin'
+  ), 200);
+}
+
+});
+
 //////////////////////////////////////////////// Routes - /project/get/@project_hash POST /////////////////////////////////////////////
 Flight::route('POST /project/get/url', function() {
 
@@ -601,14 +625,15 @@ $getbody = json_decode(Flight::request()->getBody());
 $project_id = $getbody->project_id;
 $track_title = isset($getbody->track_title) ? $getbody->track_title : "";
 $track_artist = isset($getbody->track_artist) ? $getbody->track_artist : "";
+$visibility = isset($getbody->visibility) ? $getbody->visibility : 1;
 
 // if user is able to edit this project password
 if (array_search($project_id, $_SESSION['user_projects'])) {
   $db = Flight::db();
   if ($project_id) {
-      $sql = "INSERT INTO Track (title, artist, project_id) VALUES ('$track_title', '$track_artist', '$project_id')";
+      $sql = "INSERT INTO Track (title, artist, project_id, visibility) VALUES ('$track_title', '$track_artist', '$project_id', '$visibility')";
   } else {
-      $sql = "INSERT INTO Track (title, artist) VALUES ('$track_title', '$track_artist')";
+      $sql = "INSERT INTO Track (title, artist, visibility) VALUES ('$track_title', '$track_artist', '$visibility')";
   }
   $result = $db->query($sql);
 
@@ -617,6 +642,35 @@ if (array_search($project_id, $_SESSION['user_projects'])) {
   // return ok
   Flight::json(array(
      'track_id' => $db->lastInsertId()
+  ), 200);
+} else {
+  // return not allowed
+  Flight::json(array(
+     'return' => 'notallowed'
+  ), 200);
+}
+});
+
+/////////////////////////////////////////////////////// Routes - /track/visibility POST //////////////////////////////////////////////////////
+Flight::route('POST /track/visibility', function() {
+
+$config = Flight::get("config");
+$getbody = json_decode(Flight::request()->getBody());
+
+$track_id = $getbody->track_id;
+$visibility = isset($getbody->visibility) ? $getbody->visibility : 1;
+
+// if user is able to edit this project
+if (array_search($project_id, $_SESSION['user_projects'])) {
+  $db = Flight::db();
+  $sql = "UPDATE Track SET visibility = '$visibility' WHERE track_id = '$track_id'";
+  $result = $db->query($sql);
+
+  // $_SESSION['user_tracks'][] = $db->lastInsertId();
+
+  // return ok
+  Flight::json(array(
+     'return' => 'ok'
   ), 200);
 } else {
   // return not allowed
@@ -647,6 +701,42 @@ if (array_search($track_id, $_SESSION['user_tracks'])) {
   $result = $db->query($sql);
 
   $_SESSION['user_versions'][] = $db->lastInsertId();
+
+  // return ok
+  Flight::json(array(
+     'version_id' => $db->lastInsertId()
+  ), 200);
+} else {
+  // return not allowed
+  Flight::json(array(
+     'return' => 'notallowed'
+  ), 200);
+}
+});
+
+
+//////////////////////////////////////////////////// Routes - /track/version/edit POST /////////////////////////////////////////////////////
+Flight::route('POST /track/version/edit', function() {
+
+$config = Flight::get("config");
+$getbody = json_decode(Flight::request()->getBody());
+
+$version_id = isset($getbody->version_id) ? $getbody->version_id : "";
+$downloadable = isset($getbody->downloadable) ? $getbody->downloadable : 0;
+$visibility = isset($getbody->visibility) ? $getbody->visibility : 1;
+$notes = isset($getbody->notes) ? $getbody->notes : "";
+$version_title = isset($getbody->version_title) ? $getbody->version_title : "";
+// $track_length = isset($getbody->track_length) ? $getbody->track_length : 0;
+// $wave_png = isset($getbody->wave_png) ? json_encode($getbody->wave_png) : "";
+
+// if user is able to edit this track
+if (array_search($track_id, $_SESSION['user_tracks'])) {
+  $db = Flight::db();
+
+  $sql = "UPDATE Version SET notes = '$notes', version_title = '$version_title', visibility = '$visibility', downloadable = '$downloadable' WHERE version_id = '$version_id'";
+  $result = $db->query($sql);
+
+  // $_SESSION['user_versions'][] = $db->lastInsertId();
 
   // return ok
   Flight::json(array(
