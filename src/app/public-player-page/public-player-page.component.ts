@@ -20,7 +20,7 @@ export class PublicPlayerPageComponent implements OnInit {
 
   project: Project;
 
-  message: Promise<Message>;
+  message: Message = new Message("", "", false);
 
   activeTrack: Track;
 
@@ -38,7 +38,7 @@ export class PublicPlayerPageComponent implements OnInit {
 
   private loadProjectInfo(projectHash: string) {
 
-    this.message = new Promise<Message>(resolve =>
+    // this.message = new Promise<Message>(resolve =>
       RestCall.getProject(projectHash)
         .then((project: Project) => {
           this.project = project;
@@ -47,7 +47,7 @@ export class PublicPlayerPageComponent implements OnInit {
               .then(response => response["versions"]);
             track.versions
               .then((versions: Version[]) => {
-                resolve(this.getMessage(project, versions[0]));
+                this.message = this.getMessage(project, versions[0]);
                 versions.forEach(version => {
                   if (version.downloadable == 0) version.downloadable = false
                 });
@@ -62,8 +62,8 @@ export class PublicPlayerPageComponent implements OnInit {
             if (project.tracks.length == 1)
               this.activeTrack = project.tracks[0];
           }
-        })
-    );
+        });
+    // );
   }
 
   private loadPlayer(track: Track, version: Version, file: File) {

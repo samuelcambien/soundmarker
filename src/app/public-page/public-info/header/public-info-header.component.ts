@@ -1,10 +1,9 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {Message} from "../../../message";
-import {Router} from "@angular/router";
-import {Location} from "@angular/common";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {PublicIntroductionComponent} from "../topics/public-introduction/public-introduction.component";
 import {TermsAcceptedServiceService} from "../../../terms-accepted-service.service";
+import {SubscribeComponent} from "../../../subscribe/subscribe.component";
 
 @Component({
   selector: 'app-public-info-header',
@@ -13,8 +12,7 @@ import {TermsAcceptedServiceService} from "../../../terms-accepted-service.servi
 })
 export class PublicInfoHeaderComponent implements OnInit {
 
-  @Input() messages: Promise<Message>;
-  message;
+  @Input() message;
 
   constructor(private modalService: NgbModal, private termsAcceptedService: TermsAcceptedServiceService) {
   }
@@ -27,11 +25,10 @@ export class PublicInfoHeaderComponent implements OnInit {
     // if (!this.termsAcceptedService.termsAccepted()) {
     //   this.openIntroduction();
     // }
-    if (this.messages) this.messages.then(message => this.message = message);
   }
 
   subscribe() {
-
+    this.modalService.open(SubscribeComponent, {size: "lg", backdrop: 'static', keyboard: false});
   }
 
   goToPage() {

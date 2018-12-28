@@ -19,7 +19,6 @@ import {File} from "../../model/file";
 import * as wave from "../../player/dist/player.js";
 import {RestCall} from "../../rest/rest-call";
 import {PlayerService} from "../../player.service";
-import {Utils} from "../../app.component";
 
 @Component({
   selector: 'app-public-track-player',
@@ -58,7 +57,7 @@ export class PublicTrackPlayerComponent implements OnInit, AfterViewChecked {
   startPos;
   endPos;
 
-  showComments: boolean = false;
+  showComments: boolean = true;
   private MINIMAL_INTERVAL: number = 2;
 
   version: Version;
@@ -80,7 +79,7 @@ export class PublicTrackPlayerComponent implements OnInit, AfterViewChecked {
       this.version = versions[0];
       this.comment.start_time = 0;
       this.comment.end_time = versions[0].track_length;
-      this.peaks = this.version.wave_png;
+      this.peaks = JSON.parse(this.version.wave_png);
       this.loadWaveForm();
     });
   }
@@ -268,5 +267,10 @@ export class PublicTrackPlayerComponent implements OnInit, AfterViewChecked {
 
   getPlayer() {
     return this.playerService.getPlayer(this.track.track_id);
+  }
+
+  dragStart() {
+    console.log("dragStart");
+    this.comment.include_start = true;
   }
 }
