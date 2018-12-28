@@ -452,7 +452,7 @@
             class="drag-block"
             [class.disabled]="!comment.include_start"
             appDraggable
-            (dragStart)="comment.include_start = true"
+            (dragStart)="dragStart()"
             (dragMove)="updateStartTime($event)"
             [style.left]="getStartPosition()"
           >

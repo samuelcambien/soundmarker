@@ -16,14 +16,14 @@
     <div class="form-group col-auto">
       <div class="btn-group-toggle">
         <label class="btn btn-sm btn-outline-form check-tag-box" [class.active]="this.comment.include_start">
-          <input type="checkbox" [(ngModel)]="comment.include_start" name="include_start" (change)="triggerStart($event)">Start
+          <input type="checkbox" [(ngModel)]="comment.include_start" name="include_start" (change)="triggerStart()">Start
         </label>
       </div>
     </div>
 
     <div class="form-group col-auto hide-phone">
-      <input type="text" [ngModel]="this.comment.start_time | timeFormat" (change)="updateStartTime()" name="start"
-             appTimeFormat
+      <input type="text" [ngModel]="comment.start_time | timeFormat" name="start"
+             (ngModel)="this.comment.start_time" appTimeFormat (updated)="updateStartTime($event)"
              [ngClass]="['comment-form-start-time sub-form tag-box', comment.include_start ? 'enabled' : 'disabled']">
     </div>
 
@@ -36,7 +36,8 @@
     </div>
 
     <div class="form-group col-auto hide-phone">
-      <input type="text" class="tag-box" [ngModel]="format(this.comment.end_time)" (ngModel)="this.comment.end_time" name="end"
+      <input type="text" [ngModel]="this.comment.end_time | timeFormat" name="end"
+             (ngModel)="this.comment.end_time" appTimeFormat (updated)="updateEndTime($event)"
              [ngClass]="['comment-form-end-time sub-form tag-box', comment.include_end ? 'enabled' : 'disabled']">
     </div>
 
@@ -46,8 +47,8 @@
       <p>Cancel</p>
     </label>
 
-
       <button type="submit" class="btn btn-primary btn-sm" [disabled]="!myForm.valid">Add comment</button>
+
     </div>
 
   </div>

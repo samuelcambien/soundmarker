@@ -11,13 +11,14 @@ export class DraggableDirective {
 
   private dragging = false;
 
-  @HostListener('pointerdown', ['$event'])
+  @HostListener('mousedown', ['$event'])
+  @HostListener('touchdown', ['$event'])
   onPointerDown(event): void {
     this.dragging = true;
     this.dragStart.emit(event);
   }
 
-  @HostListener('drag', ['$event'])
+  @HostListener('document:mousemove', ['$event'])
   onPointerMove(event): void {
     if (!this.dragging) {
       return;
@@ -26,7 +27,8 @@ export class DraggableDirective {
     this.dragMove.emit(event);
   }
 
-  @HostListener('document:pointerup', ['$event'])
+  @HostListener('document:mouseup', ['$event'])
+  @HostListener('document:touchup', ['$event'])
   onPointerUp(event: MouseEvent): void {
     if (!this.dragging) {
       return;

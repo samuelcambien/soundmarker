@@ -57,7 +57,7 @@ export class PublicTrackPlayerComponent implements OnInit, AfterViewChecked {
   startPos;
   endPos;
 
-  showComments: boolean = false;
+  showComments: boolean = true;
   private MINIMAL_INTERVAL: number = 2;
 
   version: Version;
@@ -267,5 +267,10 @@ export class PublicTrackPlayerComponent implements OnInit, AfterViewChecked {
 
   getPlayer() {
     return this.playerService.getPlayer(this.track.track_id);
+  }
+
+  dragStart() {
+    console.log("dragStart");
+    this.comment.include_start = true;
   }
 }

@@ -9,7 +9,7 @@ import {RestCall} from "../rest/rest-call";
 })
 export class PublicPageComponent implements OnInit {
 
-  @Input() message: Promise<Message>;
+  @Input() message: Message;
 
   ad;
 

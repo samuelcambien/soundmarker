@@ -44,7 +44,7 @@ export class CommentFormComponent implements OnInit {
   triggerEnd() {
     if (!this.comment.end_time)
       this.comment.end_time = this.player.getCurrentTime();
-    if (this.comment.include_end)
+    if (!this.comment.include_end)
       this.resetEnd();
     if (this.comment.include_end)
       this.comment.include_start = true;
@@ -54,11 +54,15 @@ export class CommentFormComponent implements OnInit {
     this.comment.end_time = this.player.getDuration();
   }
 
-  updateStartTime() {
-    console.log(this.comment.start_time);
+  updateStartTime(event) {
+    this.comment.start_time = event;
+    this.comment.include_start = true;
+    this.triggerStart();
   }
 
-  format(time: string) {
-    return Utils.getTimeFormatted(time);
+  updateEndTime(event) {
+    this.comment.end_time = event;
+    this.comment.include_end = true;
+    this.triggerEnd();
   }
 }

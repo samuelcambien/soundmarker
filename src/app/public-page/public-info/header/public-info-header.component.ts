@@ -12,8 +12,7 @@ import {SubscribeComponent} from "../../../subscribe/subscribe.component";
 })
 export class PublicInfoHeaderComponent implements OnInit {
 
-  @Input() messages: Promise<Message>;
-  message;
+  @Input() message;
 
   constructor(private modalService: NgbModal, private termsAcceptedService: TermsAcceptedServiceService) {
   }
@@ -26,7 +25,6 @@ export class PublicInfoHeaderComponent implements OnInit {
     // if (!this.termsAcceptedService.termsAccepted()) {
     //   this.openIntroduction();
     // }
-    if (this.messages) this.messages.then(message => this.message = message);
   }
 
   subscribe() {

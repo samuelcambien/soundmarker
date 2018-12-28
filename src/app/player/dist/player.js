@@ -1306,7 +1306,8 @@
     pause: function () {
       this.scheduledPause = null;
 
-      this.startPosition += this.getPlayedTime();
+      console.log(this.getPlayedTime());
+      this.startPosition = +this.startPosition + this.getPlayedTime();
       this.source && this.source.stop(0);
 
       this.setState(this.PAUSED_STATE);
@@ -1354,7 +1355,7 @@
       return (this.getCurrentTime() / duration) || 0;
     },
     getCurrentTime: function () {
-      return this.startPosition + this.getPlayedTime();
+      return +this.startPosition + this.getPlayedTime();
     }
   };
 

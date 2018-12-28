@@ -1,4 +1,4 @@
-import {Directive, ElementRef, HostListener} from '@angular/core';
+import {ChangeDetectorRef, Directive, ElementRef, EventEmitter, HostListener, Input, Output} from '@angular/core';
 import {Utils} from "./app.component";
 
 @Directive({
@@ -7,6 +7,9 @@ import {Utils} from "./app.component";
 export class TimeFormatDirective {
 
   private el: HTMLInputElement;
+  private backup;
+
+  @Output() updated = new EventEmitter();
 
   constructor(
     private elementRef: ElementRef,
@@ -15,17 +18,20 @@ export class TimeFormatDirective {
   }
 
   ngOnInit() {
-    this.el.value = Utils.getTimeFormatted(this.el.value);
   }
 
   @HostListener("focus", ["$event.target.value"])
   onFocus(value) {
+    this.backup = this.el.value;
     this.el.value = "";
   }
 
   @HostListener("blur", ["$event.target.value"])
   onBlur(value) {
-
-    this.el.value = "" + Utils.parseTime(value);
+    if (value) {
+      this.updated.emit(Utils.parseTime(value));
+    } else {
+      this.el.value = this.backup;
+    }
   }
 }

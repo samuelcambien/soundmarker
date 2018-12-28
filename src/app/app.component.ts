@@ -62,8 +62,19 @@ export class Utils {
   }
 
   public static parseTime(value: string): number {
-    console.log(moment.duration(value, ));
-    return moment.duration(value).asSeconds();
+
+    let split = value.split(":");
+    if (split.length > 3) return;
+
+    let hours = split.length >= 3 ? +split[split.length - 3] : 0;
+    let minutes = split.length >= 2 ? +split[split.length - 2] : 0;
+    let seconds = +split[split.length - 1];
+
+    return moment.duration({
+      'hours': hours,
+      'minutes': minutes,
+      'seconds': seconds
+    }).asSeconds();
   }
 
   public static sendGetDataRequest(url, params?): Promise<any> {

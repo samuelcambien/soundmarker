@@ -26,20 +26,29 @@ export class CommentSorter {
   }
 
   public static MOST_RECENT: CommentSorter = new CommentSorter(
-    (a, b) => b.comment_time - a.comment_time,
-    "Most recent"
+    (a, b) => {
+      if (a.comment_time == b.comment_time) return b.comment_id - a.comment_id;
+
+      return b.comment_time - a.comment_time
+    }, "Most recent"
   );
 
   public static TRACK_TIME: CommentSorter = new CommentSorter(
     (a, b) => {
       if (a.include_start && !b.include_start) return -1;
       if (b.include_start && !a.include_start) return 1;
+
+      if (a.start_time == b.start_time) return b.comment_id - a.comment_id;
+
       return a.start_time - b.start_time
     }, "Track time"
   );
 
   public static NAME: CommentSorter = new CommentSorter(
-    (a, b) => a.name.toLowerCase() > b.name.toLowerCase() ? 1 : -1,
-    "Name"
+    (a, b) => {
+      if (a.name.toLowerCase() == b.name.toLowerCase()) return b.comment_id - a.comment_id;
+
+      return a.name.toLowerCase() > b.name.toLowerCase() ? 1 : -1
+    }, "Name"
   );
 }
