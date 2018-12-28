@@ -49,7 +49,8 @@ import {PublicIntroductionComponent} from './public-page/public-info/topics/publ
 import {PlayerIntroductionComponent} from './public-page/public-info/topics/player-introduction/player-introduction.component';
 import {NgSelectModule} from '@ng-select/ng-select';
 import {ClipboardModule} from "ngx-clipboard";
-import { TimeFormatDirective } from './time-format.directive';
+import {TimeFormatDirective} from './time-format.directive';
+import {SubscribeComponent} from './subscribe/subscribe.component';
 
 @NgModule({
   declarations: [
@@ -91,7 +92,8 @@ import { TimeFormatDirective } from './time-format.directive';
     DraggableDirective,
     PublicIntroductionComponent,
     PlayerIntroductionComponent,
-    TimeFormatDirective
+    TimeFormatDirective,
+    SubscribeComponent
   ],
   imports: [
     FileUploadModule,
@@ -115,7 +117,8 @@ import { TimeFormatDirective } from './time-format.directive';
     HelpInfoComponent,
     ReplyFormComponent,
     PublicIntroductionComponent,
-    PrivacyAndTermsComponent
+    PrivacyAndTermsComponent,
+    SubscribeComponent
   ]
 })
 export class AppModule {

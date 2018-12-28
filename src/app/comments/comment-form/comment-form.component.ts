@@ -1,9 +1,6 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {Comment} from "../../model/comment";
-import {RestUrl, Utils} from "../../app.component";
-import {FormControl, FormGroup, NgForm} from "@angular/forms";
-import {Player} from "../../newplayer/player";
-import {RestCall} from "../../rest/rest-call";
+import {Utils} from "../../app.component";
 
 @Component({
   selector: 'app-comment-form',
@@ -38,7 +35,7 @@ export class CommentFormComponent implements OnInit {
   triggerStart() {
     if (!this.comment.start_time)
       this.comment.start_time = this.player.getCurrentTime();
-    if (this.comment.include_start) {
+    if (!this.comment.include_start) {
       this.comment.include_end = false;
       this.resetEnd();
     }
@@ -49,7 +46,7 @@ export class CommentFormComponent implements OnInit {
       this.comment.end_time = this.player.getCurrentTime();
     if (this.comment.include_end)
       this.resetEnd();
-    if (!this.comment.include_end)
+    if (this.comment.include_end)
       this.comment.include_start = true;
   }
 

@@ -69,6 +69,12 @@ export class RestCall {
     return Utils.sendPostRequest(RestUrl.COMMENT, comment);
   }
 
+  public static subscribe(project_id: string, emails: string[]) {
+    Utils.sendPostRequest(RestUrl.PROJECT_SUBSCRIBE, {
+
+    })
+  }
+
   // GET
 
   static getAdId(): Promise<any> {

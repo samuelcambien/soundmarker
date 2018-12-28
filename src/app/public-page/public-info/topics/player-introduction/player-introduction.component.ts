@@ -1,4 +1,5 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
+import {Message} from "../../../../message";
 
 @Component({
   selector: 'app-player-introduction',
@@ -6,6 +7,8 @@ import {Component, OnInit} from '@angular/core';
   styleUrls: ['./player-introduction.component.scss']
 })
 export class PlayerIntroductionComponent implements OnInit {
+
+  @Input() message: Message;
 
   constructor() { }
 

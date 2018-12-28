@@ -12,13 +12,13 @@ export class DraggableDirective {
   private dragging = false;
 
   @HostListener('pointerdown', ['$event'])
-  onPointerDown(event: MouseEvent): void {
+  onPointerDown(event): void {
     this.dragging = true;
     this.dragStart.emit(event);
   }
 
-  @HostListener('document:pointermove', ['$event'])
-  onPointerMove(event: MouseEvent): void {
+  @HostListener('drag', ['$event'])
+  onPointerMove(event): void {
     if (!this.dragging) {
       return;
     }

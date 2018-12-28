@@ -1,0 +1,7 @@
+<div (click)="close()">cancel</div>
+<form #myform (ngSubmit)="subscribe()">
+  <input type="email" [(ngModel)]="email" placeholder="email" name="email">
+  <button type="submit">
+    <div>subscribe</div>
+  </button>
+</form>

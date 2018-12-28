@@ -16,7 +16,7 @@
     <div class="form-group col-auto">
       <div class="btn-group-toggle">
         <label class="btn btn-sm btn-outline-form check-tag-box" [class.active]="this.comment.include_start">
-          <input type="checkbox" [(ngModel)]="comment.include_start" name="include_start" (click)="triggerStart()">Start
+          <input type="checkbox" [(ngModel)]="comment.include_start" name="include_start" (change)="triggerStart($event)">Start
         </label>
       </div>
     </div>
@@ -30,7 +30,7 @@
     <div class="form-group col-auto">
       <div class="btn-group-toggle">
         <label class="btn btn-sm btn-outline-form check-tag-box" [class.active]="this.comment.include_end">
-          <input type="checkbox" [(ngModel)]="comment.include_end" name="include_end" (click)="triggerEnd()">End
+          <input type="checkbox" [(ngModel)]="comment.include_end" name="include_end" (change)="triggerEnd()">End
         </label>
       </div>
     </div>

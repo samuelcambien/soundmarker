@@ -1,7 +1,6 @@
 import {Component} from '@angular/core';
 import * as moment from "moment";
 import {now} from "moment";
-import {Observable} from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -28,6 +27,8 @@ export class RestUrl {
   public static PROJECT: string = RestUrl.BACKEND + "/project/get";
 
   public static PROJECT_SHARE: string = RestUrl.BACKEND + "/project/get/url";
+
+  public static PROJECT_SUBSCRIBE: string = RestUrl.BACKEND + "/project/subscribe";
 
   public static PROJECT_NEW: string = RestUrl.BACKEND + "/project/new";
 

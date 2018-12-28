@@ -129,7 +129,7 @@ export class PublicUploadFormComponent implements OnInit {
     });
     waveform.loadDecodedBuffer(buffer);
 
-    return waveform.backend.getPeaks(227, 0, 227);
+    return waveform.backend.getPeaks(743, 0, 743);
   }
 
   private getAudioBuffer(track): Promise<AudioBuffer> {
