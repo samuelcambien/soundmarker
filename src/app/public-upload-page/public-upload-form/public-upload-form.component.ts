@@ -5,6 +5,8 @@ import {RestCall} from "../../rest/rest-call";
 import * as wave from "../../player/dist/player.js"
 import {Version} from "../../model/version";
 
+declare var AudioContext: any, webkitAudioContext: any;
+
 @Component({
   selector: 'app-public-upload-form',
   templateUrl: './public-upload-form.component.html',
@@ -132,8 +134,14 @@ export class PublicUploadFormComponent implements OnInit {
     return waveform.backend.getPeaks(743, 0, 743);
   }
 
+  private context: AudioContext;
+
   private getAudioBuffer(track): Promise<AudioBuffer> {
-    return Mp3Encoder.read(track._file).then((buffer: ArrayBuffer) => Mp3Encoder.decode(buffer));
+    return new Promise<AudioBuffer>(resolve => {
+      Mp3Encoder.read(track._file).then(
+        (buffer: ArrayBuffer) => this.context.decodeAudioData(buffer, (result) => resolve(result))
+      );
+    })
   }
 
   private uploadDownloadFile(file: File, file_name: string, extension: string, size: number, versionId: string, length: number): Promise<any> {
@@ -154,17 +162,12 @@ export class PublicUploadFormComponent implements OnInit {
       );
   }
 
-  private searchSyncWord(uint8Array: Uint8Array, startIndex: number) {
-
-    for (let i = startIndex; i < uint8Array.length; i++) {
-      if (uint8Array[i] == 255 && uint8Array[i + 1] == 251) {
-        return i;
-      }
+  constructor() {
+    try {
+      this.context = new AudioContext();
+    } catch (e) {
+      this.context = new webkitAudioContext();
     }
-  }
-
-  constructor(private _host: ElementRef) {
-
   }
 
   ngOnInit(): void {
