@@ -82,15 +82,16 @@ export class PublicUploadFormComponent implements OnInit {
 
     let length = 0;
     let uploads = [];
-    return this.processTrackMetadata(projectId, track)
+    let title = Mp3Encoder.getName(track._file.name);
+    let extension = Mp3Encoder.getExtension(track._file.name);
+
+    return this.processTrackMetadata(projectId, track, title)
       .then(version => {
         let versionId = version["version_id"];
-        let file_name = Mp3Encoder.getName(track._file.name);
-        let extension = Mp3Encoder.getExtension(track._file.name);
 
         if (this.downloadable) {
           uploads.push(
-            this.uploadDownloadFile(track._file, file_name, extension, track._file.size, versionId, length)
+            this.uploadDownloadFile(track._file, title, extension, track._file.size, versionId, length)
           );
           this.uploader.files++;
         }
@@ -98,7 +99,7 @@ export class PublicUploadFormComponent implements OnInit {
         uploads.push(
           this.convert(track)
             .then(converted =>
-              this.uploadStreamFile(converted, file_name, "mp3", track._file.size, versionId, length)
+              this.uploadStreamFile(converted, title, "mp3", track._file.size, versionId, length)
             )
         );
         this.uploader.files++;
@@ -107,9 +108,9 @@ export class PublicUploadFormComponent implements OnInit {
       });
   }
 
-  processTrackMetadata(projectId: string, track: FileItem): Promise<Version> {
+  processTrackMetadata(projectId: string, track: FileItem, title: string): Promise<Version> {
     return Promise.all([
-      RestCall.createNewTrack(projectId, track),
+      RestCall.createNewTrack(projectId, title),
       this.getAudioBuffer(track)
     ]).then(result => {
       return {trackId: result[0]["track_id"], buffer: result[1]}

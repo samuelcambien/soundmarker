@@ -22,9 +22,9 @@ export class PublicInfoHeaderComponent implements OnInit {
   }
 
   ngOnInit() {
-    // if (!this.termsAcceptedService.termsAccepted()) {
-    //   this.openIntroduction();
-    // }
+    if (!this.termsAcceptedService.termsAccepted()) {
+      this.openIntroduction();
+    }
   }
 
   subscribe() {

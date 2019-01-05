@@ -12,10 +12,10 @@ export class RestCall {
     return Utils.sendPostRequest(RestUrl.PROJECT_NEW, {});
   }
 
-  public static createNewTrack(project_id, track): Promise<any> {
+  public static createNewTrack(project_id, title): Promise<any> {
     return Utils.sendPostRequest(RestUrl.TRACK_NEW, {
       project_id: project_id,
-      track_title: track._file.name
+      track_title: title
     });
   }
 
