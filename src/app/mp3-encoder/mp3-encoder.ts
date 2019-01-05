@@ -164,9 +164,9 @@ export class Mp3Encoder {
       .then(buffer => Mp3Encoder.convertWav16bit(buffer, name));
   }
 
-  public static convertFlac(buffer: ArrayBuffer, name: string): Promise<File> {
+  public static convertFlac(file: File, name: string): Promise<File> {
 
-    return Mp3Encoder.decode(buffer)
+    return Mp3Encoder.decode(file)
       .then((buf: AudioBuffer) =>
         Mp3Encoder.read(
           new File([require('audiobuffer-to-wav')(buf)], name)
@@ -176,11 +176,9 @@ export class Mp3Encoder {
 
   public static convertMp3(buffer: ArrayBuffer, name: string): Promise<File> {
     return new Promise(resolve => resolve(new File([buffer], name)));
-
-    // return Mp3Encoder.convertFlac(buffer, name);
   }
 
-  public static decode(buffer: ArrayBuffer): Promise<AudioBuffer> {
+  public static decode(file: File): Promise<AudioBuffer> {
 
     let audioContext;
     try {
@@ -189,8 +187,8 @@ export class Mp3Encoder {
       audioContext = new webkitAudioContext();
     }
 
-    return new Promise<AudioBuffer>(resolve =>
-      audioContext.decodeAudioData(buffer, (result) => resolve(result))
+    return Mp3Encoder.read(file)
+      .then(buffer => audioContext.decodeAudioData(buffer)
     );
   }
 
