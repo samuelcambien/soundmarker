@@ -628,7 +628,7 @@ $track_artist = isset($getbody->track_artist) ? $getbody->track_artist : "";
 $visibility = isset($getbody->visibility) ? $getbody->visibility : 1;
 
 // if user is able to edit this project password
-if (array_search($project_id, $_SESSION['user_projects'])) {
+// if (array_search($project_id, $_SESSION['user_projects'])) {
   $db = Flight::db();
   if ($project_id) {
       $sql = "INSERT INTO Track (title, artist, project_id, visibility) VALUES ('$track_title', '$track_artist', '$project_id', '$visibility')";
@@ -643,12 +643,12 @@ if (array_search($project_id, $_SESSION['user_projects'])) {
   Flight::json(array(
      'track_id' => $db->lastInsertId()
   ), 200);
-} else {
-  // return not allowed
-  Flight::json(array(
-     'return' => 'notallowed'
-  ), 200);
-}
+// } else {
+//   // return not allowed
+//   Flight::json(array(
+//      'return' => 'notallowed'
+//   ), 200);
+// }
 });
 
 /////////////////////////////////////////////////////// Routes - /track/visibility POST //////////////////////////////////////////////////////
