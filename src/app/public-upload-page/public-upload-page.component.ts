@@ -30,7 +30,10 @@ export class PublicUploadPageComponent implements OnInit {
       },
       {
         name: 'onlyAudio',
-        fn: item => item.type.startsWith("audio/")
+        fn: item => {
+          console.log(item.type);
+          return item.type.startsWith("audio/")
+        }
       }
     ],
   });

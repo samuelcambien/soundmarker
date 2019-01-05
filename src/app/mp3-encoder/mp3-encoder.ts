@@ -1,6 +1,4 @@
 import * as lamejs from "lamejs";
-
-
 import WaveFile from "wavefile";
 // import * as flac from "node-flac";
 // import * as wav from "node-wav";
@@ -10,6 +8,7 @@ import WaveFile from "wavefile";
 // import * as flac from 'flac.js';
 
 declare var require;
+declare var AudioContext, webkitAudioContext;
 
 export class Mp3Encoder {
 
@@ -24,11 +23,7 @@ export class Mp3Encoder {
 
     let encoded;
 
-    console.log(audio);
     decode(audio, (err, buf) => {
-      console.log("buf.length");
-      console.log(buf.length);
-
       encoded = buf;
     });
 
@@ -186,7 +181,17 @@ export class Mp3Encoder {
   }
 
   public static decode(buffer: ArrayBuffer): Promise<AudioBuffer> {
-    return require("audio-decode")(buffer);
+
+    let audioContext;
+    try {
+      audioContext = new AudioContext();
+    } catch (e) {
+      audioContext = new webkitAudioContext();
+    }
+
+    return new Promise<AudioBuffer>(resolve =>
+      audioContext.decodeAudioData(buffer, (result) => resolve(result))
+    );
   }
 
   public static convertAlac(file: File, callback: Function) {
