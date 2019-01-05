@@ -695,7 +695,7 @@ $track_length = isset($getbody->track_length) ? $getbody->track_length : 0;
 $wave_png = isset($getbody->wave_png) ? json_encode($getbody->wave_png) : "";
 
 // if user is able to edit this track
-if (array_search($track_id, $_SESSION['user_tracks'])) {
+// if (array_search($track_id, $_SESSION['user_tracks'])) {
   $db = Flight::db();
   $sql = "INSERT INTO Version (track_id, downloadable, visibility, notes, version_title, track_length, wave_png) VALUES ('$track_id', '$downloadable', '$visibility', '$notes', '$version_title', '$track_length', '$wave_png')";
   $result = $db->query($sql);
@@ -706,12 +706,12 @@ if (array_search($track_id, $_SESSION['user_tracks'])) {
   Flight::json(array(
      'version_id' => $db->lastInsertId()
   ), 200);
-} else {
-  // return not allowed
-  Flight::json(array(
-     'return' => 'notallowed'
-  ), 200);
-}
+// } else {
+//   // return not allowed
+//   Flight::json(array(
+//      'return' => 'notallowed'
+//   ), 200);
+// }
 });
 
 
