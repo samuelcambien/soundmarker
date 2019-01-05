@@ -154,24 +154,25 @@ export class Mp3Encoder {
     return Mp3Encoder.encodeMp3(buffer, name);
   }
 
-  public static convertWavOther(buffer: ArrayBuffer, name: string): Promise<File> {
+  public static convertWavOther(file: File, name: string): Promise<File> {
 
-    let wav = new WaveFile();
-    wav.fromBuffer(new Uint8Array(buffer));
-    wav.toBitDepth('16', false);
+    return Mp3Encoder.read(file)
+      .then(buffer => {
+        let wav = new WaveFile();
+        wav.fromBuffer(new Uint8Array(buffer));
+        wav.toBitDepth('16', false);
 
-    return Mp3Encoder.read(new File([wav.toBuffer()], name))
-      .then(buffer => Mp3Encoder.convertWav16bit(buffer, name));
+        return Mp3Encoder.read(new File([wav.toBuffer()], name))
+          .then(buffer => Mp3Encoder.convertWav16bit(buffer, name));
+      })
   }
 
   public static convertFlac(file: File, name: string): Promise<File> {
 
     return Mp3Encoder.decode(file)
       .then((buf: AudioBuffer) =>
-        Mp3Encoder.read(
-          new File([require('audiobuffer-to-wav')(buf)], name)
-        )
-      ).then(buffer => Mp3Encoder.convertWavOther(buffer, name));
+        new File([require('audiobuffer-to-wav')(buf)], name)
+      ).then(file => Mp3Encoder.convertWavOther(file, name));
   }
 
   public static convertMp3(buffer: ArrayBuffer, name: string): Promise<File> {
