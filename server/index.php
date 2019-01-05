@@ -957,7 +957,7 @@ Flight::route('POST /file/chunk/@file_id/@idno/@ext', function($file_id, $idno, 
 $config = Flight::get("config");
 
 // if user is able to upload file
-if (array_search($file_id, $_SESSION['user_files'])) {
+// if (array_search($file_id, $_SESSION['user_files'])) {
   $db = Flight::db();
   $sql = "SELECT version_id, extension, metadata, aws_path, file_name, file_size, identifier, chunk_length FROM File WHERE file_id = '$file_id'";
   $result = $db->query($sql);
@@ -977,12 +977,12 @@ if (array_search($file_id, $_SESSION['user_files'])) {
   Flight::json(array(
      'ok' => $result['ObjectURL'] . PHP_EOL
   ), 200);
-} else {
-  // return not allowed
-  Flight::json(array(
-     'return' => 'notallowed'
-  ), 200);
-} 
+// } else {
+//   // return not allowed
+//   Flight::json(array(
+//      'return' => 'notallowed'
+//   ), 200);
+// } 
 });
 
 
