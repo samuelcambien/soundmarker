@@ -198,7 +198,7 @@ $project_title = isset($getbody->project_title) ? $getbody->project_title : "";
 $project_password = isset($getbody->project_password) ? $getbody->project_password : "";
 
 // if user is able to edit this project -> update with user permissions
-if (array_search($project_id, $_SESSION['user_projects'])) {
+if (in_array($project_id, $_SESSION['user_projects'])) {
   $db = Flight::db();
   $sql = "UPDATE Project SET title = '$project_title' WHERE project_id = '$project_id'";
   $result = $db->query($sql);
@@ -256,7 +256,7 @@ $expiration = isset($getbody->expiration) ? $getbody->expiration : "1 week";
 $notes = isset($getbody->notes) ? $getbody->notes : "";
 
 // if user is able to edit this project -> update with user permissions
-if (array_search($project_id, $_SESSION['user_projects'])) {
+if (in_array($project_id, $_SESSION['user_projects'])) {
   $db = Flight::db();
   // Update expiration date
   $projectdate = new \DateTime('+'.$expiration);
@@ -480,7 +480,7 @@ if ($status == "expired") {
 
 // if project is password protected
 if ($project_password) {
-  if (array_search($project_id, $_SESSION['approved_user_projects'])) {
+  if (in_array($project_id, $_SESSION['approved_user_projects'])) {
     $_SESSION['view_user_projects'][] = $project_id;
     // return ok
     Flight::json(array(
@@ -534,7 +534,7 @@ $getbody = json_decode(Flight::request()->getBody());
 $project_id = $getbody->project_id;
 
 // if user is able to edit this project password
-if (array_search($project_id, $_SESSION['user_projects'])) {
+if (in_array($project_id, $_SESSION['user_projects'])) {
   $db = Flight::db();
   $sql = "SELECT password FROM Project WHERE project_id = '$project_id'";
   $result = $db->query($sql);
@@ -560,7 +560,7 @@ $getbody = json_decode(Flight::request()->getBody());
 $project_id = $getbody->project_id;
 
 // if user is able to edit this project password
-if (array_search($project_id, $_SESSION['user_projects'])) {
+if (in_array($project_id, $_SESSION['user_projects'])) {
   $db = Flight::db();
   $sql = "UPDATE Project SET active = '0' WHERE project_id = '$project_id'";
   $result = $db->query($sql);
@@ -586,7 +586,7 @@ $getbody = json_decode(Flight::request()->getBody());
 $project_id = $getbody->project_id;
 
 // if user is able to edit this project password
-if (array_search($project_id, $_SESSION['user_projects'])) {
+if (in_array($project_id, $_SESSION['user_projects'])) {
   $db = Flight::db();
   $sql = "SELECT hash FROM Project WHERE project_id = '$project_id'";
   $result = $db->query($sql);
@@ -633,7 +633,7 @@ $track_artist = isset($getbody->track_artist) ? $getbody->track_artist : "";
 $visibility = isset($getbody->visibility) ? $getbody->visibility : 1;
 
 // if user is able to edit this project password
-if (array_search($project_id, $_SESSION['user_projects'])) {
+if (in_array($project_id, $_SESSION['user_projects'])) {
   $db = Flight::db();
   if ($project_id) {
       $sql = "INSERT INTO Track (title, artist, project_id, visibility) VALUES ('$track_title', '$track_artist', '$project_id', '$visibility')";
@@ -666,7 +666,7 @@ $track_id = $getbody->track_id;
 $visibility = isset($getbody->visibility) ? $getbody->visibility : 1;
 
 // if user is able to edit this project
-if (array_search($project_id, $_SESSION['user_projects'])) {
+if (in_array($project_id, $_SESSION['user_projects'])) {
   $db = Flight::db();
   $sql = "UPDATE Track SET visibility = '$visibility' WHERE track_id = '$track_id'";
   $result = $db->query($sql);
@@ -700,7 +700,7 @@ $track_length = isset($getbody->track_length) ? $getbody->track_length : 0;
 $wave_png = isset($getbody->wave_png) ? json_encode($getbody->wave_png) : "";
 
 // if user is able to edit this track
-if (array_search($track_id, $_SESSION['user_tracks'])) {
+if (in_array($track_id, $_SESSION['user_tracks'])) {
   $db = Flight::db();
   $sql = "INSERT INTO Version (track_id, downloadable, visibility, notes, version_title, track_length, wave_png) VALUES ('$track_id', '$downloadable', '$visibility', '$notes', '$version_title', '$track_length', '$wave_png')";
   $result = $db->query($sql);
@@ -735,7 +735,7 @@ $version_title = isset($getbody->version_title) ? $getbody->version_title : "";
 // $wave_png = isset($getbody->wave_png) ? json_encode($getbody->wave_png) : "";
 
 // if user is able to edit this track
-if (array_search($track_id, $_SESSION['user_tracks'])) {
+if (in_array($track_id, $_SESSION['user_tracks'])) {
   $db = Flight::db();
 
   $sql = "UPDATE Version SET notes = '$notes', version_title = '$version_title', visibility = '$visibility', downloadable = '$downloadable' WHERE version_id = '$version_id'";
@@ -841,7 +841,7 @@ $include_end = isset($getbody->include_end) ? $getbody->include_end : "";
 $comment_time = isset($getbody->comment_time) ? $getbody->comment_time : "";
 
 // if user is allow to see this version
-if (array_search($version_id, $_SESSION['view_versions'])) {
+if (in_array($version_id, $_SESSION['view_versions'])) {
   $db = Flight::db();
   $sql = "INSERT INTO Comment (version_id, notes, name, start_time, end_time, parent_comment_id, include_start, include_end, comment_time) VALUES ('$version_id', '$notes', '$name', '$start_time', '$end_time', '$parent_comment_id', '$include_start', '$include_end', '$comment_time')";
   $result = $db->query($sql);
@@ -937,7 +937,7 @@ $extension = isset($getbody->extension) ? $getbody->extension : "";
 $aws_path = $config['AWS_S3_PATH'].$version_id . "/" . $file_name;
 
 // if user is able to upload file
-if (array_search($version_id, $_SESSION['user_versions'])) {
+if (in_array($version_id, $_SESSION['user_versions'])) {
   $db = Flight::db();
   $sql = "INSERT INTO File (version_id, file_name, file_size, metadata, extension, chunk_length, identifier, aws_path) VALUES ('$version_id', '$file_name', '$file_size', '$metadata', '$extension', '$chunk_length', '$identifier', '$aws_path')";
   $result = $db->query($sql);
@@ -962,7 +962,7 @@ Flight::route('POST /file/chunk/@file_id/@idno/@ext', function($file_id, $idno, 
 $config = Flight::get("config");
 
 // if user is able to upload file
-if (array_search($file_id, $_SESSION['user_files'])) {
+if (in_array($file_id, $_SESSION['user_files'])) {
   $db = Flight::db();
   $sql = "SELECT version_id, extension, metadata, aws_path, file_name, file_size, identifier, chunk_length FROM File WHERE file_id = '$file_id'";
   $result = $db->query($sql);
