@@ -89,6 +89,11 @@ Flight::route('/', function(){
 
 $config = Flight::get("config");
 $now = new DateTime();
+// initialize
+if(!isset($_SESSION)) 
+{ 
+  session_start(); 
+} 
 require 'helpers/oauth.php';
 
 if (isset($_SESSION["status"]) && isset($_SESSION['ENDTIME'])) {
@@ -628,7 +633,7 @@ $track_artist = isset($getbody->track_artist) ? $getbody->track_artist : "";
 $visibility = isset($getbody->visibility) ? $getbody->visibility : 1;
 
 // if user is able to edit this project password
-// if (array_search($project_id, $_SESSION['user_projects'])) {
+if (array_search($project_id, $_SESSION['user_projects'])) {
   $db = Flight::db();
   if ($project_id) {
       $sql = "INSERT INTO Track (title, artist, project_id, visibility) VALUES ('$track_title', '$track_artist', '$project_id', '$visibility')";
@@ -643,12 +648,12 @@ $visibility = isset($getbody->visibility) ? $getbody->visibility : 1;
   Flight::json(array(
      'track_id' => $db->lastInsertId()
   ), 200);
-// } else {
-//   // return not allowed
-//   Flight::json(array(
-//      'return' => 'notallowed'
-//   ), 200);
-// }
+} else {
+  // return not allowed
+  Flight::json(array(
+     'return' => 'notallowed'
+  ), 200);
+}
 });
 
 /////////////////////////////////////////////////////// Routes - /track/visibility POST //////////////////////////////////////////////////////
@@ -695,7 +700,7 @@ $track_length = isset($getbody->track_length) ? $getbody->track_length : 0;
 $wave_png = isset($getbody->wave_png) ? json_encode($getbody->wave_png) : "";
 
 // if user is able to edit this track
-// if (array_search($track_id, $_SESSION['user_tracks'])) {
+if (array_search($track_id, $_SESSION['user_tracks'])) {
   $db = Flight::db();
   $sql = "INSERT INTO Version (track_id, downloadable, visibility, notes, version_title, track_length, wave_png) VALUES ('$track_id', '$downloadable', '$visibility', '$notes', '$version_title', '$track_length', '$wave_png')";
   $result = $db->query($sql);
@@ -706,12 +711,12 @@ $wave_png = isset($getbody->wave_png) ? json_encode($getbody->wave_png) : "";
   Flight::json(array(
      'version_id' => $db->lastInsertId()
   ), 200);
-// } else {
-//   // return not allowed
-//   Flight::json(array(
-//      'return' => 'notallowed'
-//   ), 200);
-// }
+} else {
+  // return not allowed
+  Flight::json(array(
+     'return' => 'notallowed'
+  ), 200);
+}
 });
 
 
@@ -957,7 +962,7 @@ Flight::route('POST /file/chunk/@file_id/@idno/@ext', function($file_id, $idno, 
 $config = Flight::get("config");
 
 // if user is able to upload file
-// if (array_search($file_id, $_SESSION['user_files'])) {
+if (array_search($file_id, $_SESSION['user_files'])) {
   $db = Flight::db();
   $sql = "SELECT version_id, extension, metadata, aws_path, file_name, file_size, identifier, chunk_length FROM File WHERE file_id = '$file_id'";
   $result = $db->query($sql);
@@ -977,12 +982,12 @@ $config = Flight::get("config");
   Flight::json(array(
      'ok' => $result['ObjectURL'] . PHP_EOL
   ), 200);
-// } else {
-//   // return not allowed
-//   Flight::json(array(
-//      'return' => 'notallowed'
-//   ), 200);
-// } 
+} else {
+  // return not allowed
+  Flight::json(array(
+     'return' => 'notallowed'
+  ), 200);
+} 
 });
 
 
