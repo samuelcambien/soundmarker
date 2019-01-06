@@ -92,7 +92,7 @@ export class PublicUploadFormComponent implements OnInit {
       return {trackId: result[0]["track_id"], buffer: result[1]}
     }).then(({trackId, buffer}) =>
       RestCall.createNewVersion(
-          projectId, this.notes_element.nativeElement.value, buffer.duration, this.getWaveform(buffer), this.downloadable ? "1" : "0"
+          trackId, this.notes_element.nativeElement.value, buffer.duration, this.getWaveform(buffer), this.downloadable ? "1" : "0"
         )
     ).then(version => {
       let versionId = version["version_id"];
