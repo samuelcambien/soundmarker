@@ -1,5 +1,5 @@
 <?php
-class UUID {
+ class UUID {
   public static function v4() {
     return sprintf('%04x%04x-%04x-%04x-%04x-%04x%04x%04x',
 
