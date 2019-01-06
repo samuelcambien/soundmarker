@@ -10,6 +10,7 @@ import {RestCall} from "../rest/rest-call";
 export class PublicPageComponent implements OnInit {
 
   @Input() message: Message;
+  @Input() error;
 
   ad;
 

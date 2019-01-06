@@ -1,9 +1,10 @@
-<app-public-page>
+<app-public-page [error]="error">
 
   <div>
     <app-public-upload-form [class.hidden]="stage != statusEnum.SELECT_SONGS" [uploader]="uploader"
                             (uploading)="stage = statusEnum.UPLOADING_SONGS"
                             (finished)="stage = statusEnum.GREAT_SUCCESS"
+                            (error)="error = $event"
                             (link)="link = $event">
     </app-public-upload-form>
     <app-public-uploading-files [class.hidden]="stage != statusEnum.UPLOADING_SONGS"
