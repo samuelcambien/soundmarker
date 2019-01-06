@@ -1,8 +1,5 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {Message} from "../../../message";
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
-import {PublicIntroductionComponent} from "../topics/public-introduction/public-introduction.component";
-import {TermsAcceptedServiceService} from "../../../terms-accepted-service.service";
 import {SubscribeComponent} from "../../../subscribe/subscribe.component";
 
 @Component({
@@ -13,18 +10,12 @@ import {SubscribeComponent} from "../../../subscribe/subscribe.component";
 export class PublicInfoHeaderComponent implements OnInit {
 
   @Input() message;
+  @Output() openIntroduction = new EventEmitter();
 
-  constructor(private modalService: NgbModal, private termsAcceptedService: TermsAcceptedServiceService) {
-  }
-
-  openIntroduction() {
-    this.modalService.open(PublicIntroductionComponent, {size: "lg", backdrop: 'static', keyboard: false});
+  constructor(private modalService: NgbModal) {
   }
 
   ngOnInit() {
-    if (!this.termsAcceptedService.termsAccepted()) {
-      this.openIntroduction();
-    }
   }
 
   subscribe() {
