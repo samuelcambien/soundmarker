@@ -25,9 +25,11 @@ export class PublicUploadFormComponent implements OnInit {
   player;
 
   @Input() uploader: FileUploader;
+
   @Output() uploading = new EventEmitter();
   @Output() finished = new EventEmitter();
   @Output() link = new EventEmitter<string>();
+  @Output() error = new EventEmitter();
 
   @ViewChild('notes_element') notes_element: ElementRef;
 
@@ -64,18 +66,18 @@ export class PublicUploadFormComponent implements OnInit {
   onSubmit() {
 
     this.uploading.emit();
-
     RestCall.createNewProject()
       .then(response => {
 
         let project_id = response["project_id"];
-        Promise.all(this.uploader.queue.map(track => this.processTrack(project_id, track)))
+        return Promise.all(this.uploader.queue.map(track => this.processTrack(project_id, track)))
           .then(() => RestCall.shareProject(project_id, this.email_from, this.email_to ? this.email_to.split(",") : []))
           .then(response => {
             this.finished.emit();
             this.link.emit(response["project_hash"]);
-          });
-      });
+          })
+      })
+      .catch((e) => this.error.emit(e));
   }
 
   private processTrack(projectId, track: FileItem): Promise<any> {
@@ -92,8 +94,8 @@ export class PublicUploadFormComponent implements OnInit {
       return {trackId: result[0]["track_id"], buffer: result[1]}
     }).then(({trackId, buffer}) =>
       RestCall.createNewVersion(
-          trackId, this.notes_element.nativeElement.value, buffer.duration, this.getWaveform(buffer), this.downloadable ? "1" : "0"
-        )
+        trackId, this.notes_element.nativeElement.value, buffer.duration, this.getWaveform(buffer), this.downloadable ? "1" : "0"
+      )
     ).then(version => {
       let versionId = version["version_id"];
 
@@ -156,14 +158,6 @@ export class PublicUploadFormComponent implements OnInit {
         RestCall.uploadChunk(buffer, fileId, 0, extension)
           .then(() => this.uploader.uploaded++)
       );
-  }
-
-  constructor() {
-    try {
-      this.context = new AudioContext();
-    } catch (e) {
-      this.context = new webkitAudioContext();
-    }
   }
 
   ngOnInit(): void {
