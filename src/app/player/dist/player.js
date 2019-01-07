@@ -1155,7 +1155,10 @@
         .then((completeArray) => {
           this.audioBuffers[index] = this.copy(completeArray.buffer);
           return this.decodeBuffer(index, completeArray.buffer);
-        }).then(() => this.sources[index] = this.createSource(index));
+        }).then(() => {
+          this.sources[index] = this.createSource(index);
+          this.ready = true;
+        });
     },
 
     readResponse: function (reader, array, index) {
@@ -1271,24 +1274,27 @@
      */
     play: function (start, end, comment) {
 
-      var adjustedTime = this.seekTo(start, end);
+      if (this.ready) {
+        var adjustedTime = this.seekTo(start, end);
 
-      start = adjustedTime.start;
-      end = adjustedTime.end;
+        start = adjustedTime.start;
+        end = adjustedTime.end;
 
-      // var index = Math.floor(start / this.buffer_size);
-      // start = start % this.buffer_size;
+        // var index = Math.floor(start / this.buffer_size);
+        // start = start % this.buffer_size;
 
-      if (comment) this.comment = comment;
+        if (comment) this.comment = comment;
 
-      this.sources[0] = this.createSource(0);
-      this.playSource(0, start, end);
+        this.sources[0] = this.createSource(0);
+        this.playSource(0, start, end);
 
-      if (this.ac.state == 'suspended') {
-        this.ac.resume && this.ac.resume();
+        if (this.ac.state == 'suspended') {
+          this.ac.resume && this.ac.resume();
+        }
+        this.setState(this.PLAYING_STATE);
+        this.fireEvent('play');
+        this.fireEvent('pauseothers');
       }
-      this.setState(this.PLAYING_STATE);
-      this.fireEvent('play');
     },
 
     playSource(index, start, end) {

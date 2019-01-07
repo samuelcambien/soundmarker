@@ -7,7 +7,6 @@
       <app-public-player-track
         [track]="track"
         (selected)="selectTrack(track)"
-        (playing)="pauseOtherTracks(track)"
       >
       </app-public-player-track>
 
@@ -23,7 +22,6 @@
     [enableOverview]="project.tracks.length > 1"
     [ngbCollapse]="activeTrack != track"
     (overview)="activeTrack = null;"
-    (playing)="pauseOtherTracks(track)"
   >
   </app-public-track-player>
 
