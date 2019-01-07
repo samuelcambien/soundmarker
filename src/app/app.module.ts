@@ -33,7 +33,6 @@ import {SplitterDirective} from './splitter.directive';
 import {PublicPlayerListComponent} from './public-player-page/public-player-list/public-player-list.component';
 import {PublicPlayerTrackComponent} from './public-player-page/public-player-track/public-player-track.component';
 import {PublicTrackPlayerComponent} from './public-player-page/public-track-player/public-track-player.component';
-import {ErrorComponent} from './public-page/public-info/topics/error/error.component';
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {PrivacyAndTermsComponent} from './public-page/public-info/topics/privacy-and-terms/privacy-and-terms.component';
 import {ContactComponent} from './public-page/public-info/topics/contact/contact.component';
@@ -51,6 +50,7 @@ import {NgSelectModule} from '@ng-select/ng-select';
 import {ClipboardModule} from "ngx-clipboard";
 import {TimeFormatDirective} from './time-format.directive';
 import {SubscribeComponent} from './subscribe/subscribe.component';
+import {ErrorComponent} from "./error/error.component";
 
 @NgModule({
   declarations: [
