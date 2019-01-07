@@ -4,6 +4,7 @@ import {saveAs} from 'file-saver/FileSaver';
 import {animate, transition, trigger} from "@angular/animations";
 import {Version} from "../../model/version";
 import {PlayerService} from "../../player.service";
+import {File} from "../../model/file";
 
 @Component({
   selector: 'app-public-player-track',
@@ -22,12 +23,14 @@ export class PublicPlayerTrackComponent implements OnInit {
   @Output() playing = new EventEmitter();
 
   version: Version;
+  private files: File[];
 
   constructor(private playerService: PlayerService) {
   }
 
   ngOnInit() {
-    this.track.versions.then(versions => this.version = versions[0]);
+    this.track.versions.then(versions => {this.version = versions[0]});
+    this.version.files.then(files => this.files = files);
   }
 
   play() {
@@ -48,15 +51,12 @@ export class PublicPlayerTrackComponent implements OnInit {
   }
 
   download() {
-    // Utils.sendGetDataRequest(this.track.track_url + ".mp3", [], "", (response, trackRequest) => {
-    //   saveAs(new Blob(
-    //     [
-    //       trackRequest.responseText
-    //     ],
-    //     {
-    //       type: trackRequest.getResponseHeader("content-type")
-    //     }), this.track.title + ".mp3"
-    //   )
-    // });
+
+    window.open(
+      this.files
+        .filter(file => file.identifier == 0)
+        .map(file => file.aws_path + "0." + file.extension)
+        [0]
+    );
   }
 }
