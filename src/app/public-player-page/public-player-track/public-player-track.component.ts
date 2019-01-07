@@ -1,10 +1,8 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {Track} from "../../model/track";
-import {Player} from "../../newplayer/player";
 import {saveAs} from 'file-saver/FileSaver';
 import {animate, transition, trigger} from "@angular/animations";
 import {Version} from "../../model/version";
-import {Utils} from "../../app.component";
 import {PlayerService} from "../../player.service";
 
 @Component({
@@ -20,7 +18,6 @@ import {PlayerService} from "../../player.service";
 export class PublicPlayerTrackComponent implements OnInit {
 
   @Input() track: Track;
-  @Input() player;
   @Output() selected = new EventEmitter<Track>();
   @Output() playing = new EventEmitter();
 
@@ -36,6 +33,14 @@ export class PublicPlayerTrackComponent implements OnInit {
   play() {
     this.playing.emit();
     this.playerService.getPlayer(this.track.track_id).play();
+  }
+
+  isPlaying() {
+    return this.getPlayer() && this.getPlayer().isPlaying();
+  }
+
+  private getPlayer() {
+    return this.playerService.getPlayer(this.track.track_id);
   }
 
   trackSelected() {

@@ -27,7 +27,6 @@ import {PlayerService} from "../../player.service";
 })
 export class PublicTrackPlayerComponent implements OnInit, AfterViewChecked {
 
-  @Input() player: Player;
   @Input() track: Track;
   @Input() enableOverview: boolean;
 

@@ -6,7 +6,6 @@
 
       <app-public-player-track
         [track]="track"
-        [player]="getPlayer(track)"
         (selected)="selectTrack(track)"
         (playing)="pauseOtherTracks(track)"
       >
@@ -21,7 +20,6 @@
   <app-public-track-player
     *ngFor="let track of project?.tracks"
     [track]="track"
-    [player]="getPlayer(track)"
     [enableOverview]="project.tracks.length > 1"
     [ngbCollapse]="activeTrack != track"
     (overview)="activeTrack = null;"
