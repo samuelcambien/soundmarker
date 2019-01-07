@@ -2,7 +2,7 @@
 
   <div class="player-header row">
 
-    <div *ngIf="player?.isPlaying(); then pausebutton else playbutton"></div>
+    <div *ngIf="isPlaying(); then pausebutton else playbutton"></div>
 
     <ng-template #playbutton>
 
@@ -29,7 +29,7 @@
 
     <ng-template #pausebutton>
 
-      <button (click)="player?.pause()" class="mini-btn mini-pause-btn btn btn-link">
+      <button (click)="getPlayer().pause()" class="mini-btn mini-pause-btn btn btn-link">
 
         <svg width="26px" height="26px" viewBox="0 0 27 27" version="1.1" xmlns="http://www.w3.org/2000/svg">
           <defs></defs>
