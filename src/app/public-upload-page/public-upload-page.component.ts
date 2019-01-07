@@ -1,6 +1,5 @@
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
-import {FileItem, FileUploader} from "../ng2-file-upload";
-import {FileLikeObject} from "../ng2-file-upload/file-upload/file-like-object.class";
+import {FileUploader} from "../ng2-file-upload";
 
 const UPLOAD_FILES_ENDPOINT = 'http://localhost:8080/rest/upload/file';
 
@@ -14,6 +13,8 @@ enum Status {
   styleUrls: ['./public-upload-page.component.scss']
 })
 export class PublicUploadPageComponent implements OnInit {
+
+  error;
 
   uploader: FileUploader = new FileUploader({
     url: UPLOAD_FILES_ENDPOINT,

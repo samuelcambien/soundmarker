@@ -11,7 +11,6 @@ import {
   ViewChild
 } from '@angular/core';
 import {Track} from "../../model/track";
-import {Player} from "../../newplayer/player";
 import {Comment, CommentSorter} from "../../model/comment";
 import {saveAs} from 'file-saver/FileSaver';
 import {Version} from "../../model/version";
@@ -27,12 +26,10 @@ import {PlayerService} from "../../player.service";
 })
 export class PublicTrackPlayerComponent implements OnInit, AfterViewChecked {
 
-  @Input() player: Player;
   @Input() track: Track;
   @Input() enableOverview: boolean;
 
   @Output() overview = new EventEmitter();
-  @Output() playing = new EventEmitter();
 
   @ViewChild('waveform') waveform: ElementRef;
 
@@ -139,9 +136,7 @@ export class PublicTrackPlayerComponent implements OnInit, AfterViewChecked {
   }
 
   play() {
-    this.playing.emit();
     this.getPlayer().play();
-    // this.player.play();
   }
 
   pause() {

@@ -34,6 +34,7 @@ export class PublicPlayerPageComponent implements OnInit {
     this.route.params.subscribe(params => {
       this.loadProjectInfo(params['project_hash']);
     });
+    window.onresize = () => this.getActivePlayer().redraw();
   }
 
   private loadProjectInfo(projectHash: string) {
@@ -70,6 +71,10 @@ export class PublicPlayerPageComponent implements OnInit {
     // this.playerService.addPlayer(track.track_id, new Player(file.aws_path, version.track_length));
   }
 
+  getActivePlayer() {
+    return this.getPlayer(this.activeTrack.track_id);
+  }
+
   getPlayer(trackId: string) {
     return this.playerService.getPlayer(trackId);
   }
@@ -104,7 +109,7 @@ export class PublicPlayerPageComponent implements OnInit {
 
   selectTrack(track: Track) {
     this.activeTrack = track;
-    this.getPlayer(track.track_id).redraw();
+    setTimeout(() => this.getPlayer(track.track_id).redraw(), 4);
   }
 
   getMessage(project: Project, version: Version): Message {

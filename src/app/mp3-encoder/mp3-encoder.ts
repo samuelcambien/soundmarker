@@ -181,6 +181,13 @@ export class Mp3Encoder {
 
   public static decode(file: File): Promise<AudioBuffer> {
 
+    return Mp3Encoder.read(file)
+      .then(buffer => Mp3Encoder.decodeBuffer(buffer));
+  }
+
+  private static decodeBuffer(buffer: ArrayBuffer): AudioBuffer {
+    // let audiofile = require("audiofile")();
+
     let audioContext;
     try {
       audioContext = new AudioContext();
@@ -188,9 +195,7 @@ export class Mp3Encoder {
       audioContext = new webkitAudioContext();
     }
 
-    return Mp3Encoder.read(file)
-      .then(buffer => audioContext.decodeAudioData(buffer)
-    );
+    return audioContext.decodeAudioData(buffer);
   }
 
   public static convertAlac(file: File, callback: Function) {

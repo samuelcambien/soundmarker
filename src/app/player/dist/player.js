@@ -178,13 +178,20 @@
       return this.backend.getCurrentTime();
     },
 
-    play: function (start, end) {
-      this.fireEvent('interaction', this.play.bind(this, start, end));
-      this.backend.play(start, end);
+    play: function (start, end, comment) {
+      this.fireEvent('interaction', this.play.bind(this, start, end, comment));
+      if (this.backend.ready) {
+        this.backend.play(start, end, comment);
+      } else {
+        this.backend.on("ready", () => {
+          this.backend.play(start, end, comment);
+        })
+      }
     },
 
     pause: function () {
       this.backend.isPaused() || this.backend.pause();
+      this.backend.on("ready", () => {});
     },
 
     playPause: function () {
@@ -1155,7 +1162,11 @@
         .then((completeArray) => {
           this.audioBuffers[index] = this.copy(completeArray.buffer);
           return this.decodeBuffer(index, completeArray.buffer);
-        }).then(() => this.sources[index] = this.createSource(index));
+        }).then(() => {
+          this.sources[index] = this.createSource(index);
+          this.ready = true;
+          this.fireEvent("ready");
+        });
     },
 
     readResponse: function (reader, array, index) {
@@ -1229,6 +1240,10 @@
       return this.buffer.duration;
     },
 
+    getComment: function() {
+      return this.comment;
+    },
+
     seekTo: function (start, end) {
 
       this.scheduledPause = null;
@@ -1265,24 +1280,29 @@
      * @param {Number} end When to stop
      * relative to the beginning of a clip.
      */
-    play: function (start, end) {
+    play: function (start, end, comment) {
 
-      var adjustedTime = this.seekTo(start, end);
+      if (this.ready) {
+        var adjustedTime = this.seekTo(start, end);
 
-      start = adjustedTime.start;
-      end = adjustedTime.end;
+        start = adjustedTime.start;
+        end = adjustedTime.end;
 
-      // var index = Math.floor(start / this.buffer_size);
-      // start = start % this.buffer_size;
+        // var index = Math.floor(start / this.buffer_size);
+        // start = start % this.buffer_size;
 
-      this.sources[0] = this.createSource(0);
-      this.playSource(0, start, end);
+        if (comment) this.comment = comment;
 
-      if (this.ac.state == 'suspended') {
-        this.ac.resume && this.ac.resume();
+        this.sources[0] = this.createSource(0);
+        this.playSource(0, start, end);
+
+        if (this.ac.state == 'suspended') {
+          this.ac.resume && this.ac.resume();
+        }
+        this.setState(this.PLAYING_STATE);
+        this.fireEvent('play');
+        this.fireEvent('pauseothers');
       }
-      this.setState(this.PLAYING_STATE);
-      this.fireEvent('play');
     },
 
     playSource(index, start, end) {
@@ -1306,7 +1326,8 @@
     pause: function () {
       this.scheduledPause = null;
 
-      console.log(this.getPlayedTime());
+      this.comment = null;
+
       this.startPosition = +this.startPosition + this.getPlayedTime();
       this.source && this.source.stop(0);
 

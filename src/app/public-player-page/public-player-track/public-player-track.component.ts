@@ -1,11 +1,10 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {Track} from "../../model/track";
-import {Player} from "../../newplayer/player";
 import {saveAs} from 'file-saver/FileSaver';
 import {animate, transition, trigger} from "@angular/animations";
 import {Version} from "../../model/version";
-import {Utils} from "../../app.component";
 import {PlayerService} from "../../player.service";
+import {File} from "../../model/file";
 
 @Component({
   selector: 'app-public-player-track',
@@ -20,22 +19,29 @@ import {PlayerService} from "../../player.service";
 export class PublicPlayerTrackComponent implements OnInit {
 
   @Input() track: Track;
-  @Input() player;
   @Output() selected = new EventEmitter<Track>();
-  @Output() playing = new EventEmitter();
 
   version: Version;
+  private files: File[];
 
   constructor(private playerService: PlayerService) {
   }
 
   ngOnInit() {
-    this.track.versions.then(versions => this.version = versions[0]);
+    this.track.versions.then(versions => {this.version = versions[0]});
+    this.version.files.then(files => this.files = files);
   }
 
   play() {
-    this.playing.emit();
-    this.playerService.getPlayer(this.track.track_id).play();
+    this.getPlayer().play();
+  }
+
+  isPlaying() {
+    return this.getPlayer() && this.getPlayer().isPlaying();
+  }
+
+  private getPlayer() {
+    return this.playerService.getPlayer(this.track.track_id);
   }
 
   trackSelected() {
@@ -43,15 +49,12 @@ export class PublicPlayerTrackComponent implements OnInit {
   }
 
   download() {
-    // Utils.sendGetDataRequest(this.track.track_url + ".mp3", [], "", (response, trackRequest) => {
-    //   saveAs(new Blob(
-    //     [
-    //       trackRequest.responseText
-    //     ],
-    //     {
-    //       type: trackRequest.getResponseHeader("content-type")
-    //     }), this.track.title + ".mp3"
-    //   )
-    // });
+
+    window.open(
+      this.files
+        .filter(file => file.identifier == 0)
+        .map(file => file.aws_path + "0." + file.extension)
+        [0]
+    );
   }
 }
