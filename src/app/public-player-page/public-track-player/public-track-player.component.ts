@@ -11,7 +11,6 @@ import {
   ViewChild
 } from '@angular/core';
 import {Track} from "../../model/track";
-import {Player} from "../../newplayer/player";
 import {Comment, CommentSorter} from "../../model/comment";
 import {saveAs} from 'file-saver/FileSaver';
 import {Version} from "../../model/version";

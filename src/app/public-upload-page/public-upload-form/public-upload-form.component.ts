@@ -94,8 +94,8 @@ export class PublicUploadFormComponent implements OnInit {
     let extension = Mp3Encoder.getExtension(track._file.name);
 
     return Promise.all([
-      RestCall.createNewTrack(projectId, title),
-      this.getAudioBuffer(track)
+      RestCall.createNewTrack(projectId, track._file.name),
+      Mp3Encoder.decode(track._file)
     ]).then(result => {
       return {trackId: result[0]["track_id"], buffer: result[1]}
     }).then(({trackId, buffer}) =>
@@ -136,16 +136,6 @@ export class PublicUploadFormComponent implements OnInit {
     waveform.loadDecodedBuffer(buffer);
 
     return waveform.backend.getPeaks(743, 0, 743);
-  }
-
-  private context: AudioContext;
-
-  private getAudioBuffer(track): Promise<AudioBuffer> {
-    return new Promise<AudioBuffer>(resolve => {
-      Mp3Encoder.read(track._file).then(
-        (buffer: ArrayBuffer) => this.context.decodeAudioData(buffer, (result) => resolve(result))
-      );
-    })
   }
 
   private uploadDownloadFile(file: File, file_name: string, extension: string, size: number, versionId: string, length: number): Promise<any> {
