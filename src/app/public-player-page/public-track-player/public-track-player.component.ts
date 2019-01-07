@@ -30,7 +30,6 @@ export class PublicTrackPlayerComponent implements OnInit, AfterViewChecked {
   @Input() enableOverview: boolean;
 
   @Output() overview = new EventEmitter();
-  @Output() playing = new EventEmitter();
 
   @ViewChild('waveform') waveform: ElementRef;
 
@@ -137,9 +136,7 @@ export class PublicTrackPlayerComponent implements OnInit, AfterViewChecked {
   }
 
   play() {
-    this.playing.emit();
     this.getPlayer().play();
-    // this.player.play();
   }
 
   pause() {

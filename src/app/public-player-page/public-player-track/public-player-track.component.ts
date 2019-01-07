@@ -20,7 +20,6 @@ export class PublicPlayerTrackComponent implements OnInit {
 
   @Input() track: Track;
   @Output() selected = new EventEmitter<Track>();
-  @Output() playing = new EventEmitter();
 
   version: Version;
   private files: File[];
@@ -34,8 +33,7 @@ export class PublicPlayerTrackComponent implements OnInit {
   }
 
   play() {
-    this.playing.emit();
-    this.playerService.getPlayer(this.track.track_id).play();
+    this.getPlayer().play();
   }
 
   isPlaying() {

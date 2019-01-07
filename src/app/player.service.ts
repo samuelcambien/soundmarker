@@ -1,5 +1,4 @@
-import { Injectable } from '@angular/core';
-import {Player} from "bitmovin-javascript/dist/player";
+import {Injectable} from '@angular/core';
 
 @Injectable({
   providedIn: 'root'
@@ -16,5 +15,12 @@ export class PlayerService {
 
   public addPlayer(trackId: string, player) {
     this.players.set(trackId, player);
+    player.backend.on("pauseothers", () =>
+      this.players.forEach(otherplayer => {
+        if (otherplayer !== player) {
+          otherplayer.pause();
+        }
+      })
+    );
   }
 }
