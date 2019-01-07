@@ -180,11 +180,18 @@
 
     play: function (start, end, comment) {
       this.fireEvent('interaction', this.play.bind(this, start, end, comment));
-      this.backend.play(start, end, comment);
+      if (this.backend.ready) {
+        this.backend.play(start, end, comment);
+      } else {
+        this.backend.on("ready", () => {
+          this.backend.play(start, end, comment);
+        })
+      }
     },
 
     pause: function () {
       this.backend.isPaused() || this.backend.pause();
+      this.backend.on("ready", () => {});
     },
 
     playPause: function () {
@@ -1158,6 +1165,7 @@
         }).then(() => {
           this.sources[index] = this.createSource(index);
           this.ready = true;
+          this.fireEvent("ready");
         });
     },
 
