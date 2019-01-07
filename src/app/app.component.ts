@@ -113,8 +113,13 @@ export class Utils {
       }
       trackRequest.open("POST", url, true);
       trackRequest.onreadystatechange = () => {
-        if (trackRequest.readyState === 4) {
+
+        if (trackRequest.readyState !== 4) return;
+
+        if (trackRequest.status >= 200 && trackRequest.status < 300) {
           resolve(JSON.parse(trackRequest.responseText));
+        } else {
+          reject(trackRequest.statusText);
         }
       };
       trackRequest.onerror = () => reject(trackRequest.statusText);
@@ -130,7 +135,6 @@ export class Utils {
         url += "/" + entry;
       }
       trackRequest.open("POST", url, true);
-      // trackRequest.setRequestHeader("Content-Type", "application/json");
       trackRequest.onload = () => resolve(JSON.parse(trackRequest.responseText));
       trackRequest.onerror = () => reject(trackRequest.statusText);
       trackRequest.send(JSON.stringify(data));
