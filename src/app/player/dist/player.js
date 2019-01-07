@@ -178,9 +178,9 @@
       return this.backend.getCurrentTime();
     },
 
-    play: function (start, end) {
-      this.fireEvent('interaction', this.play.bind(this, start, end));
-      this.backend.play(start, end);
+    play: function (start, end, comment) {
+      this.fireEvent('interaction', this.play.bind(this, start, end, comment));
+      this.backend.play(start, end, comment);
     },
 
     pause: function () {
@@ -1229,6 +1229,10 @@
       return this.buffer.duration;
     },
 
+    getComment: function() {
+      return this.comment;
+    },
+
     seekTo: function (start, end) {
 
       this.scheduledPause = null;
@@ -1265,7 +1269,7 @@
      * @param {Number} end When to stop
      * relative to the beginning of a clip.
      */
-    play: function (start, end) {
+    play: function (start, end, comment) {
 
       var adjustedTime = this.seekTo(start, end);
 
@@ -1274,6 +1278,8 @@
 
       // var index = Math.floor(start / this.buffer_size);
       // start = start % this.buffer_size;
+
+      if (comment) this.comment = comment;
 
       this.sources[0] = this.createSource(0);
       this.playSource(0, start, end);
@@ -1306,7 +1312,8 @@
     pause: function () {
       this.scheduledPause = null;
 
-      console.log(this.getPlayedTime());
+      this.comment = null;
+
       this.startPosition = +this.startPosition + this.getPlayedTime();
       this.source && this.source.stop(0);
 

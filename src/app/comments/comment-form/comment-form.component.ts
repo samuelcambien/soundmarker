@@ -42,12 +42,12 @@ export class CommentFormComponent implements OnInit {
   }
 
   triggerEnd() {
-    if (!this.comment.end_time)
-      this.comment.end_time = this.player.getCurrentTime();
     if (!this.comment.include_end)
       this.resetEnd();
-    if (this.comment.include_end)
+    if (this.comment.include_end) {
       this.comment.include_start = true;
+      this.triggerStart();
+    }
   }
 
   private resetEnd() {

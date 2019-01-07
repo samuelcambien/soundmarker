@@ -44,12 +44,21 @@ export class CommentComponent implements OnInit {
     return Utils.getTimeHumanized(time) + " ago";
   }
 
-  goToCommentTime(comment: Comment) {
+  play() {
 
-    if (comment.include_start) {
-      comment.include_end ?
-        this.player.play(comment.start_time, comment.end_time) :
-        this.player.play(comment.start_time);
+    if (this.comment.include_start) {
+      this.comment.include_end ?
+        this.player.play(this.comment.start_time, this.comment.end_time, this.comment.comment_id) :
+        this.player.play(this.comment.start_time, this.player.getDuration(), this.comment.comment_id);
     }
+  }
+
+  stop() {
+    this.player.pause();
+    this.player.seekTo(this.comment.start_time / this.player.getDuration());
+  }
+
+  isPlaying() {
+    return this.player && this.player.backend.getComment() === this.comment.comment_id;
   }
 }
