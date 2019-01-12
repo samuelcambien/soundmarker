@@ -1018,6 +1018,10 @@ if (in_array($file_id, $_SESSION['user_files'])) {
           'ACL'    => 'public-read'
       ]);
 
+      if ($i == 0) {
+        $returnurl = $result['ObjectURL'];
+      }
+
     // delete file again
     unlink("/tmp/".$file_id."".$i."mp3");
   }
@@ -1048,7 +1052,7 @@ if (in_array($file_id, $_SESSION['user_files'])) {
 
   // return ok
   Flight::json(array(
-     'ok' => $result['ObjectURL'] . PHP_EOL
+     'ok' => $returnurl
   ), 200);
 } else {
   // return not allowed
