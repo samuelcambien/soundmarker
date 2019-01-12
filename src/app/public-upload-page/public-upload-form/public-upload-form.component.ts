@@ -6,7 +6,7 @@ import {RestCall} from "../../rest/rest-call";
 import * as wave from "../../player/dist/player.js"
 import {Version} from "../../model/version";
 import {NgbTooltip} from '@ng-bootstrap/ng-bootstrap';
-import {NgModel, FormControl, FormGroup, FormBuilder, Validators, EmailValidator} from '@angular/forms';
+import {Validators} from '@angular/forms';
 
 declare var AudioContext: any, webkitAudioContext: any;
 
