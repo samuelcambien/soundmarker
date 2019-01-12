@@ -1,25 +1,12 @@
 <div class="container-fluid player-container">
 
-  <div id="popup-playbar" class="shadow hide-phone">
+  <div id="popup-playbar" ngClass="shadow hide-phone" [class.hidden]="isInViewport(waveform)">
 
     <div class="row popup-row">
 
       <div class="popup-play-btn">
 
         <button *ngIf="isPlaying(); then pausebutton else playbutton"></button>
-
-        <ng-template #pausebutton>
-          <button class="mini-btn mini-pause-btn btn btn-link" (click)="pause()">
-
-          </button>
-        </ng-template>
-
-        <ng-template #playbutton>
-          <button class="mini-btn mini-play-btn btn btn-link" (click)="play()">
-
-          </button>
-        </ng-template>
-
 
       </div>
 
@@ -29,6 +16,7 @@
 
       <div class="top-icon icon-action ml-auto"></div>
 
+      <div (click)="scrollToTop()">iedemenne</div>
 
       <div class="top-icon list-icon" id="list-icon" role="button" (click)="goToOverview()">
 
@@ -54,7 +42,6 @@
         </svg>
 
       </div>
-
 
       <div class="top-icon text-icon" id="text-icon" (click)="showComments = !showComments"
            [class.active]="showComments">

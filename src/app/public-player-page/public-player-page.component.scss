@@ -93,9 +93,13 @@
     left: 0px;
     right: 0px;
     z-index: 99;
-    display: none;
+    display: block;
     padding-top: 10px;
     padding-bottom: 10px;
+
+  &.hidden {
+    display: none;
+  }
 }
 
 #phone-popup-playbar {
