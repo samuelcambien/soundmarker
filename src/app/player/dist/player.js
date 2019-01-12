@@ -41,7 +41,7 @@
       minPxPerSec: 20,
       partialRender: false,
       pixelRatio: window.devicePixelRatio || screen.deviceXDPI / screen.logicalXDPI,
-      progressColor: '#bac1da',
+      progressColor: '#d7e1fd',
       normalize: false,
       renderer: 'MultiCanvas',
       scrollParent: false,
