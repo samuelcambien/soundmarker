@@ -33,6 +33,7 @@ npm-debug.log
 yarn-error.log
 testem.log
 /typings
+/server/credentials.php
 
 # System Files
 .DS_Store

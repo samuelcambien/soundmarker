@@ -140,7 +140,7 @@ Flight::route('/', function(){
       }
     }
   }
-  include 'index.html';
+  include '/Users/dieterboels/Documents/SoundmarkerDev/soundmarker/src/index.html';
 });
 
 

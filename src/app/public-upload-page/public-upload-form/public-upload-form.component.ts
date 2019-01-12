@@ -1,9 +1,12 @@
-import {Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
+import {Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild, Directive, HostListener} from '@angular/core';
 import {FileItem, FileUploader} from '../../ng2-file-upload';
+import {Observable} from 'rxjs';
 import {Mp3Encoder} from "../../mp3-encoder/mp3-encoder";
 import {RestCall} from "../../rest/rest-call";
 import * as wave from "../../player/dist/player.js"
 import {Version} from "../../model/version";
+import {NgbTooltip} from '@ng-bootstrap/ng-bootstrap';
+import {Validators} from '@angular/forms';
 
 declare var AudioContext: any, webkitAudioContext: any;
 
@@ -12,15 +15,18 @@ declare var AudioContext: any, webkitAudioContext: any;
   templateUrl: './public-upload-form.component.html',
   styleUrls: ['./public-upload-form.component.scss']
 })
+
 export class PublicUploadFormComponent implements OnInit {
 
   notes: string;
   email_from: string;
   email_to: string;
 
-  sharemode: "email" | "link" = "link";
+  sharemode: "email" | "link" = "email";
   expiration: "week" | "month" = "week";
   downloadable: boolean = false;
+
+  public validators = [Validators.required, Validators.pattern('^\\w+([\\.-]?\\w+)*@\\w+([\\.-]?\\w+)*(\\.\\w{2,3})+$')];
 
   player;
 
@@ -162,5 +168,9 @@ export class PublicUploadFormComponent implements OnInit {
     //   container: canvas
     // });
     // wave.loadDecodedBuffer(buffer);
+  }
+
+  public onValidationError(tooltip: NgbTooltip, control) {
+    console.log("Validation error"+this.email_to);
   }
 }
