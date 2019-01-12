@@ -25,8 +25,10 @@ export class PublicUploadFormComponent implements OnInit {
   sharemode: "email" | "link" = "email";
   expiration: "week" | "month" = "week";
   downloadable: boolean = false;
+  max_tracks: number = 30;
+  tracks_left = () => { return this.max_tracks - this.uploader.queue.length };
 
-  public validators = [Validators.required, Validators.pattern('^\\w+([\\.-]?\\w+)*@\\w+([\\.-]?\\w+)*(\\.\\w{2,3})+$')];
+  validators = [Validators.required, Validators.pattern('^\\w+([\\.-]?\\w+)*@\\w+([\\.-]?\\w+)*(\\.\\w{2,3})+$')];
 
   player;
 
@@ -36,6 +38,8 @@ export class PublicUploadFormComponent implements OnInit {
   @Output() finished = new EventEmitter();
   @Output() link = new EventEmitter<string>();
   @Output() error = new EventEmitter();
+
+
 
   @ViewChild('notes_element') notes_element: ElementRef;
 
