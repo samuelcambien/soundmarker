@@ -81,8 +81,21 @@
       <div class="form-row" *ngIf="sharemode == 'email'">
 
         <div class="form-group col-sm-6"  >
-          <input type="text" [(ngModel)]="email_from" name="email_from" placeholder="Email from" pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$"
-                   class="form-control form-control-sm" required ngbTooltip="Invalid email address" triggers="manual" emailValidationTooltip>
+          <tag-input [(ngModel)]='email_from'
+                     [separatorKeys]="[13]"
+                     [validators]="validators"
+                     [maxItems]="1"
+                     [ripple]="false"
+                     (onValidationError)="t.open()"
+                     (onValidationError)="onValidationError()"
+                     [animationDuration]="{enter: '0ms', leave: '0ms'}"
+                     placeholder="Email from"
+                     secondaryPlaceholder="Email from"
+                     name="email_from"
+                     class="form-control form-control-sm" required
+                     ngbTooltip="Invalid email address" triggers="manual" #t="ngbTooltip"
+                     (onAdd)="t.close()">
+          </tag-input>
         </div>
 
         <div class="col-sm-6">
@@ -96,11 +109,10 @@
                      [animationDuration]="{enter: '0ms', leave: '0ms'}"
                      placeholder="Email to"
                      secondaryPlaceholder="Email to"
-                     name="email_top"
+                     name="email_to"
                      class="form-control form-control-sm" required
                      ngbTooltip="Invalid email address" triggers="manual" #t="ngbTooltip"
                      (onAdd)="t.close()">
-              <!--[errorMessages]="errorMessages"-->
           </tag-input>
         </div>
       </div>
