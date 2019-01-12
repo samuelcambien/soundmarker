@@ -697,12 +697,12 @@ $visibility = isset($getbody->visibility) ? $getbody->visibility : 1;
 $notes = isset($getbody->notes) ? $getbody->notes : "";
 $version_title = isset($getbody->version_title) ? $getbody->version_title : "";
 $track_length = isset($getbody->track_length) ? $getbody->track_length : 0;
-$wave_png = isset($getbody->wave_png) ? json_encode($getbody->wave_png) : "";
+// $wave_png = isset($getbody->wave_png) ? json_encode($getbody->wave_png) : "";
 
 // if user is able to edit this track
 if (in_array($track_id, $_SESSION['user_tracks'])) {
   $db = Flight::db();
-  $sql = "INSERT INTO Version (track_id, downloadable, visibility, notes, version_title, track_length, wave_png) VALUES ('$track_id', '$downloadable', '$visibility', '$notes', '$version_title', '$track_length', '$wave_png')";
+  $sql = "INSERT INTO Version (track_id, downloadable, visibility, notes, version_title, track_length) VALUES ('$track_id', '$downloadable', '$visibility', '$notes', '$version_title', '$track_length')";
   $result = $db->query($sql);
 
   $_SESSION['user_versions'][] = $db->lastInsertId();
@@ -978,6 +978,83 @@ if (in_array($file_id, $_SESSION['user_files'])) {
       'Body'   => Flight::request()->getBody(), // figuring out right way to get the file from the JSON
       'ACL'    => 'public-read'
   ]);
+
+
+
+
+
+
+
+
+
+
+$ffmpeg = FFMpeg\FFMpeg::create(array(
+    'ffmpeg.binaries'  => '/usr/local/bin/ffmpeg',
+    'ffprobe.binaries' => '/usr/local/bin/ffprobe',
+    'timeout'          => 3600, // The timeout for the underlying process
+    'ffmpeg.threads'   => 12,   // The number of threads that FFMpeg should use
+), $logger);
+$audio = $ffmpeg->open('track.mp3');
+
+$format = new FFMpeg\Format\Audio\Flac();
+
+$format->on('progress', function ($audio, $format, $percentage) {
+    echo "$percentage % transcoded";
+});
+
+$format
+    ->setAudioChannels(2)
+    ->setAudioKiloBitrate(256);
+
+
+$ffprobe = FFMpeg\FFProbe::create(array(
+    'ffmpeg.binaries'  => '/usr/local/bin/ffmpeg',
+    'ffprobe.binaries' => '/usr/local/bin/ffprobe',
+    'timeout'          => 3600, // The timeout for the underlying process
+    'ffmpeg.threads'   => 12,   // The number of threads that FFMpeg should use
+), $logger);
+$duration = $ffprobe
+    ->format('track.mp3') // extracts file informations
+    ->get('duration'); 
+
+// echo $duration;
+
+
+
+
+
+
+exec("/usr/local/bin/ffmpeg -nostats -i track.mp3 -filter_complex ebur128 -f null - 2>&1", $output);
+
+foreach ($output as &$value) {
+  if (strpos($value, 'Parsed_ebur1') !== false) {
+    if (strpos($value, 'Summary') == false) {
+      $momentarylufs = substr($value, strpos($value, "M:") + 2, (strpos($value, "S:") - strpos($value, "M:") - 3));
+      $zerotohundred = intval((floatval($momentarylufs) / 1.6) + 100);
+      $wave2png[] = $zerotohundred;
+    }
+  }
+}
+// print_r($wave2png);
+
+// cut the audio.
+$audio->filters()->clip(FFMpeg\Coordinate\TimeCode::fromSeconds(10), FFMpeg\Coordinate\TimeCode::fromSeconds(10));
+$audio->save($format, 'track0.flac');
+
+$audio->filters()->clip(FFMpeg\Coordinate\TimeCode::fromSeconds(190), FFMpeg\Coordinate\TimeCode::fromSeconds(10));
+$audio->save($format, 'track1.flac');
+
+
+// Update wave_png in dB
+
+
+
+
+
+
+
+
+
   // return ok
   Flight::json(array(
      'ok' => $result['ObjectURL'] . PHP_EOL

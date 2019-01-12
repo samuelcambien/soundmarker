@@ -1,5 +1,6 @@
 {
     "require": {
-        "aws/aws-sdk-php": "3.*"
+        "aws/aws-sdk-php": "3.*",
+        "php-ffmpeg/php-ffmpeg": "^0.13.0"
     }
 }
