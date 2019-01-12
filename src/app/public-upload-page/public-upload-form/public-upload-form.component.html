@@ -81,15 +81,44 @@
         </div>
       </div>
       <div class="form-row" *ngIf="sharemode == 'email'">
-        <div class="form-group col-sm-6">
-          <input type="text" [(ngModel)]='email_from' name="email_from" placeholder="Email from"
-                 class="form-control form-control-sm" required>
+
+        <div class="form-group col-sm-6"  >
+          <tag-input [(ngModel)]='email_from'
+                     [separatorKeyCodes]="[13]"
+                     [validators]="validators"
+                     [maxItems]="1"
+                     [addOnBlur]="true"
+                     [ripple]="false"
+                     [animationDuration]="{enter: '0ms', leave: '0ms'}"
+                     placeholder="Email from"
+                     secondaryPlaceholder="Email from"
+                     name="email_from"
+                     class="form-control form-control-sm" required
+                     ngbTooltip="Invalid email address" triggers="manual" #t="ngbTooltip">
+                      <!--(onAdd)="t.close()"-->
+                     <!--(onValidationError)="t.open()"-->
+                     <!--(onValidationError)="onValidationError()">-->
+
+          </tag-input>
         </div>
+
         <div class="col-sm-6">
-          <input type="email" [(ngModel)]='email_to' name="email_to" placeholder="Email to" multiple
-                 class="form-control form-control-sm">
+          <tag-input [(ngModel)]='email_to'
+                     [separatorKeyCodes]="[13, 188, 186]"
+                     [validators]="validators"
+                     [addOnBlur]="true"
+                     [maxItems]="5"
+                     [ripple]="false"
+                     [animationDuration]="{enter: '0ms', leave: '0ms'}"
+                     placeholder="Email to"
+                     secondaryPlaceholder="Email to"
+                     name="email_to"
+                     class="form-control form-control-sm" required
+                     ngbTooltip="Invalid email address" triggers="manual" #t="ngbTooltip">
+          </tag-input>
         </div>
       </div>
+
       <div class="form-row radios">
         <div class="col">
           <div class="btn-group btn-group-sm btn-group-toggle" name="sharemode" ngbRadioGroup [(ngModel)]="sharemode"
@@ -152,7 +181,9 @@
 
         </div>
       </div>
+
     </div>
+
   </div>
 
 </form>
