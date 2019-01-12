@@ -2,7 +2,7 @@ import {BrowserModule} from '@angular/platform-browser';
 import {NgModule} from '@angular/core';
 
 import {AppComponent} from './app.component';
-import {PublicUploadFormComponent, EmailValidationToolTip} from './public-upload-page/public-upload-form/public-upload-form.component';
+import {PublicUploadFormComponent} from './public-upload-page/public-upload-form/public-upload-form.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {PublicUploadingFilesComponent} from './public-upload-page/public-upload-progress/public-uploading-files.component';
 import {PublicUploadFinishedComponent} from './public-upload-page/public-upload-finished/public-upload-finished.component';
@@ -97,7 +97,6 @@ import {SubscribeComponent} from './subscribe/subscribe.component';
     PlayerIntroductionComponent,
     TimeFormatDirective,
     SubscribeComponent,
-    EmailValidationToolTip,
   ],
   imports: [
     TagInputModule,
