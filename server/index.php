@@ -1008,8 +1008,8 @@ $format
 
 
 $ffprobe = FFMpeg\FFProbe::create(array(
-    'ffmpeg.binaries'  => '/usr/local/bin/ffmpeg',
-    'ffprobe.binaries' => '/usr/local/bin/ffprobe',
+    'ffmpeg.binaries'  => '/usr/bin/ffmpeg',
+    'ffprobe.binaries' => '/usr/bin/ffprobe',
     'timeout'          => 3600, // The timeout for the underlying process
     'ffmpeg.threads'   => 12,   // The number of threads that FFMpeg should use
 ), $logger);
@@ -1024,7 +1024,7 @@ $duration = $ffprobe
 
 
 
-exec("/usr/local/bin/ffmpeg -nostats -i track.mp3 -filter_complex ebur128 -f null - 2>&1", $output);
+exec("/usr/bin/ffmpeg -nostats -i track.mp3 -filter_complex ebur128 -f null - 2>&1", $output);
 
 foreach ($output as &$value) {
   if (strpos($value, 'Parsed_ebur1') !== false) {
