@@ -141,7 +141,7 @@ Flight::route('/', function(){
 // if (in_array("300", $_SESSION['PROJECT'])) {
 //     echo "Got mac";
 // }
-  include 'index.html';
+  include '/Users/dieterboels/Documents/SoundmarkerDev/soundmarker/src/index.html';
 });
 
 

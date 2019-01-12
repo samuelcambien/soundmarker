@@ -79,15 +79,32 @@
         </div>
       </div>
       <div class="form-row" *ngIf="sharemode == 'email'">
-        <div class="form-group col-sm-6">
-          <input type="text" [(ngModel)]='email_from' name="email_from" placeholder="Email from"
-                 class="form-control form-control-sm" required>
+
+        <div class="form-group col-sm-6"  >
+          <input type="text" [(ngModel)]="email_from" name="email_from" placeholder="Email from" pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$"
+                   class="form-control form-control-sm" required ngbTooltip="Invalid email address" triggers="manual" emailValidationTooltip>
         </div>
+
         <div class="col-sm-6">
-          <input type="email" [(ngModel)]='email_to' name="email_to" placeholder="Email to" multiple
-                 class="form-control form-control-sm">
+          <tag-input [(ngModel)]='email_to'
+                     [separatorKeys]="[13]"
+                     [validators]="validators"
+                     [maxItems]="5"
+                     [ripple]="false"
+                     (onValidationError)="t.open()"
+                     (onValidationError)="onValidationError()"
+                     [animationDuration]="{enter: '0ms', leave: '0ms'}"
+                     placeholder="Email to"
+                     secondaryPlaceholder="Email to"
+                     name="email_top"
+                     class="form-control form-control-sm" required
+                     ngbTooltip="Invalid email address" triggers="manual" #t="ngbTooltip"
+                     (onAdd)="t.close()">
+              <!--[errorMessages]="errorMessages"-->
+          </tag-input>
         </div>
       </div>
+
       <div class="form-row radios">
         <div class="col">
           <div class="btn-group btn-group-sm btn-group-toggle" name="sharemode" ngbRadioGroup [(ngModel)]="sharemode"
@@ -150,7 +167,9 @@
 
         </div>
       </div>
+
     </div>
+
   </div>
 
 </form>

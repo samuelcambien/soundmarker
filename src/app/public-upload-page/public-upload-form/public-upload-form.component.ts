@@ -1,9 +1,12 @@
-import {Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
+import {Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild, Directive, HostListener} from '@angular/core';
 import {FileItem, FileUploader} from '../../ng2-file-upload';
+import {Observable} from 'rxjs';
 import {Mp3Encoder} from "../../mp3-encoder/mp3-encoder";
 import {RestCall} from "../../rest/rest-call";
 import * as wave from "../../player/dist/player.js"
 import {Version} from "../../model/version";
+import {NgbTooltip} from '@ng-bootstrap/ng-bootstrap';
+import {NgModel, FormControl, FormGroup, FormBuilder, Validators, EmailValidator} from '@angular/forms';
 
 declare var AudioContext: any, webkitAudioContext: any;
 
@@ -12,15 +15,21 @@ declare var AudioContext: any, webkitAudioContext: any;
   templateUrl: './public-upload-form.component.html',
   styleUrls: ['./public-upload-form.component.scss']
 })
+
 export class PublicUploadFormComponent implements OnInit {
 
   notes: string;
   email_from: string;
   email_to: string;
 
-  sharemode: "email" | "link" = "link";
+  sharemode: "email" | "link" = "email";
   expiration: "week" | "month" = "week";
   downloadable: boolean = false;
+  // emailPattern: string = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
+  public validators = [Validators.required, Validators.pattern('^\\w+([\\.-]?\\w+)*@\\w+([\\.-]?\\w+)*(\\.\\w{2,3})+$')];
+  //public validators = [this.startsWithAt];
+  //public asyncValidators = [Validators.pattern('^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$')];
 
   player;
 
@@ -159,7 +168,7 @@ export class PublicUploadFormComponent implements OnInit {
   }
 
   constructor() {
-    try {
+    try{
       this.context = new AudioContext();
     } catch (e) {
       this.context = new webkitAudioContext();
@@ -173,4 +182,36 @@ export class PublicUploadFormComponent implements OnInit {
     // });
     // wave.loadDecodedBuffer(buffer);
   }
+
+  public onValidationError(tooltip: NgbTooltip, control) {
+    console.log("Validation error"+this.email_to);
+  }
 }
+
+@Directive({
+  selector: '[emailValidationTooltip]'
+})
+
+export class EmailValidationToolTip {
+  control: any;
+  tooltip: any;
+
+  constructor(control: NgModel, tooltip: NgbTooltip) {
+    this.tooltip = tooltip;
+    this.control = control;
+    this.control.statusChanges.subscribe((status) => {
+        if (control.dirty && control.invalid) {
+        } else {
+          tooltip.close();
+      }
+    });
+  }
+
+  @HostListener('focusout') onFocusOutMethod(){
+    if (this.control.dirty && this.control.invalid && this.control.value) {
+    this.tooltip.open();
+       } else {
+    this.tooltip.close();}
+    }
+}
+

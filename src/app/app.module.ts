@@ -2,7 +2,7 @@ import {BrowserModule} from '@angular/platform-browser';
 import {NgModule} from '@angular/core';
 
 import {AppComponent} from './app.component';
-import {PublicUploadFormComponent} from './public-upload-page/public-upload-form/public-upload-form.component';
+import {PublicUploadFormComponent, EmailValidationToolTip} from './public-upload-page/public-upload-form/public-upload-form.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {PublicUploadingFilesComponent} from './public-upload-page/public-upload-progress/public-uploading-files.component';
 import {PublicUploadFinishedComponent} from './public-upload-page/public-upload-finished/public-upload-finished.component';
@@ -30,6 +30,8 @@ import {MyCurrencyPipe} from './my-currency.pipe';
 import {TimeInputComponent} from './comments/time-input/time-input.component';
 import {FileUploadModule} from "./ng2-file-upload";
 import {SplitterDirective} from './splitter.directive';
+import {TagInputModule} from 'ngx-chips';
+
 import {PublicPlayerListComponent} from './public-player-page/public-player-list/public-player-list.component';
 import {PublicPlayerTrackComponent} from './public-player-page/public-player-track/public-player-track.component';
 import {PublicTrackPlayerComponent} from './public-player-page/public-track-player/public-track-player.component';
@@ -51,6 +53,7 @@ import {NgSelectModule} from '@ng-select/ng-select';
 import {ClipboardModule} from "ngx-clipboard";
 import {TimeFormatDirective} from './time-format.directive';
 import {SubscribeComponent} from './subscribe/subscribe.component';
+
 
 @NgModule({
   declarations: [
@@ -93,9 +96,11 @@ import {SubscribeComponent} from './subscribe/subscribe.component';
     PublicIntroductionComponent,
     PlayerIntroductionComponent,
     TimeFormatDirective,
-    SubscribeComponent
+    SubscribeComponent,
+    EmailValidationToolTip,
   ],
   imports: [
+    TagInputModule,
     FileUploadModule,
     NgSelectModule,
     FormsModule,
