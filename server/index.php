@@ -971,89 +971,80 @@ if (in_array($file_id, $_SESSION['user_files'])) {
   // get the variables
   $s3 = Flight::get("s3");
 
-  // Upload data.
-  $result = $s3->putObject([
-      'Bucket' => $config['AWS_S3_BUCKET'],
-      'Key'    => $files[0]["version_id"] . "/" . $files[0]["file_name"] . $idno .'.' . $files[0]["extension"],
-      'Body'   => Flight::request()->getBody(), // figuring out right way to get the file from the JSON
-      'ACL'    => 'public-read'
-  ]);
+  // store tmp file.
+  $myfile = fopen("/tmp/".$file_id.".".$ext, "w") or die("Unable to open file!");
+  fwrite($myfile, Flight::request()->getBody());
+  fclose($myfile);
 
+  // now let's see how long the song is
+  $ffprobe = FFMpeg\FFProbe::create(array(
+      'ffmpeg.binaries'  => '/opt/ffmpeg/ffmpeg-4.1-64bit-static/ffmpeg',
+      'ffprobe.binaries' => '/opt/ffmpeg/ffmpeg-4.1-64bit-static/ffprobe',
+      'timeout'          => 3600, // The timeout for the underlying process
+      'ffmpeg.threads'   => 12,   // The number of threads that FFMpeg should use
+  ));
+  $duration = $ffprobe
+      ->format("/tmp/".$file_id.".".$ext) // extracts file informations
+      ->get('duration'); 
 
+  // now we split up the song in 10sec fragments
+  // now let's convert the file
+  $ffmpeg = FFMpeg\FFMpeg::create(array(
+      'ffmpeg.binaries'  => '/opt/ffmpeg/ffmpeg-4.1-64bit-static/ffmpeg',
+      'ffprobe.binaries' => '/opt/ffmpeg/ffmpeg-4.1-64bit-static/ffprobe',
+      'timeout'          => 3600, // The timeout for the underlying process
+      'ffmpeg.threads'   => 12,   // The number of threads that FFMpeg should use
+  ));
+  $audio = $ffmpeg->open("/tmp/".$file_id.".".$ext);
 
+  $format = new FFMpeg\Format\Audio\MP3();
+  $format
+      ->setAudioChannels(2)
+      ->setAudioKiloBitrate(192);
 
+  // now we loop through and upload each fragment
+  // cut the audio.
+  $amountofsegments = intval($duration/10);
 
+  for ($i = 0; $i <= $amountofsegments; $i++) {
+    $audio->filters()->clip(FFMpeg\Coordinate\TimeCode::fromSeconds($i*10), FFMpeg\Coordinate\TimeCode::fromSeconds(10));
+    $audio->save($format, "/tmp/".$file_id."".$i."mp3");
 
+      // upload in chunks to S3
+      $result = $s3->putObject([
+          'Bucket' => $config['AWS_S3_BUCKET'],
+          'Key'    => $files[0]["version_id"] . "/" . $files[0]["file_name"] . $i .'.' . $files[0]["extension"],
+          'Body'   => file_get_contents("/tmp/".$file_id."".$i."mp3"), // figuring out right way to get the file from the JSON
+          'ACL'    => 'public-read'
+      ]);
 
+    // delete file again
+    unlink("/tmp/".$file_id."".$i."mp3");
+  }
+  
+  // now it's time to create the png
+  // let's create wave_png
 
+  exec("/opt/ffmpeg/ffmpeg-4.1-64bit-static/ffmpeg -nostats -i /tmp/".$file_id.".".$ext." -filter_complex ebur128 -f null - 2>&1", $output);
 
-
-$ffmpeg = FFMpeg\FFMpeg::create(array(
-    'ffmpeg.binaries'  => '/usr/local/bin/ffmpeg',
-    'ffprobe.binaries' => '/usr/local/bin/ffprobe',
-    'timeout'          => 3600, // The timeout for the underlying process
-    'ffmpeg.threads'   => 12,   // The number of threads that FFMpeg should use
-), $logger);
-$audio = $ffmpeg->open('track.mp3');
-
-$format = new FFMpeg\Format\Audio\Flac();
-
-$format->on('progress', function ($audio, $format, $percentage) {
-    echo "$percentage % transcoded";
-});
-
-$format
-    ->setAudioChannels(2)
-    ->setAudioKiloBitrate(256);
-
-
-$ffprobe = FFMpeg\FFProbe::create(array(
-    'ffmpeg.binaries'  => '/usr/bin/ffmpeg',
-    'ffprobe.binaries' => '/usr/bin/ffprobe',
-    'timeout'          => 3600, // The timeout for the underlying process
-    'ffmpeg.threads'   => 12,   // The number of threads that FFMpeg should use
-), $logger);
-$duration = $ffprobe
-    ->format('track.mp3') // extracts file informations
-    ->get('duration'); 
-
-// echo $duration;
-
-
-
-
-
-
-exec("/usr/bin/ffmpeg -nostats -i track.mp3 -filter_complex ebur128 -f null - 2>&1", $output);
-
-foreach ($output as &$value) {
-  if (strpos($value, 'Parsed_ebur1') !== false) {
-    if (strpos($value, 'Summary') == false) {
-      $momentarylufs = substr($value, strpos($value, "M:") + 2, (strpos($value, "S:") - strpos($value, "M:") - 3));
-      $zerotohundred = intval((floatval($momentarylufs) / 1.6) + 100);
-      $wave2png[] = $zerotohundred;
+  foreach ($output as &$value) {
+    if (strpos($value, 'Parsed_ebur1') !== false) {
+      if (strpos($value, 'Summary') == false) {
+        $momentarylufs = substr($value, strpos($value, "M:") + 2, (strpos($value, "S:") - strpos($value, "M:") - 3));
+        $zerotohundred = intval((floatval($momentarylufs) / 1.6) + 100);
+        $wave_png[] = $zerotohundred;
+      }
     }
   }
-}
-// print_r($wave2png);
+  $wave_png_json = json_encode($wave_png);
 
-// cut the audio.
-$audio->filters()->clip(FFMpeg\Coordinate\TimeCode::fromSeconds(10), FFMpeg\Coordinate\TimeCode::fromSeconds(10));
-$audio->save($format, 'track0.flac');
+  // Update wave_png in dB
+  $version_id = $files[0]["version_id"];
+  $sql = "UPDATE Version SET wave_png = '$wave_png_json' WHERE version_id = '$version_id'";
+  $result = $db->query($sql);
 
-$audio->filters()->clip(FFMpeg\Coordinate\TimeCode::fromSeconds(190), FFMpeg\Coordinate\TimeCode::fromSeconds(10));
-$audio->save($format, 'track1.flac');
-
-
-// Update wave_png in dB
-
-
-
-
-
-
-
-
+  // delete original upload
+  unlink("/tmp/".$file_id.".".$ext);
 
   // return ok
   Flight::json(array(
