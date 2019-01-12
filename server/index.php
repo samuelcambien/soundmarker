@@ -997,7 +997,7 @@ if (in_array($file_id, $_SESSION['user_files'])) {
   ));
   $audio = $ffmpeg->open("/tmp/".$file_id.".".$ext);
 
-  $format = new FFMpeg\Format\Audio\MP3();
+  $format = new FFMpeg\Format\Audio\Mp3();
   $format
       ->setAudioChannels(2)
       ->setAudioKiloBitrate(192);
@@ -1008,13 +1008,13 @@ if (in_array($file_id, $_SESSION['user_files'])) {
 
   for ($i = 0; $i <= $amountofsegments; $i++) {
     $audio->filters()->clip(FFMpeg\Coordinate\TimeCode::fromSeconds($i*10), FFMpeg\Coordinate\TimeCode::fromSeconds(10));
-    $audio->save($format, "/tmp/".$file_id."".$i."mp3");
+    $audio->save($format, "/tmp/".$file_id."".$i.".mp3");
 
       // upload in chunks to S3
       $result = $s3->putObject([
           'Bucket' => $config['AWS_S3_BUCKET'],
           'Key'    => $files[0]["version_id"] . "/" . $files[0]["file_name"] . $i .'.' . $files[0]["extension"],
-          'Body'   => file_get_contents("/tmp/".$file_id."".$i."mp3"), // figuring out right way to get the file from the JSON
+          'Body'   => file_get_contents("/tmp/".$file_id."".$i.".mp3"),
           'ACL'    => 'public-read'
       ]);
 
@@ -1023,7 +1023,7 @@ if (in_array($file_id, $_SESSION['user_files'])) {
       }
 
     // delete file again
-    unlink("/tmp/".$file_id."".$i."mp3");
+    unlink("/tmp/".$file_id."".$i.".mp3");
   }
   
   // now it's time to create the png
