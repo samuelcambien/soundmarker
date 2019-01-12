@@ -1,23 +1,12 @@
-.bg-card {
-	background-color: #fff;
-	border: none !important;
-	border-radius: 0.6rem;
-}
+@import "../about-us/about-us-info.component.scss";
 
-.intro-heading {
-	color: white;
-	font-size: 84pt;
-}
+
 
 
 .intro-footer button {
 	height: 30px;
 	margin-left: 10px;
 	
-}
-
-.carousel-item .info-heading h1 {
-	padding-left: 5px;
 }
 
 .intro-footer p {
@@ -38,95 +27,9 @@
 	padding-bottom: 15px;
 }
 
-.intro-png {
-	background-size: contain;
-	height: 110px;
-	background-repeat: no-repeat;
-	background-position: center center;
-}
-
-.intro-png-one {
-	background-image: url(intro-1.png);	
-}
-
-.intro-png-two {
-	background-image: url(intro-2.png);	
-}
-
-.intro-png-three {
-	background-image: url(intro-3.png);	
-}
-
-.intro-png-four {
-	background-image: url(intro-4.png);	
-}
-
-.carousel {
-	margin-bottom: 30px !important;
-}
-
-.dark-card {
-	background-color: #7397ff;
-}
-
-.dark-card .card-body h2, .dark-card .card-body p {
-	color: #ffffff;
-}
-
-
-
-
-.card-title {
-	color: #7397FF;
-	font-family: 'sofia-medium';
-}
-
-.card-text {
-	color: #717db0;
-}
-
-
-
-.info-svg {
-	width: 120px;
-	margin-left: auto;
-	margin-right: auto;
-	margin-bottom: 16px;
-	margin-top: 11px;
-}
-
-.info-svg.flow {
-	margin-bottom: 0px;
-	margin-top: -8px;
-}
-
-.row {
-	padding-left: 15px; padding-right: 15px;
-}
-
 @media (max-width: 576px) {
 
-.card-body h5 {
-	font-size: 10pt !important;
-}
 
-.card-body p {
-	font-size: 10pt !important;
-}
-
-.intro-card {
-	height: auto;
-	bottom: 0px;
-	margin-bottom: 0px;
-	min-height: 100%;
-	position: absolute;
-}
-
-.intro-svg {
-	margin-top: 5%;
-	margin-bottom: 5%;
-	background-position: center center;
-}
 
 .intro-footer {
 	bottom: 0px;

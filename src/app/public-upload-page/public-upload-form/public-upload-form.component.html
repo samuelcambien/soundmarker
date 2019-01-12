@@ -38,21 +38,21 @@
               <h5>Add tracks</h5>
 
               <div>
-                <h6>Up to 20</h6>
+                <h6>Up to 30</h6>
               </div>
             </div>
 
           </ng-template>
-
+		  <a>
           <ng-template #addsongs>
-            <div class="addmoresongs"><h5>Add tracks</h5></div>
+            <div class="addmoresongs"><h5>Add more tracks</h5><h6>2 added • 28 left</h6></div>
           </ng-template>
-
+		  </a>
         </div>
 
         <div class="tabletainer">
 
-          <table class="table">
+          <table class="table noselect">
             <tbody>
               <tr *ngFor="let item of uploader.queue">
                 <td><p>{{ item?.file?.name }}</p></td>
@@ -67,6 +67,8 @@
                name="files" accept="audio/*,audio/flac,audio/x-m4a"/>
 
       </div>
+      
+      <div class="sep-line show-medium"></div>
 
     </div>
 
@@ -125,9 +127,9 @@
           <button type="submit" [disabled]="!uploader.getNotUploadedItems().length || !myForm.valid"
                   class="btn btn-sm btn-primary free-upload">
 
-            <div class="show-phone">Share tracks</div>
+            <div class="show-medium">Share tracks</div>
 
-            <svg width="30px" height="30px" viewBox="0 0 38 38" class="plane-icon hide-phone" version="1.1"
+            <svg width="30px" height="30px" viewBox="0 0 38 38" class="plane-icon hide-medium" version="1.1"
                  xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
               <desc></desc>
               <defs></defs>

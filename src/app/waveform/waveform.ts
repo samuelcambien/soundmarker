@@ -6,7 +6,7 @@ export class SoundCloudWaveform {
   canvas_height = 40;
   bar_width = 1;
   bar_gap = 0.1;
-  wave_color = "#007bff";
+  wave_color = "#ccd9fc";
   download = false;
   onComplete;
 

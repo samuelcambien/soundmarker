@@ -3,13 +3,18 @@
 	height: 48px;
 	background: #ffffff;
 	position: fixed;
-	margin-bottom: 48px;
+	margin-top: 48px;
 	 z-index: 1000;
-	 bottom:0px;
+	 top:0px;
 	 left: 0px;
 	 padding: 10px;
 }
 
+.audio-wave {
+	max-height: 70px;
+	cursor: text;
+	overflow: hidden;
+}
 
 .player-toolbar {
 	
@@ -84,7 +89,7 @@
 }
 
 #popup-playbar {
-    background-color: #7397FF; /* Black background color */
+    background-color: #ffffff; /* Black background color */
     position: absolute; /* Make it stick/fixed */
     top: 48px; /* Hide the navbar 50 px outside of the top view */
     width: 100%; /* Full width */
@@ -96,14 +101,16 @@
     display: block;
     padding-top: 10px;
     padding-bottom: 10px;
+    border-bottom: 1px solid #eef1ff;
 
-  &.hidden {
-    display: none;
-  }
+    &.hidden {
+      display: none;
+    }
 }
 
 #phone-popup-playbar {
-	  background-color: #7397ff; 
+	  background-color: #ffffff;
+	   border-top: 1px solid #eef1ff;
     position: fixed; /* Make it stick/fixed */
     bottom: 0px;
     width: 100%; /* Full width */
@@ -113,7 +120,10 @@
     height: 48px;
     display: none;
     z-index: 1000;
-  
+    -webkit-box-shadow: 0 -0.07rem 0.3rem 0.01rem rgba(115, 150, 255, 0.1) !important;
+	 -moz-box-shadow:  0 -0.07rem 0.3rem 0.01rem rgba(115, 150, 255, 0.1) !important;
+        box-shadow: 0 -0.07rem 0.3rem 0.01rem rgba(115, 150, 255, 0.1) !important;
+
 
 }
 
@@ -149,6 +159,10 @@
 		padding-right: 15px !important;
 	}
 	
+	.comment-sort {
+		margin-left: auto;
+	}
+
 	.comment-search {
 	margin-bottom: 10px;
 	width: 100%;
@@ -166,22 +180,44 @@
 }
 
 .phone-popup-row .col {
-	margin-top: 10px;
-	margin-bottom: 10px;
+	margin-top: 4px;
+	margin-bottom: 4px;
 
 }
 
 .phone-popup-row .col .top-icon {
-	width: 20px;
+	width: 22px;
 	margin-left: auto;
 	margin-right: auto;
 	float: none;
 }
 
 .phone-popup-row .col .popup-play-btn {
-	width: 20px;
+	width: 26px;
 	margin-left: auto;
 	margin-right: auto;
+	margin-top: -26px;
+	-webkit-transform:scale(1.2);
+   -moz-transform:scale(1.2);
+   -o-transform:scale(1.2);
+   transform:scale(1.2);
+
+
+}
+
+.phone-popup-row .col .popup-play-btn button {
+	    -webkit-box-shadow: 0.2rem 0.2rem 0.3rem 0.01rem rgba(115, 150, 255, 0.25) !important;
+	 -moz-box-shadow:  0.2rem 0.2rem 0.3rem 0.01rem rgba(115, 150, 255, 0.25) !important;
+        box-shadow: 0.2rem 0.2rem 0.3rem 0.01rem rgba(115, 150, 255, 0.25) !important;
+        padding: 0px;
+        border: none;
+        border-radius: 10rem;
+        height: 43px;
+}
+
+#popup-playbar .popup-row .popup-play-btn button {
+	margin-left: -14px;
+	margin-right: -7px;
 }
 
 .popup-row {
@@ -189,13 +225,27 @@
     margin-right: 15px !important;
 }
 
+.phone-playbar-text {
+	font-size: 6pt;
+	font-family: 'sofia-bold';
+	margin-top: -4px;
+	color: #bac1da;
+	text-align: center;
+}
+
+#popup-playbar .popup-row .top-icon {
+	margin-left: 6px;
+	margin-right: 6px;
+}
+
 .popup-play-btn {
 	margin-top: -9px;
 	
+
 }
 
 .popup-title {
-	color: #fff;
+	color: #7397FF;
 	margin-top: 2px;
 	margin-right: 20px;
 	margin-left: -5px;
@@ -203,7 +253,7 @@
 }
 
 .popup-time p {
-	color: #eef1ff !important;
+	color: #bac1da !important;
 	margin-top: 6px;
 }
 
@@ -282,8 +332,6 @@
 	background-color: #fff;
 }
 
-
-
 .custom-select {
 	width: 100px;
 	height: 29px;
@@ -294,7 +342,6 @@
 	margin-right: -8px;
 	margin-top: -4px;
 	font-family: 'sofia-regular';
-
 }
 
 .custom-select:active, .custom-select:focus {
@@ -305,22 +352,9 @@
 .waveform-container {
   position: relative;
   height: 70px;
-  margin-bottom: 4px;
-  margin-top: 10px;
-}
+  margin-bottom: -1px;
+  margin-top: 16px;
 
-#waveform {
-  width: 100%;
-  height: 62px;
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  fill: #eef1ff;
-}
-
-.wave-svg {
-	height: 62px !important;
-	width: 100%;
 }
 
 .progress-container {
@@ -352,7 +386,7 @@
 #comment-interval {
   position: absolute;
   top: 0;
-  border-bottom: 7px solid pink;
+  border-bottom: 7px solid #d7e1fd;
   border-radius: 3px;
 }
 
@@ -368,7 +402,7 @@
 
 .drag-block svg * {
 	stroke: #717db0;
-	fill: pink;
+	fill: #d7e1fd;
 }
 
 .drag-block.disabled svg * {
@@ -398,7 +432,7 @@ margin-top: 4px;
 }
 
 .popup-icon-stroke {
-	stroke: #ffffff;
+	stroke: #bac1da;
 }
 
 .top-icon:hover .icon-stroke,

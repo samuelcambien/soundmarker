@@ -24,9 +24,9 @@ export class PublicPageComponent implements OnInit {
   }
 
   ngOnInit() {
-    // if (!this.termsAcceptedService.termsAccepted()) {
-    //   this.openIntroduction();
-    // }
+     if (!this.termsAcceptedService.termsAccepted()) {
+       this.openIntroduction();
+     }
     RestCall.getAdId()
       .then(response => RestCall.getAd(response["ad_id"]))
       .then(response => this.ad = response);
