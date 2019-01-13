@@ -4,13 +4,13 @@
 
     <div class="form-field col-md-4">
 
-      <div class="card upload-songs-area rounded border-0">
+      <div class="card upload-songs-area rounded border-0" placement="bottom" ngbTooltip="temp" container="body">
 
-        <div class="upload-songs-text">
+        <div class="upload-songs-text"  >
 
-          <div *ngIf="uploader.getNotUploadedItems().length == 0; then uploadsongs else addsongs"></div>
+          <div  *ngIf="uploader.getNotUploadedItems().length == 0; then uploadsongs else addsongs"></div>
 
-          <ng-template #uploadsongs>
+          <ng-template #uploadsongs >
 
             <div class="addsongs">
 
@@ -38,14 +38,18 @@
               <h5>Add tracks</h5>
 
               <div>
-                <h6>Up to {{max_tracks}}</h6>
+                <h6>Up to {{uploader.options.queueLimit}}</h6>
               </div>
             </div>
 
           </ng-template>
 		  <a>
-          <ng-template #addsongs>
-            <div *ngIf="tracks_left()>0" class="addmoresongs"><h5>Add more tracks</h5><h6>{{uploader.queue.length}} added •  {{tracks_left()}} left</h6></div>
+          <ng-template  #addsongs>
+            <div [ngClass]="tracks_left()>0 ? 'addmoresongs' : 'addmoresongsdisabled'">
+              <h5 *ngIf="tracks_left()>0">Add more tracks</h5>
+              <h5 *ngIf="tracks_left()==0"> Max amount added</h5>
+                <h6>{{uploader.queue.length}} added •  {{tracks_left()}} left</h6>
+            </div>
           </ng-template>
 		  </a>
         </div>
@@ -60,10 +64,9 @@
               </tr>
             </tbody>
           </table>
-
         </div>
 
-        <input class="upload-songs-input" id="public-uploader" type="file" ng2FileSelect [uploader]="uploader" multiple
+        <input *ngIf="tracks_left()>0" class="upload-songs-input" id="public-uploader" type="file" ng2FileSelect [uploader]="uploader" multiple
                name="files" accept="audio/*,audio/flac,audio/x-m4a"/>
 
       </div>
@@ -83,24 +86,10 @@
       <div class="form-row" *ngIf="sharemode == 'email'">
 
         <div class="form-group col-sm-6"  >
-          <tag-input [(ngModel)]='email_from'
-                     [separatorKeyCodes]="[13]"
-                     [validators]="validators"
-                     [maxItems]="1"
-                     [addOnBlur]="true"
-                     [ripple]="false"
-                     [animationDuration]="{enter: '0ms', leave: '0ms'}"
-                     placeholder="Email from"
-                     secondaryPlaceholder="Email from"
-                     name="email_from"
-                     class="form-control form-control-sm" required
-                     ngbTooltip="Invalid email address" triggers="manual" #t="ngbTooltip">
-                      <!--(onAdd)="t.close()"-->
-                     <!--(onValidationError)="t.open()"-->
-                     <!--(onValidationError)="onValidationError()">-->
-
-          </tag-input>
+          <input type="text" [(ngModel)]="email_from" name="email_from" placeholder="Email from" pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$"
+                 class="form-control form-control-sm" required ngbTooltip="Invalid email address" triggers="manual" emailValidationTooltip>
         </div>
+
 
         <div class="col-sm-6">
           <tag-input [(ngModel)]='email_to'
@@ -176,16 +165,11 @@
                 </g>
               </g>
             </svg>
-
           </button>
-
         </div>
       </div>
-
     </div>
-
   </div>
-
 </form>
 
 <div ng2FileDrop

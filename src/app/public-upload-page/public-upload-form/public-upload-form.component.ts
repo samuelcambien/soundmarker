@@ -1,10 +1,10 @@
-import {Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
+import {Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild, HostListener, Directive} from '@angular/core';
 import {FileItem, FileUploader} from '../../ng2-file-upload';
 import {Mp3Encoder} from "../../mp3-encoder/mp3-encoder";
 import {RestCall} from "../../rest/rest-call";
 import * as wave from "../../player/dist/player.js"
 import {NgbTooltip} from '@ng-bootstrap/ng-bootstrap';
-import {Validators} from '@angular/forms';
+import {Validators, NgControl} from '@angular/forms';
 import {File} from "../../model/file";
 
 declare var AudioContext: any, webkitAudioContext: any;
@@ -24,20 +24,21 @@ export class PublicUploadFormComponent implements OnInit {
   sharemode: "email" | "link" = "email";
   expiration: "week" | "month" = "week";
   downloadable: boolean = false;
-  max_tracks: number = 30;
-  tracks_left = () => { return this.max_tracks - this.uploader.queue.length };
 
   validators = [Validators.required, Validators.pattern('^\\w+([\\.-]?\\w+)*@\\w+([\\.-]?\\w+)*(\\.\\w{2,3})+$')];
 
   player;
 
   @Input() uploader: FileUploader;
+  @Input() tryAgain: EventEmitter<any>;
 
   @Output() uploading = new EventEmitter();
   @Output() finished = new EventEmitter();
   @Output() link = new EventEmitter<string>();
   @Output() error = new EventEmitter();
+  @Output() form = new EventEmitter();
 
+  tracks_left = () => { return this.uploader.options.queueLimit - this.uploader.queue.length };
 
 
   @ViewChild('notes_element') notes_element: ElementRef;
@@ -92,7 +93,9 @@ export class PublicUploadFormComponent implements OnInit {
             this.link.emit(response["project_hash"]);
           })
       })
-      .catch((e) => this.error.emit(e));
+      .catch((e) => {
+        this.clearForm(false);
+        this.error.emit(e)});
   }
 
   private processTrack(projectId, track: FileItem): Promise<any> {
@@ -136,6 +139,8 @@ export class PublicUploadFormComponent implements OnInit {
     }
   }
 
+
+
   private getWaveform(buffer: AudioBuffer): string {
 
     let wavediv: HTMLDivElement = document.createElement('div');
@@ -158,7 +163,46 @@ export class PublicUploadFormComponent implements OnInit {
     // wave.loadDecodedBuffer(buffer);
   }
 
+  constructor(){
+  }
+
   public onValidationError(tooltip: NgbTooltip, control) {
     console.log("Validation error"+this.email_to);
+  }
+
+  private clearForm(clearData): void{
+    if (clearData) {
+      this.notes = '';
+      this.email_to = '';
+      this.email_from = '';
+    }
+    this.uploader.clearQueue();
+  }
+}
+
+@Directive({
+  selector: '[emailValidationTooltip]'
+})
+
+export class EmailValidationToolTip {
+  control: any;
+  tooltip: any;
+
+  constructor(control: NgControl, tooltip: NgbTooltip) {
+    this.tooltip = tooltip;
+    this.control = control;
+    this.control.statusChanges.subscribe((status) => {
+      if (control.dirty && control.invalid) {
+      } else {
+        tooltip.close();
+      }
+    });
+  }
+
+  @HostListener('focusout') onFocusOutMethod(){
+    if (this.control.dirty && this.control.invalid && this.control.value) {
+      this.tooltip.open();
+    } else {
+      this.tooltip.close();}
   }
 }
