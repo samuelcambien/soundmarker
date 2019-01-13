@@ -1033,7 +1033,7 @@ if (in_array($file_id, $_SESSION['user_files'])) {
     if (strpos($value, 'lavfi.astats.Overall.RMS_level=') !== false) {
         $momentarylufs = substr($value, strpos($value, "lavfi.astats.Overall.RMS_level=") + 31, 10);
         if (strpos($momentarylufs, 'inf') == false) { 
-          $zerotohundred = (floatval($momentarylufs)/160)+1;
+          $zerotohundred = (floatval($momentarylufs)/100)+1;
         } else {
           $zerotohundred = 0;
         }
