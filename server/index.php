@@ -972,7 +972,7 @@ if (in_array($file_id, $_SESSION['user_files'])) {
   $s3 = Flight::get("s3");
 
   // store tmp file.
-  $myfile = fopen("/tmp/".$file_id.".".$ext, "w") or die("Unable to open file!");
+  $myfile = fopen("/tmp/orig".$file_id.".".$ext, "w") or die("Unable to open file!");
   fwrite($myfile, Flight::request()->getBody());
   fclose($myfile);
 
@@ -995,7 +995,7 @@ if (in_array($file_id, $_SESSION['user_files'])) {
       'timeout'          => 3600, // The timeout for the underlying process
       'ffmpeg.threads'   => 12,   // The number of threads that FFMpeg should use
   ));
-  $audio = $ffmpeg->open("/tmp/".$file_id.".".$ext);
+  $audio = $ffmpeg->open("/tmp/orig".$file_id.".".$ext);
 
   $format = new FFMpeg\Format\Audio\Mp3();
   $format
@@ -1056,13 +1056,13 @@ if (in_array($file_id, $_SESSION['user_files'])) {
     $result = $s3->putObject([
         'Bucket' => $config['AWS_S3_BUCKET'],
         'Key'    => $files[0]["version_id"] . "/" . $files[0]["file_name"] . '.' . $files[0]["extension"],
-        'Body'   => file_get_contents("/tmp/".$file_id.".".$ext),
+        'Body'   => file_get_contents("/tmp/orig".$file_id.".".$ext),
         'ACL'    => 'public-read'
     ]);
   }
 
   // delete original upload
-  unlink("/tmp/".$file_id.".".$ext);
+  unlink("/tmp/orig".$file_id.".".$ext);
 
   // return ok
   Flight::json(array(
