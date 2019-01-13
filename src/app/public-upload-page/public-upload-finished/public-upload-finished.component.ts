@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnInit, Output, EventEmitter} from '@angular/core';
 
 @Component({
   selector: 'app-public-upload-finished',
@@ -8,6 +8,7 @@ import {Component, Input, OnInit} from '@angular/core';
 export class PublicUploadFinishedComponent implements OnInit {
 
   @Input() link;
+  @Output() sendNewFiles= new EventEmitter();
 
   constructor() { }
 
@@ -16,5 +17,9 @@ export class PublicUploadFinishedComponent implements OnInit {
 
   getLink() {
     return "http://localhost/project/" + this.link;
+  }
+
+  private sendMore(){
+    this.sendNewFiles.emit();
   }
 }
