@@ -604,7 +604,7 @@ Flight::route('POST /project/url', function() {
 
 /////////////////////////////////////////////// Routes - /project/@project_hash POST //////////////////////////////////////////////////
 Flight::route('/project/@project_hash', function(){
-  include 'index.html';
+  include '/Users/dieterboels/Documents/SoundmarkerDev/soundmarker/src/index.html';
 });
 
 
