@@ -1024,7 +1024,7 @@ if (in_array($file_id, $_SESSION['user_files'])) {
 
     // delete file again
     unlink("/tmp/".$file_id.".mp3");
-  }
+  // }
   
   // now it's time to create the png
   // let's create wave_png
