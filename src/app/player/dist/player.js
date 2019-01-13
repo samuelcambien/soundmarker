@@ -1157,7 +1157,7 @@
 
     loadChunk: function (index) {
 
-      return fetch(this.aws_path + index.toString() + ".mp3")
+      return fetch(this.aws_path + ".mp3")
         .then(response => this.readResponse(response.body.getReader(), new Uint8Array(), 0))
         .then((completeArray) => {
           this.audioBuffers[index] = this.copy(completeArray.buffer);
