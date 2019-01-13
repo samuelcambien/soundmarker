@@ -990,8 +990,8 @@ if (in_array($file_id, $_SESSION['user_files'])) {
   // now we split up the song in 10sec fragments
   // now let's convert the file
   $ffmpeg = FFMpeg\FFMpeg::create(array(
-      'ffmpeg.binaries'  => '/opt/ffmpeg/ffmpeg-4.1-64bit-static/ffmpeg',
-      'ffprobe.binaries' => '/opt/ffmpeg/ffmpeg-4.1-64bit-static/ffprobe',
+      'ffmpeg.binaries'  => $config['FFMPEG_PATH'].'/ffmpeg',
+      'ffprobe.binaries' => $config['FFMPEG_PATH'].'/ffprobe',
       'timeout'          => 3600, // The timeout for the underlying process
       'ffmpeg.threads'   => 12,   // The number of threads that FFMpeg should use
   ));
@@ -1029,7 +1029,7 @@ if (in_array($file_id, $_SESSION['user_files'])) {
   // now it's time to create the png
   // let's create wave_png
 
-  exec("/opt/ffmpeg/ffmpeg-4.1-64bit-static/ffmpeg -nostats -i /tmp/".$file_id.".".$ext." -filter_complex ebur128 -f null - 2>&1", $output);
+  exec($config['FFMPEG_PATH']."/ffmpeg -nostats -i /tmp/orig".$file_id.".".$ext." -filter_complex ebur128 -f null - 2>&1", $output);
 
   foreach ($output as &$value) {
     if (strpos($value, 'Parsed_ebur1') !== false) {
