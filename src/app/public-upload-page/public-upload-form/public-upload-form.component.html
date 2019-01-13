@@ -38,21 +38,21 @@
               <h5>Add tracks</h5>
 
               <div>
-                <h6>Up to 20</h6>
+                <h6>Up to {{max_tracks}}</h6>
               </div>
             </div>
 
           </ng-template>
-
+		  <a>
           <ng-template #addsongs>
-            <div class="addmoresongs"><h5>Add tracks</h5></div>
+            <div *ngIf="tracks_left()>0" class="addmoresongs"><h5>Add more tracks</h5><h6>{{uploader.queue.length}} added •  {{tracks_left()}} left</h6></div>
           </ng-template>
-
+		  </a>
         </div>
 
         <div class="tabletainer">
 
-          <table class="table">
+          <table class="table noselect">
             <tbody>
               <tr *ngFor="let item of uploader.queue">
                 <td><p>{{ item?.file?.name }}</p></td>
@@ -68,6 +68,8 @@
 
       </div>
 
+      <div class="sep-line show-medium"></div>
+
     </div>
 
     <div class="col-md-8">
@@ -79,15 +81,44 @@
         </div>
       </div>
       <div class="form-row" *ngIf="sharemode == 'email'">
-        <div class="form-group col-sm-6">
-          <input type="text" [(ngModel)]='email_from' name="email_from" placeholder="Email from"
-                 class="form-control form-control-sm" required>
+
+        <div class="form-group col-sm-6"  >
+          <tag-input [(ngModel)]='email_from'
+                     [separatorKeyCodes]="[13]"
+                     [validators]="validators"
+                     [maxItems]="1"
+                     [addOnBlur]="true"
+                     [ripple]="false"
+                     [animationDuration]="{enter: '0ms', leave: '0ms'}"
+                     placeholder="Email from"
+                     secondaryPlaceholder="Email from"
+                     name="email_from"
+                     class="form-control form-control-sm" required
+                     ngbTooltip="Invalid email address" triggers="manual" #t="ngbTooltip">
+                      <!--(onAdd)="t.close()"-->
+                     <!--(onValidationError)="t.open()"-->
+                     <!--(onValidationError)="onValidationError()">-->
+
+          </tag-input>
         </div>
+
         <div class="col-sm-6">
-          <input type="email" [(ngModel)]='email_to' name="email_to" placeholder="Email to" multiple
-                 class="form-control form-control-sm">
+          <tag-input [(ngModel)]='email_to'
+                     [separatorKeyCodes]="[13, 188, 186]"
+                     [validators]="validators"
+                     [addOnBlur]="true"
+                     [maxItems]="5"
+                     [ripple]="false"
+                     [animationDuration]="{enter: '0ms', leave: '0ms'}"
+                     placeholder="Email to"
+                     secondaryPlaceholder="Email to"
+                     name="email_to"
+                     class="form-control form-control-sm" required
+                     ngbTooltip="Invalid email address" triggers="manual" #t="ngbTooltip">
+          </tag-input>
         </div>
       </div>
+
       <div class="form-row radios">
         <div class="col">
           <div class="btn-group btn-group-sm btn-group-toggle" name="sharemode" ngbRadioGroup [(ngModel)]="sharemode"
@@ -125,9 +156,9 @@
           <button type="submit" [disabled]="!uploader.getNotUploadedItems().length || !myForm.valid"
                   class="btn btn-sm btn-primary free-upload">
 
-            <div class="show-phone">Share tracks</div>
+            <div class="show-medium">Share tracks</div>
 
-            <svg width="30px" height="30px" viewBox="0 0 38 38" class="plane-icon hide-phone" version="1.1"
+            <svg width="30px" height="30px" viewBox="0 0 38 38" class="plane-icon hide-medium" version="1.1"
                  xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
               <desc></desc>
               <defs></defs>
@@ -150,7 +181,9 @@
 
         </div>
       </div>
+
     </div>
+
   </div>
 
 </form>

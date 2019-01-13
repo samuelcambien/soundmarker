@@ -175,7 +175,9 @@
 */
 
 
-
+.nav-link.nav-link-messages.dropdown-toggle {
+	width: 30px;
+}
 
 
 .dropdown-menu {
@@ -271,7 +273,13 @@
 }
 
 
+// notify me button
 
+#notify-button {
+	width: calc(100% - 20px);
+	margin-bottom: 10px;
+	margin-left: 10px;
+}
 
 // responsive
 

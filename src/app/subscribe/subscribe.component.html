@@ -1,7 +1,60 @@
-<div (click)="close()">cancel</div>
-<form #myform (ngSubmit)="subscribe()">
-  <input type="email" [(ngModel)]="email" placeholder="email" name="email">
-  <button type="submit">
-    <div>subscribe</div>
-  </button>
-</form>
+<div class="shadow public-bottom-container card rounded-lg position-static shadow">
+
+  <div class="container-fluid">
+    <div class="col-sm-12">
+      <button type="button" class="close-modal-btn shadow-sm" data-dismiss="modal" aria-label="Close">
+
+        <span class="remove" aria-hidden="true">
+          <svg width="13px" height="13px" viewBox="0 0 13 13" version="1.1" xmlns="http://www.w3.org/2000/svg">
+            <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round"
+               stroke-linejoin="round">
+              <g id="Internet-Networks-Servers-/-Upload/Download-/-upload-dash-arrow-1"
+                 transform="translate(-19.000000, -228.000000)" stroke="#ffffff" stroke-width="1.5">
+                <path d="M31,229.205453 L20,240.205453" id="Shape"></path>
+                <path d="M20,229.205453 L31,240.205453" id="Shape"></path>
+              </g>
+            </g>
+          </svg>
+
+        </span>
+      </button>
+
+      <div class="info-heading">
+        <h2>Get notified</h2>
+        <p>Get a daily status update via email to see<br>new comments of your mates.</p>
+      </div>
+      
+      <div class="spacing-lg"></div>
+
+      <div class="message-content">
+	     
+		      <div class="subscribe-form">
+			  	<form #myform (ngSubmit)="subscribe()">
+				  	<div class="form-row">
+			  			<input type="email" [(ngModel)]="email" placeholder="Email address" name="email">
+				  	</div>
+				  	<div class="form-row">
+			  			<button type="submit">Submit</button>
+				  	</div>
+				</form>
+		      </div>
+	      
+      </div>
+
+      <div class="container spacing-lg"></div>
+
+
+    </div>
+  </div>
+
+
+  <div class="spacing"></div>
+
+
+  <app-info-footer></app-info-footer>
+
+</div>
+
+
+
+

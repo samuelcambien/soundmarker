@@ -30,6 +30,8 @@ import {MyCurrencyPipe} from './my-currency.pipe';
 import {TimeInputComponent} from './comments/time-input/time-input.component';
 import {FileUploadModule} from "./ng2-file-upload";
 import {SplitterDirective} from './splitter.directive';
+import {TagInputModule} from 'ngx-chips';
+
 import {PublicPlayerListComponent} from './public-player-page/public-player-list/public-player-list.component';
 import {PublicPlayerTrackComponent} from './public-player-page/public-player-track/public-player-track.component';
 import {PublicTrackPlayerComponent} from './public-player-page/public-track-player/public-track-player.component';
@@ -51,6 +53,7 @@ import {ClipboardModule} from "ngx-clipboard";
 import {TimeFormatDirective} from './time-format.directive';
 import {SubscribeComponent} from './subscribe/subscribe.component';
 import {ErrorComponent} from "./error/error.component";
+
 
 @NgModule({
   declarations: [
@@ -93,9 +96,10 @@ import {ErrorComponent} from "./error/error.component";
     PublicIntroductionComponent,
     PlayerIntroductionComponent,
     TimeFormatDirective,
-    SubscribeComponent
+    SubscribeComponent,
   ],
   imports: [
+    TagInputModule,
     FileUploadModule,
     NgSelectModule,
     FormsModule,

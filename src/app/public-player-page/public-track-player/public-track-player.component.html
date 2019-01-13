@@ -1,117 +1,81 @@
 <div class="container-fluid player-container">
 
-  <div id="popup-playbar" class="shadow hide-phone">
+  <div id="popup-playbar" ngClass="shadow-topbar hide-phone" [class.hidden]="isInViewport(waveform)">
 
     <div class="row popup-row">
 
       <div class="popup-play-btn">
 
-        <button *ngIf="isPlaying(); then pausebutton else playbutton"></button>
+	  <button *ngIf="isPlaying(); then popuppausebutton else popupplaybutton"></button>
 
-        <ng-template #pausebutton>
-          <button class="mini-btn mini-pause-btn btn btn-link" (click)="pause()">
+      <ng-template #popuppausebutton>
+        <button class="mini-btn mini-pause-btn btn btn-link" (click)="pause()">
+          <svg width="43px" height="43px" viewBox="0 0 27 27" version="1.1" xmlns="http://www.w3.org/2000/svg">
+            <defs></defs>
+            <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+              <g id="Group-5">
+                <g id="Group-6">
+                  <circle id="Oval" fill="#FFFFFF" cx="13.5" cy="13.5" r="13.5"></circle>
+                  <rect id="Rectangle" fill="#7397FF" fill-rule="nonzero" x="9" y="8" width="3" height="12"
+                        rx="1.5"></rect>
+                  <rect id="Rectangle" fill="#7397FF" fill-rule="nonzero" x="15" y="8" width="3" height="12"
+                        rx="1.5"></rect>
+                </g>
+              </g>
+            </g>
+          </svg>
+        </button>
+      </ng-template>
 
-          </button>
-        </ng-template>
+      <ng-template #popupplaybutton>
+        <button class="mini-btn mini-play-btn btn btn-link" (click)="play()">
+          <svg width="43px" height="43px" viewBox="0 0 27 27" version="1.1" xmlns="http://www.w3.org/2000/svg">
+            <defs></defs>
+            <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+              <g id="Group-5">
+                <g id="Group-6">
+                  <circle id="Oval" fill="#FFFFFF" cx="13.5" cy="13.5" r="13.5"></circle>
+                  <path
+                    d="M16.3141199,9.00179825 L20.7528354,16.3448585 C21.3242409,17.2901466 21.0211492,18.5196696 20.0758611,19.0910751 C19.7637352,19.2797482 19.4059591,19.3794796 19.0412399,19.3794796 L10.1638089,19.3794796 C9.05923941,19.3794796 8.16380891,18.4840491 8.16380891,17.3794796 C8.16380891,17.0147604 8.26354033,16.6569843 8.45221343,16.3448585 L12.8909289,9.00179825 C13.4623344,8.05651017 14.6918575,7.75341844 15.6371456,8.32482392 C15.9142829,8.4923472 16.1465966,8.72466097 16.3141199,9.00179825 Z"
+                    id="Triangle-2" fill="#7397FF"
+                    transform="translate(14.602672, 13.707802) rotate(90.000000) translate(-14.602672, -13.707802) "></path>
+                </g>
+              </g>
+            </g>
+          </svg>
+        </button>
+      </ng-template>
 
-        <ng-template #playbutton>
-          <button class="mini-btn mini-play-btn btn btn-link" (click)="play()">
-
-          </button>
-        </ng-template>
-
+        <div (click)="scrollToTop()">iedemenne</div>
 
       </div>
 
       <div class="popup-title"><h4>{{track?.title}}</h4></div>
 
-      <div class="popup-time"><p>{{_progress}} / {{track.duration | timeFormat}}</p></div>
+      <div class="popup-time"><p>{{_progress | timeFormat}} / {{version?.track_length | timeFormat}}</p></div>
 
       <div class="top-icon icon-action ml-auto"></div>
 
 
-      <div class="top-icon list-icon" id="list-icon" role="button" (click)="goToOverview()">
+      <div class="top-icon list-icon" id="scroll-icon" role="button" >
 
 
-        <svg width="24px" height="22px" viewBox="0 0 24 22" version="1.1" xmlns="http://www.w3.org/2000/svg"
-        >
 
-          <desc></desc>
-          <defs></defs>
-          <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round">
-            <g id="Internet-Networks-Servers-/-Upload/Download-/-upload-dash-arrow-1"
-               transform="translate(-34.000000, -20.000000)" class="popup-icon-stroke" stroke-width="1.5">
-              <g id="folder-music-1" transform="translate(35.000000, 21.000000)" stroke-linejoin="round">
-                <path
-                  d="M19.9375,7.27272727 L19.9375,4.54545455 C19.9375,3.79233898 19.3218915,3.18181818 18.5625,3.18181818 L7.5625,3.18181818 L7.5625,1.81818182 C7.5625,1.06506625 6.94689153,0.454545455 6.1875,0.454545455 L2.0625,0.454545455 C1.30310847,0.454545455 0.6875,1.06506625 0.6875,1.81818182 L0.6875,18 C0.698195433,18.7675739 1.27536665,19.4110187 2.04282426,19.5109493 C2.81028188,19.6108799 3.53537435,19.1370026 3.7455,18.3981818 L5.9015,8.25818182 C6.0713586,7.67459902 6.60994576,7.27279232 7.22241667,7.27272727 L19.9375,7.27272727 C20.3646849,7.27258154 20.7676733,7.46935193 21.0280458,7.80521683 C21.2884183,8.14108174 21.3765956,8.57788578 21.2666667,8.98727273 L19.25,18.5327273 C19.0896055,19.1300535 18.5441281,19.5456672 17.9208333,19.5454545 L2.24308333,19.5454545"
-                  id="Shape"></path>
-              </g>
-              <path d="M42.4509086,37.75 L50.5672633,37.75" id="Line" fill-rule="nonzero"></path>
-              <path d="M43.5,34.5 L51.5,34.5" id="Line" fill-rule="nonzero"></path>
-              <path d="M44.4509086,31.25 L52.5672633,31.25" id="Line" fill-rule="nonzero"></path>
+<svg width="22px" height="22px" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Internet-Networks-Servers-/-Upload/Download-/-upload-dash-arrow-1" transform="translate(-73.000000, -71.000000)">
+            <g id="Group-13" transform="translate(73.000000, 71.000000)">
+                <circle id="Oval" fill="#7397FF" fill-rule="nonzero" cx="10" cy="10" r="10"></circle>
+                <path d="M6,11.5605195 L9.5,8.19883227 C9.77619416,7.93372258 10.2238058,7.93372258 10.5,8.19883227 L14,11.5605195" id="Shape" stroke="#FFFFFF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
             </g>
-          </g>
-        </svg>
+        </g>
+    </g>
+</svg>
 
       </div>
 
 
-      <div class="top-icon text-icon" id="text-icon" (click)="showComments = !showComments"
-           [class.active]="showComments">
 
-
-        <svg width="22px" height="22px" viewBox="0 0 22 22" version="1.1" xmlns="http://www.w3.org/2000/svg"
-        >
-
-          <desc></desc>
-          <defs></defs>
-          <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round"
-             stroke-linejoin="round">
-            <g id="Internet-Networks-Servers-/-Upload/Download-/-upload-dash-arrow-1"
-               transform="translate(-65.000000, -20.000000)" class="popup-icon-stroke" stroke-width="1.5">
-              <g id="messages-bubble" transform="translate(66.000000, 21.000000)">
-                <path
-                  d="M10.6578236,1.39552634e-05 C7.2733682,-0.00487001799 4.15271669,1.82840041 2.50707282,4.78828665 C0.861428952,7.74817289 0.949909343,11.3686229 2.73817252,14.2444485 L0,20 L5.74989584,17.2595575 C9.11259725,19.3520226 13.4289699,19.0910325 16.5155083,16.6086132 C19.6020468,14.1261939 20.7857069,9.9636565 19.4677154,6.22668649 C18.1497239,2.48971647 14.6174794,-0.00681020874 10.6578236,1.39552634e-05 Z"
-                  id="Shape"></path>
-              </g>
-              <circle id="Oval" fill="#bac1da" cx="80.5" cy="30.5" r="1"></circle>
-              <circle id="Oval" fill="#bac1da" cx="76.5" cy="30.5" r="1"></circle>
-              <circle id="Oval" fill="#bac1da" cx="72.5" cy="30.5" r="1"></circle>
-            </g>
-          </g>
-        </svg>
-
-      </div>
-
-      <div *ngIf="version?.downloadable" class="top-icon cloud-icon" id="cloud-icon" (click)="download()">
-
-
-        <svg width="22px" height="22px" viewBox="0 0 22 22" version="1.1" xmlns="http://www.w3.org/2000/svg"
-        >
-          <!-- Generator: Sketch 51 (57462) - http://www.bohemiancoding.com/sketch -->
-          <desc>Created with Sketch.</desc>
-          <defs></defs>
-          <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round"
-             stroke-linejoin="round">
-            <g id="Internet-Networks-Servers-/-Upload/Download-/-upload-dash-arrow-1"
-               transform="translate(-95.000000, -20.000000)" class="popup-icon-stroke" stroke-width="1.5">
-              <g id="Group" transform="translate(96.000000, 21.000000)">
-                <g id="upload-brackets">
-                  <path d="M10.0008333,5 L10.0008333,15" id="Shape"></path>
-                  <polyline id="Shape" points="6.25083333 11.25 10.0008333 15 13.7508333 11.25"></polyline>
-                  <path
-                    d="M5,19.375 L1.87583333,19.375 C1.1854774,19.375 0.625833333,18.8153559 0.625833333,18.125 L0.625833333,1.875 C0.625833333,1.18464406 1.1854774,0.625 1.87583333,0.625 L5,0.625"
-                    id="Shape"></path>
-                  <path
-                    d="M15,0.625 L18.125,0.625 C18.8153559,0.625 19.375,1.18464406 19.375,1.875 L19.375,18.125 C19.375,18.8153559 18.8153559,19.375 18.125,19.375 L15,19.375"
-                    id="Shape"></path>
-                </g>
-              </g>
-            </g>
-          </g>
-        </svg>
-
-      </div>
     </div>
 
   </div>
@@ -121,11 +85,11 @@
     <div class="row phone-popup-row">
 
       <div class="col">
+
         <div class="top-icon list-icon" id="list-icon" role="button" (click)="goToOverview()">
 
 
-          <svg width="24px" height="22px" viewBox="0 0 24 22" version="1.1" xmlns="http://www.w3.org/2000/svg"
-          >
+          <svg width="24px" height="22px" viewBox="0 0 24 22" version="1.1" xmlns="http://www.w3.org/2000/svg">
 
             <desc></desc>
             <defs></defs>
@@ -145,19 +109,17 @@
           </svg>
 
         </div>
+        <div class="phone-playbar-text">Project</div>
 
       </div>
 
-      <div class="col">
-
+     <!-- <div class="col">
 
         <div *ngIf="version?.downloadable" class="top-icon cloud-icon" id="cloud-icon" (click)="download()">
 
 
-          <svg width="22px" height="22px" viewBox="0 0 22 22" version="1.1" xmlns="http://www.w3.org/2000/svg"
-          >
-            <!-- Generator: Sketch 51 (57462) - http://www.bohemiancoding.com/sketch -->
-            <desc>Created with Sketch.</desc>
+          <svg width="22px" height="22px" viewBox="0 0 22 22" version="1.1" xmlns="http://www.w3.org/2000/svg">
+
             <defs></defs>
             <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round"
                stroke-linejoin="round">
@@ -180,41 +142,20 @@
           </svg>
 
         </div>
+        <div class="phone-playbar-text">DOWNLOAD</div>
 
-      </div>
-
-      <div class="col">
-        <div class="popup-play-btn">
-
-          <button *ngIf="isPlaying(); then pausebutton else playbutton"></button>
-
-          <ng-template #pausebutton>
-            <button class="mini-btn mini-pause-btn btn btn-link" (click)="pause()">
-
-            </button>
-          </ng-template>
-
-          <ng-template #playbutton>
-            <button class="mini-btn mini-play-btn btn btn-link" (click)="play()">
-
-            </button>
-          </ng-template>
+      </div> -->
 
 
-        </div>
 
+     <!-- <div class="col">
 
-      </div>
-
-      <div class="col">
         <div class="top-icon text-icon" id="text-icon" (click)="showComments = !showComments"
              [class.active]="showComments">
 
 
-          <svg width="22px" height="22px" viewBox="0 0 22 22" version="1.1" xmlns="http://www.w3.org/2000/svg"
-          >
-            <!-- Generator: Sketch 51 (57462) - http://www.bohemiancoding.com/sketch -->
-            <desc>Created with Sketch.</desc>
+          <svg width="22px" height="22px" viewBox="0 0 22 22" version="1.1" xmlns="http://www.w3.org/2000/svg">
+
             <defs></defs>
             <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round"
                stroke-linejoin="round">
@@ -233,12 +174,46 @@
           </svg>
 
         </div>
+             <div class="phone-playbar-text">COMMENTS</div>
+
+      </div> -->
+
+      <div class="col">
+
+        <div  class="top-icon cloud-icon" id="cloud-icon" (click)="download()">
+
+
+          <svg width="22px" height="22px" viewBox="0 0 22 22" version="1.1" xmlns="http://www.w3.org/2000/svg">
+
+            <defs></defs>
+            <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round"
+               stroke-linejoin="round">
+              <g id="Internet-Networks-Servers-/-Upload/Download-/-upload-dash-arrow-1"
+                 transform="translate(-95.000000, -20.000000)" class="popup-icon-stroke" stroke-width="1.5">
+                <g id="Group" transform="translate(96.000000, 21.000000)">
+                  <g id="upload-brackets">
+                    <path d="M10.0008333,5 L10.0008333,15" id="Shape"></path>
+                    <polyline id="Shape" points="6.25083333 11.25 10.0008333 15 13.7508333 11.25"></polyline>
+                    <path
+                      d="M5,19.375 L1.87583333,19.375 C1.1854774,19.375 0.625833333,18.8153559 0.625833333,18.125 L0.625833333,1.875 C0.625833333,1.18464406 1.1854774,0.625 1.87583333,0.625 L5,0.625"
+                      id="Shape"></path>
+                    <path
+                      d="M15,0.625 L18.125,0.625 C18.8153559,0.625 19.375,1.18464406 19.375,1.875 L19.375,18.125 C19.375,18.8153559 18.8153559,19.375 18.125,19.375 L15,19.375"
+                      id="Shape"></path>
+                  </g>
+                </g>
+              </g>
+            </g>
+          </svg>
+
+        </div>
+        <div class="phone-playbar-text">Download</div>
 
       </div>
 
       <div class="col">
 
-        <a class="top-icon text-icon" id="text-icon" (click)="phoneSearch = !phoneSearch"
+        <div class="top-icon text-icon" id="text-icon" (click)="phoneSearch = !phoneSearch"
            [attr.aria-expanded]="!phoneSearch" aria-controls="phonesearch">
 
 
@@ -259,7 +234,33 @@
             </g>
           </svg>
 
-        </a>
+        </div>
+           <div class="phone-playbar-text">Search</div>
+
+
+
+      </div>
+
+	  <div class="col">
+
+        <div class="popup-play-btn">
+
+          <button *ngIf="isPlaying(); then pausebutton else playbutton"></button>
+
+          <ng-template #pausebutton>
+            <button class="mini-btn mini-pause-btn btn btn-link" (click)="pause()">
+
+            </button>
+          </ng-template>
+
+          <ng-template #playbutton>
+            <button class="mini-btn mini-play-btn btn btn-link" (click)="play()">
+
+            </button>
+          </ng-template>
+
+
+        </div>
 
       </div>
 
@@ -268,10 +269,28 @@
 
   </div>
 
-  <div [ngbCollapse]="!phoneSearch" id="phonesearch" class="show-phone shadow">
+  <div [ngbCollapse]="!phoneSearch" id="phonesearch" class="show-phone shadow-topbar">
 
-    <input type="search" name="search" placeholder="Filter e.g. bass" [(ngModel)]="search"
+    <input autofocus="autofocus"  type="search" name="search" placeholder="Filter e.g. bass" [(ngModel)]="search"
            class="comment-form-search sub-form search-box">
+
+     <span class="search-icon">
+          <svg width="16px" height="16px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg">
+
+            <desc></desc>
+            <defs></defs>
+            <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round"
+               stroke-linejoin="round">
+              <g id="Internet-Networks-Servers-/-Upload/Download-/-upload-dash-arrow-1"
+                 transform="translate(-99.000000, -65.000000)" class="search-stroke" stroke-width="1.5">
+                <circle id="Oval" cx="105.509842" cy="71.5098416" r="5.50984157"></circle>
+                <path d="M110,76 L114.272172,80.2727797" id="Shape"></path>
+              </g>
+            </g>
+          </svg>
+        </span>
+
+        <span *ngIf="search" class="clear-search ml-auto" (click)="search = null">&times;</span>
 
   </div>
 
@@ -344,8 +363,7 @@
            ngbTooltip="Download">
 
 
-        <svg width="22px" height="22px" viewBox="0 0 22 22" version="1.1" xmlns="http://www.w3.org/2000/svg"
-        >
+        <svg width="22px" height="22px" viewBox="0 0 22 22" version="1.1" xmlns="http://www.w3.org/2000/svg">
           <desc></desc>
           <defs></defs>
           <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round"
@@ -433,7 +451,7 @@
 
       <div class="waveform-container">
 
-        <div id="waveform_{{track.track_id}}" #waveform>
+        <div class="audio-wave" id="waveform_{{track.track_id}}" #waveform>
 
         </div>
         <!-- <div class="progress-container">
@@ -537,10 +555,10 @@
 
       </div>
 
-      <div class="comment-sort hide-phone" placement="top" ngbTooltip="Order by"
+      <div class="comment-sort" placement="top" ngbTooltip="Order by"
       >
         <!--[class.disabled]="track.comments.length < 2"-->
-        <ng-select class="custom" [items]="commentSorters"
+        <ng-select class="custom noselect" [items]="commentSorters"
                    bindLabel="description"
                    [clearable]="false"
                    [searchable]="false"

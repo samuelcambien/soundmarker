@@ -1,11 +1,13 @@
 .progress-container h5, .progress-container h6 {
   text-align: center;
+  color: #7397ff;
 }
 
 .progress {
-  height: 4px;
-  width: 700px;
+  height: 6px;
+  width: calc(100% + 30px);
   margin-top: 22px;
+  background: #eef1ff;
 }
 
 .progress-bar {
