@@ -1028,7 +1028,7 @@ if (in_array($file_id, $_SESSION['user_files'])) {
   
   // now it's time to create the png
   // let's create wave_png
-  exec("/usr/local/bin/ffmpeg -i track.mp3 -af astats=metadata=1:reset=1,ametadata=print:key=lavfi.astats.Overall.RMS_level -f null - 2>&1", $output);
+  exec($config['FFMPEG_PATH']."/ffmpeg -nostats -i /tmp/orig".$file_id.".".$ext." -af astats=metadata=1:reset=1,ametadata=print:key=lavfi.astats.Overall.RMS_level -f null - 2>&1", $output);
   foreach ($output as &$value) {
     if (strpos($value, 'lavfi.astats.Overall.RMS_level=') !== false) {
         $momentarylufs = substr($value, strpos($value, "lavfi.astats.Overall.RMS_level=") + 31, 10);
