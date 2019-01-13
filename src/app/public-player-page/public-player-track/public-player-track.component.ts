@@ -28,8 +28,10 @@ export class PublicPlayerTrackComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.track.versions.then(versions => {this.version = versions[0]});
-    this.version.files.then(files => this.files = files);
+    this.track.versions.then(versions => {
+      this.version = versions[0];
+      this.version.files.then(files => this.files = files);
+    });
   }
 
   play() {

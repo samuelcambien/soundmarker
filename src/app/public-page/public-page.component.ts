@@ -18,6 +18,7 @@ export class PublicPageComponent implements OnInit {
   @Output() tryAgain = new EventEmitter();
 
   @ViewChild('sma') sma: ElementRef;
+  @ViewChild('smaphone') smaPhone: ElementRef;
 
   constructor(private modalService: NgbModal, private termsAcceptedService: TermsAcceptedServiceService) {
   }
@@ -42,7 +43,10 @@ export class PublicPageComponent implements OnInit {
   private getAd() {
     RestCall.getAdId()
       .then(response => RestCall.getAd(response["ad_id"]))
-      .then(response => this.sma.nativeElement.innerHTML = response);
+      .then(response => {
+        this.sma.nativeElement.innerHTML = response;
+        this.smaPhone.nativeElement.innerHTML = response;
+      });
   }
 
   private reset() {

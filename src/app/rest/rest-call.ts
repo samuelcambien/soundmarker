@@ -19,12 +19,10 @@ export class RestCall {
     });
   }
 
-  public static createNewVersion(trackId: string, versionNotes: string, length: number, waveform: string, downloadable): Promise<Version> {
+  public static createNewVersion(trackId: string, versionNotes: string, downloadable): Promise<Version> {
     return Utils.sendPostRequest(RestUrl.VERSION_NEW, {
       track_id: trackId,
-      track_length: length,
       notes: versionNotes,
-      wave_png: waveform,
       downloadable: downloadable
     });
   }
