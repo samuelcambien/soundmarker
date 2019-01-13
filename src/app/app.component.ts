@@ -18,7 +18,7 @@ export class RestUrl {
 
   private static DATA: string = RestUrl.BACKEND;
 
-  public static AD: string = RestUrl.BACKEND + "/ad";
+  public static AD: string = RestUrl.BACKEND + "/sma";
 
   public static UPLOAD: string = RestUrl.DATA + "/file/new";
 
