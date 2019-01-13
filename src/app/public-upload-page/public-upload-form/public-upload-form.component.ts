@@ -1,12 +1,11 @@
-import {Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild, Directive, HostListener} from '@angular/core';
+import {Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
 import {FileItem, FileUploader} from '../../ng2-file-upload';
-import {Observable} from 'rxjs';
 import {Mp3Encoder} from "../../mp3-encoder/mp3-encoder";
 import {RestCall} from "../../rest/rest-call";
 import * as wave from "../../player/dist/player.js"
-import {Version} from "../../model/version";
 import {NgbTooltip} from '@ng-bootstrap/ng-bootstrap';
 import {Validators} from '@angular/forms';
+import {File} from "../../model/file";
 
 declare var AudioContext: any, webkitAudioContext: any;
 
@@ -114,24 +113,27 @@ export class PublicUploadFormComponent implements OnInit {
       )
     ).then(version => {
       let versionId = version["version_id"];
-
-      if (this.downloadable) {
-        uploads.push(
-          this.uploadDownloadFile(track._file, title, extension, track._file.size, versionId, length)
+      return this.getStreamFileId(track._file, title, extension, track, versionId, length)
+        .then(({fileId: streamFileId, buffer: buffer}) =>
+          this.getDownloadFileId(track._file, title, extension, track, versionId, length)
+            .then(downloadFileId =>
+              RestCall.uploadChunk(buffer, streamFileId, downloadFileId, 0, extension)
+            )
         );
-        this.uploader.files++;
-      }
-
-      uploads.push(
-        this.convert(track, title, extension)
-          .then(converted =>
-            this.uploadStreamFile(converted, title, "mp3", track._file.size, versionId, length)
-          )
-      );
-      this.uploader.files++;
-
-      return Promise.all(uploads);
     });
+  }
+
+  private getStreamFileId(file, title, extension, track: FileItem, versionId, length: number): Promise<{ fileId: string, buffer: ArrayBuffer }> {
+    return RestCall.createNewFile(file, title, extension, track._file.size, versionId, 0, length);
+  }
+
+  private getDownloadFileId(file, title, extension, track: FileItem, versionId, length: number): Promise<string> {
+    if (this.downloadable) {
+      return RestCall.createNewFile(file, title, "mp3", track._file.size, versionId, 1, length)
+        .then(({fileId: fileId}) => fileId);
+    } else {
+      return new Promise(resolve => resolve("null"));
+    }
   }
 
   private getWaveform(buffer: AudioBuffer): string {
@@ -146,24 +148,6 @@ export class PublicUploadFormComponent implements OnInit {
     waveform.loadDecodedBuffer(buffer);
 
     return waveform.backend.getPeaks(743, 0, 743);
-  }
-
-  private uploadDownloadFile(file: File, file_name: string, extension: string, size: number, versionId: string, length: number): Promise<any> {
-
-    return RestCall.createNewFile(file, file_name, extension, size, versionId, 0, length)
-      .then(({fileId, buffer}) => {
-        return RestCall.uploadChunk(buffer, fileId, 0, extension)
-          .then(() => this.uploader.uploaded++);
-      });
-  }
-
-  private uploadStreamFile(file: File, file_name: string, extension: string, size: number, versionId: string, length: number): Promise<any> {
-
-    return RestCall.createNewFile(file, file_name, extension, size, versionId, 1, length)
-      .then(({fileId, buffer}) =>
-        RestCall.uploadChunk(buffer, fileId, 0, extension)
-          .then(() => this.uploader.uploaded++)
-      );
   }
 
   ngOnInit(): void {

@@ -50,11 +50,11 @@ export class RestCall {
       Mp3Encoder.read(file)
     ]).then(result => {
       return {fileId: result[0]["file_id"], buffer: result[1]};
-    });
+      });
   }
 
-  public static uploadChunk(buffer, fileId: string, index: number, ext: string): Promise<any> {
-    return Utils.sendPostDataRequest(RestUrl.UPLOAD_CHUNK, buffer, [fileId, index, ext]);
+  public static uploadChunk(buffer, streamFileId: string, downloadFileId: string, index: number, ext: string): Promise<any> {
+    return Utils.sendPostDataRequest(RestUrl.UPLOAD_CHUNK, buffer, [streamFileId, downloadFileId, index, ext]);
   }
 
   public static shareProject(project_id: string, emailFrom?: string, emailTo?: string[]): Promise<any> {
