@@ -19,7 +19,7 @@ export class PublicUploadFinishedComponent implements OnInit {
     return "http://localhost:4200/project/" + this.link;
   }
 
-  private sendMore(){
+  sendMore(){
     this.sendNewFiles.emit();
   }
 }
