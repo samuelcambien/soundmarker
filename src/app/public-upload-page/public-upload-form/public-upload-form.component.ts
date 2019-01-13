@@ -43,42 +43,11 @@ export class PublicUploadFormComponent implements OnInit {
 
   @ViewChild('notes_element') notes_element: ElementRef;
 
-  protected convert(file: FileItem, name: string, extension: string): Promise<File> {
-
-    let converter: Function;
-
-    switch (extension) {
-      case "wav-16bit":
-        converter = Mp3Encoder.convertWav16bit;
-        break;
-      case "m4a":
-      case "wav":
-        converter = Mp3Encoder.convertWavOther;
-        break;
-      case "alac":
-        converter = Mp3Encoder.convertAlac;
-        break;
-      case "aiff":
-        converter = Mp3Encoder.convertAiff;
-        break;
-      case "flac":
-        converter = Mp3Encoder.convertFlac;
-        break;
-      case "mp3":
-      default:
-        converter = Mp3Encoder.convertMp3;
-        break;
-    }
-
-    return converter(file._file, name);
-  }
-
   onSubmit() {
 
     this.uploading.emit();
     RestCall.createNewProject()
       .then(response => {
-
         let project_id = response["project_id"];
         return Promise.all(this.uploader.queue.map(track => this.processTrack(project_id, track)))
           .then(() => {
@@ -101,29 +70,24 @@ export class PublicUploadFormComponent implements OnInit {
   private processTrack(projectId, track: FileItem): Promise<any> {
 
     let length = 0;
-    let uploads = [];
     let title = Mp3Encoder.getName(track._file.name);
     let extension = Mp3Encoder.getExtension(track._file.name);
 
-    return Promise.all([
-      RestCall.createNewTrack(projectId, track._file.name),
-      Mp3Encoder.decode(track._file)
-    ]).then(result => {
-      return {trackId: result[0]["track_id"], buffer: result[1]}
-    }).then(({trackId, buffer}) =>
-      RestCall.createNewVersion(
-        trackId, this.notes_element.nativeElement.value, buffer.duration, this.getWaveform(buffer), this.downloadable ? "1" : "0"
-      )
-    ).then(version => {
-      let versionId = version["version_id"];
-      return this.getStreamFileId(track._file, title, extension, track, versionId, length)
-        .then(({fileId: streamFileId, buffer: buffer}) =>
-          this.getDownloadFileId(track._file, title, extension, track, versionId, length)
-            .then(downloadFileId =>
-              RestCall.uploadChunk(buffer, streamFileId, downloadFileId, 0, extension)
-            )
-        );
-    });
+    return RestCall.createNewTrack(projectId, track._file.name)
+      .then(trackId =>
+        RestCall.createNewVersion(
+          trackId, this.notes_element.nativeElement.value, this.downloadable ? "1" : "0"
+        )
+      ).then(version => {
+        let versionId = version["version_id"];
+        return this.getStreamFileId(track._file, title, extension, track, versionId, length)
+          .then(({fileId: streamFileId, buffer: buffer}) =>
+            this.getDownloadFileId(track._file, title, extension, track, versionId, length)
+              .then(downloadFileId =>
+                RestCall.uploadChunk(buffer, streamFileId, downloadFileId, 0, extension)
+              )
+          );
+      })
   }
 
   private getStreamFileId(file, title, extension, track: FileItem, versionId, length: number): Promise<{ fileId: string, buffer: ArrayBuffer }> {
@@ -137,22 +101,6 @@ export class PublicUploadFormComponent implements OnInit {
     } else {
       return new Promise(resolve => resolve("null"));
     }
-  }
-
-
-
-  private getWaveform(buffer: AudioBuffer): string {
-
-    let wavediv: HTMLDivElement = document.createElement('div');
-    wavediv.classList.add("waveform");
-    window.document.body.appendChild(wavediv);
-
-    const waveform = wave.create({
-      container: wavediv
-    });
-    waveform.loadDecodedBuffer(buffer);
-
-    return waveform.backend.getPeaks(743, 0, 743);
   }
 
   ngOnInit(): void {

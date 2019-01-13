@@ -135,9 +135,18 @@ export class Utils {
         url += "/" + entry;
       }
       trackRequest.open("POST", url, true);
-      trackRequest.onload = () => resolve(JSON.parse(trackRequest.responseText));
+      trackRequest.onreadystatechange = () => {
+
+        if (trackRequest.readyState !== 4) return;
+
+        if (trackRequest.status >= 200 && trackRequest.status < 300) {
+          resolve(JSON.parse(trackRequest.responseText));
+        } else {
+          reject(trackRequest.statusText);
+        }
+      };
       trackRequest.onerror = () => reject(trackRequest.statusText);
-      trackRequest.send(JSON.stringify(data));
+      trackRequest.send(data);
     });
   }
 
