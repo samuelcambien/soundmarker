@@ -1013,7 +1013,7 @@ if (in_array($file_id, $_SESSION['user_files'])) {
       // upload in chunks to S3
       $result = $s3->putObject([
           'Bucket' => $config['AWS_S3_BUCKET'],
-          'Key'    => $files[0]["version_id"] . "/" . $files[0]["file_name"] . '.' . $files[0]["extension"],
+          'Key'    => $files[0]["version_id"] . "/" . $files[0]["file_name"] . '.mp3',
           'Body'   => file_get_contents("/tmp/".$file_id.".mp3"),
           'ACL'    => 'public-read'
       ]);
@@ -1028,16 +1028,16 @@ if (in_array($file_id, $_SESSION['user_files'])) {
   
   // now it's time to create the png
   // let's create wave_png
-
-  exec($config['FFMPEG_PATH']."/ffmpeg -nostats -i /tmp/orig".$file_id.".".$ext." -filter_complex ebur128 -f null - 2>&1", $output);
-
+  exec("/usr/local/bin/ffmpeg -i track.mp3 -af astats=metadata=1:reset=1,ametadata=print:key=lavfi.astats.Overall.RMS_level -f null - 2>&1", $output);
   foreach ($output as &$value) {
-    if (strpos($value, 'Parsed_ebur1') !== false) {
-      if (strpos($value, 'Summary') == false) {
-        $momentarylufs = substr($value, strpos($value, "M:") + 2, (strpos($value, "S:") - strpos($value, "M:") - 3));
-        $zerotohundred = ((floatval($momentarylufs) / 160) + 1);
+    if (strpos($value, 'lavfi.astats.Overall.RMS_level=') !== false) {
+        $momentarylufs = substr($value, strpos($value, "lavfi.astats.Overall.RMS_level=") + 31, 10);
+        if (strpos($momentarylufs, 'inf') == false) { 
+          $zerotohundred = (floatval($momentarylufs)/160)+1;
+        } else {
+          $zerotohundred = 0;
+        }
         $wave_png[] = $zerotohundred;
-      }
     }
   }
   $wave_png_json = json_encode($wave_png);
@@ -1091,7 +1091,7 @@ if (in_array($file_id, $_SESSION['user_files'])) {
 ADS
 */
 /////////////////////////////////////////////////////////// Routes - /ad GET //////////////////////////////////////////////////////////
-Flight::route('GET /ad', function() {
+Flight::route('GET /sma', function() {
 
 $config = Flight::get("config");
 // TODO: if nothing returns, show default one, no error
@@ -1116,7 +1116,7 @@ $result = $db->query($sql);
 });
 
 /////////////////////////////////////////////////////// Routes - /ad/@ad_id GET ///////////////////////////////////////////////////////
-Flight::route('GET /ad/@ad_id', function($ad_id) {
+Flight::route('GET /sma/@ad_id', function($ad_id) {
 
 $config = Flight::get("config");
 $db = Flight::db();
@@ -1128,7 +1128,7 @@ echo stripslashes($html);
 });
 
 ////////////////////////////////////////////////////////// Routes - /ad POST //////////////////////////////////////////////////////////
-Flight::route('POST /ad', function() {
+Flight::route('POST /sma', function() {
 
 $config = Flight::get("config");
 $getbody = json_decode(Flight::request()->getBody());
