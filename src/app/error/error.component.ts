@@ -15,7 +15,7 @@ export class ErrorComponent implements OnInit {
   ngOnInit() {
   }
 
-  private tryAgain(){
+  tryAgain(){
     this.reset.emit();
   }
 }

@@ -52,34 +52,35 @@ export class PublicUploadPageComponent implements OnInit {
     this.uploader.uploaded = 0;
   }
 
-  constructor(){
+  constructor() {
 
-  this.uploader.onWhenAddingFileFailed = (item, filter) => {
-    let message = '';
-    let failed = false;
-    if(filter) {
-      switch (filter.name) {
-        case 'queueLimit':
-          message = 'Try again, max 30 tracks.';
-          console.log(message);
-          break;
-        case 'fileSize':
-          message = 'One of your tracks exceeded the limit of 500MB';
-          break;
-        default:
-          message = 'Something went wrong, please try again.';
-          break;
+    this.uploader.onWhenAddingFileFailed = (item, filter) => {
+      let message = '';
+      let failed = false;
+      if (filter) {
+        switch (filter.name) {
+          case 'queueLimit':
+            message = 'Try again, max 30 tracks.';
+            console.log(message);
+            break;
+          case 'fileSize':
+            message = 'One of your tracks exceeded the limit of 500MB';
+            break;
+          default:
+            message = 'Something went wrong, please try again.';
+            break;
+        }
       }
-    }
-    return message;
-  };
+      return message;
+    };
   }
-  private tryAgain(){
+
+  tryAgain() {
     this.stage = this.statusEnum.SELECT_SONGS;
     this.error = null;
   }
 
-  private successfullUpload(){
+  successfullUpload() {
     this.stage = this.statusEnum.SELECT_SONGS;
     this.uploader.clearQueue();
   }
