@@ -957,7 +957,7 @@ if (in_array($version_id, $_SESSION['user_versions'])) {
 });
 
 ////////////////////////////////////////////////// Routes - /file/chunk/$file_id POST /////////////////////////////////////////////////
-Flight::route('POST /file/chunk/@file_id/@idno/@ext', function($file_id, $idno, $ext) {
+Flight::route('POST /file/chunk/@file_id/@download_id/@idno/@ext', function($file_id, $download_id, $idno, $ext) {
 
 $config = Flight::get("config");
 
@@ -977,15 +977,15 @@ if (in_array($file_id, $_SESSION['user_files'])) {
   fclose($myfile);
 
   // now let's see how long the song is
-  $ffprobe = FFMpeg\FFProbe::create(array(
-      'ffmpeg.binaries'  => '/opt/ffmpeg/ffmpeg-4.1-64bit-static/ffmpeg',
-      'ffprobe.binaries' => '/opt/ffmpeg/ffmpeg-4.1-64bit-static/ffprobe',
-      'timeout'          => 3600, // The timeout for the underlying process
-      'ffmpeg.threads'   => 12,   // The number of threads that FFMpeg should use
-  ));
-  $duration = $ffprobe
-      ->format("/tmp/".$file_id.".".$ext) // extracts file informations
-      ->get('duration'); 
+  // $ffprobe = FFMpeg\FFProbe::create(array(
+  //     'ffmpeg.binaries'  => '/opt/ffmpeg/ffmpeg-4.1-64bit-static/ffmpeg',
+  //     'ffprobe.binaries' => '/opt/ffmpeg/ffmpeg-4.1-64bit-static/ffprobe',
+  //     'timeout'          => 3600, // The timeout for the underlying process
+  //     'ffmpeg.threads'   => 12,   // The number of threads that FFMpeg should use
+  // ));
+  // $duration = $ffprobe
+  //     ->format("/tmp/".$file_id.".".$ext) // extracts file informations
+  //     ->get('duration'); 
 
   // now we split up the song in 10sec fragments
   // now let's convert the file
@@ -1004,26 +1004,26 @@ if (in_array($file_id, $_SESSION['user_files'])) {
 
   // now we loop through and upload each fragment
   // cut the audio.
-  $amountofsegments = intval($duration/10);
+  // $amountofsegments = intval($duration/10);
 
-  for ($i = 0; $i <= $amountofsegments; $i++) {
-    $audio->filters()->clip(FFMpeg\Coordinate\TimeCode::fromSeconds($i*10), FFMpeg\Coordinate\TimeCode::fromSeconds(10));
-    $audio->save($format, "/tmp/".$file_id."".$i.".mp3");
+  // for ($i = 0; $i <= $amountofsegments; $i++) {
+    // $audio->filters()->clip(FFMpeg\Coordinate\TimeCode::fromSeconds($i*10), FFMpeg\Coordinate\TimeCode::fromSeconds(10));
+    $audio->save($format, "/tmp/".$file_id.".mp3");
 
       // upload in chunks to S3
       $result = $s3->putObject([
           'Bucket' => $config['AWS_S3_BUCKET'],
-          'Key'    => $files[0]["version_id"] . "/" . $files[0]["file_name"] . $i .'.' . $files[0]["extension"],
-          'Body'   => file_get_contents("/tmp/".$file_id."".$i.".mp3"),
+          'Key'    => $files[0]["version_id"] . "/" . $files[0]["file_name"] . '.' . $files[0]["extension"],
+          'Body'   => file_get_contents("/tmp/".$file_id.".mp3"),
           'ACL'    => 'public-read'
       ]);
 
-      if ($i == 0) {
+      // if ($i == 0) {
         $returnurl = $result['ObjectURL'];
-      }
+      // }
 
     // delete file again
-    unlink("/tmp/".$file_id."".$i.".mp3");
+    unlink("/tmp/".$file_id.".mp3");
   }
   
   // now it's time to create the png
@@ -1035,7 +1035,7 @@ if (in_array($file_id, $_SESSION['user_files'])) {
     if (strpos($value, 'Parsed_ebur1') !== false) {
       if (strpos($value, 'Summary') == false) {
         $momentarylufs = substr($value, strpos($value, "M:") + 2, (strpos($value, "S:") - strpos($value, "M:") - 3));
-        $zerotohundred = intval((floatval($momentarylufs) / 1.6) + 100);
+        $zerotohundred = ((floatval($momentarylufs) / 160) + 1);
         $wave_png[] = $zerotohundred;
       }
     }
@@ -1046,6 +1046,20 @@ if (in_array($file_id, $_SESSION['user_files'])) {
   $version_id = $files[0]["version_id"];
   $sql = "UPDATE Version SET wave_png = '$wave_png_json' WHERE version_id = '$version_id'";
   $result = $db->query($sql);
+
+  // now if downloadable, also save the original file:
+  if ($download_id > 0) {
+    $sql = "SELECT version_id, extension, metadata, aws_path, file_name, file_size, identifier, chunk_length FROM File WHERE file_id = '$download_id'";
+    $result = $db->query($sql);
+    $files = $result->fetchAll();
+    
+    $result = $s3->putObject([
+        'Bucket' => $config['AWS_S3_BUCKET'],
+        'Key'    => $files[0]["version_id"] . "/" . $files[0]["file_name"] . '.' . $files[0]["extension"],
+        'Body'   => file_get_contents("/tmp/".$file_id.".".$ext),
+        'ACL'    => 'public-read'
+    ]);
+  }
 
   // delete original upload
   unlink("/tmp/".$file_id.".".$ext);
