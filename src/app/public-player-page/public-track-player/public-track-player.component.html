@@ -179,7 +179,6 @@
       </div> -->
 
       <div class="col">
-
         <div  class="top-icon cloud-icon" id="cloud-icon" (click)="download()">
 
 
@@ -208,15 +207,11 @@
 
         </div>
         <div class="phone-playbar-text">Download</div>
-
       </div>
 
       <div class="col">
-
-        <div class="top-icon text-icon" id="text-icon" (click)="phoneSearch = !phoneSearch"
-           [attr.aria-expanded]="!phoneSearch" aria-controls="phonesearch">
-
-
+        <div class="top-icon text-icon" id="text-icon" (click)="triggerPhoneSearch()"
+             [attr.aria-expanded]="!phoneSearch" aria-controls="phonesearch">
           <svg width="21px" height="21px" viewBox="0 0 21 21" version="1.1" xmlns="http://www.w3.org/2000/svg"
           >
 
@@ -233,12 +228,8 @@
               </g>
             </g>
           </svg>
-
         </div>
-           <div class="phone-playbar-text">Search</div>
-
-
-
+        <div class="phone-playbar-text">Search</div>
       </div>
 
 	  <div class="col">
@@ -271,8 +262,14 @@
 
   <div [ngbCollapse]="!phoneSearch" id="phonesearch" class="show-phone shadow-topbar">
 
-    <input autofocus="autofocus"  type="search" name="search" placeholder="Filter e.g. bass" [(ngModel)]="search"
-           class="comment-form-search sub-form search-box">
+    <input
+      type="search"
+      name="search"
+      placeholder="Filter e.g. bass"
+      class="comment-form-search sub-form search-box"
+      [(ngModel)]="search"
+      #phonesearch
+    >
 
      <span class="search-icon">
           <svg width="16px" height="16px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg">
@@ -528,7 +525,7 @@
       <h4 class="checked-comments-title hide-pro">|
         Checked</h4>
 
-      <div class="comment-search ml-auto hide-phone" [class.active]="search" placement="top"
+      <div class="comment-search ml-auto hide-phone" [class.active]="search" [class.disabled]="!hasComments()" placement="top"
            ngbTooltip="Search for words or names">
 
         <input type="search" name="search" placeholder="Filter e.g. bass" [(ngModel)]="search"
@@ -555,7 +552,7 @@
 
       </div>
 
-      <div class="comment-sort" placement="top" ngbTooltip="Order by"
+      <div class="comment-sort" placement="top" ngbTooltip="Order by" [class.disabled]="!hasMatchingComments()"
       >
         <!--[class.disabled]="track.comments.length < 2"-->
         <ng-select class="custom noselect" [items]="commentSorters"

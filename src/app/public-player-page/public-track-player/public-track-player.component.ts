@@ -34,6 +34,7 @@ export class PublicTrackPlayerComponent implements OnInit, AfterViewChecked {
   @ViewChild('waveform') waveform: ElementRef;
   @ViewChild('startTime') startTime: ElementRef;
   @ViewChild('endTime') endTime: ElementRef;
+  @ViewChild('phonesearch') phonesearch: ElementRef;
 
   commentSorters: CommentSorter[] = [
     CommentSorter.MOST_RECENT,
@@ -145,7 +146,7 @@ export class PublicTrackPlayerComponent implements OnInit, AfterViewChecked {
     return this.getPlayer() && this.getPlayer().isPlaying();
   }
 
-  getMatchingCommentsSorted() {
+  getMatchingCommentsSorted(): Comment[] {
 
     return this.getMatchingComments().sort(this.currentSorter.comparator);
   }
@@ -155,7 +156,7 @@ export class PublicTrackPlayerComponent implements OnInit, AfterViewChecked {
     this.cdRef.detectChanges();
   }
 
-  getMatchingComments() {
+  getMatchingComments(): Comment[] {
 
     if (!this.track.comments) return [];
 
@@ -166,6 +167,14 @@ export class PublicTrackPlayerComponent implements OnInit, AfterViewChecked {
     return this.track.comments.filter(
       comment => search.test(comment.notes) || search.test(comment.name)
     );
+  }
+
+  hasComments() {
+    return this.track.comments && this.track.comments.length > 0;
+  }
+
+  hasMatchingComments() {
+    return this.getMatchingComments().length > 0;
   }
 
   public loadWaveForm() {
@@ -235,6 +244,13 @@ export class PublicTrackPlayerComponent implements OnInit, AfterViewChecked {
     this.download()
   }
 
+  triggerPhoneSearch() {
+    this.phoneSearch = !this.phoneSearch;
+    if (this.phoneSearch) {
+      setTimeout(() => this.phonesearch.nativeElement.focus(), 3);
+    }
+  }
+
   goToOverview() {
     this.overview.emit();
   }
@@ -267,10 +283,11 @@ export class PublicTrackPlayerComponent implements OnInit, AfterViewChecked {
     this.comment.include_start = true;
   }
 
-  isInViewport(elem) {
+  isInViewport(waveform) {
 
-    let bounding = elem.getBoundingClientRect();
-    return bounding.top + bounding.height / 2 > elem.closest(".comments-scrolltainer").getBoundingClientRect().top;
+    let bounding = waveform.getBoundingClientRect();
+    let scrollPane = waveform.closest(".comments-scrolltainer");
+    return bounding.top + bounding.height / 2 > scrollPane.getBoundingClientRect().top;
   }
 
   scrollToTop() {
