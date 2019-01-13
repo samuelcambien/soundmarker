@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
 import {Message} from "../message";
 import {RestCall} from "../rest/rest-call";
 import {PublicIntroductionComponent} from "./public-info/topics/public-introduction/public-introduction.component";
@@ -15,6 +15,8 @@ export class PublicPageComponent implements OnInit {
   @Input() message: Message;
   @Input() error;
 
+  @ViewChild('sma') sma: ElementRef;
+
   ad;
 
   constructor(private modalService: NgbModal, private termsAcceptedService: TermsAcceptedServiceService) { }
@@ -24,11 +26,14 @@ export class PublicPageComponent implements OnInit {
   }
 
   ngOnInit() {
-     if (!this.termsAcceptedService.termsAccepted()) {
-       this.openIntroduction();
-     }
+    if (!this.termsAcceptedService.termsAccepted()) {
+      this.openIntroduction();
+    }
     RestCall.getAdId()
-      .then(response => RestCall.getAd(response["ad_id"]))
-      .then(response => this.ad = response);
+      .then(response => RestCall.getAd("1"))
+      .then(response => {
+        this.ad = response;
+        this.sma.nativeElement.innerHTML = this.ad;
+      })
   }
 }
