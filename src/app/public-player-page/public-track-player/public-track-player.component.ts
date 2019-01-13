@@ -32,8 +32,6 @@ export class PublicTrackPlayerComponent implements OnInit, AfterViewChecked {
   @Output() overview = new EventEmitter();
 
   @ViewChild('waveform') waveform: ElementRef;
-
-
   @ViewChild('startTime') startTime: ElementRef;
   @ViewChild('endTime') endTime: ElementRef;
 
@@ -267,5 +265,15 @@ export class PublicTrackPlayerComponent implements OnInit, AfterViewChecked {
   dragStart() {
     console.log("dragStart");
     this.comment.include_start = true;
+  }
+
+  isInViewport(elem) {
+
+    let bounding = elem.getBoundingClientRect();
+    return bounding.top + bounding.height / 2 > elem.closest(".comments-scrolltainer").getBoundingClientRect().top;
+  }
+
+  scrollToTop() {
+
   }
 }

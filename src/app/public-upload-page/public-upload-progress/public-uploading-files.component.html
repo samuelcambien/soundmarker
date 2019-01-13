@@ -1,4 +1,4 @@
-<div class="container progress-container">
+<div class="container-fluid progress-container">
   <div>
    
 	    
@@ -33,7 +33,7 @@
 	    
    
     <h5>Uploading tracks</h5><h6> {{getProgress()}}% </h6>
-    <div class="progress">
+    <div class="progress row">
       <div class="progress-bar" role="progressbar" [ngStyle]="{ 'width': getProgress() + '%' }"></div>
     </div>
   </div>

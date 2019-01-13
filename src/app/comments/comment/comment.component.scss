@@ -22,6 +22,12 @@
 	cursor: pointer;
 }
 
+.comment-play-button.disabled {
+	opacity: 0.2;
+	cursor: default;
+	pointer-events: none;
+}
+
 .comment-check {
 	width: 18px;
 	height: 18px;

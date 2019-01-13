@@ -15,6 +15,6 @@ export class PublicUploadFinishedComponent implements OnInit {
   }
 
   getLink() {
-    return "http://localhost/project/" + this.link;
+    return "http://localhost:4200/project/" + this.link;
   }
 }

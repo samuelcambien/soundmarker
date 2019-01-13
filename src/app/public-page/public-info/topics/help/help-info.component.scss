@@ -1,119 +1,85 @@
+.wp-block-sgb-accordion__content p {
+		font-size: 12pt;
+	}
 
-
-.btn.btn-link {
-	 font-size: 10pt;
-  color: #7397FF !important;
-  background-color: transparent !important;
-}
-
-.mb-0 .btn.btn-link {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  width: 100%;
-  text-align: left;
-}
-
-.btn.btn-link:hover, .btn.btn-link:active, .btn.btn-link:focus, .btn.btn-link:visited {
-	color: #4479db !important;
-	text-decoration: none !important;
-	background-color: transparent !important;
-}
-
-.btn.btn-link:active, .btn.btn-link:focus .card-header {
-	background-color: #eef1ff !important;
-}
-
-.card-header {
+.wp-block-sgb-accordion {
+	padding: 20px;
+	margin-bottom: 1.5em;
 	background-color: #ffffff !important;
-	border: none !important;
-	cursor: pointer;
+	box-shadow: 0 11px 30px rgba(115, 150, 255,.15) !important;
+	-webkit-box-shadow: 0 11px 30px rgba(115, 150, 255,.15) !important;
+	-moz-box-shadow: 0 11px 30px rgba(115, 150, 255,.15) !important;
+        border-radius: 0.4rem !important;
+
+	summary {
+		padding: 20px;
+		padding-right: 40px;
+		margin: -20px -20px 20px -20px;
+		cursor: pointer;
+		display: block;
+		position: relative;
+		line-height: 1;
+		user-select: none;
+		color: #717db0 !important;
+		border-radius: 0.4rem !important;
+		font-family: 'sofia-regular';
+		
+
+		&:focus {
+			outline: 0;
+		}
+
+		&::-webkit-details-marker {
+			display: none;
+		}
+
+		&:after {
+			content: '\f067';
+			font-family: 'Font Awesome 5 Free';
+			-webkit-font-smoothing: antialiased;
+			display: inline-block;
+			font-style: normal;
+			font-variant: normal;
+			text-rendering: auto;
+			font-weight: 900;
+			line-height: 1.17;
+			position: absolute;
+			right: 20px;
+			transform: translateY(-100%);
+			color: currentColor;
+			bottom: 0;
+		}
+	}
+
+	p:last-of-type {
+		margin-bottom: 0;
+	}
+
+	&[open] summary:after {
+		content: '\f068';
+	}
+
+	&:not([open]) {
+		padding-bottom: 0;
+	}
+
+	&.has-shadow {
+		box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.25);
+	}
+
+	+ .wp-block-sgb-accordion {
+		margin-top: -0.8em;
+	}
 }
 
-.card-header:hover {
-	background-color: #eef1ff !important;
-	transition: 0.3s;
-}
-
-.card-header:hover .btn.btn-link {
-	color: #4479db !important;
-	text-decoration: none !important;
-}
-
-.card-body {
-	border-bottom: none !important;
-	border-top: 1px solid #eef1ff !important; 
-}
-
-.card-body p {
-	color: #717db0;
-}
-
-.help-footer .container p a {
-	color: #717db0 !important;
-	text-decoration: underline !important;
-}
-
-.card {
-	border-left: 1px solid #eef1ff !important;
-	border-right: 1px solid #eef1ff !important;
-	border-bottom: none !important;
-	border-top: 1px solid #eef1ff !important;
-}
-
-#last-card {
-border-bottom: 1px solid #eef1ff !important;
-}
-
-.help-footer {
-	background-color: #f9f9ff;
-	width: 100%;
-	margin-top: 30px;
-	padding-top: 40px;
-	padding-bottom: 30px;
-}
-
-.help-footer .container p {
-	text-align: center;
-	color: #717db0;
-}
-
-.ticket-card {
-	padding: 25px;
-	margin-top: 20px;
-}
-
-.ticket-card h2 {
-	margin-bottom: 25px !important;
-	color: #7397ff;
-}
-
-.btn-link {
-	margin-left: -10px !important;
-	  
-}
-
-button.btn-more.collapsed:after
-{
-    content:' more' ;
-   
-}
-button.btn-more:after
-{
-    content:' less' ;
-   
-}
-
-
-
-@media (max-width: 576px) { 
+@media (max-width: 576px) {
 	
-	.btn.btn-link {
-  font-size: 8pt;
-  }
-
-.card-body p {
-	font-size: 8pt;
-}
-
+.wp-block-sgb-accordion__content p {
+		font-size: 10pt;
+	}
+	
+	summary {
+		font-size: 10pt;
+	}
+	
 }
