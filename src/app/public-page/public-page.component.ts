@@ -1,4 +1,4 @@
-import {Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
+import {Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
 import {Message} from "../message";
 import {RestCall} from "../rest/rest-call";
 import {PublicIntroductionComponent} from "./public-info/topics/public-introduction/public-introduction.component";
@@ -14,12 +14,14 @@ export class PublicPageComponent implements OnInit {
 
   @Input() message: Message;
   @Input() error;
+  @Output() tryAgain=new EventEmitter();
 
   @ViewChild('sma') sma: ElementRef;
 
   ad;
 
-  constructor(private modalService: NgbModal, private termsAcceptedService: TermsAcceptedServiceService) { }
+  constructor(private modalService: NgbModal, private termsAcceptedService: TermsAcceptedServiceService) {
+  }
 
   openIntroduction() {
     this.modalService.open(PublicIntroductionComponent, {size: "lg", backdrop: 'static', keyboard: false});
@@ -35,5 +37,9 @@ export class PublicPageComponent implements OnInit {
         this.ad = response;
         this.sma.nativeElement.innerHTML = this.ad;
       })
+  }
+
+  private reset() {
+      this.tryAgain.emit();
   }
 }
