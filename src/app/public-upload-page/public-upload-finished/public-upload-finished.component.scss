@@ -20,6 +20,7 @@ h4, a {
 .copy-link-btn {
 		border-bottom-left-radius: 0px !important;
 	border-top-left-radius: 0px !important;
+	max-width: 73px !important;
 }
 
 .form-group {
@@ -57,11 +58,20 @@ h4, a {
 		padding-right: 10px;
 	}
 	
+	.copy-link-btn {
+		margin-bottom: 0px !important;
+	}
+	
 	.col-sm-8 {
 		margin-left: 10px;
 		margin-right: -10px;
 	}
 	
+	#copy-link {
+		width: 86px !important;
+	}
+	
+
 	
 	}
 	
@@ -82,6 +92,27 @@ h4, a {
 	
 	.btn-sm {
 		width: auto;
+	}
+	
+		.success-title {
+		text-align: center !important;
+		max-width: 230px !important;
+		margin-left: auto !important;
+		margin-right: auto !important;
+	}
+	
+	.success-text {
+		text-align: center !important;
+		margin-left: auto !important;
+		margin-right: auto !important;
+	}
+	
+	.form-inline {
+		margin-left: auto !important;
+	}
+	
+	.btn-sm {
+		margin-right: auto !important;
 	}
 	
 
