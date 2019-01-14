@@ -1,4 +1,4 @@
-<app-public-page [error]="error" (tryAgain)="tryAgain()">
+<app-public-page [error]="error" (tryAgain)="tryAgain()" >
 
   <div>
     <app-public-upload-form [class.hidden]="stage != statusEnum.SELECT_SONGS" [uploader]="uploader"
@@ -10,10 +10,7 @@
     <app-public-uploading-files [class.hidden]="stage != statusEnum.UPLOADING_SONGS"
                                 [uploader]="uploader"></app-public-uploading-files>
     <app-public-upload-finished [class.hidden]="stage != statusEnum.GREAT_SUCCESS"
-                                [link]="link"
-                                (sendNewFiles)="tryAgain()"></app-public-upload-finished>
+                                [link]="link" (sendNewFiles)="tryAgain()"></app-public-upload-finished>
   </div>
-
 </app-public-page>
-
 <div id="waveform" #waveform></div>

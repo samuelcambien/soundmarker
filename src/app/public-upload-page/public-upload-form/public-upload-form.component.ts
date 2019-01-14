@@ -19,14 +19,13 @@ export class PublicUploadFormComponent implements OnInit {
 
   notes: string;
   email_from: string;
-  email_to: string;
+  email_to: string[];
 
-  sharemode: "email" | "link" = "email";
+  sharemode: "email" | "link" = "link";
   expiration: "week" | "month" = "week";
   downloadable: boolean = false;
 
   validators = [Validators.required, Validators.pattern('^\\w+([\\.-]?\\w+)*@\\w+([\\.-]?\\w+)*(\\.\\w{2,3})+$')];
-
   player;
 
   @Input() uploader: FileUploader;
@@ -38,13 +37,12 @@ export class PublicUploadFormComponent implements OnInit {
   @Output() error = new EventEmitter();
   @Output() form = new EventEmitter();
 
-  tracks_left = () => { return this.uploader.options.queueLimit - this.uploader.queue.length };
-
-
   @ViewChild('notes_element') notes_element: ElementRef;
+  @ViewChild('ft') files_tooltip: NgbTooltip;
+
+  tracks_left = () => {return this.uploader.options.queueLimit - this.uploader.queue.length};
 
   onSubmit() {
-
     this.uploading.emit();
     RestCall.createNewProject()
       .then(response => {
@@ -52,18 +50,20 @@ export class PublicUploadFormComponent implements OnInit {
         return Promise.all(this.uploader.queue.map(track => this.processTrack(project_id, track)))
           .then(() => {
             if (this.sharemode === 'email') {
-              return RestCall.shareProject(project_id, this.email_from, this.email_to.split(","))
+              return RestCall.shareProject(project_id, this.email_from, this.email_to)
             } else {
               return RestCall.shareProject(project_id)
             }
           })
           .then(response => {
             this.finished.emit();
+            this.clearForm(true);
             this.link.emit(response["project_hash"]);
           })
       })
       .catch((e) => {
         this.clearForm(false);
+        console.log(e);
         this.error.emit(e)});
   }
 
@@ -104,25 +104,36 @@ export class PublicUploadFormComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log("");
     // wave.init({
     //   container: canvas
     // });
     // wave.loadDecodedBuffer(buffer);
+    this.uploader.onWhenAddingFileFailed = (item, filter) =>  {
+      let message= '';
+      switch (filter.name) {
+        case 'queueLimit':
+          message = 'Max of ' + this.uploader.options.queueLimit + ' tracks exceeded. Not all tracks were added.';
+          break;
+        case 'fileSize':
+          message = "One or more tracks exceeded the limit of 500MB per track."
+          break;
+        case 'onlyAudio':
+          message = "One or more files are not supported and were not added."
+          break;
+        default:
+          message = "Something went wrong, please try again.";
+          break;
+      }
+      this.files_tooltip.open(this.files_tooltip.ngbTooltip= message);
+    };
   }
 
-  constructor(){
-  }
-
-  public onValidationError(tooltip: NgbTooltip, control) {
-    console.log("Validation error"+this.email_to);
-  }
+  constructor(){  }
 
   private clearForm(clearData): void{
     if (clearData) {
       this.notes = '';
-      this.email_to = '';
-      this.email_from = '';
+      this.email_to = [];
     }
     this.uploader.clearQueue();
   }
@@ -134,7 +145,7 @@ export class PublicUploadFormComponent implements OnInit {
 
 export class EmailValidationToolTip {
   control: any;
-  tooltip: any;
+  tooltip: NgbTooltip;
 
   constructor(control: NgControl, tooltip: NgbTooltip) {
     this.tooltip = tooltip;

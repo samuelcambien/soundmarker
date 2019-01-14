@@ -1,4 +1,4 @@
-import {Component, ElementRef, OnInit, ViewChild, EventEmitter} from '@angular/core';
+import {Component, ElementRef, OnInit, ViewChild, EventEmitter, Output} from '@angular/core';
 import {FileUploader} from "../ng2-file-upload";
 
 const UPLOAD_FILES_ENDPOINT = 'http://localhost:8080/rest/upload/file';
@@ -16,11 +16,13 @@ export class PublicUploadPageComponent implements OnInit {
 
   error;
 
+  uploader_error_message: string;
+
   uploader: FileUploader = new FileUploader({
     url: UPLOAD_FILES_ENDPOINT,
     disableMultipart: true,
     queueLimit: 10,
-    maxFileSize: 2000000000, // 2GB
+    maxFileSize: 500000000, // 500MB 500 000 000
     filters: [
       {
         name: 'avoidDuplicates',
@@ -53,26 +55,6 @@ export class PublicUploadPageComponent implements OnInit {
   }
 
   constructor() {
-
-    this.uploader.onWhenAddingFileFailed = (item, filter) => {
-      let message = '';
-      let failed = false;
-      if (filter) {
-        switch (filter.name) {
-          case 'queueLimit':
-            message = 'Try again, max 30 tracks.';
-            console.log(message);
-            break;
-          case 'fileSize':
-            message = 'One of your tracks exceeded the limit of 500MB';
-            break;
-          default:
-            message = 'Something went wrong, please try again.';
-            break;
-        }
-      }
-      return message;
-    };
   }
 
   tryAgain() {
@@ -81,7 +63,7 @@ export class PublicUploadPageComponent implements OnInit {
   }
 
   successfullUpload() {
-    this.stage = this.statusEnum.SELECT_SONGS;
+    this.stage = this.statusEnum.GREAT_SUCCESS;
     this.uploader.clearQueue();
   }
 }
