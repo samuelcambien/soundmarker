@@ -1011,20 +1011,20 @@ if (in_array($file_id, $_SESSION['user_files'])) {
     $audio->save($format, "/tmp/".$file_id.".mp3");
 
       // upload in chunks to S3
-      $result = $s3->putObject([
-          'Bucket' => $config['AWS_S3_BUCKET'],
-          'Key'    => $files[0]["version_id"] . "/" . $files[0]["file_name"] . '.mp3',
-          'Body'   => file_get_contents("/tmp/".$file_id.".mp3"),
-          'ACL'    => 'public-read'
-      ]);
+       $result = $s3->putObject([
+           'Bucket' => $config['AWS_S3_BUCKET'],
+           'Key'    => $files[0]["version_id"] . "/" . $files[0]["file_name"] . '.mp3',
+           'Body'   => file_get_contents("/tmp/".$file_id.".mp3"),
+           'ACL'    => 'public-read'
+       ]);
 
-      // if ($i == 0) {
-        $returnurl = $result['ObjectURL'];
-      // }
+       // if ($i == 0) {
+         $returnurl = $result['ObjectURL'];
+       // }
 
-    // delete file again
-    unlink("/tmp/".$file_id.".mp3");
-  // }
+     // delete file again
+     unlink("/tmp/".$file_id.".mp3");
+   // }
   
   // now it's time to create the png
   // let's create wave_png
