@@ -53,6 +53,8 @@ import {ClipboardModule} from "ngx-clipboard";
 import {TimeFormatDirective} from './time-format.directive';
 import {SubscribeComponent} from './subscribe/subscribe.component';
 import {ErrorComponent} from "./error/error.component";
+import { PageNotFoundComponent } from './error/page-not-found/page-not-found.component';
+import { ProjectExpiredComponent } from './error/project-expired/project-expired.component';
 
 
 @NgModule({
@@ -97,7 +99,9 @@ import {ErrorComponent} from "./error/error.component";
     PlayerIntroductionComponent,
     TimeFormatDirective,
     SubscribeComponent,
-    EmailValidationToolTip
+    EmailValidationToolTip,
+    PageNotFoundComponent,
+    ProjectExpiredComponent
   ],
   imports: [
     TagInputModule,

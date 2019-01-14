@@ -44,6 +44,10 @@ export class CommentComponent implements OnInit {
     return Utils.getTimeHumanized(time) + " ago";
   }
 
+  getTimeAccurate(time: number) {
+    return Utils.getTimeAccurate(time);
+  }
+
   play() {
 
     if (this.comment.include_start) {

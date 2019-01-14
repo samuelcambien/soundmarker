@@ -57,6 +57,10 @@ export class Utils {
     return moment.duration(now() - time).humanize();
   }
 
+  public static getTimeAccurate(milliseconds) {
+    return moment.unix(milliseconds/1000).format("D MMM, H:mm");
+  }
+
   public static getTimeFormatted(seconds) {
     return moment.utc(moment.duration({'seconds': seconds}).asMilliseconds()).format("mm:ss");
   }
