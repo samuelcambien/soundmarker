@@ -142,7 +142,7 @@ if (isset($_SESSION["status"]) && isset($_SESSION['ENDTIME'])) {
     }
   } 
 }
-include 'index.html';
+include '/Users/dieterboels/Documents/SoundmarkerDev/soundmarker/index.html';
 });
 
 
@@ -976,93 +976,14 @@ if (true) {
   fwrite($myfile, Flight::request()->getBody());
   fclose($myfile);
 
-  // now let's see how long the song is
-  // $ffprobe = FFMpeg\FFProbe::create(array(
-  //     'ffmpeg.binaries'  => '/opt/ffmpeg/ffmpeg-4.1-64bit-static/ffmpeg',
-  //     'ffprobe.binaries' => '/opt/ffmpeg/ffmpeg-4.1-64bit-static/ffprobe',
-  //     'timeout'          => 3600, // The timeout for the underlying process
-  //     'ffmpeg.threads'   => 12,   // The number of threads that FFMpeg should use
-  // ));
-  // $duration = $ffprobe
-  //     ->format("/tmp/".$file_id.".".$ext) // extracts file informations
-  //     ->get('duration'); 
-
   // now we split up the song in 10sec fragments
   // now let's convert the file
   $ffmpeg = FFMpeg\FFMpeg::create(array(
-      'ffmpeg.binaries'  => $config['FFMPEG_PATH'].'/ffmpeg',
-      'ffprobe.binaries' => $config['FFMPEG_PATH'].'/ffprobe',
+      'ffmpeg.binaries'  => '/usr/local/Cellar/ffmpeg/4.1_1/bin/ffmpeg',
+      'ffprobe.binaries' => '/usr/local/Cellar/ffmpeg/4.1_1/bin/ffprobe',
       'timeout'          => 3600, // The timeout for the underlying process
       'ffmpeg.threads'   => 12,   // The number of threads that FFMpeg should use
   ));
-  $audio = $ffmpeg->open("/tmp/orig".$file_id.".".$ext);
-
-  $format = new FFMpeg\Format\Audio\Mp3();
-  $format
-      ->setAudioChannels(2)
-      ->setAudioKiloBitrate(192);
-
-  // now we loop through and upload each fragment
-  // cut the audio.
-  // $amountofsegments = intval($duration/10);
-
-  // for ($i = 0; $i <= $amountofsegments; $i++) {
-    // $audio->filters()->clip(FFMpeg\Coordinate\TimeCode::fromSeconds($i*10), FFMpeg\Coordinate\TimeCode::fromSeconds(10));
-    $audio->save($format, "/tmp/".$file_id.".mp3");
-
-      // upload in chunks to S3
-      $result = $s3->putObject([
-          'Bucket' => $config['AWS_S3_BUCKET'],
-          'Key'    => $files[0]["version_id"] . "/" . $files[0]["file_name"] . '.mp3',
-          'Body'   => file_get_contents("/tmp/".$file_id.".mp3"),
-          'ACL'    => 'public-read'
-      ]);
-
-      // if ($i == 0) {
-        $returnurl = $result['ObjectURL'];
-      // }
-
-    // delete file again
-    unlink("/tmp/".$file_id.".mp3");
-  // }
-  
-  // now it's time to create the png
-  // let's create wave_png
-  exec($config['FFMPEG_PATH']."/ffmpeg -nostats -i /tmp/orig".$file_id.".".$ext." -af astats=metadata=1:reset=1,ametadata=print:key=lavfi.astats.Overall.RMS_level -f null - 2>&1", $output);
-  foreach ($output as &$value) {
-    if (strpos($value, 'lavfi.astats.Overall.RMS_level=') !== false) {
-        $momentarylufs = substr($value, strpos($value, "lavfi.astats.Overall.RMS_level=") + 31, 10);
-        if (strpos($momentarylufs, 'inf') == false) {
-          $zerotohundred = (floatval($momentarylufs)/100)+1;
-        } else {
-          $zerotohundred = 0;
-        }
-        $wave_png[] = $zerotohundred;
-      }
-    }
-  $wave_png_json = json_encode($wave_png);
-
-  // Update wave_png in dB
-  $version_id = $files[0]["version_id"];
-  $sql = "UPDATE Version SET wave_png = '$wave_png_json' WHERE version_id = '$version_id'";
-  $result = $db->query($sql);
-
-  // now if downloadable, also save the original file:
-  if ($download_id > 0) {
-    $sql = "SELECT version_id, extension, metadata, aws_path, file_name, file_size, identifier, chunk_length FROM File WHERE file_id = '$download_id'";
-    $result = $db->query($sql);
-    $files = $result->fetchAll();
-    
-    $result = $s3->putObject([
-        'Bucket' => $config['AWS_S3_BUCKET'],
-        'Key'    => $files[0]["version_id"] . "/" . $files[0]["file_name"] . '.' . $files[0]["extension"],
-        'Body'   => file_get_contents("/tmp/orig".$file_id.".".$ext),
-        'ACL'    => 'public-read'
-    ]);
-  }
-
-  // delete original upload
-  unlink("/tmp/orig".$file_id.".".$ext);
 
   // return ok
   Flight::json(array(
@@ -1091,7 +1012,7 @@ if (true) {
 ADS
 */
 /////////////////////////////////////////////////////////// Routes - /ad GET //////////////////////////////////////////////////////////
-Flight::route('GET /sma', function() {
+Flight::route('GET /ad', function() {
 
 $config = Flight::get("config");
 // TODO: if nothing returns, show default one, no error
@@ -1116,7 +1037,7 @@ $result = $db->query($sql);
 });
 
 /////////////////////////////////////////////////////// Routes - /ad/@ad_id GET ///////////////////////////////////////////////////////
-Flight::route('GET /sma/@ad_id', function($ad_id) {
+Flight::route('GET /ad/@ad_id', function($ad_id) {
 
 $config = Flight::get("config");
 $db = Flight::db();
@@ -1128,7 +1049,7 @@ echo stripslashes($html);
 });
 
 ////////////////////////////////////////////////////////// Routes - /ad POST //////////////////////////////////////////////////////////
-Flight::route('POST /sma', function() {
+Flight::route('POST /ad', function() {
 
 $config = Flight::get("config");
 $getbody = json_decode(Flight::request()->getBody());
