@@ -512,7 +512,79 @@
 
   </div>
 
-  <div class="comments" [ngbCollapse]="!showComments">
+  <div class="comments hide-phone" [ngbCollapse]="!showComments">
+
+    <div class="comments-divider">
+      <hr>
+    </div>
+
+    <div class="comments-header row">
+
+      <h4 class="comments-title unselectable">{{getMatchingComments()?.length}} comments </h4>
+
+      <h4 class="checked-comments-title hide-pro">|
+        Checked</h4>
+
+      <div class="comment-search ml-auto hide-phone" [class.active]="search" [class.disabled]="!hasComments()" placement="top"
+           ngbTooltip="Search for words or names">
+
+        <input type="search" name="search" placeholder="Filter e.g. bass" [(ngModel)]="search"
+               class="comment-form-search sub-form search-box">
+
+        <span class="search-icon">
+          <svg width="16px" height="16px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg">
+           
+            <desc></desc>
+            <defs></defs>
+            <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round"
+               stroke-linejoin="round">
+              <g id="Internet-Networks-Servers-/-Upload/Download-/-upload-dash-arrow-1"
+                 transform="translate(-99.000000, -65.000000)" class="search-stroke" stroke-width="1.5">
+                <circle id="Oval" cx="105.509842" cy="71.5098416" r="5.50984157"></circle>
+                <path d="M110,76 L114.272172,80.2727797" id="Shape"></path>
+              </g>
+            </g>
+          </svg>
+        </span>
+
+
+        <span *ngIf="search" class="clear-search ml-auto" (click)="search = null">&times;</span>
+
+      </div>
+
+      <div class="comment-sort" placement="top" ngbTooltip="Order by" [class.disabled]="!hasMatchingComments()"
+      >
+        <!--[class.disabled]="track.comments.length < 2"-->
+        <ng-select class="custom noselect" [items]="commentSorters"
+                   bindLabel="description"
+                   [clearable]="false"
+                   [searchable]="false"
+                   [(ngModel)]="currentSorter">
+        </ng-select>
+      </div>
+
+    </div>
+
+    <app-comment-form [version_id]="version?.version_id" [comment]="comment" [player]="getPlayer()"
+                      (newComment)="addComment($event)">
+    </app-comment-form>
+
+    <app-comment
+      *ngFor="let comment of getMatchingCommentsSorted()"
+      [comment]="comment"
+      [player]="getPlayer()"
+      [search]="search"
+    >
+    </app-comment>
+
+    <div *ngIf="search && getMatchingComments().length == 0" class="no-comments">
+
+      <p>We couldn't find any comments related to your search.</p>
+    </div>
+
+  </div>
+  
+   <div class="comments show-phone" >
 
     <div class="comments-divider">
       <hr>

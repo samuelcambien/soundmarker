@@ -10,7 +10,7 @@
 	
 }
 
-.phone-ad {
+.phone-sma {
 	height: 160px;
 	min-width: calc(100% - 20px);
 	margin-left: 10px;
@@ -22,12 +22,7 @@
 	  -webkit-box-shadow: 0 0rem 0.3rem 0.01rem rgba(115, 150, 255, 0.55) !important;
 	 -moz-box-shadow:  0 0rem 0.3rem 0.01rem rgba(115, 150, 255, 0.55) !important;
         box-shadow: 0 0rem 0.3rem 0.01rem rgba(115, 150, 255, 0.55) !important;
-}
-
-.phone-ad h2 {
-	color: #ffffff;
-	text-align: center;
-	margin-top: 65px;
+        overflow: hidden;
 }
 
 .public-page {

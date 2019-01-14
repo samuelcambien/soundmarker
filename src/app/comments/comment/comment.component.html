@@ -124,7 +124,11 @@
     </button>
 -->
 
-    <p class="date-tx ml-auto hide-phone noselect" placement="top" ngbTooltip="17-02-18 13:23">{{getTimeHumanized(comment.comment_time)}}</p>
+    <p class="date-tx ml-auto hide-phone noselect"
+       placement="top"
+       ngbTooltip="{{getTimeAccurate(comment.comment_time)}}">
+      {{getTimeHumanized(comment.comment_time)}}
+    </p>
 
   </div>
 
