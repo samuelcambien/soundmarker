@@ -466,7 +466,8 @@
             [class.disabled]="!comment.include_start"
             appDraggable
             (dragStart)="dragStart()"
-            (dragMove)="updateStartTime($event)"
+            (mouseMove)="updateStartTime($event.x)"
+            (touchMove)="updateStartTime($event.touches[0].clientX)"
             [style.left]="getStartPosition()"
           >
             <ng-container *ngTemplateOutlet="soundmarker"></ng-container>
@@ -477,7 +478,8 @@
             class="drag-block"
             [class.disabled]="!comment.include_end"
             appDraggable
-            (dragMove)="updateEndTime(endPos, $event)"
+            (mouseMove)="updateEndTime($event.x)"
+            (touchMove)="updateEndTime($event.touches[0].clientX)"
             (dragStart)="comment.include_end = true; comment.include_start = true"
             [style.left]="getEndPosition()"
           >
