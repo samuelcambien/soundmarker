@@ -55,6 +55,7 @@ import {SubscribeComponent} from './subscribe/subscribe.component';
 import {ErrorComponent} from "./error/error.component";
 import { PageNotFoundComponent } from './error/page-not-found/page-not-found.component';
 import { ProjectExpiredComponent } from './error/project-expired/project-expired.component';
+import { PublicPagenotfoundPageComponent } from './public-pagenotfound-page/public-pagenotfound-page.component';
 
 
 @NgModule({
@@ -101,7 +102,8 @@ import { ProjectExpiredComponent } from './error/project-expired/project-expired
     SubscribeComponent,
     EmailValidationToolTip,
     PageNotFoundComponent,
-    ProjectExpiredComponent
+    ProjectExpiredComponent,
+    PublicPagenotfoundPageComponent
   ],
   imports: [
     TagInputModule,

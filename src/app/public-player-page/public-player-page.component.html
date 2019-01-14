@@ -1,28 +1,36 @@
 <app-public-page [message]="message" xmlns="http://www.w3.org/1999/html">
 
-  <div class="list-container" [ngbCollapse]="activeTrack != null">
+  <app-page-not-found *ngIf="!exists"></app-page-not-found>
 
-    <div *ngFor="let track of project?.tracks; let last = last;">
+  <app-project-expired *ngIf="expired"></app-project-expired>
 
-      <app-public-player-track
-        [track]="track"
-        (selected)="selectTrack(track)"
-      >
-      </app-public-player-track>
+  <div *ngIf="exists && !expired">
 
-      <hr *ngIf="track != last">
+    <div class="list-container" [ngbCollapse]="activeTrack != null">
+
+      <div *ngFor="let track of project?.tracks; let last = last;">
+
+        <app-public-player-track
+          [track]="track"
+          (selected)="selectTrack(track)"
+        >
+        </app-public-player-track>
+
+        <hr *ngIf="track != last">
+
+      </div>
 
     </div>
 
-  </div>
+    <app-public-track-player
+      *ngFor="let track of project?.tracks"
+      [track]="track"
+      [enableOverview]="project.tracks.length > 1"
+      [ngbCollapse]="activeTrack != track"
+      (overview)="activeTrack = null;"
+    >
+    </app-public-track-player>
 
-  <app-public-track-player
-    *ngFor="let track of project?.tracks"
-    [track]="track"
-    [enableOverview]="project.tracks.length > 1"
-    [ngbCollapse]="activeTrack != track"
-    (overview)="activeTrack = null;"
-  >
-  </app-public-track-player>
+  </div>
 
 </app-public-page>

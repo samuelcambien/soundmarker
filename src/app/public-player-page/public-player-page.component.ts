@@ -18,6 +18,9 @@ import {PlayerService} from "../player.service";
 })
 export class PublicPlayerPageComponent implements OnInit {
 
+  expired: boolean = false;
+  exists: boolean = true;
+
   project: Project;
 
   message: Message = new Message("", "", false);
@@ -39,32 +42,49 @@ export class PublicPlayerPageComponent implements OnInit {
 
   private loadProjectInfo(projectHash: string) {
 
-    // this.message = new Promise<Message>(resolve =>
-      RestCall.getProject(projectHash)
-        .then((project: Project) => {
-          this.project = project;
-          for (let track of project.tracks) {
-            track.versions = RestCall.getTrack(track.track_id)
-              .then(response => response["versions"]);
-            track.versions
-              .then((versions: Version[]) => {
-                this.message = this.getMessage(project, versions[0]);
-                versions.forEach(version => {
-                  if (version.downloadable == 0) version.downloadable = false
-                });
-                versions[0].files = RestCall.getVersion(versions[0].version_id)
-                  .then(response => versions[0].files = response["files"]);
-                versions[0].files.then((files) => {
-                  // this.loadPlayer(track, versions[0], files[0]);
-                  this.loadComments(track);
-                })
-              });
+    RestCall.getProject(projectHash)
+      .then((project: Project) => {
+        this.project = project;
 
-            if (project.tracks.length == 1)
-              this.activeTrack = project.tracks[0];
-          }
-        });
-    // );
+        if (!this.doesExist()) {
+          this.exists = false;
+          return;
+        }
+
+        if (!this.isActive()) {
+          this.expired = true;
+          return;
+        }
+
+        for (let track of project.tracks) {
+          track.versions = RestCall.getTrack(track.track_id)
+            .then(response => response["versions"]);
+          track.versions
+            .then((versions: Version[]) => {
+              this.message = this.getMessage(project, versions[0]);
+              versions.forEach(version => {
+                if (version.downloadable == 0) version.downloadable = false
+              });
+              versions[0].files = RestCall.getVersion(versions[0].version_id)
+                .then(response => versions[0].files = response["files"]);
+              versions[0].files.then((files) => {
+                // this.loadPlayer(track, versions[0], files[0]);
+                this.loadComments(track);
+              })
+            });
+
+          if (project.tracks.length == 1)
+            this.activeTrack = project.tracks[0];
+        }
+      });
+  }
+
+  private doesExist() {
+    return this.project.project_id != null;
+  }
+
+  private isActive() {
+    return this.project.status == "active";
   }
 
   private loadPlayer(track: Track, version: Version, file: File) {
