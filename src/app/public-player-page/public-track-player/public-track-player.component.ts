@@ -108,10 +108,11 @@ export class PublicTrackPlayerComponent implements OnInit, AfterViewChecked {
     return this.getRawPosition(this.endTime, this.comment.end_time);
   }
 
-  updateStartTime(event) {
+  updateStartTime(x) {
+
     this.comment.include_start = true;
     this.comment.start_time = this.getValidStartTime(
-      this.getCommentTime(this.startTime, event)
+      this.getCommentTime(this.startTime, x)
     );
   }
 
@@ -121,10 +122,10 @@ export class PublicTrackPlayerComponent implements OnInit, AfterViewChecked {
     return commentTime;
   }
 
-  updateEndTime(endPos, current) {
+  updateEndTime(x) {
     this.comment.include_end = true;
     this.comment.end_time = this.getValidEndTime(
-      this.getCommentTime(this.endTime, current)
+      this.getCommentTime(this.endTime, x)
     );
   }
 
@@ -221,9 +222,9 @@ export class PublicTrackPlayerComponent implements OnInit, AfterViewChecked {
     return this.getTrackLength() * (event.x - this.waveform.nativeElement.getBoundingClientRect().left) / this.getPlayerWidth();
   }
 
-  private getCommentTime(element, event) {
+  private getCommentTime(element, x) {
 
-    return this.getTrackLength() * (event.x + element.nativeElement.offsetWidth / 2 - this.getPlayerPosition()) / this.getPlayerWidth();
+    return this.getTrackLength() * (x + element.nativeElement.offsetWidth / 2 - this.getPlayerPosition()) / this.getPlayerWidth();
   }
 
   getTrackLength() {
@@ -279,7 +280,6 @@ export class PublicTrackPlayerComponent implements OnInit, AfterViewChecked {
   }
 
   dragStart() {
-    console.log("dragStart");
     this.comment.include_start = true;
   }
 
