@@ -74,9 +74,9 @@ export class PublicUploadFormComponent implements OnInit {
     let extension = Mp3Encoder.getExtension(track._file.name);
 
     return RestCall.createNewTrack(projectId, track._file.name)
-      .then(trackId =>
+      .then(response =>
         RestCall.createNewVersion(
-          trackId, this.notes_element.nativeElement.value, this.downloadable ? "1" : "0"
+          response["track_id"], this.notes_element.nativeElement.value, this.downloadable ? "1" : "0"
         )
       ).then(version => {
         let versionId = version["version_id"];
