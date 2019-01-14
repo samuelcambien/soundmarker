@@ -117,6 +117,9 @@ export class PublicUploadFormComponent implements OnInit {
         case 'fileSize':
           message = "One or more tracks exceeded the limit of 500MB per track."
           break;
+        case 'onlyAudio':
+          message = "One or more files are not supported and were not added."
+          break;
         default:
           message = "Something went wrong, please try again.";
           break;
@@ -125,9 +128,7 @@ export class PublicUploadFormComponent implements OnInit {
     };
   }
 
-  constructor(){
-
-  }
+  constructor(){  }
 
   private clearForm(clearData): void{
     if (clearData) {
