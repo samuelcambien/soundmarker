@@ -21,6 +21,7 @@ $s3 = new Aws\S3\S3Client([
     'profile'     => 's3',
     'version'     => 'latest',
     'region'      => $config['AWS_S3_REGION'],
+    'scheme'      => 'http',
 ]);
 
 Flight::set("s3", $s3);
@@ -977,15 +978,15 @@ if (in_array($file_id, $_SESSION['user_files'])) {
   fclose($myfile);
 
   // now let's see how long the song is
-  // $ffprobe = FFMpeg\FFProbe::create(array(
-  //     'ffmpeg.binaries'  => '/opt/ffmpeg/ffmpeg-4.1-64bit-static/ffmpeg',
-  //     'ffprobe.binaries' => '/opt/ffmpeg/ffmpeg-4.1-64bit-static/ffprobe',
-  //     'timeout'          => 3600, // The timeout for the underlying process
-  //     'ffmpeg.threads'   => 12,   // The number of threads that FFMpeg should use
-  // ));
-  // $duration = $ffprobe
-  //     ->format("/tmp/".$file_id.".".$ext) // extracts file informations
-  //     ->get('duration'); 
+  $ffprobe = FFMpeg\FFProbe::create(array(
+      'ffmpeg.binaries'  => $config['FFMPEG_PATH'].'/ffmpeg',
+      'ffprobe.binaries' => $config['FFMPEG_PATH'].'/ffprobe',
+      'timeout'          => 3600, // The timeout for the underlying process
+      'ffmpeg.threads'   => 12,   // The number of threads that FFMpeg should use
+  ));
+  $duration = $ffprobe
+      ->format("/tmp/orig".$file_id.".".$ext) // extracts file informations
+      ->get('duration'); 
 
   // now we split up the song in 10sec fragments
   // now let's convert the file
@@ -1045,6 +1046,10 @@ if (in_array($file_id, $_SESSION['user_files'])) {
   // Update wave_png in dB
   $version_id = $files[0]["version_id"];
   $sql = "UPDATE Version SET wave_png = '$wave_png_json' WHERE version_id = '$version_id'";
+  $result = $db->query($sql);
+
+  // Update duration in dB
+  $sql = "UPDATE Version SET track_length = '$duration' WHERE version_id = '$version_id'";
   $result = $db->query($sql);
 
   // now if downloadable, also save the original file:
