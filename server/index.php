@@ -17,10 +17,21 @@ Flight::register('db', 'PDO', array('mysql:host='.$config["RDS_HOSTNAME"].';dbna
 use Aws\S3\S3Client;
 use Aws\S3\Exception\S3Exception;
 
+use Aws\CommandInterface;
+use Aws\Result;
+use Psr\Http\Message\RequestInterface;
+use GuzzleHttp\Promise;
+
+$myHandler = function (CommandInterface $cmd, RequestInterface $request) {
+  $result = new Result(['foo' => 'bar']);
+  return Promise\promise_for($result);
+};
+
 $s3 = new Aws\S3\S3Client([
     'profile'     => 's3',
     'version'     => 'latest',
     'region'      => $config['AWS_S3_REGION'],
+    'scheme' => 'http',
 ]);
 
 Flight::set("s3", $s3);
