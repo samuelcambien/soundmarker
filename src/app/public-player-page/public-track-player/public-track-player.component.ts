@@ -290,7 +290,7 @@ export class PublicTrackPlayerComponent implements OnInit, AfterViewChecked {
     return bounding.top + bounding.height / 2 > scrollPane.getBoundingClientRect().top;
   }
 
-  scrollToTop() {
-
+  scrollToTop(waveform) {
+    waveform.closest(".comments-scrolltainer").scrollTop = 0;
   }
 }

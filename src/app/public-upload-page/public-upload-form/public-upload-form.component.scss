@@ -1,3 +1,6 @@
+
+
+
 // form
 
 textarea {
@@ -124,17 +127,17 @@ textarea.form-control {
   background: transparent !important;
 }
 
-.upload-songs-area::-webkit-scrollbar, textarea::-webkit-scrollbar {
+.upload-songs-area::-webkit-scrollbar, textarea::-webkit-scrollbar, tag-input::-webkit-scrollbar {
   width: 4px;
 }
 
-.upload-songs-area::-webkit-scrollbar-thumb, textarea::-webkit-scrollbar-thumb {
+.upload-songs-area::-webkit-scrollbar-thumb, textarea::-webkit-scrollbar-thumb, tag-input::-webkit-scrollbar-thumb {
   background-color: #eef1ff;
   border-radius: 4px;
   transition: 0.2s;
 }
 
-.upload-songs-area::-webkit-scrollbar-thumb:hover, textarea::-webkit-scrollbar-thumb:hover {
+.upload-songs-area::-webkit-scrollbar-thumb:hover, textarea::-webkit-scrollbar-thumb:hover, tag-input::-webkit-scrollbar-thumb:hover {
   background-color: #bac1da;
   cursor: pointer;
   pointer-events: auto;

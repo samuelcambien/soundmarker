@@ -25,10 +25,6 @@ CONTENTS
 	
 */
 
-
-
-
-
 body {
 	// background: #eef1ff !important;
 	background-color: #eef1ff;
@@ -1050,3 +1046,121 @@ color: white;
   width: 100vw;
   height: 100vh;
 }
+
+
+// tags
+
+#tag-input-email {
+	padding: 0px !important;
+	max-height: 38px !important;
+	overflow: auto;
+	overflow-y: scroll;
+	overflow-x: hidden;
+	height: 38px !important;
+
+}
+
+ .ng2-tag-input__text-input {
+	font-family: 'sofia-regular' !important;
+	padding: 0px !important;
+	 color: #717db0 !important;
+	 line-height: 1.5 !important;
+	 margin-bottom: -1px;
+    background: transparent;
+    margin-top: 5px;
+    height: 30px !important;
+
+}
+
+.tag__text {
+	font-family: 'sofia-regular' !important;
+	color: #717db0 !important;
+	line-height: 1 !important;
+	background: transparent !important;
+	letter-spacing: normal !important;
+	}
+
+delete-icon svg {
+	height: 12px !important;
+}
+
+.ng2-tags-container {
+
+
+}
+
+.ng2-tag-input {
+
+	border-bottom: none !important;
+	margin: 0px !important;
+	padding: 0px !important;
+	background: transparent !important;
+}
+
+.ng-tns-c16-0 {
+	background: transparent !important;
+
+}
+
+.tag-wrapper delete-icon {
+	margin-top: -21px !important;
+}
+
+.tag-wrapper delete-icon span svg path {
+	stroke: #bac1da !important;
+	fill: #bac1da !important;
+}
+
+.tag-wrapper delete-icon:hover {
+	-webkit-transform: none !important;
+	transform: none !important;
+}
+
+.tag-wrapper delete-icon:hover span svg path {
+	stroke: #717db0 !important;
+	fill: #717db0 !important;
+}
+
+.ng-trigger {
+	max-height: 19px !important;
+	padding-top: 0px !important;
+	margin-top: 4px !important;
+	margin-bottom: 0px !important;
+	background: #eef1ff !important;
+	box-shadow: none !important;
+    -webkit-box-shadow: none !important;
+    -moz-box-shadow: none !important;
+	padding-top: 2px !important;
+	border-radius: 0.3rem !important;
+	border: 1px solid #eef1ff !important;
+	padding-left: 4px !important;
+	padding-right: 1px !important;
+	max-width: 180px !important;
+}
+
+.ng2-tag-input__text-input::-webkit-input-placeholder {
+  color: #bac1da !important;
+  opacity: 1 !important;
+}
+
+.ng2-tag-input__text-input::-moz-placeholder {
+  color: #bac1da !important;
+  opacity: 1 !important;
+}
+
+.ng2-tag-input__text-input:-ms-input-placeholder {
+  color: #bac1da !important;
+  opacity: 1 !important;
+}
+
+.ng2-tag-input__text-input::-ms-input-placeholder {
+  color: #bac1da !important;
+  opacity: 1 !important;
+}
+
+.ng2-tag-input__text-input::placeholder {
+  color: #bac1da !important;
+  opacity: 1 !important;
+}
+
+
