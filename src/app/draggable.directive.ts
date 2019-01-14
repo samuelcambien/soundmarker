@@ -5,31 +5,42 @@ import {Directive, EventEmitter, HostListener, Output} from "@angular/core";
 })
 export class DraggableDirective {
 
-  @Output() dragStart = new EventEmitter<MouseEvent>();
-  @Output() dragMove = new EventEmitter<MouseEvent>();
-  @Output() dragEnd = new EventEmitter<MouseEvent>();
+  @Output() dragStart = new EventEmitter<any>();
+  @Output() mouseMove = new EventEmitter<any>();
+  @Output() touchMove = new EventEmitter<any>();
+  @Output() dragEnd = new EventEmitter<any>();
 
   private dragging = false;
 
   @HostListener('mousedown', ['$event'])
-  @HostListener('touchdown', ['$event'])
+  @HostListener('touchstart', ['$event'])
   onPointerDown(event): void {
     this.dragging = true;
     this.dragStart.emit(event);
   }
 
   @HostListener('document:mousemove', ['$event'])
-  onPointerMove(event): void {
+  onMouseMove(event): void {
     if (!this.dragging) {
       return;
     }
 
-    this.dragMove.emit(event);
+    this.mouseMove.emit(event);
+  }
+
+  @HostListener('document:touchmove', ['$event'])
+  onTouchMove(event): void {
+    if (!this.dragging) {
+      return;
+    }
+
+    this.touchMove.emit(event);
   }
 
   @HostListener('document:mouseup', ['$event'])
-  @HostListener('document:touchup', ['$event'])
-  onPointerUp(event: MouseEvent): void {
+  @HostListener('document:touchend', ['$event'])
+  onPointerUp(event): void {
+
     if (!this.dragging) {
       return;
     }
