@@ -81,4 +81,10 @@ input.disabled {
 
 @media (max-width: 576px) {
 	
+	.check-tag-box {
+	margin-right: 0px !important;
+	border-bottom-right-radius: 0.2rem !important;
+	border-top-right-radius: 0.2rem !important;
+}
+	
 }

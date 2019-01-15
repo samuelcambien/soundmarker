@@ -12,7 +12,9 @@
 
 .phone-sma {
 	height: 160px;
+	max-width: calc(100% - 20px);
 	min-width: calc(100% - 20px);
+	width: calc(100% - 20px);
 	margin-left: 10px;
 	margin-right: 10px;
 	background: #89C5CC;
@@ -33,6 +35,7 @@
   min-height: 233px;
   max-height: calc(100% - 120px);
   position: fixed;
+  z-index: 100;
 }
 
 .bg-light {
@@ -42,6 +45,8 @@
 .upload-container {
   min-height: 194px;
 }
+
+
 
 // responsive 
 
@@ -120,24 +125,28 @@
 	margin-top: 228px;
 	min-height: 160px;
 	max-height: none;
-	width: calc(100% - 20px);
-    left: 10px;
-    right: 10px;
+	width: calc(100%);
+    left: 0px;
+    right: 0px;
     max-width: 556px;
     min-width: 268px;
     margin-left: 0px;
     margin-right: 0px;
-    position: absolute;
-    margin-bottom: 58px;
+    position: relative;
+    margin-bottom: 58px !important;
   -webkit-box-shadow: 0 0rem 0.3rem 0.01rem rgba(115, 150, 255, 0.25) !important;
 	 -moz-box-shadow:  0 0rem 0.3rem 0.01rem rgba(115, 150, 255, 0.25) !important;
         box-shadow: 0 0rem 0.3rem 0.01rem rgba(115, 150, 255, 0.25) !important;
+       
     
   }
   
   .phone-scroll {
 	  overflow-y: scroll;
 	  height: 100%;
+	 padding-left: 10px;
+	 padding-right: 10px;
+	  
   }
   
   .upload-container {

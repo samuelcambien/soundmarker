@@ -40,6 +40,7 @@ button[type='submit'] {
 	font-size: 18px !important;
 	margin-top: 10px;
 	border: none;
+	cursor: pointer;
 }
 
 button:hover, button:active, button:focus input[type='button']:hover, input[type="button"]:active, input[type="button"]:focus, input[type='reset']:hover, input[type='submit']:hover, input[type='submit']:active, input[type='submit']:focus {
