@@ -23,22 +23,30 @@
         <h2>Get notified</h2>
         <p>Get a daily status update via email to see<br>new comments of your mates.</p>
       </div>
-      
+
       <div class="spacing-lg"></div>
 
       <div class="message-content">
-	     
-		      <div class="subscribe-form">
-			  	<form #myform (ngSubmit)="subscribe()">
-				  	<div class="form-row">
-			  			<input type="email" [(ngModel)]="email" placeholder="Email address" name="email">
-				  	</div>
-				  	<div class="form-row">
-			  			<button type="submit">Submit</button>
-				  	</div>
-				</form>
-		      </div>
-	      
+
+        <div class="subscribe-form" *ngIf="status == 'pending'">
+          <form #myform (ngSubmit)="subscribe()">
+            <div class="form-row">
+              <input type="email" [(ngModel)]="email" placeholder="Email address" name="email">
+            </div>
+            <div class="form-row">
+              <button type="submit">Submit</button>
+            </div>
+          </form>
+        </div>
+
+        <div *ngIf="status == 'greatsuccess'">
+          Great success!!
+        </div>
+
+        <div *ngIf="status == 'error'">
+          storend
+        </div>
+
       </div>
 
       <div class="container spacing-lg"></div>
