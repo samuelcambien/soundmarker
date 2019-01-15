@@ -147,6 +147,8 @@ a:hover, a:active, a:focus, a:visited {
 	font-size: 10pt;
 }
 
+
+
 .tooltip {
 	font-family: 'sofia-regular';
 	font-size: 10pt;
@@ -161,8 +163,17 @@ a:hover, a:active, a:focus, a:visited {
 }
 
 .tooltip > .tooltip-inner {
+ background-color: #717db0 ;
+      
 
+}
 
+.tooltip > .arrow::before {
+	 border-top-color: #717db0;
+}
+
+.tooltip.bs-tooltip-bottom > .arrow::before {
+	border-bottom-color: #717db0;
 }
 
 .margin-tooltip + .tooltip {
@@ -387,7 +398,7 @@ line-height: 25pt;
   bottom: 0;
   left: 0;
   background-color: #717db0 !important;
-  z-index: 10;
+  z-index: 110;
 }
 
 .modal-backdrop.fade {

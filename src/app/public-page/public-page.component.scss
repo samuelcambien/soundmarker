@@ -12,7 +12,9 @@
 
 .phone-sma {
 	height: 160px;
+	max-width: calc(100% - 20px);
 	min-width: calc(100% - 20px);
+	width: calc(100% - 20px);
 	margin-left: 10px;
 	margin-right: 10px;
 	background: #89C5CC;
@@ -33,6 +35,7 @@
   min-height: 233px;
   max-height: calc(100% - 120px);
   position: fixed;
+  z-index: 100;
 }
 
 .bg-light {
