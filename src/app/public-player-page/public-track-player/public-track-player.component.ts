@@ -236,7 +236,7 @@ export class PublicTrackPlayerComponent implements OnInit, AfterViewChecked {
     window.open(
       this.files
         .filter(file => file.identifier == 0)
-        .map(file => file.aws_path + "0." + file.extension)
+        .map(file => file.aws_path + "." + file.extension)
         [0]
     );
   }
