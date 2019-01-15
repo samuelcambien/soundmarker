@@ -23,7 +23,7 @@
 }
 
 .comment-play-button.disabled {
-	opacity: 0.2;
+	visibility: hidden;
 	cursor: default;
 	pointer-events: none;
 }
