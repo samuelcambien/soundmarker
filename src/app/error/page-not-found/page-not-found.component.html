@@ -1,3 +1,33 @@
-<p>
-  page-not-found works!
-</p>
+<div class="container-fluid">
+
+  <div class="row">
+
+    <div class="col-sm-4">
+      <div class="got-img" id="error-svg">
+        
+              </div>
+    </div>
+
+    <div class="col-sm-8">
+
+      <div class="container-fluid">
+
+        <div class="row">
+          <h4 class="error-title">Oops.. Page not found</h4>
+        </div>
+
+        <div class="row">
+          <p class="error-text">
+            The page you requested could not be found.<br>Please check the URL.<br class="show-medium"> learn more in our <a href="http://3.122.127.21/support/" target="_blank">Support Center</a>
+            <br><br><br class="hide-medium"><!--Error: <a href="http://3.122.127.21/support/" target="_blank">Error in processing data</a>-->
+          </p>
+        </div>
+
+        <div class="row">
+              <button type="button" class="btn btn-primary btn-sm error-btn-left" (click)="tryAgain()">Back to home</button>
+              <a class="error-btn-right" target="_blank" href="http://3.122.127.21/support/ticket/"><button type="button" class="btn btn-outline-form btn-sm " id="error-let-know">Let us know</button></a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
