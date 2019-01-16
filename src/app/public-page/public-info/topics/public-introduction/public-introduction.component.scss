@@ -27,19 +27,39 @@
 	padding-bottom: 15px;
 }
 
+.accept-text, .accept-button {
+	float: right;
+}
+
 @media (max-width: 576px) {
 
+.accept-text, .accept-button {
+	float: none;
+	text-align: center;
+	margin-left: auto;
+	margin-right: auto;
+}
 
+.accept-text {
+	margin-top: -75px;
+	
+}
+
+.intro-footer button {
+	height: 30px;
+	margin-left: calc(50% - 60px);
+	margin-right: auto;
+	margin-top: 60px;
+	width: 120px;
+}
 
 .intro-footer {
-	bottom: 0px;
-	margin-bottom: 0px;
-	position: absolute;
+	
 	
 }
 
 .intro-footer p, .intro-footer a {
-	font-size: 6pt;
+	font-size: 8pt;
 }
 
 }
