@@ -4,7 +4,7 @@
 
 <div class="container rounded phone-scroll">
 
-  <div class="sma hide-phone" #sma></div>
+  <div [@openClose]="smaToggle ? 'smas' : 'smahidden'" class="sma hide-phone" #sma></div>
 
   <div class="phone-sma show-phone rounded-lg border-0" #smaphone>
     </div>
