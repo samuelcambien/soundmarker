@@ -10,6 +10,7 @@ import {SubscribeComponent} from "../../../subscribe/subscribe.component";
 export class PublicInfoHeaderComponent implements OnInit {
 
   @Input() message;
+  @Input() error;
   @Output() openIntroduction = new EventEmitter();
 
   constructor(private modalService: NgbModal) {
