@@ -5,6 +5,7 @@ import {PublicIntroductionComponent} from "./public-info/topics/public-introduct
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {TermsAcceptedServiceService} from "../terms-accepted-service.service";
 import {interval} from "rxjs";
+import {RestUrl} from '../app.component';
 
 @Component({
   selector: 'app-public-page',
@@ -20,6 +21,7 @@ export class PublicPageComponent implements OnInit {
   @ViewChild('sma') sma: ElementRef;
   @ViewChild('smaphone') smaPhone: ElementRef;
 
+
   constructor(private modalService: NgbModal, private termsAcceptedService: TermsAcceptedServiceService) {
   }
 
@@ -31,7 +33,6 @@ export class PublicPageComponent implements OnInit {
     if (!this.termsAcceptedService.termsAccepted()) {
       this.openIntroduction();
     }
-
     this.getAd();
     interval(45 * 1000)
       .subscribe(() => {
@@ -41,6 +42,7 @@ export class PublicPageComponent implements OnInit {
   }
 
   private getAd() {
+
     RestCall.getAdId()
       .then(response => RestCall.getAd(response["ad_id"]))
       .then(response => {

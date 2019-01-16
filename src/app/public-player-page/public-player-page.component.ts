@@ -3,12 +3,10 @@ import {ActivatedRoute} from "@angular/router";
 import {Comment} from "../model/comment";
 import {Track} from "../model/track";
 import {Project} from "../model/project";
-import {Player} from "../newplayer/player";
 import {Message} from "../message";
 import {RestCall} from "../rest/rest-call";
 import {File} from "../model/file";
 import {Version} from "../model/version";
-import {Observable} from "rxjs";
 import {PlayerService} from "../player.service";
 
 @Component({
@@ -48,11 +46,13 @@ export class PublicPlayerPageComponent implements OnInit {
 
         if (!this.doesExist()) {
           this.exists = false;
+          this.message = null;
           return;
         }
 
         if (!this.isActive()) {
           this.expired = true;
+          this.message = null;
           return;
         }
 
