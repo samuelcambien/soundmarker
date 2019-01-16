@@ -62,6 +62,9 @@ export class PublicPlayerPageComponent implements OnInit {
           track.versions
             .then((versions: Version[]) => {
               this.message = this.getMessage(project, versions[0]);
+              if(this.message.text==''){
+                this.message.text="No notes included";
+              }
               versions.forEach(version => {
                 if (version.downloadable == 0) version.downloadable = false
               });
