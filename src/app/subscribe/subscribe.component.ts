@@ -10,7 +10,6 @@ import {RestCall} from "../rest/rest-call";
 export class SubscribeComponent implements OnInit {
 
   email: string;
-  status: "pending" | "greatsuccess" | "error" = "pending";
 
   constructor(private modalService: NgbModal, private activeModal: NgbActiveModal) { }
 
@@ -18,13 +17,11 @@ export class SubscribeComponent implements OnInit {
   }
 
   subscribe() {
-    RestCall.subscribe("", this.email.split(","))
-      .then(() => this.status = "greatsuccess")
-      .catch(() => this.status = "error");
+    RestCall.subscribe("", this.email.split(","));
+    this.close();
   }
 
   close() {
     this.activeModal.close();
-    this.status = "pending";
   }
 }

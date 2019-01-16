@@ -1,6 +1,6 @@
 <app-public-page [message]="message" xmlns="http://www.w3.org/1999/html">
 
-  <app-page-not-found *ngIf="!exists"></app-page-not-found>
+  <app-page-not-found *ngIf="!exists" ></app-page-not-found>
 
   <app-project-expired *ngIf="expired"></app-project-expired>
 
@@ -19,7 +19,6 @@
         <hr *ngIf="track != last">
 
       </div>
-
     </div>
 
     <app-public-track-player

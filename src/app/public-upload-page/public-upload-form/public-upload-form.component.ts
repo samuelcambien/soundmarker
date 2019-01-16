@@ -63,7 +63,6 @@ export class PublicUploadFormComponent implements OnInit {
       })
       .catch((e) => {
         this.clearForm(false);
-        console.log(e);
         this.error.emit(e)});
   }
 

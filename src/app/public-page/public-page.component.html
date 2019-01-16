@@ -4,33 +4,20 @@
 
 <div class="container rounded phone-scroll">
 
-  <div class="sma hide-phone" #sma></div>
+  <div [@openClose]="smaToggle ? 'smas' : 'smahidden'" class="sma hide-phone" #sma></div>
 
   <div class="phone-sma show-phone rounded-lg border-0" #smaphone>
-    
-  </div>
-
+    </div>
   <div class="public-page card shadow-lg rounded-lg border-0">
-
     <div class="hide-phone">
       <app-public-info-header [message]="message"></app-public-info-header>
-
     </div>
-
     <div class="upload-container comments-scrolltainer card-body bg-light rounded-lg">
-
       <ng-content *ngIf="!error"></ng-content>
-
       <app-error *ngIf="error" (reset)="reset()"></app-error>
-
     </div>
-
   </div>
-  
-  
-
 </div>
-
 
 
 <div class="modal fade info-modal-faq" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"

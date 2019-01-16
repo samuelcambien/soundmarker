@@ -319,4 +319,5 @@ table tr td p {
   height: 100vh;
   z-index: -1;
   opacity: 100%;
+  pointer-events: none !important;
 }
