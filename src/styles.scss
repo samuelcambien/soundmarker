@@ -44,7 +44,7 @@ CONTENTS
 
 body {
 	// background: #eef1ff !important;
-	background-color: #444444;
+	background-color: #2a2a2a;
 	height: 100%;
 	width: 100%;
 	overflow: hidden;
@@ -175,7 +175,9 @@ a:visited {
 		opacity: 1;
 	}
 }
-.tooltip > .tooltip-inner {
+
+/*
+ .tooltip > .tooltip-inner {
 	background-color: #717db0 !important;
 }
 .tooltip > .arrow::before {
@@ -184,11 +186,13 @@ a:visited {
 .tooltip.bs-tooltip-bottom > .arrow::before {
 	border-bottom-color: #717db0;
 }
+
+ */
 .margin-tooltip + .tooltip {
 	margin-bottom: 5px;
 	animation-name: delayedFadeIn;
 	animation-duration: 1s;
-	/* Adjust this duration */
+	
 }
 .sm-black {
 	color: #717db0;
@@ -664,7 +668,7 @@ select:-webkit-autofill:focus {
 }
 // buttons 
  .wp-block-button__link {
-	background-color: #7397ff !important;
+	background-color: #7397ff;
 	border-radius: 0.3rem !important;
 	box-shadow: 0 11px 30px rgba(115, 150, 255, .25) !important;
 	-webkit-box-shadow: 0 11px 30px rgba(115, 150, 255, .25) !important;
@@ -682,6 +686,9 @@ select:-webkit-autofill:focus {
 	overflow-wrap: break-word;
 	text-decoration: none;
 	color: #ffffff;
+}
+.wp-block-button__link:hover {
+	background-color: #6388f5;	
 }
 .wp-block-button.aligncenter {
 	text-align: center;
