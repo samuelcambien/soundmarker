@@ -33,6 +33,7 @@
     RewriteCond %{REQUEST_URI} "/project/edit" [OR]
     RewriteCond %{REQUEST_URI} "/project/password" [OR]
     RewriteCond %{REQUEST_URI} "/project/delete" [OR]
+    RewriteCond %{REQUEST_URI} "/project/subscribe" [OR]
     RewriteCond %{REQUEST_URI} "/project/([a-z0-9/-]+)$" [OR]
     RewriteCond %{REQUEST_URI} "/file/chunk/([a-z0-9/-]+)$" [OR]
     RewriteCond %{REQUEST_URI} "/unsubscribe/([a-z0-9/-]+)$" [OR]
