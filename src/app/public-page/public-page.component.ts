@@ -33,8 +33,9 @@ export class PublicPageComponent implements OnInit {
 
   // Timing parameters
   waitBeforeFirstAd = 1750; //ms
-  timeOfAd = 45000;
-
+  @Input() project_id;
+  @Input() sender;
+  @Input() expiry_date;
   @Input() message: Message;
   @Input() error;
   @Output() tryAgain = new EventEmitter();
@@ -56,7 +57,7 @@ export class PublicPageComponent implements OnInit {
       this.openIntroduction();
     }
     this.getAd(this.waitBeforeFirstAd);
-    interval(this.timeOfAd)
+    interval(45 * 1000)
       .pipe(tap(()=>{
         this.smaToggle=0;})
       ).pipe(delay(400))

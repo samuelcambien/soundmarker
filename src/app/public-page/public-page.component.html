@@ -75,7 +75,7 @@
      aria-hidden="true">
   <div class="modal-dialog  modal-lg">
     <div class="modal-content">
-      <app-player-introduction [message]="message"></app-player-introduction>
+      <app-player-introduction [message]="message" [expiry_date]="expiry_date" [sender]="sender"></app-player-introduction>
     </div>
   </div>
 </div>
@@ -84,7 +84,7 @@
      aria-hidden="true">
   <div class="modal-dialog  modal-lg">
     <div class="modal-content">
-      <app-subscribe></app-subscribe>
+      <app-subscribe [project_id]="project_id"></app-subscribe>
     </div>
   </div>
 </div>

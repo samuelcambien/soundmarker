@@ -14,7 +14,7 @@ export class RestUrl {
 
   private static MOCK: string = "http://localhost:3000";
 
-  private static BACKEND: string = "http://localhost";
+  private static BACKEND: string = "http://localhost:80";
 
   private static DATA: string = RestUrl.BACKEND;
 
@@ -28,7 +28,7 @@ export class RestUrl {
 
   public static PROJECT_SHARE: string = RestUrl.BACKEND + "/project/get/url";
 
-  public static PROJECT_SUBSCRIBE: string = RestUrl.BACKEND + "/project/subscribe";
+  public static PROJECT_SUBSCRIBE: string = RestUrl.BACKEND + "/subscribe";
 
   public static PROJECT_NEW: string = RestUrl.BACKEND + "/project/new";
 
@@ -115,6 +115,7 @@ export class Utils {
       if (params) for (let entry of params) {
         url += "/" + entry;
       }
+      trackRequest.addEventListener("progress", updateProgress, false);
       trackRequest.open("POST", url, true);
       trackRequest.onreadystatechange = () => {
 
@@ -129,13 +130,25 @@ export class Utils {
       trackRequest.onerror = () => reject(trackRequest.statusText);
       trackRequest.send(data);
     });
+
+  function updateProgress (oEvent) {
+    console.log(oEvent);
+      if (oEvent.lengthComputable) {
+        var percentComplete = oEvent.loaded / oEvent.total;
+        console.log(percentComplete);
+
+        // ...
+      } else {
+        // Unable to compute progress information since the total size is unknown
+      }
+    }
   }
 
   public static sendPostRequest(url, data, params?): Promise<any> {
-
     return new Promise((resolve, reject) => {
       let trackRequest = new XMLHttpRequest();
       if (params) for (let entry of params) {
+
         url += "/" + entry;
       }
       trackRequest.open("POST", url, true);
@@ -159,4 +172,6 @@ export class Utils {
       trackRequest.send(JSON.stringify(data));
     });
   }
+
+
 }

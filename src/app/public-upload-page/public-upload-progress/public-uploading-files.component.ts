@@ -18,4 +18,6 @@ export class PublicUploadingFilesComponent implements OnInit {
   getProgress() {
     return this.uploader.files > 0 ? Math.round(95 * this.uploader.uploaded / this.uploader.files) : 0;
   }
+
+
 }
