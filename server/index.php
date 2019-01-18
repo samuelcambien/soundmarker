@@ -497,7 +497,7 @@ if ($project_password) {
   $_SESSION['view_user_projects'][] = $project_id;
 
   // also send sender
-  $sql = "SELECT emailaddress, user_id FROM Notification WHERE type = 0 AND type_id = '$project_id'";
+  $sql = "SELECT emailaddress, user_id FROM Notification WHERE type = '0' AND type_id = '$project_id'";
   $response = $db->query($sql)->fetchAll(PDO::FETCH_ASSOC);
   $emailaddress = $response[0]["emailaddress"];
 
