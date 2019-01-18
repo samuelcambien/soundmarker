@@ -21,7 +21,7 @@
 
       <div class="info-heading">
         <h2>{{message?.title}}</h2>
-        <p>Will be deleted on January 13th 2019</p>
+        <p>Will be deleted on {{this.expiry_date}} </p>
       </div>
 
 	  <div class="spacing-lg"></div>
@@ -29,7 +29,7 @@
       <div class="message-content">
 	      <div class="container-fluid">
 	      <div class="row">
-	    <h5 >Notes (by Michiel)</h5><p class="ml-auto">datum</p>
+	    <h5 >Notes (by   {{this.sender}})</h5><p class="ml-auto">datum</p>
 	      </div>
 	      <div class="row">
         <p>{{message?.text}}</p>

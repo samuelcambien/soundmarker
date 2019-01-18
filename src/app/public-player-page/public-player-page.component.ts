@@ -20,6 +20,9 @@ export class PublicPlayerPageComponent implements OnInit {
   exists: boolean = true;
 
   project: Project;
+  expiry_date;
+  sender;
+  project_id: string;
 
   message: Message = new Message("", "", false);
 
@@ -40,9 +43,13 @@ export class PublicPlayerPageComponent implements OnInit {
 
   private loadProjectInfo(projectHash: string) {
 
+
     RestCall.getProject(projectHash)
       .then((project: Project) => {
+        this.project_id = project.project_id;
         this.project = project;
+        this.expiry_date =  'unknown expiry date';
+        this.sender ='unknown sender';
 
         if (!this.doesExist()) {
           this.exists = false;

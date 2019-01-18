@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {NgbActiveModal, NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {RestCall} from "../rest/rest-call";
 
@@ -10,6 +10,7 @@ import {RestCall} from "../rest/rest-call";
 export class SubscribeComponent implements OnInit {
 
   email: string;
+  @Input() project_id;
 
   constructor(private modalService: NgbModal, private activeModal: NgbActiveModal) { }
 
@@ -17,7 +18,9 @@ export class SubscribeComponent implements OnInit {
   }
 
   subscribe() {
-    RestCall.subscribe("", this.email.split(","));
+    console.log(this.project_id);
+    console.log(this.email);
+    RestCall.subscribe(this.project_id, this.email);
     this.close();
   }
 

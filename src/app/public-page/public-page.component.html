@@ -1,13 +1,16 @@
-<div class="phone-topbar show-phone">
+<div class="phone-topbar show-phone ">
   <app-public-info-header [message]="message" (openIntroduction)="openIntroduction()"></app-public-info-header>
 </div>
 
-<div class="container rounded phone-scroll">
+<div  class="container rounded phone-scroll">
+  <div [@openClose]="smaToggle ? 'smas' : 'smahidden'" class="smatoggle">
+  <div class="sma hide-phone" #sma></div>
 
-  <div [@openClose]="smaToggle ? 'smas' : 'smahidden'" class="sma hide-phone" #sma></div>
+    <div class="phone-sma show-phone  rounded-lg border-0" #smaphone>
 
-  <div class="phone-sma show-phone rounded-lg border-0" #smaphone>
-    </div>
+  </div>
+  </div>
+
   <div class="public-page card shadow-lg rounded-lg border-0">
     <div class="hide-phone">
       <app-public-info-header [message]="message"></app-public-info-header>
@@ -18,6 +21,9 @@
     </div>
   </div>
 </div>
+
+
+
 
 
 <div class="modal fade info-modal-faq" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
@@ -69,7 +75,7 @@
      aria-hidden="true">
   <div class="modal-dialog  modal-lg">
     <div class="modal-content">
-      <app-player-introduction [message]="message"></app-player-introduction>
+      <app-player-introduction [message]="message" [expiry_date]="expiry_date" [sender]="sender"></app-player-introduction>
     </div>
   </div>
 </div>
@@ -78,7 +84,7 @@
      aria-hidden="true">
   <div class="modal-dialog  modal-lg">
     <div class="modal-content">
-      <app-subscribe></app-subscribe>
+      <app-subscribe [project_id]="project_id"></app-subscribe>
     </div>
   </div>
 </div>

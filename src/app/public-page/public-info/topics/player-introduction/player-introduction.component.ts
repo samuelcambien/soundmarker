@@ -9,6 +9,8 @@ import {Message} from "../../../../message";
 export class PlayerIntroductionComponent implements OnInit {
 
   @Input() message: Message;
+  @Input() sender;
+  @Input() expiry_date;
 
   constructor() { }
 
