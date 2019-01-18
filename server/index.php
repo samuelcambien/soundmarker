@@ -977,11 +977,6 @@ if (in_array($file_id, $_SESSION['user_files'])) {
   fwrite($myfile, Flight::request()->getBody());
   fclose($myfile);
 
-  // return ok -> let's try
-  Flight::json(array(
-     'ok' => $returnurl
-  ), 200);
-
   // now let's see how long the song is
   $ffprobe = FFMpeg\FFProbe::create(array(
       'ffmpeg.binaries'  => $config['FFMPEG_PATH'].'/ffmpeg',
@@ -1027,6 +1022,10 @@ if (in_array($file_id, $_SESSION['user_files'])) {
        // if ($i == 0) {
          $returnurl = $result['ObjectURL'];
        // }
+      // return ok -> let's try
+      Flight::json(array(
+         'ok' => $returnurl
+      ), 200);
 
      // delete file again
      unlink("/tmp/".$file_id.".mp3");
