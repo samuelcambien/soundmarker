@@ -497,7 +497,7 @@ if ($project_password) {
   $_SESSION['view_user_projects'][] = $project_id;
   // return ok
   Flight::json(array(
-     'project_id' => $project_id, 'status' => $status, 'tracks' => $tracks
+     'project_id' => $project_id, 'status' => $status, 'expiration' => $expiration_date, 'tracks' => $tracks
   ), 200);  
 }
 });
@@ -977,6 +977,11 @@ if (in_array($file_id, $_SESSION['user_files'])) {
   fwrite($myfile, Flight::request()->getBody());
   fclose($myfile);
 
+  // return ok -> let's try
+  Flight::json(array(
+     'ok' => $returnurl
+  ), 200);
+
   // now let's see how long the song is
   $ffprobe = FFMpeg\FFProbe::create(array(
       'ffmpeg.binaries'  => $config['FFMPEG_PATH'].'/ffmpeg',
@@ -1069,10 +1074,6 @@ if (in_array($file_id, $_SESSION['user_files'])) {
   // delete original upload
   unlink("/tmp/orig".$file_id.".".$ext);
 
-  // return ok
-  Flight::json(array(
-     'ok' => $returnurl
-  ), 200);
 } else {
   // return not allowed
   Flight::json(array(
