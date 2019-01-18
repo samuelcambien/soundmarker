@@ -499,7 +499,12 @@ if ($project_password) {
   // also send sender
   $sql = "SELECT emailaddress, user_id FROM Notification WHERE type = '0' AND type_id = '$project_id'";
   $response = $db->query($sql)->fetchAll(PDO::FETCH_ASSOC);
-  $emailaddress = $response[0]["emailaddress"];
+  // if only link is created, then no sender
+  if (isset($response[0])) {
+    $emailaddress = $response[0]["emailaddress"];
+  } else {
+    $emailaddress = "";
+  }
 
   // return ok
   Flight::json(array(
