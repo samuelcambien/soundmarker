@@ -2,12 +2,13 @@
   <app-public-info-header [message]="message" (openIntroduction)="openIntroduction()"></app-public-info-header>
 </div>
 
-<div class="container rounded phone-scroll">
+<div  class="container rounded phone-scroll">
+  <div [@openClose]="smaToggle ? 'smas' : 'smahidden'" class="smatoggle">
+  <div class="sma hide-phone" #sma></div>
 
-  <div [@openClose]="smaToggle ? 'smas' : 'smahidden'" class="sma hide-phone" #sma></div>
+    <div class="phone-sma show-phone  rounded-lg border-0" #smaphone>
 
-  <div class="phone-sma show-phone  rounded-lg border-0" #smaphone>
-
+  </div>
   </div>
 
   <div class="public-page card shadow-lg rounded-lg border-0">

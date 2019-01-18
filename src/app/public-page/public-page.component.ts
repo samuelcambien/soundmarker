@@ -7,6 +7,7 @@ import {TermsAcceptedServiceService} from "../terms-accepted-service.service";
 import {interval} from "rxjs";
 import {trigger, state, style, animate, transition} from '@angular/animations';
 import { tap, delay } from "rxjs/operators";
+import {resolve} from 'q';
 
 
 @Component({
@@ -16,19 +17,23 @@ import { tap, delay } from "rxjs/operators";
   animations: [
     trigger('openClose', [
       state('smas', style({
-        opacity: 1 })),
+        opacity: 1, })),
       state('smahidden', style({
         opacity: 0,})),
       transition('smas => smahidden', [
-        animate('2.5s')
+        animate('400ms')
       ]),
       transition('smahidden => smas', [
-        animate('2.5s')
+        animate('500ms')
       ]),
     ]),
   ],
 })
 export class PublicPageComponent implements OnInit {
+
+  // Timing parameters
+  waitBeforeFirstAd = 1750; //ms
+  timeOfAd = 45000;
 
   @Input() message: Message;
   @Input() error;
@@ -37,7 +42,7 @@ export class PublicPageComponent implements OnInit {
   @ViewChild('sma') sma: ElementRef;
   @ViewChild('smaphone') smaPhone: ElementRef;
 
-  smaToggle= 1;
+  smaToggle= 0;
 
   constructor(private modalService: NgbModal, private termsAcceptedService: TermsAcceptedServiceService) {
   }
@@ -50,24 +55,30 @@ export class PublicPageComponent implements OnInit {
     if (!this.termsAcceptedService.termsAccepted()) {
       this.openIntroduction();
     }
-    this.getAd();
-    interval(5 * 1000)
+    this.getAd(this.waitBeforeFirstAd);
+    interval(this.timeOfAd)
       .pipe(tap(()=>{
         this.smaToggle=0;})
-      ).pipe(delay(1750))
-      .subscribe(() => {
-        this.smaToggle=1;
-        this.getAd();
-      });
+      ).pipe(delay(400))
+      .pipe(tap(() => {
+        this.getAd(0);
+      }))
+      .pipe(delay(85))
+      .subscribe(()=>this.smaToggle=1);
   }
 
-  private getAd() {
+  private getAd(initial) {
 
     RestCall.getAdId()
       .then(response => RestCall.getAd(response["ad_id"]))
+      // .then(x => new Promise(resolve => setTimeout(() => resolve(x), initial)))
       .then(response => {
         this.sma.nativeElement.innerHTML = response;
         this.smaPhone.nativeElement.innerHTML = response;
+        return new Promise(resolve => setTimeout(() => resolve(response), initial))})
+      .then(response => {
+        if(initial){
+            this.smaToggle= 1}
       });
   }
 
