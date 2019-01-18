@@ -497,7 +497,7 @@ if ($project_password) {
   $_SESSION['view_user_projects'][] = $project_id;
   // return ok
   Flight::json(array(
-     'project_id' => $project_id, 'status' => $status, 'tracks' => $tracks
+     'project_id' => $project_id, 'status' => $status, 'expiration' => $expiration_date, 'tracks' => $tracks
   ), 200);  
 }
 });
@@ -1022,6 +1022,10 @@ if (in_array($file_id, $_SESSION['user_files'])) {
        // if ($i == 0) {
          $returnurl = $result['ObjectURL'];
        // }
+      // return ok -> let's try
+      Flight::json(array(
+         'ok' => $returnurl
+      ), 200);
 
      // delete file again
      unlink("/tmp/".$file_id.".mp3");
@@ -1069,10 +1073,6 @@ if (in_array($file_id, $_SESSION['user_files'])) {
   // delete original upload
   unlink("/tmp/orig".$file_id.".".$ext);
 
-  // return ok
-  Flight::json(array(
-     'ok' => $returnurl
-  ), 200);
 } else {
   // return not allowed
   Flight::json(array(
