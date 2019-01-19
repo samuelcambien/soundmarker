@@ -188,7 +188,7 @@ export class PublicTrackPlayerComponent implements OnInit, AfterViewChecked {
           // peaks: this.version.wave_png,
           peaks: this.peaks,
           duration: this.version.track_length,
-          aws_path: files.filter(file => file.identifier == 1)[0].aws_path
+          aws_path: files.filter(file => file.identifier == 0)[0].aws_path
           // aws_path: "https://d3k08uu3zdbsgq.cloudfront.net/Zelmar-LetYouGo"
         }
       ));
@@ -235,7 +235,7 @@ export class PublicTrackPlayerComponent implements OnInit, AfterViewChecked {
 
     window.open(
       this.files
-        .filter(file => file.identifier == 0)
+        .filter(file => file.identifier == 1)
         .map(file => file.aws_path + '.' + file.extension)
         [0]
     );
