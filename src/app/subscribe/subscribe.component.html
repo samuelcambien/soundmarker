@@ -21,7 +21,7 @@
 
       <div class="info-heading">
         <h2>Get notified</h2>
-        <p>Get a daily status update via email to see<br>new comments of your mates.</p>
+        <p>Get a daily status update via email to see<br>new comments and replies.</p>
       </div>
 
       <div class="spacing-lg"></div>
@@ -40,11 +40,11 @@
         </div>
 
         <div *ngIf="status == 'greatsuccess'">
-          Great success!!
+          <h2 class="subscribe-message">Success! You'll be notified</h2>
         </div>
 
         <div *ngIf="status == 'error'">
-          storend
+         <h2 class="subscribe-message">Oops.. Something went wrong</h2>
         </div>
 
       </div>
