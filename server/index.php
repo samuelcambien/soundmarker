@@ -1100,7 +1100,7 @@ if (in_array($file_id, $_SESSION['user_files'])) {
     
     $result = $s3->putObject([
         'Bucket' => $config['AWS_S3_BUCKET'],
-        'Key'    => $filesnew[0]["version_id"] . "/" . $filesnew[0]["file_name"] . '.' . $filesnew[0]["extension"],
+        'Key'    => $filesnew[0]["version_id"] . "/" . $filesnew[0]["file_name"] . '.' . $files[0]["extension"],
         'Body'   => file_get_contents("/tmp/orig".$file_id.".".$ext),
         'ACL'    => 'public-read'
     ]);
