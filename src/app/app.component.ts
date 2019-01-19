@@ -14,7 +14,7 @@ export class RestUrl {
 
   private static MOCK: string = "http://localhost:3000";
 
-  private static BACKEND: string = "http://localhost:80";
+  private static BACKEND: string = "http://localhost";
 
   private static DATA: string = RestUrl.BACKEND;
 
@@ -28,7 +28,7 @@ export class RestUrl {
 
   public static PROJECT_SHARE: string = RestUrl.BACKEND + "/project/get/url";
 
-  public static PROJECT_SUBSCRIBE: string = RestUrl.BACKEND + "/subscribe";
+  public static PROJECT_SUBSCRIBE: string = RestUrl.BACKEND + "/project/subscribe";
 
   public static PROJECT_NEW: string = RestUrl.BACKEND + "/project/new";
 

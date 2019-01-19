@@ -18,8 +18,6 @@ export class SubscribeComponent implements OnInit {
   }
 
   subscribe() {
-    console.log(this.project_id);
-    console.log(this.email);
     RestCall.subscribe(this.project_id, this.email);
     this.close();
   }
