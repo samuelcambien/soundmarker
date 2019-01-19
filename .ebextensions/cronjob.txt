@@ -1,3 +1,4 @@
 
 */15 * * * * root . /opt/elasticbeanstalk/support/envvars && /usr/bin/php /var/app/current/cron.php > /dev/null
+* 00 * * * root . /opt/elasticbeanstalk/support/envvars && /usr/bin/php /var/app/current/daily.php > /dev/null
 

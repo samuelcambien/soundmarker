@@ -38,6 +38,7 @@ $SesClient = new SesClient([
 
 Flight::set("SesClient", $SesClient);
 
+ini_set("default_socket_timeout", 120);
 if(!isset($_SESSION)) 
 { 
   session_start(); 
