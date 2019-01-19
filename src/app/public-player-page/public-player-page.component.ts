@@ -48,8 +48,10 @@ export class PublicPlayerPageComponent implements OnInit {
       .then((project: Project) => {
         this.project_id = project.project_id;
         this.project = project;
-        this.expiry_date =  'unknown expiry date';
-        this.sender ='unknown sender';
+        this.expiry_date =  project.expiration.substr(0, 10);
+        if (project.sender) {
+          this.sender = "(By " + project.sender + ")";
+        }
 
         if (!this.doesExist()) {
           this.exists = false;

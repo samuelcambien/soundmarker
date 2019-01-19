@@ -28,7 +28,7 @@ export class RestUrl {
 
   public static PROJECT_SHARE: string = RestUrl.BACKEND + "/project/get/url";
 
-  public static PROJECT_SUBSCRIBE: string = RestUrl.BACKEND + "/subscribe";
+  public static PROJECT_SUBSCRIBE: string = RestUrl.BACKEND + "/project/subscribe";
 
   public static PROJECT_NEW: string = RestUrl.BACKEND + "/project/new";
 
