@@ -445,6 +445,28 @@ if (in_array($project_id, $_SESSION['user_projects'])) {
 }
 });
 
+/////////////////////////////////////////////////////// Routes - /project/subscribe GET ///////////////////////////////////////////////////////
+
+Flight::route('POST /project/subscribe', function() {
+
+// Check if user is allowed to get that info
+$config = Flight::get("config");
+$getbody = json_decode(Flight::request()->getBody());
+
+$emailaddress = $getbody->emailaddress;
+$project_id = $getbody->project_id;
+
+$db = Flight::db();
+$sql = "INSERT INTO DailyUpdates (project_id, emailaddress) VALUES ('$project_id', '$emailaddress')";
+$result = $db->query($sql);
+
+// return ok
+Flight::json(array(
+   'return' => "ok"
+), 200);
+});
+
+
 //////////////////////////////////////////////// Routes - /project/get/@project_hash GET /////////////////////////////////////////////
 Flight::route('GET /project/get/@project_hash', function($project_hash) {
 
@@ -1044,12 +1066,15 @@ if (in_array($file_id, $_SESSION['user_files'])) {
   
   // now it's time to create the png
   // let's create wave_png
-  exec($config['FFMPEG_PATH']."/ffmpeg -nostats -i /tmp/orig".$file_id.".".$ext." -af astats=metadata=1:reset=1,ametadata=print:key=lavfi.astats.Overall.RMS_level -f null - 2>&1", $output);
+  exec($config['FFMPEG_PATH']."/ffmpeg -nostats -i /tmp/orig".$file_id.".".$ext." -af astats=length=0.1:metadata=1:reset=1,ametadata=print:key=lavfi.astats.Overall.RMS_level -f null - 2>&1", $output);
   foreach ($output as &$value) {
     if (strpos($value, 'lavfi.astats.Overall.RMS_level=') !== false) {
         $momentarylufs = substr($value, strpos($value, "lavfi.astats.Overall.RMS_level=") + 31, 10);
         if (strpos($momentarylufs, 'inf') == false) { 
-          $zerotohundred = (floatval($momentarylufs)/100)+1;
+          $zerotohundred = (floatval($momentarylufs)/70)+1;
+          if ($zerotohundred < 0) {
+            $zerotohundred = 0;
+          }
         } else {
           $zerotohundred = 0;
         }
@@ -1071,11 +1096,11 @@ if (in_array($file_id, $_SESSION['user_files'])) {
   if ($download_id > 0) {
     $sql = "SELECT version_id, extension, metadata, aws_path, file_name, file_size, identifier, chunk_length FROM File WHERE file_id = '$download_id'";
     $result = $db->query($sql);
-    $files = $result->fetchAll();
+    $filesnew = $result->fetchAll();
     
     $result = $s3->putObject([
         'Bucket' => $config['AWS_S3_BUCKET'],
-        'Key'    => $files[0]["version_id"] . "/" . $files[0]["file_name"] . '.' . $files[0]["extension"],
+        'Key'    => $filesnew[0]["version_id"] . "/" . $filesnew[0]["file_name"] . '.' . $filesnew[0]["extension"],
         'Body'   => file_get_contents("/tmp/orig".$file_id.".".$ext),
         'ACL'    => 'public-read'
     ]);
@@ -1197,27 +1222,6 @@ $sql = "DELETE FROM DailyUpdates WHERE update_id = '$update_id' AND project_id =
 $result = $db->query($sql);
 
 // Render a display -> front end
-
-// return ok
-Flight::json(array(
-   'return' => "ok"
-), 200);
-});
-
-/////////////////////////////////////////////////////// Routes - /subscribe GET ///////////////////////////////////////////////////////
-
-Flight::route('POST /project/subscribe', function() {
-
-// Check if user is allowed to get that info
-$config = Flight::get("config");
-$getbody = json_decode(Flight::request()->getBody());
-
-$emailaddress = $getbody->emailaddress;
-$project_id = $getbody->project_id;
-
-$db = Flight::db();
-$sql = "INSERT INTO DailyUpdates (project_id, emailaddress) VALUES ('$project_id', '$emailaddress')";
-$result = $db->query($sql);
 
 // return ok
 Flight::json(array(
