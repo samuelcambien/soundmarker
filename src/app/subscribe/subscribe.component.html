@@ -21,30 +21,31 @@
 
       <div class="info-heading">
         <h2>Get notified</h2>
-        <p>Get a daily status update via email to see<br>new comments of your mates.</p>
+        <p>Get a daily status update via email to see<br>new comments and replies.</p>
       </div>
-
+      
       <div class="spacing-lg"></div>
 
       <div class="message-content">
 
         <div class="subscribe-form" *ngIf="status == 'pending'">
-          <form #myform (ngSubmit)="subscribe()">
+          <form #myform="ngForm" (ngSubmit)="subscribe()">
             <div class="form-row">
-              <input type="email" [(ngModel)]="email" placeholder="Email address" name="email">
+              <input type="email" [(ngModel)]="email" placeholder="Email address" name="email"
+                     pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$" required ngbTooltip="Invalid email address" triggers="manual" emailValidationTooltip>
             </div>
             <div class="form-row">
-              <button type="submit">Submit</button>
+              <button type="submit" [disabled]="!myform.valid">Submit</button>
             </div>
           </form>
         </div>
 
         <div *ngIf="status == 'greatsuccess'">
-          Great success!!
+          <h2 class="subscribe-message">Success! You'll be notified</h2>
         </div>
 
         <div *ngIf="status == 'error'">
-          storend
+         <h2 class="subscribe-message">Oops.. Something went wrong</h2>
         </div>
 
       </div>

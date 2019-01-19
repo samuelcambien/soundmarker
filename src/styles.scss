@@ -53,6 +53,7 @@ body {
 @media (max-width: 576px) {
 	body {
 		background-color: #eef1ff;
+		overflow: scroll;
 	}
 }
 .waveform {
@@ -587,6 +588,9 @@ h2 {
 	font-family: 'sofia-regular';
 	padding-top: 4px;
 	width: 100%;
+	-webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
 }
 .select-button {
 	transition: 0.1s;

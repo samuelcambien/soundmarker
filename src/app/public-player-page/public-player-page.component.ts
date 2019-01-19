@@ -48,10 +48,6 @@ export class PublicPlayerPageComponent implements OnInit {
       .then((project: Project) => {
         this.project_id = project.project_id;
         this.project = project;
-        this.expiry_date =  project.expiration.substr(0, 10);
-        if (project.sender) {
-          this.sender = "(By " + project.sender + ")";
-        }
 
         if (!this.doesExist()) {
           this.exists = false;
@@ -63,6 +59,11 @@ export class PublicPlayerPageComponent implements OnInit {
           this.expired = true;
           this.message = null;
           return;
+        }
+
+        this.expiry_date =  project.expiration.substr(0, 10);
+        if (project.sender) {
+          this.sender = "(By " + project.sender + ")";
         }
 
         for (let track of project.tracks) {
