@@ -2396,7 +2396,7 @@
         ctx.lineTo((i - first) * scale + this.halfPixel, halfH - h + offsetY);
       }
 
-      ctx.lineTo((canvasEnd - first) * scale + this.halfPixel, halfH + offsetY + 2);
+      ctx.lineTo((length - 1 - first) * scale + this.halfPixel, halfH + offsetY);
 
       ctx.closePath();
       ctx.fill();
