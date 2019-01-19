@@ -495,9 +495,20 @@ if ($project_password) {
   }
 } else {
   $_SESSION['view_user_projects'][] = $project_id;
+
+  // also send sender
+  $sql = "SELECT emailaddress, user_id FROM Notification WHERE type = '0' AND type_id = '$project_id'";
+  $response = $db->query($sql)->fetchAll(PDO::FETCH_ASSOC);
+  // if only link is created, then no sender
+  if (isset($response[0])) {
+    $emailaddress = $response[0]["emailaddress"];
+  } else {
+    $emailaddress = "";
+  }
+
   // return ok
   Flight::json(array(
-     'project_id' => $project_id, 'status' => $status, 'tracks' => $tracks
+     'project_id' => $project_id, 'status' => $status, 'expiration' => $expiration_date, 'sender' => $emailaddress, 'tracks' => $tracks
   ), 200);  
 }
 });
@@ -1022,6 +1033,10 @@ if (true) {
        // if ($i == 0) {
          $returnurl = $result['ObjectURL'];
        // }
+      // return ok -> let's try
+      Flight::json(array(
+         'ok' => $returnurl
+      ), 200);
 
      // delete file again
      unlink("/tmp/".$file_id.".mp3");
@@ -1069,10 +1084,6 @@ if (true) {
   // delete original upload
   unlink("/tmp/orig".$file_id.".".$ext);
 
-  // return ok
-  Flight::json(array(
-     'ok' => $returnurl
-  ), 200);
 } else {
   // return not allowed
   Flight::json(array(
@@ -1195,10 +1206,15 @@ Flight::json(array(
 
 /////////////////////////////////////////////////////// Routes - /subscribe GET ///////////////////////////////////////////////////////
 
-Flight::route('GET /subscribe/@project_id/@emailaddress', function($project_id, $emailaddress) {
+Flight::route('POST /project/subscribe', function() {
 
 // Check if user is allowed to get that info
 $config = Flight::get("config");
+$getbody = json_decode(Flight::request()->getBody());
+
+$emailaddress = $getbody->emailaddress;
+$project_id = $getbody->project_id;
+
 $db = Flight::db();
 $sql = "INSERT INTO DailyUpdates (project_id, emailaddress) VALUES ('$project_id', '$emailaddress')";
 $result = $db->query($sql);
