@@ -54,7 +54,7 @@ export class PublicPlayerTrackComponent implements OnInit {
 
     window.open(
       this.files
-        .filter(file => file.identifier == 0)
+        .filter(file => file.identifier == 1)
         .map(file => file.aws_path + '.' + file.extension)
         [0]
     );
