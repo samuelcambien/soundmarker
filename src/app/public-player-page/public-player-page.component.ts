@@ -8,6 +8,7 @@ import {RestCall} from "../rest/rest-call";
 import {File} from "../model/file";
 import {Version} from "../model/version";
 import {PlayerService} from "../player.service";
+import {interval} from "rxjs";
 
 @Component({
   selector: 'app-public-player',
@@ -82,7 +83,9 @@ export class PublicPlayerPageComponent implements OnInit {
                 .then(response => versions[0].files = response["files"]);
               versions[0].files.then((files) => {
                 // this.loadPlayer(track, versions[0], files[0]);
-                this.loadComments(track);
+                this.loadComments(track, versions[0].version_id);
+                interval(20 * 1000)
+                  .subscribe(() => this.loadComments(track, versions[0].version_id))
               })
             });
 
@@ -112,20 +115,18 @@ export class PublicPlayerPageComponent implements OnInit {
     return this.playerService.getPlayer(trackId);
   }
 
-  private loadComments(track: Track) {
-    track.versions.then((versions: Version[]) => {
-      RestCall.getComments(versions[0].version_id)
-        .then(response => {
-          let allComments: Comment[] = response["comments"];
-          track.comments = allComments.filter(comment => comment.parent_comment_id == 0);
-          for (let comment of track.comments) {
-            if (comment.include_end == 0) comment.include_end = false;
-            if (comment.include_start == 0) comment.include_start = false;
-            comment.version_id = versions[0].version_id;
-            this.loadReplies(comment, allComments);
-          }
-        })
-    });
+  private loadComments(track: Track, version_id: string) {
+    RestCall.getComments(version_id)
+      .then(response => {
+        let allComments: Comment[] = response["comments"];
+        track.comments = allComments.filter(comment => comment.parent_comment_id == 0);
+        for (let comment of track.comments) {
+          if (comment.include_end == 0) comment.include_end = false;
+          if (comment.include_start == 0) comment.include_start = false;
+          comment.version_id = version_id;
+          this.loadReplies(comment, allComments);
+        }
+      })
   }
 
   private loadReplies(comment: Comment, allComments: Comment[]) {
