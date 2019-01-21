@@ -51,8 +51,8 @@ export class RestCall {
       });
   }
 
-  public static uploadChunk(buffer, streamFileId: string, downloadFileId: string, index: number, ext: string): Promise<any> {
-    return Utils.sendPostDataRequest(RestUrl.UPLOAD_CHUNK, buffer, [streamFileId, downloadFileId, index, ext]);
+  public static uploadChunk(buffer, streamFileId: string, downloadFileId: string, index: number, ext: string, onProgress): Promise<any> {
+    return Utils.sendPostDataRequest(RestUrl.UPLOAD_CHUNK, buffer, [streamFileId, downloadFileId, index, ext], onProgress);
   }
 
   public static shareProject(project_id: string, emailFrom?: string, emailTo?: string[]): Promise<any> {

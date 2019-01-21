@@ -108,7 +108,7 @@ export class Utils {
     });
   }
 
-  public static sendPostDataRequest(url, data, params?): Promise<any> {
+  public static sendPostDataRequest(url, data, params?, onProgress?): Promise<any> {
 
     return new Promise((resolve, reject) => {
       let trackRequest = new XMLHttpRequest();
@@ -127,7 +127,10 @@ export class Utils {
           reject(trackRequest.statusText);
         }
       };
-      trackRequest.onerror = () => reject(trackRequest.statusText);
+      trackRequest.onerror = () => reject("connection error");
+      trackRequest.upload.onprogress = event => onProgress(
+          Math.round(event.lengthComputable ? event.loaded * 100 / event.total : 0)
+      );
       trackRequest.send(data);
     });
 
