@@ -15,6 +15,7 @@ import {RestCall} from "../../rest/rest-call";
 import {NgbTooltip} from '@ng-bootstrap/ng-bootstrap';
 import {NgControl, Validators} from '@angular/forms';
 import {Utils} from "../../app.component";
+import {LocalStorageService} from "../../local-storage.service";
 
 declare var AudioContext: any, webkitAudioContext: any;
 
@@ -27,10 +28,10 @@ declare var AudioContext: any, webkitAudioContext: any;
 export class PublicUploadFormComponent implements OnInit {
 
   notes: string;
-  email_from: string;
+  email_from: string = this.localStorageService.getEmailFrom();
   email_to: string[];
 
-  sharemode: "email" | "link" = "link";
+  sharemode: "email" | "link" = "email";
   expiration: "week" | "month" = "week";
   downloadable: boolean = false;
 
@@ -55,6 +56,7 @@ export class PublicUploadFormComponent implements OnInit {
 
   onSubmit() {
     this.uploading.emit();
+    this.storePreferences();
     RestCall.createNewProject()
       .then(response => {
         let project_id = response["project_id"];
@@ -156,7 +158,7 @@ export class PublicUploadFormComponent implements OnInit {
     };
   }
 
-  constructor() {
+  constructor(private localStorageService: LocalStorageService) {
   }
 
   private clearForm(clearData): void {
@@ -165,6 +167,12 @@ export class PublicUploadFormComponent implements OnInit {
       this.email_to = [];
     }
     this.uploader.clearQueue();
+  }
+
+  private storePreferences() {
+    this.localStorageService.storeEmailFrom(this.email_from);
+    this.localStorageService.storeShareMode(this.sharemode);
+    this.localStorageService.storeAllowDownloads(this.downloadable);
   }
 }
 
