@@ -115,7 +115,6 @@ export class Utils {
       if (params) for (let entry of params) {
         url += "/" + entry;
       }
-      trackRequest.addEventListener("progress", updateProgress, false);
       trackRequest.open("POST", url, true);
       trackRequest.onreadystatechange = () => {
 
@@ -133,18 +132,6 @@ export class Utils {
       );
       trackRequest.send(data);
     });
-
-  function updateProgress (oEvent) {
-    console.log(oEvent);
-      if (oEvent.lengthComputable) {
-        var percentComplete = oEvent.loaded / oEvent.total;
-        console.log(percentComplete);
-
-        // ...
-      } else {
-        // Unable to compute progress information since the total size is unknown
-      }
-    }
   }
 
   public static sendPostRequest(url, data, params?): Promise<any> {
