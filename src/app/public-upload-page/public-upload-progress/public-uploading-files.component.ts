@@ -15,10 +15,7 @@ export class PublicUploadingFilesComponent implements OnInit {
   ngOnInit() {
   }
 
-
   getProgress() {
-    return this.uploader.files > 0 ? Math.round(95 * this.uploader.uploaded / this.uploader.files) : 0;
+    return this.uploader.progress;
   }
-
-
 }

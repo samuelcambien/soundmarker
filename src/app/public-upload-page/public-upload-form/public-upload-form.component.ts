@@ -1,11 +1,20 @@
-import {Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild, HostListener, Directive} from '@angular/core';
+import {
+  Component,
+  Directive,
+  ElementRef,
+  EventEmitter,
+  HostListener,
+  Input,
+  OnInit,
+  Output,
+  ViewChild
+} from '@angular/core';
 import {FileItem, FileUploader} from '../../ng2-file-upload';
 import {Mp3Encoder} from "../../mp3-encoder/mp3-encoder";
 import {RestCall} from "../../rest/rest-call";
-import * as wave from "../../player/dist/player.js"
 import {NgbTooltip} from '@ng-bootstrap/ng-bootstrap';
-import {Validators, NgControl} from '@angular/forms';
-import {File} from "../../model/file";
+import {NgControl, Validators} from '@angular/forms';
+import {Utils} from "../../app.component";
 
 declare var AudioContext: any, webkitAudioContext: any;
 
@@ -40,30 +49,37 @@ export class PublicUploadFormComponent implements OnInit {
   @ViewChild('notes_element') notes_element: ElementRef;
   @ViewChild('ft') files_tooltip: NgbTooltip;
 
-  tracks_left = () => {return this.uploader.options.queueLimit - this.uploader.queue.length};
+  tracks_left = () => {
+    return this.uploader.options.queueLimit - this.uploader.queue.length
+  };
 
   onSubmit() {
     this.uploading.emit();
     RestCall.createNewProject()
       .then(response => {
         let project_id = response["project_id"];
-        return Promise.all(this.uploader.queue.map(track => this.processTrack(project_id, track)))
-          .then(() => {
-            if (this.sharemode === 'email') {
-              return RestCall.shareProject(project_id, this.email_from, this.email_to)
-            } else {
-              return RestCall.shareProject(project_id)
-            }
-          })
-          .then(response => {
-            this.finished.emit();
-            this.clearForm(true);
-            this.link.emit(response["project_hash"]);
-          })
+        return Utils.promiseSequential(
+          this.uploader.queue.map(track => () =>
+
+            this.processTrack(project_id, track)
+              .then(() => {
+                if (this.sharemode === 'email') {
+                  return RestCall.shareProject(project_id, this.email_from, this.email_to)
+                } else {
+                  return RestCall.shareProject(project_id)
+                }
+              })
+          )
+        ).then(response => {
+          this.finished.emit();
+          this.clearForm(true);
+          this.link.emit(response["project_hash"]);
+        })
       })
       .catch((e) => {
         this.clearForm(false);
-        this.error.emit(e)});
+        this.error.emit(e)
+      });
   }
 
   private processTrack(projectId, track: FileItem): Promise<any> {
@@ -83,13 +99,22 @@ export class PublicUploadFormComponent implements OnInit {
           .then(({fileId: streamFileId, buffer: buffer}) =>
             this.getDownloadFileId(track._file, title, extension, track, versionId, length)
               .then(downloadFileId =>
-                RestCall.uploadChunk(buffer, streamFileId, downloadFileId, 0, extension, progress => this.setProgress(progress))
-              )
+                RestCall.uploadChunk(buffer, streamFileId, downloadFileId, 0, extension, progress => this.setChunkProgress(progress))
+              ).then(() => this.setChunkCompleted())
           );
       })
   }
 
-  private setProgress(progress: any) {
+  private setChunkProgress(progress: number) {
+    this.setProgress(((100 * this.uploader.uploaded + progress) / this.uploader.queue.length));
+  }
+
+  private setChunkCompleted() {
+    this.uploader.uploaded++;
+    this.setProgress(100 * this.uploader.uploaded / this.uploader.queue.length);
+  }
+
+  private setProgress(progress: number) {
     this.uploader.progress = progress;
   }
 
@@ -111,8 +136,8 @@ export class PublicUploadFormComponent implements OnInit {
     //   container: canvas
     // });
     // wave.loadDecodedBuffer(buffer);
-    this.uploader.onWhenAddingFileFailed = (item, filter) =>  {
-      let message= '';
+    this.uploader.onWhenAddingFileFailed = (item, filter) => {
+      let message = '';
       switch (filter.name) {
         case 'queueLimit':
           message = 'Max of ' + this.uploader.options.queueLimit + ' tracks exceeded. Not all tracks were added.';
@@ -127,13 +152,14 @@ export class PublicUploadFormComponent implements OnInit {
           message = "Something went wrong, please try again.";
           break;
       }
-      this.files_tooltip.open(this.files_tooltip.ngbTooltip= message);
+      this.files_tooltip.open(this.files_tooltip.ngbTooltip = message);
     };
   }
 
-  constructor(){  }
+  constructor() {
+  }
 
-  private clearForm(clearData): void{
+  private clearForm(clearData): void {
     if (clearData) {
       this.notes = '';
       this.email_to = [];
@@ -161,10 +187,11 @@ export class EmailValidationToolTip {
     });
   }
 
-  @HostListener('focusout') onFocusOutMethod(){
+  @HostListener('focusout') onFocusOutMethod() {
     if (this.control.dirty && this.control.invalid && this.control.value) {
       this.tooltip.open();
     } else {
-      this.tooltip.close();}
+      this.tooltip.close();
+    }
   }
 }
