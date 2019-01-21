@@ -62,16 +62,15 @@ export class PublicUploadFormComponent implements OnInit {
         let project_id = response["project_id"];
         return Utils.promiseSequential(
           this.uploader.queue.map(track => () =>
-
             this.processTrack(project_id, track)
-              .then(() => {
-                if (this.sharemode === 'email') {
-                  return RestCall.shareProject(project_id, this.email_from, this.email_to)
-                } else {
-                  return RestCall.shareProject(project_id)
-                }
-              })
           )
+        ).then(() => {
+              if (this.sharemode === 'email') {
+                return RestCall.shareProject(project_id, this.email_from, this.email_to)
+              } else {
+                return RestCall.shareProject(project_id)
+              }
+            }
         ).then(response => {
           this.finished.emit();
           this.clearForm(true);
