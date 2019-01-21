@@ -3,7 +3,7 @@ import {Message} from "../message";
 import {RestCall} from "../rest/rest-call";
 import {PublicIntroductionComponent} from "./public-info/topics/public-introduction/public-introduction.component";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
-import {TermsAcceptedServiceService} from "../terms-accepted-service.service";
+import {LocalStorageService} from "../local-storage.service";
 import {interval} from "rxjs";
 import {trigger, state, style, animate, transition} from '@angular/animations';
 import { tap, delay } from "rxjs/operators";
@@ -45,7 +45,7 @@ export class PublicPageComponent implements OnInit {
 
   smaToggle= 0;
 
-  constructor(private modalService: NgbModal, private termsAcceptedService: TermsAcceptedServiceService) {
+  constructor(private modalService: NgbModal, private localStorageService: LocalStorageService) {
   }
 
   openIntroduction() {
@@ -53,7 +53,8 @@ export class PublicPageComponent implements OnInit {
   }
 
   ngOnInit() {
-    if (!this.termsAcceptedService.termsAccepted()) {
+    this.localStorageService.storeVisit();
+    if (!this.localStorageService.termsAccepted()) {
       this.openIntroduction();
     }
     this.getAd(this.waitBeforeFirstAd);
