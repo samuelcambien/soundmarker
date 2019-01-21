@@ -83,10 +83,14 @@ export class PublicUploadFormComponent implements OnInit {
           .then(({fileId: streamFileId, buffer: buffer}) =>
             this.getDownloadFileId(track._file, title, extension, track, versionId, length)
               .then(downloadFileId =>
-                RestCall.uploadChunk(buffer, streamFileId, downloadFileId, 0, extension)
+                RestCall.uploadChunk(buffer, streamFileId, downloadFileId, 0, extension, progress => this.setProgress(progress))
               )
           );
       })
+  }
+
+  private setProgress(progress: any) {
+    this.uploader.progress = progress;
   }
 
   private getStreamFileId(file, title, extension, track: FileItem, versionId, length: number): Promise<{ fileId: string, buffer: ArrayBuffer }> {
