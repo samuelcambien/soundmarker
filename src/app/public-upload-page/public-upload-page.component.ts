@@ -21,7 +21,7 @@ export class PublicUploadPageComponent implements OnInit {
   uploader: FileUploader = new FileUploader({
     url: UPLOAD_FILES_ENDPOINT,
     disableMultipart: true,
-    queueLimit: 30,
+    queueLimit: 12,
     maxFileSize: 500000000, // 500MB 500 000 000
     filters: [
       {
