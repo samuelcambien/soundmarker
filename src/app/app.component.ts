@@ -176,5 +176,11 @@ export class Utils {
     });
   }
 
-
+  public static promiseSequential(promiseFactories: Function[]): Promise<any> {
+    return promiseFactories.reduce((promise, factory) =>
+      promise.then(result =>
+        factory().then(Array.prototype.concat.bind(result))
+      ), Promise.resolve([])
+    );
+  }
 }
