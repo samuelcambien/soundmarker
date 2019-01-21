@@ -102,7 +102,7 @@ export class Utils {
         url += "/" + entry;
       }
       trackRequest.open("GET", url, true);
-      trackRequest.onload = () => resolve(JSON.parse(trackRequest.responseText));
+      trackRequest.onload = () => resolve(Utils.parse(trackRequest.responseText));
       trackRequest.onerror = () => reject(trackRequest.statusText);
       trackRequest.send();
     });
@@ -121,7 +121,7 @@ export class Utils {
         if (trackRequest.readyState !== 4) return;
 
         if (trackRequest.status >= 200 && trackRequest.status < 300) {
-          resolve(JSON.parse(trackRequest.responseText));
+          resolve(Utils.parse(trackRequest.responseText));
         } else {
           reject(trackRequest.statusText);
         }
@@ -138,13 +138,12 @@ export class Utils {
     return new Promise((resolve, reject) => {
       let trackRequest = new XMLHttpRequest();
       if (params) for (let entry of params) {
-
         url += "/" + entry;
       }
       trackRequest.open("POST", url, true);
-      trackRequest.onload = () => resolve(JSON.parse(trackRequest.responseText));
+      trackRequest.onload = () => resolve(Utils.parse(trackRequest.responseText));
       trackRequest.onerror = () => reject(trackRequest.statusText);
-      trackRequest.send(JSON.stringify(data));
+      trackRequest.send(Utils.stringify(data));
     });
   }
 
@@ -157,10 +156,18 @@ export class Utils {
       }
       trackRequest.open("POST", url, true);
       trackRequest.setRequestHeader("Content-Type", "application/json");
-      trackRequest.onload = () => resolve(JSON.parse(trackRequest.responseText));
+      trackRequest.onload = () => resolve(Utils.parse(trackRequest.responseText));
       trackRequest.onerror = () => reject(trackRequest.statusText);
-      trackRequest.send(JSON.stringify(data));
+      trackRequest.send(Utils.stringify(data));
     });
+  }
+
+  public static stringify(data): string {
+    return JSON.stringify(data, (key, value) => typeof value === 'string' ? escape(value) : value);
+  }
+
+  public static parse(string: string) {
+    return JSON.parse(string, (key, value) => typeof value === 'string' ? unescape(value) : value);
   }
 
   public static promiseSequential(promiseFactories: Function[]): Promise<any> {
