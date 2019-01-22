@@ -403,11 +403,15 @@
             [class.disabled]="!comment.include_start"
             appDraggable
             (dragStart)="dragStart()"
-            (mouseMove)="updateStartTime($event.x)"
-            (touchMove)="updateStartTime($event.touches[0].clientX)"
+            (dragMove)="updateStartTime($event)"
             [style.left]="getStartPosition()"
           >
-            <ng-container *ngTemplateOutlet="soundmarker"></ng-container>
+            <div class="phone-draggable">
+              <ng-container *ngTemplateOutlet="phonemarker"></ng-container>
+            </div>
+            <ng-container *ngTemplateOutlet="soundmarker">
+
+            </ng-container>
           </div>
 
           <div
@@ -415,11 +419,14 @@
             class="drag-block"
             [class.disabled]="!comment.include_end"
             appDraggable
-            (mouseMove)="updateEndTime($event.x)"
-            (touchMove)="updateEndTime($event.touches[0].clientX)"
+            (dragMove)="updateEndTime($event)"
             (dragStart)="comment.include_end = true; comment.include_start = true"
             [style.left]="getEndPosition()"
           >
+
+            <div class="phone-draggable">
+              <ng-container *ngTemplateOutlet="phonemarker"></ng-container>
+            </div>
             <ng-container *ngTemplateOutlet="soundmarker"></ng-container>
           </div>
 
@@ -433,6 +440,10 @@
                 <path d="M5.5,52.5 L5.5,0.5" id="Line" fill-rule="nonzero"></path>
               </g>
             </svg>
+          </ng-template>
+
+          <ng-template #phonemarker>
+            <svg width="25" height="74"></svg>
           </ng-template>
 
           <div id="comment-interval" *ngIf="comment.include_start && comment.include_end"

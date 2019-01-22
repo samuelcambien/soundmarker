@@ -1,19 +1,29 @@
-import {Directive, EventEmitter, HostListener, Output} from "@angular/core";
+import {Directive, ElementRef, EventEmitter, HostListener, OnInit, Output, ViewChild} from "@angular/core";
 
 @Directive({
   selector: '[appDraggable]'
 })
-export class DraggableDirective {
+export class DraggableDirective implements OnInit {
+
+  constructor(
+    private elementRef: ElementRef,
+  ) {
+  }
+
+  ngOnInit(): void {
+    this.elementRef.nativeElement.querySelector('.phone-draggable')
+      .ontouchstart = e => this.onPointerDown(e);
+  }
 
   @Output() dragStart = new EventEmitter<any>();
-  @Output() mouseMove = new EventEmitter<any>();
-  @Output() touchMove = new EventEmitter<any>();
+  @Output() dragMove = new EventEmitter<any>();
   @Output() dragEnd = new EventEmitter<any>();
+
+  @ViewChild('phoneDraggable') phoneDraggable: ElementRef;
 
   private dragging = false;
 
   @HostListener('mousedown', ['$event'])
-  @HostListener('touchstart', ['$event'])
   onPointerDown(event): void {
     this.dragging = true;
     this.dragStart.emit(event);
@@ -25,7 +35,7 @@ export class DraggableDirective {
       return;
     }
 
-    this.mouseMove.emit(event);
+    this.dragMove.emit(event.x);
   }
 
   @HostListener('document:touchmove', ['$event'])
@@ -34,7 +44,7 @@ export class DraggableDirective {
       return;
     }
 
-    this.touchMove.emit(event);
+    this.dragMove.emit(event.touches[0].clientX);
   }
 
   @HostListener('document:mouseup', ['$event'])
