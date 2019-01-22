@@ -169,7 +169,8 @@ export class PublicUploadFormComponent implements OnInit {
   }
 
   private storePreferences() {
-    this.localStorageService.storeEmailFrom(this.email_from);
+    if (this.sharemode == "email")
+      this.localStorageService.storeEmailFrom(this.email_from);
     this.localStorageService.storeShareMode(this.sharemode);
     this.localStorageService.storeAllowDownloads(this.downloadable);
   }
