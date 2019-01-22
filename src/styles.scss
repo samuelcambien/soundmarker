@@ -28,6 +28,8 @@ CONTENTS
 	
 */
 
+
+
 	.rotate-overlay {
 		position: fixed;
 		width: 100%;
@@ -40,7 +42,9 @@ CONTENTS
 
 	}
 
-
+html {
+	-ms-overflow-style: none !important;
+}
 
 body {
 	// background: #eef1ff !important;
@@ -53,7 +57,8 @@ body {
 @media (max-width: 576px) {
 	body {
 		background-color: #eef1ff;
-		overflow: scroll;
+		overflow: auto;
+		
 	}
 }
 .waveform {
@@ -410,6 +415,19 @@ h2 {
 .modal-content {
 	border-radius: 0.6rem;
 	border: none !important;
+}
+@media (max-width: 1100px) {
+
+	
+	#sm .modal-lg, .modal-lg {
+
+	top: inherit;
+	margin-left: auto !important;
+	    margin-right: auto !important;
+	    left: inherit;
+	    right: inherit;
+	    
+	}
 }
 @media (max-width: 767.98px) {
 	#sm .modal-lg,
