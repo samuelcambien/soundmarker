@@ -23,7 +23,7 @@
 
     <div class="form-group col-auto hide-phone">
       <input type="text" [ngModel]="comment.start_time | timeFormat" name="start"
-             (ngModel)="this.comment.start_time" appTimeFormat (updated)="updateStartTime($event)"
+             (ngModel)="this.comment.start_time" [appTimeFormat]="isValidStartTime" (updated)="updateStartTime($event)"
              [ngClass]="['comment-form-start-time sub-form tag-box', comment.include_start ? 'enabled' : 'disabled']">
     </div>
 
@@ -37,7 +37,7 @@
 
     <div class="form-group col-auto hide-phone">
       <input type="text" [ngModel]="this.comment.end_time | timeFormat" name="end"
-             (ngModel)="this.comment.end_time" appTimeFormat (updated)="updateEndTime($event)"
+             (ngModel)="this.comment.end_time" [appTimeFormat]="isValidEndTime" (updated)="updateEndTime($event);"
              [ngClass]="['comment-form-end-time sub-form tag-box', comment.include_end ? 'enabled' : 'disabled']">
     </div>
 

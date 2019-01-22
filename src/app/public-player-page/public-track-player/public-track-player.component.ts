@@ -25,6 +25,8 @@ import {PlayerService} from "../../player.service";
   styleUrls: ['./public-track-player.component.scss']
 })
 export class PublicTrackPlayerComponent implements OnInit, AfterViewChecked {
+  
+  static MINIMAL_INTERVAL: number = 1;
 
   @Input() track: Track;
   @Input() enableOverview: boolean;
@@ -54,7 +56,6 @@ export class PublicTrackPlayerComponent implements OnInit, AfterViewChecked {
   endPos;
 
   showComments: boolean = false;
-  private MINIMAL_INTERVAL: number = 2;
 
   version: Version;
 
@@ -118,7 +119,7 @@ export class PublicTrackPlayerComponent implements OnInit, AfterViewChecked {
 
   private getValidStartTime(commentTime: number) {
     if (commentTime < 0) return 0;
-    if (commentTime > this.comment.end_time - this.MINIMAL_INTERVAL) return this.comment.end_time - this.MINIMAL_INTERVAL;
+    if (commentTime > this.comment.end_time - PublicTrackPlayerComponent.MINIMAL_INTERVAL) return this.comment.end_time - PublicTrackPlayerComponent.MINIMAL_INTERVAL;
     return commentTime;
   }
 
@@ -130,7 +131,7 @@ export class PublicTrackPlayerComponent implements OnInit, AfterViewChecked {
   }
 
   private getValidEndTime(commentTime: number) {
-    if (commentTime < this.comment.start_time + this.MINIMAL_INTERVAL) return this.comment.start_time + this.MINIMAL_INTERVAL;
+    if (commentTime < this.comment.start_time + PublicTrackPlayerComponent.MINIMAL_INTERVAL) return this.comment.start_time + PublicTrackPlayerComponent.MINIMAL_INTERVAL;
     if (commentTime > this.getTrackLength()) return this.getTrackLength();
     return commentTime;
   }

@@ -9,6 +9,7 @@ export class TimeFormatDirective {
   private el: HTMLInputElement;
   private backup;
 
+  @Input("appTimeFormat") validator;
   @Output() updated = new EventEmitter();
 
   constructor(
@@ -27,9 +28,12 @@ export class TimeFormatDirective {
   }
 
   @HostListener("blur", ["$event.target.value"])
+  @HostListener("keyup.enter", ["$event.target.value"])
   onBlur(value) {
-    if (value) {
-      this.updated.emit(Utils.parseTime(value));
+    this.el.blur();
+    let time = Utils.parseTime(value);
+    if (value && this.validator(time)) {
+      this.updated.emit(time);
     } else {
       this.el.value = this.backup;
     }
