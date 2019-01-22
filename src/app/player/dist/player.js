@@ -178,6 +178,10 @@
       return this.backend.getCurrentTime();
     },
 
+    isReady: function () {
+      return this.backend.ready;
+    },
+
     play: function (start, end, comment) {
       this.fireEvent('interaction', this.play.bind(this, start, end, comment));
       if (this.backend.ready) {
@@ -1158,6 +1162,10 @@
     loadChunk: function (index) {
 
       return fetch(this.aws_path + ".mp3")
+        .then(response => {
+          if (!response.ok) throw Error(response.statusText);
+          return response;
+        })
         .then(response => this.readResponse(response.body.getReader(), new Uint8Array(), 0))
         .then((completeArray) => {
           this.audioBuffers[index] = this.copy(completeArray.buffer);

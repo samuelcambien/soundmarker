@@ -620,3 +620,13 @@ hr {
   margin-bottom: 0px;
   border-top: 1px solid #eef1ff;
 }
+
+.phone-draggable {
+  width: 25px;
+  height: 74px;
+  position: absolute;
+  bottom: 4px;
+  left: -7px;
+  display: inline;
+  opacity: 100%;
+}

@@ -13,6 +13,12 @@ export class PlayerService {
     return this.players.get(trackId);
   }
 
+  public playerReady(trackId: string): boolean {
+
+    let player = this.getPlayer(trackId);
+    return player && player.isReady();
+  }
+
   public addPlayer(trackId: string, player) {
     this.players.set(trackId, player);
     player.backend.on("pauseothers", () =>

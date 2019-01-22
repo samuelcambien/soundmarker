@@ -25,6 +25,8 @@ export class PublicPlayerPageComponent implements OnInit {
   sender;
   project_id: string;
 
+  error;
+
   message: Message = new Message("", "", false);
 
   activeTrack: Track;
@@ -43,7 +45,6 @@ export class PublicPlayerPageComponent implements OnInit {
   }
 
   private loadProjectInfo(projectHash: string) {
-
 
     RestCall.getProject(projectHash)
       .then((project: Project) => {
@@ -81,8 +82,7 @@ export class PublicPlayerPageComponent implements OnInit {
               });
               versions[0].files = RestCall.getVersion(versions[0].version_id)
                 .then(response => versions[0].files = response["files"]);
-              versions[0].files.then((files) => {
-                // this.loadPlayer(track, versions[0], files[0]);
+              versions[0].files.then(() => {
                 this.loadComments(track, versions[0].version_id);
                 interval(20 * 1000)
                   .subscribe(() => this.loadComments(track, versions[0].version_id))
@@ -101,10 +101,6 @@ export class PublicPlayerPageComponent implements OnInit {
 
   private isActive() {
     return this.project.status == "active";
-  }
-
-  private loadPlayer(track: Track, version: Version, file: File) {
-    // this.playerService.addPlayer(track.track_id, new Player(file.aws_path, version.track_length));
   }
 
   getActivePlayer() {

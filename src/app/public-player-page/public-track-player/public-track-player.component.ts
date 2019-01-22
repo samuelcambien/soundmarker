@@ -26,9 +26,12 @@ import {PlayerService} from "../../player.service";
 })
 export class PublicTrackPlayerComponent implements OnInit, AfterViewChecked {
 
+  static MINIMAL_INTERVAL: number = 1;
+
   @Input() track: Track;
   @Input() enableOverview: boolean;
 
+  @Output() error = new EventEmitter();
   @Output() overview = new EventEmitter();
 
   @ViewChild('waveform') waveform: ElementRef;
@@ -54,7 +57,6 @@ export class PublicTrackPlayerComponent implements OnInit, AfterViewChecked {
   endPos;
 
   showComments: boolean = false;
-  private MINIMAL_INTERVAL: number = 2;
 
   version: Version;
 
@@ -64,10 +66,7 @@ export class PublicTrackPlayerComponent implements OnInit, AfterViewChecked {
   peaks;
   private files: File[];
 
-  constructor(private playerService: PlayerService, private cdRef:ChangeDetectorRef, zone: NgZone) {
-    setInterval(() => {
-      this._progress = this.getCurrentTime();
-    }, 1);
+  constructor(private playerService: PlayerService, private cdRef: ChangeDetectorRef, zone: NgZone) {
   }
 
   ngOnInit() {
@@ -76,8 +75,14 @@ export class PublicTrackPlayerComponent implements OnInit, AfterViewChecked {
       this.comment.start_time = 0;
       this.comment.end_time = versions[0].track_length;
       this.peaks = JSON.parse(this.version.wave_png);
-      this.loadWaveForm();
-    });
+      return this.loadWaveForm();
+    }).catch(
+      e => this.error.emit(e)
+    ).then(() =>
+      setInterval(() => {
+        this._progress = this.getCurrentTime();
+      }, 1)
+    );
   }
 
   private getPlayerWidth(): number {
@@ -118,7 +123,7 @@ export class PublicTrackPlayerComponent implements OnInit, AfterViewChecked {
 
   private getValidStartTime(commentTime: number) {
     if (commentTime < 0) return 0;
-    if (commentTime > this.comment.end_time - this.MINIMAL_INTERVAL) return this.comment.end_time - this.MINIMAL_INTERVAL;
+    if (commentTime > this.comment.end_time - PublicTrackPlayerComponent.MINIMAL_INTERVAL) return this.comment.end_time - PublicTrackPlayerComponent.MINIMAL_INTERVAL;
     return commentTime;
   }
 
@@ -130,7 +135,7 @@ export class PublicTrackPlayerComponent implements OnInit, AfterViewChecked {
   }
 
   private getValidEndTime(commentTime: number) {
-    if (commentTime < this.comment.start_time + this.MINIMAL_INTERVAL) return this.comment.start_time + this.MINIMAL_INTERVAL;
+    if (commentTime < this.comment.start_time + PublicTrackPlayerComponent.MINIMAL_INTERVAL) return this.comment.start_time + PublicTrackPlayerComponent.MINIMAL_INTERVAL;
     if (commentTime > this.getTrackLength()) return this.getTrackLength();
     return commentTime;
   }
@@ -178,25 +183,21 @@ export class PublicTrackPlayerComponent implements OnInit, AfterViewChecked {
     return this.getMatchingComments().length > 0;
   }
 
-  public loadWaveForm() {
+  public loadWaveForm(): Promise<any> {
 
-    this.version.files.then((files) => {
+    return this.version.files.then((files) => {
       this.files = files;
       this.playerService.addPlayer(this.track.track_id, wave.create(
         {
           container: "#waveform_" + this.track.track_id,
-          // peaks: this.version.wave_png,
           peaks: this.peaks,
           duration: this.version.track_length,
           aws_path: files.filter(file => file.identifier == 0)[0].aws_path
-          // aws_path: "https://d3k08uu3zdbsgq.cloudfront.net/Zelmar-LetYouGo"
         }
       ));
-      // this.getPlayer().load(files.filter(file => file.extension == "m4a")[0].aws_path + "0.m4a");
-      // this.getPlayer().load("https://s3-eu-west-1.amazonaws.com/soundmarkersass-local-robin/608/06%20-%20Redbone0.mp3");
       this.getPlayer().drawBuffer();
       this.getPlayer().backend.load();
-      this.getPlayer().backend.loadChunk(0);
+      return this.getPlayer().backend.loadChunk(0);
     });
   }
 
@@ -285,12 +286,20 @@ export class PublicTrackPlayerComponent implements OnInit, AfterViewChecked {
 
   isInViewport(waveform) {
 
-    let bounding = waveform.getBoundingClientRect();
-    let scrollPane = waveform.closest(".comments-scrolltainer");
-    return bounding.top + bounding.height / 2 > scrollPane.getBoundingClientRect().top;
+    try {
+      let bounding = waveform.getBoundingClientRect();
+      let scrollPane = waveform.closest(".comments-scrolltainer");
+      return bounding.top + bounding.height / 2 > scrollPane.getBoundingClientRect().top;
+    } catch (e) {
+      return true;
+    }
   }
 
   scrollToTop(waveform) {
     waveform.closest(".comments-scrolltainer").scrollTop = 0;
+  }
+
+  playerIsReady(): boolean {
+    return this.playerService.playerReady(this.track.track_id);
   }
 }

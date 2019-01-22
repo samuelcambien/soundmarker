@@ -1,6 +1,6 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {Comment} from "../../model/comment";
-import {Utils} from "../../app.component";
+import {PublicTrackPlayerComponent} from "../../public-player-page/public-track-player/public-track-player.component";
 
 @Component({
   selector: 'app-comment-form',
@@ -54,15 +54,25 @@ export class CommentFormComponent implements OnInit {
     this.comment.end_time = this.player.getDuration();
   }
 
-  updateStartTime(event) {
-    this.comment.start_time = event;
+  updateStartTime(time) {
+
+    this.comment.start_time = time;
     this.comment.include_start = true;
     this.triggerStart();
   }
 
-  updateEndTime(event) {
-    this.comment.end_time = event;
+  public isValidStartTime = (time) =>
+    time >= 0
+    && (time <= this.comment.end_time - PublicTrackPlayerComponent.MINIMAL_INTERVAL);
+
+  updateEndTime(time) {
+
+    this.comment.end_time = time;
     this.comment.include_end = true;
     this.triggerEnd();
   }
+
+  public isValidEndTime = (time) =>
+    time >= this.comment.start_time + PublicTrackPlayerComponent.MINIMAL_INTERVAL
+    && time <= this.player.duration;
 }
