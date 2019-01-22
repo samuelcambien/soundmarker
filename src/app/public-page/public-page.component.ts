@@ -1,13 +1,12 @@
-import {Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild, HostBinding} from '@angular/core';
+import {Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
 import {Message} from "../message";
 import {RestCall} from "../rest/rest-call";
 import {PublicIntroductionComponent} from "./public-info/topics/public-introduction/public-introduction.component";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {LocalStorageService} from "../local-storage.service";
 import {interval} from "rxjs";
-import {trigger, state, style, animate, transition} from '@angular/animations';
-import { tap, delay } from "rxjs/operators";
-import {resolve} from 'q';
+import {animate, state, style, transition, trigger} from '@angular/animations';
+import {delay, tap} from "rxjs/operators";
 
 
 @Component({
@@ -17,9 +16,11 @@ import {resolve} from 'q';
   animations: [
     trigger('openClose', [
       state('smas', style({
-        opacity: 1, })),
+        opacity: 1,
+      })),
       state('smahidden', style({
-        opacity: 0,})),
+        opacity: 0,
+      })),
       transition('smas => smahidden', [
         animate('400ms')
       ]),
@@ -43,7 +44,8 @@ export class PublicPageComponent implements OnInit {
   @ViewChild('sma') sma: ElementRef;
   @ViewChild('smaphone') smaPhone: ElementRef;
 
-  smaToggle= 0;
+  smaToggle = 0;
+  nextSma;
 
   constructor(private modalService: NgbModal, private localStorageService: LocalStorageService) {
   }
@@ -57,31 +59,40 @@ export class PublicPageComponent implements OnInit {
     if (!this.localStorageService.termsAccepted()) {
       this.openIntroduction();
     }
-    this.getAd(this.waitBeforeFirstAd);
+    this.getFirstAd();
+    this.getNextAd();
     interval(45 * 1000)
-      .pipe(tap(()=>{
-        this.smaToggle=0;})
-      ).pipe(delay(400))
-      .pipe(tap(() => {
-        this.getAd(0);
-      }))
+      .pipe(tap(() => this.smaToggle = 0))
+      .pipe(delay(400))
+      .pipe(tap(() => this.showAd(this.nextSma)))
+      .pipe(tap(() => this.getNextAd()))
       .pipe(delay(85))
-      .subscribe(()=>this.smaToggle=1);
+      .subscribe(() => this.smaToggle = 1);
   }
 
-  private getAd(initial) {
+  private getFirstAd() {
+    return this.getAd()
+      .then(response =>
+        setTimeout(() => {
+          this.showAd(response);
+          this.smaToggle = 1;
+        }, this.waitBeforeFirstAd)
+      );
+  }
 
-    RestCall.getAdId()
-      .then(response => RestCall.getAd(response["ad_id"]))
-      // .then(x => new Promise(resolve => setTimeout(() => resolve(x), initial)))
-      .then(response => {
-        this.sma.nativeElement.innerHTML = response;
-        this.smaPhone.nativeElement.innerHTML = response;
-        return new Promise(resolve => setTimeout(() => resolve(response), initial))})
-      .then(response => {
-        if(initial){
-            this.smaToggle= 1}
-      });
+  private getNextAd(): void {
+    this.getAd()
+      .then(response => this.nextSma = response);
+  }
+
+  private getAd(): Promise<string> {
+    return RestCall.getAdId()
+      .then(response => RestCall.getAd(response["ad_id"]));
+  }
+
+  private showAd(ad) {
+    this.sma.nativeElement.innerHTML = ad;
+    this.smaPhone.nativeElement.innerHTML = ad;
   }
 
   private reset() {
