@@ -994,6 +994,8 @@ if (true) {
 Flight::route('POST /file/chunk/@file_id/@download_id/@idno/@ext', function($file_id, $download_id, $idno, $ext) {
 
 $config = Flight::get("config");
+ignore_user_abort(true);
+set_time_limit(0);
 
 // if user is able to upload file
 if (true) {
@@ -1009,6 +1011,11 @@ if (true) {
   $myfile = fopen("/tmp/orig".$file_id.".".$ext, "w") or die("Unable to open file!");
   fwrite($myfile, Flight::request()->getBody());
   fclose($myfile);
+
+  // return ok -> let's try
+  Flight::json(array(
+     'ok' => 'ok'
+  ), 200);
 
   // now let's see how long the song is
   $ffprobe = FFMpeg\FFProbe::create(array(
@@ -1049,16 +1056,13 @@ if (true) {
            'Bucket' => $config['AWS_S3_BUCKET'],
            'Key'    => $files[0]["version_id"] . "/" . $files[0]["file_name"] . '.mp3',
            'Body'   => file_get_contents("/tmp/".$file_id.".mp3"),
-           'ACL'    => 'public-read'
+           'ACL'    => 'public-read',
+           'ContentDisposition' => 'attachment; filename=\"'.$files[0]["version_id"] . "/" . $files[0]["file_name"] . '.mp3'.'\"'
        ]);
 
        // if ($i == 0) {
          $returnurl = $result['ObjectURL'];
        // }
-      // return ok -> let's try
-      Flight::json(array(
-         'ok' => $returnurl
-      ), 200);
 
      // delete file again
      unlink("/tmp/".$file_id.".mp3");
@@ -1102,7 +1106,8 @@ if (true) {
         'Bucket' => $config['AWS_S3_BUCKET'],
         'Key'    => $filesnew[0]["version_id"] . "/" . $filesnew[0]["file_name"] . '.' . $filesnew[0]["extension"],
         'Body'   => file_get_contents("/tmp/orig".$file_id.".".$ext),
-        'ACL'    => 'public-read'
+        'ACL'    => 'public-read',
+        'ContentDisposition' => 'attachment; filename=\"'.$files[0]["version_id"] . "/" . $files[0]["file_name"] . '.mp3'.'\"'
     ]);
   }
 
