@@ -64,4 +64,8 @@ export class CommentComponent implements OnInit {
   isPlaying() {
     return this.player && this.player.backend.getComment() === this.comment.comment_id;
   }
+
+  playerIsReady(): boolean {
+    return this.player && this.player.isReady();
+  }
 }

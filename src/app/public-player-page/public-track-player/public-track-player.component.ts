@@ -298,4 +298,8 @@ export class PublicTrackPlayerComponent implements OnInit, AfterViewChecked {
   scrollToTop(waveform) {
     waveform.closest(".comments-scrolltainer").scrollTop = 0;
   }
+
+  playerIsReady(): boolean {
+    return this.playerService.playerReady(this.track.track_id);
+  }
 }

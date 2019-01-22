@@ -2,7 +2,7 @@
 
   <div class="player-header row">
 
-    <div *ngIf="isPlaying(); then pausebutton else playbutton"></div>
+    <div *ngIf="isPlaying(); then pausebutton else playbutton" [class.disabled]="!playerIsReady()"></div>
 
     <ng-template #playbutton>
 

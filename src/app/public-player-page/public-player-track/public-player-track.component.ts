@@ -59,4 +59,8 @@ export class PublicPlayerTrackComponent implements OnInit {
         [0]
     );
   }
+
+  playerIsReady(): boolean {
+    return this.playerService.playerReady(this.track.track_id);
+  }
 }
