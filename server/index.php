@@ -1055,7 +1055,7 @@ if (in_array($file_id, $_SESSION['user_files'])) {
       // upload in chunks to S3
        $result = $s3->putObject([
            'Bucket' => $config['AWS_S3_BUCKET'],
-           'Key'    => $files[0]["version_id"] . "/" . $files[0]["file_name"] . '.mp3',
+           'Key'    => $files[0]["version_id"] . "/" . urldecode($files[0]["file_name"]) . '.mp3',
            'Body'   => file_get_contents("/tmp/".$file_id.".mp3"),
            'ACL'    => 'public-read',
            'ContentDisposition' => 'attachment; filename=\"'.$files[0]["version_id"] . "/" . $files[0]["file_name"] . '.mp3'.'\"'
@@ -1105,7 +1105,7 @@ if (in_array($file_id, $_SESSION['user_files'])) {
     
     $result = $s3->putObject([
         'Bucket' => $config['AWS_S3_BUCKET'],
-        'Key'    => $filesnew[0]["version_id"] . "/" . $filesnew[0]["file_name"] . '.' . $files[0]["extension"],
+        'Key'    => $filesnew[0]["version_id"] . "/" . urldecode($filesnew[0]["file_name"]) . '.' . $files[0]["extension"],
         'Body'   => file_get_contents("/tmp/orig".$file_id.".".$ext),
         'ACL'    => 'public-read',
         'ContentDisposition' => 'attachment; filename=\"'.$files[0]["version_id"] . "/" . $files[0]["file_name"] . '.mp3'.'\"'
