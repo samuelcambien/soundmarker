@@ -74,15 +74,19 @@ export class RestCall {
     });
   }
 
-  static logSmaClick(): Promise<any> {
+  static logSmaClick(smaId: string): Promise<any> {
     return Utils.sendPostRequest(RestUrl.AD, {
-      clicks: 1
+      ad_id: smaId,
+      clicks: "1",
+      exposure_time: "0"
     });
   }
 
-  static getNextAdId(): Promise<any> {
+  static getNextAdId(smaId: string, exposureTime): Promise<any> {
     return Utils.sendPostRequest(RestUrl.AD, {
-      exposure_time: 40
+      ad_id: smaId,
+      clicks: "0",
+      exposure_time: exposureTime
     });
   }
 
