@@ -48,6 +48,7 @@ export class PublicPageComponent implements OnInit {
 
   smaToggle = 0;
   smaId: string;
+  smaHtml;
 
   constructor(private modalService: NgbModal, private localStorageService: LocalStorageService) {
   }
@@ -61,16 +62,16 @@ export class PublicPageComponent implements OnInit {
     if (!this.localStorageService.termsAccepted()) {
       this.openIntroduction();
     }
-    this.getFirstAd();
-    interval(this.exposureTime * 1000)
-      .pipe(tap(() => this.smaToggle = 0))
-      .pipe(delay(325))
-      .pipe(map(() => {
-        this.getNextAd()
-          .then(response => this.showAd(response))
-      }))
-      .pipe(delay(500))
-      .subscribe(() => this.smaToggle = 1);
+    this.getFirstAd()
+      .then(() =>
+        interval(this.exposureTime * 1000)
+          .pipe(map(() => this.getNextAd()))
+          .pipe(tap(() => this.smaToggle = 0))
+          .pipe(delay(325))
+          .pipe(tap(() => this.showAd(this.smaHtml)))
+          .pipe(delay(500))
+          .subscribe(() => this.smaToggle = 1)
+      );
   }
 
   private getFirstAd() {
@@ -88,9 +89,12 @@ export class PublicPageComponent implements OnInit {
 
   private getNextAd(): Promise<any> {
     return RestCall.getNextAdId(this.smaId, this.exposureTime)
-      .then(response => {
-        this.smaId = response["ad_id"];
-        return RestCall.getAd(this.smaId)
+      .then(response =>
+        this.smaId = response["ad_id"]
+      ).then(() =>
+        RestCall.getAd(this.smaId)
+      ).then(response => {
+        this.smaHtml = response;
       });
   }
 
