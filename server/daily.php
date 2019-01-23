@@ -153,7 +153,7 @@ foreach ($updates as &$update) {
       // Replace strings -> %tracktitle%
       $tracktitle = "";
       foreach ($files as &$file) {
-          $tracktitle .= $file["file_name"] . "\n";
+          $tracktitle .= urldecode($file["file_name"]) . "\n";
       }
       $emailstring = str_replace("%tracktitle%",$tracktitle,$emailstring);
       $emailstring_text = str_replace("%tracktitle%",$tracktitle,$emailstring_text);   

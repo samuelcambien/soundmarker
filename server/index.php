@@ -326,7 +326,7 @@ if (in_array($project_id, $_SESSION['user_projects'])) {
     // Replace strings -> %tracktitle%
     $tracktitle = "";
     foreach ($files as &$file) {
-        $tracktitle .= $file["file_name"] . "<br>";
+        $tracktitle .= urldecode($file["file_name"]) . "<br>";
     }
     $emailstring = str_replace("%tracktitle%",$tracktitle,$emailstring);
     $emailstring_text = str_replace("%tracktitle%",$tracktitle,$emailstring_text);   

@@ -105,7 +105,7 @@ foreach ($notifications as &$notification) {
         // Replace strings -> %tracktitle%
         $tracktitle = "";
         foreach ($files as &$file) {
-            $tracktitle .= $file["file_name"] . "<br>";
+            $tracktitle .= urldecode($file["file_name"]) . "<br>";
         }
         $emailstring = str_replace("%tracktitle%",$tracktitle,$emailstring);
         $emailstring_text = str_replace("%tracktitle%",$tracktitle,$emailstring_text);   
