@@ -1200,8 +1200,8 @@ $db = Flight::db();
 $sql = "SELECT clicks, exposure_time FROM Ad WHERE ad_id = '$ad_id'";
 $result = $db->query($sql);
 
-$clicksnew = $result->fetch()[0]["clicks"] + $clicks;
-$exposure_timenew = $result->fetch()[0]["exposure_time"] + $exposure_time;
+$clicksnew = intval($result->fetch()[0]["clicks"]) + intval($clicks);
+$exposure_timenew = intval($result->fetch()[0]["exposure_time"]) + intval($exposure_time);
 
 $sql = "UPDATE Ad SET exposure_time = '$exposure_timenew' WHERE ad_id = '$ad_id'";
 $result = $db->query($sql);
@@ -1222,7 +1222,7 @@ $impressions = $array[$rand]["impressions"]+1;
 
 // return ok
 Flight::json(array(
-   'html' => $html, 'ad_id' => $ad_id
+   'ad_id' => $ad_id
 ), 200);
 
 // store impression for new ad
