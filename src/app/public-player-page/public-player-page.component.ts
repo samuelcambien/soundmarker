@@ -65,7 +65,7 @@ export class PublicPlayerPageComponent implements OnInit {
 
         this.expiry_date =  project.expiration.substr(0, 10);
         if (project.sender) {
-          this.sender = "(By " + project.sender + ")";
+          this.sender = "by " + project.sender;
         }
 
         for (let track of project.tracks) {
