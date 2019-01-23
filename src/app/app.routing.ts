@@ -20,6 +20,10 @@ const appRoutes: Routes = [
     component: PublicPlayerPageComponent,
   },
   {
+    path: "project/",
+    component: PublicPagenotfoundPageComponent,
+  },
+  {
     path: "about-us",
     component: AboutUsInfoComponent,
   },

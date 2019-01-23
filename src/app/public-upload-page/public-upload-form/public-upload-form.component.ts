@@ -56,6 +56,7 @@ export class PublicUploadFormComponent implements OnInit {
   };
 
   onSubmit() {
+    this.uploader.progress = 0;
     this.uploading.emit();
     this.storePreferences();
     RestCall.createNewProject()

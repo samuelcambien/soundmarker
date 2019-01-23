@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {ActivatedRoute} from "@angular/router";
+import {ActivatedRoute, Router} from '@angular/router';
 import {Comment} from "../model/comment";
 import {Track} from "../model/track";
 import {Project} from "../model/project";
@@ -32,6 +32,7 @@ export class PublicPlayerPageComponent implements OnInit {
   activeTrack: Track;
 
   constructor(
+    private router: Router,
     private route: ActivatedRoute,
     private playerService: PlayerService
   ) {
@@ -42,6 +43,10 @@ export class PublicPlayerPageComponent implements OnInit {
       this.loadProjectInfo(params['project_hash']);
     });
     window.onresize = () => this.getActivePlayer().redraw();
+
+    this.error.subscribe(()=>{
+      this.message=null;
+    });
   }
 
   private loadProjectInfo(projectHash: string) {
@@ -63,9 +68,9 @@ export class PublicPlayerPageComponent implements OnInit {
           return;
         }
 
-        this.expiry_date =  project.expiration.substr(0, 10);
+        this.expiry_date = project.expiration.substr(0, 10);
         if (project.sender) {
-          this.sender = "(By " + project.sender + ")";
+          this.sender = "by " + project.sender;
         }
 
         for (let track of project.tracks) {
@@ -74,8 +79,8 @@ export class PublicPlayerPageComponent implements OnInit {
           track.versions
             .then((versions: Version[]) => {
               this.message = this.getMessage(project, versions[0]);
-              if(this.message.text==''){
-                this.message.text="No notes included";
+              if (this.message.text == '') {
+                this.message.text = "No notes included";
               }
               versions.forEach(version => {
                 if (version.downloadable == 0) version.downloadable = false
@@ -115,7 +120,16 @@ export class PublicPlayerPageComponent implements OnInit {
     RestCall.getComments(version_id)
       .then(response => {
         let allComments: Comment[] = response["comments"];
-        track.comments = allComments.filter(comment => comment.parent_comment_id == 0);
+        track.comments = (track.comments || [])
+          .concat(
+            allComments
+              .filter(comment => comment.parent_comment_id == 0)
+              .filter(comment =>
+                !(track.comments || [])
+                  .map(loadedComment => loadedComment.comment_id)
+                  .includes(comment.comment_id)
+              )
+          );
         for (let comment of track.comments) {
           if (comment.include_end == 0) comment.include_end = false;
           if (comment.include_start == 0) comment.include_start = false;
@@ -139,7 +153,12 @@ export class PublicPlayerPageComponent implements OnInit {
 
   selectTrack(track: Track) {
     this.activeTrack = track;
-    setTimeout(() => this.getPlayer(track.track_id).redraw(), 4);
+    setTimeout(() => {
+        if (this.getPlayer(track.track_id)) {
+          this.getPlayer(track.track_id).redraw()
+        }
+      }, 4
+    );
   }
 
   getMessage(project: Project, version: Version): Message {
@@ -147,5 +166,9 @@ export class PublicPlayerPageComponent implements OnInit {
       project.tracks.length + " tracks added" + (project.email_from ? " by " + project.email_from : ""),
       version.notes,
       false);
+  }
+
+  backToHome(){
+    this.router.navigate(['./']);
   }
 }

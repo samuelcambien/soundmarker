@@ -33,7 +33,7 @@ import {delay, map, tap} from "rxjs/operators";
 export class PublicPageComponent implements OnInit {
 
   // Timing parameters
-  waitBeforeFirstAd = 1750; //ms
+  waitBeforeFirstAd = 1800; //ms
   exposureTime = 45;
 
   @Input() project_id;
@@ -63,6 +63,7 @@ export class PublicPageComponent implements OnInit {
     }
     this.getFirstAd();
     interval(this.exposureTime * 1000)
+      .pipe(delay(this.waitBeforeFirstAd))
       .pipe(tap(() => this.smaToggle = 0))
       .pipe(delay(400))
       .pipe(map(() => {
@@ -78,8 +79,11 @@ export class PublicPageComponent implements OnInit {
       .then(response =>
         setTimeout(() => {
           this.showAd(response);
+        }, this.waitBeforeFirstAd/2))
+      .then(response =>
+        setTimeout(() => {
           this.smaToggle = 1;
-        }, this.waitBeforeFirstAd)
+        }, this.waitBeforeFirstAd/2)
       );
   }
 

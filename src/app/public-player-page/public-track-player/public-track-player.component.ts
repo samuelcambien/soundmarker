@@ -76,13 +76,18 @@ export class PublicTrackPlayerComponent implements OnInit, AfterViewChecked {
       this.comment.end_time = versions[0].track_length;
       this.peaks = JSON.parse(this.version.wave_png);
       return this.loadWaveForm();
-    }).catch(
-      e => this.error.emit(e)
-    ).then(() =>
-      setInterval(() => {
-        this._progress = this.getCurrentTime();
-      }, 1)
-    );
+    })
+    // .catch(
+    // e => {
+    //   console.log(e);
+    //   this.error.emit(e);
+    // }
+    // )
+      .then(() =>
+        setInterval(() => {
+          this._progress = this.getCurrentTime();
+        }, 1)
+      );
   }
 
   private getPlayerWidth(): number {
