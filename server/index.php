@@ -1241,11 +1241,7 @@ $sql = "DELETE FROM DailyUpdates WHERE update_id = '$update_id' AND project_id =
 $result = $db->query($sql);
 
 // Render a display -> front end
-
-// return ok
-Flight::json(array(
-   'return' => "ok"
-), 200);
+echo "<script>window.location = \"https://more.soundmarker.com/notifications/\";</script>";
 });
 
 
