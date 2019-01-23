@@ -1059,18 +1059,18 @@ if (true) {
         ->setAudioChannels(2)
         ->setAudioKiloBitrate(192);
 
-    $audio->save($format, "/tmp/".$file_id.".mp3");
+    $audio->save($format, "/tmp/mp3".$file_id.".mp3");
 
       // upload in chunks to S3
        $result = $s3->putObject([
            'Bucket' => $config['AWS_S3_BUCKET'],
            'Key'    => $files[0]["version_id"] . "/" . urldecode($files[0]["file_name"]) . '.mp3',
-           'Body'   => file_get_contents("/tmp/".$file_id.".mp3"),
+           'Body'   => file_get_contents("/tmp/mp3".$file_id.".mp3"),
            'ACL'    => 'public-read'
        ]);
 
      // delete file again
-     unlink("/tmp/".$file_id.".mp3");
+     unlink("/tmp/mp3".$file_id.".mp3");
   } else {
          $result = $s3->putObject([
              'Bucket' => $config['AWS_S3_BUCKET'],
@@ -1197,9 +1197,10 @@ $clicks = $getbody->clicks;
 $db = Flight::db();
 $sql = "SELECT clicks, exposure_time FROM Ad WHERE ad_id = '$ad_id'";
 $result = $db->query($sql);
+$resultfetch = $result->fetchAll(PDO::FETCH_ASSOC);
 
-$clicksnew = intval($result->fetch()[0]["clicks"]) + intval($clicks);
-$exposure_timenew = intval($result->fetch()[0]["exposure_time"]) + intval($exposure_time);
+$clicksnew = intval($resultfetch[0]["clicks"]) + intval($clicks);
+$exposure_timenew = intval($resultfetch[0]["exposure_time"]) + intval($exposure_time);
 
 $sql = "UPDATE Ad SET exposure_time = '$exposure_timenew' WHERE ad_id = '$ad_id'";
 $result = $db->query($sql);
@@ -1207,12 +1208,10 @@ $sql = "UPDATE Ad SET clicks = '$clicksnew' WHERE ad_id = '$ad_id'";
 $result = $db->query($sql);
 
 // get next ad
-$sql = "SELECT html, ad_id, impressions FROM Ad WHERE priority != '0' AND impressions <= limits";
+$sql = "SELECT html, ad_id, impressions FROM Ad WHERE priority != '0' AND impressions <= limits AND ad_id <> '$ad_id'";
 $result = $db->query($sql);
 $array = $result->fetchAll(PDO::FETCH_ASSOC);
 
-// first filter old ad out of array
-unset($array[array_search($ad_id, $array)]);
 $rand = rand(0,(count($array)-1));
 $html = $array[$rand]["html"];
 $ad_id = $array[$rand]["ad_id"];
