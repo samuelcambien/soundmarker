@@ -16,7 +16,7 @@
   margin-top: 0px !important;
   padding-left: 0px !important;
   margin-bottom: 0px !important;
-  background: #none !important;
+  background: none !important;
   box-shadow: none !important;
   -webkit-box-shadow: none !important;
   -moz-box-shadow: none !important;
@@ -26,6 +26,7 @@
 
 .phone-sma {
 	height: 160px;
+	
 	max-width: calc(100% - 20px);
 	min-width: calc(100% - 20px);
 	width: calc(100% - 20px);
@@ -59,7 +60,8 @@
 .upload-container {
   min-height: 194px;
   //overflow: auto !important;
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
 
@@ -162,7 +164,7 @@
   }
   
   .phone-scroll {
-	  overflow-y: scroll;
+	  overflow-y: inherit;
 	  height: 100%;
 	 padding-left: 10px;
 	 padding-right: 10px;
