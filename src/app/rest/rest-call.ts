@@ -74,7 +74,20 @@ export class RestCall {
     });
   }
 
+  static logSmaClick(): Promise<any> {
+    return Utils.sendPostRequest(RestUrl.AD, {
+      clicks: 1
+    });
+  }
+
+  static getNextAdId(): Promise<any> {
+    return Utils.sendPostRequest(RestUrl.AD, {
+      exposure_time: 40
+    });
+  }
+
   // GET
+
   static getAdId(): Promise<any> {
     return Utils.sendGetRequest(RestUrl.AD);
   }

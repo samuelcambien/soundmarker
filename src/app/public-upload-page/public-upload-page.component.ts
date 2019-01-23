@@ -1,7 +1,8 @@
-import {Component, ElementRef, OnInit, ViewChild, EventEmitter, Output} from '@angular/core';
+import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {FileUploader} from "../ng2-file-upload";
 
 const UPLOAD_FILES_ENDPOINT = 'http://localhost:8080/rest/upload/file';
+
 
 enum Status {
   SELECT_SONGS, UPLOADING_SONGS, GREAT_SUCCESS
@@ -14,9 +15,23 @@ enum Status {
 })
 export class PublicUploadPageComponent implements OnInit {
 
-  error;
+  public static ACCEPTED_FILE_TYPES: string[] =
+    [
+      "audio/wv",
+      "audio/flac",
+      "audio/wav",
+      "audio/x-m4a",
+      "audio/x-wav",
+      "audio/x-aiff",
+      "audio/mpeg",
+      "audio/aiff",
+      "audio/mp3",
+      "audio/ogg",
+      "audio/aac",
+      "audio/m4a",
+    ];
 
-  uploader_error_message: string;
+  error;
 
   uploader: FileUploader = new FileUploader({
     url: UPLOAD_FILES_ENDPOINT,
@@ -35,9 +50,7 @@ export class PublicUploadPageComponent implements OnInit {
       },
       {
         name: 'onlyAudio',
-        fn: item => {
-          return item.type.startsWith("audio/")
-        }
+        fn: item => PublicUploadPageComponent.accept(item.type)
       }
     ],
   });
@@ -65,5 +78,12 @@ export class PublicUploadPageComponent implements OnInit {
   successfullUpload() {
     this.stage = this.statusEnum.GREAT_SUCCESS;
     this.uploader.clearQueue();
+  }
+
+  static accept(fileType: string): boolean {
+
+    return PublicUploadPageComponent.ACCEPTED_FILE_TYPES.find(
+      acceptedType => acceptedType == fileType
+    ) != null;
   }
 }
