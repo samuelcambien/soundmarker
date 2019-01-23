@@ -1029,27 +1029,28 @@ if (in_array($file_id, $_SESSION['user_files'])) {
       ->format("/tmp/orig".$file_id.".".$ext) // extracts file informations
       ->get('duration'); 
 
-  // now we split up the song in 10sec fragments
-  // now let's convert the file
-  $ffmpeg = FFMpeg\FFMpeg::create(array(
-      'ffmpeg.binaries'  => $config['FFMPEG_PATH'].'/ffmpeg',
-      'ffprobe.binaries' => $config['FFMPEG_PATH'].'/ffprobe',
-      'timeout'          => 3600, // The timeout for the underlying process
-      'ffmpeg.threads'   => 12,   // The number of threads that FFMpeg should use
-  ));
-  $audio = $ffmpeg->open("/tmp/orig".$file_id.".".$ext);
+  $codec_name =$ffprobe
+      ->format("/tmp/orig".$file_id.".".$ext) // extracts file informations
+      ->get('codec_name'); 
 
-  $format = new FFMpeg\Format\Audio\Mp3();
-  $format
-      ->setAudioChannels(2)
-      ->setAudioKiloBitrate(192);
+  // if coded is not lossy, transcode
+  if ((strpos($codec_name, 'pcm') !== false) || (strpos($codec_name, 'lac') !== false) || (strpos($codec_name, 'wavpack') !== false)) {
 
-  // now we loop through and upload each fragment
-  // cut the audio.
-  // $amountofsegments = intval($duration/10);
+    // now we split up the song in 10sec fragments
+    // now let's convert the file
+    $ffmpeg = FFMpeg\FFMpeg::create(array(
+        'ffmpeg.binaries'  => $config['FFMPEG_PATH'].'/ffmpeg',
+        'ffprobe.binaries' => $config['FFMPEG_PATH'].'/ffprobe',
+        'timeout'          => 3600, // The timeout for the underlying process
+        'ffmpeg.threads'   => 12,   // The number of threads that FFMpeg should use
+    ));
+    $audio = $ffmpeg->open("/tmp/orig".$file_id.".".$ext);
 
-  // for ($i = 0; $i <= $amountofsegments; $i++) {
-    // $audio->filters()->clip(FFMpeg\Coordinate\TimeCode::fromSeconds($i*10), FFMpeg\Coordinate\TimeCode::fromSeconds(10));
+    $format = new FFMpeg\Format\Audio\Mp3();
+    $format
+        ->setAudioChannels(2)
+        ->setAudioKiloBitrate(192);
+
     $audio->save($format, "/tmp/".$file_id.".mp3");
 
       // upload in chunks to S3
@@ -1057,17 +1058,19 @@ if (in_array($file_id, $_SESSION['user_files'])) {
            'Bucket' => $config['AWS_S3_BUCKET'],
            'Key'    => $files[0]["version_id"] . "/" . urldecode($files[0]["file_name"]) . '.mp3',
            'Body'   => file_get_contents("/tmp/".$file_id.".mp3"),
-           'ACL'    => 'public-read',
-           'ContentDisposition' => 'attachment; filename=\"'.$files[0]["version_id"] . "/" . $files[0]["file_name"] . '.mp3'.'\"'
+           'ACL'    => 'public-read'
        ]);
-
-       // if ($i == 0) {
-         $returnurl = $result['ObjectURL'];
-       // }
 
      // delete file again
      unlink("/tmp/".$file_id.".mp3");
-   // }
+  } else {
+         $result = $s3->putObject([
+             'Bucket' => $config['AWS_S3_BUCKET'],
+             'Key'    => $files[0]["version_id"] . "/" . urldecode($files[0]["file_name"]) . $ext,
+             'Body'   => file_get_contents("/tmp/orig".$file_id.".".$ext),
+             'ACL'    => 'public-read'
+         ]);
+  }
   
   // now it's time to create the png
   // let's create wave_png
