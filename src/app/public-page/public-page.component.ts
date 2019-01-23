@@ -22,10 +22,10 @@ import {delay, map, tap} from "rxjs/operators";
         opacity: 0,
       })),
       transition('smas => smahidden', [
-        animate('400ms')
+        animate('325ms')
       ]),
       transition('smahidden => smas', [
-        animate('500ms')
+        animate('325ms')
       ]),
     ]),
   ],
@@ -33,7 +33,7 @@ import {delay, map, tap} from "rxjs/operators";
 export class PublicPageComponent implements OnInit {
 
   // Timing parameters
-  waitBeforeFirstAd = 1800; //ms
+  waitBeforeFirstAd = 2750; //ms
   exposureTime = 45;
 
   @Input() project_id;
@@ -63,14 +63,13 @@ export class PublicPageComponent implements OnInit {
     }
     this.getFirstAd();
     interval(this.exposureTime * 1000)
-      .pipe(delay(this.waitBeforeFirstAd/2-400-85))
       .pipe(tap(() => this.smaToggle = 0))
-      .pipe(delay(400))
+      .pipe(delay(325))
       .pipe(map(() => {
         this.getNextAd()
           .then(response => this.showAd(response))
       }))
-      .pipe(delay(85))
+      .pipe(delay(500))
       .subscribe(() => this.smaToggle = 1);
   }
 
