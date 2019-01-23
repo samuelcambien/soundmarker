@@ -51,7 +51,9 @@ if(!isset($_SESSION))
   $cache_expire = session_cache_expire();
   session_start(); 
 } 
-$access_token = json_decode($_SESSION["USER"])->access_token;
+if (isset($_SESSION["USER"])) {
+  $access_token = json_decode($_SESSION["USER"])->access_token;
+}
 
 // Error handling
 Flight::map('error', function(Exception $ex){
@@ -1030,7 +1032,7 @@ if (in_array($file_id, $_SESSION['user_files'])) {
   $ffprobe = FFMpeg\FFProbe::create(array(
       'ffmpeg.binaries'  => $config['FFMPEG_PATH'].'/ffmpeg',
       'ffprobe.binaries' => $config['FFMPEG_PATH'].'/ffprobe',
-      'timeout'          => 3600, // The timeout for the underlying process
+      'timeout'          => 8000, // The timeout for the underlying process
       'ffmpeg.threads'   => 12,   // The number of threads that FFMpeg should use
   ));
   $duration = $ffprobe
@@ -1038,18 +1040,18 @@ if (in_array($file_id, $_SESSION['user_files'])) {
       ->get('duration'); 
 
   $codec_name = $ffprobe
-      ->format("/tmp/orig".$file_id.".".$ext) // extracts file informations
+      ->streams("/tmp/orig".$file_id.".".$ext) // extracts file informations
       ->first()
       ->get('codec_name'); 
 
   // if coded is not lossy, transcode
-  if ((strpos($codec_name, 'pcm') == 1) OR (strpos($codec_name, 'lac') == 1) OR (strpos($codec_name, 'wavpack') == 1)) {
+  if ((strpos($codec_name, 'pcm') !== false) || (strpos($codec_name, 'lac') !== false) || (strpos($codec_name, 'wavpack') !== false)) {
     // now we split up the song in 10sec fragments
     // now let's convert the file
     $ffmpeg = FFMpeg\FFMpeg::create(array(
         'ffmpeg.binaries'  => $config['FFMPEG_PATH'].'/ffmpeg',
         'ffprobe.binaries' => $config['FFMPEG_PATH'].'/ffprobe',
-        'timeout'          => 3600, // The timeout for the underlying process
+        'timeout'          => 8000, // The timeout for the underlying process
         'ffmpeg.threads'   => 12,   // The number of threads that FFMpeg should use
     ));
     $audio = $ffmpeg->open("/tmp/orig".$file_id.".".$ext);
