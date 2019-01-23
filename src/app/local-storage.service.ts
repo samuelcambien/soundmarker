@@ -20,7 +20,7 @@ export class LocalStorageService {
   }
 
   public getEmailFrom(): string {
-    return localStorage.getItem("smrk_from");
+    return localStorage.getItem("smrk_from") != null ? localStorage.getItem("smrk_from") : "";
   }
 
   public storeShareMode(shareMode: string): void {
@@ -28,7 +28,7 @@ export class LocalStorageService {
   }
 
   public getShareMode(): string {
-    return localStorage.getItem("smrk_type");
+    return localStorage.getItem("smrk_type") != null ? localStorage.getItem("smrk_type") : "";
   }
 
   public storePeriod(period: string): void {
@@ -36,7 +36,7 @@ export class LocalStorageService {
   }
 
   public getPeriod(): string {
-    return localStorage.getItem("smrk_period");
+    return localStorage.getItem("smrk_period") != null ? localStorage.getItem("smrk_period") : "";
   }
 
   public storeAllowDownloads(allowDownloads: boolean): void {

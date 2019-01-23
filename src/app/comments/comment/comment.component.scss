@@ -22,7 +22,7 @@
 	cursor: pointer;
 }
 
-.comment-play-button.disabled {
+.comment-play-button.hidden {
 	visibility: hidden;
 	cursor: default;
 	pointer-events: none;
