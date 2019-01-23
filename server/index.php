@@ -1213,6 +1213,8 @@ $sql = "SELECT html, ad_id, impressions FROM Ad WHERE priority != '0' AND impres
 $result = $db->query($sql);
 $array = $result->fetchAll(PDO::FETCH_ASSOC);
 
+// first filter old ad out of array
+unset($array[array_search($ad_id, $array)]);
 $rand = rand(0,(count($array)-1));
 $html = $array[$rand]["html"];
 $ad_id = $array[$rand]["ad_id"];
