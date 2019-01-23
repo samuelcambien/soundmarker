@@ -120,8 +120,8 @@ export class PublicPlayerPageComponent implements OnInit {
             allComments
               .filter(comment => comment.parent_comment_id == 0)
               .filter(comment =>
-                track.comments
-                  .map(comment => comment.comment_id)
+                !(track.comments || [])
+                  .map(loadedComment => loadedComment.comment_id)
                   .includes(comment.comment_id)
               )
           );
