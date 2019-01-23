@@ -39,16 +39,14 @@ $SesClient = new SesClient([
 Flight::set("SesClient", $SesClient);
 
 ini_set("default_socket_timeout", 4000);
-if(!isset($_SESSION)) 
-{ 
-    /* set the cache limiter to 'private' */
+if(!isset($_SESSION)) { 
+  /* set the cache limiter to 'private' */
+  // session_cache_limiter('private');
+  // $cache_limiter = session_cache_limiter();
 
-  session_cache_limiter('private');
-  $cache_limiter = session_cache_limiter();
-
-  /* set the cache expire to 30 minutes */
-  session_cache_expire(1440);
-  $cache_expire = session_cache_expire();
+  //  set the cache expire to 30 minutes 
+  // session_cache_expire(1440);
+  // $cache_expire = session_cache_expire();
   session_start(); 
 } 
 if (isset($_SESSION["USER"])) {
@@ -1070,7 +1068,7 @@ if (in_array($file_id, $_SESSION['user_files'])) {
       // upload in chunks to S3
        $result = $s3->putObject([
            'Bucket' => $config['AWS_S3_BUCKET'],
-           'Key'    => $files[0]["version_id"] . "/" . urldecode($files[0]["file_name"]) . '.mp3',
+           'Key'    => $files[0]["version_id"] . "/" . utf8_decode(urldecode($files[0]["file_name"])) . '.mp3',
            'Body'   => file_get_contents("/tmp/mp3".$file_id.".mp3"),
            'ACL'    => 'public-read'
        ]);
@@ -1080,7 +1078,7 @@ if (in_array($file_id, $_SESSION['user_files'])) {
   } else {
          $result = $s3->putObject([
              'Bucket' => $config['AWS_S3_BUCKET'],
-             'Key'    => $files[0]["version_id"] . "/" . urldecode($files[0]["file_name"]) . '.' . $ext,
+             'Key'    => $files[0]["version_id"] . "/" . utf8_decode(urldecode($files[0]["file_name"])) . '.' . $ext,
              'Body'   => file_get_contents("/tmp/orig".$file_id.".".$ext),
              'ACL'    => 'public-read'
          ]);
