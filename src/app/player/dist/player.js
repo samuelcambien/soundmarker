@@ -878,7 +878,7 @@
       this.decodedBuffers = [];
       this.sources = [];
 
-      this.lastPlay = this.ac.currentTime;
+      this.lastPlay = this.getAudioContext().currentTime;
       this.startPosition = 0;
       this.scheduledPause = null;
 
@@ -1155,19 +1155,26 @@
 
     load: function (buffer) {
       this.startPosition = 0;
-      this.lastPlay = this.ac.currentTime;
+      this.lastPlay = this.getAudioContext().currentTime;
       this.buffer = buffer;
     },
 
     loadChunk: function (index) {
 
-      return fetch(this.aws_path + ".mp3")
-        .then(response => {
-          if (!response.ok) throw Error(response.statusText);
-          return response;
-        })
-        .then(response => this.readResponse(response.body.getReader(), new Uint8Array(), 0))
-        .then((completeArray) => {
+      return new Promise(resolve => {
+
+        var ajax = Player.util.ajax({
+          url: this.aws_path + ".mp3",
+          responseType: 'arraybuffer'
+        });
+
+        ajax.on('success', function (data, e) {
+          resolve(data);
+          my.currentAjax = null;
+        });
+      }).then(response =>
+          this.readResponse(response.body.getReader(), new Uint8Array(), 0)
+        ).then((completeArray) => {
           this.audioBuffers[index] = this.copy(completeArray.buffer);
           return this.decodeBuffer(index, completeArray.buffer);
         }).then(() => {
@@ -1267,7 +1274,7 @@
       }
 
       this.startPosition = start;
-      this.lastPlay = this.ac.currentTime;
+      this.lastPlay = this.getAudioContext().currentTime;
 
       if (this.state === this.states[this.FINISHED_STATE]) {
         this.setState(this.PAUSED_STATE);
@@ -1277,7 +1284,7 @@
     },
 
     getPlayedTime: function () {
-      return (this.ac.currentTime - this.lastPlay) * this.playbackRate;
+      return (this.getAudioContext().currentTime - this.lastPlay) * this.playbackRate;
     },
 
     /**
