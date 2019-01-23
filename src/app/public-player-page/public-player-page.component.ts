@@ -46,10 +46,6 @@ export class PublicPlayerPageComponent implements OnInit {
       if (this.getActivePlayer())
         this.getActivePlayer().redraw();
     };
-
-    this.error.subscribe(()=>{
-      this.message=null;
-    });
   }
 
   private loadProjectInfo(projectHash: string) {
