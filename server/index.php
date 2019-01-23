@@ -1037,8 +1037,9 @@ if (in_array($file_id, $_SESSION['user_files'])) {
       ->format("/tmp/orig".$file_id.".".$ext) // extracts file informations
       ->get('duration'); 
 
-  $codec_name =$ffprobe
+  $codec_name = $ffprobe
       ->format("/tmp/orig".$file_id.".".$ext) // extracts file informations
+      ->first()
       ->get('codec_name'); 
 
   // if coded is not lossy, transcode
