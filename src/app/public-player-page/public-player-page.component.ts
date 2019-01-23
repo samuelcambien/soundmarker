@@ -148,7 +148,12 @@ export class PublicPlayerPageComponent implements OnInit {
 
   selectTrack(track: Track) {
     this.activeTrack = track;
-    setTimeout(() => this.getPlayer(track.track_id).redraw(), 4);
+    setTimeout(() => {
+        if (this.getPlayer(track.track_id)) {
+          this.getPlayer(track.track_id).redraw()
+        }
+      }, 4
+    );
   }
 
   getMessage(project: Project, version: Version): Message {
