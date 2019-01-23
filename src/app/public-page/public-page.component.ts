@@ -63,7 +63,7 @@ export class PublicPageComponent implements OnInit {
     }
     this.getFirstAd();
     interval(this.exposureTime * 1000)
-      .pipe(delay(this.waitBeforeFirstAd))
+      .pipe(delay(this.waitBeforeFirstAd/2-400-85))
       .pipe(tap(() => this.smaToggle = 0))
       .pipe(delay(400))
       .pipe(map(() => {
