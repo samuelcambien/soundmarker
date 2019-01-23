@@ -878,7 +878,7 @@
       this.decodedBuffers = [];
       this.sources = [];
 
-      this.lastPlay = this.getAudioContext().currentTime;
+      this.lastPlay = 0;
       this.startPosition = 0;
       this.scheduledPause = null;
 
@@ -1161,20 +1161,16 @@
 
     loadChunk: function (index) {
 
-      return new Promise(resolve => {
-
-        var ajax = Player.util.ajax({
-          url: this.aws_path + ".mp3",
-          responseType: 'arraybuffer'
-        });
-
-        ajax.on('success', function (data, e) {
-          resolve(data);
-          my.currentAjax = null;
-        });
+      return new Promise((resolve, reject) => {
+        let trackRequest = new XMLHttpRequest();
+        trackRequest.responseType = 'arraybuffer';
+        trackRequest.open("GET", this.aws_path + ".mp3", true);
+        trackRequest.onload = () => resolve(trackRequest.response);
+        trackRequest.onerror = () => reject(trackRequest.statusText);
+        trackRequest.send();
       }).then((completeArray) => {
-          this.audioBuffers[index] = this.copy(completeArray.buffer);
-          return this.decodeBuffer(index, completeArray.buffer);
+          this.audioBuffers[index] = this.copy(completeArray);
+          return this.decodeBuffer(index, completeArray);
         }).then(() => {
           this.sources[index] = this.createSource(index);
           this.ready = true;
@@ -1199,6 +1195,7 @@
     },
 
     copy: function (src) {
+      if (!src) return;
       var dst = new ArrayBuffer(src.byteLength);
       new Uint8Array(dst).set(new Uint8Array(src));
       return dst;
