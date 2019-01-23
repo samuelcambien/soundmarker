@@ -42,6 +42,7 @@ foreach ($updates as &$update) {
   $project_idsreturn = $db->query($project_ids)->fetchAll(PDO::FETCH_ASSOC)[0];
   $project_id_notexpired = $project_idsreturn["project_id"];
   $expiration_date = $project_idsreturn["expiration_date"];
+  $expiration_datef = $expiration_date->format('F jS Y');
 
   if (($project_id_notexpired == $project_id) && ($expiration_date >= $lastmonthf)) {
   $sql = "SELECT track_id FROM Track WHERE project_id = '$project_id'";
@@ -117,8 +118,8 @@ foreach ($updates as &$update) {
       $emailstring = str_replace("%commentamount%",$count,$emailstring);
       $emailstring_text = str_replace("%commentamount%",$count,$emailstring_text);   
 
-      $emailstring = str_replace("%projectdate%",$expiration_date,$emailstring);
-      $emailstring_text = str_replace("%projectdate%",$expiration_date,$emailstring_text);   
+      $emailstring = str_replace("%projectdate%",$expiration_datef,$emailstring);
+      $emailstring_text = str_replace("%projectdate%",$expiration_datef,$emailstring_text);   
 
       // Replace strings -> %projectlink%
       $sql = "SELECT hash FROM Project WHERE project_id = '$project_id'";
