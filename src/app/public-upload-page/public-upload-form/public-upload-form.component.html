@@ -67,7 +67,7 @@
         </div>
 
         <input *ngIf="tracks_left()>0" class="upload-songs-input" id="public-uploader" type="file" title="" ng2FileSelect [uploader]="uploader" multiple
-               name="files" accept="audio/*,audio/flac,audio/x-m4a"/>
+               name="files" accept="{{getAcceptedFileTypes().join(',')}}"/>
 
       </div>
 

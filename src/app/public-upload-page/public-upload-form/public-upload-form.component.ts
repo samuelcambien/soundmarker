@@ -16,6 +16,7 @@ import {NgbTooltip} from '@ng-bootstrap/ng-bootstrap';
 import {NgControl, Validators} from '@angular/forms';
 import {Utils} from "../../app.component";
 import {LocalStorageService} from "../../local-storage.service";
+import {PublicUploadPageComponent} from "../public-upload-page.component";
 
 declare var AudioContext: any, webkitAudioContext: any;
 
@@ -173,6 +174,10 @@ export class PublicUploadFormComponent implements OnInit {
       this.localStorageService.storeEmailFrom(this.email_from);
     this.localStorageService.storeShareMode(this.sharemode);
     this.localStorageService.storeAllowDownloads(this.downloadable);
+  }
+
+  getAcceptedFileTypes() {
+    return PublicUploadPageComponent.ACCEPTED_FILE_TYPES;
   }
 }
 
