@@ -34,7 +34,7 @@ export class PublicPageComponent implements OnInit {
 
   // Timing parameters
   waitBeforeFirstAd = 1750; //ms
-  exposureTime = 5;
+  exposureTime = 45;
 
   @Input() project_id;
   @Input() sender;
@@ -87,7 +87,7 @@ export class PublicPageComponent implements OnInit {
     return RestCall.getNextAdId(this.smaId, this.exposureTime)
       .then(response => {
         this.smaId = response["ad_id"];
-        RestCall.getAd(this.smaId)
+        return RestCall.getAd(this.smaId)
       });
   }
 
