@@ -34,6 +34,7 @@ export class PublicPageComponent implements OnInit {
 
   // Timing parameters
   waitBeforeFirstAd = 1750; //ms
+
   @Input() project_id;
   @Input() sender;
   @Input() expiry_date;
@@ -45,7 +46,6 @@ export class PublicPageComponent implements OnInit {
   @ViewChild('smaphone') smaPhone: ElementRef;
 
   smaToggle = 0;
-  nextSma;
 
   constructor(private modalService: NgbModal, private localStorageService: LocalStorageService) {
   }
@@ -60,12 +60,13 @@ export class PublicPageComponent implements OnInit {
       this.openIntroduction();
     }
     this.getFirstAd();
-    this.getNextAd();
     interval(45 * 1000)
       .pipe(tap(() => this.smaToggle = 0))
       .pipe(delay(400))
-      .pipe(tap(() => this.showAd(this.nextSma)))
-      .pipe(tap(() => this.getNextAd()))
+      .pipe(tap(() => {
+        this.getNextAd()
+          .then(response => this.showAd(response))
+      }))
       .pipe(delay(85))
       .subscribe(() => this.smaToggle = 1);
   }
@@ -80,9 +81,9 @@ export class PublicPageComponent implements OnInit {
       );
   }
 
-  private getNextAd(): void {
-    this.getAd()
-      .then(response => this.nextSma = response);
+  private getNextAd(): Promise<any> {
+    return RestCall.getNextAdId()
+      .then(response => RestCall.getAd(response["ad_id"]));
   }
 
   private getAd(): Promise<string> {
