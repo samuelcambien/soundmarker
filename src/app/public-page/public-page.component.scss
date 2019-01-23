@@ -58,8 +58,8 @@
 
 .upload-container {
   min-height: 194px;
-  overflow: auto !important;
-  overflow-x: hidden;
+  //overflow: auto !important;
+  overflow: hidden;
 }
 
 
@@ -148,7 +148,6 @@
 	width: calc(100%);
     left: 0px;
     right: 0px;
-    overflow: auto;
     max-width: 556px;
     min-width: 268px;
     margin-left: 0px;
@@ -167,14 +166,12 @@
 	  height: 100%;
 	 padding-left: 10px;
 	 padding-right: 10px;
-	 overflow: auto;
-	  
+	  overflow-x: hidden !important;
   }
   
   .upload-container {
-  min-height: 154px;
-  
-}
+    min-height: 154px;
+  }
   
     .btn-group {
     margin-bottom: 10px;
