@@ -1042,8 +1042,7 @@ if (true) {
       ->get('codec_name'); 
 
   // if coded is not lossy, transcode
-  if ((strpos($codec_name, 'pcm') !== false) || (strpos($codec_name, 'lac') !== false) || (strpos($codec_name, 'wavpack') !== false)) {
-
+  if ((strpos($codec_name, 'pcm') == 1) OR (strpos($codec_name, 'lac') == 1) OR (strpos($codec_name, 'wavpack') == 1)) {
     // now we split up the song in 10sec fragments
     // now let's convert the file
     $ffmpeg = FFMpeg\FFMpeg::create(array(
@@ -1074,7 +1073,7 @@ if (true) {
   } else {
          $result = $s3->putObject([
              'Bucket' => $config['AWS_S3_BUCKET'],
-             'Key'    => $files[0]["version_id"] . "/" . urldecode($files[0]["file_name"]) . $ext,
+             'Key'    => $files[0]["version_id"] . "/" . urldecode($files[0]["file_name"]) . '.' . $ext,
              'Body'   => file_get_contents("/tmp/orig".$file_id.".".$ext),
              'ACL'    => 'public-read'
          ]);
@@ -1118,8 +1117,7 @@ if (true) {
         'Bucket' => $config['AWS_S3_BUCKET'],
         'Key'    => $filesnew[0]["version_id"] . "/" . urldecode($filesnew[0]["file_name"]) . '.' . $files[0]["extension"],
         'Body'   => file_get_contents("/tmp/orig".$file_id.".".$ext),
-        'ACL'    => 'public-read',
-        'ContentDisposition' => 'attachment; filename=\"'.$files[0]["version_id"] . "/" . $files[0]["file_name"] . '.mp3'.'\"'
+        'ACL'    => 'public-read'
     ]);
   }
 
