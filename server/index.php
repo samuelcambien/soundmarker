@@ -38,9 +38,17 @@ $SesClient = new SesClient([
 
 Flight::set("SesClient", $SesClient);
 
-ini_set("default_socket_timeout", 120);
+ini_set("default_socket_timeout", 4000);
 if(!isset($_SESSION)) 
 { 
+    /* set the cache limiter to 'private' */
+
+  session_cache_limiter('private');
+  $cache_limiter = session_cache_limiter();
+
+  /* set the cache expire to 30 minutes */
+  session_cache_expire(1440);
+  $cache_expire = session_cache_expire();
   session_start(); 
 } 
 $access_token = json_decode($_SESSION["USER"])->access_token;
