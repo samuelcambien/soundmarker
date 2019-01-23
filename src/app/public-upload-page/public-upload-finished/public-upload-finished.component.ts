@@ -9,6 +9,7 @@ export class PublicUploadFinishedComponent implements OnInit {
 
   @Input() link;
   @Output() sendNewFiles= new EventEmitter();
+  @Input() period: string;
 
   constructor() { }
 

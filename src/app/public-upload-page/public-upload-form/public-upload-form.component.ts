@@ -33,7 +33,7 @@ export class PublicUploadFormComponent implements OnInit {
   email_to: string[];
 
   sharemode: "email" | "link" = "email";
-  expiration: "week" | "month" = "week";
+  expiration: "1week" | "1month" = "1week";
   downloadable: boolean = false;
 
   validators = [Validators.required, Validators.pattern('^\\w+([\\.-]?\\w+)*@\\w+([\\.-]?\\w+)*(\\.\\w{2,3})+$')];
@@ -45,6 +45,7 @@ export class PublicUploadFormComponent implements OnInit {
   @Output() uploading = new EventEmitter();
   @Output() finished = new EventEmitter();
   @Output() link = new EventEmitter<string>();
+  @Output() period = new EventEmitter<string>();
   @Output() error = new EventEmitter();
   @Output() form = new EventEmitter();
 
@@ -68,15 +69,16 @@ export class PublicUploadFormComponent implements OnInit {
           )
         ).then(() => {
               if (this.sharemode === 'email') {
-                return RestCall.shareProject(project_id, this.email_from, this.email_to)
+                return RestCall.shareProject(project_id, this.expiration, this.email_from, this.email_to)
               } else {
-                return RestCall.shareProject(project_id)
+                return RestCall.shareProject(project_id, this.expiration)
               }
             }
         ).then(response => {
           this.finished.emit();
           this.clearForm(true);
           this.link.emit(response["project_hash"]);
+          this.period.emit(this.expiration.substr(1,this.expiration.length));
         })
       })
       .catch((e) => {
