@@ -16,6 +16,13 @@
 	overflow: hidden;
 }
 
+.mini-play-btn.disabled, .popup-play-btn.disabled {
+	opacity: 0.2;
+	pointer-events: none;
+}
+
+
+
 .player-toolbar {
 	
 }
@@ -135,6 +142,10 @@
 
 }
 
+.top-icon.disabled {
+	pointer-events: none;
+	opacity: 0.3;
+}
 
 
 @media (max-width: 576px) {
