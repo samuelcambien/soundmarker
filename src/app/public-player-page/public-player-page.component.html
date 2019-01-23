@@ -4,6 +4,7 @@
   [sender]="sender"
   [project_id]="project_id"
   [error]="error"
+  (tryAgain)="backToHome()"
   xmlns="http://www.w3.org/1999/html">
 
   <app-page-not-found *ngIf="!exists" ></app-page-not-found>
