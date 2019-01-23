@@ -42,7 +42,10 @@ export class PublicPlayerPageComponent implements OnInit {
     this.route.params.subscribe(params => {
       this.loadProjectInfo(params['project_hash']);
     });
-    window.onresize = () => this.getActivePlayer().redraw();
+    window.onresize = () => {
+      if (this.getActivePlayer())
+        this.getActivePlayer().redraw();
+    };
 
     this.error.subscribe(()=>{
       this.message=null;
