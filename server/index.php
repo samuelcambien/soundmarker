@@ -1208,7 +1208,7 @@ $sql = "UPDATE Ad SET clicks = '$clicksnew' WHERE ad_id = '$ad_id'";
 $result = $db->query($sql);
 
 // get next ad
-$sql = "SELECT html, ad_id, impressions FROM Ad WHERE priority != '0' AND impressions <= limits AND ad_id <> '$ad_id'";
+$sql = "SELECT html, ad_id, impressions FROM Ad WHERE priority = '0' AND impressions <= limits AND ad_id <> '$ad_id'";
 $result = $db->query($sql);
 $array = $result->fetchAll(PDO::FETCH_ASSOC);
 
@@ -1223,7 +1223,7 @@ Flight::json(array(
 ), 200);
 
 // store impression for new ad
-$sql = "UPDATE Ad SET impressions = '$impressions' WHERE ad_id = '$ad_id' AND impressions < limit";
+$sql = "UPDATE Ad SET impressions = '$impressions' WHERE ad_id = '$ad_id'";
 $result = $db->query($sql);
 });
 

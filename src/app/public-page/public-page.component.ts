@@ -6,7 +6,7 @@ import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {LocalStorageService} from "../local-storage.service";
 import {interval} from "rxjs";
 import {animate, state, style, transition, trigger} from '@angular/animations';
-import {delay, tap} from "rxjs/operators";
+import {delay, map, tap} from "rxjs/operators";
 
 
 @Component({
@@ -34,6 +34,7 @@ export class PublicPageComponent implements OnInit {
 
   // Timing parameters
   waitBeforeFirstAd = 1750; //ms
+  exposureTime = 5;
 
   @Input() project_id;
   @Input() sender;
@@ -46,6 +47,7 @@ export class PublicPageComponent implements OnInit {
   @ViewChild('smaphone') smaPhone: ElementRef;
 
   smaToggle = 0;
+  smaId: string;
 
   constructor(private modalService: NgbModal, private localStorageService: LocalStorageService) {
   }
@@ -60,10 +62,10 @@ export class PublicPageComponent implements OnInit {
       this.openIntroduction();
     }
     this.getFirstAd();
-    interval(45 * 1000)
+    interval(this.exposureTime * 1000)
       .pipe(tap(() => this.smaToggle = 0))
       .pipe(delay(400))
-      .pipe(tap(() => {
+      .pipe(map(() => {
         this.getNextAd()
           .then(response => this.showAd(response))
       }))
@@ -82,13 +84,19 @@ export class PublicPageComponent implements OnInit {
   }
 
   private getNextAd(): Promise<any> {
-    return RestCall.getNextAdId()
-      .then(response => RestCall.getAd(response["ad_id"]));
+    return RestCall.getNextAdId(this.smaId, this.exposureTime)
+      .then(response => {
+        this.smaId = response["ad_id"];
+        RestCall.getAd(this.smaId)
+      });
   }
 
   private getAd(): Promise<string> {
     return RestCall.getAdId()
-      .then(response => RestCall.getAd(response["ad_id"]));
+      .then(response => {
+        this.smaId = response["ad_id"];
+        return RestCall.getAd(this.smaId)
+      });
   }
 
   private showAd(ad) {
