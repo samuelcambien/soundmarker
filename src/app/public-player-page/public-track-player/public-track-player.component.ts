@@ -77,7 +77,10 @@ export class PublicTrackPlayerComponent implements OnInit, AfterViewChecked {
       this.peaks = JSON.parse(this.version.wave_png);
       return this.loadWaveForm();
     }).catch(
-      e => this.error.emit(e)
+      e => {
+        console.log(e);
+        this.error.emit(e);
+      }
     ).then(() =>
       setInterval(() => {
         this._progress = this.getCurrentTime();
