@@ -60,7 +60,8 @@
 .upload-container {
   min-height: 194px;
   //overflow: auto !important;
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
 
