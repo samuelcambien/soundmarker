@@ -63,7 +63,7 @@ export class PublicPlayerPageComponent implements OnInit {
           return;
         }
 
-        this.expiry_date =  project.expiration.substr(0, 10);
+        this.expiry_date = project.expiration.substr(0, 10);
         if (project.sender) {
           this.sender = "by " + project.sender;
         }
@@ -74,8 +74,8 @@ export class PublicPlayerPageComponent implements OnInit {
           track.versions
             .then((versions: Version[]) => {
               this.message = this.getMessage(project, versions[0]);
-              if(this.message.text==''){
-                this.message.text="No notes included";
+              if (this.message.text == '') {
+                this.message.text = "No notes included";
               }
               versions.forEach(version => {
                 if (version.downloadable == 0) version.downloadable = false
@@ -115,7 +115,16 @@ export class PublicPlayerPageComponent implements OnInit {
     RestCall.getComments(version_id)
       .then(response => {
         let allComments: Comment[] = response["comments"];
-        track.comments = allComments.filter(comment => comment.parent_comment_id == 0);
+        track.comments = (track.comments || [])
+          .concat(
+            allComments
+              .filter(comment => comment.parent_comment_id == 0)
+              .filter(comment =>
+                track.comments
+                  .map(comment => comment.comment_id)
+                  .includes(comment.comment_id)
+              )
+          );
         for (let comment of track.comments) {
           if (comment.include_end == 0) comment.include_end = false;
           if (comment.include_start == 0) comment.include_start = false;
