@@ -1172,9 +1172,7 @@
           resolve(data);
           my.currentAjax = null;
         });
-      }).then(response =>
-          this.readResponse(response.body.getReader(), new Uint8Array(), 0)
-        ).then((completeArray) => {
+      }).then((completeArray) => {
           this.audioBuffers[index] = this.copy(completeArray.buffer);
           return this.decodeBuffer(index, completeArray.buffer);
         }).then(() => {
