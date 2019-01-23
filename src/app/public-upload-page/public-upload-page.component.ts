@@ -57,6 +57,7 @@ export class PublicUploadPageComponent implements OnInit {
 
   link: string;
 
+  period;
   statusEnum = Status;
   stage: Status = Status.SELECT_SONGS;
 
