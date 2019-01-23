@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {ActivatedRoute} from "@angular/router";
+import {ActivatedRoute, Router} from '@angular/router';
 import {Comment} from "../model/comment";
 import {Track} from "../model/track";
 import {Project} from "../model/project";
@@ -32,6 +32,7 @@ export class PublicPlayerPageComponent implements OnInit {
   activeTrack: Track;
 
   constructor(
+    private router: Router,
     private route: ActivatedRoute,
     private playerService: PlayerService
   ) {
@@ -42,6 +43,10 @@ export class PublicPlayerPageComponent implements OnInit {
       this.loadProjectInfo(params['project_hash']);
     });
     window.onresize = () => this.getActivePlayer().redraw();
+
+    this.error.subscribe(()=>{
+      this.message=null;
+    });
   }
 
   private loadProjectInfo(projectHash: string) {
@@ -156,5 +161,9 @@ export class PublicPlayerPageComponent implements OnInit {
       project.tracks.length + " tracks added" + (project.email_from ? " by " + project.email_from : ""),
       version.notes,
       false);
+  }
+
+  backToHome(){
+    this.router.navigate(['./']);
   }
 }
