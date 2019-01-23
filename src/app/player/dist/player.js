@@ -944,13 +944,13 @@
     },
 
     createScriptNode: function () {
-      if (this.ac.createScriptProcessor) {
-        this.scriptNode = this.ac.createScriptProcessor(this.scriptBufferSize);
+      if (this.getAudioContext().createScriptProcessor) {
+        this.scriptNode = this.getAudioContext().createScriptProcessor(this.scriptBufferSize);
       } else {
-        this.scriptNode = this.ac.createJavaScriptNode(this.scriptBufferSize);
+        this.scriptNode = this.getAudioContext().createJavaScriptNode(this.scriptBufferSize);
       }
 
-      this.scriptNode.connect(this.ac.destination);
+      this.scriptNode.connect(this.getAudioContext().destination);
     },
 
     addOnAudioProcess: function () {
@@ -986,7 +986,7 @@
     },
 
     createAnalyserNode: function () {
-      this.analyser = this.ac.createAnalyser();
+      this.analyser = this.getAudioContext().createAnalyser();
       this.analyser.connect(this.gainNode);
     },
 
@@ -995,13 +995,13 @@
      */
     createVolumeNode: function () {
       // Create gain node using the AudioContext
-      if (this.ac.createGain) {
-        this.gainNode = this.ac.createGain();
+      if (this.getAudioContext().createGain) {
+        this.gainNode = this.getAudioContext().createGain();
       } else {
-        this.gainNode = this.ac.createGainNode();
+        this.gainNode = this.getAudioContext().createGainNode();
       }
       // Add the gain node to the graph
-      this.gainNode.connect(this.ac.destination);
+      this.gainNode.connect(this.getAudioContext().destination);
     },
 
     /**
@@ -1147,8 +1147,8 @@
       // not passed in as a parameter
       if (!this.params.audioContext) {
         // check if browser supports AudioContext.close()
-        if (typeof this.ac.close === 'function') {
-          this.ac.close();
+        if (typeof this.getAudioContext().close === 'function') {
+          this.getAudioContext().close();
         }
       }
     },
@@ -1204,7 +1204,7 @@
     decodeBuffer: function (index, arrayBuffer) {
       return new Promise(resolve => {
         this.audioBuffers[index] = this.copy(arrayBuffer);
-        this.ac.decodeAudioData(
+        this.getAudioContext().decodeAudioData(
           arrayBuffer,
           (audioBuffer) => {
             this.decodedBuffers[index] = audioBuffer;
@@ -1216,7 +1216,7 @@
 
     createSource: function (index) {
 
-      var source = this.ac.createBufferSource();
+      var source = this.getAudioContext().createBufferSource();
 
       //adjust for old browsers.
       source.start = source.start || source.noteGrainOn;
@@ -1306,8 +1306,8 @@
         this.sources[0] = this.createSource(0);
         this.playSource(0, start, end);
 
-        if (this.ac.state == 'suspended') {
-          this.ac.resume && this.ac.resume();
+        if (this.getAudioContext().state == 'suspended') {
+          this.getAudioContext().resume && this.getAudioContext().resume();
         }
         this.setState(this.PLAYING_STATE);
         this.fireEvent('play');
