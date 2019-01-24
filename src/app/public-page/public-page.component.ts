@@ -94,7 +94,7 @@ export class PublicPageComponent implements OnInit {
       ).then(() =>
         RestCall.getAd(this.smaId)
       ).then(response => {
-        this.smaHtml = response;
+        if (response) this.smaHtml = response;
       });
   }
 
