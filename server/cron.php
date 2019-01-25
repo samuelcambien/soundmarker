@@ -73,7 +73,7 @@ foreach ($notifications as &$notification) {
         // Replace strings
         // Replace strings -> %projectlink%
         $sql = "SELECT hash FROM Project WHERE project_id = '$project_id'";
-        $projectlink = "http://soundmarker-env.mc3wuhhgpz.eu-central-1.elasticbeanstalk.com/project/" . $db->query($sql)->fetch()[0];
+        $projectlink = $config['SERVER_URL']. "/project/" . $db->query($sql)->fetch()[0];
         $emailstring = str_replace("%projectlink%",$projectlink,$emailstring);
         $emailstring_text = str_replace("%projectlink%",$projectlink,$emailstring_text);
         // Replace strings -> %recipientmail%

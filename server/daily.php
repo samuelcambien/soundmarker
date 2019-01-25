@@ -101,6 +101,17 @@ foreach ($updates as &$update) {
   unset($versions2);
   unset($tracks);
 
+  // clean up array
+  foreach ($comments as $key => $value) {
+      if ($value["comment"] <= $latestcomment) {
+      if ($value["version"] == $latestversion) {
+      unset($comments[$key]);
+      }
+    }
+  $latestcomment = $value["comment"];
+  $latestversion = $value["version"];
+  }
+
 
   $commentsjson = json_encode($comments);
   unset($comments);
@@ -153,7 +164,7 @@ foreach ($updates as &$update) {
       // Replace strings -> %tracktitle%
       $tracktitle = "";
       foreach ($files as &$file) {
-          $tracktitle .= $file["file_name"] . "\n";
+          $tracktitle .= urldecode($file["file_name"]) . "<br>";
       }
       $emailstring = str_replace("%tracktitle%",$tracktitle,$emailstring);
       $emailstring_text = str_replace("%tracktitle%",$tracktitle,$emailstring_text);   
@@ -174,30 +185,31 @@ foreach ($updates as &$update) {
       $subject = 'Daily status update from Soundmarker';
       $char_set = 'UTF-8';
       try {
-          // $result = $SesClient->sendEmail([
-          //     'Destination' => [
-          //         'ToAddresses' => [$emailaddress],
-          //     ],
-          //     'ReplyToAddresses' => ["noreply@soundmarker.com"],
-          //     'Source' => "Soundmarker <noreply@soundmarker.com>",
-          //     'Message' => [
-          //       'Body' => [
-          //           'Html' => [
-          //               'Charset' => $char_set,
-          //               'Data' => $emailstring,
-          //           ],
-          //           'Text' => [
-          //               'Charset' => $char_set,
-          //               'Data' => $emailstring_text,
-          //           ],
-          //       ],
-          //       'Subject' => [
-          //           'Charset' => $char_set,
-          //           'Data' => $subject,
-          //       ],
-          //     ],
-          // ]);
-          // $messageId = $result['MessageId'];
+          $result = $SesClient->sendEmail([
+              'Destination' => [
+ //                 'ToAddresses' => [$emailaddress],
+                  'ToAddresses' => ["robinreumers@gmail.com"],
+              ],
+              'ReplyToAddresses' => ["noreply@soundmarker.com"],
+              'Source' => "Soundmarker <noreply@soundmarker.com>",
+              'Message' => [
+                'Body' => [
+                    'Html' => [
+                        'Charset' => $char_set,
+                        'Data' => $emailstring,
+                    ],
+                    'Text' => [
+                        'Charset' => $char_set,
+                        'Data' => $emailstring_text,
+                    ],
+                ],
+                'Subject' => [
+                    'Charset' => $char_set,
+                    'Data' => $subject,
+                ],
+              ],
+          ]);
+          $messageId = $result['MessageId'];
       } catch (AwsException $e) {
           // output error message if fails
           echo $e->getMessage();
