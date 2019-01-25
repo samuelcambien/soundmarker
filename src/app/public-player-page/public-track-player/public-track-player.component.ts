@@ -271,14 +271,17 @@ export class PublicTrackPlayerComponent implements OnInit, AfterViewChecked {
   }
 
   addComment(comment: Comment) {
+    this.track.comments.push(comment);
     RestCall.addComment(this.comment).then(response => {
       this.comment.comment_id = response["comment_id"];
-      this.track.comments.push(comment);
-
       this.comment = new Comment();
       this.comment.start_time = 0;
       this.comment.end_time = this.getTrackLength();
-    });
+    }).catch(() =>
+      this.track.comments = this.track.comments.filter(
+        loadedComment => loadedComment != comment
+      )
+    );
   }
 
   getPlayer() {
