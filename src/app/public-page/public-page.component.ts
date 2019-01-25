@@ -34,7 +34,7 @@ export class PublicPageComponent implements OnInit {
 
   // Timing parameters
   waitBeforeFirstAd = 2750; //ms
-  exposureTime = 5;
+  exposureTime = 45;
 
   @Input() project_id;
   @Input() sender;
