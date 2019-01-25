@@ -34,7 +34,7 @@ export class PublicPageComponent implements OnInit {
 
   // Timing parameters
   waitBeforeFirstAd = 2750; //ms
-  exposureTime = 45;
+  exposureTime = 5;
 
   @Input() project_id;
   @Input() sender;
@@ -62,28 +62,28 @@ export class PublicPageComponent implements OnInit {
     if (!this.localStorageService.termsAccepted()) {
       this.openIntroduction();
     }
-    this.getFirstAd()
-      .then(() =>
-        interval(this.exposureTime * 1000)
-          .pipe(map(() => this.getNextAd()))
-          .pipe(tap(() => this.smaToggle = 0))
-          .pipe(delay(325))
-          .pipe(tap(() => this.showAd(this.smaHtml)))
-          .pipe(delay(500))
-          .subscribe(() => this.smaToggle = 1)
-      );
+    this.getFirstAd();
+    interval(this.exposureTime * 1000)
+      .pipe(map(() => this.getNextAd()))
+      .pipe(tap(() => this.smaToggle = 0))
+      .pipe(delay(200))
+      .pipe(tap(() => this.showAd(this.smaHtml)))
+      .pipe(delay(200))
+      .subscribe(() => this.smaToggle = 1);
   }
 
   private getFirstAd() {
     return this.getAd()
-      .then(response =>
-        setTimeout(() => {
-          this.showAd(response);
-        }, this.waitBeforeFirstAd/2))
-      .then(response =>
+      .then(response => {
+        this.smaHtml = response;
+          setTimeout(() => {
+            this.showAd(response);
+          }, this.waitBeforeFirstAd / 2)
+        }
+      ).then(() =>
         setTimeout(() => {
           this.smaToggle = 1;
-        }, this.waitBeforeFirstAd/2)
+        }, this.waitBeforeFirstAd / 2)
       );
   }
 
