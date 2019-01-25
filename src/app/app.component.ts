@@ -127,9 +127,9 @@ export class Utils {
         }
       };
       trackRequest.onerror = () => reject("connection error");
-      trackRequest.upload.onprogress = event => onProgress(
-          Math.round(event.lengthComputable ? event.loaded * 100 / event.total : 0)
-      );
+      // trackRequest.upload.onprogress = event => onProgress(
+      //     Math.round(event.lengthComputable ? event.loaded * 100 / event.total : 0)
+      // );
       trackRequest.send(data);
     });
   }
