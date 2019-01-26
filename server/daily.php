@@ -187,8 +187,7 @@ foreach ($updates as &$update) {
       try {
           $result = $SesClient->sendEmail([
               'Destination' => [
- //                 'ToAddresses' => [$emailaddress],
-                  'ToAddresses' => ["robinreumers@gmail.com"],
+                 'ToAddresses' => [$emailaddress],
               ],
               'ReplyToAddresses' => ["noreply@soundmarker.com"],
               'Source' => "Soundmarker <noreply@soundmarker.com>",
