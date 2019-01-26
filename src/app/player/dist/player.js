@@ -649,6 +649,8 @@
     }
   };
 
+  Player.ac = new (window.AudioContext || window.webkitAudioContext);
+
   Player.create = function (params) {
     var player = Object.create(Player);
     player.init(params);
@@ -849,12 +851,10 @@
     },
 
     getAudioContext: function () {
-      if (!this.ac) {
-        this.ac = new (
-          window.AudioContext || window.webkitAudioContext
-        );
+      if (!Player.ac) {
+        Player.ac = new (window.AudioContext || window.webkitAudioContext);
       }
-      return this.ac;
+      return Player.ac;
     },
 
     getOfflineAudioContext: function (sampleRate) {
