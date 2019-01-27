@@ -56,8 +56,6 @@ export class PublicTrackPlayerComponent implements OnInit, AfterViewChecked {
   startPos;
   endPos;
 
-  showComments: boolean = false;
-
   version: Version;
 
   phoneSearch: boolean;

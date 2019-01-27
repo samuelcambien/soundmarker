@@ -320,32 +320,6 @@
 
       </div>
 
-      <div class="top-icon text-icon margin-tooltip" id="text-icon" (click)="showComments = !showComments"
-           [class.active]="showComments" placement="top" ngbTooltip="Comments">
-
-
-        <svg width="22px" height="22px" viewBox="0 0 22 22" version="1.1" xmlns="http://www.w3.org/2000/svg"
-        >
-          <desc></desc>
-          <defs></defs>
-          <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round"
-             stroke-linejoin="round">
-            <g id="Internet-Networks-Servers-/-Upload/Download-/-upload-dash-arrow-1"
-               transform="translate(-65.000000, -20.000000)" class="icon-stroke" stroke-width="1.5">
-              <g id="messages-bubble" transform="translate(66.000000, 21.000000)">
-                <path
-                  d="M10.6578236,1.39552634e-05 C7.2733682,-0.00487001799 4.15271669,1.82840041 2.50707282,4.78828665 C0.861428952,7.74817289 0.949909343,11.3686229 2.73817252,14.2444485 L0,20 L5.74989584,17.2595575 C9.11259725,19.3520226 13.4289699,19.0910325 16.5155083,16.6086132 C19.6020468,14.1261939 20.7857069,9.9636565 19.4677154,6.22668649 C18.1497239,2.48971647 14.6174794,-0.00681020874 10.6578236,1.39552634e-05 Z"
-                  id="Shape"></path>
-              </g>
-              <circle id="Oval" fill="#bac1da" cx="80.5" cy="30.5" r="0.5"></circle>
-              <circle id="Oval" fill="#bac1da" cx="76.5" cy="30.5" r="0.5"></circle>
-              <circle id="Oval" fill="#bac1da" cx="72.5" cy="30.5" r="0.5"></circle>
-            </g>
-          </g>
-        </svg>
-
-      </div>
-
       <div *ngIf="enableOverview" class="top-icon list-icon margin-tooltip" id="list-icon" role="button"
            (click)="goToOverview()"
            placement="top" ngbTooltip="Overview">
@@ -460,80 +434,7 @@
 
   </div>
 
-  <div class="comments hide-phone" [ngbCollapse]="!showComments">
-
-    <div class="comments-divider">
-      <hr>
-    </div>
-
-    <div class="comments-header row">
-
-      <h4 class="comments-title unselectable">{{getMatchingComments()?.length}} comments </h4>
-
-      <h4 class="checked-comments-title hide-pro">|
-        Checked</h4>
-
-      <div class="comment-search ml-auto hide-phone" [class.active]="search" [class.disabled]="!hasComments()"
-           placement="top"
-           ngbTooltip="Search for words or names">
-
-        <input type="search" name="search" placeholder="Filter e.g. bass" [(ngModel)]="search"
-               class="comment-form-search sub-form search-box">
-
-        <span class="search-icon">
-          <svg width="16px" height="16px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg">
-           
-            <desc></desc>
-            <defs></defs>
-            <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round"
-               stroke-linejoin="round">
-              <g id="Internet-Networks-Servers-/-Upload/Download-/-upload-dash-arrow-1"
-                 transform="translate(-99.000000, -65.000000)" class="search-stroke" stroke-width="1.5">
-                <circle id="Oval" cx="105.509842" cy="71.5098416" r="5.50984157"></circle>
-                <path d="M110,76 L114.272172,80.2727797" id="Shape"></path>
-              </g>
-            </g>
-          </svg>
-        </span>
-
-
-        <span *ngIf="search" class="clear-search ml-auto" (click)="search = null">&times;</span>
-
-      </div>
-
-      <div class="comment-sort" placement="top" ngbTooltip="Order by" [class.disabled]="!hasMatchingComments()"
-      >
-        <!--[class.disabled]="track.comments.length < 2"-->
-        <ng-select class="custom noselect" [items]="commentSorters"
-                   bindLabel="description"
-                   [clearable]="false"
-                   [searchable]="false"
-                   [(ngModel)]="currentSorter">
-        </ng-select>
-      </div>
-
-    </div>
-
-    <app-comment-form [version_id]="version?.version_id" [comment]="comment" [player]="getPlayer()"
-                      (newComment)="addComment($event)">
-    </app-comment-form>
-
-    <app-comment
-      *ngFor="let comment of getMatchingCommentsSorted()"
-      [comment]="comment"
-      [player]="getPlayer()"
-      [search]="search"
-    >
-    </app-comment>
-
-    <div *ngIf="search && getMatchingComments().length == 0" class="no-comments">
-
-      <p>We couldn't find any comments related to your search.</p>
-    </div>
-
-  </div>
-
-  <div class="comments show-phone">
+  <div class="comments">
 
     <div class="comments-divider">
       <hr>
