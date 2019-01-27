@@ -5,10 +5,11 @@ import {Track} from "../model/track";
 import {Project} from "../model/project";
 import {Message} from "../message";
 import {RestCall} from "../rest/rest-call";
-import {File} from "../model/file";
 import {Version} from "../model/version";
 import {PlayerService} from "../player.service";
 import {interval} from "rxjs";
+import * as moment from "moment";
+import {now} from "moment";
 
 @Component({
   selector: 'app-public-player',
@@ -30,6 +31,7 @@ export class PublicPlayerPageComponent implements OnInit {
   message: Message = new Message("", "", false);
 
   activeTrack: Track;
+  commentsExpired = false;
 
   constructor(
     private router: Router,
@@ -63,11 +65,15 @@ export class PublicPlayerPageComponent implements OnInit {
 
         if (!this.isActive()) {
           this.expired = true;
+          if (this.areCommentsExpired()) {
+            this.commentsExpired = true;
+          }
           this.message = null;
           return;
         }
 
         this.expiry_date = project.expiration.substr(0, 10);
+
         if (project.sender) {
           this.sender = "by " + project.sender;
         }
@@ -105,6 +111,10 @@ export class PublicPlayerPageComponent implements OnInit {
 
   private isActive() {
     return this.project.status == "active";
+  }
+
+  private areCommentsExpired() {
+    return moment(this.project.expiration).add(1, "months").isAfter(now());
   }
 
   getActivePlayer() {

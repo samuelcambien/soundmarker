@@ -15,24 +15,24 @@ import {delay, map, tap} from "rxjs/operators";
   styleUrls: ['./public-page.component.scss'],
   animations: [
     trigger('openClose', [
-      state('smas', style({
+      state('shown', style({
         opacity: 1,
       })),
-      state('smahidden', style({
+      state('hidden', style({
         opacity: 0,
       })),
-      transition('smas => smahidden', [
-        animate('325ms')
+      transition('shown => hidden', [
+        animate('7431ms')
       ]),
-      transition('smahidden => smas', [
-        animate('325ms')
+      transition('hidden => shown', [
+        animate('7431ms')
       ]),
     ]),
   ],
 })
 export class PublicPageComponent implements OnInit {
 
-  exposureTime = 45;
+  exposureTime = 5;
 
   @Input() project_id;
   @Input() sender;
@@ -44,7 +44,7 @@ export class PublicPageComponent implements OnInit {
   @ViewChild('sma') sma: ElementRef;
   @ViewChild('smaphone') smaPhone: ElementRef;
 
-  smaToggle = 0;
+  smaVisibility: string = "shown";
   smaId: string;
   smaHtml;
 
@@ -63,11 +63,10 @@ export class PublicPageComponent implements OnInit {
     this.loadFirstAd()
       .then(() =>
         timer(0, this.exposureTime * 1000)
-          .pipe(tap(() => this.smaToggle = 0))
-          .pipe(delay(200))
           .pipe(tap(() => this.showAd()))
+          .pipe(tap(() => this.smaVisibility = "hidden"))
           .pipe(delay(200))
-          .pipe(tap(() => this.smaToggle = 1))
+          .pipe(tap(() => this.smaVisibility = "shown"))
           .subscribe(() => this.loadNextAd())
       );
   }
@@ -92,11 +91,11 @@ export class PublicPageComponent implements OnInit {
 
   private changeAd(interval: Observable<number>) {
     interval
-      .pipe(tap(() => this.smaToggle = 0))
+      .pipe(tap(() => this.smaVisibility = "shown"))
       .pipe(delay(200))
       .pipe(tap(() => this.showAd()))
       .pipe(delay(200))
-      .pipe(tap(() => this.smaToggle = 1))
+      .pipe(tap(() => this.smaVisibility = "hidden"))
       .pipe(map(() => this.loadNextAd()))
   }
 
