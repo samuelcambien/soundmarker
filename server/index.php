@@ -1061,7 +1061,7 @@ if (in_array($file_id, $_SESSION['user_files'])) {
     $format = new FFMpeg\Format\Audio\Mp3();
     $format
         ->setAudioChannels(2)
-        ->setAudioKiloBitrate(192);
+        ->setAudioKiloBitrate(320);
 
     $audio->save($format, "/tmp/mp3".$file_id.".mp3");
 
