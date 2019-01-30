@@ -30,6 +30,7 @@ export class PublicTrackPlayerComponent implements OnInit, AfterViewChecked {
 
   @Input() track: Track;
   @Input() enableOverview: boolean;
+  @Input() expired: boolean = false;
 
   @Output() error = new EventEmitter();
   @Output() overview = new EventEmitter();
@@ -56,8 +57,6 @@ export class PublicTrackPlayerComponent implements OnInit, AfterViewChecked {
   startPos;
   endPos;
 
-  showComments: boolean = false;
-
   version: Version;
 
   phoneSearch: boolean;
@@ -66,32 +65,34 @@ export class PublicTrackPlayerComponent implements OnInit, AfterViewChecked {
   peaks;
   private files: File[];
 
-  constructor(private playerService: PlayerService, private cdRef: ChangeDetectorRef, zone: NgZone) {
+  constructor(private playerService: PlayerService, private cdRef: ChangeDetectorRef) {
   }
 
   ngOnInit() {
-    this.track.versions.then(versions => {
-      this.version = versions[0];
-      this.comment.start_time = 0;
-      this.comment.end_time = versions[0].track_length;
-      this.peaks = JSON.parse(this.version.wave_png);
-      return this.loadWaveForm();
-    })
-    // .catch(
-    // e => {
-    //   console.log(e);
-    //   this.error.emit(e);
-    // }
-    // )
-      .then(() =>
-        setInterval(() => {
-          this._progress = this.getCurrentTime();
-        }, 1)
-      );
+    if (!this.expired) {
+      this.track.versions.then(versions => {
+        this.version = versions[0];
+        this.comment.start_time = 0;
+        this.comment.end_time = versions[0].track_length;
+        this.peaks = JSON.parse(this.version.wave_png);
+        return this.loadWaveForm();
+      })
+      // .catch(
+      // e => {
+      //   console.log(e);
+      //   this.error.emit(e);
+      // }
+      // )
+        .then(() =>
+          setInterval(() => {
+            this._progress = this.getCurrentTime();
+          }, 1)
+        );
+    }
   }
 
   private getPlayerWidth(): number {
-    return this.waveform.nativeElement.clientWidth;
+    return this.waveform && this.waveform.nativeElement.clientWidth;
   }
 
   private getPlayerPosition(): number {
@@ -219,6 +220,7 @@ export class PublicTrackPlayerComponent implements OnInit, AfterViewChecked {
   }
 
   private getRawPosition(element, commentTime): number {
+    if (!element) return 0;
     return this.getPlayerWidth() && this.getTrackLength() ?
       this.getPlayerWidth() * commentTime / this.getTrackLength() - element.nativeElement.offsetWidth / 2 :
       -element.nativeElement.offsetWidth / 2;
@@ -295,8 +297,8 @@ export class PublicTrackPlayerComponent implements OnInit, AfterViewChecked {
   isInViewport(waveform) {
 
     try {
-      let bounding = waveform.getBoundingClientRect();
-      let scrollPane = waveform.closest(".comments-scrolltainer");
+      let bounding = waveform.nativeElement.getBoundingClientRect();
+      let scrollPane = waveform.nativeElement.closest(".comments-scrolltainer");
       return bounding.top + bounding.height / 2 > scrollPane.getBoundingClientRect().top;
     } catch (e) {
       return true;
@@ -304,7 +306,7 @@ export class PublicTrackPlayerComponent implements OnInit, AfterViewChecked {
   }
 
   scrollToTop(waveform) {
-    waveform.closest(".comments-scrolltainer").scrollTop = 0;
+    waveform.nativeElement.closest(".comments-scrolltainer").scrollTop = 0;
   }
 
   playerIsReady(): boolean {

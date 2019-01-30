@@ -1,0 +1,90 @@
+h4, a {
+	color: #7397ff;
+}
+
+
+
+.error-text a {
+	color: #7397ff !important;
+}
+
+
+
+.got-img {
+	min-width: 160px;
+	min-height: 160px;
+	margin-bottom: -10px;
+	
+	
+}
+
+.btn-primary {
+	margin-right: 10px;
+}
+
+#expired-svg {
+	margin-top: auto;
+	margin-left: auto;
+	margin-right: auto;
+	background-image: url(../sm-expired.svg);
+	background-size: contain;
+	background-repeat: no-repeat;
+	margin-top: -4px;
+	width: 90%;
+	height: 90%;
+	max-height: 160px;
+}
+
+@media (max-width: 768px) {
+	
+	#error-svg {
+		padding-right: 10px;
+	}
+	
+	.col-sm-8 {
+		margin-left: 10px;
+		margin-right: -10px;
+	}
+	
+	
+	}
+	
+	@media (max-width: 576px) {
+		
+		.error-title, .error-text {
+			text-align: center;
+			max-width: 300px;
+			margin-left: auto;
+			margin-right: auto;
+		}
+		
+			#error-svg {
+		padding-right: 0px;
+		width: 40%;
+		margin-top: 14px;
+		margin-bottom: 24px;
+	}
+	
+	.col-sm-8 {
+		margin-left: 0px;
+		margin-right: 0px;
+		padding: 0px;
+	}
+	
+	.btn-sm {
+		width: auto;
+	}
+	
+	 #error-let-know {
+  width: inherit !important;
+  }
+  
+  .error-btn-left {
+	  margin-left: auto;
+  }
+  
+    .error-btn-right {
+	  margin-right: auto;
+  }
+		
+		}

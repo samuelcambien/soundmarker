@@ -167,11 +167,11 @@
 
 	.comments {
 		padding-bottom: 15px !important;
-	}
+  }
 
-	.list-container {
-	max-height: none !important;
-	}
+  .list-container {
+    max-height: none !important;
+  }
 
 	.player-content {
 		padding-left: 15px !important;
@@ -293,8 +293,6 @@
 // track list
 
 .list-container {
-	max-height: 154px;
-	  overflow-y: scroll;
   overflow-x: hidden;
 }
 /*

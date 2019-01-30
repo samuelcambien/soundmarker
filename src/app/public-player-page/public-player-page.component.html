@@ -9,9 +9,9 @@
 
   <app-page-not-found *ngIf="!exists" ></app-page-not-found>
 
-  <app-project-expired *ngIf="expired"></app-project-expired>
+  <app-project-expired *ngIf="expired && commentsExpired"></app-project-expired>
 
-  <div *ngIf="exists && !expired">
+  <div *ngIf="exists && !(expired && commentsExpired)">
 
     <div class="list-container" [ngbCollapse]="activeTrack != null">
 
@@ -33,6 +33,7 @@
       [track]="track"
       [enableOverview]="project.tracks.length > 1"
       [ngbCollapse]="activeTrack != track"
+      [expired]="expired && !commentsExpired"
       (overview)="activeTrack = null;"
       (error)="error = $event"
     >

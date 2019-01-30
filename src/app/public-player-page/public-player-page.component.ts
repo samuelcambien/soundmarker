@@ -5,10 +5,11 @@ import {Track} from "../model/track";
 import {Project} from "../model/project";
 import {Message} from "../message";
 import {RestCall} from "../rest/rest-call";
-import {File} from "../model/file";
 import {Version} from "../model/version";
 import {PlayerService} from "../player.service";
 import {interval} from "rxjs";
+import * as moment from "moment";
+import {now} from "moment";
 
 @Component({
   selector: 'app-public-player',
@@ -17,8 +18,9 @@ import {interval} from "rxjs";
 })
 export class PublicPlayerPageComponent implements OnInit {
 
-  expired: boolean = false;
   exists: boolean = true;
+  expired: boolean = false;
+  commentsExpired = false;
 
   project: Project;
   expiry_date;
@@ -63,11 +65,15 @@ export class PublicPlayerPageComponent implements OnInit {
 
         if (!this.isActive()) {
           this.expired = true;
+          if (this.areCommentsExpired()) {
+            this.commentsExpired = true;
+          }
           this.message = null;
           return;
         }
 
         this.expiry_date = project.expiration.substr(0, 10);
+
         if (project.sender) {
           this.sender = "by " + project.sender;
         }
@@ -107,8 +113,12 @@ export class PublicPlayerPageComponent implements OnInit {
     return this.project.status == "active";
   }
 
+  private areCommentsExpired() {
+    return moment(this.project.expiration).add(1, "months").isAfter(now());
+  }
+
   getActivePlayer() {
-    return this.getPlayer(this.activeTrack.track_id);
+    return this.activeTrack && this.getPlayer(this.activeTrack.track_id);
   }
 
   getPlayer(trackId: string) {
@@ -153,9 +163,8 @@ export class PublicPlayerPageComponent implements OnInit {
   selectTrack(track: Track) {
     this.activeTrack = track;
     setTimeout(() => {
-        if (this.getPlayer(track.track_id)) {
-          this.getPlayer(track.track_id).redraw()
-        }
+        if (this.getPlayer(track.track_id))
+          this.getPlayer(track.track_id).redraw();
       }, 4
     );
   }
@@ -167,7 +176,7 @@ export class PublicPlayerPageComponent implements OnInit {
       false);
   }
 
-  backToHome(){
+  backToHome() {
     this.router.navigate(['./']);
   }
 }

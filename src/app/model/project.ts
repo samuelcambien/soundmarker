@@ -6,6 +6,6 @@ export class Project {
   email_from: string;
   project_id: string;
   tracks: Track[];
-  expiration:string;
-  sender:string;
+  expiration: string;
+  sender: string;
 }
