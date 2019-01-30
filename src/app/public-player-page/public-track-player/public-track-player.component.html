@@ -67,7 +67,8 @@
                 <circle id="Oval" fill="#7397FF" fill-rule="nonzero" cx="10" cy="10" r="10"></circle>
                 <path
                   d="M6,11.5605195 L9.5,8.19883227 C9.77619416,7.93372258 10.2238058,7.93372258 10.5,8.19883227 L14,11.5605195"
-                  id="Shape" stroke="#FFFFFF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                  id="Shape" stroke="#FFFFFF" stroke-width="1.5" stroke-linecap="round"
+                  stroke-linejoin="round"></path>
               </g>
             </g>
           </g>
@@ -115,7 +116,8 @@
       </div>
 
       <div class="col">
-        <div class="top-icon cloud-icon" id="cloud-icon" (click)="download()" [class.disabled]="!version?.downloadable">
+        <div class="top-icon cloud-icon" id="cloud-icon" (click)="download()"
+             [class.disabled]="!version?.downloadable">
 
 
           <svg width="22px" height="22px" viewBox="0 0 22 22" version="1.1" xmlns="http://www.w3.org/2000/svg">
@@ -285,7 +287,10 @@
 
     <div class="title unselectable">
       <h4>{{track?.title}}</h4>
-      <p>{{_progress | timeFormat}} / {{version?.track_length | timeFormat}}</p>
+      <p *ngIf="!expired">{{_progress | timeFormat}} / {{version?.track_length | timeFormat}}</p>
+      <p *ngIf="expired">
+        Sorry, this track has expired.
+      </p>
     </div>
 
     <div class="player-toolbar hide-phone  ml-auto">
@@ -351,7 +356,7 @@
 
   </div>
 
-  <div class="player-content row">
+  <div class="player-content row" *ngIf="!expired">
 
     <div class="player-container col-md-12">
 
@@ -488,8 +493,12 @@
 
     </div>
 
-    <app-comment-form [version_id]="version?.version_id" [comment]="comment" [player]="getPlayer()"
-                      (newComment)="addComment($event)">
+    <app-comment-form
+      *ngIf="!expired"
+      [version_id]="version?.version_id"
+      [comment]="comment"
+      [player]="getPlayer()"
+      (newComment)="addComment($event)">
     </app-comment-form>
 
     <app-comment
@@ -497,6 +506,7 @@
       [comment]="comment"
       [player]="getPlayer()"
       [search]="search"
+      [expired]="expired"
     >
     </app-comment>
 

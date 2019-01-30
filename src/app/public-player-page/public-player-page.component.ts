@@ -18,8 +18,9 @@ import {now} from "moment";
 })
 export class PublicPlayerPageComponent implements OnInit {
 
-  expired: boolean = false;
   exists: boolean = true;
+  expired: boolean = false;
+  commentsExpired = false;
 
   project: Project;
   expiry_date;
@@ -31,7 +32,6 @@ export class PublicPlayerPageComponent implements OnInit {
   message: Message = new Message("", "", false);
 
   activeTrack: Track;
-  commentsExpired = false;
 
   constructor(
     private router: Router,
@@ -118,7 +118,7 @@ export class PublicPlayerPageComponent implements OnInit {
   }
 
   getActivePlayer() {
-    return this.getPlayer(this.activeTrack.track_id);
+    return this.activeTrack && this.getPlayer(this.activeTrack.track_id);
   }
 
   getPlayer(trackId: string) {
@@ -162,7 +162,11 @@ export class PublicPlayerPageComponent implements OnInit {
 
   selectTrack(track: Track) {
     this.activeTrack = track;
-    setTimeout(() => this.getPlayer(track.track_id).redraw(), 4);
+    setTimeout(() => {
+        if (this.getPlayer(track.track_id))
+          this.getPlayer(track.track_id).redraw();
+      }, 4
+    );
   }
 
   getMessage(project: Project, version: Version): Message {
@@ -172,7 +176,7 @@ export class PublicPlayerPageComponent implements OnInit {
       false);
   }
 
-  backToHome(){
+  backToHome() {
     this.router.navigate(['./']);
   }
 }

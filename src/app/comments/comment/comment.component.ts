@@ -12,6 +12,7 @@ export class CommentComponent implements OnInit {
   @Input() comment: Comment;
   @Input() player;
   @Input() search: string;
+  @Input() expired: boolean;
 
   reply: Comment;
 
@@ -66,6 +67,6 @@ export class CommentComponent implements OnInit {
   }
 
   playerIsReady(): boolean {
-    return this.player && this.player.isReady();
+    return this.player ? this.player.isReady() : false;
   }
 }

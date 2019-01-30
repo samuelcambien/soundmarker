@@ -4,7 +4,9 @@
 	
 	<div class="comment-toolbar">
 		
-		<div class="comment-play-button" [class.hidden]="!comment.include_start" [class.disabled]="!playerIsReady()">
+		<div class="comment-play-button"
+         [class.hidden]="!comment.include_start"
+         [class.disabled]="!playerIsReady()">
 
       <div *ngIf="isPlaying(); then stopbutton else playbutton"></div>
 
@@ -138,8 +140,9 @@
 
   <div class="row reply-row">
 
-    <div class="comment-reply" (click)="createReply()">
-      <p class="reply-tx"> Reply</p>
+    <div class="comment-reply" *ngIf="!expired" (click)="createReply()">
+      <p class="reply-tx" *ngIf="!comment.replies?.length">Reply</p>
+      <p class="reply-tx" *ngIf="comment.replies?.length">Reply  ·  </p>
     </div>
 
     <div *ngIf="comment.replies?.length">
@@ -148,8 +151,7 @@
          (click)="showReplies = !showReplies"
          class="showhidereplies collapsed">
 
-        <span *ngIf="!showReplies">
-        ·  Show {{comment.replies.length}} <span *ngIf="comment.replies.length > 1; else reply">replies </span> <ng-template #reply>reply </ng-template>
+        <span *ngIf="!showReplies">Show {{comment.replies.length}} <span *ngIf="comment.replies.length > 1; else reply">replies </span> <ng-template #reply>reply </ng-template>
         <svg width="10px" height="6px" viewBox="0 0 14 8" version="1.1" xmlns="http://www.w3.org/2000/svg">
           <defs></defs>
           <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round"
@@ -165,8 +167,7 @@
         </svg>
       </span>
 
-        <span *ngIf="showReplies">
-          ·  Hide {{comment.replies.length}} <span *ngIf="comment.replies.length > 1; else reply">replies </span> <ng-template #reply>reply </ng-template>
+        <span *ngIf="showReplies">Hide {{comment.replies.length}} <span *ngIf="comment.replies.length > 1; else reply">replies </span> <ng-template #reply>reply </ng-template>
           <svg width="10px" height="6px" viewBox="0 0 14 8" version="1.1" xmlns="http://www.w3.org/2000/svg">
             <defs></defs>
             <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round"

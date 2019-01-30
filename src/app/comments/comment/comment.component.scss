@@ -26,6 +26,11 @@
 	cursor: pointer;
 }
 
+.comment-play-button.disabled {
+  opacity: 0.2;
+	pointer-events: none;
+}
+
 .comment-play-button.hidden {
 	visibility: hidden;
 	cursor: default;

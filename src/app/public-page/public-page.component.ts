@@ -32,7 +32,7 @@ import {delay, map, tap} from "rxjs/operators";
 })
 export class PublicPageComponent implements OnInit {
 
-  exposureTime = 5;
+  exposureTime = 45;
 
   @Input() project_id;
   @Input() sender;
