@@ -65,7 +65,7 @@ export class PublicPlayerPageComponent implements OnInit {
 
         if (!this.isActive()) {
           this.expired = true;
-          if (this.areCommentsExpired()) {
+          if (!this.areCommentsActive()) {
             this.commentsExpired = true;
           }
           this.message = null;
@@ -110,10 +110,10 @@ export class PublicPlayerPageComponent implements OnInit {
   }
 
   private isActive() {
-    return this.project.status == "active";
+    return moment(this.project.expiration).isAfter(now())
   }
 
-  private areCommentsExpired() {
+  private areCommentsActive() {
     return moment(this.project.expiration).add(1, "months").isAfter(now());
   }
 
