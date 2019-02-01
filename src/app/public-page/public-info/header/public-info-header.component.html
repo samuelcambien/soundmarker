@@ -5,7 +5,7 @@
   </a>
 
   <!--<a class="navbar-brand" href="#" href="" data-toggle="modal" data-target=".info-modal-public-introduction">-->
-    <!--<div class="soundmarker-logo"></div>-->
+  <!--<div class="soundmarker-logo"></div>-->
   <!--</a>-->
 
   <div class="ml-auto">
@@ -17,9 +17,10 @@
         <ul class="nav nav-pills">
 
 
-      <li class="nav-item dropdown">
-        <a class="nav-link nav-link-messages dropdown-toggle" id="messages" data-toggle="dropdown" href="" role="button" aria-haspopup="true"
-           aria-expanded="false">
+          <li class="nav-item dropdown">
+            <a class="nav-link nav-link-messages dropdown-toggle" id="messages" data-toggle="dropdown" href=""
+               role="button" aria-haspopup="true"
+               aria-expanded="false">
 
               <svg width="12px" height="16px" viewBox="0 0 14 18" version="1.1" xmlns="http://www.w3.org/2000/svg"
                    xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -43,15 +44,19 @@
 
             <span class="notifications"></span>
 
-        <div class="messages dropdown-menu dropdown-menu-right" aria-labelledby="messages">
-          <div class="arrow-up"></div>
-          <div class="dropdown-container shadow-dropdown">
-	          
-	           <a  href="" data-toggle="modal"
-						  data-target=".info-modal-player-subscribe">
-	                  	<button type="button" class="btn btn-primary btn-sm" id="notify-button">Get notified on this project</button>
-	                  </a>
+            <div class="messages dropdown-menu dropdown-menu-right" aria-labelledby="messages">
+              <div class="arrow-up"></div>
+              <div class="dropdown-container shadow-dropdown">
 
+                <a href="" data-toggle="modal"
+                   data-target=".info-modal-player-subscribe">
+                  <button *ngIf="message.enableNotifications"
+                    type="button"
+                          class="btn btn-primary btn-sm"
+                          id="notify-button">
+                    Get notified on this project
+                  </button>
+                </a>
 
                 <!-- <a class="dropdown-item message-dropdown" href="" data-toggle="modal" data-target=".info-modal-pro">
 
@@ -62,9 +67,6 @@
 
                   <h5>{{message.title}} </h5>
                   <p>{{message.text}} </p></a>
-                  
-	                 
-                  
 
               </div>
             </div>
@@ -85,7 +87,8 @@
 
 
       <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" id="menu" data-toggle="dropdown" href="" role="button" aria-haspopup="true" aria-expanded="false">
+        <a class="nav-link dropdown-toggle" id="menu" data-toggle="dropdown" href="" role="button" aria-haspopup="true"
+           aria-expanded="false">
 
 
           <svg width="28px" height="8px" viewBox="0 0 24 8" version="1.1" xmlns="http://www.w3.org/2000/svg"
@@ -109,25 +112,25 @@
         <div class="more-info dropdown-menu dropdown-menu-right" aria-labelledby="menu">
           <div class="arrow-up"></div>
           <div class="dropdown-container shadow-dropdown">
-           <!-- <a class="dropdown-item pro-dropdown" href="" data-toggle="modal" data-target=".info-modal-pro">
-              <div class="item-icon">
-                <svg width="11px" height="12px" viewBox="0 0 11 12" version="1.1" xmlns="http://www.w3.org/2000/svg"
-                     xmlns:xlink="http://www.w3.org/1999/xlink">
-                  <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round"
-                     stroke-linejoin="round">
-                    <g id="Internet-Networks-Servers-/-Upload/Download-/-upload-dash-arrow-1"
-                       transform="translate(-119.000000, -176.000000)" stroke="#7397FF" stroke-width="1.5">
-                      <circle id="Oval" cx="121.5" cy="183.75" r="1.5"></circle>
-                      <path d="M121.5,182.25 L121.5,177" id="Shape"></path>
-                      <path d="M121.5,186.75 L121.5,185.25" id="Shape"></path>
-                      <circle id="Oval" cx="127.5" cy="180.5" r="1.5"></circle>
-                      <path d="M127.5,178.5 L127.5,177" id="Shape"></path>
-                      <path d="M127.5,186.75 L127.5,182.25" id="Shape"></path>
-                    </g>
-                  </g>
-                </svg>
-              </div>
-              Pro</a> -->
+            <!-- <a class="dropdown-item pro-dropdown" href="" data-toggle="modal" data-target=".info-modal-pro">
+               <div class="item-icon">
+                 <svg width="11px" height="12px" viewBox="0 0 11 12" version="1.1" xmlns="http://www.w3.org/2000/svg"
+                      xmlns:xlink="http://www.w3.org/1999/xlink">
+                   <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round"
+                      stroke-linejoin="round">
+                     <g id="Internet-Networks-Servers-/-Upload/Download-/-upload-dash-arrow-1"
+                        transform="translate(-119.000000, -176.000000)" stroke="#7397FF" stroke-width="1.5">
+                       <circle id="Oval" cx="121.5" cy="183.75" r="1.5"></circle>
+                       <path d="M121.5,182.25 L121.5,177" id="Shape"></path>
+                       <path d="M121.5,186.75 L121.5,185.25" id="Shape"></path>
+                       <circle id="Oval" cx="127.5" cy="180.5" r="1.5"></circle>
+                       <path d="M127.5,178.5 L127.5,177" id="Shape"></path>
+                       <path d="M127.5,186.75 L127.5,182.25" id="Shape"></path>
+                     </g>
+                   </g>
+                 </svg>
+               </div>
+               Pro</a> -->
             <a class="dropdown-item" href="" data-toggle="modal" data-target=".info-modal-aboutus">
               <div class="item-icon">
 
@@ -168,26 +171,30 @@
                 </svg>
               </div>
               Help</a>
-              
-               <a class="dropdown-item pro-dropdown" href="" data-toggle="modal" data-target=".info-modal-pro">
+
+            <a class="dropdown-item pro-dropdown" href="" data-toggle="modal" data-target=".info-modal-pro">
               <div class="item-icon">
-                
-<svg width="13px" height="11px" viewBox="0 0 13 11" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
-        <g id="Internet-Networks-Servers-/-Upload/Download-/-upload-dash-arrow-1" transform="translate(-117.000000, -245.000000)" stroke="#7397FF" stroke-width="1.5">
-            <g id="expand" transform="translate(118.000000, 252.000000)">
-                <path d="M0,0 L0,2.25 C1.18423789e-16,2.66421356 0.3581722,3 0.8,3 L4,3" id="Shape"></path>
-                <path d="M11,0 L11,2.25 C11,2.66421356 10.6418278,3 10.2,3 L7,3" id="Shape"></path>
-            </g>
-            <g id="expand" transform="translate(123.500000, 248.000000) rotate(180.000000) translate(-123.500000, -248.000000) translate(118.000000, 246.500000)">
-                <path d="M0,0 L0,2.25 C1.18423789e-16,2.66421356 0.3581722,3 0.8,3 L4,3" id="Shape"></path>
-                <path d="M11,0 L11,2.25 C11,2.66421356 10.6418278,3 10.2,3 L7,3" id="Shape"></path>
-            </g>
-        </g>
-    </g>
-</svg>
+
+                <svg width="13px" height="11px" viewBox="0 0 13 11" version="1.1" xmlns="http://www.w3.org/2000/svg"
+                     xmlns:xlink="http://www.w3.org/1999/xlink">
+                  <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round"
+                     stroke-linejoin="round">
+                    <g id="Internet-Networks-Servers-/-Upload/Download-/-upload-dash-arrow-1"
+                       transform="translate(-117.000000, -245.000000)" stroke="#7397FF" stroke-width="1.5">
+                      <g id="expand" transform="translate(118.000000, 252.000000)">
+                        <path d="M0,0 L0,2.25 C1.18423789e-16,2.66421356 0.3581722,3 0.8,3 L4,3" id="Shape"></path>
+                        <path d="M11,0 L11,2.25 C11,2.66421356 10.6418278,3 10.2,3 L7,3" id="Shape"></path>
+                      </g>
+                      <g id="expand"
+                         transform="translate(123.500000, 248.000000) rotate(180.000000) translate(-123.500000, -248.000000) translate(118.000000, 246.500000)">
+                        <path d="M0,0 L0,2.25 C1.18423789e-16,2.66421356 0.3581722,3 0.8,3 L4,3" id="Shape"></path>
+                        <path d="M11,0 L11,2.25 C11,2.66421356 10.6418278,3 10.2,3 L7,3" id="Shape"></path>
+                      </g>
+                    </g>
+                  </g>
+                </svg>
               </div>
-              Advertise</a> 
+              Advertise</a>
 
             <div class="dropdown-divider"></div>
             <!-- <a class="dropdown-item" href="" data-toggle="modal" data-target=".info-modal-terms">
@@ -197,20 +204,25 @@
                Contact us</a> -->
             <a class="dropdown-item" href="https://more.soundmarker.com/" target="_blank">
               <div class="item-icon">
-                
-<svg width="16px" height="12px" viewBox="0 0 16 12" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
-        <g id="Internet-Networks-Servers-/-Upload/Download-/-upload-dash-arrow-1" transform="translate(-117.000000, -215.000000)" stroke="#7397FF" stroke-width="1.5">
-            <g id="navigation-next" transform="translate(118.000000, 216.000000)">
-                <g id="Group-12" transform="translate(5.000000, 1.700000)">
-                    <path d="M9,2 L2.24985001,2 C1.00729216,2 0,2.8954305 0,4" id="Shape"></path>
-                    <polyline id="Shape" points="7 0 9 2 7 4"></polyline>
-                </g>
-                <path d="M10,0.909090909 C10,0.407013864 9.59298614,0 9.09090909,0 L0.909090909,0 C0.407013864,0 1.34572488e-16,0.407013864 0,0.909090909 L0,9.09090909 C1.34572488e-16,9.59298614 0.407013864,10 0.909090909,10 L9.09090909,10 C9.59298614,10 10,9.59298614 10,9.09090909 L10,6.36363636" id="Shape"></path>
-            </g>
-        </g>
-    </g>
-</svg>
+
+                <svg width="16px" height="12px" viewBox="0 0 16 12" version="1.1" xmlns="http://www.w3.org/2000/svg"
+                     xmlns:xlink="http://www.w3.org/1999/xlink">
+                  <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round"
+                     stroke-linejoin="round">
+                    <g id="Internet-Networks-Servers-/-Upload/Download-/-upload-dash-arrow-1"
+                       transform="translate(-117.000000, -215.000000)" stroke="#7397FF" stroke-width="1.5">
+                      <g id="navigation-next" transform="translate(118.000000, 216.000000)">
+                        <g id="Group-12" transform="translate(5.000000, 1.700000)">
+                          <path d="M9,2 L2.24985001,2 C1.00729216,2 0,2.8954305 0,4" id="Shape"></path>
+                          <polyline id="Shape" points="7 0 9 2 7 4"></polyline>
+                        </g>
+                        <path
+                          d="M10,0.909090909 C10,0.407013864 9.59298614,0 9.09090909,0 L0.909090909,0 C0.407013864,0 1.34572488e-16,0.407013864 0,0.909090909 L0,9.09090909 C1.34572488e-16,9.59298614 0.407013864,10 0.909090909,10 L9.09090909,10 C9.59298614,10 10,9.59298614 10,9.09090909 L10,6.36363636"
+                          id="Shape"></path>
+                      </g>
+                    </g>
+                  </g>
+                </svg>
               </div>
 
               Learn more</a>

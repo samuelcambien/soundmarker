@@ -1,6 +1,7 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {SubscribeComponent} from "../../../subscribe/subscribe.component";
+import {Message} from "../../../message";
 
 @Component({
   selector: 'app-public-info-header',
@@ -9,7 +10,7 @@ import {SubscribeComponent} from "../../../subscribe/subscribe.component";
 })
 export class PublicInfoHeaderComponent implements OnInit {
 
-  @Input() message;
+  @Input() message: Message;
   @Input() error;
   @Output() openIntroduction = new EventEmitter();
 
