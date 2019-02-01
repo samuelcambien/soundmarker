@@ -985,7 +985,7 @@ $file_size = isset($getbody->file_size) ? $getbody->file_size : 0;
 $file_name = isset($getbody->file_name) ? $getbody->file_name : "";
 $metadata = isset($getbody->metadata) ? $getbody->metadata : "";
 $extension = isset($getbody->extension) ? $getbody->extension : "";
-$aws_path = $config['AWS_S3_PATH'].$version_id . "/" . url_encode($file_name);
+$aws_path = $config['AWS_S3_PATH'].$version_id . "/" . urlencode($file_name);
 
 // if user is able to upload file
 if (true) {
