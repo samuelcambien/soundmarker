@@ -19,6 +19,7 @@ import {File} from "../../model/file";
 export class PublicPlayerTrackComponent implements OnInit {
 
   @Input() track: Track;
+  @Input() expired: boolean;
   @Output() selected = new EventEmitter<Track>();
 
   version: Version;

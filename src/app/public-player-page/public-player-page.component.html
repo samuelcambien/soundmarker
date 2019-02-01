@@ -19,6 +19,7 @@
 
         <app-public-player-track
           [track]="track"
+          [expired]="expired && !commentsExpired"
           (selected)="selectTrack(track)"
         >
         </app-public-player-track>
