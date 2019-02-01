@@ -490,15 +490,18 @@ $expiration_date = $response[0]["expiration_date"];
 $user_id = $response[0]["user_id"];
 $project_password = $response[0]["password"];
 
-// lastmonth = currentmonth
-$lastmonth = new \DateTime();
+$lastmonth = new \DateTime('-1 month');
 $lastmonthf = $lastmonth->format('Y-m-d H:i:s');
+$currentmonth = new \DateTime();
+$currentmonthf = $currentmonth->format('Y-m-d H:i:s');
 
 if ($user_id) {
   $status = "pro";
-} elseif ($active == 0 && $expiration_date < $lastmonthf) {
-  $status = "expired";
 } elseif ($active == 0) {
+  $status = "inactive";
+} elseif ($expiration_date < $lastmonthf) {
+  $status = "expired";
+} elseif ($expiration_date < $currentmonthf) {
   $status = "commentsonly";
 } else {
   $status = "active";
@@ -1069,7 +1072,7 @@ if (in_array($file_id, $_SESSION['user_files'])) {
       // upload in chunks to S3
        $result = $s3->putObject([
            'Bucket' => $config['AWS_S3_BUCKET'],
-           'Key'    => $files[0]["version_id"] . "/" . utf8_decode(urldecode($files[0]["file_name"])) . '.mp3',
+           'Key'    => $files[0]["version_id"] . "/" . urldecode($files[0]["file_name"]) . '.mp3',
            'Body'   => file_get_contents("/tmp/mp3".$file_id.".mp3"),
            'ACL'    => 'public-read',
            'ContentType' => 'application/octet-stream; charset=utf-8'
@@ -1080,7 +1083,7 @@ if (in_array($file_id, $_SESSION['user_files'])) {
   } else {
          $result = $s3->putObject([
              'Bucket' => $config['AWS_S3_BUCKET'],
-             'Key'    => $files[0]["version_id"] . "/" . utf8_decode(urldecode($files[0]["file_name"])) . '.' . $ext,
+             'Key'    => $files[0]["version_id"] . "/" . urldecode($files[0]["file_name"]) . '.' . $ext,
              'Body'   => file_get_contents("/tmp/orig".$file_id.".".$ext),
              'ACL'    => 'public-read',
              'ContentType' => 'application/octet-stream; charset=utf-8'
