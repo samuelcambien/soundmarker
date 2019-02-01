@@ -29,7 +29,7 @@ export class PublicPlayerPageComponent implements OnInit {
 
   error;
 
-  message: Message = new Message("", "", false);
+  message: Message = new Message("", "", false, false);
 
   activeTrack: Track;
 
@@ -60,7 +60,6 @@ export class PublicPlayerPageComponent implements OnInit {
         if (!this.doesExist()) {
           this.exists = false;
           this.message = null;
-          return;
         }
 
         if (!this.isActive()) {
@@ -69,7 +68,6 @@ export class PublicPlayerPageComponent implements OnInit {
             this.commentsExpired = true;
           }
           this.message = null;
-          return;
         }
 
         this.expiry_date = project.expiration.substr(0, 10);
@@ -173,7 +171,9 @@ export class PublicPlayerPageComponent implements OnInit {
     return new Message(
       project.tracks.length + " tracks added" + (project.email_from ? " by " + project.email_from : ""),
       version.notes,
-      false);
+      false,
+      !this.expired
+    );
   }
 
   backToHome() {

@@ -1,6 +1,10 @@
 export class Message {
 
-  constructor(public title: string, public text: string, public read: boolean){
-
+  constructor(
+    public title: string,
+    public text: string,
+    public read: boolean,
+    public enableNotifications: boolean
+  ) {
   }
 }
