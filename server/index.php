@@ -490,7 +490,8 @@ $expiration_date = $response[0]["expiration_date"];
 $user_id = $response[0]["user_id"];
 $project_password = $response[0]["password"];
 
-$lastmonth = new \DateTime('-1 month');
+// lastmonth = currentmonth
+$lastmonth = new \DateTime();
 $lastmonthf = $lastmonth->format('Y-m-d H:i:s');
 
 if ($user_id) {
@@ -1070,7 +1071,8 @@ if (true) {
            'Bucket' => $config['AWS_S3_BUCKET'],
            'Key'    => $files[0]["version_id"] . "/" . utf8_decode(urldecode($files[0]["file_name"])) . '.mp3',
            'Body'   => file_get_contents("/tmp/mp3".$file_id.".mp3"),
-           'ACL'    => 'public-read'
+           'ACL'    => 'public-read',
+           'ContentType' => 'application/octet-stream; charset=utf-8'
        ]);
 
      // delete file again
@@ -1080,7 +1082,8 @@ if (true) {
              'Bucket' => $config['AWS_S3_BUCKET'],
              'Key'    => $files[0]["version_id"] . "/" . utf8_decode(urldecode($files[0]["file_name"])) . '.' . $ext,
              'Body'   => file_get_contents("/tmp/orig".$file_id.".".$ext),
-             'ACL'    => 'public-read'
+             'ACL'    => 'public-read',
+             'ContentType' => 'application/octet-stream; charset=utf-8'
          ]);
   }
   
@@ -1122,7 +1125,8 @@ if (true) {
         'Bucket' => $config['AWS_S3_BUCKET'],
         'Key'    => $filesnew[0]["version_id"] . "/" . urldecode($filesnew[0]["file_name"]) . '.' . $filesnew[0]["extension"],
         'Body'   => file_get_contents("/tmp/orig".$file_id.".".$ext),
-        'ACL'    => 'public-read'
+        'ACL'    => 'public-read',
+        'ContentType' => 'application/octet-stream; charset=utf-8'
     ]);
   }
 
