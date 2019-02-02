@@ -193,12 +193,14 @@ export class PublicTrackPlayerComponent implements OnInit, AfterViewChecked {
 
     return this.version.files.then((files) => {
       this.files = files;
+      let streamFile = files.filter(file => file.identifier == 0)[0];
       this.playerService.addPlayer(this.track.track_id, wave.create(
         {
           container: "#waveform_" + this.track.track_id,
           peaks: this.peaks,
           duration: this.version.track_length,
-          aws_path: files.filter(file => file.identifier == 0)[0].aws_path
+          aws_path: streamFile.aws_path,
+          extension: streamFile.extension
         }
       ));
       this.getPlayer().drawBuffer();
