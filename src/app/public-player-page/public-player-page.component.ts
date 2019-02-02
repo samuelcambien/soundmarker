@@ -108,11 +108,11 @@ export class PublicPlayerPageComponent implements OnInit {
   }
 
   private isActive() {
-    return moment(this.project.expiration).isAfter(now())
+    return this.project.status == "active";
   }
 
   private areCommentsActive() {
-    return moment(this.project.expiration).add(1, "months").isAfter(now());
+    return this.project.status != "expired";
   }
 
   getActivePlayer() {
