@@ -39,12 +39,12 @@ $SesClient = new SesClient([
 Flight::set("SesClient", $SesClient);
 
 ini_set("default_socket_timeout", 4000);
-if(!isset($_SESSION)) { 
+if(!isset($_SESSION)) {
   /* set the cache limiter to 'private' */
   // session_cache_limiter('private');
   // $cache_limiter = session_cache_limiter();
 
-  //  set the cache expire to 30 minutes 
+  //  set the cache expire to 30 minutes
   // session_cache_expire(1440);
   // $cache_expire = session_cache_expire();
   session_start(); 
@@ -985,7 +985,7 @@ $file_size = isset($getbody->file_size) ? $getbody->file_size : 0;
 $file_name = isset($getbody->file_name) ? $getbody->file_name : "";
 $metadata = isset($getbody->metadata) ? $getbody->metadata : "";
 $extension = isset($getbody->extension) ? $getbody->extension : "";
-$aws_path = $config['AWS_S3_PATH'].$version_id . "/" . urlencode($file_name);
+$aws_path = urlencode($config['AWS_S3_PATH'].$version_id . "/" . urlencode($file_name));
 
 // if user is able to upload file
 if (in_array($version_id, $_SESSION['user_versions'])) {
@@ -1043,7 +1043,7 @@ if (in_array($file_id, $_SESSION['user_files'])) {
   ));
   $duration = $ffprobe
       ->format("/tmp/orig".$file_id.".".$ext) // extracts file informations
-      ->get('duration'); 
+      ->get('duration');
 
   $codec_name = $ffprobe
       ->streams("/tmp/orig".$file_id.".".$ext) // extracts file informations

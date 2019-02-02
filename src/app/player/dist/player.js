@@ -872,6 +872,7 @@
 
       this.setPeaks(params.peaks);
       this.aws_path = params.aws_path;
+      this.extension = params.extension;
       this.buffer_size = params.buffer_size;
 
       this.audioBuffers = [];
@@ -1164,7 +1165,7 @@
       return new Promise((resolve, reject) => {
         let trackRequest = new XMLHttpRequest();
         trackRequest.responseType = 'arraybuffer';
-        trackRequest.open("GET", this.aws_path + ".mp3", true);
+        trackRequest.open("GET", this.aws_path + "." + this.extension, true);
         trackRequest.onload = () => resolve(trackRequest.response);
         trackRequest.onerror = () => reject(trackRequest.statusText);
         trackRequest.send();
