@@ -1075,7 +1075,8 @@ if (in_array($file_id, $_SESSION['user_files'])) {
            'Key'    => $files[0]["version_id"] . "/" . $files[0]["file_name"] . '.mp3',
            'Body'   => file_get_contents("/tmp/mp3".$file_id.".mp3"),
            'ACL'    => 'public-read',
-           'ContentType' => 'application/octet-stream; charset=utf-8'
+           'ContentType' => 'application/octet-stream; charset=utf-8',
+           'Content-Disposition' => 'attachment; filename='. $files[0]["file_name"] . '.mp3'
        ]);
 
      // delete file again
@@ -1086,7 +1087,8 @@ if (in_array($file_id, $_SESSION['user_files'])) {
              'Key'    => $files[0]["version_id"] . "/" . $files[0]["file_name"] . '.' . $ext,
              'Body'   => file_get_contents("/tmp/orig".$file_id.".".$ext),
              'ACL'    => 'public-read',
-             'ContentType' => 'application/octet-stream; charset=utf-8'
+             'ContentType' => 'application/octet-stream; charset=utf-8',
+             'Content-Disposition' => 'attachment; filename='. $files[0]["file_name"] . '.' . $ext
          ]);
   }
   
@@ -1129,7 +1131,8 @@ if (in_array($file_id, $_SESSION['user_files'])) {
         'Key'    => $filesnew[0]["version_id"] . "/" . $filesnew[0]["file_name"] . '.' . $filesnew[0]["extension"],
         'Body'   => file_get_contents("/tmp/orig".$file_id.".".$ext),
         'ACL'    => 'public-read',
-        'ContentType' => 'application/octet-stream; charset=utf-8'
+        'ContentType' => 'application/octet-stream; charset=utf-8',
+        'Content-Disposition' => 'attachment; filename='. $files[0]["file_name"] . '.' . $filesnew[0]["extension"]
     ]);
   }
 
