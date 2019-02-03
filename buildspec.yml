@@ -10,8 +10,8 @@ phases:
             - npm install
             - npm install -g node-sass
             - npm install -g @angular/cli
-            - npm install -g @angular/core
-            - npm install --save-dev @angular-devkit/build-angular
+            - npm install -g @angular/core@7.2.2
+            - npm install --save-dev @angular-devkit/build-angular@0.12.3
             - npm link
     build:
         commands:
