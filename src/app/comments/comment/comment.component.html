@@ -1,4 +1,6 @@
-<div class="comment" [class.pending]="!comment.comment_id">
+<div class="comment"
+     [class.pending]="!comment.comment_id"
+     [class.highlight]="player?.getComment() == comment.comment_id">
 
 	<div class="row">
 	

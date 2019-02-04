@@ -58,8 +58,7 @@ export class CommentComponent implements OnInit {
   }
 
   stop() {
-    this.player.pause();
-    this.player.seekTo(this.comment.start_time / this.player.getDuration());
+    this.player.stop();
   }
 
   isPlaying() {
