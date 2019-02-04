@@ -40,11 +40,13 @@ textarea.form-control {
 
 .form-row .radios {
   margin-top: 10px;
+  flex-wrap: nowrap;
 }
 
 @media (max-width: 767.98px) {
 	.form-row .radios {
   margin-bottom: -10px;
+  flex-wrap: wrap;
 }
 }
 

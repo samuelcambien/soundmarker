@@ -7,14 +7,46 @@
   <!--<a class="navbar-brand" href="#" href="" data-toggle="modal" data-target=".info-modal-public-introduction">-->
   <!--<div class="soundmarker-logo"></div>-->
   <!--</a>-->
+  
+ 
 
   <div class="ml-auto">
+	  <div *ngIf="message">
+  <div class="navbar autoplay-button">
+
+        <ul class="nav nav-pills">
+	        
+	        <label class="switch">
+			  <input type="checkbox" checked>
+			  <span class="slider round"></span>
+			</label>
+	        
+        </ul>
+        
+    </div>
+  
+   <div class="autoplay-text dropdown-menu dropdown-menu-right">
+          <div class="arrow-up"></div>
+          <div class="dropdown-container shadow-dropdown">
+	          <div class="container-fluid">
+	          	<h5 class="noselect">Autoplay ON</h5>
+	          </div>
+          </div>
+   </div>
+  
+
+  
+  </div>
+  </div>
 
     <div *ngIf="message">
-
+	    
+	 
       <div class="navbar messages-icon" id="navbarNavDropdown">
 
         <ul class="nav nav-pills">
+	        
+	
 
 
           <li class="nav-item dropdown">
@@ -79,7 +111,7 @@
 
     </div>
 
-  </div>
+  
 
   <div class="navbar main-menu-icon" id="navbarNavDropdown">
 
