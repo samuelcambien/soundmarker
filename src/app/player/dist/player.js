@@ -975,9 +975,8 @@
         //   my.loadChunk(my.currentIndex + 1);
         // }
 
-        if (time >= my.getDuration()) {
+        if (time >= my.getDuration() && !my.comment) {
           my.setState(my.FINISHED_STATE);
-          my.comment = null;
           my.fireEvent('pause');
         } else if (time >= my.scheduledPause) {
           my.pause();

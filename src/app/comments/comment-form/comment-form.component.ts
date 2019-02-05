@@ -34,7 +34,7 @@ export class CommentFormComponent implements OnInit {
 
   triggerStart() {
     if (!this.comment.start_time)
-      this.comment.start_time = this.player.getCurrentTime();
+      this.updateStartTime(this.player.getCurrentTime());
     if (!this.comment.include_start) {
       this.comment.include_end = false;
       this.resetEnd();
@@ -56,20 +56,37 @@ export class CommentFormComponent implements OnInit {
 
   updateStartTime(time) {
 
-    this.comment.start_time = time;
+    this.comment.start_time = this.getValidStartTime(time);
     this.comment.include_start = true;
     this.triggerStart();
+  }
+
+  private getValidStartTime(commentTime: number) {
+    if (commentTime < 0)
+      return 0;
+    if (commentTime > this.comment.end_time - PublicTrackPlayerComponent.MINIMAL_INTERVAL)
+      return this.comment.end_time - PublicTrackPlayerComponent.MINIMAL_INTERVAL;
+    return commentTime;
   }
 
   public isValidStartTime = (time) =>
     time >= 0
     && (time <= this.comment.end_time - PublicTrackPlayerComponent.MINIMAL_INTERVAL);
 
+
   updateEndTime(time) {
 
-    this.comment.end_time = time;
+    this.comment.end_time = this.getValidEndTime(time);
     this.comment.include_end = true;
     this.triggerEnd();
+  }
+
+  private getValidEndTime(commentTime: number) {
+    if (commentTime < this.comment.start_time + PublicTrackPlayerComponent.MINIMAL_INTERVAL)
+      return this.comment.start_time + PublicTrackPlayerComponent.MINIMAL_INTERVAL;
+    if (commentTime > this.player.duration)
+      return this.player.duration;
+    return commentTime;
   }
 
   public isValidEndTime = (time) =>

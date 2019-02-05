@@ -2,6 +2,7 @@ import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {SubscribeComponent} from "../../../subscribe/subscribe.component";
 import {Message} from "../../../message";
+import {ProjectService} from "../../../services/project.service";
 
 @Component({
   selector: 'app-public-info-header',
@@ -14,7 +15,10 @@ export class PublicInfoHeaderComponent implements OnInit {
   @Input() error;
   @Output() openIntroduction = new EventEmitter();
 
-  constructor(private modalService: NgbModal) {
+  constructor(
+    private modalService: NgbModal,
+    public projectService: ProjectService
+  ) {
   }
 
   ngOnInit() {
@@ -26,5 +30,10 @@ export class PublicInfoHeaderComponent implements OnInit {
 
   goToPage() {
     window.history.replaceState({}, '', `/uploading-files-dev`);
+  }
+
+  showAutoplayToggle(): boolean {
+    return this.projectService.getActiveProject()
+      && this.projectService.getActiveProject().tracks.length > 1;
   }
 }

@@ -15,7 +15,7 @@ import {RestCall} from "../../rest/rest-call";
 import {NgbTooltip} from '@ng-bootstrap/ng-bootstrap';
 import {NgControl, Validators} from '@angular/forms';
 import {Utils} from "../../app.component";
-import {LocalStorageService} from "../../local-storage.service";
+import {LocalStorageService} from "../../services/local-storage.service";
 import {PublicUploadPageComponent} from "../public-upload-page.component";
 
 declare var AudioContext: any, webkitAudioContext: any;

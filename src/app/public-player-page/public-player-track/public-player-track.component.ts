@@ -3,7 +3,7 @@ import {Track} from "../../model/track";
 import {saveAs} from 'file-saver/FileSaver';
 import {animate, transition, trigger} from "@angular/animations";
 import {Version} from "../../model/version";
-import {PlayerService} from "../../player.service";
+import {PlayerService} from "../../services/player.service";
 import {File} from "../../model/file";
 
 @Component({

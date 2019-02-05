@@ -3,7 +3,7 @@ import {Message} from "../message";
 import {RestCall} from "../rest/rest-call";
 import {PublicIntroductionComponent} from "./public-info/topics/public-introduction/public-introduction.component";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
-import {LocalStorageService} from "../local-storage.service";
+import {LocalStorageService} from "../services/local-storage.service";
 import {interval, Observable, timer} from "rxjs";
 import {animate, state, style, transition, trigger} from '@angular/animations';
 import {delay, map, tap} from "rxjs/operators";

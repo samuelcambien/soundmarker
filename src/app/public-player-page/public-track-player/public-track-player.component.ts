@@ -15,9 +15,10 @@ import {Comment, CommentSorter} from "../../model/comment";
 import {saveAs} from 'file-saver/FileSaver';
 import {Version} from "../../model/version";
 import {File} from "../../model/file";
-import * as wave from "../../player/dist/player.js";
+import * as player from "../../player/dist/player.js";
 import {RestCall} from "../../rest/rest-call";
-import {PlayerService} from "../../player.service";
+import {PlayerService} from "../../services/player.service";
+import {ProjectService} from "../../services/project.service";
 
 @Component({
   selector: 'app-public-track-player',
@@ -65,7 +66,11 @@ export class PublicTrackPlayerComponent implements OnInit, AfterViewChecked {
   peaks;
   private files: File[];
 
-  constructor(private playerService: PlayerService, private cdRef: ChangeDetectorRef) {
+  constructor(
+    private playerService: PlayerService,
+    private projectService: ProjectService,
+    private cdRef: ChangeDetectorRef,
+  ) {
   }
 
   ngOnInit() {
@@ -75,7 +80,7 @@ export class PublicTrackPlayerComponent implements OnInit, AfterViewChecked {
         this.comment.start_time = 0;
         this.comment.end_time = versions[0].track_length;
         this.peaks = JSON.parse(this.version.wave_png);
-        return this.loadWaveForm();
+        return this.loadPlayer();
       })
       // .catch(
       // e => {
@@ -189,12 +194,12 @@ export class PublicTrackPlayerComponent implements OnInit, AfterViewChecked {
     return this.getMatchingComments().length > 0;
   }
 
-  public loadWaveForm(): Promise<any> {
+  public loadPlayer(): Promise<any> {
 
     return this.version.files.then((files) => {
       this.files = files;
       let streamFile = files.filter(file => file.identifier == 0)[0];
-      this.playerService.addPlayer(this.track.track_id, wave.create(
+      this.playerService.addPlayer(this.track.track_id, player.create(
         {
           container: "#waveform_" + this.track.track_id,
           peaks: this.peaks,
@@ -205,16 +210,15 @@ export class PublicTrackPlayerComponent implements OnInit, AfterViewChecked {
       ));
       this.getPlayer().drawBuffer();
       this.getPlayer().backend.load();
+      this.getPlayer().on('finish', () => {
+        if (this.projectService.autoPlay) this.projectService.playNextTrack(this.track)
+      });
       return this.getPlayer().backend.loadChunk(0);
     });
   }
 
   getCurrentTime(): number {
     return this.getPlayer() != null ? this.getPlayer().getCurrentTime() : 0;
-  }
-
-  getCurrentTimeRounded() {
-    return Math.round(this.getCurrentTime());
   }
 
   private getPosition(element, commentTime) {
@@ -226,10 +230,6 @@ export class PublicTrackPlayerComponent implements OnInit, AfterViewChecked {
     return this.getPlayerWidth() && this.getTrackLength() ?
       this.getPlayerWidth() * commentTime / this.getTrackLength() - element.nativeElement.offsetWidth / 2 :
       -element.nativeElement.offsetWidth / 2;
-  }
-
-  private getSeekTime(event) {
-    return this.getTrackLength() * (event.x - this.waveform.nativeElement.getBoundingClientRect().left) / this.getPlayerWidth();
   }
 
   private getCommentTime(element, x) {
@@ -249,10 +249,6 @@ export class PublicTrackPlayerComponent implements OnInit, AfterViewChecked {
         .map(file => file.aws_path + '.' + file.extension)
         [0]
     );
-  }
-
-  downloadFile(propertyId: string, fileId: string) {
-    this.download()
   }
 
   triggerPhoneSearch() {
