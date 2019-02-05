@@ -124,7 +124,16 @@ export class PublicUploadFormComponent implements OnInit {
   }
 
   private getStreamFileId(file, title, extension, track: FileItem, versionId, length: number): Promise<{ fileId: string, buffer: ArrayBuffer }> {
-    return RestCall.createNewFile(file, title, "mp3", track._file.size, versionId, 0, length);
+    return RestCall.createNewFile(file, title, this.getStreamFileExtension(extension), track._file.size, versionId, 0, length);
+  }
+
+  private getStreamFileExtension(extension: string) {
+    switch (extension) {
+      case "aac":
+        return "aac";
+      default:
+        return "mp3"
+    }
   }
 
   private getDownloadFileId(file, title, extension, track: FileItem, versionId, length: number): Promise<string> {
