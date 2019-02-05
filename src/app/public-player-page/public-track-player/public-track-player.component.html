@@ -379,7 +379,7 @@
           <div
             #startTime
             class="drag-block"
-            [class.disabled]="!comment.include_start"
+            [class.disabled]="!comment?.include_start"
             [style.left]="getStartPosition()"
           >
             <div
@@ -398,7 +398,7 @@
           <div
             #endTime
             class="drag-block"
-            [class.disabled]="!comment.include_end"
+            [class.disabled]="!comment?.include_end"
             [style.left]="getEndPosition()"
           >
             <div
@@ -434,7 +434,7 @@
             <svg width="25" height="25"></svg>
           </ng-template>
 
-          <div id="comment-interval" *ngIf="comment.include_start && comment.include_end"
+          <div id="comment-interval" *ngIf="comment?.include_start && comment?.include_end"
                [style.left]="getCommentIntervalPosition()"
                [style.width]="getCommentIntervalWidth()"
                (click)="playInterval()"
@@ -516,6 +516,7 @@
       [player]="getPlayer()"
       [search]="search"
       [expired]="expired"
+      (delete)="deleteComment($event)"
     >
     </app-comment>
 

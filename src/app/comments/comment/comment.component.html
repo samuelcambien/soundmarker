@@ -2,38 +2,38 @@
      [class.pending]="!comment.comment_id"
      [class.highlight]="player?.getComment() == comment.comment_id">
 
-	<div class="row">
-	
-	<div class="comment-toolbar">
-		
-		<div class="comment-play-button"
-         [class.hidden]="!comment.include_start"
-         [class.disabled]="!playerIsReady()">
+  <div class="row">
 
-      <div *ngIf="isPlaying(); then stopbutton else playbutton"></div>
+    <div class="comment-toolbar">
 
-      <ng-template #playbutton>
-        <div class="play-button" (click)="play(comment)">
-          <svg width="18px" height="18px" viewBox="0 0 27 27" version="1.1" xmlns="http://www.w3.org/2000/svg">
-            <defs></defs>
-            <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-              <g id="Group-5">
-                <g id="Group-6">
-                  <circle id="Oval" fill="#7397ff" cx="13.5" cy="13.5" r="13.5"></circle>
-                  <path
-                    d="M16.3141199,9.00179825 L20.7528354,16.3448585 C21.3242409,17.2901466 21.0211492,18.5196696 20.0758611,19.0910751 C19.7637352,19.2797482 19.4059591,19.3794796 19.0412399,19.3794796 L10.1638089,19.3794796 C9.05923941,19.3794796 8.16380891,18.4840491 8.16380891,17.3794796 C8.16380891,17.0147604 8.26354033,16.6569843 8.45221343,16.3448585 L12.8909289,9.00179825 C13.4623344,8.05651017 14.6918575,7.75341844 15.6371456,8.32482392 C15.9142829,8.4923472 16.1465966,8.72466097 16.3141199,9.00179825 Z"
-                    id="Triangle-2" fill="#FFFFFF"
-                    transform="translate(14.602672, 13.707802) rotate(90.000000) translate(-14.602672, -13.707802) "></path>
+      <div class="comment-play-button"
+           [class.hidden]="!comment?.include_start"
+           [class.disabled]="!playerIsReady()">
+
+        <div *ngIf="isPlaying(); then stopbutton else playbutton"></div>
+
+        <ng-template #playbutton>
+          <div class="play-button" (click)="play(comment)">
+            <svg width="18px" height="18px" viewBox="0 0 27 27" version="1.1" xmlns="http://www.w3.org/2000/svg">
+              <defs></defs>
+              <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                <g id="Group-5">
+                  <g id="Group-6">
+                    <circle id="Oval" fill="#7397ff" cx="13.5" cy="13.5" r="13.5"></circle>
+                    <path
+                      d="M16.3141199,9.00179825 L20.7528354,16.3448585 C21.3242409,17.2901466 21.0211492,18.5196696 20.0758611,19.0910751 C19.7637352,19.2797482 19.4059591,19.3794796 19.0412399,19.3794796 L10.1638089,19.3794796 C9.05923941,19.3794796 8.16380891,18.4840491 8.16380891,17.3794796 C8.16380891,17.0147604 8.26354033,16.6569843 8.45221343,16.3448585 L12.8909289,9.00179825 C13.4623344,8.05651017 14.6918575,7.75341844 15.6371456,8.32482392 C15.9142829,8.4923472 16.1465966,8.72466097 16.3141199,9.00179825 Z"
+                      id="Triangle-2" fill="#FFFFFF"
+                      transform="translate(14.602672, 13.707802) rotate(90.000000) translate(-14.602672, -13.707802) "></path>
+                  </g>
                 </g>
               </g>
-            </g>
-          </svg>
-        </div>
-      </ng-template>
+            </svg>
+          </div>
+        </ng-template>
 
-      <ng-template #stopbutton>
-        <div class="play-button" (click)="stop(comment)">
-<svg version="1.1" id="Laag_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+        <ng-template #stopbutton>
+          <div class="play-button" (click)="stop(comment)">
+            <svg version="1.1" id="Laag_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
 	 width="18px" height="18px" viewBox="0 0 18 18" enable-background="new 0 0 18 18" xml:space="preserve">
 <g id="Page-1">
 	<g id="Group-5">
@@ -45,11 +45,11 @@
 <path fill="#FFFFFF" d="M11.2,12.6H6.8c-0.8,0-1.4-0.6-1.4-1.4V6.8C5.4,6,6,5.4,6.8,5.4h4.4c0.8,0,1.4,0.6,1.4,1.4v4.4
 	C12.6,12,12,12.6,11.2,12.6z"/>
 </svg>
-        </div>
-        <div>
-          
-        </div>
-      </ng-template>
+          </div>
+          <div>
+
+          </div>
+        </ng-template>
 
     </div>
     
@@ -60,125 +60,127 @@
         <g id="Internet-Networks-Servers-/-Upload/Download-/-upload-dash-arrow-1" transform="translate(-142.000000, -98.000000)">
             <g id="Group-14" transform="translate(142.000000, 98.000000)">
                 <g id="Group-13-Copy" fill="#7397FF" fill-rule="nonzero">
-                    <circle id="Oval" cx="9" cy="9" r="9"></circle>
+                  <circle id="Oval" cx="9" cy="9" r="9"></circle>
                 </g>
-                <g id="button-loop-1" transform="translate(3.300000, 6.500000)" stroke="#FFFFFF" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5">
-                    <path d="M6,2.50000014 C6,2.50000014 7.1,5 8.93333333,5 C10.3508642,5 11.5,3.88071194 11.5,2.50000014 C11.5,1.11928834 10.3508642,2.7193617e-07 8.93333333,2.7193617e-07 C7.1,-0.000952108964 6,2.50000014 6,2.50000014 Z" id="Shape"></path>
-                    <path d="M5.5,2.50000014 C5.5,2.50000014 4.4,5 2.56666667,5 C1.14913581,5 1.6283271e-16,3.88071194 0,2.50000014 C-1.6283271e-16,1.11928834 1.14913581,2.7193617e-07 2.56666667,2.7193617e-07 C4.4,-0.000952108964 5.5,2.50000014 5.5,2.50000014 Z" id="Shape"></path>
+                <g id="button-loop-1" transform="translate(3.300000, 6.500000)" stroke="#FFFFFF" stroke-linecap="round"
+                   stroke-linejoin="round" stroke-width="1.5">
+                  <path
+                    d="M6,2.50000014 C6,2.50000014 7.1,5 8.93333333,5 C10.3508642,5 11.5,3.88071194 11.5,2.50000014 C11.5,1.11928834 10.3508642,2.7193617e-07 8.93333333,2.7193617e-07 C7.1,-0.000952108964 6,2.50000014 6,2.50000014 Z"
+                    id="Shape"></path>
+                  <path
+                    d="M5.5,2.50000014 C5.5,2.50000014 4.4,5 2.56666667,5 C1.14913581,5 1.6283271e-16,3.88071194 0,2.50000014 C-1.6283271e-16,1.11928834 1.14913581,2.7193617e-07 2.56666667,2.7193617e-07 C4.4,-0.000952108964 5.5,2.50000014 5.5,2.50000014 Z"
+                    id="Shape"></path>
                 </g>
-            </g>
-        </g>
-    </g>
-</svg>
-    </div>
-    
-    
-    <div class="comment-options"> 
-	     <div class="dropdown">
-		    <a class="dropdown-toggle" href="#" role="button" id="dropdown-options" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">   
-		          <svg width="17px" height="5px" viewBox="0 0 24 8" version="1.1" xmlns="http://www.w3.org/2000/svg"
-		               xmlns:xlink="http://www.w3.org/1999/xlink">
-		            <g id="Page-1" stroke="none" stroke-width="1" fill="#bac1da" fill-rule="evenodd" stroke-linecap="round"
-		               stroke-linejoin="round">
-		              <g id="Interface-Essential-/-Menu-/-navigation-menu-horizontal" transform="translate(0.000000, -9.000000)"
-		                 class="menu-icon" stroke="#bac1da" stroke-width="1.5" class="menu-icon">
-		                <g id="Group" transform="translate(0.000000, 9.000000)">
-		                  <g id="navigation-menu-horizontal">
-		                    <circle id="Oval" cx="4" cy="4" r="2.5"></circle>
-		                    <circle id="Oval" cx="13" cy="4" r="2.5"></circle>
-		                    <circle id="Oval" cx="22" cy="4" r="2.5"></circle>
-		                  </g>
-		                </g>
-		              </g>
-		            </g>
-		          </svg>	          
-		    </a>
-			  <div class="dropdown-menu" aria-labelledby="dropdown-options">
-					<div class="arrow-up"></div>
-		            <div class="dropdown-container shadow-dropdown">
-					    <a class="dropdown-item" href="#">Delete</a>
-		            </div>
-			  </div>
-		</div>
-    </div>
-          
-
-	
-	</div>
-	
-	<div class="comment-infobar col">
-		
-
-		
-		
-
-  <div class="row">
-
-    <div class="comment-name"><p class="name-tx" [innerHtml]="comment.name | titlecase | highlight: search"></p></div>
-    <div *ngIf="comment.include_start">
-      <div *ngIf="comment.include_end; then interval else start" ></div>
-    </div>
-      <ng-template #start>
-        <p class="comment-time">&nbsp;[{{comment.start_time | timeFormat}}] </p>
-      </ng-template>
-      <ng-template #interval>
-        <p class="comment-time">&nbsp;[{{comment.start_time | timeFormat}} - {{comment.end_time | timeFormat}}] </p>
-      </ng-template>
-<!--
-    <button (click)="goToCommentTime(comment)" class="btn btn-secondary btn-sm comment-play">
-      <div class="play-button">
-        <svg width="13px" height="13px" viewBox="0 0 27 27" version="1.1" xmlns="http://www.w3.org/2000/svg">
-          <defs></defs>
-          <g project_id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-            <g project_id="Group-5">
-              <g project_id="Group-6">
-                <circle project_id="Oval" fill="#717db0" cx="13.5" cy="13.5" r="13.5"></circle>
-                <path
-                  d="M16.3141199,9.00179825 L20.7528354,16.3448585 C21.3242409,17.2901466 21.0211492,18.5196696 20.0758611,19.0910751 C19.7637352,19.2797482 19.4059591,19.3794796 19.0412399,19.3794796 L10.1638089,19.3794796 C9.05923941,19.3794796 8.16380891,18.4840491 8.16380891,17.3794796 C8.16380891,17.0147604 8.26354033,16.6569843 8.45221343,16.3448585 L12.8909289,9.00179825 C13.4623344,8.05651017 14.6918575,7.75341844 15.6371456,8.32482392 C15.9142829,8.4923472 16.1465966,8.72466097 16.3141199,9.00179825 Z"
-                  project_id="Triangle-2" fill="#FFFFFF"
-                  transform="translate(14.602672, 13.707802) rotate(90.000000) translate(-14.602672, -13.707802) "></path>
               </g>
             </g>
           </g>
         </svg>
       </div>
-      <div *ngIf="comment.end_time; then interval else start_time" class="comment-time"></div>
-      <ng-template #start_time>
-        <p>{{comment.start_time | timeFormat}}</p>
-      </ng-template>
-      <ng-template #interval>
-        <p>{{comment.start_time | timeFormat}} - {{comment.end_time | timeFormat}}</p>
-      </ng-template>
-    </button>
--->
 
-    <p class="date-tx ml-auto hide-phone noselect"
-       placement="top"
-       ngbTooltip="{{getTimeAccurate(comment.comment_time)}}">
-      {{getTimeHumanized(comment.comment_time)}}
-    </p>
+      <div class="comment-options" *ngIf="comment.deleteable">
+        <div class="dropdown">
+          <a class="dropdown-toggle" href="#" role="button" id="dropdown-options" data-toggle="dropdown"
+             aria-haspopup="true" aria-expanded="false">
+            <svg width="17px" height="5px" viewBox="0 0 24 8" version="1.1" xmlns="http://www.w3.org/2000/svg">
+              <g id="Page-1" stroke="none" stroke-width="1" fill="#bac1da" fill-rule="evenodd" stroke-linecap="round"
+                 stroke-linejoin="round">
+                <g id="Interface-Essential-/-Menu-/-navigation-menu-horizontal"
+                   transform="translate(0.000000, -9.000000)"
+                   class="menu-icon" stroke="#bac1da" stroke-width="1.5" class="menu-icon">
+                  <g id="Group" transform="translate(0.000000, 9.000000)">
+                    <g id="navigation-menu-horizontal">
+                      <circle id="Oval" cx="4" cy="4" r="2.5"></circle>
+                      <circle id="Oval" cx="13" cy="4" r="2.5"></circle>
+                      <circle id="Oval" cx="22" cy="4" r="2.5"></circle>
+                    </g>
+                  </g>
+                </g>
+              </g>
+            </svg>
+          </a>
+          <div class="dropdown-menu" aria-labelledby="dropdown-options">
+            <div class="arrow-up"></div>
+            <div class="dropdown-container shadow-dropdown">
+              <a class="dropdown-item" (click)="delete.emit(comment)">Delete</a>
+            </div>
+          </div>
+        </div>
+      </div>
 
-  </div>
-
-  <div class="row comment-text">
-	 
-    <p class="comment-tx" [innerHtml]="comment.notes | highlight: search"></p>
-  </div>
-
-  <div class="row reply-row">
-
-    <div class="comment-reply" *ngIf="!expired" (click)="createReply()">
-      <p class="reply-tx" *ngIf="!comment.replies?.length">Reply</p>
-      <p class="reply-tx" *ngIf="comment.replies?.length">Reply  ·  </p>
     </div>
 
-    <div *ngIf="comment.replies?.length">
+    <div class="comment-infobar col">
 
-      <p role="button" [attr.aria-expanded]="showReplies" aria-controls="collapseExample"
-         (click)="showReplies = !showReplies"
-         class="showhidereplies collapsed">
 
-        <span *ngIf="!showReplies">Show {{comment.replies.length}} <span *ngIf="comment.replies.length > 1; else reply">replies </span> <ng-template #reply>reply </ng-template>
+      <div class="row">
+
+        <div class="comment-name"><p class="name-tx" [innerHtml]="comment.name | titlecase | highlight: search"></p>
+        </div>
+        <div *ngIf="comment.include_start">
+          <div *ngIf="comment.include_end; then interval else start"></div>
+        </div>
+        <ng-template #start>
+          <p class="comment-time">&nbsp;[{{comment.start_time | timeFormat}}] </p>
+        </ng-template>
+        <ng-template #interval>
+          <p class="comment-time">&nbsp;[{{comment.start_time | timeFormat}} - {{comment.end_time | timeFormat}}] </p>
+        </ng-template>
+        <!--
+            <button (click)="goToCommentTime(comment)" class="btn btn-secondary btn-sm comment-play">
+              <div class="play-button">
+                <svg width="13px" height="13px" viewBox="0 0 27 27" version="1.1" xmlns="http://www.w3.org/2000/svg">
+                  <defs></defs>
+                  <g project_id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                    <g project_id="Group-5">
+                      <g project_id="Group-6">
+                        <circle project_id="Oval" fill="#717db0" cx="13.5" cy="13.5" r="13.5"></circle>
+                        <path
+                          d="M16.3141199,9.00179825 L20.7528354,16.3448585 C21.3242409,17.2901466 21.0211492,18.5196696 20.0758611,19.0910751 C19.7637352,19.2797482 19.4059591,19.3794796 19.0412399,19.3794796 L10.1638089,19.3794796 C9.05923941,19.3794796 8.16380891,18.4840491 8.16380891,17.3794796 C8.16380891,17.0147604 8.26354033,16.6569843 8.45221343,16.3448585 L12.8909289,9.00179825 C13.4623344,8.05651017 14.6918575,7.75341844 15.6371456,8.32482392 C15.9142829,8.4923472 16.1465966,8.72466097 16.3141199,9.00179825 Z"
+                          project_id="Triangle-2" fill="#FFFFFF"
+                          transform="translate(14.602672, 13.707802) rotate(90.000000) translate(-14.602672, -13.707802) "></path>
+                      </g>
+                    </g>
+                  </g>
+                </svg>
+              </div>
+              <div *ngIf="comment.end_time; then interval else start_time" class="comment-time"></div>
+              <ng-template #start_time>
+                <p>{{comment.start_time | timeFormat}}</p>
+              </ng-template>
+              <ng-template #interval>
+                <p>{{comment.start_time | timeFormat}} - {{comment.end_time | timeFormat}}</p>
+              </ng-template>
+            </button>
+        -->
+
+        <p class="date-tx ml-auto hide-phone noselect"
+           placement="top"
+           ngbTooltip="{{getTimeAccurate(comment.comment_time)}}">
+          {{getTimeHumanized(comment.comment_time)}}
+        </p>
+
+      </div>
+
+      <div class="row comment-text">
+
+        <p class="comment-tx" [innerHtml]="comment.notes | highlight: search"></p>
+      </div>
+
+      <div class="row reply-row">
+
+        <div class="comment-reply" *ngIf="!expired" (click)="createReply()">
+          <p class="reply-tx" *ngIf="!comment.replies?.length">Reply</p>
+          <p class="reply-tx" *ngIf="comment.replies?.length">Reply · </p>
+        </div>
+
+        <div *ngIf="comment.replies?.length">
+
+          <p role="button" [attr.aria-expanded]="showReplies" aria-controls="collapseExample"
+             (click)="showReplies = !showReplies"
+             class="showhidereplies collapsed">
+
+        <span *ngIf="!showReplies">Show {{comment.replies.length}} <span *ngIf="comment.replies.length > 1; else reply">replies </span> <ng-template
+          #reply>reply </ng-template>
         <svg width="10px" height="6px" viewBox="0 0 14 8" version="1.1" xmlns="http://www.w3.org/2000/svg">
           <defs></defs>
           <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round"
@@ -194,7 +196,8 @@
         </svg>
       </span>
 
-        <span *ngIf="showReplies">Hide {{comment.replies.length}} <span *ngIf="comment.replies.length > 1; else reply">replies </span> <ng-template #reply>reply </ng-template>
+            <span *ngIf="showReplies">Hide {{comment.replies.length}} <span
+              *ngIf="comment.replies.length > 1; else reply">replies </span> <ng-template #reply>reply </ng-template>
           <svg width="10px" height="6px" viewBox="0 0 14 8" version="1.1" xmlns="http://www.w3.org/2000/svg">
             <defs></defs>
             <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round"
@@ -209,24 +212,25 @@
           </svg>
         </span>
 
-      </p>
+          </p>
 
+        </div>
+
+      </div>
+
+
+      <div class="replies">
+
+        <div class="comment-replies" id="comment-replies" [ngbCollapse]="!showReplies">
+
+          <app-reply *ngFor="let reply of this.comment.replies" [reply]="reply"></app-reply>
+
+        </div>
+
+        <app-reply-form *ngIf="reply != null" [reply]="reply" (cancel)="clearReply()"
+                        (newReply)="newReply()"></app-reply-form>
+
+      </div>
     </div>
-
   </div>
-
-
-  <div class="replies">
-
-    <div class="comment-replies" id="comment-replies" [ngbCollapse]="!showReplies">
-
-      <app-reply *ngFor="let reply of this.comment.replies" [reply]="reply"></app-reply>
-
-    </div>
-
-    <app-reply-form *ngIf="reply != null" [reply]="reply" (cancel)="clearReply()" (newReply)="newReply()"></app-reply-form>
- 
-  </div>
-	</div>
-	</div>
 </div>

@@ -50,7 +50,7 @@ export class PublicTrackPlayerComponent implements OnInit, AfterViewChecked {
 
   currentSorter: CommentSorter = CommentSorter.MOST_RECENT;
 
-  comment: Comment;
+  comment: Comment = new Comment();
 
   search: string;
 
@@ -276,6 +276,7 @@ export class PublicTrackPlayerComponent implements OnInit, AfterViewChecked {
     this.comment.name = this.localStorageService.getCommentName();
     this.comment.start_time = 0;
     this.comment.end_time = this.getTrackLength();
+    this.comment.deleteable = true;
   }
 
   addComment(comment: Comment) {
@@ -285,10 +286,19 @@ export class PublicTrackPlayerComponent implements OnInit, AfterViewChecked {
       this.comment.comment_id = response["comment_id"];
       this.createNewComment();
     }).catch(() =>
-      this.track.comments = this.track.comments.filter(
-        loadedComment => loadedComment != comment
-      )
+      this.removeComment(comment)
     );
+  }
+
+  removeComment(comment: Comment) {
+    this.track.comments = this.track.comments.filter(
+      loadedComment => loadedComment != comment
+    );
+  }
+
+  deleteComment(comment: Comment) {
+    RestCall.deleteComment(comment.comment_id);
+    this.removeComment(comment);
   }
 
   getPlayer() {

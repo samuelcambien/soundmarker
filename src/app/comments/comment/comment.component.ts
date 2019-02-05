@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {Comment} from "../../model/comment";
 import {Utils} from "../../app.component";
 import {LocalStorageService} from "../../services/local-storage.service";
@@ -14,6 +14,7 @@ export class CommentComponent implements OnInit {
   @Input() player;
   @Input() search: string;
   @Input() expired: boolean;
+  @Output() delete = new EventEmitter<Comment>();
 
   reply: Comment;
 

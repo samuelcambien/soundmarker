@@ -48,6 +48,8 @@ export class RestUrl {
 
   public static COMMENT: string = RestUrl.TRACK + "/version/comment";
 
+  public static COMMENT_DELETE: string = RestUrl.TRACK + "/version/delete/comment";
+
   public static REPLIES: string = RestUrl.COMMENTS + "/replies";
 }
 

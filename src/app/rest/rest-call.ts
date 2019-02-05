@@ -92,6 +92,14 @@ export class RestCall {
     });
   }
 
+  // DELETE
+
+  public static deleteComment(commentId: string) {
+    return Utils.sendPostRequest(RestUrl.COMMENT_DELETE, {
+      comment_id: commentId
+    })
+  }
+
   // GET
 
   static getAdId(): Promise<any> {
