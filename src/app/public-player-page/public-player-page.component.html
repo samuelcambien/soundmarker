@@ -34,7 +34,7 @@
     <app-public-track-player
       *ngFor="let track of project?.tracks"
       [track]="track"
-      [enableOverview]="true"
+      [enableOverview]="project?.tracks?.length > 1"
       [ngbCollapse]="getActiveTrack() != track"
       [expired]="expired && !commentsExpired"
       (overview)="setActiveTrack(null)"
