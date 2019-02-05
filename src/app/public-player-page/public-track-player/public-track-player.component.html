@@ -380,33 +380,38 @@
             #startTime
             class="drag-block"
             [class.disabled]="!comment.include_start"
-            appDraggable
-            (dragStart)="dragStart()"
-            (dragMove)="updateStartTime($event)"
             [style.left]="getStartPosition()"
           >
-            <div class="phone-draggable">
-              <ng-container *ngTemplateOutlet="phonemarker"></ng-container>
+            <div
+              class="app-draggable"
+              appDraggable
+              (dragStart)="dragStart()"
+              (dragMove)="updateStartTime($event)"
+            >
+              <div class="phone-draggable"></div>
             </div>
-            <ng-container *ngTemplateOutlet="soundmarker">
-
-            </ng-container>
+            <div class="soundmarker">
+              <ng-container *ngTemplateOutlet="soundmarker"></ng-container>
+            </div>
           </div>
 
           <div
             #endTime
             class="drag-block"
             [class.disabled]="!comment.include_end"
-            appDraggable
-            (dragMove)="updateEndTime($event)"
-            (dragStart)="comment.include_end = true; comment.include_start = true"
             [style.left]="getEndPosition()"
           >
-
-            <div class="phone-draggable">
-              <ng-container *ngTemplateOutlet="phonemarker"></ng-container>
+            <div
+              class="app-draggable"
+              appDraggable
+              (dragMove)="updateEndTime($event)"
+              (dragStart)="comment.include_end = true; comment.include_start = true"
+            >
+              <div class="phone-draggable"></div>
             </div>
-            <ng-container *ngTemplateOutlet="soundmarker"></ng-container>
+            <div class="soundmarker">
+              <ng-container *ngTemplateOutlet="soundmarker"></ng-container>
+            </div>
           </div>
 
           <ng-template #soundmarker>
@@ -421,8 +426,12 @@
             </svg>
           </ng-template>
 
+          <ng-template #dragmarker>
+            <svg width="9" height="9"></svg>
+          </ng-template>
+
           <ng-template #phonemarker>
-            <svg width="25" height="74"></svg>
+            <svg width="25" height="25"></svg>
           </ng-template>
 
           <div id="comment-interval" *ngIf="comment.include_start && comment.include_end"
