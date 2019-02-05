@@ -51,14 +51,18 @@
           </div>
         </ng-template>
 
-    </div>
-    
-    <div class="region-loop">
-	    
-<svg width="18px" height="18px" viewBox="0 0 18 18" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="Internet-Networks-Servers-/-Upload/Download-/-upload-dash-arrow-1" transform="translate(-142.000000, -98.000000)">
-            <g id="Group-14" transform="translate(142.000000, 98.000000)">
+      </div>
+
+      <div class="region-loop"
+           [class.hidden]="!(comment?.include_start && comment?.include_end)"
+      >
+
+        <svg width="18px" height="18px" viewBox="0 0 18 18" version="1.1" xmlns="http://www.w3.org/2000/svg"
+             xmlns:xlink="http://www.w3.org/1999/xlink">
+          <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+            <g id="Internet-Networks-Servers-/-Upload/Download-/-upload-dash-arrow-1"
+               transform="translate(-142.000000, -98.000000)">
+              <g id="Group-14" transform="translate(142.000000, 98.000000)">
                 <g id="Group-13-Copy" fill="#7397FF" fill-rule="nonzero">
                   <circle id="Oval" cx="9" cy="9" r="9"></circle>
                 </g>
