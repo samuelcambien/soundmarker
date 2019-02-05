@@ -69,9 +69,9 @@ export class PublicUploadFormComponent implements OnInit {
           )
         ).then(() => {
               if (this.sharemode === 'email') {
-                return RestCall.shareProject(project_id, this.expiration, this.email_from, this.email_to)
+                return RestCall.shareProject(project_id, this.expiration, this.notes, this.email_from, this.email_to)
               } else {
-                return RestCall.shareProject(project_id, this.expiration)
+                return RestCall.shareProject(project_id, this.expiration, this.notes)
               }
             }
         ).then(response => {

@@ -59,6 +59,7 @@ export class PublicPlayerPageComponent implements OnInit {
         if (!this.doesExist()) {
           this.exists = false;
           this.message = null;
+          return;
         }
 
         if (!this.isActive()) {
