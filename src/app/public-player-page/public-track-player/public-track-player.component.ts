@@ -19,6 +19,7 @@ import * as player from "../../player/dist/player.js";
 import {RestCall} from "../../rest/rest-call";
 import {PlayerService} from "../../services/player.service";
 import {ProjectService} from "../../services/project.service";
+import {LocalStorageService} from "../../services/local-storage.service";
 
 @Component({
   selector: 'app-public-track-player',
@@ -49,7 +50,7 @@ export class PublicTrackPlayerComponent implements OnInit, AfterViewChecked {
 
   currentSorter: CommentSorter = CommentSorter.MOST_RECENT;
 
-  comment: Comment = new Comment();
+  comment: Comment;
 
   search: string;
 
@@ -67,6 +68,7 @@ export class PublicTrackPlayerComponent implements OnInit, AfterViewChecked {
   private files: File[];
 
   constructor(
+    private localStorageService: LocalStorageService,
     private playerService: PlayerService,
     private projectService: ProjectService,
     private cdRef: ChangeDetectorRef,
@@ -77,9 +79,8 @@ export class PublicTrackPlayerComponent implements OnInit, AfterViewChecked {
     if (!this.expired) {
       this.track.versions.then(versions => {
         this.version = versions[0];
-        this.comment.start_time = 0;
-        this.comment.end_time = versions[0].track_length;
         this.peaks = JSON.parse(this.version.wave_png);
+        this.createNewComment();
         return this.loadPlayer();
       })
       // .catch(
@@ -270,13 +271,19 @@ export class PublicTrackPlayerComponent implements OnInit, AfterViewChecked {
 
   }
 
+  createNewComment() {
+    this.comment = new Comment();
+    this.comment.name = this.localStorageService.getCommentName();
+    this.comment.start_time = 0;
+    this.comment.end_time = this.getTrackLength();
+  }
+
   addComment(comment: Comment) {
     this.track.comments.push(comment);
+    this.localStorageService.storeCommentName(comment.name);
     RestCall.addComment(this.comment).then(response => {
       this.comment.comment_id = response["comment_id"];
-      this.comment = new Comment();
-      this.comment.start_time = 0;
-      this.comment.end_time = this.getTrackLength();
+      this.createNewComment();
     }).catch(() =>
       this.track.comments = this.track.comments.filter(
         loadedComment => loadedComment != comment

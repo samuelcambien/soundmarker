@@ -47,6 +47,14 @@ export class LocalStorageService {
     return localStorage.getItem("smrk_downl") === "true";
   }
 
+  public storeCommentName(commentName: string): void {
+    localStorage.setItem("smrk_comment_name", commentName);
+  }
+
+  public getCommentName(): string {
+    return localStorage.getItem("smrk_comment_name") != null ? localStorage.getItem("smrk_comment_name") : "";
+  }
+
   public storeVisit(): void {
     localStorage.setItem("smrk_visit", (this.getVisits() + 1) + "");
   }
