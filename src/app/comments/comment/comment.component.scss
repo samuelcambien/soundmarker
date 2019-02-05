@@ -49,34 +49,6 @@
   opacity: 0.5;
 }
 
-@-webkit-keyframes argh-my-eyes {
-  0%   { background-color: #e2e7f5; }
-  49% { background-color: #eef1ff; }
-  50% { background-color: #e2e7f5; }
-  99% { background-color: #eef1ff; }
-  100% { background-color: #e2e7f5; }
-}
-@-moz-keyframes argh-my-eyes {
-  0%   { background-color: #e2e7f5; }
-  49% { background-color: #eef1ff; }
-  50% { background-color: #e2e7f5; }
-  99% { background-color: #eef1ff; }
-  100% { background-color: #e2e7f5; }
-}
-@keyframes argh-my-eyes {
-  0%   { background-color: #e2e7f5; }
-  49% { background-color: #eef1ff; }
-  50% { background-color: #e2e7f5; }
-  99% { background-color: #eef1ff; }
-  100% { background-color: #e2e7f5; }
-}
-
-.highlight {
-  -webkit-animation: argh-my-eyes 1s infinite;
-  -moz-animation:    argh-my-eyes 1s infinite;
-  animation:         argh-my-eyes 1s infinite;
-}
-
 .comment-infobar {
 		padding-top: 10px;
 	padding-bottom: 10px;
@@ -102,12 +74,18 @@
 .region-loop {
 	width: 18px;
 	height: 18px;
-	
+
 	margin-top: 1px;
 	transition: 0.2s;
 	-webkit-transition: 0.2s;
 	cursor: pointer;
 	// visibility: hidden;
+
+  &.hidden {
+    visibility: hidden;
+    cursor: default;
+    pointer-events: none;
+  }
 }
 
 
@@ -115,8 +93,8 @@
 .comment-options {
 	margin-top: -5px;
 	cursor: pointer
-	
-	
+
+
 }
 
 .comment-time {
@@ -127,11 +105,15 @@
 	background-color: #eef1ff;
 	border-radius: 0.6rem;
 	margin-top: 10px;
-    border-top-left-radius: 1.2rem;
+  border-top-left-radius: 1.2rem;
+
+  &.highlight {
+    background-color: #e2e7f5;
+  }
 }
 
 .replies {
-	
+
 }
 
 .comment .row {
@@ -157,7 +139,7 @@
 
 .comment-tag p {
 	font-family: "sofia-regular";
-	
+
 }
 
 /*
@@ -220,7 +202,7 @@ hr {
 	font-family: 'sofia-regular';
 	font-size: 8pt;
 	cursor: pointer;
-	-webkit-user-select: none; /* Safari */        
+	-webkit-user-select: none; /* Safari */
 -moz-user-select: none; /* Firefox */
 -ms-user-select: none; /* IE10+/Edge */
 user-select: none; /* Standard */
@@ -236,14 +218,14 @@ user-select: none; /* Standard */
 	float: right;
 	margin-right: 20px;
 	}
-	
+
 .showhidereplies {
 	margin-top: -0.8rem;
 	margin-left: 4px;
 	font-size: 8pt;
 	cursor: pointer;
 	margin-bottom: 0px;
-	-webkit-user-select: none; /* Safari */        
+	-webkit-user-select: none; /* Safari */
 -moz-user-select: none; /* Firefox */
 -ms-user-select: none; /* IE10+/Edge */
 user-select: none; /* Standard */

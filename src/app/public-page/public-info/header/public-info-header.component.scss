@@ -2,6 +2,7 @@
 
 /* The switch - the box around the slider */
 .switch {
+  cursor: pointer;
   position: relative;
   display: inline-block;
   width: 22px;
@@ -100,7 +101,6 @@ input:checked + .slider:before {
 
 .navbar .main-menu-icon, .navbar .messages-icon, .navbar .autoplay-button {
 	border-bottom: none;
-	cursor: pointer;
 }
 
 .main-menu-icon {
