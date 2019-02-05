@@ -48,6 +48,8 @@ export class RestUrl {
 
   public static COMMENT: string = RestUrl.TRACK + "/version/comment";
 
+  public static COMMENT_DELETE: string = RestUrl.TRACK + "/version/delete/comment";
+
   public static REPLIES: string = RestUrl.COMMENTS + "/replies";
 }
 
@@ -58,7 +60,7 @@ export class Utils {
   }
 
   public static getTimeAccurate(milliseconds) {
-    return moment.unix(milliseconds/1000).format("D MMM, H:mm");
+    return moment.unix(milliseconds / 1000).format("D MMM, H:mm");
   }
 
   public static getTimeFormatted(seconds) {
@@ -171,10 +173,9 @@ export class Utils {
   }
 
   public static promiseSequential(promiseFactories: Function[]): Promise<any> {
-    return promiseFactories.reduce((promise, factory) =>
-      promise.then(result =>
-        factory().then(Array.prototype.concat.bind(result))
-      ), Promise.resolve([])
+    return promiseFactories.reduce(
+      (promise, factory) => promise.then(() => factory()),
+      Promise.resolve([])
     );
   }
 }

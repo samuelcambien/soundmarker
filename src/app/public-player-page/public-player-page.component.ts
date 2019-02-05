@@ -6,10 +6,9 @@ import {Project} from "../model/project";
 import {Message} from "../message";
 import {RestCall} from "../rest/rest-call";
 import {Version} from "../model/version";
-import {PlayerService} from "../player.service";
+import {PlayerService} from "../services/player.service";
 import {interval} from "rxjs";
-import * as moment from "moment";
-import {now} from "moment";
+import {ProjectService} from "../services/project.service";
 
 @Component({
   selector: 'app-public-player',
@@ -31,12 +30,11 @@ export class PublicPlayerPageComponent implements OnInit {
 
   message: Message = new Message("", "", false, false);
 
-  activeTrack: Track;
-
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    private playerService: PlayerService
+    private playerService: PlayerService,
+    private projectService: ProjectService
   ) {
   }
 
@@ -56,10 +54,12 @@ export class PublicPlayerPageComponent implements OnInit {
       .then((project: Project) => {
         this.project_id = project.project_id;
         this.project = project;
+        this.projectService.setActiveProject(project);
 
         if (!this.doesExist()) {
           this.exists = false;
           this.message = null;
+          return;
         }
 
         if (!this.isActive()) {
@@ -98,7 +98,7 @@ export class PublicPlayerPageComponent implements OnInit {
             });
 
           if (project.tracks.length == 1)
-            this.activeTrack = project.tracks[0];
+            this.projectService.setActiveTrack(project.tracks[0]);
         }
       });
   }
@@ -115,8 +115,16 @@ export class PublicPlayerPageComponent implements OnInit {
     return this.project.status != "expired";
   }
 
+  getActiveTrack() {
+    return this.projectService.getActiveTrack();
+  }
+
+  setActiveTrack(track: Track) {
+    this.projectService.setActiveTrack(track);
+  }
+
   getActivePlayer() {
-    return this.activeTrack && this.getPlayer(this.activeTrack.track_id);
+    return this.getPlayer(this.projectService.getActiveTrack().track_id);
   }
 
   getPlayer(trackId: string) {
@@ -150,21 +158,8 @@ export class PublicPlayerPageComponent implements OnInit {
     comment.replies = allComments.filter(reply => reply.parent_comment_id == comment.comment_id);
   }
 
-  pauseOtherTracks(except: Track) {
-    for (let track of this.project.tracks) {
-      if (track != except) {
-        this.playerService.getPlayer(track.track_id).pause();
-      }
-    }
-  }
-
   selectTrack(track: Track) {
-    this.activeTrack = track;
-    setTimeout(() => {
-        if (this.getPlayer(track.track_id))
-          this.getPlayer(track.track_id).redraw();
-      }, 4
-    );
+    this.projectService.setActiveTrack(track);
   }
 
   getMessage(project: Project, version: Version): Message {

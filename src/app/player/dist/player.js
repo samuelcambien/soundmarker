@@ -333,6 +333,10 @@
       return this.backend.filters || [];
     },
 
+    getComment: function() {
+      return this.backend.comment;
+    },
+
     toggleScroll: function () {
       this.params.scrollParent = !this.params.scrollParent;
       this.drawBuffer();
@@ -971,7 +975,7 @@
         //   my.loadChunk(my.currentIndex + 1);
         // }
 
-        if (time >= my.getDuration()) {
+        if (time >= my.getDuration() && !my.comment) {
           my.setState(my.FINISHED_STATE);
           my.fireEvent('pause');
         } else if (time >= my.scheduledPause) {

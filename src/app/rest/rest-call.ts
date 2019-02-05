@@ -55,10 +55,11 @@ export class RestCall {
     return Utils.sendPostDataRequest(RestUrl.UPLOAD_CHUNK, buffer, [streamFileId, downloadFileId, index, ext], onProgress);
   }
 
-  public static shareProject(project_id: string, expiration: string, emailFrom?: string, emailTo?: string[]): Promise<any> {
+  public static shareProject(project_id: string, expiration: string, notes: string, emailFrom?: string, emailTo?: string[]): Promise<any> {
     return Utils.sendPostRequest(RestUrl.PROJECT_SHARE, {
       project_id: project_id,
       expiration: expiration,
+      notes: notes,
       sender: emailFrom,
       receiver: emailTo
     });
@@ -89,6 +90,14 @@ export class RestCall {
       clicks: "0",
       exposure_time: exposureTime
     });
+  }
+
+  // DELETE
+
+  public static deleteComment(commentId: string) {
+    return Utils.sendPostRequest(RestUrl.COMMENT_DELETE, {
+      comment_id: commentId
+    })
   }
 
   // GET

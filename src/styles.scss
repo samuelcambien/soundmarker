@@ -164,21 +164,21 @@ a:visited {
 }
 .tooltip {
 	font-family: 'sofia-regular';
-	font-size: 10pt;
-	animation-name: delayedFadeIn;
-	animation-duration: 1s;
+	font-size: 10pt !important;
+	animation-name: delayedFadeIn !important;
+	animation-duration: 1s !important;
 	/* Adjust this duration */
 }
 @Keyframes delayedFadeIn {
 	0% {
-		opacity: 0;
+		opacity: 0 !important;
 	}
 	75% {
-		opacity: 0;
+		opacity: 0 !important;
 	}
 	/* Set this to 99% for no fade-in. */
 	100% {
-		opacity: 1;
+		opacity: 1 !important;
 	}
 }
 

@@ -1,6 +1,7 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {Comment} from "../../model/comment";
 import {Utils} from "../../app.component";
+import {LocalStorageService} from "../../services/local-storage.service";
 
 @Component({
   selector: 'app-comment',
@@ -13,12 +14,15 @@ export class CommentComponent implements OnInit {
   @Input() player;
   @Input() search: string;
   @Input() expired: boolean;
+  @Output() delete = new EventEmitter<Comment>();
 
   reply: Comment;
 
   showReplies: boolean = false;
 
-  constructor() {
+  constructor(
+    private localStorageService: LocalStorageService,
+  ) {
   }
 
   ngOnInit() {
@@ -26,6 +30,7 @@ export class CommentComponent implements OnInit {
 
   createReply() {
     this.reply = new Comment();
+    this.reply.name = this.localStorageService.getCommentName();
     this.reply.parent_comment_id = this.comment.comment_id;
     this.reply.version_id = this.comment.version_id;
     this.showReplies = true;
@@ -36,6 +41,7 @@ export class CommentComponent implements OnInit {
   }
 
   newReply() {
+    this.localStorageService.storeCommentName(this.reply.name);
     this.comment.replies.push(this.reply);
     this.clearReply();
   }

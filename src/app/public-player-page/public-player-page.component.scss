@@ -1,3 +1,6 @@
+
+
+
 #phonesearch {
 	width: 100%;
 	height: 48px;
@@ -30,10 +33,14 @@
 .comment-search {
 	margin-bottom: 10px;
 	width: 160px;
+	opacity: 1;
+	transition: 0.2s;
+	-webkit-transition: 0.2s;
 }
 
 .comment-search.disabled {
 	pointer-events: none;
+	opacity: 0;
 }
 
 .search-box {
@@ -65,11 +72,15 @@
 	margin-bottom: 1px;
 	line-height: 1.2;
 	margin-left: 8px;
+	opacity: 1;
+		transition: 0.2s;
+	-webkit-transition: 0.2s;
 	
 }
 
 .comment-sort.disabled {
 	pointer-events: none;
+	opacity: 0;
 }
 
 .title h4 {
@@ -461,10 +472,6 @@ margin-top: 4px;
 	stroke-width: 1.5;
 }
 
-.drag-block {
-	cursor: ew-resize !important;
-}
-
 .title {
 	margin-top: 3px;
 	
@@ -630,12 +637,27 @@ hr {
   border-top: 1px solid #eef1ff;
 }
 
+.soundmarker {
+  pointer-events: none;
+}
+
+.app-draggable {
+  cursor: ew-resize !important;
+  width: 9px;
+  height: 9px;
+  position: absolute;
+  bottom: 11px;
+  left: 1px;
+  display: inline;
+  opacity: 100%;
+}
+
 .phone-draggable {
   width: 25px;
-  height: 74px;
+  height: 25px;
   position: absolute;
-  bottom: 4px;
-  left: -7px;
+  bottom: -8px;
+  left: -8px;
   display: inline;
   opacity: 100%;
 }

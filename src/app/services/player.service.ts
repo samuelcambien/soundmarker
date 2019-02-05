@@ -1,4 +1,5 @@
 import {Injectable} from '@angular/core';
+import {Project} from "../model/project";
 
 @Injectable({
   providedIn: 'root'
@@ -13,12 +14,6 @@ export class PlayerService {
     return this.players.get(trackId);
   }
 
-  public playerReady(trackId: string): boolean {
-
-    let player = this.getPlayer(trackId);
-    return player && player.isReady();
-  }
-
   public addPlayer(trackId: string, player) {
     this.players.set(trackId, player);
     player.backend.on("pauseothers", () =>
@@ -28,5 +23,11 @@ export class PlayerService {
         }
       })
     );
+  }
+
+  public playerReady(trackId: string): boolean {
+
+    let player = this.getPlayer(trackId);
+    return player && player.isReady();
   }
 }

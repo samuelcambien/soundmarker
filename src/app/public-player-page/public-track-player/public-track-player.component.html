@@ -295,7 +295,7 @@
 
     <div class="player-toolbar hide-phone  ml-auto">
 
-      <div *ngIf="version?.downloadable && !expired" class="top-icon cloud-icon margin-tooltip " id="cloud-icon"
+      <div *ngIf="version?.downloadable && !expired" class="top-icon cloud-icon margin-tooltip" id="cloud-icon"
            (click)="download()" placement="top"
            ngbTooltip="Download">
 
@@ -379,34 +379,39 @@
           <div
             #startTime
             class="drag-block"
-            [class.disabled]="!comment.include_start"
-            appDraggable
-            (dragStart)="dragStart()"
-            (dragMove)="updateStartTime($event)"
+            [class.disabled]="!comment?.include_start"
             [style.left]="getStartPosition()"
           >
-            <div class="phone-draggable">
-              <ng-container *ngTemplateOutlet="phonemarker"></ng-container>
+            <div
+              class="app-draggable"
+              appDraggable
+              (dragStart)="dragStart()"
+              (dragMove)="updateStartTime($event)"
+            >
+              <div class="phone-draggable"></div>
             </div>
-            <ng-container *ngTemplateOutlet="soundmarker">
-
-            </ng-container>
+            <div class="soundmarker">
+              <ng-container *ngTemplateOutlet="soundmarker"></ng-container>
+            </div>
           </div>
 
           <div
             #endTime
             class="drag-block"
-            [class.disabled]="!comment.include_end"
-            appDraggable
-            (dragMove)="updateEndTime($event)"
-            (dragStart)="comment.include_end = true; comment.include_start = true"
+            [class.disabled]="!comment?.include_end"
             [style.left]="getEndPosition()"
           >
-
-            <div class="phone-draggable">
-              <ng-container *ngTemplateOutlet="phonemarker"></ng-container>
+            <div
+              class="app-draggable"
+              appDraggable
+              (dragMove)="updateEndTime($event)"
+              (dragStart)="comment.include_end = true; comment.include_start = true"
+            >
+              <div class="phone-draggable"></div>
             </div>
-            <ng-container *ngTemplateOutlet="soundmarker"></ng-container>
+            <div class="soundmarker">
+              <ng-container *ngTemplateOutlet="soundmarker"></ng-container>
+            </div>
           </div>
 
           <ng-template #soundmarker>
@@ -421,11 +426,15 @@
             </svg>
           </ng-template>
 
-          <ng-template #phonemarker>
-            <svg width="25" height="74"></svg>
+          <ng-template #dragmarker>
+            <svg width="9" height="9"></svg>
           </ng-template>
 
-          <div id="comment-interval" *ngIf="comment.include_start && comment.include_end"
+          <ng-template #phonemarker>
+            <svg width="25" height="25"></svg>
+          </ng-template>
+
+          <div id="comment-interval" *ngIf="comment?.include_start && comment?.include_end"
                [style.left]="getCommentIntervalPosition()"
                [style.width]="getCommentIntervalWidth()"
                (click)="playInterval()"
@@ -507,6 +516,7 @@
       [player]="getPlayer()"
       [search]="search"
       [expired]="expired"
+      (delete)="deleteComment($event)"
     >
     </app-comment>
 

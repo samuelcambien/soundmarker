@@ -15,7 +15,7 @@ import {RestCall} from "../../rest/rest-call";
 import {NgbTooltip} from '@ng-bootstrap/ng-bootstrap';
 import {NgControl, Validators} from '@angular/forms';
 import {Utils} from "../../app.component";
-import {LocalStorageService} from "../../local-storage.service";
+import {LocalStorageService} from "../../services/local-storage.service";
 import {PublicUploadPageComponent} from "../public-upload-page.component";
 
 declare var AudioContext: any, webkitAudioContext: any;
@@ -69,9 +69,9 @@ export class PublicUploadFormComponent implements OnInit {
           )
         ).then(() => {
               if (this.sharemode === 'email') {
-                return RestCall.shareProject(project_id, this.expiration, this.email_from, this.email_to)
+                return RestCall.shareProject(project_id, this.expiration, this.notes, this.email_from, this.email_to)
               } else {
-                return RestCall.shareProject(project_id, this.expiration)
+                return RestCall.shareProject(project_id, this.expiration, this.notes)
               }
             }
         ).then(response => {

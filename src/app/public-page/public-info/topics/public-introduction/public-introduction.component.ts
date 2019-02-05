@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {NgbActiveModal, NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {PrivacyAndTermsComponent} from "../privacy-and-terms/privacy-and-terms.component";
-import {LocalStorageService} from "../../../../local-storage.service";
+import {LocalStorageService} from "../../../../services/local-storage.service";
 
 @Component({
   selector: 'app-public-introduction',

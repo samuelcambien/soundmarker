@@ -19,8 +19,6 @@ export class DraggableDirective implements OnInit {
   @Output() dragMove = new EventEmitter<any>();
   @Output() dragEnd = new EventEmitter<any>();
 
-  @ViewChild('phoneDraggable') phoneDraggable: ElementRef;
-
   private dragging = false;
 
   @HostListener('mousedown', ['$event'])

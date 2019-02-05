@@ -1,3 +1,37 @@
+.comment-options .dropdown {
+	min-width: 70px !important;
+	max-width: 70px !important;
+}
+.comment-options .dropdown .dropdown-menu {
+	margin-left: 0px;
+	padding: 0px;
+	border: none;
+	width: 70px !important;
+	background: transparent;
+}
+
+.comment-options .dropdown .dropdown-menu .dropdown-container {
+	margin-left: -10px;
+	padding: 5px;
+	border: none;
+	width: 70px !important;
+	background: #fff;
+	border-radius: 0.3rem;
+}
+
+.comment-options .dropdown .dropdown-menu a {
+	font-size: 10pt !important;
+	color: #7397ff !important;
+	border-radius: 0.2rem;
+	background-color: #fff !important;
+	margin: 0px;
+	padding: .25rem .55rem !important;
+}
+
+.comment-options .dropdown .dropdown-menu a:hover {
+	background-color: #eef1ff !important;
+}
+
 .comment-toolbar {
 	top:0px;
 	bottom: 0px;
@@ -37,29 +71,30 @@
 	pointer-events: none;
 }
 
-.comment-check {
+.region-loop {
 	width: 18px;
 	height: 18px;
-	border-radius: 2rem;
-	border: 1.5px solid #bac1da;
+
 	margin-top: 1px;
 	transition: 0.2s;
 	-webkit-transition: 0.2s;
 	cursor: pointer;
 	// visibility: hidden;
+
+  &.hidden {
+    visibility: hidden;
+    cursor: default;
+    pointer-events: none;
+  }
 }
 
-.comment-check:hover {
-	background-color: #bac1da;
-		transition: 0.2s;
-	-webkit-transition: 0.2s;
-}
+
 
 .comment-options {
 	margin-top: -5px;
 	cursor: pointer
-	
-	
+
+
 }
 
 .comment-time {
@@ -70,11 +105,15 @@
 	background-color: #eef1ff;
 	border-radius: 0.6rem;
 	margin-top: 10px;
-    border-top-left-radius: 1.2rem;
+  border-top-left-radius: 1.2rem;
+
+  &.highlight {
+    background-color: #e2e7f5;
+  }
 }
 
 .replies {
-	
+
 }
 
 .comment .row {
@@ -100,7 +139,7 @@
 
 .comment-tag p {
 	font-family: "sofia-regular";
-	
+
 }
 
 /*
@@ -163,7 +202,7 @@ hr {
 	font-family: 'sofia-regular';
 	font-size: 8pt;
 	cursor: pointer;
-	-webkit-user-select: none; /* Safari */        
+	-webkit-user-select: none; /* Safari */
 -moz-user-select: none; /* Firefox */
 -ms-user-select: none; /* IE10+/Edge */
 user-select: none; /* Standard */
@@ -179,14 +218,14 @@ user-select: none; /* Standard */
 	float: right;
 	margin-right: 20px;
 	}
-	
+
 .showhidereplies {
 	margin-top: -0.8rem;
 	margin-left: 4px;
 	font-size: 8pt;
 	cursor: pointer;
 	margin-bottom: 0px;
-	-webkit-user-select: none; /* Safari */        
+	-webkit-user-select: none; /* Safari */
 -moz-user-select: none; /* Firefox */
 -ms-user-select: none; /* IE10+/Edge */
 user-select: none; /* Standard */

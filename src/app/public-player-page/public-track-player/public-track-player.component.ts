@@ -15,9 +15,11 @@ import {Comment, CommentSorter} from "../../model/comment";
 import {saveAs} from 'file-saver/FileSaver';
 import {Version} from "../../model/version";
 import {File} from "../../model/file";
-import * as wave from "../../player/dist/player.js";
+import * as player from "../../player/dist/player.js";
 import {RestCall} from "../../rest/rest-call";
-import {PlayerService} from "../../player.service";
+import {PlayerService} from "../../services/player.service";
+import {ProjectService} from "../../services/project.service";
+import {LocalStorageService} from "../../services/local-storage.service";
 
 @Component({
   selector: 'app-public-track-player',
@@ -65,17 +67,21 @@ export class PublicTrackPlayerComponent implements OnInit, AfterViewChecked {
   peaks;
   private files: File[];
 
-  constructor(private playerService: PlayerService, private cdRef: ChangeDetectorRef) {
+  constructor(
+    private localStorageService: LocalStorageService,
+    private playerService: PlayerService,
+    private projectService: ProjectService,
+    private cdRef: ChangeDetectorRef,
+  ) {
   }
 
   ngOnInit() {
     if (!this.expired) {
       this.track.versions.then(versions => {
         this.version = versions[0];
-        this.comment.start_time = 0;
-        this.comment.end_time = versions[0].track_length;
         this.peaks = JSON.parse(this.version.wave_png);
-        return this.loadWaveForm();
+        this.createNewComment();
+        return this.loadPlayer();
       })
       // .catch(
       // e => {
@@ -189,12 +195,12 @@ export class PublicTrackPlayerComponent implements OnInit, AfterViewChecked {
     return this.getMatchingComments().length > 0;
   }
 
-  public loadWaveForm(): Promise<any> {
+  public loadPlayer(): Promise<any> {
 
     return this.version.files.then((files) => {
       this.files = files;
       let streamFile = files.filter(file => file.identifier == 0)[0];
-      this.playerService.addPlayer(this.track.track_id, wave.create(
+      this.playerService.addPlayer(this.track.track_id, player.create(
         {
           container: "#waveform_" + this.track.track_id,
           peaks: this.peaks,
@@ -205,16 +211,15 @@ export class PublicTrackPlayerComponent implements OnInit, AfterViewChecked {
       ));
       this.getPlayer().drawBuffer();
       this.getPlayer().backend.load();
+      this.getPlayer().on('finish', () => {
+        if (this.projectService.autoPlay) this.projectService.playNextTrack(this.track)
+      });
       return this.getPlayer().backend.loadChunk(0);
     });
   }
 
   getCurrentTime(): number {
     return this.getPlayer() != null ? this.getPlayer().getCurrentTime() : 0;
-  }
-
-  getCurrentTimeRounded() {
-    return Math.round(this.getCurrentTime());
   }
 
   private getPosition(element, commentTime) {
@@ -226,10 +231,6 @@ export class PublicTrackPlayerComponent implements OnInit, AfterViewChecked {
     return this.getPlayerWidth() && this.getTrackLength() ?
       this.getPlayerWidth() * commentTime / this.getTrackLength() - element.nativeElement.offsetWidth / 2 :
       -element.nativeElement.offsetWidth / 2;
-  }
-
-  private getSeekTime(event) {
-    return this.getTrackLength() * (event.x - this.waveform.nativeElement.getBoundingClientRect().left) / this.getPlayerWidth();
   }
 
   private getCommentTime(element, x) {
@@ -251,10 +252,6 @@ export class PublicTrackPlayerComponent implements OnInit, AfterViewChecked {
     );
   }
 
-  downloadFile(propertyId: string, fileId: string) {
-    this.download()
-  }
-
   triggerPhoneSearch() {
     this.phoneSearch = !this.phoneSearch;
     if (this.phoneSearch) {
@@ -274,18 +271,34 @@ export class PublicTrackPlayerComponent implements OnInit, AfterViewChecked {
 
   }
 
+  createNewComment() {
+    this.comment = new Comment();
+    this.comment.name = this.localStorageService.getCommentName();
+    this.comment.start_time = 0;
+    this.comment.end_time = this.getTrackLength();
+    this.comment.deleteable = true;
+  }
+
   addComment(comment: Comment) {
     this.track.comments.push(comment);
+    this.localStorageService.storeCommentName(comment.name);
     RestCall.addComment(this.comment).then(response => {
       this.comment.comment_id = response["comment_id"];
-      this.comment = new Comment();
-      this.comment.start_time = 0;
-      this.comment.end_time = this.getTrackLength();
+      this.createNewComment();
     }).catch(() =>
-      this.track.comments = this.track.comments.filter(
-        loadedComment => loadedComment != comment
-      )
+      this.removeComment(comment)
     );
+  }
+
+  removeComment(comment: Comment) {
+    this.track.comments = this.track.comments.filter(
+      loadedComment => loadedComment != comment
+    );
+  }
+
+  deleteComment(comment: Comment) {
+    RestCall.deleteComment(comment.comment_id);
+    this.removeComment(comment);
   }
 
   getPlayer() {

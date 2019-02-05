@@ -1,5 +1,6 @@
 export class Comment {
 
+  public deleteable: boolean;
   public comment_id;
   public version_id;
   public parent_comment_id;

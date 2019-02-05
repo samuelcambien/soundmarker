@@ -13,7 +13,9 @@
 
   <div *ngIf="exists && !(expired && commentsExpired)">
 
-    <div class="list-container" [ngbCollapse]="activeTrack != null">
+    <div class="list-container" [ngbCollapse]="getActiveTrack() != null">
+	    
+
 
       <div *ngFor="let track of project?.tracks; let last = last;">
 
@@ -32,10 +34,10 @@
     <app-public-track-player
       *ngFor="let track of project?.tracks"
       [track]="track"
-      [enableOverview]="project.tracks.length > 1"
-      [ngbCollapse]="activeTrack != track"
+      [enableOverview]="true"
+      [ngbCollapse]="getActiveTrack() != track"
       [expired]="expired && !commentsExpired"
-      (overview)="activeTrack = null;"
+      (overview)="setActiveTrack(null)"
       (error)="error = $event"
     >
     </app-public-track-player>
