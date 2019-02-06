@@ -10,7 +10,6 @@ import {
   ViewChild
 } from '@angular/core';
 import {FileItem, FileUploader} from '../../ng2-file-upload';
-import {Mp3Encoder} from "../../mp3-encoder/mp3-encoder";
 import {RestCall} from "../../rest/rest-call";
 import {NgbTooltip} from '@ng-bootstrap/ng-bootstrap';
 import {NgControl, Validators} from '@angular/forms';
@@ -90,8 +89,8 @@ export class PublicUploadFormComponent implements OnInit {
   private processTrack(projectId, track: FileItem): Promise<any> {
 
     let length = 0;
-    let title = Mp3Encoder.getName(track._file.name);
-    let extension = Mp3Encoder.getExtension(track._file.name);
+    let title = Utils.getName(track._file.name);
+    let extension = Utils.getExtension(track._file.name);
 
     return RestCall.createNewTrack(projectId, title)
       .then(response =>

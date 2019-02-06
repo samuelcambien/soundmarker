@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { PublicPlayerListComponent } from './public-player-list.component';
+import { PublicTrackPreviewComponent } from './public-track-preview.component';
 
-describe('PublicPlayerListComponent', () => {
-  let component: PublicPlayerListComponent;
-  let fixture: ComponentFixture<PublicPlayerListComponent>;
+describe('PublicPlayerTrackComponent', () => {
+  let component: PublicTrackPreviewComponent;
+  let fixture: ComponentFixture<PublicTrackPreviewComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ PublicPlayerListComponent ]
+      declarations: [ PublicTrackPreviewComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(PublicPlayerListComponent);
+    fixture = TestBed.createComponent(PublicTrackPreviewComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

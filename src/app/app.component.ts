@@ -55,6 +55,24 @@ export class RestUrl {
 
 export class Utils {
 
+  public static read(file: File): Promise<ArrayBuffer> {
+    return new Promise<any>(resolve => {
+      let reader: FileReader = new FileReader();
+      reader.onload = () => resolve(reader.result);
+      reader.readAsArrayBuffer(file);
+    })
+  }
+
+  public static getName(name: string): string {
+
+    return name.split(/(.*)\.(.*)/)[1];
+  }
+
+  public static getExtension(name: string): string {
+
+    return name.split(/(.*)\.(.*)/)[2].toLowerCase();
+  }
+
   public static getTimeHumanized(time) {
     return moment.duration(now() - time).humanize();
   }

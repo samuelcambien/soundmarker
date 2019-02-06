@@ -24,16 +24,11 @@ import {DragAndDropModule} from "angular-draggable-droppable";
 import {DurationDirective} from './formatting/duration.directive';
 import {DurationFormatterPipe} from './formatting/duration-formatter.pipe';
 import {NgbActiveModal, NgbModule} from "@ng-bootstrap/ng-bootstrap";
-import {SoundmarkerComponent} from './soundmarker/soundmarker.component';
-import {MyCurrencyFormatterDirective} from './my-currency-formatter.directive';
-import {MyCurrencyPipe} from './my-currency.pipe';
 import {TimeInputComponent} from './comments/time-input/time-input.component';
 import {FileUploadModule} from "./ng2-file-upload";
-import {SplitterDirective} from './splitter.directive';
 import {TagInputModule} from 'ngx-chips';
 
-import {PublicPlayerListComponent} from './public-player-page/public-player-list/public-player-list.component';
-import {PublicPlayerTrackComponent} from './public-player-page/public-player-track/public-player-track.component';
+import {PublicTrackPreviewComponent} from './public-player-page/public-track-preview/public-track-preview.component';
 import {PublicTrackPlayerComponent} from './public-player-page/public-track-player/public-track-player.component';
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {PrivacyAndTermsComponent} from './public-page/public-info/topics/privacy-and-terms/privacy-and-terms.component';
@@ -43,9 +38,9 @@ import {TermsComponent} from './public-page/public-info/topics/privacy-and-terms
 import {PrivacyComponent} from './public-page/public-info/topics/privacy-and-terms/privacy/privacy.component';
 import {CookieComponent} from './public-page/public-info/topics/privacy-and-terms/cookie/cookie.component';
 import {NtdComponent} from './public-page/public-info/topics/privacy-and-terms/ntd/ntd.component';
-import {HighlightPipe} from './highlight.pipe';
+import {HighlightPipe} from './formatting/highlight.pipe';
 import {TimeFormatPipe} from './time-format.pipe';
-import {DraggableDirective} from './draggable.directive';
+import {DraggableDirective} from './public-player-page/public-track-player/draggable.directive';
 import {PublicIntroductionComponent} from './public-page/public-info/topics/public-introduction/public-introduction.component';
 import {PlayerIntroductionComponent} from './public-page/public-info/topics/player-introduction/player-introduction.component';
 import {NgSelectModule} from '@ng-select/ng-select';
@@ -78,13 +73,8 @@ import { ExpiredProjectComponent } from './error/expired-project/expired-project
     ReplyFormComponent,
     DurationDirective,
     DurationFormatterPipe,
-    SoundmarkerComponent,
-    MyCurrencyFormatterDirective,
-    MyCurrencyPipe,
     TimeInputComponent,
-    SplitterDirective,
-    PublicPlayerListComponent,
-    PublicPlayerTrackComponent,
+    PublicTrackPreviewComponent,
     PublicTrackPlayerComponent,
     ErrorComponent,
     PrivacyAndTermsComponent,
