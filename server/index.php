@@ -223,7 +223,7 @@ if (in_array($project_id, $_SESSION['user_projects'])) {
   // return not allowed
   Flight::json(array(
      'return' => 'notallowed'
-  ), 200);
+  ), 405);
 }
 });
 
@@ -450,7 +450,7 @@ if (in_array($project_id, $_SESSION['user_projects'])) {
   // return not allowed
   Flight::json(array(
      'return' => 'notallowed'
-  ), 200);
+  ), 405);
 }
 });
 
@@ -594,7 +594,7 @@ if (in_array($project_id, $_SESSION['user_projects'])) {
   // return not allowed
   Flight::json(array(
      'return' => 'notallowed'
-  ), 200);
+  ), 405);
 }
 });
 
@@ -620,7 +620,7 @@ if (in_array($project_id, $_SESSION['user_projects'])) {
   // return not allowed
   Flight::json(array(
      'return' => 'notallowed'
-  ), 200);
+  ), 405);
 }
 });
 
@@ -647,7 +647,7 @@ if (in_array($project_id, $_SESSION['user_projects'])) {
   // return not allowed
   Flight::json(array(
      'return' => 'notallowed'
-  ), 200);
+  ), 405);
 }
 });
 
@@ -699,7 +699,7 @@ if (in_array($project_id, $_SESSION['user_projects'])) {
   // return not allowed
   Flight::json(array(
      'return' => 'notallowed'
-  ), 200);
+  ), 405);
 }
 });
 
@@ -728,7 +728,7 @@ if (in_array($project_id, $_SESSION['user_projects'])) {
   // return not allowed
   Flight::json(array(
      'return' => 'notallowed'
-  ), 200);
+  ), 405);
 }
 });
 
@@ -762,7 +762,7 @@ if (in_array($track_id, $_SESSION['user_tracks'])) {
   // return not allowed
   Flight::json(array(
      'return' => 'notallowed'
-  ), 200);
+  ), 405);
 }
 });
 
@@ -798,7 +798,7 @@ if (in_array($track_id, $_SESSION['user_tracks'])) {
   // return not allowed
   Flight::json(array(
      'return' => 'notallowed'
-  ), 200);
+  ), 405);
 }
 });
 
@@ -844,7 +844,7 @@ if (in_array($version_id, $_SESSION['view_versions'])) {
   // return not allowed
   Flight::json(array(
      'return' => 'notallowed'
-  ), 200);
+  ), 405);
 }
 });
 
@@ -871,7 +871,7 @@ if (in_array($version_id, $_SESSION['view_versions'])) {
   // return not allowed
   Flight::json(array(
      'return' => 'notallowed'
-  ), 200);
+  ), 405);
 }
 });
 
@@ -906,7 +906,7 @@ if (in_array($version_id, $_SESSION['view_versions'])) {
   // return not allowed
   Flight::json(array(
      'return' => 'notallowed'
-  ), 200);
+  ), 405);
 } 
 });
 
@@ -933,7 +933,7 @@ if (in_array($comment_id, $_SESSION['view_comments'])) {
   // return not allowed
   Flight::json(array(
      'return' => 'notallowed'
-  ), 200);
+  ), 405);
 } 
 });
 
@@ -958,7 +958,7 @@ if (in_array($file_id, $_SESSION['view_files'])) {
   // return not allowed
   Flight::json(array(
      'return' => 'notallowed'
-  ), 200);
+  ), 405);
 } 
 });
 
@@ -1003,7 +1003,7 @@ if (in_array($version_id, $_SESSION['user_versions'])) {
   // return not allowed
   Flight::json(array(
      'return' => 'notallowed'
-  ), 200);
+  ), 405);
 } 
 });
 
@@ -1143,7 +1143,7 @@ if (in_array($file_id, $_SESSION['user_files'])) {
   // return not allowed
   Flight::json(array(
      'return' => 'notallowed'
-  ), 200);
+  ), 405);
 } 
 });
 

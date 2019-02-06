@@ -1,5 +1,4 @@
 import {RestUrl, Utils} from "../app.component";
-import {Mp3Encoder} from "../mp3-encoder/mp3-encoder";
 import {Comment} from "../model/comment";
 import {Project} from "../model/project";
 import {Version} from "../model/version";
@@ -45,7 +44,7 @@ export class RestCall {
         extension: extension,
         file_size: size
       }),
-      Mp3Encoder.read(file)
+      Utils.read(file)
     ]).then(result => {
       return {fileId: result[0]["file_id"], buffer: result[1]};
       });

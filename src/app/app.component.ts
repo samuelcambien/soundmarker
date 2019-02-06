@@ -55,6 +55,24 @@ export class RestUrl {
 
 export class Utils {
 
+  public static read(file: File): Promise<ArrayBuffer> {
+    return new Promise<any>(resolve => {
+      let reader: FileReader = new FileReader();
+      reader.onload = () => resolve(reader.result);
+      reader.readAsArrayBuffer(file);
+    })
+  }
+
+  public static getName(name: string): string {
+
+    return name.split(/(.*)\.(.*)/)[1];
+  }
+
+  public static getExtension(name: string): string {
+
+    return name.split(/(.*)\.(.*)/)[2].toLowerCase();
+  }
+
   public static getTimeHumanized(time) {
     return moment.duration(now() - time).humanize();
   }
@@ -143,8 +161,16 @@ export class Utils {
         url += "/" + entry;
       }
       trackRequest.open("POST", url, true);
-      trackRequest.onload = () => resolve(Utils.parse(trackRequest.responseText));
-      trackRequest.onerror = () => reject(trackRequest.statusText);
+      trackRequest.onreadystatechange = () => {
+
+        if (trackRequest.readyState !== 4) return;
+
+        if (trackRequest.status >= 200 && trackRequest.status < 300) {
+          resolve(Utils.parse(trackRequest.responseText));
+        } else {
+          reject(trackRequest.statusText);
+        }
+      };
       trackRequest.send(Utils.stringify(data));
     });
   }

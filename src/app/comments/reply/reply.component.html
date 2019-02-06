@@ -1,15 +1,17 @@
+<div
+  class="reply container-fluid"
+  [class.pending]="!reply.comment_id"
+>
 
-  <div class="reply container-fluid">
-	  
-    <div class="row reply-row">
-      <p class="name-tx">{{reply.name}}</p>
-      <p class="date-tx ml-auto hide-phone noselect"
-         placement="top"
-         ngbTooltip="{{getTimeAccurate(reply.comment_time)}}">
-        {{getTimeHumanized(reply.comment_time)}}
-      </p>
-    
-    </div>
-    <div><p class="row reply-row comment-tx"> {{reply.notes}}</p></div>
-  
+  <div class="row reply-row">
+    <p class="name-tx">{{reply.name}}</p>
+    <p class="date-tx ml-auto hide-phone noselect"
+       placement="top"
+       ngbTooltip="{{getTimeAccurate(reply.comment_time)}}">
+      {{getTimeHumanized(reply.comment_time)}}
+    </p>
+
+  </div>
+  <div><p class="row reply-row comment-tx"> {{reply.notes}}</p></div>
+
 </div>

@@ -22,7 +22,6 @@ export class ReplyFormComponent implements OnInit {
 
   onSubmit(form: NgForm) {
     this.reply.comment_time = Date.now();
-    RestCall.addComment(this.reply);
     this.newReply.emit(this.reply);
   }
 }

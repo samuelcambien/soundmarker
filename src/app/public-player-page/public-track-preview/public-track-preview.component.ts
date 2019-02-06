@@ -8,15 +8,15 @@ import {File} from "../../model/file";
 
 @Component({
   selector: 'app-public-player-track',
-  templateUrl: './public-player-track.component.html',
-  styleUrls: ['./public-player-track.component.scss'],
+  templateUrl: './public-track-preview.component.html',
+  styleUrls: ['./public-track-preview.component.scss'],
   animations: [
     trigger('toggleComments', [
       transition('* => *', animate('5000s'))
     ])
   ]
 })
-export class PublicPlayerTrackComponent implements OnInit {
+export class PublicTrackPreviewComponent implements OnInit {
 
   @Input() track: Track;
   @Input() expired: boolean;
