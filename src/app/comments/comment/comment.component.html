@@ -171,7 +171,7 @@
 
       <div class="row reply-row">
 
-        <div class="comment-reply" *ngIf="!expired" (click)="createReply()">
+        <div class="comment-reply" *ngIf="!expired && comment.comment_id" (click)="createReply()">
           <p class="reply-tx" *ngIf="!comment.replies?.length">Reply</p>
           <p class="reply-tx" *ngIf="comment.replies?.length">Reply · </p>
         </div>
@@ -226,7 +226,10 @@
 
         <div class="comment-replies" id="comment-replies" [ngbCollapse]="!showReplies">
 
-          <app-reply *ngFor="let reply of this.comment.replies" [reply]="reply"></app-reply>
+          <app-reply
+            *ngFor="let reply of this.comment.replies"
+            [reply]="reply"
+          ></app-reply>
 
         </div>
 

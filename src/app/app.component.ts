@@ -143,8 +143,16 @@ export class Utils {
         url += "/" + entry;
       }
       trackRequest.open("POST", url, true);
-      trackRequest.onload = () => resolve(Utils.parse(trackRequest.responseText));
-      trackRequest.onerror = () => reject(trackRequest.statusText);
+      trackRequest.onreadystatechange = () => {
+
+        if (trackRequest.readyState !== 4) return;
+
+        if (trackRequest.status >= 200 && trackRequest.status < 300) {
+          resolve(Utils.parse(trackRequest.responseText));
+        } else {
+          reject(trackRequest.statusText);
+        }
+      };
       trackRequest.send(Utils.stringify(data));
     });
   }

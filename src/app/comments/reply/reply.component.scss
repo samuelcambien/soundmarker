@@ -9,6 +9,10 @@
   border-left: 2px solid #bac1da;
   border-bottom-left-radius: 0px;
   border-top-left-radius: 0px;
+
+  &.pending {
+    opacity: 0.5;
+  }
 }
 
 .name-tx {
@@ -35,4 +39,4 @@
 	text-align: right;
 	float: right;
 	margin-right: 5px;
-		}
+}

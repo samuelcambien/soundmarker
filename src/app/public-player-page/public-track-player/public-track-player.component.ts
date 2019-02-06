@@ -276,18 +276,20 @@ export class PublicTrackPlayerComponent implements OnInit, AfterViewChecked {
     this.comment.name = this.localStorageService.getCommentName();
     this.comment.start_time = 0;
     this.comment.end_time = this.getTrackLength();
-    this.comment.deleteable = true;
   }
 
   addComment(comment: Comment) {
     this.track.comments.push(comment);
     this.localStorageService.storeCommentName(comment.name);
-    RestCall.addComment(this.comment).then(response => {
-      this.comment.comment_id = response["comment_id"];
-      this.createNewComment();
-    }).catch(() =>
-      this.removeComment(comment)
-    );
+    RestCall.addComment(this.comment)
+      .then(response => {
+        this.comment.comment_id = response["comment_id"];
+        this.comment.deleteable = true;
+        this.createNewComment();
+      })
+      .catch(() =>
+        this.removeComment(comment)
+      );
   }
 
   removeComment(comment: Comment) {

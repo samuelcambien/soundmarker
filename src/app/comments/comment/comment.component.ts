@@ -2,6 +2,7 @@ import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {Comment} from "../../model/comment";
 import {Utils} from "../../app.component";
 import {LocalStorageService} from "../../services/local-storage.service";
+import {RestCall} from "../../rest/rest-call";
 
 @Component({
   selector: 'app-comment',
@@ -41,9 +42,22 @@ export class CommentComponent implements OnInit {
   }
 
   newReply() {
-    this.localStorageService.storeCommentName(this.reply.name);
-    this.comment.replies.push(this.reply);
+    let reply = this.reply;
     this.clearReply();
+    this.localStorageService.storeCommentName(reply.name);
+    this.comment.replies.push(reply);
+    RestCall.addComment(reply)
+      .then(response => {
+        reply.comment_id = response["comment_id"];
+        reply.deleteable = true;
+      })
+      .catch(() => this.removeReply(reply));
+  }
+
+  removeReply(reply: Comment) {
+    this.comment.replies = this.comment.replies.filter(
+      loadedReply => loadedReply != reply
+    );
   }
 
   getTimeHumanized(time: number) {
