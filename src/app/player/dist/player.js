@@ -994,7 +994,8 @@
           my.setState(my.FINISHED_STATE);
           my.fireEvent('pause');
         } else if (time >= my.scheduledPause) {
-          my.pause();
+          if (my.loop()) my.replay();
+          else my.pause();
         } else if (my.state === my.states[my.PLAYING_STATE]) {
           my.fireEvent('audioprocess', time);
         }
@@ -1315,8 +1316,8 @@
       if (this.ready) {
         var adjustedTime = this.seekTo(start, end);
 
-        start = adjustedTime.start;
-        end = adjustedTime.end;
+        this.start = adjustedTime.start;
+        this.end = adjustedTime.end;
 
         // var index = Math.floor(start / this.buffer_size);
         // start = start % this.buffer_size;
@@ -1324,7 +1325,7 @@
         if (comment) this.setComment(comment);
 
         this.sources[0] = this.createSource(0);
-        this.playSource(0, start, end);
+        this.playSource(0, this.start, this.end);
 
         if (this.getAudioContext().state == 'suspended') {
           this.getAudioContext().resume && this.getAudioContext().resume();
@@ -1333,6 +1334,14 @@
         this.fireEvent('play');
         this.fireEvent('pauseothers');
       }
+    },
+
+    replay: function() {
+      this.play(this.start, this.end, this.comment);
+    },
+
+    loop: function() {
+      return this.comment && this.comment.loop;
     },
 
     playSource(index, start, end) {

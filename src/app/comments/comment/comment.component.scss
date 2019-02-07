@@ -10,6 +10,16 @@
 	background: transparent;
 }
 
+.comment-options:hover .comment-options-fill, .comment-options:focus-within .comment-options-fill {
+	fill: #7397ff;
+	
+}
+
+.comment-options:hover .menu-icon, .comment-options:focus-within .menu-icon {
+	
+	stroke: #7397ff;
+}
+
 .comment-options .dropdown .dropdown-menu .dropdown-container {
 	margin-left: -10px;
 	padding: 5px;

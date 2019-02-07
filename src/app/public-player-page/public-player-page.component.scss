@@ -84,7 +84,15 @@
 }
 
 .title h4 {
-	width: 300px;
+	max-width: 300px;
+	overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-align: left;
+}
+
+.title p {
+		max-width: 300px;
 	overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -166,10 +174,10 @@
 	}
 
 	.player-container {
-		padding-left: 0px !important;
-		padding-right: 0px !important;
-		margin-top: -15px !important;
-		margin-bottom: -15px !important;
+		padding-left: 5px !important;
+		padding-right: 5px !important;
+		margin-top: -5px !important;
+		margin-bottom: 5px !important;
 	}
 
 	#phone-popup-playbar {
@@ -303,9 +311,7 @@
 
 // track list
 
-.list-container {
-  overflow-x: hidden;
-}
+
 /*
 .list-container::-webkit-scrollbar {
   width: 4px;
@@ -520,7 +526,8 @@ margin-left: 11px;
 	margin-right: 0px;
 	padding-top: 5px;
 	padding-bottom: 5px;
-	height: 38px;
+	height: 55px;
+	max-height: 55px;
 }
 
 .solid-player {

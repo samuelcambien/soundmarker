@@ -24,5 +24,13 @@
 
 .show-track-button {
 	cursor: pointer !important;
-	width: 84%;
+	width: 80%;
+}
+
+@media (max-width: 576px) {
+	
+	.show-track-button {
+	
+	width: 70%;
+}
 }
