@@ -72,8 +72,8 @@ export class CommentComponent implements OnInit {
 
     if (this.comment.include_start) {
       this.comment.include_end ?
-        this.player.play(this.comment.start_time, this.comment.end_time, this.comment.comment_id) :
-        this.player.play(this.comment.start_time, this.player.getDuration(), this.comment.comment_id);
+        this.player.play(this.comment.start_time, this.comment.end_time, this.comment) :
+        this.player.play(this.comment.start_time, this.player.getDuration(), this.comment);
     }
   }
 
@@ -83,7 +83,7 @@ export class CommentComponent implements OnInit {
   }
 
   isPlaying() {
-    return this.player && this.comment.comment_id && this.player.backend.getComment() === this.comment.comment_id;
+    return this.player && this.player.backend.getComment() == this.comment;
   }
 
   playerIsReady(): boolean {
