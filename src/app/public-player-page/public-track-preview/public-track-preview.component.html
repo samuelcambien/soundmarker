@@ -53,7 +53,7 @@
     <div role="button" (click)="trackSelected()" class="show-track-button">
 
       <div class="title"><h4>{{track?.title}}</h4>
-      <p *ngIf="!expired">12 comments · 5 minutes ago</p>
+        <p *ngIf="!expired">{{getCommentCount()}} comments {{getLastUpdated()}}</p>
       <p *ngIf="expired">
         Sorry, this track has expired.
       </p></div>

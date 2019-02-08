@@ -15,16 +15,14 @@
 
     <div class="list-container" [ngbCollapse]="getActiveTrack() != null">
 	    
-
-
       <div *ngFor="let track of project?.tracks; let last = last;">
 
-        <app-public-player-track
+        <app-public-track-preview
           [track]="track"
           [expired]="expired && !commentsExpired"
           (selected)="selectTrack(track)"
         >
-        </app-public-player-track>
+        </app-public-track-preview>
 
         <hr *ngIf="!last">
 

@@ -17,7 +17,7 @@ export class ReplyComponent implements OnInit {
   }
 
   getTimeHumanized(time: number) {
-    return Utils.getTimeHumanized(time) + " ago";
+    return Utils.getTimeHumanized(time);
   }
 
   getTimeAccurate(time: number) {

@@ -17,9 +17,10 @@
       <div class="region-loop" placement="top"
            ngbTooltip="Loop region"
            [class.hidden]="!(comment?.include_start && comment?.include_end)"
+           [class.active]="comment.loop"
            (click)="comment.loop = !comment.loop"
       >
-        <div *ngIf="comment.loop; then loopbuttonactive else loopbutton"></div>
+        <ng-container *ngTemplateOutlet="loopbutton"></ng-container>
       </div>
 
       <div class="comment-options" *ngIf="comment.deleteable">
@@ -224,32 +225,14 @@
 </ng-template>
 
 <ng-template #loopbutton>
-  <svg width="18px" height="18px" viewBox="0 0 18 18" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <svg width="18px" height="18px" viewBox="0 0 18 18" version="1.1" xmlns="http://www.w3.org/2000/svg">
     <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
       <g id="Internet-Networks-Servers-/-Upload/Download-/-upload-dash-arrow-1" transform="translate(-246.000000, -101.000000)">
         <g id="Group-14-Copy-6" transform="translate(246.000000, 101.000000)">
-          <g id="Group-13-Copy" fill="#E2E7F5" fill-rule="nonzero">
+          <g id="Group-13-Copy" class="fill" fill="#E2E7F5" fill-rule="nonzero">
             <circle id="Oval" cx="9" cy="9" r="9"></circle>
           </g>
-          <g id="button-loop-1" transform="translate(0.300000, 5.000000)" stroke="#BAC1DA" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5">
-            <path d="M8.7,4.1500002 C8.7,4.1500002 10.3,7.78125 12.9666667,7.78125 C15.0285297,7.78125 16.7,6.15548409 16.7,4.1500002 C16.7,2.14451631 15.0285297,0.518750395 12.9666667,0.518750395 C10.3,0.517367062 8.7,4.1500002 8.7,4.1500002 Z" id="Shape"></path>
-            <path d="M8.7,4.1500002 C8.7,4.1500002 7.1,7.78125 4.43333333,7.78125 C2.37147027,7.78125 0.7,6.15548409 0.7,4.1500002 C0.7,2.14451631 2.37147027,0.518750395 4.43333333,0.518750395 C5.62092238,0.518134333 6.59695627,1.23826353 7.31432738,2.03729829 C8.20777411,3.03245266 8.7,4.1500002 8.7,4.1500002 Z" id="Shape"></path>
-          </g>
-        </g>
-      </g>
-    </g>
-  </svg>
-</ng-template>
-
-<ng-template #loopbuttonactive>
-  <svg width="18px" height="18px" viewBox="0 0 18 18" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-      <g id="Internet-Networks-Servers-/-Upload/Download-/-upload-dash-arrow-1" transform="translate(-271.000000, -101.000000)">
-        <g id="Group-14-Copy-7" transform="translate(271.000000, 101.000000)">
-          <g id="Group-13-Copy" fill="#E2E7F5" fill-rule="nonzero">
-            <circle id="Oval" cx="9" cy="9" r="9"></circle>
-          </g>
-          <g id="button-loop-1" transform="translate(0.300000, 5.000000)" stroke="#7397FF" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5">
+          <g id="button-loop-1" class="stroke" transform="translate(0.300000, 5.000000)" stroke="#BAC1DA" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5">
             <path d="M8.7,4.1500002 C8.7,4.1500002 10.3,7.78125 12.9666667,7.78125 C15.0285297,7.78125 16.7,6.15548409 16.7,4.1500002 C16.7,2.14451631 15.0285297,0.518750395 12.9666667,0.518750395 C10.3,0.517367062 8.7,4.1500002 8.7,4.1500002 Z" id="Shape"></path>
             <path d="M8.7,4.1500002 C8.7,4.1500002 7.1,7.78125 4.43333333,7.78125 C2.37147027,7.78125 0.7,6.15548409 0.7,4.1500002 C0.7,2.14451631 2.37147027,0.518750395 4.43333333,0.518750395 C5.62092238,0.518134333 6.59695627,1.23826353 7.31432738,2.03729829 C8.20777411,3.03245266 8.7,4.1500002 8.7,4.1500002 Z" id="Shape"></path>
           </g>
