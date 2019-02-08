@@ -1800,7 +1800,9 @@
     },
 
     drawPeaks: function (peaks, length, start, end) {
+
       this.setWidth(length);
+      this.updateSize();
 
       this.params.barWidth ?
         this.drawBars(peaks, 0, start, end) :
@@ -1897,7 +1899,6 @@
 
     progress: function (progress, start) {
 
-      if (!start) start = 0;
       var minPxDelta = 1 / this.params.pixelRatio;
       var pos = this.getPos(progress);
 
@@ -1986,7 +1987,7 @@
           top: 0,
           bottom: 0,
           overflow: 'hidden',
-          width: this.getWidth() / 2 + 'px',
+          width: 0,
           clip: 'rect(0px, ' + pos + 'px, ' + this.height + 'px, ' + start + 'px)',
           display: 'none',
           boxSizing: 'border-box',
@@ -2012,7 +2013,7 @@
           bottom: 0,
           opacity: 0.5,
           overflow: 'hidden',
-          width: this.getWidth() / 2 + 'px',
+          width: 0,
           clip: 'rect(0px, 0px, 0px, 0px)',
           display: 'none',
           boxSizing: 'border-box',
@@ -2037,8 +2038,10 @@
       this.waveCc.canvas.height = this.height;
       this.style(this.waveCc.canvas, {width: width + 'px'});
 
-      this.style(this.progressWave, {display: 'block'});
+      this.setStyle(this.progressCc, {width: this.getWidth() / 2 + 'px'});
+      this.setStyle(this.commentCc, {width: this.getWidth() / 2 + 'px'});
 
+      this.style(this.progressWave, {display: 'block'});
       this.style(this.commentWave, {display: 'block'});
 
       if (this.progressCc) {
@@ -2184,9 +2187,11 @@
 
       this.waveCc.fillStyle = this.params.waveColor;
       if (this.progressCc) {
+        this.setStyle(this.progressCc, {width: this.getWidth() / 2 + 'px'});
         this.progressCc.fillStyle = this.params.progressColor;
       }
       if (this.commentCc) {
+        this.setStyle(this.commentCc, {width: this.getWidth() / 2 + 'px'});
         this.commentCc.fillStyle = '#7397ff';
       }
 
@@ -2260,7 +2265,7 @@
           top: 0,
           bottom: 0,
           overflow: 'hidden',
-          width: this.getWidth() / 2 + 'px',
+          width: 0,
           clip: 'rect(0px, 0px, 0px, 0px)',
           display: 'none',
           boxSizing: 'border-box',
@@ -2276,7 +2281,7 @@
           bottom: 0,
           overflow: 'hidden',
           opacity: 0.5,
-          width: this.getWidth() / 2 + 'px',
+          width: 0,
           clip: 'rect(0px, 0px, 0px, 0px)',
           boxSizing: 'border-box',
         })
@@ -2370,8 +2375,10 @@
       entry.waveCtx.canvas.height = height;
       this.style(entry.waveCtx.canvas, {width: elementWidth + 'px'});
 
-      this.style(this.progressWave, {display: 'block'});
+      this.style(this.progressWave, {width: this.getWidth() / 2 + 'px'});
+      this.style(this.commentWave, {width: this.getWidth() / 2 + 'px'});
 
+      this.style(this.progressWave, {display: 'block'});
       this.style(this.commentWave, {display: 'block'});
 
       if (this.hasProgressCanvas) {
