@@ -1803,6 +1803,8 @@
 
       this.setWidth(length);
       this.updateSize();
+      this.updateProgress(this.getPos(this.progressStart));
+      this.updateComment(this.getPos(this.commentStart), this.getPos(this.commentEnd));
 
       this.params.barWidth ?
         this.drawBars(peaks, 0, start, end) :
@@ -1900,6 +1902,7 @@
     progress: function (progress, start) {
 
       var minPxDelta = 1 / this.params.pixelRatio;
+      this.progressStart = progress;
       var pos = this.getPos(progress);
 
       if (pos < this.lastPos || pos - this.lastPos >= minPxDelta) {
@@ -1915,7 +1918,9 @@
     },
 
     highlightComment: function (start, end) {
-      this.updateComment(this.getPos(start), this.getPos(end));
+      this.commentStart = start;
+      this.commentEnd = end;
+      this.updateComment(this.getPos(this.commentStart), this.getPos(this.commentEnd));
     },
 
     getPos: function(time) {
