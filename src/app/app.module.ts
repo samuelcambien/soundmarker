@@ -52,6 +52,7 @@ import { PageNotFoundComponent } from './error/page-not-found/page-not-found.com
 import { ProjectExpiredComponent } from './error/project-expired/project-expired.component';
 import { PublicPagenotfoundPageComponent } from './public-pagenotfound-page/public-pagenotfound-page.component';
 import { ExpiredProjectComponent } from './error/expired-project/expired-project.component';
+import { DropdownToggleComponent } from './dropdown-toggle/dropdown-toggle.component';
 
 
 @NgModule({
@@ -95,7 +96,8 @@ import { ExpiredProjectComponent } from './error/expired-project/expired-project
     PageNotFoundComponent,
     ProjectExpiredComponent,
     PublicPagenotfoundPageComponent,
-    ExpiredProjectComponent
+    ExpiredProjectComponent,
+    DropdownToggleComponent
   ],
   imports: [
     TagInputModule,

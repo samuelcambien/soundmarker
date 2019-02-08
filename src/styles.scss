@@ -58,6 +58,8 @@ body {
 	body {
 		background-color: #eef1ff;
 		overflow: auto;
+		height: auto !important;
+		width: auto !important;
 
 	}
 }
@@ -116,14 +118,17 @@ body {
 }
 @font-face {
 	font-family:'sofia-bold';
+	font-display: block;
 	src:url(fonts/sofiapro-bold.otf);
 }
 @font-face {
 	font-family:'sofia-medium';
+	font-display: block;
 	src:url(fonts/sofiapro-medium.otf);
 }
 @font-face {
 	font-family:'sofia-regular';
+	font-display: block;
 	src:url(fonts/sofiapro-regular.otf);
 }
 @font-face {

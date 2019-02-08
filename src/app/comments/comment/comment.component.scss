@@ -10,6 +10,14 @@
 	background: transparent;
 }
 
+.comment-options:hover .comment-options-fill, .comment-options:focus-within .comment-options-fill {
+	fill: #7397ff;
+}
+
+.comment-options:hover .menu-icon, .comment-options:focus-within .menu-icon {
+	stroke: #7397ff;
+}
+
 .comment-options .dropdown .dropdown-menu .dropdown-container {
 	margin-left: -10px;
 	padding: 5px;
@@ -79,22 +87,24 @@
 	transition: 0.2s;
 	-webkit-transition: 0.2s;
 	cursor: pointer;
-	// visibility: hidden;
 
   &.hidden {
     visibility: hidden;
     cursor: default;
     pointer-events: none;
   }
+
+  &:hover,
+  &.active {
+    .stroke {
+      stroke: #7397ff;
+    }
+  }
 }
-
-
 
 .comment-options {
 	margin-top: -5px;
 	cursor: pointer
-
-
 }
 
 .comment-time {

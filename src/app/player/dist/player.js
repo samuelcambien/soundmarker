@@ -99,7 +99,7 @@
 
     redraw: function () {
       this.drawBuffer();
-      this.drawer.progress(this.backend.getPlayedPercents());
+      this.drawer.progress(this.backend.getPlayedPercents(), this.getProgressStart());
     },
 
     createDrawer: function () {
@@ -156,9 +156,18 @@
       this.backend.on('pause', function () {
         my.fireEvent('pause');
       });
+      this.backend.on('comment', function (comment) {
+        if (!comment)
+          my.drawer.highlightComment(0, 0);
+        else if (comment.include_end)
+          my.drawer.highlightComment(
+            comment.start_time / my.duration,
+            comment.end_time / my.duration
+          );
+      });
 
       this.backend.on('audioprocess', function (time) {
-        my.drawer.progress(my.backend.getPlayedPercents());
+        my.drawer.progress(my.backend.getPlayedPercents(), my.getProgressStart());
         my.fireEvent('audioprocess', time);
       });
     },
@@ -287,6 +296,12 @@
       return this.backend.getPlaybackRate();
     },
 
+    getProgressStart: function () {
+      // if (!this.backend.comment)
+        return 0;
+      // else return this.backend.comment.start_time / this.duration;
+    },
+
     /**
      * Toggle the volume on and off. It not currenly muted it will
      * save the current volume value and turn the volume off.
@@ -384,7 +399,7 @@
       this.params.scrollParent = true;
 
       this.drawBuffer();
-      this.drawer.progress(this.backend.getPlayedPercents());
+      this.drawer.progress(this.backend.getPlayedPercents(), this.getProgressStart());
 
       this.drawer.recenter(
         this.getCurrentTime() / this.getDuration()
@@ -979,7 +994,8 @@
           my.setState(my.FINISHED_STATE);
           my.fireEvent('pause');
         } else if (time >= my.scheduledPause) {
-          my.pause();
+          if (my.loop()) my.replay();
+          else my.pause();
         } else if (my.state === my.states[my.PLAYING_STATE]) {
           my.fireEvent('audioprocess', time);
         }
@@ -1174,13 +1190,13 @@
         trackRequest.onerror = () => reject(trackRequest.statusText);
         trackRequest.send();
       }).then((completeArray) => {
-          this.audioBuffers[index] = this.copy(completeArray);
-          return this.decodeBuffer(index, completeArray);
-        }).then(() => {
-          this.sources[index] = this.createSource(index);
-          this.ready = true;
-          this.fireEvent("ready");
-        });
+        this.audioBuffers[index] = this.copy(completeArray);
+        return this.decodeBuffer(index, completeArray);
+      }).then(() => {
+        this.sources[index] = this.createSource(index);
+        this.ready = true;
+        this.fireEvent("ready");
+      });
     },
 
     readResponse: function (reader, array, index) {
@@ -1255,7 +1271,7 @@
       return this.buffer.duration;
     },
 
-    getComment: function() {
+    getComment: function () {
       return this.comment;
     },
 
@@ -1300,16 +1316,16 @@
       if (this.ready) {
         var adjustedTime = this.seekTo(start, end);
 
-        start = adjustedTime.start;
-        end = adjustedTime.end;
+        this.start = adjustedTime.start;
+        this.end = adjustedTime.end;
 
         // var index = Math.floor(start / this.buffer_size);
         // start = start % this.buffer_size;
 
-        if (comment) this.comment = comment;
+        if (comment) this.setComment(comment);
 
         this.sources[0] = this.createSource(0);
-        this.playSource(0, start, end);
+        this.playSource(0, this.start, this.end);
 
         if (this.getAudioContext().state == 'suspended') {
           this.getAudioContext().resume && this.getAudioContext().resume();
@@ -1318,6 +1334,14 @@
         this.fireEvent('play');
         this.fireEvent('pauseothers');
       }
+    },
+
+    replay: function() {
+      this.play(this.start, this.end, this.comment);
+    },
+
+    loop: function() {
+      return this.comment && this.comment.loop;
     },
 
     playSource(index, start, end) {
@@ -1341,7 +1365,7 @@
     pause: function () {
       this.scheduledPause = null;
 
-      this.comment = null;
+      this.setComment(null);
 
       this.startPosition = +this.startPosition + this.getPlayedTime();
       this.source && this.source.stop(0);
@@ -1377,6 +1401,11 @@
         this.playbackRate = value;
         this.play();
       }
+    },
+
+    setComment: function (comment) {
+      this.comment = comment;
+      this.fireEvent('comment', comment);
     }
   };
 
@@ -1771,7 +1800,9 @@
     },
 
     drawPeaks: function (peaks, length, start, end) {
+
       this.setWidth(length);
+      this.updateSize();
 
       this.params.barWidth ?
         this.drawBars(peaks, 0, start, end) :
@@ -1866,9 +1897,10 @@
       this.updateSize();
     },
 
-    progress: function (progress) {
+    progress: function (progress, start) {
+
       var minPxDelta = 1 / this.params.pixelRatio;
-      var pos = Math.round(progress * this.width) * minPxDelta;
+      var pos = this.getPos(progress);
 
       if (pos < this.lastPos || pos - this.lastPos >= minPxDelta) {
         this.lastPos = pos;
@@ -1878,8 +1910,17 @@
           this.recenterOnPosition(newPos);
         }
 
-        this.updateProgress(pos);
+        this.updateProgress(pos, this.getPos(start));
       }
+    },
+
+    highlightComment: function (start, end) {
+      this.updateComment(this.getPos(start), this.getPos(end));
+    },
+
+    getPos: function(time) {
+      var minPxDelta = 1 / this.params.pixelRatio;
+      return Math.round(time * this.width) * minPxDelta;
     },
 
     destroy: function () {
@@ -1906,7 +1947,16 @@
     clearWave: function () {
     },
 
-    updateProgress: function (position) {
+    updateProgress: function (position, start) {
+    },
+
+    updateComment: function (start, end) {
+      this.style(
+        this.commentWave,
+        {
+          clip: 'rect(0px, ' + end + 'px, ' + this.height + 'px, ' + start + 'px)'
+        }
+      );
     }
   };
 
@@ -1932,12 +1982,13 @@
       this.progressWave = this.wrapper.appendChild(
         this.style(document.createElement('wave'), {
           position: 'absolute',
-          zIndex: 2,
+          zIndex: 3,
           left: 0,
           top: 0,
           bottom: 0,
           overflow: 'hidden',
-          width: '0',
+          width: 0,
+          clip: 'rect(0px, ' + pos + 'px, ' + this.height + 'px, ' + start + 'px)',
           display: 'none',
           boxSizing: 'border-box',
           borderRightStyle: 'solid',
@@ -1952,6 +2003,32 @@
         );
         this.progressCc = progressCanvas.getContext('2d');
       }
+
+      this.commentWave = this.wrapper.appendChild(
+        this.style(document.createElement('wave'), {
+          position: 'absolute',
+          zIndex: 2,
+          left: 0,
+          top: 0,
+          bottom: 0,
+          opacity: 0.5,
+          overflow: 'hidden',
+          width: 0,
+          clip: 'rect(0px, 0px, 0px, 0px)',
+          display: 'none',
+          boxSizing: 'border-box',
+          borderRightStyle: 'solid',
+          borderRightWidth: this.params.cursorWidth + 'px',
+          borderRightColor: this.params.cursorColor
+        })
+      );
+
+      if (this.params.waveColor != this.params.progressColor) {
+        var commentCanvas = this.commentWave.appendChild(
+          document.createElement('canvas')
+        );
+        this.commentCc = commentCanvas.getContext('2d');
+      }
     },
 
     updateSize: function () {
@@ -1961,12 +2038,22 @@
       this.waveCc.canvas.height = this.height;
       this.style(this.waveCc.canvas, {width: width + 'px'});
 
+      this.setStyle(this.progressCc, {width: this.getWidth() / 2 + 'px'});
+      this.setStyle(this.commentCc, {width: this.getWidth() / 2 + 'px'});
+
       this.style(this.progressWave, {display: 'block'});
+      this.style(this.commentWave, {display: 'block'});
 
       if (this.progressCc) {
         this.progressCc.canvas.width = this.width;
         this.progressCc.canvas.height = this.height;
         this.style(this.progressCc.canvas, {width: width + 'px'});
+      }
+
+      if (this.commentCc) {
+        this.commentCc.canvas.width = this.width;
+        this.commentCc.canvas.height = this.height;
+        this.style(this.commentCc.canvas, {width: width + 'px'});
       }
 
       this.clearWave();
@@ -1976,6 +2063,9 @@
       this.waveCc.clearRect(0, 0, this.width, this.height);
       if (this.progressCc) {
         this.progressCc.clearRect(0, 0, this.width, this.height);
+      }
+      if (this.commentCc) {
+        this.commentCc.clearRect(0, 0, this.width, this.height);
       }
     },
 
@@ -2030,8 +2120,11 @@
       if (this.progressCc) {
         this.progressCc.fillStyle = this.params.progressColor;
       }
+      if (this.commentCc) {
+        this.commentCc.fillStyle = '#7397ff';
+      }
 
-      [this.waveCc, this.progressCc].forEach(function (cc) {
+      [this.waveCc, this.progressCc, this.commentCc].forEach(function (cc) {
         if (!cc) {
           return;
         }
@@ -2094,10 +2187,15 @@
 
       this.waveCc.fillStyle = this.params.waveColor;
       if (this.progressCc) {
+        this.setStyle(this.progressCc, {width: this.getWidth() / 2 + 'px'});
         this.progressCc.fillStyle = this.params.progressColor;
       }
+      if (this.commentCc) {
+        this.setStyle(this.commentCc, {width: this.getWidth() / 2 + 'px'});
+        this.commentCc.fillStyle = '#7397ff';
+      }
 
-      [this.waveCc, this.progressCc].forEach(function (cc) {
+      [this.waveCc, this.progressCc, this.commentCc].forEach(function (cc) {
         if (!cc) {
           return;
         }
@@ -2125,8 +2223,11 @@
       }, this);
     },
 
-    updateProgress: function (pos) {
-      this.style(this.progressWave, {width: pos + 'px'});
+    updateProgress: function (pos, start) {
+      if (!start) start = 0;
+      this.style(this.progressWave, {
+        clip: 'rect(0px, ' + pos + 'px, ' + this.height + 'px, ' + start + 'px)'
+      });
     },
 
     getImage: function (type, quality) {
@@ -2164,8 +2265,24 @@
           top: 0,
           bottom: 0,
           overflow: 'hidden',
-          width: '0',
+          width: 0,
+          clip: 'rect(0px, 0px, 0px, 0px)',
           display: 'none',
+          boxSizing: 'border-box',
+        })
+      );
+
+      this.commentWave = this.wrapper.appendChild(
+        this.style(document.createElement('wave'), {
+          position: 'absolute',
+          zIndex: 3,
+          left: 0,
+          top: 0,
+          bottom: 0,
+          overflow: 'hidden',
+          opacity: 0.5,
+          width: 0,
+          clip: 'rect(0px, 0px, 0px, 0px)',
           boxSizing: 'border-box',
         })
       );
@@ -2213,7 +2330,6 @@
       );
       entry.waveCtx = entry.wave.getContext('2d');
 
-
       if (this.hasProgressCanvas) {
         entry.progress = this.progressWave.appendChild(
           this.style(document.createElement('canvas'), {
@@ -2224,6 +2340,16 @@
           })
         );
         entry.progressCtx = entry.progress.getContext('2d');
+
+        entry.comment = this.commentWave.appendChild(
+          this.style(document.createElement('canvas'), {
+            position: 'absolute',
+            left: leftOffset + 'px',
+            top: 0,
+            bottom: 0
+          })
+        );
+        entry.commentCtx = entry.comment.getContext('2d');
       }
 
       this.canvases.push(entry);
@@ -2249,12 +2375,20 @@
       entry.waveCtx.canvas.height = height;
       this.style(entry.waveCtx.canvas, {width: elementWidth + 'px'});
 
+      this.style(this.progressWave, {width: this.getWidth() / 2 + 'px'});
+      this.style(this.commentWave, {width: this.getWidth() / 2 + 'px'});
+
       this.style(this.progressWave, {display: 'block'});
+      this.style(this.commentWave, {display: 'block'});
 
       if (this.hasProgressCanvas) {
         entry.progressCtx.canvas.width = width;
         entry.progressCtx.canvas.height = height;
         this.style(entry.progressCtx.canvas, {width: elementWidth + 'px'});
+
+        entry.commentCtx.canvas.width = width;
+        entry.commentCtx.canvas.height = height;
+        this.style(entry.commentCtx.canvas, {width: elementWidth + 'px'});
       }
     },
 
@@ -2379,6 +2513,7 @@
 
         this.drawLineToContext(entry, entry.waveCtx, peaks, absmax, halfH, offsetY, start, end);
         this.drawLineToContext(entry, entry.progressCtx, peaks, absmax, halfH, offsetY, start, end);
+        this.drawLineToContext(entry, entry.commentCtx, peaks, absmax, halfH, offsetY, start, end);
       }
     },
 
@@ -2446,6 +2581,12 @@
             intersection.y1,
             intersection.x2 - intersection.x1,
             intersection.y2 - intersection.y1);
+
+          this.fillRectToContext(entry.commentCtx,
+            intersection.x1 - leftOffset,
+            intersection.y1,
+            intersection.x2 - intersection.x1,
+            intersection.y2 - intersection.y1);
         }
       }
     },
@@ -2461,11 +2602,15 @@
       entry.waveCtx.fillStyle = this.params.waveColor;
       if (this.hasProgressCanvas) {
         entry.progressCtx.fillStyle = this.params.progressColor;
+        entry.commentCtx.fillStyle = '#7397ff';
       }
     },
 
-    updateProgress: function (pos) {
-      this.style(this.progressWave, {width: pos + 'px'});
+    updateProgress: function (pos, start) {
+      if (!start) start = 0;
+      this.style(this.progressWave, {
+        clip: 'rect(0px, ' + pos + 'px, ' + this.height + 'px, ' + start + 'px)'
+      });
     }
   });
 

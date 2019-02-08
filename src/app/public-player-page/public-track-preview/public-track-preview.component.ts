@@ -5,9 +5,11 @@ import {animate, transition, trigger} from "@angular/animations";
 import {Version} from "../../model/version";
 import {PlayerService} from "../../services/player.service";
 import {File} from "../../model/file";
+import {Comment, CommentSorter} from "../../model/comment";
+import {Utils} from "../../app.component";
 
 @Component({
-  selector: 'app-public-player-track',
+  selector: 'app-public-track-preview',
   templateUrl: './public-track-preview.component.html',
   styleUrls: ['./public-track-preview.component.scss'],
   animations: [
@@ -63,5 +65,30 @@ export class PublicTrackPreviewComponent implements OnInit {
 
   playerIsReady(): boolean {
     return this.playerService.playerReady(this.track.track_id);
+  }
+
+  private getCommentsAndReplies(): Comment[] {
+
+    return this.track && this.track.comments ?
+      this.track.comments.reduce(
+        (commentsAndReplies, comment) =>
+          Array.prototype.concat(commentsAndReplies, comment, comment.replies),
+        []
+      ) : [];
+  }
+
+  getCommentCount() {
+
+    return this.getCommentsAndReplies().length;
+  }
+
+  getLastUpdated() {
+
+    let commentsAndReplies = this.getCommentsAndReplies();
+
+    return commentsAndReplies.length > 0 ?
+      "· " + Utils.getTimeHumanized(
+        commentsAndReplies.sort(CommentSorter.MOST_RECENT.comparator)[0].comment_time
+      ) : "";
   }
 }

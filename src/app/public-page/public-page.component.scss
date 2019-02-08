@@ -170,11 +170,13 @@
 	  height: 100%;
 	 padding-left: 10px;
 	 padding-right: 10px;
-	  overflow-x: hidden !important;
+	  
   }
   
   .upload-container {
     min-height: 154px;
+    padding: 10px !important;
+    overflow: hidden;
   }
   
     .btn-group {
