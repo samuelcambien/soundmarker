@@ -53,6 +53,7 @@ body {
 	width: 100%;
 	overflow: hidden;
 	min-width: 320px !important;
+	-webkit-overflow-scrolling: touch;
 }
 @media (max-width: 576px) {
 	body {
@@ -60,6 +61,7 @@ body {
 		overflow: auto;
 		height: auto !important;
 		width: auto !important;
+		
 
 	}
 }
