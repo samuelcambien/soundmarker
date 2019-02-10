@@ -88,13 +88,6 @@
 	opacity: 0;
 }
 
-.title h4 {
-	max-width: 300px;
-	overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  text-align: left;
-}
 
 .title p {
 		max-width: 300px;
@@ -294,7 +287,16 @@
 	margin-top: 2px;
 	margin-right: 20px;
 	margin-left: -5px;
+	max-width: 140px;
 
+}
+
+.popup-title h4 {
+		overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-align: left;
+  display: block;
 }
 
 .popup-time p {
@@ -485,12 +487,26 @@ margin-top: 4px;
 
 .title {
 	margin-top: 3px;
-	
+	max-width: 76%;
+}
+.title span {
+ 
+  white-space: nowrap;
+  transform: translateX(0);
+  transition: 1s;
+}
+.title:hover span {
+  transform: translateX(calc(200px - 100%));
 }
 
 .title h4 {
 	margin-bottom: 0px;
 	color: #7397FF;
+		max-width: 100%;
+	overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-align: left;
 }
 
 .title p {
