@@ -286,7 +286,7 @@
     </div>
 
     <div class="title unselectable">
-      <span><h4><marquee behavior="alternate">{{track?.title}}</marquee></h4></span>
+      <h4>{{track?.title}}</h4>
       <p *ngIf="!expired">{{_progress | timeFormat}} / {{version?.track_length | timeFormat}}</p>
       <p *ngIf="expired">
         Sorry, this track has expired.
