@@ -16,7 +16,7 @@
 
       <div class="region-loop" placement="top"
            ngbTooltip="Loop region"
-           [class.hidden]="!(comment?.include_start && comment?.include_end)"
+           [class.hidden]="true"
            [class.active]="comment.loop"
            (click)="comment.loop = !comment.loop"
       >
