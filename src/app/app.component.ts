@@ -74,7 +74,7 @@ export class Utils {
   }
 
   public static getTimeHumanized(time) {
-    return moment.duration(now() - time).humanize();
+    return moment.duration(now() - time).humanize() + " ago";
   }
 
   public static getTimeAccurate(milliseconds) {
