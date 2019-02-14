@@ -184,6 +184,15 @@
 	color: #7397ff;
 }
 
+@media (max-width: 576px) {
+	.name-tx {
+		max-width: 126px;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
+}
+
 .comment-tx {
 	color: #717db0;
 	padding-right: 15px;
