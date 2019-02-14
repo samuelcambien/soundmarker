@@ -79,7 +79,7 @@ export class PublicTrackPreviewComponent implements OnInit {
 
   getCommentCount() {
 
-    return this.getCommentsAndReplies().length;
+    return this.track && this.track.comments && this.track.comments.length;
   }
 
   getLastUpdated() {
