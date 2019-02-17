@@ -152,6 +152,7 @@ foreach ($notifications as &$notification) {
 unset($versions);
 unset($versions2);
 unset($tracks);
+unset($files);
 
 // Send daily updates
 // Go through Daily Updates and get project_ids, then check first if they're not expired
