@@ -152,5 +152,6 @@ foreach ($notifications as &$notification) {
 unset($versions);
 unset($versions2);
 unset($tracks);
+unset($files);
 
 ?>
