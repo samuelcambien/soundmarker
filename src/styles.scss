@@ -188,6 +188,11 @@ a:visited {
 		opacity: 1 !important;
 	}
 }
+@media (max-width: 576px) {
+	.tooltip {
+		display: none !important;
+	}
+}
 
 /*
  .tooltip > .tooltip-inner {
@@ -289,6 +294,9 @@ h2 {
 		font-size: 28pt;
 		line-height: 25pt;
 	}
+	.info-heading h2 {
+		font-size: 20pt !important;
+	}
 	.info-heading p {
 		font-size: 10pt !important;
 	}
@@ -354,7 +362,7 @@ h2 {
 // modals
  .modal {
 	-webkit-overflow-scrolling: touch;
-	overflow-y: auto;
+	overflow-y: scroll;
 }
 #sm .modal-lg,
 .modal-lg {
