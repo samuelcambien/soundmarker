@@ -5,6 +5,8 @@ import {PublicPlayerPageComponent} from "./public-player-page/public-player-page
 import {PublicUploadingFilesComponent} from "./public-upload-page/public-upload-progress/public-uploading-files.component";
 import {AboutUsInfoComponent} from "./public-page/public-info/public-info.component";
 import {PublicPagenotfoundPageComponent} from "./public-pagenotfound-page/public-pagenotfound-page.component";
+import {ProComponent} from './pro/pro.component';
+
 
 const appRoutes: Routes = [
   {
@@ -26,6 +28,10 @@ const appRoutes: Routes = [
   {
     path: "about-us",
     component: AboutUsInfoComponent,
+  },
+  {
+    path: "pro",
+    component: ProComponent
   },
   {
     path: '**',
