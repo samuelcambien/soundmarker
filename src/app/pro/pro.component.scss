@@ -17,7 +17,7 @@
   background: #fff;
 }
 
-#wrapper.toggled #sidebar-wrapper {
+#pro-wrapper.toggled #sidebar-wrapper {
   margin-left: 0;
 }
 
@@ -88,11 +88,11 @@
     min-width: 810px !important;
   
   }
-    #wrapper.toggled #sidebar-wrapper {
+    #pro-wrapper.toggled #sidebar-wrapper {
     margin-left: 0px !important;
   }
   
-  #wrapper.toggled .black-overlay {
+  #pro-wrapper.toggled .black-overlay {
 	  opacity: 1;
 	  pointer-events: block;
   }
