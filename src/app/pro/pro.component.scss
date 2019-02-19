@@ -44,11 +44,12 @@
 	height: 100vh;
 	background-color: rgba(113, 124, 176, 0.3);
 	opacity: 0;
-	pointer-events: none;
+	//pointer-events: none;
 	transition: opacity 0.25s;
 	-webkit-transition: opacity 0.25s;
 	-moz-transition: opacity 0.25s;
 	-o-transition: opacity 0.25s;
+  display:none;
 }
 
 
@@ -94,7 +95,8 @@
   
   #pro-wrapper.toggled .black-overlay {
 	  opacity: 1;
-	  pointer-events: block;
+	  //pointer-events: block;
+      display:block;
   }
   
  #sidebar-wrapper {

@@ -1,19 +1,20 @@
-<div class="d-flex" id="pro-wrapper">
+<div class="d-flex"  [ngClass]="{'toggled': showSidebar}" id="pro-wrapper">
 	
 	<div class="pro-sidebar" id="sidebar-wrapper">
 		<app-pro-sidebar></app-pro-sidebar>
 	</div>
 	
-	<div class="black-overlay" id="menu-toggle-overlay"></div>
+	<div class="black-overlay" id="menu-toggle-overlay" (click)="toggleSidebar()"></div>
 	
     <div id="page-content-wrapper">
 	    
 	    <div class="pro-topbar">
-		    <app-pro-topbar></app-pro-topbar>
+		    <app-pro-topbar
+          (sidebar)="toggleSidebar()">
+        </app-pro-topbar>
 	    </div>
 	
 		<div class="pro-board">
 			<app-pro-board></app-pro-board>
 		</div>
-	
 </div>

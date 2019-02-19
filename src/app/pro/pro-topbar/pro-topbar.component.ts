@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 
 @Component({
   selector: 'app-pro-topbar',
@@ -7,9 +7,16 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ProTopbarComponent implements OnInit {
 
-  constructor() { }
+
+  @Output() sidebar = new EventEmitter();
+
+  constructor() {
+  }
 
   ngOnInit() {
   }
 
+  toggleSidebar(){
+    this.sidebar.emit();
+  }
 }
