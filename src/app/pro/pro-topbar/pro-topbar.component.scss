@@ -1,0 +1,123 @@
+.nav-item {
+	
+	border-radius: 0.2rem;
+	height: 31px;
+	width: 31px;
+	margin-top: -1px;
+	transition: 0.2s;
+	-webkit-transition: 0.2s;
+	-moz-transition: 0.2s;
+	-o-transition: 0.2s;
+	
+}
+
+
+
+.nav-item:hover {
+	background-color: #eef1ff;
+}
+
+.navbar {
+	height: 48px;
+	background-color: #fff;
+	border-bottom: 1px solid #eef1ff;
+	-webkit-box-shadow: 0 0.07rem 0.3rem 0.01rem rgba(115, 150, 255, .1) !important;
+	-moz-box-shadow: 0 0.07rem 0.3rem 0.01rem rgba(115, 150, 255, .1) !important;
+	box-shadow: 0 0.07rem 0.3rem 0.01rem rgba(115, 150, 255, .1) !important;
+
+}
+
+.sidebar-toggle {
+	  display: none;
+	  float: left;
+  } 
+
+.sidebar-heading h4 {
+	text-align: left;
+	color: #ffffff;
+}
+
+.sidebar-toggle {
+	margin-top: 8px;
+	cursor: pointer;
+}
+
+.breadcrumb-container {
+	padding-top: 7px;
+	padding-left: 7px;
+}
+
+.breadcrumb {
+  background: transparent !important;
+  height: 29px;
+  border: none; 
+  color: #BAC1DA !important;
+  display: inline;
+}
+
+.breadcrumb-item {
+	font-family: 'sofia-regular';
+	font-size: 10pt;
+	color: #BAC1DA !important;
+	float: left;
+}
+
+.breadcrumb-item+.breadcrumb-item::before {
+	color: #BAC1DA !important;
+}
+
+.breadcrumb-item a {
+	color: #7397FF !important;
+}
+
+.breadcrumbbar {
+		background-color: rgba(255, 255, 255, 0.95);
+	border-bottom: 1px solid #eef1ff;
+	-webkit-box-shadow: 0 0.07rem 0.3rem 0.01rem rgba(115, 150, 255, .1) !important;
+	-moz-box-shadow: 0 0.07rem 0.3rem 0.01rem rgba(115, 150, 255, .1) !important;
+	box-shadow: 0 0.07rem 0.3rem 0.01rem rgba(115, 150, 255, .1) !important;
+	height: 38px;
+	padding: 10px;
+	position: fixed;
+	width: 100vw;
+	display: none;
+	
+}
+
+.breadcrumbbar .breadcrumb {
+	margin: 0px;
+}
+
+.nav-profile {
+	width: 24px;
+	height: 24px;
+	background: #7397FF;
+	border-radius: 5rem;
+	margin: -4px;
+}
+
+.nav-profile p {
+	font-family: 'sofia-bold' !important;
+	font-size: 10pt;
+	color: white;
+	padding-top: 4px;
+	text-align: center;
+}
+
+
+
+@media (max-width: 1129.98px) {
+
+  .sidebar-toggle {
+	  display: block;
+  }
+  
+ 
+  .navbar .breadcrumb {
+	display: none;  
+  }
+  .breadcrumbbar {
+	display: block;  
+  }
+  
+  }

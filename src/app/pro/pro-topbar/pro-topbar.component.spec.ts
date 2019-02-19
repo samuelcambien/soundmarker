@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ProDashboardComponent } from './pro-dashboard.component';
+import { ProTopbarComponent } from './pro-topbar.component';
 
-describe('ProDashboardComponent', () => {
-  let component: ProDashboardComponent;
-  let fixture: ComponentFixture<ProDashboardComponent>;
+describe('ProTopbarComponent', () => {
+  let component: ProTopbarComponent;
+  let fixture: ComponentFixture<ProTopbarComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ProDashboardComponent ]
+      declarations: [ ProTopbarComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ProDashboardComponent);
+    fixture = TestBed.createComponent(ProTopbarComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

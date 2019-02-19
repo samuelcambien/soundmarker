@@ -1,0 +1,22 @@
+.sidebar-item-transfer .more {
+	float: right;
+	margin-top: -12px;
+	opacity: 0.3;
+	transition: 0.2s;
+	-webkit-transition: 0.2s;
+}
+.sidebar-item-transfer:hover .more {
+	opacity: 1;
+}
+.sidebar-item-transfer h5 {
+	color: #ffffff;
+	overflow: hidden;
+	white-space: nowrap;
+	max-width: 85%;
+	text-overflow: ellipsis;
+}
+.sidebar-item-transfer p {
+	color: #ffffff;
+	font-size: 10pt;
+	opacity: 0.5;
+}

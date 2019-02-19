@@ -53,12 +53,11 @@ import { ProjectExpiredComponent } from './error/project-expired/project-expired
 import { PublicPagenotfoundPageComponent } from './public-pagenotfound-page/public-pagenotfound-page.component';
 import { ExpiredProjectComponent } from './error/expired-project/expired-project.component';
 import { DropdownToggleComponent } from './dropdown-toggle/dropdown-toggle.component';
-import { ProDashboardTopbarComponent } from './pro/pro-dashboard/pro-dashboard-topbar/pro-dashboard-topbar.component';
-import { ProDashboardSidebarComponent } from './pro/pro-dashboard/pro-dashboard-sidebar/pro-dashboard-sidebar.component';
-import { ProDashboardSidebarItemProjectComponent } from './pro/pro-dashboard/pro-dashboard-sidebar/pro-dashboard-sidebar-item-project/pro-dashboard-sidebar-item-project.component';
-import { ProDashboardSidebarItemTransferComponent } from './pro/pro-dashboard/pro-dashboard-sidebar/pro-dashboard-sidebar-item-transfer/pro-dashboard-sidebar-item-transfer.component';
+import { ProTopbarComponent } from './pro/pro-topbar/pro-topbar.component';
+import { ProSidebarComponent } from './pro/pro-sidebar/pro-sidebar.component';
+import { ProSidebarItemProjectComponent } from './pro/pro-sidebar/pro-sidebar-item-project/pro-sidebar-item-project.component';
+import { ProSidebarItemTransferComponent } from './pro/pro-sidebar/pro-sidebar-item-transfer/pro-sidebar-item-transfer.component';
 import { ProBoardComponent } from './pro/pro-board/pro-board.component';
-import { ProDashboardComponent } from './pro/pro-dashboard/pro-dashboard.component';
 import { ProBoardUploadComponent } from './pro/pro-board/pro-board-upload/pro-board-upload.component';
 import { ProBoardProjectsComponent } from './pro/pro-board/pro-board-projects/pro-board-projects.component';
 import { ProBoardProjectsProjectComponent } from './pro/pro-board/pro-board-projects/pro-board-projects-project/pro-board-projects-project.component';
@@ -112,12 +111,11 @@ import { ProComponent } from './pro/pro.component';
     PublicPagenotfoundPageComponent,
     ExpiredProjectComponent,
     DropdownToggleComponent,
-    ProDashboardTopbarComponent,
-    ProDashboardSidebarComponent,
-    ProDashboardSidebarItemProjectComponent,
-    ProDashboardSidebarItemTransferComponent,
+    ProTopbarComponent,
+    ProSidebarComponent,
+    ProSidebarItemProjectComponent,
+    ProSidebarItemTransferComponent,
     ProBoardComponent,
-    ProDashboardComponent,
     ProBoardUploadComponent,
     ProBoardProjectsComponent,
     ProBoardProjectsProjectComponent,
