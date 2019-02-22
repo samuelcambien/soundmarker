@@ -9,7 +9,15 @@
   
 }
 
-
+.pro-sidebar-right {
+	height: 100vh;
+	width: 210px;
+	background: #eef1ff;
+	position: absolute;
+	right: 0px;
+	z-index: 9999;
+	margin-right: -210px;
+}
 
 #page-content-wrapper {
   min-width: 100vw;
@@ -20,6 +28,11 @@
 #pro-wrapper.toggled #sidebar-wrapper {
   margin-left: 0;
 }
+
+#pro-wrapper.foggled #right-sidebar-wrapper {
+  margin-right: -210px;
+}
+
 
 .pro-board {
 	background: #fff;
@@ -37,19 +50,20 @@
 
 /* GENERAL */
 
-.black-overlay {
+.black-overlay, .flack-overlay {
 	position: fixed;
 	z-index: 1000;
 	width: 100vw;
 	height: 100vh;
 	background-color: rgba(113, 124, 176, 0.3);
 	opacity: 0;
-	//pointer-events: none;
+	pointer-events: none;
 	transition: opacity 0.25s;
 	-webkit-transition: opacity 0.25s;
 	-moz-transition: opacity 0.25s;
 	-o-transition: opacity 0.25s;
-  display:none;
+  
+  cursor: pointer;
 }
 
 
@@ -62,7 +76,7 @@
 
 /* RESPONSIVE */
 
-@media (min-width: 1109.98px) {
+@media (min-width: 889.98px) {
   #sidebar-wrapper {
     margin-left: 0;
   }
@@ -74,6 +88,7 @@
     margin-left: 0;
   }
   
+
   #sidebar-wrapper .list-group {
   width: 280px;
 }
@@ -82,7 +97,7 @@
 
 
 
-@media (max-width: 1129.98px) {
+@media (max-width: 889.98px) {
 	
 	
 	#page-content-wrapper {
@@ -93,15 +108,21 @@
     margin-left: 0px !important;
   }
   
+ 
+  
   #pro-wrapper.toggled .black-overlay {
 	  opacity: 1;
-	  //pointer-events: block;
-      display:block;
+	  pointer-events: all;
+      
   }
+  
+
   
  #sidebar-wrapper {
     margin-left: -280px !important;
   }
+  
+  
   #page-content-wrapper {
     min-width: 100vw !important;
     position: absolute;
@@ -110,12 +131,35 @@
 
 }
 
-@media (min-width: 690px) {
+@media (min-width: 575.98px) {
 	#page-content-wrapper {
     min-width: 0;
     width: 100%;
   }
+  
+    #wrapper.foggled #right-sidebar-wrapper {
+    margin-right: -210px;
+  }
+  
  
+}
+
+@media (max-width: 575.98px) {
+	
+	 #right-sidebar-wrapper {
+    margin-right: -210px !important;
+  }
+  
+     #pro-wrapper.foggled #right-sidebar-wrapper {
+    margin-right: 0px !important;
+  }
+  
+	
+	   #pro-wrapper.foggled .flack-overlay {
+	  opacity: 1;
+	  pointer-events: all;
+      
+  }
 }
 
 

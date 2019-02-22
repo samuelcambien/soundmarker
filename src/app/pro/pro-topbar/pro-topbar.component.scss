@@ -11,7 +11,57 @@
 	
 }
 
+.pro-dropdown {
+	top: 48px;
+	margin-right: -6px;
+	border: 1px solid #eef1ff;
+	padding: 10px;
+	border-radius: 0.3rem;
+}
 
+.pro-notifications {
+	margin-right: -37px;
+}
+
+
+.dropdown-header {
+	    padding: .5rem .5rem;
+
+}
+
+h5.dropdown-header {
+	color: #717db0;
+	margin-top: 5px;
+	margin-bottom: 0px !important;
+	pointer-events: none;
+}
+
+h6.dropdown-header {
+	color: #bac1da;
+	margin-top: -10px;
+	margin-bottom: 10px;
+	pointer-events: none;
+}
+
+.dropdown-divider {
+	margin-left: -10px;
+	margin-right: -10px;
+	border-color: #eef1ff;
+}
+
+a.dropdown-item {
+	font-family: 'sofia-regular';
+	color: #7397FF !important;
+	font-size: 10pt;
+	padding: 10px;
+	padding-top: 7px;
+	padding-bottom: 6px;
+	border-radius: 0.2rem;
+}
+
+.dropdown-item:hover {
+	background-color: #eef1ff;
+}
 
 .nav-item:hover {
 	background-color: #eef1ff;
@@ -78,6 +128,8 @@
 	box-shadow: 0 0.07rem 0.3rem 0.01rem rgba(115, 150, 255, .1) !important;
 	height: 38px;
 	padding: 10px;
+	padding-left: 15px;
+	padding-right: 15px;
 	position: fixed;
 	width: 100vw;
 	display: none;
@@ -97,16 +149,54 @@
 }
 
 .nav-profile p {
-	font-family: 'sofia-bold' !important;
+	font-family: 'sofia-medium' !important;
 	font-size: 10pt;
 	color: white;
 	padding-top: 4px;
 	text-align: center;
 }
 
+.topbar-logo {
+	text-align: center;
+	position: absolute;
+	width: 100%;
+	font-family: 'sofia-medium';
+	color:#7397FF;
+	font-size: 16pt;
+	left: 0px;
+	pointer-events: none;
+}
 
+.breadcrumb-item {
+		  max-width: 200px;
+		  overflow: hidden;
+		  text-overflow: ellipsis;
+		  white-space: nowrap;
+	  }
+	  
+	  .phone-rightbar-toggle {
+		 top:13px;
+		 right: 5px;
+		 position: absolute;
+		 padding: 0px;
+	  }
+	  
+	   .show-no-sidebar {
+	  display: none;
+  }
+  
+  @media (max-width: 1189.98px) {
+	  .breadcrumb-item {
+		  max-width: 150px;
+		  overflow: hidden;
+		  text-overflow: ellipsis;
+		  white-space: nowrap;
+	  }
+  }
 
-@media (max-width: 1129.98px) {
+@media (max-width: 889.98px) {
+	
+	
 
   .sidebar-toggle {
 	  display: block;
@@ -116,8 +206,23 @@
   .navbar .breadcrumb {
 	display: none;  
   }
+  
   .breadcrumbbar {
 	display: block;  
   }
   
+  .show-no-sidebar {
+	  display: block;
+  }
+  
+  }
+  
+  @media (max-width: 575.98px) {
+	  
+	  .breadcrumb-item {
+		  max-width: 30%;
+		  overflow: hidden;
+		  text-overflow: ellipsis;
+		  white-space: nowrap;
+	  }
   }
