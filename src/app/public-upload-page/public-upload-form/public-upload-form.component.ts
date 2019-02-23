@@ -12,12 +12,11 @@ import {
 import {FileItem, FileUploader} from '../../ng2-file-upload';
 import {RestCall} from "../../rest/rest-call";
 import {NgbTooltip} from '@ng-bootstrap/ng-bootstrap';
-import {NgControl, Validators} from '@angular/forms';
+import {FormControl, NgControl, Validators} from '@angular/forms';
 import {Utils} from "../../app.component";
 import {LocalStorageService} from "../../services/local-storage.service";
 import {PublicUploadPageComponent} from "../public-upload-page.component";
-
-declare var AudioContext: any, webkitAudioContext: any;
+import {Observable, of} from 'rxjs';
 
 @Component({
   selector: 'app-public-upload-form',
@@ -54,6 +53,8 @@ export class PublicUploadFormComponent implements OnInit {
   tracks_left = () => {
     return this.uploader.options.queueLimit - this.uploader.queue.length
   };
+
+
 
   onSubmit() {
     this.uploader.progress = 0;

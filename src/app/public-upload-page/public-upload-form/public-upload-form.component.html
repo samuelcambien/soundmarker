@@ -98,13 +98,14 @@
 
         <div class="col-sm-6">
           <tag-input [(ngModel)]='email_to'
+                     [trimTags]="true"
                      [separatorKeyCodes]="[13, 188, 186]"
-                     [validators]="validators"
                      [addOnBlur]="true"
                      [maxItems]="5"
                      [ripple]="false"
                      [animationDuration]="{enter: '0ms', leave: '0ms'}"
                      [modelAsStrings] = "true"
+                     [validators]="validators"
                      placeholder="Email to"
                      secondaryPlaceholder="Email to"
                      name="email_to"

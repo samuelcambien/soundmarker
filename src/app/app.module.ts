@@ -25,8 +25,9 @@ import {DurationDirective} from './formatting/duration.directive';
 import {DurationFormatterPipe} from './formatting/duration-formatter.pipe';
 import {NgbActiveModal, NgbModule} from "@ng-bootstrap/ng-bootstrap";
 import {TimeInputComponent} from './comments/time-input/time-input.component';
+import {TrimValueAccessorModule} from 'ng-trim-value-accessor';
 import {FileUploadModule} from "./ng2-file-upload";
-import {TagInputModule} from 'ngx-chips';
+import {TagInputModule} from './ngx-chips/modules';
 
 import {PublicTrackPreviewComponent} from './public-player-page/public-track-preview/public-track-preview.component';
 import {PublicTrackPlayerComponent} from './public-player-page/public-track-player/public-track-player.component';
@@ -67,6 +68,7 @@ import { ProBoardTransfersComponent } from './pro/pro-board/pro-board-transfers/
 import { ProBoardTransfersTransferComponent } from './pro/pro-board/pro-board-transfers/pro-board-transfers-transfer/pro-board-transfers-transfer.component';
 import { ProBoardTransferTrackComponent } from './pro/pro-board/pro-board-transfers/pro-board-transfer-track/pro-board-transfer-track.component';
 import { ProComponent } from './pro/pro.component';
+
 
 
 @NgModule({
@@ -128,6 +130,7 @@ import { ProComponent } from './pro/pro.component';
     ProComponent
   ],
   imports: [
+
     TagInputModule,
     FileUploadModule,
     NgSelectModule,
@@ -138,8 +141,8 @@ import { ProComponent } from './pro/pro.component';
     BrowserModule,
     BrowserAnimationsModule,
     ClipboardModule,
+    TrimValueAccessorModule,
     routing,
-
   ],
   providers: [
     NgbActiveModal
