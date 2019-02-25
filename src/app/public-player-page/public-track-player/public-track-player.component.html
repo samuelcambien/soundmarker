@@ -1,4 +1,4 @@
-<div class="container-fluid player-container">
+<div class="container-fluid player-container" #firstNameElement>
 
   <div id="popup-playbar" ngClass="shadow-topbar hide-phone" [class.hidden]="isInViewport(waveform)">
 
@@ -148,8 +148,8 @@
       </div>
 
       <div class="col">
-        <div class="top-icon text-icon" id="text-icon" (click)="triggerPhoneSearch()"
-             [attr.aria-expanded]="!phoneSearch" aria-controls="phonesearch">
+        <div class="top-icon text-icon" id="text-icon" (click)="showPhoneSearch()"
+             >
           <svg width="21px" height="21px" viewBox="0 0 21 21" version="1.1" xmlns="http://www.w3.org/2000/svg"
           >
 
@@ -188,28 +188,24 @@
 
 
         </div>
-
       </div>
-
-
     </div>
-
   </div>
 
-  <div [ngbCollapse]="!phoneSearch" id="phonesearch" class="show-phone shadow-topbar">
+  <div tabindex="0" id="phonesearch"  class="show-phone shadow-topbar" >
 
     <input
+      #phoneSearchInput
       type="search"
       name="search"
+      id="phony"
       placeholder="Filter e.g. bass"
       class="comment-form-search sub-form search-box"
       [(ngModel)]="search"
-      #phonesearch
-    >
+      (blur)="hidePhoneSearch($event)">
 
     <span class="search-icon">
           <svg width="16px" height="16px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg">
-
             <desc></desc>
             <defs></defs>
             <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round"
