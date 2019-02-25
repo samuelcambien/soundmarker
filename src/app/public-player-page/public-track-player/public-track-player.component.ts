@@ -3,9 +3,8 @@ import {
   ChangeDetectorRef,
   Component,
   ElementRef,
-  EventEmitter,
+  EventEmitter, HostListener,
   Input,
-  NgZone,
   OnInit,
   Output,
   ViewChild
@@ -26,7 +25,7 @@ import {LocalStorageService} from "../../services/local-storage.service";
   templateUrl: './public-track-player.component.html',
   styleUrls: ['./public-track-player.component.scss']
 })
-export class PublicTrackPlayerComponent implements OnInit, AfterViewChecked {
+export class PublicTrackPlayerComponent implements OnInit, AfterViewChecked  {
 
   static MINIMAL_INTERVAL: number = 1;
 
@@ -40,7 +39,7 @@ export class PublicTrackPlayerComponent implements OnInit, AfterViewChecked {
   @ViewChild('waveform') waveform: ElementRef;
   @ViewChild('startTime') startTime: ElementRef;
   @ViewChild('endTime') endTime: ElementRef;
-  @ViewChild('phonesearch') phonesearch: ElementRef;
+  @ViewChild('phoneSearchInput') phoneSearchInput: ElementRef;
 
   commentSorters: CommentSorter[] = [
     CommentSorter.MOST_RECENT,
@@ -60,8 +59,6 @@ export class PublicTrackPlayerComponent implements OnInit, AfterViewChecked {
   endPos;
 
   version: Version;
-
-  phoneSearch: boolean;
   phoneOrder: boolean;
 
   peaks;
@@ -73,6 +70,7 @@ export class PublicTrackPlayerComponent implements OnInit, AfterViewChecked {
     private projectService: ProjectService,
     private cdRef: ChangeDetectorRef,
   ) {
+
   }
 
   ngOnInit() {
@@ -94,6 +92,13 @@ export class PublicTrackPlayerComponent implements OnInit, AfterViewChecked {
             this._progress = this.getCurrentTime();
           }, 1)
         );
+    }
+  }
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    if (window.innerWidth > 577){
+      document.getElementById("phonesearch").setAttribute("style","display:none");
     }
   }
 
@@ -243,19 +248,24 @@ export class PublicTrackPlayerComponent implements OnInit, AfterViewChecked {
   }
 
   download() {
-
     window.open(
       this.files
         .filter(file => file.identifier == 1)
         .map(file => file.aws_path + '.' + file.extension)
         [0]
-    );
+    );}
+
+  showPhoneSearch() {
+    document.getElementById("phonesearch").setAttribute("style","display:inline-block");
+    this.phoneSearchInput.nativeElement.focus();
   }
 
-  triggerPhoneSearch() {
-    this.phoneSearch = !this.phoneSearch;
-    if (this.phoneSearch) {
-      setTimeout(() => this.phonesearch.nativeElement.focus(), 3);
+  hidePhoneSearch(event) {
+    if(event.relatedTarget && (event.relatedTarget.getAttribute('id') === "phonesearch")){
+      this.phoneSearchInput.nativeElement.focus(); //in case the search field is cleared or the search icon is clicker: re-focus on the search field.
+    }
+    else {
+      document.getElementById("phonesearch").setAttribute("style", "display:none");
     }
   }
 
