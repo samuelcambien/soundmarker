@@ -81,6 +81,16 @@ export class TagInputForm implements OnInit, OnChanges {
      */
     @ViewChild('input') public input;
 
+
+    /**
+     * @name submitCharacters
+     * Characters which confirm the different email addresses.
+     * Characters are comma (,) and semicolon (;).
+     * If tags are needed in the future these could be different.
+     * Sorry for the hard coding.
+     */
+    private submitCharacters = [186, 188];
+
     /**
      * @name form
      */
@@ -190,26 +200,15 @@ export class TagInputForm implements OnInit, OnChanges {
     }
 
     /**
+     * - fires a submit on specific characters.
      * @name onKeyDown
      * @param $event
+     *
      */
     public onKeyDown($event) {
-        this.inputText = this.value.value;
-        if ($event.key === 'Enter') {
+        if (this.submitCharacters.indexOf($event.which ) > -1) {
             this.submit($event);
-
-            this.inputText = '';
         }
-        return this.onKeydown.emit($event);
-    }
-
-    /**
-     * @name onKeyUp
-     * @param $event
-     */
-    public onKeyUp($event) {
-        this.inputText = this.value.value;
-        return this.onKeyup.emit($event);
     }
 
     /**
