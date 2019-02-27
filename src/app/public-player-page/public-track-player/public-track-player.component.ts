@@ -256,7 +256,7 @@ export class PublicTrackPlayerComponent implements OnInit, AfterViewChecked  {
     );}
 
   showPhoneSearch() {
-    document.getElementById("phonesearch").setAttribute("style","display:block");
+    document.getElementById("phonesearch").setAttribute("style","display:inline-block");
     this.phoneSearchInput.nativeElement.focus();
   }
 
