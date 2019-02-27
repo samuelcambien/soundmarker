@@ -38,35 +38,32 @@
               <h5>Add tracks</h5>
 
               <div>
-                <h6>Up to {{uploader.options.queueLimit}}</h6>
+                <h6>Up to {{queueSizeMargin}}</h6>
               </div>
             </div>
-
           </ng-template>
 		  <a>
           <ng-template  #addsongs>
-            <div [ngClass]="tracks_left()>0 ? 'addmoresongs' : 'addmoresongsdisabled'">
-              <h5 *ngIf="tracks_left()>0">Add more tracks</h5>
-              <h5 *ngIf="tracks_left()==0"> Max amount added</h5>
-                <h6>{{uploader.queue.length}} added •  {{tracks_left()}} left</h6>
+            <div class="addmoresongs">
+              <h5>Add more tracks</h5>
+                <h6>{{queueSizeMargin}} left</h6>
             </div>
           </ng-template>
 		  </a>
         </div>
 
         <div class="tabletainer">
-
           <table class="table noselect">
             <tbody>
               <tr *ngFor="let item of uploader.queue">
                 <td><p>{{ item?.file?.name }}</p></td>
-                <span (click)="item.remove()" class="delete cross" aria-hidden="true">&times;</span>
+                <span (click)="removeFromQueue(item)" class="delete cross" aria-hidden="true">&times;</span>
               </tr>
             </tbody>
           </table>
         </div>
 
-        <input *ngIf="tracks_left()>0" class="upload-songs-input" id="public-uploader" type="file" title="" ng2FileSelect [uploader]="uploader" multiple
+        <input class="upload-songs-input" id="public-uploader" type="file" title="" ng2FileSelect [uploader]="uploader" multiple
                name="files" accept="{{getAcceptedFileTypes().join(',')}}"/>
 
       </div>

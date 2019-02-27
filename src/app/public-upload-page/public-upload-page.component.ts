@@ -33,11 +33,11 @@ export class PublicUploadPageComponent implements OnInit {
 
   error;
 
+
   uploader: FileUploader = new FileUploader({
     url: UPLOAD_FILES_ENDPOINT,
     disableMultipart: true,
-    queueLimit: 12,
-    maxFileSize: 500000000, // 500MB 500 000 000
+    maxFileSize: 2080000000, // 2GB 2 000 000 000 + 80 MB margin
     filters: [
       {
         name: 'avoidDuplicates',
@@ -51,24 +51,54 @@ export class PublicUploadPageComponent implements OnInit {
       {
         name: 'onlyAudio',
         fn: item => PublicUploadPageComponent.accept(item.type)
+      },
+      {
+        name: 'checkSizeLimit',
+        fn: item => {return this.acceptedQueueMargin + this.queueSizeRemaining - item.size > 0}
       }
     ],
   });
 
   link: string;
-
+  
   period;
   statusEnum = Status;
   stage: Status = Status.SELECT_SONGS;
 
+  acceptedQueueMargin = 80000000; // 80 MB
+  queueSizeRemaining: number = 2000000000; // 2000000000 2 000 000 000
+  queueSizeRemainingString:  string = "2 GB";
+
   @ViewChild('waveform') waveform: ElementRef;
+
+  constructor() {
+  }
 
   ngOnInit() {
     this.uploader.files = 0;
     this.uploader.uploaded = 0;
+    this.uploader.onAfterAddingFile = (item) => this.removeFileSize(item.file.size);
   }
 
-  constructor() {
+  // Remove the size of a added file again to the leftover queuesize.
+  removeFileSize(fileSize){
+    this.queueSizeRemaining = this.queueSizeRemaining - fileSize;
+    this.queueSizeRemainingString = this.bytesToSize(this.queueSizeRemaining);
+  }
+
+  // Add the size of a removed file again to the leftover queuesize.
+  addFileSize(fileSize): void{
+    this.queueSizeRemaining = this.queueSizeRemaining + fileSize;
+    this.queueSizeRemainingString = this.bytesToSize(this.queueSizeRemaining);
+  }
+
+  // Convert the queue size left to a human readable string.
+  bytesToSize(bytes: number): string {
+    let sizes = ['Bytes', 'KB', 'MB', 'GB'];
+    if (bytes <= 0) {bytes=bytes+this.acceptedQueueMargin};
+    let i = Math.floor(Math.log(bytes)/Math.log(1000));
+    let p = Math.round(bytes/(Math.pow(1000, i))*100)/100;
+    return p + " " + sizes[i];
   }
 
   tryAgain() {
