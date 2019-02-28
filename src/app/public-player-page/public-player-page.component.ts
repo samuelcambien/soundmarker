@@ -48,6 +48,7 @@ export class PublicPlayerPageComponent implements OnInit {
     };
   }
 
+
   private loadProjectInfo(projectHash: string) {
 
     RestCall.getProject(projectHash)
