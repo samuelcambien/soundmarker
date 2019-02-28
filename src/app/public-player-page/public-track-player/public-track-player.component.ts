@@ -1,5 +1,5 @@
 import {
-  AfterViewChecked,
+  AfterViewChecked, AfterViewInit,
   ChangeDetectorRef,
   Component,
   ElementRef,
@@ -25,7 +25,7 @@ import {LocalStorageService} from "../../services/local-storage.service";
   templateUrl: './public-track-player.component.html',
   styleUrls: ['./public-track-player.component.scss']
 })
-export class PublicTrackPlayerComponent implements OnInit, AfterViewChecked  {
+export class PublicTrackPlayerComponent implements OnInit, AfterViewInit, AfterViewChecked  {
 
   static MINIMAL_INTERVAL: number = 1;
 
@@ -41,11 +41,18 @@ export class PublicTrackPlayerComponent implements OnInit, AfterViewChecked  {
   @ViewChild('endTime') endTime: ElementRef;
   @ViewChild('phoneSearchInput') phoneSearchInput: ElementRef;
 
+  @ViewChild('trackTitle') trackTitleDOM: ElementRef;
+
   commentSorters: CommentSorter[] = [
     CommentSorter.MOST_RECENT,
     CommentSorter.TRACK_TIME,
     CommentSorter.NAME
   ];
+
+  scrollInitialWait: number= 2250;
+  scrollInterval: number= 54;
+  scrollWaitAtEnd: number= 100;
+  scrollWaitOnHover: number = 300;
 
   currentSorter: CommentSorter = CommentSorter.MOST_RECENT;
 
@@ -92,6 +99,45 @@ export class PublicTrackPlayerComponent implements OnInit, AfterViewChecked  {
             this._progress = this.getCurrentTime();
           }, 1)
         );
+     }
+  }
+
+  titleScrollDiv;
+  initialScrollLeft;
+  initialScrollDiv;
+  scrollTitleRunning: boolean = false;
+
+  ngAfterViewInit(){
+    this.initialScrollLeft = this.trackTitleDOM.nativeElement.scrollLeft;
+    this.initialScrollDiv = this.trackTitleDOM.nativeElement.scrollWidth - this.trackTitleDOM.nativeElement.offsetWidth + this.scrollWaitAtEnd;
+    this.titleScrollDiv = this.initialScrollDiv;
+    this.scrollTitleRunning = true;
+    setTimeout(this.scrollTitle, this.scrollInitialWait);
+  }
+
+  scrollTitle = () => {
+        let i = 1;
+        this.trackTitleDOM.nativeElement.setAttribute("style", "text-overflow: none");
+        let scrollIntervalID = setInterval(() => {
+          this.trackTitleDOM.nativeElement.scrollLeft += i;
+          this.titleScrollDiv -=  1;
+          if (this.titleScrollDiv === 0) {
+            this.titleScrollDiv = this.trackTitleDOM.nativeElement.scrollLeft;
+            if (i === -1) {
+              clearInterval(scrollIntervalID);
+              this.trackTitleDOM.nativeElement.setAttribute("style", "text-overflow: ellipsis");
+              this.scrollTitleRunning = !this.scrollTitleRunning;
+              this.titleScrollDiv = this.initialScrollDiv;
+            }
+            i = -i;
+          }
+        }, this.scrollInterval);
+  }
+
+  scrollTitleHover(){
+    if(!this.scrollTitleRunning) {
+      this.scrollTitleRunning = true;
+      setTimeout(this.scrollTitle, this.scrollWaitOnHover);
     }
   }
 
@@ -174,8 +220,9 @@ export class PublicTrackPlayerComponent implements OnInit, AfterViewChecked  {
     return this.getMatchingComments().sort(this.currentSorter.comparator);
   }
 
-  ngAfterViewChecked() {
 
+
+  ngAfterViewChecked() {
     this.cdRef.detectChanges();
   }
 
