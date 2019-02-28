@@ -50,7 +50,7 @@ export class PublicTrackPlayerComponent implements OnInit, AfterViewInit, AfterV
   ];
 
   scrollInitialWait: number= 2250;
-  scrollInterval: number= 54;
+  scrollInterval: number= 44;
   scrollWaitAtEnd: number= 100;
   scrollWaitOnHover: number = 300;
 
@@ -102,32 +102,26 @@ export class PublicTrackPlayerComponent implements OnInit, AfterViewInit, AfterV
      }
   }
 
-  titleScrollDiv;
-  initialScrollLeft;
-  initialScrollDiv;
   scrollTitleRunning: boolean = false;
 
   ngAfterViewInit(){
-    this.initialScrollLeft = this.trackTitleDOM.nativeElement.scrollLeft;
-    this.initialScrollDiv = this.trackTitleDOM.nativeElement.scrollWidth - this.trackTitleDOM.nativeElement.offsetWidth + this.scrollWaitAtEnd;
-    this.titleScrollDiv = this.initialScrollDiv;
     this.scrollTitleRunning = true;
     setTimeout(this.scrollTitle, this.scrollInitialWait);
   }
 
   scrollTitle = () => {
         let i = 1;
+        let titleScrollDiv = this.trackTitleDOM.nativeElement.scrollWidth - this.trackTitleDOM.nativeElement.offsetWidth + this.scrollWaitAtEnd;
         this.trackTitleDOM.nativeElement.setAttribute("style", "text-overflow: none");
         let scrollIntervalID = setInterval(() => {
           this.trackTitleDOM.nativeElement.scrollLeft += i;
-          this.titleScrollDiv -=  1;
-          if (this.titleScrollDiv === 0) {
-            this.titleScrollDiv = this.trackTitleDOM.nativeElement.scrollLeft;
+          titleScrollDiv -=  1;
+          if (titleScrollDiv === 0) {
+            titleScrollDiv = this.trackTitleDOM.nativeElement.scrollLeft;
             if (i === -1) {
               clearInterval(scrollIntervalID);
               this.trackTitleDOM.nativeElement.setAttribute("style", "text-overflow: ellipsis");
               this.scrollTitleRunning = !this.scrollTitleRunning;
-              this.titleScrollDiv = this.initialScrollDiv;
             }
             i = -i;
           }
