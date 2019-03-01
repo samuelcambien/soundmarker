@@ -1063,7 +1063,7 @@ if (in_array($file_id, $_SESSION['user_files'])) {
          $result = $s3->putObject([
              'Bucket' => $config['AWS_S3_BUCKET'],
              'Key'    => $files[0]["version_id"] . "/" . $filename,
-             'Body'   => file_get_contents("/tmp/".$file_id."/".$filename),
+             'Body'   => file_get_contents($filename),
              'ACL'    => 'public-read',
              'ContentType' => 'application/octet-stream; charset=utf-8',
              'Content-Disposition' => 'attachment; filename='. $filename
