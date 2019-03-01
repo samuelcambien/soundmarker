@@ -1059,17 +1059,18 @@ if (in_array($file_id, $_SESSION['user_files'])) {
    $di = new RecursiveDirectoryIterator('/tmp/'.$file_id);
     foreach (new RecursiveIteratorIterator($di) as $filename => $file) {
         //echo $filename . ' - ' . $file->getSize() . ' bytes <br/>';
+        $filenameshort = substr($file_id, (strlen($file_id)+5)); 
         // upload in chunks to S3
          $result = $s3->putObject([
              'Bucket' => $config['AWS_S3_BUCKET'],
-             'Key'    => $files[0]["version_id"] . "/" . $filename,
+             'Key'    => $files[0]["version_id"] . "/" . $filenameshort,
              'Body'   => file_get_contents($filename),
              'ACL'    => 'public-read',
              'ContentType' => 'application/octet-stream; charset=utf-8',
-             'Content-Disposition' => 'attachment; filename='. $filename
+             'Content-Disposition' => 'attachment; filename='. $filenameshort
          ]);
 
-         unlink("/tmp/".$file_id."/".$filename);
+         unlink($filename);
     }
 
   // if coded is not lossy, transcode
