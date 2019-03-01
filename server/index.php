@@ -1071,9 +1071,7 @@ if (in_array($file_id, $_SESSION['user_files'])) {
     }
 
     // delete files
-    foreach(glob("/tmp/".$file_id."*") as $f) {
-        unlink($f);
-    }
+    exec("rm -rf /tmp/".$file_id."/*");
 
   // if coded is not lossy, transcode
   if ((strpos($codec_name, 'pcm') !== false) || (strpos($codec_name, 'lac') !== false) || (strpos($codec_name, 'wavpack') !== false)) {
