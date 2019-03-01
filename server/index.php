@@ -1050,6 +1050,28 @@ if (true) {
       ->first()
       ->get('codec_name'); 
 
+
+   // mkdir folder
+   exec("mkdir /tmp/".$file_id);
+   // now create segments
+   exec($config['FFMPEG_PATH']."/ffmpeg -i /tmp/orig".$file_id.".".$ext." -f segment -segment_time 10 -codec:a libmp3lame -qscale:a 1 /tmp/".$file_id."/".$file_id.".mp3");
+   // loop through all files and upload them
+   $di = new RecursiveDirectoryIterator('/tmp/'.$file_id);
+    foreach (new RecursiveIteratorIterator($di) as $filename => $file) {
+        //echo $filename . ' - ' . $file->getSize() . ' bytes <br/>';
+        // upload in chunks to S3
+         $result = $s3->putObject([
+             'Bucket' => $config['AWS_S3_BUCKET'],
+             'Key'    => $files[0]["version_id"] . "/" . $filename,
+             'Body'   => file_get_contents("/tmp/".$file_id."/".$filename),
+             'ACL'    => 'public-read',
+             'ContentType' => 'application/octet-stream; charset=utf-8',
+             'Content-Disposition' => 'attachment; filename='. $filename
+         ]);
+
+         unlink("/tmp/".$file_id."/".$filename);
+    }
+
   // if coded is not lossy, transcode
   if ((strpos($codec_name, 'pcm') !== false) || (strpos($codec_name, 'lac') !== false) || (strpos($codec_name, 'wavpack') !== false)) {
     // now we split up the song in 10sec fragments
