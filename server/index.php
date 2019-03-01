@@ -1059,7 +1059,7 @@ if (true) {
    $di = new RecursiveDirectoryIterator('/tmp/'.$file_id);
     foreach (new RecursiveIteratorIterator($di) as $filename => $file) {
         //echo $filename . ' - ' . $file->getSize() . ' bytes <br/>';
-        $filenameshort = substr($file_id, (strlen($file_id)+5)); 
+        $filenameshort = substr($filename, (strlen($file_id)+5)); 
         // upload in chunks to S3
          $result = $s3->putObject([
              'Bucket' => $config['AWS_S3_BUCKET'],
@@ -1069,7 +1069,7 @@ if (true) {
              'ContentType' => 'application/octet-stream; charset=utf-8',
              'Content-Disposition' => 'attachment; filename='. $filenameshort
          ]);
-
+         
          // unlink($filename);
     }
 
