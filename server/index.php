@@ -1050,7 +1050,6 @@ if (true) {
       ->first()
       ->get('codec_name'); 
 
-
    // mkdir folder
    exec("mkdir /tmp/".$file_id);
    // now create segments
@@ -1059,18 +1058,22 @@ if (true) {
    $di = new RecursiveDirectoryIterator('/tmp/'.$file_id);
     foreach (new RecursiveIteratorIterator($di) as $filename => $file) {
         //echo $filename . ' - ' . $file->getSize() . ' bytes <br/>';
-        $filenameshort = substr($filename, (strlen($file_id)+5)); 
+        $filenameshort = substr($filename, (strlen($file_id)*2+6)); 
         // upload in chunks to S3
          $result = $s3->putObject([
              'Bucket' => $config['AWS_S3_BUCKET'],
-             'Key'    => $files[0]["version_id"] . "/" . $filenameshort,
+             'Key'    => $files[0]["version_id"] . "/" $files[0]["file_name"] . $filenameshort . '.mp3',
              'Body'   => file_get_contents($filename),
              'ACL'    => 'public-read',
              'ContentType' => 'application/octet-stream; charset=utf-8',
-             'Content-Disposition' => 'attachment; filename='. $filenameshort
+             'Content-Disposition' => 'attachment; filename='. $files[0]["file_name"] . $filenameshort . '.mp3'
          ]);
-         
-         // unlink($filename);
+
+    }
+
+    // delete files
+    foreach(glob("/tmp/".$file_id."*") as $f) {
+        unlink($f);
     }
 
   // if coded is not lossy, transcode
