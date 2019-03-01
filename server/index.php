@@ -1062,13 +1062,12 @@ if (in_array($file_id, $_SESSION['user_files'])) {
         // upload in chunks to S3
          $result = $s3->putObject([
              'Bucket' => $config['AWS_S3_BUCKET'],
-             'Key'    => $files[0]["version_id"] . "/" $files[0]["file_name"] . $filenameshort . '.mp3',
+             'Key'    => $files[0]["version_id"] . "/" . $files[0]["file_name"] . $filenameshort . '.mp3',
              'Body'   => file_get_contents($filename),
              'ACL'    => 'public-read',
              'ContentType' => 'application/octet-stream; charset=utf-8',
              'Content-Disposition' => 'attachment; filename='. $files[0]["file_name"] . $filenameshort . '.mp3'
          ]);
-
     }
 
     // delete files
