@@ -1070,7 +1070,7 @@ if (in_array($file_id, $_SESSION['user_files'])) {
              'Content-Disposition' => 'attachment; filename='. $filenameshort
          ]);
 
-         unlink($filename);
+         // unlink($filename);
     }
 
   // if coded is not lossy, transcode
