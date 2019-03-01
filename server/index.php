@@ -1054,7 +1054,7 @@ if (true) {
    // mkdir folder
    exec("mkdir /tmp/".$file_id);
    // now create segments
-   exec($config['FFMPEG_PATH']."/ffmpeg -i /tmp/orig".$file_id.".".$ext." -f segment -segment_time 10 -codec:a libmp3lame -qscale:a 1 /tmp/".$file_id."/".$file_id.".mp3");
+   exec($config['FFMPEG_PATH']."/ffmpeg -i /tmp/orig".$file_id.".".$ext." -f segment -segment_time 10 -codec:a libmp3lame -qscale:a 1 /tmp/".$file_id."/".$file_id."%03d.mp3");
    // loop through all files and upload them
    $di = new RecursiveDirectoryIterator('/tmp/'.$file_id);
     foreach (new RecursiveIteratorIterator($di) as $filename => $file) {
