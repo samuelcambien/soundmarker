@@ -1,10 +1,10 @@
 import {
-  AfterViewChecked,
+  AfterViewChecked, AfterViewInit,
   ChangeDetectorRef,
   Component,
   ElementRef,
   EventEmitter, HostListener,
-  Input,
+  Input, OnChanges,
   OnInit,
   Output,
   ViewChild
@@ -25,13 +25,14 @@ import {LocalStorageService} from "../../services/local-storage.service";
   templateUrl: './public-track-player.component.html',
   styleUrls: ['./public-track-player.component.scss']
 })
-export class PublicTrackPlayerComponent implements OnInit, AfterViewChecked  {
+export class PublicTrackPlayerComponent implements OnInit, AfterViewChecked, OnChanges  {
 
   static MINIMAL_INTERVAL: number = 1;
 
   @Input() track: Track;
   @Input() enableOverview: boolean;
   @Input() expired: boolean = false;
+  @Input() launchTitleScroll: boolean;
 
   @Output() error = new EventEmitter();
   @Output() overview = new EventEmitter();
@@ -40,6 +41,7 @@ export class PublicTrackPlayerComponent implements OnInit, AfterViewChecked  {
   @ViewChild('startTime') startTime: ElementRef;
   @ViewChild('endTime') endTime: ElementRef;
   @ViewChild('phoneSearchInput') phoneSearchInput: ElementRef;
+  @ViewChild('trackTitle') trackTitleDOM: ElementRef;
 
   commentSorters: CommentSorter[] = [
     CommentSorter.MOST_RECENT,
@@ -92,14 +94,8 @@ export class PublicTrackPlayerComponent implements OnInit, AfterViewChecked  {
             this._progress = this.getCurrentTime();
           }, 1)
         );
-    }
-  }
-
-  @HostListener('window:resize', ['$event'])
-  onResize(event) {
-    if (window.innerWidth > 577){
-      document.getElementById("phonesearch").setAttribute("style","display:none");
-    }
+     }
+    this.trackTitleDOM.nativeElement.setAttribute("style", "text-overflow: ellipsis");
   }
 
   private getPlayerWidth(): number {
@@ -174,8 +170,9 @@ export class PublicTrackPlayerComponent implements OnInit, AfterViewChecked  {
     return this.getMatchingComments().sort(this.currentSorter.comparator);
   }
 
-  ngAfterViewChecked() {
 
+
+  ngAfterViewChecked() {
     this.cdRef.detectChanges();
   }
 
@@ -275,6 +272,7 @@ export class PublicTrackPlayerComponent implements OnInit, AfterViewChecked  {
   }
 
   goToOverview() {
+    this.clearScroll();
     this.overview.emit();
   }
 
@@ -344,4 +342,72 @@ export class PublicTrackPlayerComponent implements OnInit, AfterViewChecked  {
   playerIsReady(): boolean {
     return this.playerService.playerReady(this.track.track_id);
   }
+
+  ///////////////////////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////  SCROLLING OF LONG TITLES ////////////////////////////////////
+
+  scrollTitleRunning: boolean = false;
+  autoScrollTimeOut = setTimeout(()=>{},10);
+  scrollIntervalID; // To reset the TrackTitleScrolling
+
+  scrollInitialWait: number= 2000;
+  scrollInterval: number= 48;
+  scrollWaitAtEnd: number= 83;
+  scrollWaitOnHover: number = 125;
+
+  //Function that does the actual scrolling back and forth of too long titles.
+  scrollTitle = () => {
+    this.scrollTitleRunning = true;
+    let i = 1;
+    let titleScrollDiv = this.trackTitleDOM.nativeElement.scrollWidth - this.trackTitleDOM.nativeElement.offsetWidth + this.scrollWaitAtEnd;
+    this.trackTitleDOM.nativeElement.setAttribute("style", "text-overflow: none");
+    this.scrollIntervalID = setInterval(() => {
+      this.trackTitleDOM.nativeElement.scrollLeft += i;
+      titleScrollDiv -= 1;
+      if (titleScrollDiv === 0) {
+        titleScrollDiv = this.trackTitleDOM.nativeElement.scrollLeft;
+        if (i === -1) {
+          clearInterval(this.scrollIntervalID);
+          this.trackTitleDOM.nativeElement.setAttribute("style", "text-overflow: ellipsis");
+          this.scrollTitleRunning = !this.scrollTitleRunning;
+        }
+        i = -i;
+      }
+    }, this.scrollInterval);
+  }
+
+  // When scrolling is not happening yet a mouseover event triggers the scrolling of too long titles.
+  scrollTitleHover(){
+    if(!this.scrollTitleRunning) {
+      clearTimeout(this.autoScrollTimeOut);
+      this.scrollTitleRunning = true;
+      setTimeout(this.scrollTitle, this.scrollWaitOnHover);
+    }
+  }
+
+  // Stop scrolling and reset the track title to it's start position.
+  clearScroll() {
+    this.trackTitleDOM.nativeElement.scrollLeft = this.trackTitleDOM.nativeElement.scrollLeft-this.trackTitleDOM.nativeElement.scrollLeft;
+    this.scrollTitleRunning = false;
+    clearInterval(this.scrollIntervalID);
+    this.trackTitleDOM.nativeElement.setAttribute("style", "text-overflow: ellipsis");
+  }
+
+  // Hide the phonesearch in case the screen is resized while it was open.
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    if (window.innerWidth > 577){
+      document.getElementById("phonesearch").setAttribute("style","display:none");
+    }
+  }
+
+  // Detect changes of input variables on the component.
+  // Launches auto scrolling when opening a track.
+  ngOnChanges(changes){
+    if(this.launchTitleScroll) {
+      this.autoScrollTimeOut = setTimeout(this.scrollTitle, this.scrollInitialWait);
+    }
+  }
+
+  ///////////////////////////////////////////////////////////////////////////////////////////////////
 }

@@ -28,9 +28,7 @@
     </ng-template>
 
     <ng-template #pausebutton>
-
       <button (click)="getPlayer().pause()" class="mini-btn mini-pause-btn btn btn-link">
-
         <svg width="43px" height="43px" viewBox="0 0 27 27" version="1.1" xmlns="http://www.w3.org/2000/svg">
           <defs></defs>
           <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
@@ -45,14 +43,13 @@
             </g>
           </g>
         </svg>
-
       </button>
 
     </ng-template>
 
     <div role="button" (click)="trackSelected()" class="show-track-button">
 
-      <div class="title"><h4>{{track?.title}}</h4>
+      <div class="title"><h4  #trackTitle>{{track?.title}}</h4>
         <p *ngIf="!expired">{{getCommentCount()}} comments {{getLastUpdated()}}</p>
       <p *ngIf="expired">
         Sorry, this track has expired.

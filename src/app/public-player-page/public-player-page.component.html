@@ -34,6 +34,7 @@
       [track]="track"
       [enableOverview]="project?.tracks?.length > 1"
       [ngbCollapse]="getActiveTrack() != track"
+      [launchTitleScroll]="getActiveTrack() == track"
       [expired]="expired && !commentsExpired"
       (overview)="setActiveTrack(null)"
       (error)="error = $event"

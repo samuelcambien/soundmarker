@@ -14,7 +14,7 @@ export class RestUrl {
 
   private static MOCK: string = "http://localhost:3000";
 
-  private static BACKEND: string = "http://192.168.1.43";
+  private static BACKEND: string = "http://localhost";
 
   private static DATA: string = RestUrl.BACKEND;
 
