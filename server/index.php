@@ -299,7 +299,7 @@ if (true) {
     $emailstring = str_replace("%projectlink%",$projectlink,$emailstring);
     $emailstring_text = str_replace("%projectlink%",$projectlink,$emailstring_text);
     // Replace strings -> %recipientmail%
-    $emailstring = str_replace("%recipientmail%",implode("\n", $receiver),$emailstring);
+    $emailstring = str_replace("%recipientmail%",implode("<br>", $receiver),$emailstring);
     $emailstring_text = str_replace("%recipientmail%",implode("\n", $receiver),$emailstring_text);
     // Replace strings -> %trackamount%
     $sql = "SELECT track_id FROM Track WHERE project_id = '$project_id'";
@@ -1156,7 +1156,8 @@ if (true) {
         'Key'    => $filesnew[0]["version_id"] . "/" . $filesnew[0]["file_name"] . '.' . $filesnew[0]["extension"],
         'Body'   => file_get_contents("/tmp/orig".$file_id.".".$ext),
         'ACL'    => 'public-read',
-        'ContentType' => 'application/octet-stream; charset=utf-8'
+        'ContentType' => 'application/octet-stream; charset=utf-8',
+        'ContentDisposition' => 'attachment; filename='. $files[0]["file_name"] . '.' . $filesnew[0]["extension"]
     ]);
   }
 
