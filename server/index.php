@@ -388,8 +388,8 @@ if (in_array($project_id, $_SESSION['user_projects'])) {
     $emailstring = str_replace("%tracktitle%",$tracktitle,$emailstring);
     $emailstring_text = str_replace("%tracktitle%",$tracktitle,$emailstring_text);   
     // Replace strings -> %projectnotes%
-    $emailstring = str_replace("%projectnotes%",$notes,$emailstring);
-    $emailstring_text = str_replace("%projectnotes%",$notes,$emailstring_text);   
+    $emailstring = str_replace("%projectnotes%",urldecode($notes),$emailstring);
+    $emailstring_text = str_replace("%projectnotes%",urldecode($notes),$emailstring_text);   
     // Replace strings -> %sendermail%
     $emailstring = str_replace("%sendermail%",$sender,$emailstring);
     $emailstring_text = str_replace("%sendermail%",$sender,$emailstring_text);   
@@ -398,9 +398,10 @@ if (in_array($project_id, $_SESSION['user_projects'])) {
     $char_set = 'UTF-8';
 
     try {
+        foreach ($receiver as &$receiveremail) {
         $result = Flight::get("SesClient")->sendEmail([
             'Destination' => [
-                'ToAddresses' => $receiver,
+                'ToAddresses' => $receiveremail,
             ],
             'ReplyToAddresses' => [$sender],
             'Source' => "Soundmarker <noreply@soundmarker.com>",
@@ -421,7 +422,8 @@ if (in_array($project_id, $_SESSION['user_projects'])) {
               ],
             ],
         ]);
-        $messageId = $result['MessageId'];
+        // $messageId = $result['MessageId'];
+        }
     } catch (AwsException $e) {
         // output error message if fails
         echo $e->getMessage();
