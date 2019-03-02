@@ -401,7 +401,7 @@ if (in_array($project_id, $_SESSION['user_projects'])) {
         foreach ($receiver as &$receiveremail) {
         $result = Flight::get("SesClient")->sendEmail([
             'Destination' => [
-                'ToAddresses' => $receiveremail,
+                'ToAddresses' => [$receiveremail],
             ],
             'ReplyToAddresses' => [$sender],
             'Source' => "Soundmarker <noreply@soundmarker.com>",
@@ -1068,7 +1068,7 @@ if (in_array($file_id, $_SESSION['user_files'])) {
              'Body'   => file_get_contents($filename),
              'ACL'    => 'public-read',
              'ContentType' => 'application/octet-stream; charset=utf-8',
-             'Content-Disposition' => 'attachment; filename='. $files[0]["file_name"] . $filenameshort
+             'ContentDisposition' => 'attachment; filename='. $files[0]["file_name"] . $filenameshort
          ]);
     }
 
@@ -1101,7 +1101,7 @@ if (in_array($file_id, $_SESSION['user_files'])) {
            'Body'   => file_get_contents("/tmp/mp3".$file_id.".mp3"),
            'ACL'    => 'public-read',
            'ContentType' => 'application/octet-stream; charset=utf-8',
-           'Content-Disposition' => 'attachment; filename='. $files[0]["file_name"] . '.mp3'
+           'ContentDisposition' => 'attachment; filename='. $files[0]["file_name"] . '.mp3'
        ]);
 
      // delete file again
@@ -1113,7 +1113,7 @@ if (in_array($file_id, $_SESSION['user_files'])) {
              'Body'   => file_get_contents("/tmp/orig".$file_id.".".$ext),
              'ACL'    => 'public-read',
              'ContentType' => 'application/octet-stream; charset=utf-8',
-             'Content-Disposition' => 'attachment; filename='. $files[0]["file_name"] . '.' . $ext
+             'ContentDisposition' => 'attachment; filename='. $files[0]["file_name"] . '.' . $ext
          ]);
   }
   
