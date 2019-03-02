@@ -260,6 +260,11 @@ export class PublicTrackPlayerComponent implements OnInit, AfterViewChecked  {
     this.phoneSearchInput.nativeElement.focus();
   }
 
+  clearSearch(){
+    this.search = null;
+    this.phoneSearchInput.nativeElement.focus();
+  }
+
   hidePhoneSearch(event) {
     if(event.relatedTarget && (event.relatedTarget.getAttribute('id') === "phonesearch")){
       this.phoneSearchInput.nativeElement.focus(); //in case the search field is cleared or the search icon is clicker: re-focus on the search field.
