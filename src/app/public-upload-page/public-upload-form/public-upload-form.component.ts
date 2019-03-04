@@ -38,22 +38,19 @@ export class PublicUploadFormComponent implements OnInit {
   player;
 
   @Input() uploader: FileUploader;
+  @Input() queueSizeMargin;
   @Input() tryAgain: EventEmitter<any>;
 
   @Output() uploading = new EventEmitter();
   @Output() finished = new EventEmitter();
   @Output() link = new EventEmitter<string>();
   @Output() period = new EventEmitter<string>();
+  @Output() removedFileSize = new EventEmitter<number>();
   @Output() error = new EventEmitter();
   @Output() form = new EventEmitter();
 
   @ViewChild('notes_element') notes_element: ElementRef;
   @ViewChild('ft') files_tooltip: NgbTooltip;
-
-  tracks_left = () => {
-    return this.uploader.options.queueLimit - this.uploader.queue.length
-  };
-
 
 
   onSubmit() {
@@ -150,17 +147,19 @@ export class PublicUploadFormComponent implements OnInit {
     //   container: canvas
     // });
     // wave.loadDecodedBuffer(buffer);
+
+
     this.uploader.onWhenAddingFileFailed = (item, filter) => {
       let message = '';
       switch (filter.name) {
-        case 'queueLimit':
-          message = 'Max of ' + this.uploader.options.queueLimit + ' tracks exceeded. Not all tracks were added.';
-          break;
         case 'fileSize':
-          message = "One or more tracks exceeded the limit of 500MB per track."
+          message = "You exceeded the limit of 2 GB."
           break;
         case 'onlyAudio':
           message = "One or more files are not supported and were not added."
+          break;
+        case 'checkSizeLimit':
+          message = "You exceeded the limit of 2 GB.";
           break;
         default:
           message = "Something went wrong, please try again.";
@@ -191,6 +190,12 @@ export class PublicUploadFormComponent implements OnInit {
   getAcceptedFileTypes() {
     return PublicUploadPageComponent.ACCEPTED_FILE_TYPES;
   }
+
+  removeFromQueue(item){
+    this.uploader.removeFromQueue(item);
+    this.removedFileSize.emit(item.file.size);
+  }
+
 }
 
 @Directive({
