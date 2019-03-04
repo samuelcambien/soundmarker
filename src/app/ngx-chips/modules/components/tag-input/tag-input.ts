@@ -649,7 +649,6 @@ export class TagInputComponent extends TagInputAccessor implements OnInit, After
      */
     public blur(): void {
         this.onTouched();
-
         this.onBlur.emit(this.formValue);
     }
 
@@ -794,6 +793,7 @@ export class TagInputComponent extends TagInputAccessor implements OnInit, After
 
         // if so, give a visual cue and return false
         if (!this.allowDupes && dupe && this.blinkIfDupe) {
+            this.setInputValue('');
             const model = this.tags.find(item => {
                 return this.getItemValue(item.model) === this.getItemValue(dupe);
             });
