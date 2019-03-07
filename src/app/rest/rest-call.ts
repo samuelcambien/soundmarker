@@ -92,7 +92,6 @@ export class RestCall {
   }
 
   // DELETE
-
   public static deleteComment(commentId: string) {
     return Utils.sendPostRequest(RestUrl.COMMENT_DELETE, {
       comment_id: commentId
@@ -100,7 +99,6 @@ export class RestCall {
   }
 
   // GET
-
   static getAdId(): Promise<any> {
     return Utils.sendGetRequest(RestUrl.AD);
   }

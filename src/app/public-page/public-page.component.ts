@@ -1,38 +1,18 @@
-import {Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
+import {Component, ElementRef, EventEmitter, HostListener, Input, OnInit, Output, ViewChild} from '@angular/core';
 import {Message} from "../message";
 import {RestCall} from "../rest/rest-call";
 import {PublicIntroductionComponent} from "./public-info/topics/public-introduction/public-introduction.component";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {LocalStorageService} from "../services/local-storage.service";
-import {interval, Observable, timer} from "rxjs";
-import {animate, state, style, transition, trigger} from '@angular/animations';
-import {delay, map, tap} from "rxjs/operators";
-
+import {Subject, timer} from 'rxjs';
+import {delay, tap} from 'rxjs/operators';
 
 @Component({
   selector: 'app-public-page',
   templateUrl: './public-page.component.html',
   styleUrls: ['./public-page.component.scss'],
-  animations: [
-    trigger('openClose', [
-      state('shown', style({
-        opacity: 1,
-      })),
-      state('hidden', style({
-        opacity: 0,
-      })),
-      transition('shown => hidden', [
-        animate('7431ms')
-      ]),
-      transition('hidden => shown', [
-        animate('7431ms')
-      ]),
-    ]),
-  ],
 })
 export class PublicPageComponent implements OnInit {
-
-  exposureTime = 45;
 
   @Input() project_id;
   @Input() sender;
@@ -42,42 +22,67 @@ export class PublicPageComponent implements OnInit {
   @Output() tryAgain = new EventEmitter();
 
   @ViewChild('sma') sma: ElementRef;
-  @ViewChild('smaphone') smaPhone: ElementRef;
 
-  smaVisibility: string = "shown";
   smaId: string;
-  smaHtml;
+  smaClass = window.innerWidth > 577 ? "sma hide-phone" : "phone-sma show-phone  rounded-lg border-0";
 
-  constructor(private modalService: NgbModal, private localStorageService: LocalStorageService) {
+  hiddenIframe;
+  shownIframe;
+
+  adExposureTime = 10; // in seconds
+  adFadeInTime = "0.75s"; // Needs to be a string.
+  adFadeOutTime = "0.5s"; // Needs to be a string.
+  adInitialDelay = 1850;  // in ms, this is also the delay between loading an add and showing it. (Enough time to load it)
+  adTransitionWait = 500; // in ms. Needs to be at least the adFadeOutTime or otherwise the ad's iframe is destroyed before the ad has faded out.
+
+  screenActive = new Subject();
+
+  constructor(private modalService: NgbModal, private localStorageService: LocalStorageService, private sanitizer: DomSanitizer) {
   }
 
   openIntroduction() {
     this.modalService.open(PublicIntroductionComponent, {size: "lg", backdrop: 'static', keyboard: false});
   }
 
+  adTimer;
+
   ngOnInit() {
     this.localStorageService.storeVisit();
     if (!this.localStorageService.termsAccepted()) {
       this.openIntroduction();
     }
-    this.loadFirstAd()
-      .then(() =>
-        timer(0, this.exposureTime * 1000)
-          .pipe(tap(() => this.showAd()))
-          .pipe(tap(() => this.smaVisibility = "hidden"))
-          .pipe(delay(200))
-          .pipe(tap(() => this.smaVisibility = "shown"))
-          .subscribe(() => this.loadNextAd())
-      );
+    this.smaId = "1"
+
+    this.adTimer = timer(0, 300000).subscribe(()=>{});
+    this.adTimer.unsubscribe();
+
+    this.screenActive.subscribe(
+      ()=> {
+        if(this.adTimer.closed) {
+          this.adTimer = timer(0, this.adExposureTime * 1000).pipe
+         (tap(() => {if(!this.hiddenIframe) this.loadNextAd()}),
+          tap(() => {if(document.visibilityState == "hidden") {this.adTimer.unsubscribe()};}),
+          delay(this.adInitialDelay),
+          tap(() => this.hideIframe(this.shownIframe)),
+          delay(this.adTransitionWait),
+          tap(() => this.destroyIframe(this.shownIframe))
+         ).subscribe(() => this.showIframe(this.hiddenIframe))
+      }}
+    );
+
+    this.screenActive.next("true");
+
+    document.addEventListener("visibilitychange",
+      () => {if(document.visibilityState == "visible") this.screenActive.next("true")});
   }
 
-  private loadFirstAd(): Promise<any> {
-    return RestCall.getAdId()
-      .then(response => this.saveAd(response));
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    this.smaClass = window.innerWidth > 577 ? "sma hide-phone" : "phone-sma show-phone  rounded-lg border-0";
   }
 
   private loadNextAd(): Promise<any> {
-    return RestCall.getNextAdId(this.smaId, this.exposureTime)
+    return RestCall.getNextAdId(this.smaId, this.adExposureTime)
       .then(response => this.saveAd(response));
   }
 
@@ -85,26 +90,44 @@ export class PublicPageComponent implements OnInit {
     this.smaId = response["ad_id"];
     return RestCall.getAd(this.smaId)
       .then(response => {
-        this.smaHtml = response;
+        this.hiddenIframe = this.createIframe(response);
       });
   }
 
-  private changeAd(interval: Observable<number>) {
-    interval
-      .pipe(tap(() => this.smaVisibility = "shown"))
-      .pipe(delay(200))
-      .pipe(tap(() => this.showAd()))
-      .pipe(delay(200))
-      .pipe(tap(() => this.smaVisibility = "hidden"))
-      .pipe(map(() => this.loadNextAd()))
-  }
-
-  private showAd() {
-    this.sma.nativeElement.innerHTML = this.smaHtml;
-    this.smaPhone.nativeElement.innerHTML = this.smaHtml;
-  }
 
   private reset() {
     this.tryAgain.emit();
+  }
+
+  createIframe(src){
+    let iframe = document.createElement('iframe');
+    iframe.setAttribute('src', src);
+    iframe.setAttribute('scrolling', "no");
+    iframe.setAttribute('style','width:100%; height:100%; border:none; opacity: 0;');
+    this.sma.nativeElement.appendChild(iframe);
+    return iframe;
+  }
+
+  showIframe(iframe){
+    if(iframe) {
+      console.log("fadein")
+      iframe.style.animation = 'shown-sma ' + this.adFadeInTime + ' forwards';
+      this.shownIframe = this.hiddenIframe;
+      this.hiddenIframe = null;
+    }
+  }
+
+  hideIframe(iframe){
+    if(iframe) {
+      console.log("fadeout");
+      iframe.style.animation = 'hidden-sma ' + this.adFadeOutTime + ' forwards';
+    }
+  }
+
+  destroyIframe(iframe){
+    if(iframe) {
+      iframe.remove();
+    }
+
   }
 }
