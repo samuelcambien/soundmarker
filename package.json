@@ -35,7 +35,6 @@
     "av": "^0.4.9",
     "better-coffee-loader": "^0.1.0",
     "binary-io": "0.0.1",
-    "bitmovin-javascript": "^2.5.0",
     "core-js": "^2.5.4",
     "date-fns": "^1.29.0",
     "file-saver": "^1.3.8",

@@ -42,7 +42,8 @@ export class ProjectService {
     let tracks = this.getActiveProject().tracks;
     let nextTrack = tracks[tracks.indexOf(track) + 1];
     if (nextTrack) {
-      this.playerService.getPlayer(nextTrack.track_id).play(0);
+      this.playerService.getPlayer(track.track_id).unloadAudio();
+      this.playerService.getPlayer(nextTrack.track_id).play();
       if (this.activeTrack != null) {
         this.setActiveTrack(nextTrack);
       }

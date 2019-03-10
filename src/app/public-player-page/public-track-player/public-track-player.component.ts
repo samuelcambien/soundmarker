@@ -1,10 +1,12 @@
 import {
-  AfterViewChecked, AfterViewInit,
+  AfterViewChecked,
   ChangeDetectorRef,
   Component,
   ElementRef,
-  EventEmitter, HostListener,
-  Input, OnChanges,
+  EventEmitter,
+  HostListener,
+  Input,
+  OnChanges,
   OnInit,
   Output,
   ViewChild
@@ -14,11 +16,11 @@ import {Comment, CommentSorter} from "../../model/comment";
 import {saveAs} from 'file-saver/FileSaver';
 import {Version} from "../../model/version";
 import {File} from "../../model/file";
-import * as player from "../../player/dist/player.js";
 import {RestCall} from "../../rest/rest-call";
 import {PlayerService} from "../../services/player.service";
 import {ProjectService} from "../../services/project.service";
 import {LocalStorageService} from "../../services/local-storage.service";
+import {Player} from "../../player";
 
 @Component({
   selector: 'app-public-track-player',
@@ -197,31 +199,34 @@ export class PublicTrackPlayerComponent implements OnInit, AfterViewChecked, OnC
     return this.getMatchingComments().length > 0;
   }
 
-  public loadPlayer(): Promise<any> {
+  public loadPlayer(): Promise<void> {
 
     return this.version.files.then((files) => {
       this.files = files;
-      let streamFile = files.filter(file => file.identifier == 0)[0];
-      this.playerService.addPlayer(this.track.track_id, player.create(
-        {
-          container: "#waveform_" + this.track.track_id,
-          peaks: this.peaks,
-          duration: this.version.track_length,
-          aws_path: streamFile.aws_path,
-          extension: streamFile.extension
+
+      const streamFile = files.filter(file => file.identifier == 0)[0];
+      const player = new Player("waveform_" + this.track.track_id, this.peaks, this.version.track_length, streamFile.aws_path, streamFile.extension);
+
+      this.playerService.addPlayer(this.track.track_id, player);
+
+      player.finished.subscribe(() => {
+        if (this.projectService.autoPlay) {
+          this.projectService.playNextTrack(this.track);
         }
-      ));
-      this.getPlayer().drawBuffer();
-      this.getPlayer().backend.load();
-      this.getPlayer().on('finish', () => {
-        if (this.projectService.autoPlay) this.projectService.playNextTrack(this.track)
       });
-      return this.getPlayer().backend.loadChunk(0);
+
+      player.playing.subscribe(() => {
+        this.playerService.stopAllExcept(player);
+      })
     });
   }
 
   getCurrentTime(): number {
     return this.getPlayer() != null ? this.getPlayer().getCurrentTime() : 0;
+  }
+
+  getDuration(): number {
+    return this.version && this.version.track_length;
   }
 
   private getPosition(element, commentTime) {
@@ -316,7 +321,7 @@ export class PublicTrackPlayerComponent implements OnInit, AfterViewChecked, OnC
     this.removeComment(comment);
   }
 
-  getPlayer() {
+  getPlayer(): Player {
     return this.playerService.getPlayer(this.track.track_id);
   }
 
@@ -337,10 +342,6 @@ export class PublicTrackPlayerComponent implements OnInit, AfterViewChecked, OnC
 
   scrollToTop(waveform) {
     waveform.nativeElement.closest(".comments-scrolltainer").scrollTop = 0;
-  }
-
-  playerIsReady(): boolean {
-    return this.playerService.playerReady(this.track.track_id);
   }
 
   ///////////////////////////////////////////////////////////////////////////////////////////////////

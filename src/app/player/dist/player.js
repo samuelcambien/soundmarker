@@ -88,6 +88,7 @@
       // Holds any running audio downloads
       this.currentAjax = null;
 
+      this.context = this.params.context;
       this.duration = this.params.duration;
 
       this.createDrawer();
@@ -180,7 +181,7 @@
     },
 
     getDuration: function () {
-      return this.backend.getDuration();
+      return this.duration;
     },
 
     getCurrentTime: function () {
@@ -193,13 +194,7 @@
 
     play: function (start, end, comment) {
       this.fireEvent('interaction', this.play.bind(this, start, end, comment));
-      if (this.backend.ready) {
-        this.backend.play(start, end, comment);
-      } else {
-        this.backend.on("ready", () => {
-          this.backend.play(start, end, comment);
-        })
-      }
+      this.backend.play(start, end, comment);
     },
 
     pause: function () {
@@ -250,7 +245,7 @@
       this.drawer.progress(this.backend.getPlayedPercents());
 
       if (!paused) {
-        this.backend.play();
+        this.fireEvent('load');
       }
       this.params.scrollParent = oldScrollParent;
       this.fireEvent('seek', progress);
@@ -453,7 +448,6 @@
      * Loads audio and re-renders the waveform.
      */
     load: function (url, peaks, preload) {
-      this.empty();
 
       switch (this.params.backend) {
         case 'WebAudio':
@@ -1582,6 +1576,11 @@
     },
 
     getDuration: function () {
+
+      if (this.params.duration) {
+        return this.params.duration;
+      }
+
       var duration = (this.buffer || this.media).duration;
       if (duration >= Infinity) { // streaming audio
         duration = this.media.seekable.end(0);
@@ -1641,7 +1640,6 @@
       this.onPlayEnd = function (time) {
         if (time >= end) {
           my.pause();
-          my.seekTo(end);
         }
       };
       this.on('audioprocess', this.onPlayEnd);

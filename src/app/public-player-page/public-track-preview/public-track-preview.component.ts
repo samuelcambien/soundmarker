@@ -66,10 +66,6 @@ export class PublicTrackPreviewComponent implements OnInit {
     );
   }
 
-  playerIsReady(): boolean {
-    return this.playerService.playerReady(this.track.track_id);
-  }
-
   private getCommentsAndReplies(): Comment[] {
 
     return this.track && this.track.comments ?
