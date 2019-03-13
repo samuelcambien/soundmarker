@@ -77,7 +77,7 @@
         <div class="form-group col hide-phone">
                 <textarea #notes_element [(ngModel)]="notes" type="text" placeholder="Notes" name="notes"
                           class="form-control form-control-sm"
-                          rows="{{sharemode == 'email' ? 3 : 5 }}"></textarea>
+                          rows="{{sharemode == 'email' ? 1 : 5 }}"></textarea>
         </div>
 
         <div class="form-group col show-phone">
@@ -88,12 +88,12 @@
       </div>
       <div class="form-row" *ngIf="sharemode == 'email'">
 
-        <div class="col-sm-6"  >
+        <div class="col-sm-12"  >
             <input type="text" [(ngModel)]="email_from" name="email_from" placeholder="Email from" pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$"
                    class="form-control form-control-sm" required ngbTooltip="Invalid email address" triggers="manual" emailValidationTooltip>
         </div>
 
-        <div class="col-sm-6">
+        <div class="col-sm-12">
           <tag-input [(ngModel)]='email_to'
                      [trimTags]="true"
                      [separatorKeyCodes]="[13, 188, 186]"
@@ -138,10 +138,9 @@
         </div>
         <div class="col">
           <div class="btn-group btn-group-sm btn-group-toggle allow-downloads" placement="top"
-               ngbTooltip="Select to allow">
+               ngbTooltip="Disallow downloads">
             <label ngbButtonLabel class="btn btn-outline-form">
-              <input ngbButton class="slide-selector" type="checkbox" [(ngModel)]="downloadable" name="usage">Allow
-              downloads
+              <input ngbButton class="slide-selector" type="checkbox" [(ngModel)]="downloadable" name="usage">Stream only
             </label>
           </div>
         </div>

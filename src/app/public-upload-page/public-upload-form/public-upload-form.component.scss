@@ -48,6 +48,13 @@ textarea.form-control {
   margin-bottom: -10px;
   flex-wrap: wrap;
 }
+
+.upload-songs-area {
+	position: relative !important;
+	max-height: 100px !important;
+	padding-top: 10px !important;
+}
+
 }
 
 @media (max-width: 503px) {
@@ -117,8 +124,9 @@ textarea.form-control {
 }
 
 .upload-songs-area {
-  position: relative;
-  height: 153px;
+  position: absolute;
+  min-height: 153px;
+  max-height: 100%;
   padding-top: 0;
   overflow-y: scroll;
   overflow-x: hidden;
