@@ -18,7 +18,11 @@ export class RestUrl {
 
   private static DATA: string = RestUrl.BACKEND;
 
-  public static AD: string = RestUrl.BACKEND + "/sma";
+  public static SMA: string = RestUrl.BACKEND + "/sma";
+
+  public static SMA_IMPRESSION: string = RestUrl.BACKEND + "/sma/impression";
+
+  public static SMA_CLICK: string = RestUrl.BACKEND + "/sma/click";
 
   public static UPLOAD: string = RestUrl.DATA + "/file/new";
 

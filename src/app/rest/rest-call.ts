@@ -76,15 +76,21 @@ export class RestCall {
   }
 
   static logSmaClick(smaId: string): Promise<any> {
-    return Utils.sendPostRequest(RestUrl.AD, {
+    return Utils.sendPostRequest(RestUrl.SMA, {
       ad_id: smaId,
-      clicks: "1",
-      exposure_time: "0"
     });
   }
 
+  static logSmaImpression(smaId: string): Promise<any>{
+    console.log("smaImpression logged");
+    // return Utils.sendPostRequest(RestUrl.SMA_IMPRESSION, {
+    //   ad_id: smaId,
+    // });
+    return Promise.resolve();
+  }
+
   static getNextAdId(smaId: string, exposureTime): Promise<any> {
-    return Utils.sendPostRequest(RestUrl.AD, {
+    return Utils.sendPostRequest(RestUrl.SMA, {
       ad_id: smaId,
       clicks: "0",
       exposure_time: exposureTime
@@ -100,11 +106,11 @@ export class RestCall {
 
   // GET
   static getAdId(): Promise<any> {
-    return Utils.sendGetRequest(RestUrl.AD);
+    return Utils.sendGetRequest(RestUrl.SMA);
   }
 
-  public static getAd(id: string): Promise<any> {
-    return Utils.sendGetDataRequest(RestUrl.AD, [id]);
+  public static getSma(id: string, ip?: string): Promise<any> {
+    return Utils.sendGetDataRequest(RestUrl.SMA, [id]);
   }
 
   public static getProject(projectHash: string): Promise<Project> {
