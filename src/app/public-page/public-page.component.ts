@@ -7,6 +7,7 @@ import {LocalStorageService} from "../services/local-storage.service";
 import {Subject, timer} from 'rxjs';
 import {delay, tap} from 'rxjs/operators';
 import * as moment from "moment";
+import {Utils} from '../app.component';
 
 @Component({
   selector: 'app-public-page',
@@ -56,7 +57,6 @@ export class PublicPageComponent implements OnInit {
     }
     this.smaId = 0;
 
-
     //////////////////        Advertisement refresh algorithm.             //////////////////
     //  The idea is that the ad only refreshes if the web page is active in the browser or
     //  there has been activity detected from a moving mouse, so the page is active.
@@ -82,6 +82,18 @@ export class PublicPageComponent implements OnInit {
     if(document.visibilityState=="visible") {
       setTimeout(() => this.screenAction.next(), this.adInitialDelay);
     }                                                                                                   // Launch advertisement algorithm for the first time if tab is open.
+
+    if (window.addEventListener) {
+      window.addEventListener("message", this.receiveMessage, false);
+    }
+  }
+
+  // Registering a click and opening the ad.
+  private receiveMessage(event) {
+      if (event.origin !== Utils.getSmaDomain()) return; // Make sure that the click from the iframe click is coming from the correct domain.
+      if (event.data) {
+        RestCall.logSmaClick(this.smaId).then(()  => window.open(event.data, "blank_"));
+      }
   }
 
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -140,7 +152,6 @@ export class PublicPageComponent implements OnInit {
 
   // Breaks the advertisement cycle and waits for a user interaction to restart a new cycle and update the ad.
   private adWait(){
-    console.log("Adwait");
     this.firstAd = true;
     this.adTimer.unsubscribe();
     document.addEventListener('mouseover', this.onVisibilityChange, true);
@@ -193,7 +204,6 @@ export class PublicPageComponent implements OnInit {
 
   onFocus = () => {
     if(document.visibilityState == 'visible') {
-      console.log("Focus");
       document.removeEventListener("visibilitychange", this.onFocus, false);
       document.removeEventListener('focus', this.onFocus, false);
       document.removeEventListener('mouseover', this.onVisibilityChange, true);
@@ -203,7 +213,6 @@ export class PublicPageComponent implements OnInit {
   };
 
   onVisibilityChange = () => {
-    console.log("mouseEventtrigger");
     if(document.visibilityState == "visible") {
       document.removeEventListener('mouseover', this.onVisibilityChange, true);
       this.updateMostRecentUserActivity();

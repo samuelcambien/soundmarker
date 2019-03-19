@@ -76,9 +76,10 @@ export class RestCall {
   }
 
   static logSmaClick(smaId: string): Promise<any> {
-    return Utils.sendPostRequest(RestUrl.SMA, {
-      ad_id: smaId,
-    });
+    return Promise.resolve();
+    // return Utils.sendPostRequest(RestUrl.SMA, {
+    //   ad_id: smaId,
+    // });
   }
 
   static logSmaImpression(smaId: string): Promise<any>{

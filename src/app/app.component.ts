@@ -72,6 +72,11 @@ export class Utils {
     return name.split(/(.*)\.(.*)/)[1];
   }
 
+  public static getSmaDomain(): string{
+    // return "http://127.0.0.1";
+    return "https://s3.eu-central-1.amazonaws.com";
+  }
+
   public static getExtension(name: string): string {
 
     return name.split(/(.*)\.(.*)/)[2].toLowerCase();
