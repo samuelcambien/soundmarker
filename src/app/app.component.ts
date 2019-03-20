@@ -1,6 +1,7 @@
 import {Component} from '@angular/core';
 import * as moment from "moment";
 import {now} from "moment";
+import {environment} from '../environments/environment';
 
 @Component({
   selector: 'app-root',
@@ -74,7 +75,7 @@ export class Utils {
 
   public static getSmaDomain(): string{
     // return "http://127.0.0.1";
-    return "https://s3.eu-central-1.amazonaws.com";
+    return environment.smaDomain;
   }
 
   public static getExtension(name: string): string {
