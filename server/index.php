@@ -1203,7 +1203,7 @@ $impressions = $array[$rand]["impressions"]+1;
 
 // return ok
 Flight::json(array(
-   'ad_id' => $ad_id,
+   'sma_id' => $ad_id,
    'html' => $html
 ), 200);
 
@@ -1230,7 +1230,7 @@ Flight::route('POST /sma', function() {
 $config = Flight::get("config");
 $getbody = json_decode(Flight::request()->getBody());
 
-$ad_id = $getbody->ad_id;
+$ad_id = $getbody->sma_id;
 $exposure_time = $getbody->exposure_time;
 $clicks = $getbody->clicks;
 
@@ -1259,7 +1259,7 @@ $impressions = $array[$rand]["impressions"]+1;
 
 // return ok
 Flight::json(array(
-   'ad_id' => $ad_id
+   'sma_id' => $ad_id
 ), 200);
 
 // store impression for new ad
@@ -1274,7 +1274,7 @@ Flight::route('POST /sma/imp', function() {
 $config = Flight::get("config");
 $getbody = json_decode(Flight::request()->getBody());
 
-$ad_id = $getbody->ad_id;
+$ad_id = $getbody->sma_id;
 
 $db = Flight::db();
 $sql = "SELECT clicks, exposure_time, impressions FROM Ad WHERE ad_id = '$ad_id'";
@@ -1298,7 +1298,7 @@ Flight::route('POST /sma/click', function() {
 $config = Flight::get("config");
 $getbody = json_decode(Flight::request()->getBody());
 
-$ad_id = $getbody->ad_id;
+$ad_id = $getbody->sma_id;
 
 $db = Flight::db();
 $sql = "SELECT clicks, exposure_time, impressions FROM Ad WHERE ad_id = '$ad_id'";
