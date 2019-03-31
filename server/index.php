@@ -1203,12 +1203,13 @@ $impressions = $array[$rand]["impressions"]+1;
 
 // return ok
 Flight::json(array(
-   'ad_id' => $ad_id
+   'ad_id' => $ad_id,
+   'html' => $html
 ), 200);
 
-// store impression for new ad
-$sql = "UPDATE Ad SET impressions = '$impressions' WHERE ad_id = '$ad_id'";
-$result = $db->query($sql);
+// // store impression for new ad
+// $sql = "UPDATE Ad SET impressions = '$impressions' WHERE ad_id = '$ad_id'";
+// $result = $db->query($sql);
 });
 
 /////////////////////////////////////////////////////// Routes - /ad/@ad_id GET ///////////////////////////////////////////////////////
@@ -1266,6 +1267,54 @@ $sql = "UPDATE Ad SET impressions = '$impressions' WHERE ad_id = '$ad_id'";
 $result = $db->query($sql);
 });
 
+
+////////////////////////////////////////////////////////// Routes - /sma/imp POST //////////////////////////////////////////////////////////
+Flight::route('POST /sma/imp', function() {
+
+$config = Flight::get("config");
+$getbody = json_decode(Flight::request()->getBody());
+
+$ad_id = $getbody->ad_id;
+
+$db = Flight::db();
+$sql = "SELECT clicks, exposure_time, impressions FROM Ad WHERE ad_id = '$ad_id'";
+$result = $db->query($sql);
+$resultfetch = $result->fetchAll(PDO::FETCH_ASSOC);
+
+$impressionsnew = intval($resultfetch[0]["impressions"]) + 1;
+
+$sql = "UPDATE Ad SET impressions = '$impressionsnew' WHERE ad_id = '$ad_id'";
+$result = $db->query($sql);
+
+// return ok
+Flight::json(array(
+   'ok' => 'ok'
+), 200);
+});
+
+////////////////////////////////////////////////////////// Routes - /sma/imp POST //////////////////////////////////////////////////////////
+Flight::route('POST /sma/click', function() {
+
+$config = Flight::get("config");
+$getbody = json_decode(Flight::request()->getBody());
+
+$ad_id = $getbody->ad_id;
+
+$db = Flight::db();
+$sql = "SELECT clicks, exposure_time, impressions FROM Ad WHERE ad_id = '$ad_id'";
+$result = $db->query($sql);
+$resultfetch = $result->fetchAll(PDO::FETCH_ASSOC);
+
+$clicksnew = intval($resultfetch[0]["clicks"]) + 1;
+
+$sql = "UPDATE Ad SET clicks = '$clicksnew' WHERE ad_id = '$ad_id'";
+$result = $db->query($sql);
+
+// return ok
+Flight::json(array(
+   'ok' => 'ok'
+), 200);
+});
 
 
 ////////////////////////////////////////////////////// Routes - /unsubscribe GET //////////////////////////////////////////////////////
