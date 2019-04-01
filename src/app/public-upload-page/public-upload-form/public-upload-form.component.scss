@@ -43,6 +43,21 @@ textarea.form-control {
   flex-wrap: nowrap;
 }
 
+.notification-sort {
+	padding-top: 6px;
+	padding-left: 0px !important;
+	padding-right: 2px !important;
+	border: none !important;
+}
+
+select {
+	padding-left: 0px;
+}
+
+option {
+	padding-left: 0px;
+}
+
 @media (max-width: 767.98px) {
 	.form-row .radios {
   margin-bottom: -10px;

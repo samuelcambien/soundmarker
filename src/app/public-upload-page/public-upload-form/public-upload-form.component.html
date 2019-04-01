@@ -73,25 +73,15 @@
     </div>
 
     <div class="col-md-8">
-      <div class="form-row">
-        <div class="form-group col hide-phone">
-                <textarea #notes_element [(ngModel)]="notes" type="text" placeholder="Notes" name="notes"
-                          class="form-control form-control-sm"
-                          rows="{{sharemode == 'email' ? 1 : 5 }}"></textarea>
-        </div>
-
-        <div class="form-group col show-phone">
-                <textarea #notes_element [(ngModel)]="notes" type="text" placeholder="Notes" name="notes"
-                          class="form-control form-control-sm"
-                          rows="{{sharemode == 'email' ? 3 : 7 }}"></textarea>
-        </div>
-      </div>
+      
       <div class="form-row" *ngIf="sharemode == 'email'">
 
         <div class="col-sm-12"  >
-            <input type="text" [(ngModel)]="email_from" name="email_from" placeholder="Email from" pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$"
+            <input type="text" [(ngModel)]="email_from" name="email_from" placeholder="Email from*" pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$"
                    class="form-control form-control-sm" required ngbTooltip="Invalid email address" triggers="manual" emailValidationTooltip>
+                   
         </div>
+       
 
         <div class="col-sm-12">
           <tag-input [(ngModel)]='email_to'
@@ -112,19 +102,23 @@
           </tag-input>
         </div>
       </div>
+      
+      <div class="form-row">
+        <div class="form-group col hide-phone">
+                <textarea #notes_element [(ngModel)]="notes" type="text" placeholder="Notes" name="notes"
+                          class="form-control form-control-sm"
+                          rows="{{sharemode == 'email' ? 1 : 5 }}"></textarea>
+        </div>
+
+        <div class="form-group col show-phone">
+                <textarea #notes_element [(ngModel)]="notes" type="text" placeholder="Notes" name="notes"
+                          class="form-control form-control-sm"
+                          rows="{{sharemode == 'email' ? 3 : 7 }}"></textarea>
+        </div>
+      </div>
 
       <div class="form-row radios">
-        <div class="col">
-          <div class="btn-group btn-group-sm btn-group-toggle" name="sharemode" ngbRadioGroup [(ngModel)]="sharemode"
-               placement="top" ngbTooltip="Share via" container="body">
-            <label ngbButtonLabel class="btn btn-outline-form active">
-              <input name="email" ngbButton class="slide-selector left-btn" type="radio" [value]="'email'">Email
-            </label>
-            <label ngbButtonLabel class="btn btn-outline-form">
-              <input name="link" ngbButton class="slide-selector" type="radio" [value]="'link'">Link
-            </label>
-          </div>
-        </div>
+    
         <div class="col">
           <div class="btn-group btn-group-sm btn-group-toggle" name="expiration" ngbRadioGroup [(ngModel)]="expiration"
                placement="top" ngbTooltip="Expire after a">
@@ -138,11 +132,29 @@
         </div>
         <div class="col">
           <div class="btn-group btn-group-sm btn-group-toggle allow-downloads" placement="top"
-               ngbTooltip="Disallow downloads">
+               ngbTooltip="No download">
             <label ngbButtonLabel class="btn btn-outline-form">
               <input ngbButton class="slide-selector" type="checkbox" [(ngModel)]="downloadable" name="usage">Stream only
             </label>
           </div>
+        </div>
+            <div class="col">
+	                  <div class="notification-sort select-button" ngbTooltip="Email alerts">
+      <select>
+        <option>Notify daily</option>
+        <option>Notify direct</option>
+        <option>Don't notify</option>
+      </select>
+    </div>
+          <!--<div class="btn-group btn-group-sm btn-group-toggle" name="sharemode" ngbRadioGroup [(ngModel)]="sharemode"
+               placement="top" ngbTooltip="Share via" container="body">
+            <label ngbButtonLabel class="btn btn-outline-form active">
+              <input name="email" ngbButton class="slide-selector left-btn" type="radio" [value]="'email'">Email
+            </label>
+            <label ngbButtonLabel class="btn btn-outline-form">
+              <input name="link" ngbButton class="slide-selector" type="radio" [value]="'link'">Link
+            </label>
+          </div>-->
         </div>
         <div class="col">
 
