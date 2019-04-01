@@ -282,7 +282,7 @@
     </div>
 
     <div class="title unselectable" >
-      <h4 #trackTitle (mouseenter)="scrollTitleHover()">{{track?.title}} </h4>
+      <h4 #trackTitle [ngClass]="{overflowTitle: overflowTitle}"> {{track?.title}} </h4>
       <p *ngIf="!expired">{{_progress | timeFormat}} / {{version?.track_length | timeFormat}}</p>
       <p *ngIf="expired">
         Sorry, this track has expired.

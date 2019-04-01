@@ -23,7 +23,7 @@ import {LocalStorageService} from "../../services/local-storage.service";
 @Component({
   selector: 'app-public-track-player',
   templateUrl: './public-track-player.component.html',
-  styleUrls: ['./public-track-player.component.scss']
+  styleUrls: ['./public-track-player.component.scss'],
 })
 export class PublicTrackPlayerComponent implements OnInit, AfterViewChecked, OnChanges  {
 
@@ -341,51 +341,17 @@ export class PublicTrackPlayerComponent implements OnInit, AfterViewChecked, OnC
   ///////////////////////////////////////////////////////////////////////////////////////////////////
   ////////////////////////////////////  SCROLLING OF LONG TITLES ////////////////////////////////////
 
-  scrollTitleRunning: boolean = false;
-  autoScrollTimeOut = setTimeout(()=>{},10);
-  scrollIntervalID; // To reset the TrackTitleScrolling
-
-  scrollInitialWait: number= 2000;
-  scrollInterval: number= 48;
-  scrollWaitAtEnd: number= 83;
-  scrollWaitOnHover: number = 125;
-
-  //Function that does the actual scrolling back and forth of too long titles.
-  scrollTitle = () => {
-    this.scrollTitleRunning = true;
-    let i = 1;
-    let titleScrollDiv = this.trackTitleDOM.nativeElement.scrollWidth - this.trackTitleDOM.nativeElement.offsetWidth + this.scrollWaitAtEnd;
-    this.trackTitleDOM.nativeElement.setAttribute("style", "text-overflow: none");
-    this.scrollIntervalID = setInterval(() => {
-      this.trackTitleDOM.nativeElement.scrollLeft += i;
-      titleScrollDiv -= 1;
-      if (titleScrollDiv === 0) {
-        titleScrollDiv = this.trackTitleDOM.nativeElement.scrollLeft;
-        if (i === -1) {
-          clearInterval(this.scrollIntervalID);
-          this.trackTitleDOM.nativeElement.setAttribute("style", "text-overflow: ellipsis");
-          this.scrollTitleRunning = !this.scrollTitleRunning;
-        }
-        i = -i;
-      }
-    }, this.scrollInterval);
-  }
-
-  // When scrolling is not happening yet a mouseover event triggers the scrolling of too long titles.
-  scrollTitleHover(){
-    if(!this.scrollTitleRunning) {
-      clearTimeout(this.autoScrollTimeOut);
-      this.scrollTitleRunning = true;
-      setTimeout(this.scrollTitle, this.scrollWaitOnHover);
-    }
-  }
+  scrollInitialWait: number= 1250;
+  scrollWaitAtEnd: number= 50;
+  overflowTitle: boolean= false;
+  scrollspeed = 0.015;
 
   // Stop scrolling and reset the track title to it's start position.
   clearScroll() {
-    this.trackTitleDOM.nativeElement.scrollLeft = this.trackTitleDOM.nativeElement.scrollLeft-this.trackTitleDOM.nativeElement.scrollLeft;
-    this.scrollTitleRunning = false;
-    clearInterval(this.scrollIntervalID);
+    this.trackTitleDOM.nativeElement.scrollLeft = 0;
     this.trackTitleDOM.nativeElement.setAttribute("style", "text-overflow: ellipsis");
+    this.trackTitleDOM.nativeElement.removeEventListener("click", this.autoScroll);
+    this.overflowTitle = false;
   }
 
   // Hide the phonesearch in case the screen is resized while it was open.
@@ -400,9 +366,47 @@ export class PublicTrackPlayerComponent implements OnInit, AfterViewChecked, OnC
   // Launches auto scrolling when opening a track.
   ngOnChanges(changes){
     if(this.launchTitleScroll) {
-      this.autoScrollTimeOut = setTimeout(this.scrollTitle, this.scrollInitialWait);
+      setTimeout(() => this.autoScroll(), this.scrollInitialWait);
     }
   }
 
+  //Function that does the actual scrolling back and forth of too long titles.
+  autoScroll = () => {
+    if(this.trackTitleDOM.nativeElement.offsetWidth < this.trackTitleDOM.nativeElement.scrollWidth){ //Only run this function if there is actually a title which overflows the div.
+      this.overflowTitle=false;
+
+      this.trackTitleDOM.nativeElement.setAttribute("style", "text-overflow: none");
+      this.trackTitleDOM.nativeElement.removeEventListener("click", this.autoScroll);
+      let end = this.trackTitleDOM.nativeElement.scrollWidth - this.trackTitleDOM.nativeElement.offsetWidth + this.scrollWaitAtEnd;
+      let duration = end/this.scrollspeed;
+
+      // Easing function for scrolling back and forth.
+      // t = current time or position
+      // c = change or delta of value
+      // d = duration / total time or position
+      let easing = (t, c, d) => {
+        return 1-Math.abs(1-c*t/d);
+      };
+
+      let startTime;
+      if (window.performance && window.performance.now) startTime = performance.now();
+      else if (Date.now)                                startTime = Date.now();
+      else                                              startTime = new Date().getTime();
+
+      let scrollLoop = (time?) => {
+        let t = (!time ? 0 : time - startTime);
+        let factor = easing(t, 2, duration);
+        this.trackTitleDOM.nativeElement.scrollLeft =  end * factor;
+        if (t < duration && this.launchTitleScroll)
+          requestAnimationFrame(scrollLoop);
+        else if (t>duration){
+          this.trackTitleDOM.nativeElement.setAttribute("style", "text-overflow: ellipsis");
+          this.trackTitleDOM.nativeElement.addEventListener("click", this.autoScroll);
+          this.overflowTitle = true;
+        }
+      };
+      scrollLoop();
+  };
+  }
   ///////////////////////////////////////////////////////////////////////////////////////////////////
 }
