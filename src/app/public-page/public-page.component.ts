@@ -55,7 +55,7 @@ export class PublicPageComponent implements OnInit {
     if (!this.localStorageService.termsAccepted()) {
       this.openIntroduction();
     }
-    this.smaId = 0;
+    this.smaId = 1;
 
     //////////////////        Advertisement refresh algorithm.             //////////////////
     //  The idea is that the ad only refreshes if the web page is active in the browser or
@@ -84,12 +84,12 @@ export class PublicPageComponent implements OnInit {
     }                                                                                                   // Launch advertisement algorithm for the first time if tab is open.
 
     if (window.addEventListener) {
-      window.addEventListener("message", this.receiveMessage, false);
+      window.addEventListener("message", this.clickSma.bind(this), false);
     }
   }
 
   // Registering a click and opening the ad.
-  private receiveMessage(event) {
+  private clickSma(event) {
       if (event.origin !== Utils.getSmaDomain()) return; // Make sure that the click from the iframe click is coming from the correct domain.
       if (event.data) {
         RestCall.logSmaClick(this.smaId).then(()  => window.open(event.data, "blank_"));
@@ -102,7 +102,6 @@ export class PublicPageComponent implements OnInit {
 
   // Fetch next ad.
   private loadNextAd(): Promise<any> {
-    this.smaId = (this.smaId)%4+1; // SHOULD BE REMOVED WHEN BACKEND IS READY
     return RestCall.getSma(this.smaId)
       .then(response => this.hiddenIframe = this.createIframe(response));
   }

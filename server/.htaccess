@@ -38,7 +38,9 @@
     RewriteCond %{REQUEST_URI} "/file/chunk/([a-z0-9/-]+)$" [OR]
     RewriteCond %{REQUEST_URI} "/unsubscribe/([a-z0-9/-]+)$" [OR]
     RewriteCond %{REQUEST_URI} "/subscribe/([a-z0-9/-]+)$" [OR]
-    RewriteCond %{REQUEST_URI} "/sma"
+    RewriteCond %{REQUEST_URI} "/sma" [OR]
+    RewriteCond %{REQUEST_URI} "/sma/click" [OR]
+    RewriteCond %{REQUEST_URI} "/sma/imp"
     RewriteRule ^ index.php [L]
 
 

@@ -76,18 +76,15 @@ export class RestCall {
   }
 
   static logSmaClick(smaId: string): Promise<any> {
-    return Promise.resolve();
-    // return Utils.sendPostRequest(RestUrl.SMA, {
-    //   ad_id: smaId,
-    // });
+    return Utils.sendPostRequest(RestUrl.SMA_CLICK, {
+      sma_id: smaId,
+    });
   }
 
   static logSmaImpression(smaId: string): Promise<any>{
-    console.log("smaImpression logged");
-    // return Utils.sendPostRequest(RestUrl.SMA_IMPRESSION, {
-    //   ad_id: smaId,
-    // });
-    return Promise.resolve();
+    return Utils.sendPostRequest(RestUrl.SMA_IMPRESSION, {
+      sma_id: smaId,
+    });
   }
 
   static getNextAdId(smaId: string, exposureTime): Promise<any> {
