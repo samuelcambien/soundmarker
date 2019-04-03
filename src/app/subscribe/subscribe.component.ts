@@ -19,7 +19,7 @@ export class SubscribeComponent implements OnInit {
   }
 
   subscribe() {
-    RestCall.subscribe(this.project_id, this.email)
+    RestCall.subscribe(this.project_id, this.email, '1')
       .then(() => this.status = "greatsuccess")
       .catch(() => this.status = "error");
   }
