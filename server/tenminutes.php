@@ -26,7 +26,7 @@ $s3 = new Aws\S3\S3Client([
 
 // Send daily updates
 // Go through Daily Updates and get project_ids, then check first if they're not expired
-$sql = "SELECT update_id, project_id, emailaddress, last_comment_id FROM DailyUpdates WHERE notify_id = '1'";
+$sql = "SELECT update_id, project_id, emailaddress, last_comment_id FROM DailyUpdates WHERE notify_id = '2'";
 $updates = $db->query($sql)->fetchAll(PDO::FETCH_ASSOC);
 foreach ($updates as &$update) {
   $count = 0;
