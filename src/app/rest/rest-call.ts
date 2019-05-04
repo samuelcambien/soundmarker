@@ -87,14 +87,6 @@ export class RestCall {
     });
   }
 
-  static getNextAdId(smaId: string, exposureTime): Promise<any> {
-    return Utils.sendPostRequest(RestUrl.SMA, {
-      ad_id: smaId,
-      clicks: "0",
-      exposure_time: exposureTime
-    });
-  }
-
   // DELETE
   public static deleteComment(commentId: string) {
     return Utils.sendPostRequest(RestUrl.COMMENT_DELETE, {
@@ -103,12 +95,12 @@ export class RestCall {
   }
 
   // GET
-  static getAdId(): Promise<any> {
-    return Utils.sendGetRequest(RestUrl.SMA);
+  static getSma(sma_id: string): Promise<any> {
+    return Utils.sendGetRequest(RestUrl.SMA, [sma_id]);
   }
 
-  public static getSma(id: string, ip?: string): Promise<any> {
-    return Utils.sendGetDataRequest(RestUrl.SMA, [id]);
+  public static getRandSma(id: string): Promise<any> {
+    return Utils.sendPostRequest(RestUrl.SMA, {sma_id: id});
   }
 
   public static getProject(projectHash: string): Promise<Project> {
