@@ -21,7 +21,7 @@
 
       <div class="info-heading">
         <h2>{{message?.title}}</h2>
-        <p>Will be deleted on {{this.expiry_date}} </p>
+        <p>{{ expired == false ? 'Expires in ' + getDaysToExpired() + ' days (' +  getDateHumanized() + ')' : 'Expired on ' + getDateHumanized()}}</p>
       </div>
 
 	  <div class="spacing-lg"></div>

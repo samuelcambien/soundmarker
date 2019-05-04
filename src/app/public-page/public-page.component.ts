@@ -37,6 +37,7 @@ export class PublicPageComponent implements OnInit {
   @Input() project_id;
   @Input() sender;
   @Input() expiry_date;
+  @Input() expired;
   @Input() message: Message;
   @Input() error;
   @Output() tryAgain = new EventEmitter();

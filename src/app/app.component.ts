@@ -55,7 +55,7 @@ export class RestUrl {
 
 export class Utils {
 
-  public static read(file: File): Promise<ArrayBuffer> {
+    public static read(file: File): Promise<ArrayBuffer> {
     return new Promise<any>(resolve => {
       let reader: FileReader = new FileReader();
       reader.onload = () => resolve(reader.result);
@@ -100,6 +100,15 @@ export class Utils {
       'seconds': seconds
     }).asSeconds();
   }
+
+  public static getDaysDiff(date){
+    return moment(date).diff(moment(), 'days')+1;
+  }
+
+  public static getDateHumanized(date) {
+    return moment(date).format('MMMM D, YYYY'); // Formatted as "February 25th 2019" for example
+  }
+
 
   public static sendGetDataRequest(url, params?): Promise<any> {
     return new Promise<any>((resolve, reject) => {
