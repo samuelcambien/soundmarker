@@ -1188,6 +1188,7 @@ if (true) {
 ADS
 */
 /////////////////////////////////////////////////////////// Routes - /ad GET //////////////////////////////////////////////////////////
+// retire this call
 Flight::route('GET /sma', function() {
 
 $config = Flight::get("config");
@@ -1200,7 +1201,6 @@ $array = $result->fetchAll();
 $rand = rand(0,(count($array)-1));
 $html = $array[$rand]["html"];
 $ad_id = $array[$rand]["ad_id"];
-$impressions = $array[$rand]["impressions"]+1;
 
 // return ok
 Flight::json(array(
@@ -1232,23 +1232,9 @@ $config = Flight::get("config");
 $getbody = json_decode(Flight::request()->getBody());
 
 $ad_id = $getbody->sma_id;
-$exposure_time = $getbody->exposure_time;
-$clicks = $getbody->clicks;
-
-$db = Flight::db();
-$sql = "SELECT clicks, exposure_time FROM Ad WHERE ad_id = '$ad_id'";
-$result = $db->query($sql);
-$resultfetch = $result->fetchAll(PDO::FETCH_ASSOC);
-
-$clicksnew = intval($resultfetch[0]["clicks"]) + intval($clicks);
-$exposure_timenew = intval($resultfetch[0]["exposure_time"]) + intval($exposure_time);
-
-$sql = "UPDATE Ad SET exposure_time = '$exposure_timenew' WHERE ad_id = '$ad_id'";
-$result = $db->query($sql);
-$sql = "UPDATE Ad SET clicks = '$clicksnew' WHERE ad_id = '$ad_id'";
-$result = $db->query($sql);
 
 // get next ad
+$db = Flight::db();
 $sql = "SELECT html, ad_id, impressions FROM Ad WHERE priority = '0' AND impressions <= limits AND ad_id <> '$ad_id'";
 $result = $db->query($sql);
 $array = $result->fetchAll(PDO::FETCH_ASSOC);
@@ -1256,18 +1242,62 @@ $array = $result->fetchAll(PDO::FETCH_ASSOC);
 $rand = rand(0,(count($array)-1));
 $html = $array[$rand]["html"];
 $ad_id = $array[$rand]["ad_id"];
-$impressions = $array[$rand]["impressions"]+1;
 
 // return ok
 Flight::json(array(
-   'sma_id' => $ad_id
+   'sma_id' => $ad_id,
+   'html' => $html
 ), 200);
 
-// store impression for new ad
-$sql = "UPDATE Ad SET impressions = '$impressions' WHERE ad_id = '$ad_id'";
-$result = $db->query($sql);
 });
 
+////////////////////////////////////////////////////////// Routes - /sma/imp POST //////////////////////////////////////////////////////////
+Flight::route('POST /sma/imp', function() {
+
+$config = Flight::get("config");
+$getbody = json_decode(Flight::request()->getBody());
+
+$ad_id = $getbody->sma_id;
+
+$db = Flight::db();
+$sql = "SELECT clicks, exposure_time, impressions FROM Ad WHERE ad_id = '$ad_id'";
+$result = $db->query($sql);
+$resultfetch = $result->fetchAll(PDO::FETCH_ASSOC);
+
+$impressionsnew = intval($resultfetch[0]["impressions"]) + 1;
+
+$sql = "UPDATE Ad SET impressions = '$impressionsnew' WHERE ad_id = '$ad_id'";
+$result = $db->query($sql);
+
+// return ok
+Flight::json(array(
+   'ok' => 'ok'
+), 200);
+});
+
+////////////////////////////////////////////////////////// Routes - /sma/imp POST //////////////////////////////////////////////////////////
+Flight::route('POST /sma/click', function() {
+
+$config = Flight::get("config");
+$getbody = json_decode(Flight::request()->getBody());
+
+$ad_id = $getbody->sma_id;
+
+$db = Flight::db();
+$sql = "SELECT clicks, exposure_time, impressions FROM Ad WHERE ad_id = '$ad_id'";
+$result = $db->query($sql);
+$resultfetch = $result->fetchAll(PDO::FETCH_ASSOC);
+
+$clicksnew = intval($resultfetch[0]["clicks"]) + 1;
+
+$sql = "UPDATE Ad SET clicks = '$clicksnew' WHERE ad_id = '$ad_id'";
+$result = $db->query($sql);
+
+// return ok
+Flight::json(array(
+   'ok' => 'ok'
+), 200);
+});
 
 ////////////////////////////////////////////////////////// Routes - /sma/imp POST //////////////////////////////////////////////////////////
 Flight::route('POST /sma/imp', function() {

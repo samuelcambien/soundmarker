@@ -1,6 +1,7 @@
 import {Component} from '@angular/core';
 import * as moment from "moment";
 import {now} from "moment";
+import {environment} from '../environments/environment';
 
 @Component({
   selector: 'app-root',
@@ -18,7 +19,11 @@ export class RestUrl {
 
   private static DATA: string = RestUrl.BACKEND;
 
-  public static AD: string = RestUrl.BACKEND + "/sma";
+  public static SMA: string = RestUrl.BACKEND + "/sma";
+
+  public static SMA_IMPRESSION: string = RestUrl.BACKEND + "/sma/imp";
+
+  public static SMA_CLICK: string = RestUrl.BACKEND + "/sma/click";
 
   public static UPLOAD: string = RestUrl.DATA + "/file/new";
 
@@ -66,6 +71,11 @@ export class Utils {
   public static getName(name: string): string {
 
     return name.split(/(.*)\.(.*)/)[1];
+  }
+
+  public static getSmaDomain(): string{
+    // return "http://127.0.0.1";
+    return environment.smaDomain;
   }
 
   public static getExtension(name: string): string {

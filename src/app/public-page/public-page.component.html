@@ -6,12 +6,8 @@
 </div>
 
 <div  class="container rounded phone-scroll">
-  <div [@openClose]="smaVisibility" class="smatoggle">
-  <div class="sma hide-phone" #sma></div>
-
-    <div class="phone-sma show-phone  rounded-lg border-0" #smaphone>
-
-  </div>
+  <div>
+    <div [ngClass]="smaClass" #sma> </div>
   </div>
 
   <div class="public-page card shadow-lg rounded-lg border-0">
@@ -26,7 +22,6 @@
    
   </div>
 </div>
-
 
 <div class="modal fade info-modal-faq" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
      aria-hidden="true">

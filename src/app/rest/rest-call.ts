@@ -77,23 +77,18 @@ export class RestCall {
   }
 
   static logSmaClick(smaId: string): Promise<any> {
-    return Utils.sendPostRequest(RestUrl.AD, {
-      ad_id: smaId,
-      clicks: "1",
-      exposure_time: "0"
+    return Utils.sendPostRequest(RestUrl.SMA_CLICK, {
+      sma_id: smaId,
     });
   }
 
-  static getNextAdId(smaId: string, exposureTime): Promise<any> {
-    return Utils.sendPostRequest(RestUrl.AD, {
-      ad_id: smaId,
-      clicks: "0",
-      exposure_time: exposureTime
+  static logSmaImpression(smaId: string): Promise<any>{
+    return Utils.sendPostRequest(RestUrl.SMA_IMPRESSION, {
+      sma_id: smaId,
     });
   }
 
   // DELETE
-
   public static deleteComment(commentId: string) {
     return Utils.sendPostRequest(RestUrl.COMMENT_DELETE, {
       comment_id: commentId
@@ -101,12 +96,13 @@ export class RestCall {
   }
 
   // GET
-  static getAdId(): Promise<any> {
-    return Utils.sendGetRequest(RestUrl.AD);
+
+  static getSma(sma_id: string): Promise<any> {
+    return Utils.sendGetRequest(RestUrl.SMA, [sma_id]);
   }
 
-  public static getAd(id: string): Promise<any> {
-    return Utils.sendGetDataRequest(RestUrl.AD, [id]);
+  public static getRandSma(id: string): Promise<any> {
+    return Utils.sendPostRequest(RestUrl.SMA, {sma_id: id});
   }
 
   public static getProject(projectHash: string): Promise<Project> {
