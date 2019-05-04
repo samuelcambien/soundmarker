@@ -138,7 +138,7 @@ export class PublicUploadFormComponent implements OnInit {
     }
   }
 
-  notifications= [{id: '2', label: 'Notify daily'}, {id: '1', label: 'Notify direct'},{id: '0', label: 'Don\'t notify'}];
+  notifications= [{id: '2', label: 'Notify daily'}, {id: '1', label: 'Notify directly'},{id: '0', label: 'Don\'t notify'}];
   notifyID;
 
   ngOnInit(): void {
