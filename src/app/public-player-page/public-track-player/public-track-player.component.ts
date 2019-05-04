@@ -95,6 +95,7 @@ export class PublicTrackPlayerComponent implements OnInit, AfterViewChecked, OnC
           }, 1)
         );
      }
+
     this.trackTitleDOM.nativeElement.setAttribute("style", "text-overflow: ellipsis");
   }
 

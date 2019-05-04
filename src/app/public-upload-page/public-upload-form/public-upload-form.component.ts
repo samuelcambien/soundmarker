@@ -16,7 +16,6 @@ import {FormControl, NgControl, Validators} from '@angular/forms';
 import {Utils} from "../../app.component";
 import {LocalStorageService} from "../../services/local-storage.service";
 import {PublicUploadPageComponent} from "../public-upload-page.component";
-import {Observable, of} from 'rxjs';
 
 @Component({
   selector: 'app-public-upload-form',
@@ -30,7 +29,6 @@ export class PublicUploadFormComponent implements OnInit {
   email_from: string = this.localStorageService.getEmailFrom();
   email_to: string[];
 
-  sharemode: "email" | "link" = "email";
   expiration: "1week" | "1month" = "1week";
   downloadable: boolean = false;
 
@@ -65,13 +63,11 @@ export class PublicUploadFormComponent implements OnInit {
             this.processTrack(project_id, track)
           )
         ).then(() => {
-              if (this.sharemode === 'email') {
+                if(this.notifyID != "0")  RestCall.subscribe(project_id, this.email_from, this.notifyID);
                 return RestCall.shareProject(project_id, this.expiration, this.notes, this.email_from, this.email_to)
-              } else {
-                return RestCall.shareProject(project_id, this.expiration, this.notes)
-              }
             }
-        ).then(response => {
+        ).
+        then(response => {
           this.finished.emit();
           this.clearForm(true);
           this.link.emit(response["project_hash"]);
@@ -93,7 +89,7 @@ export class PublicUploadFormComponent implements OnInit {
     return RestCall.createNewTrack(projectId, title)
       .then(response =>
         RestCall.createNewVersion(
-          response["track_id"], this.notes_element.nativeElement.value, this.downloadable ? "1" : "0"
+          response["track_id"], this.notes_element.nativeElement.value, this.downloadable ? "0" : "1"
         )
       ).then(version => {
         let versionId = version["version_id"];
@@ -142,13 +138,15 @@ export class PublicUploadFormComponent implements OnInit {
     }
   }
 
+  notifications= [{id: '1', label: 'Notify daily'}, {id: '2', label: 'Notify directly'},{id: '0', label: 'Don\'t notify'}];
+  notifyID;
+
   ngOnInit(): void {
     // wave.init({
     //   container: canvas
     // });
     // wave.loadDecodedBuffer(buffer);
-
-
+    this.notifyID =  this.localStorageService.getNotificationID();
     this.uploader.onWhenAddingFileFailed = (item, filter) => {
       let message = '';
       switch (filter.name) {
@@ -156,7 +154,7 @@ export class PublicUploadFormComponent implements OnInit {
           message = "You exceeded the limit of 2 GB."
           break;
         case 'onlyAudio':
-          message = "One or more files are not supported and were not added."
+          message = "One or more files are not supported and were not added.";
           break;
         case 'checkSizeLimit':
           message = "You exceeded the limit of 2 GB.";
@@ -181,10 +179,9 @@ export class PublicUploadFormComponent implements OnInit {
   }
 
   private storePreferences() {
-    if (this.sharemode == "email")
-      this.localStorageService.storeEmailFrom(this.email_from);
-    this.localStorageService.storeShareMode(this.sharemode);
+    this.localStorageService.storeEmailFrom(this.email_from);
     this.localStorageService.storeAllowDownloads(this.downloadable);
+    this.localStorageService.storeNotifyID(this.notifyID);
   }
 
   getAcceptedFileTypes() {

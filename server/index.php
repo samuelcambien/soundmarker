@@ -440,8 +440,8 @@ if (true) {
     $result = $db->query($sql);
 
     // Create DailyUpdates in dB
-    $sql = "INSERT INTO DailyUpdates (emailaddress, project_id) VALUES ('$sender', '$project_id')";
-    $result = $db->query($sql);
+    // $sql = "INSERT INTO DailyUpdates (emailaddress, project_id) VALUES ('$sender', '$project_id')";
+    // $result = $db->query($sql);
   }
 
   // return ok
@@ -466,9 +466,10 @@ $getbody = json_decode(Flight::request()->getBody());
 
 $emailaddress = $getbody->emailaddress;
 $project_id = $getbody->project_id;
+$notify_id = $getbody->notify_id;
 
 $db = Flight::db();
-$sql = "INSERT INTO DailyUpdates (project_id, emailaddress) VALUES ('$project_id', '$emailaddress')";
+$sql = "INSERT INTO DailyUpdates (project_id, emailaddress, notify_id) VALUES ('$project_id', '$emailaddress', '$notify_id')";
 $result = $db->query($sql);
 
 // return ok
