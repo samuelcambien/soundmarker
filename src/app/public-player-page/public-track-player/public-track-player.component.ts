@@ -267,7 +267,7 @@ export class PublicTrackPlayerComponent implements OnInit, AfterViewChecked, OnC
     if(event.relatedTarget && (event.relatedTarget.getAttribute('id') === "phonesearch")){
       this.phoneSearchInput.nativeElement.focus(); //in case the search field is cleared or the search icon is clicker: re-focus on the search field.
     }
-    else {
+    else if(this.search == null) {
       document.getElementById("phonesearch").setAttribute("style", "display:none");
     }
   }
