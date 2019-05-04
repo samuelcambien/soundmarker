@@ -344,7 +344,7 @@ export class PublicTrackPlayerComponent implements OnInit, AfterViewChecked, OnC
   scrollInitialWait: number= 1250;
   scrollWaitAtEnd: number= 50;
   overflowTitle: boolean= false;
-  scrollspeed = 0.015;
+  scrollspeed = 0.014;
 
   // Stop scrolling and reset the track title to it's start position.
   clearScroll() {
