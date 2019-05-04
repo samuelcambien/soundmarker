@@ -21,7 +21,7 @@
 
       <div class="info-heading">
         <h2>Get notified</h2>
-        <p>Get a status updates via email to see<br>new comments and replies.</p>
+        <p>Get status updates via email to see<br>new comments and replies.</p>
       </div>
       
       <div class="spacing-lg"></div>
@@ -36,10 +36,10 @@
               <div class="btn-group btn-group-sm btn-group-toggle" name="notify" ngbRadioGroup [(ngModel)]="notifyID"
                      placement="top" ngbTooltip="Get notified">
                   <label ngbButtonLabel class="btn btn-outline-form active">
-                    <input ngbButton name="week" class="slide-selector left-btn" type="radio" [value]="'1'">Daily
+                    <input ngbButton name="daily" class="slide-selector left-btn" type="radio" [value]="'1'">Daily
                   </label>
                   <label ngbButtonLabel class="btn btn-outline-form">
-                    <input ngbButton name="month" class="slide-selector" type="radio" [value]="'2'">Instantly
+                    <input ngbButton name="instantly" class="slide-selector" type="radio" [value]="'2'">Instantly
                   </label>
               </div>
               <button type="submit" [disabled]="!subscribeForm.valid">Submit</button>

@@ -101,7 +101,6 @@ export class RestCall {
   }
 
   // GET
-
   static getAdId(): Promise<any> {
     return Utils.sendGetRequest(RestUrl.AD);
   }
