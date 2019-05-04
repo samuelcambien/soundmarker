@@ -795,6 +795,11 @@ button:visited {
 	padding-bottom: 3px;
 	height: 29px;
 }
+
+.free-upload:disabled  {
+  opacity: 0.2;
+}
+
 .btn-group .btn + .btn,
 .btn-group .btn + .btn-group,
 .btn-group .btn-group + .btn,
