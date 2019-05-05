@@ -1,12 +1,10 @@
 import {
-  AfterViewChecked,
-  ChangeDetectorRef,
+  ChangeDetectionStrategy, ChangeDetectorRef,
   Component,
   ElementRef,
   EventEmitter,
   HostListener,
-  Input,
-  OnChanges,
+  Input, OnChanges,
   OnInit,
   Output,
   ViewChild
@@ -18,16 +16,16 @@ import {Version} from "../../model/version";
 import {File} from "../../model/file";
 import {RestCall} from "../../rest/rest-call";
 import {PlayerService} from "../../services/player.service";
-import {ProjectService} from "../../services/project.service";
 import {LocalStorageService} from "../../services/local-storage.service";
 import {Player} from "../../player";
 
 @Component({
   selector: 'app-public-track-player',
   templateUrl: './public-track-player.component.html',
-  styleUrls: ['./public-track-player.component.scss']
+  styleUrls: ['./public-track-player.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class PublicTrackPlayerComponent implements OnInit, AfterViewChecked, OnChanges  {
+export class PublicTrackPlayerComponent implements OnInit, OnChanges {
 
   static MINIMAL_INTERVAL: number = 1;
 
@@ -65,39 +63,27 @@ export class PublicTrackPlayerComponent implements OnInit, AfterViewChecked, OnC
   version: Version;
   phoneOrder: boolean;
 
-  peaks;
   private files: File[];
 
   constructor(
     private localStorageService: LocalStorageService,
     private playerService: PlayerService,
-    private projectService: ProjectService,
-    private cdRef: ChangeDetectorRef,
+    private cdr: ChangeDetectorRef
   ) {
 
   }
 
-  ngOnInit() {
-    if (!this.expired) {
-      this.track.versions.then(versions => {
-        this.version = versions[0];
-        this.peaks = JSON.parse(this.version.wave_png);
-        this.createNewComment();
-        return this.loadPlayer();
-      })
-      // .catch(
-      // e => {
-      //   console.log(e);
-      //   this.error.emit(e);
-      // }
-      // )
-        .then(() =>
-          setInterval(() => {
-            this._progress = this.getCurrentTime();
-          }, 1)
-        );
-     }
+  ngOnInit(): void {
+    this.version = this.track.versions[0];
+    setInterval(() => {
+      this._progress = this.getCurrentTime();
+      this.cdr.detectChanges();
+    }, 1);
+    this.playerService.getPlayer(this.track.track_id)
+      .addWaveform(this.waveform.nativeElement);
+    this.createNewComment();
     this.trackTitleDOM.nativeElement.setAttribute("style", "text-overflow: ellipsis");
+    this.cdr.detectChanges();
   }
 
   private getPlayerWidth(): number {
@@ -172,53 +158,25 @@ export class PublicTrackPlayerComponent implements OnInit, AfterViewChecked, OnC
     return this.getMatchingComments().sort(this.currentSorter.comparator);
   }
 
-
-
-  ngAfterViewChecked() {
-    this.cdRef.detectChanges();
-  }
-
   getMatchingComments(): Comment[] {
 
-    if (!this.track.comments) return [];
+    if (!this.version.comments) return [];
 
-    if (!this.search) return this.track.comments;
+    if (!this.search) return this.version.comments;
 
     let search = new RegExp(this.search, 'i');
 
-    return this.track.comments.filter(
+    return this.version.comments.filter(
       comment => search.test(comment.notes) || search.test(comment.name)
     );
   }
 
   hasComments() {
-    return this.track.comments && this.track.comments.length > 0;
+    return this.version.comments && this.version.comments.length > 0;
   }
 
   hasMatchingComments() {
     return this.getMatchingComments().length > 0;
-  }
-
-  public loadPlayer(): Promise<void> {
-
-    return this.version.files.then((files) => {
-      this.files = files;
-
-      const streamFile = files.filter(file => file.identifier == 0)[0];
-      const player = new Player("waveform_" + this.track.track_id, this.peaks, this.version.track_length, streamFile.aws_path, streamFile.extension);
-
-      this.playerService.addPlayer(this.track.track_id, player);
-
-      player.finished.subscribe(() => {
-        if (this.projectService.autoPlay) {
-          this.projectService.playNextTrack(this.track);
-        }
-      });
-
-      player.playing.subscribe(() => {
-        this.playerService.stopAllExcept(player);
-      })
-    });
   }
 
   getCurrentTime(): number {
@@ -277,7 +235,7 @@ export class PublicTrackPlayerComponent implements OnInit, AfterViewChecked, OnC
   }
 
   goToOverview() {
-    this.clearScroll();
+    // this.clearScroll();
     this.overview.emit();
   }
 
@@ -297,7 +255,7 @@ export class PublicTrackPlayerComponent implements OnInit, AfterViewChecked, OnC
   }
 
   addComment(comment: Comment) {
-    this.track.comments.push(comment);
+    this.version.comments.push(comment);
     this.localStorageService.storeCommentName(comment.name);
     RestCall.addComment(this.comment)
       .then(response => {
@@ -311,7 +269,7 @@ export class PublicTrackPlayerComponent implements OnInit, AfterViewChecked, OnC
   }
 
   removeComment(comment: Comment) {
-    this.track.comments = this.track.comments.filter(
+    this.version.comments = this.version.comments.filter(
       loadedComment => loadedComment != comment
     );
   }
@@ -375,7 +333,7 @@ export class PublicTrackPlayerComponent implements OnInit, AfterViewChecked, OnC
         i = -i;
       }
     }, this.scrollInterval);
-  }
+  };
 
   // When scrolling is not happening yet a mouseover event triggers the scrolling of too long titles.
   scrollTitleHover(){

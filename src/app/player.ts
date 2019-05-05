@@ -1,63 +1,38 @@
 import {RestCall} from "./rest/rest-call";
-import * as player from "./player/dist/player";
 import {Comment} from "./model/comment";
-import {ProjectService} from "./services/project.service";
 import {EventEmitter, Output} from "@angular/core";
+import {Drawer} from "./drawer";
+import {Utils} from "./app.component";
 
 export class Player {
 
-  private container: HTMLElement;
-  private player;
-  private peaks: number[];
-  private duration: number;
-  private awsPath: string;
-  private extension: string;
   private context: string;
   private mediaSource: MediaSource;
   private sourceBuffer: SourceBuffer;
-  private startIndex: number;
+  private media: HTMLMediaElement;
 
+  private startIndex: number;
+  private endIndex: number;
   private comment: Comment;
+
+  private drawers: Drawer[] = [];
 
   @Output() playing = new EventEmitter();
   @Output() finished = new EventEmitter();
 
-  constructor(container: string, peaks: number[], duration: number, awsPath: string, extension: string) {
+  constructor(
+    private peaks: number[],
+    private duration: number,
+    private awsPath: string,
+    private extension: string
+  ) {
+    this.initialize();
+  }
 
-    const waveformContainer = document.getElementById(container);
-    this.container = waveformContainer;
-
-    this.player = player.create({
-      container: waveformContainer,
-      backend: 'AudioElement',
-      dragSelection: false,
-      scrollParent: false,
-      peaks: peaks,
-      duration: duration,
-      cursorColor: '#bac1da',
-      progressColor: '#b9caff',
-      waveColor: '#eef1ff',
-    });
-
-    this.player.on('load', () => this.play());
-    this.player.on('pause', () => {
-      if (this.getComment()) if (this.getComment().loop) {
-        this.play(this.getComment());
-      } else {
-        this.seekTo(this.getComment().start_time);
-        this.comment = null;
-      }
-    });
-    this.player.on('finish', () => {
-      this.finished.emit();
-    });
-
-    this.peaks = peaks;
-    this.duration = duration;
-    this.awsPath = awsPath;
-    this.extension = extension;
-
+  initialize() {
     this.createMediaSource();
+    this.setupProgress();
+    this.redraw();
   }
 
   createMediaSource(): Promise<void> {
@@ -70,19 +45,59 @@ export class Player {
       });
       this.context = window.URL.createObjectURL(this.mediaSource);
 
-      const currentTime = this.getCurrentTime();
-      this.player.load(this.context, this.peaks);
-      this.player.seekTo(currentTime / this.getDuration());
-
+      this.createMedia();
       this.redraw();
     });
   }
 
-  loadAudio(): Promise<any> {
+  createMedia() {
 
-    const startIndex = Math.floor(this.player.getCurrentTime() / 10);
+    if (this.media) {
+      document.body.removeChild(this.media);
+    }
 
-    if (startIndex >= this.startIndex) {
+    this.media = document.createElement('audio');
+    this.media.src = this.context;
+    this.media.addEventListener('ended', () => this.finished.emit());
+
+    document.body.appendChild(this.media);
+  }
+
+  setupProgress() {
+
+    const onAudioProcess = () => {
+      if (!this.isPlaying()) {
+        return;
+      }
+
+      if (this.comment && this.comment.include_end && this.getCurrentTime() > this.comment.end_time) {
+        if (this.comment.loop)
+          this.play(this.comment);
+        else {
+          this.seekTo(this.comment.start_time);
+          this.pause();
+        }
+      }
+
+      this.drawers.forEach(drawer => drawer.progress(this.getCurrentTime() / this.getDuration()));
+
+      // Call again in the next frame
+      const requestAnimationFrame = window.requestAnimationFrame || window.webkitRequestAnimationFrame;
+      requestAnimationFrame(onAudioProcess);
+    };
+
+    this.playing.subscribe(() => onAudioProcess());
+  }
+
+  loop(): boolean {
+    return this.comment && this.comment.loop;
+  }
+
+  loadAudio(startTime: number): Promise<any> {
+
+    const startIndex = Math.floor(startTime / 10);
+
+    if (startIndex >= this.startIndex && startIndex <= this.endIndex) {
       return Promise.resolve();
     }
 
@@ -92,27 +107,17 @@ export class Player {
 
   loadChunks(startIndex: number) {
 
-    // Hard coded sample rate for test data; this could be parsed from the container
-    // instead, but for the sake of focus I've hard coded it.
-    const SECONDS_PER_SAMPLE = 1 / 44100.0;
+    const loadChunk = (index) => {
+      RestCall.getChunk(this.awsPath, this.extension, index)
+        .then(data => {
+          appendChunk(data, index);
+          this.endIndex = index;
+        });
+    };
 
-    const player = this.player;
-    const awsPath = this.awsPath;
-    const extension = this.extension;
-    const segments = Math.ceil(player.getDuration() / 10);
+    const appendChunk = (data: ArrayBuffer, index) => {
 
-    const mediaSource = this.mediaSource;
-    const sourceBuffer = this.sourceBuffer;
-
-    this.startIndex = startIndex;
-    loadChunk(startIndex);
-
-    function loadChunk(index) {
-      RestCall.getChunk(awsPath, extension, index)
-        .then(data => appendChunk(data, index));
-    }
-
-    function appendChunk(data, index) {
+      const dataCopy = data.slice(0);
 
       // Parsing the gapless metadata is unfortunately non trivial and a bit
       // messy, so we'll glaze over it here.  See appendix b if you'd like more
@@ -123,58 +128,58 @@ export class Player {
       //    frontPaddingDuration: Duration in seconds of the front padding.
       //    endPaddingDuration: Duration in seconds of the end padding.
       //
-      const gaplessMetadata = parseGaplessData(data);
+      parseGaplessData(data)
+        .then(gaplessMetadata => {
 
-      // Each appended segment must be appended relative to the next.  To avoid
-      // any overlaps we'll use the ending timestamp of the last append as the
-      // starting point for our next append or zero if we haven't appended
-      // anything yet.
-      const appendTime = index > startIndex ?
-        sourceBuffer.buffered.end(0) :
-        10 * startIndex;
+          // Each appended segment must be appended relative to the next.  To avoid
+          // any overlaps we'll use the ending timestamp of the last append as the
+          // starting point for our next append or zero if we haven't appended
+          // anything yet.
+          const appendTime = index > startIndex ?
+            this.sourceBuffer.buffered.end(0) :
+            10 * startIndex;
 
-      // The timestampOffset field essentially tells MediaSource where in the
-      // media timeline the data given to appendBuffer() should be placed.  I.e.
-      // if the timestampOffset is 1 second, the appended data will start 1
-      // second into playback.
-      //
-      // MediaSource requires that the media timeline starts from time zero, so
-      // we need to ensure that the data left after filtering by the append
-      // window starts at time zero.  We'll do this by shifting all of the
-      // padding we want to discard before our append time.
-      sourceBuffer.timestampOffset = appendTime - gaplessMetadata.frontPaddingDuration;
+          // The timestampOffset field essentially tells MediaSource where in the
+          // media timeline the data given to appendBuffer() should be placed.  I.e.
+          // if the timestampOffset is 1 second, the appended data will start 1
+          // second into playback.
+          //
+          // MediaSource requires that the media timeline starts from time zero, so
+          // we need to ensure that the data left after filtering by the append
+          // window starts at time zero.  We'll do this by shifting all of the
+          // padding we want to discard before our append time.
+          this.sourceBuffer.timestampOffset = appendTime - gaplessMetadata.frontPaddingDuration;
 
-      // Simply put, an append window allows you to trim off audio (or video)
-      // frames which fall outside of a specified window.  Here we'll use the
-      // end of our last append as the start of our append window and the end of
-      // the real audio data for this segment as the end of our append window.
-      sourceBuffer.appendWindowStart = appendTime;
-      sourceBuffer.appendWindowEnd = appendTime + gaplessMetadata.audioDuration;
+          // Simply put, an append window allows you to trim off audio (or video)
+          // frames which fall outside of a specified window.  Here we'll use the
+          // end of our last append as the start of our append window and the end of
+          // the real audio data for this segment as the end of our append window.
+          this.sourceBuffer.appendWindowStart = appendTime;
+          this.sourceBuffer.appendWindowEnd = appendTime + gaplessMetadata.audioDuration;
 
-      // When appendBuffer() completes it will fire an "updateend" event signaling
-      // that it's okay to append another segment of media. Here we'll chain the
-      // append for the next segment to the completion of our current append.
-      if (index === startIndex) {
-        sourceBuffer.addEventListener('updateend', function () {
-          if (++index < segments) {
-            loadChunk(index);
-          } else {
-            // We've loaded all available segments, so tell MediaSource there are
-            // no more buffers which will be appended.
-            mediaSource.endOfStream();
-            // player.duration = sourceBuffer.buffered.end(0);
+          // When appendBuffer() completes it will fire an "updateend" event signaling
+          // that it's okay to append another segment of media. Here we'll chain the
+          // append for the next segment to the completion of our current append.
+          if (index === startIndex) {
+            this.sourceBuffer.addEventListener('updateend', () => {
+              if (++index < segments) {
+                loadChunk(index);
+              } else {
+                // We've loaded all available segments, so tell MediaSource there are
+                // no more buffers which will be appended.
+                this.mediaSource.endOfStream();
+              }
+            });
           }
+
+          // appendBuffer() will now use the timestamp offset and append window
+          // settings to filter and timestamp the data we're appending.
+          this.sourceBuffer.appendBuffer(dataCopy);
         });
-      }
+    };
 
-      // mediaSource.addEventListener()
-
-      // appendBuffer() will now use the timestamp offset and append window
-      // settings to filter and timestamp the data we're appending.
-      sourceBuffer.appendBuffer(data);
-    }
-
-    function parseGaplessData(arrayBuffer) {
+    const parseGaplessData: (ArrayBuffer) => Promise<{audioDuration, frontPaddingDuration, endPaddingDuration}>
+      = (arrayBuffer) => {
       // Gapless data is generally within the first 4096 bytes, so limit parsing.
       const byteStr = String.fromCharCode.apply(
         null, new Uint8Array(arrayBuffer.slice(0, 4096)));
@@ -212,6 +217,7 @@ export class Player {
         xingDataIndex = byteStr.indexOf('Info');
       }
       if (xingDataIndex !== -1) {
+
         const frameCountIndex = xingDataIndex + 8;
         const frameCount = readInt(byteStr.substr(frameCountIndex, 4));
 
@@ -234,87 +240,152 @@ export class Player {
         realSamples -= frontPadding + endPadding;
       }
 
-      return {
-        audioDuration: realSamples * SECONDS_PER_SAMPLE,
-        frontPaddingDuration: frontPadding * SECONDS_PER_SAMPLE,
-        endPaddingDuration: endPadding * SECONDS_PER_SAMPLE
-      };
-    }
+      if (realSamples != 0) {
+        return Promise.resolve({
+          audioDuration: realSamples * SECONDS_PER_SAMPLE,
+          frontPaddingDuration: frontPadding * SECONDS_PER_SAMPLE,
+          endPaddingDuration: endPadding * SECONDS_PER_SAMPLE
+        });
+      } else {
+        return new Promise(resolve =>
+          new AudioContext().decodeAudioData(arrayBuffer).then(
+            audio => resolve({
+              audioDuration: audio.duration,
+              frontPaddingDuration: 0,
+              endPaddingDuration: 0
+            })
+          )
+        );
+      }
+    };
 
     // Since most MP3 encoders store the gapless metadata in binary, we'll need a
     // method for turning bytes into integers.  Note: This doesn't work for values
     // larger than 2^30 since we'll overflow the signed integer type when shifting.
-    function readInt(buffer) {
+    const readInt = (buffer) => {
       let result = buffer.charCodeAt(0);
       for (let i = 1; i < buffer.length; ++i) {
         result <<= 8;
         result += buffer.charCodeAt(i);
       }
       return result;
-    }
+    };
+
+    // Hard coded sample rate for test data; this could be parsed from the container
+    // instead, but for the sake of focus I've hard coded it.
+    const SECONDS_PER_SAMPLE = 1 / 44100.0;
+
+    const segments = Math.ceil(this.getDuration() / 10);
+
+    this.startIndex = startIndex;
+    let prevXingDataIndex;
+
+    loadChunk(startIndex);
   }
 
   unloadAudio() {
     delete this.startIndex;
     window.URL.revokeObjectURL(this.context);
     this.mediaSource = null;
-    this.player.empty();
   }
 
   play(comment?: Comment) {
 
-    this.playing.emit();
+    this.setComment(comment);
 
-    if (comment) {
-      this.seekTo(comment.start_time);
-    }
+    this.playFromStart(comment ? comment.start_time : this.getCurrentTime());
+  }
 
-    this.loadAudio().then(() => {
+  playFromStart(startTime?: number) {
 
-      this.comment = comment;
+    if (!startTime) startTime = 0;
 
-      if (!comment) {
-        this.player.play();
-      } else if (!comment.include_end) {
-        this.player.play(comment.start_time);
-      } else {
-        this.player.play(comment.start_time, comment.end_time);
-      }
-    });
+    this.seekTo(startTime)
+      .then(() => {
+        this.media.play();
+        this.playing.emit();
+      });
   }
 
   getComment() {
     return this.comment;
   }
 
-  seekTo(time: number) {
-    this.player.seekTo(time / this.getDuration());
+  setComment(comment: Comment) {
+    this.comment = comment;
+    this.drawers.forEach(drawer => {
+      if (comment && comment.include_end) {
+        drawer.highlightComment(
+          comment.start_time / this.getDuration(),
+          comment.end_time / this.getDuration()
+        );
+      } else {
+        drawer.highlightComment(0, 0);
+      }
+    });
+  }
+
+  seekTo(progress: number): Promise<void> {
+
+    return this.loadAudio(progress).then(() => {
+      this.media.currentTime = progress;
+      this.drawers.forEach(drawer => drawer.progress(progress / this.getDuration(), 0));
+    });
   }
 
   pause() {
-    this.comment = null;
-    this.player.pause();
+    this.setComment(null);
+    this.media && this.media.pause();
   }
 
   stop() {
-    this.player.stop();
+    this.pause();
     this.unloadAudio();
   }
 
   isPlaying() {
-    return this.player.isPlaying();
+    return this.media && !this.media.paused;
   }
 
   getCurrentTime() {
-    return this.player.getCurrentTime();
+    return this.media && this.media.currentTime;
   }
 
   getDuration() {
-    return this.player.getDuration();
+    return this.duration;
+  }
+
+  addWaveform(div: HTMLElement) {
+    this.createDrawer(div);
+  }
+
+  private createDrawer(div: HTMLElement) {
+
+    const drawer = new Drawer(
+      div,
+      {
+        height: 128,
+        duration: this.duration,
+        peaks: this.peaks,
+        pixelRatio: 2,
+        minPxPerSec: 20,
+        cursorColor: '#bac1da',
+        progressColor: '#b9caff',
+        waveColor: '#eef1ff',
+      }
+    );
+    this.drawers.push(drawer);
+
+    drawer.seek.subscribe(progress => {
+      this.setComment(null);
+      const isPlaying = this.isPlaying();
+      this.seekTo(progress * this.getDuration()).then(() => {
+        if (isPlaying) this.play();
+      });
+    });
   }
 
   redraw() {
-    this.player.drawBuffer();
-    this.player.drawer.progress(this.player.backend.getPlayedPercents(), this.player.getProgressStart());
+    this.drawers.forEach(drawer => drawer.drawBuffer());
   }
 }

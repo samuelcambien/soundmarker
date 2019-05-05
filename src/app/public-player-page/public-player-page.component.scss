@@ -91,8 +91,8 @@
 
 
 .title p {
-		max-width: 300px;
-	overflow: hidden;
+  max-width: 300px;
+  overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
   text-align: left;
@@ -167,7 +167,7 @@
 
 
 @media (max-width: 576px) {
-	
+
 	.title h4 {
 	margin-right: 10px;
 	}
@@ -204,7 +204,7 @@
 	.title {
 		max-width: 100% !important;
 	}
-	
+
 	.comment-sort {
 		margin-left: auto;
 	}
@@ -216,11 +216,11 @@
 
 .search-box {
 	width: 100%;
-	
+
 }
 
-   
-	
+
+
 }
 
 .phone-popup-row {
@@ -288,7 +288,7 @@
 
 .popup-play-btn {
 	margin-top: -9px;
-	
+
 
 }
 
@@ -363,7 +363,7 @@
     max-height: 29px !important;
 }
 
-.ng-select.custom .ng-control  {            
+.ng-select.custom .ng-control  {
      height: 29px !important;
     max-height: 29px !important;
     background-color: #eef1ff !important;
@@ -500,7 +500,7 @@ margin-top: 4px;
 	max-width: 76%;
 }
 .title span {
- 
+
   white-space: nowrap;
   transform: translateX(0);
   transition: 1s;
@@ -523,7 +523,7 @@ margin-top: 4px;
 }
 
 .unselectable {
-		-webkit-user-select: none; /* Safari */        
+		-webkit-user-select: none; /* Safari */
 -moz-user-select: none; /* Firefox */
 -ms-user-select: none; /* IE10+/Edge */
 user-select: none; /* Standard */

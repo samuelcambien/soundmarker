@@ -33,10 +33,8 @@ export class PublicTrackPreviewComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.track.versions.then(versions => {
-      this.version = versions[0];
-      this.version.files.then(files => this.files = files);
-    });
+    this.version = this.track.versions[0];
+    this.files = this.version.files;
     this.trackTitleDOM.nativeElement.setAttribute("style", "text-overflow: ellipsis");
   }
 
@@ -68,8 +66,8 @@ export class PublicTrackPreviewComponent implements OnInit {
 
   private getCommentsAndReplies(): Comment[] {
 
-    return this.track && this.track.comments ?
-      this.track.comments.reduce(
+    return this.track && this.version.comments ?
+      this.version.comments.reduce(
         (commentsAndReplies, comment) =>
           Array.prototype.concat(commentsAndReplies, comment, comment.replies),
         []
@@ -78,7 +76,7 @@ export class PublicTrackPreviewComponent implements OnInit {
 
   getCommentCount() {
 
-    return this.track && this.track.comments && this.track.comments.length;
+    return this.track && this.version.comments && this.version.comments.length;
   }
 
   getLastUpdated() {
