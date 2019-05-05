@@ -27,6 +27,7 @@ export class PublicPageComponent implements OnInit {
   @ViewChild('sma') sma: ElementRef;
 
   smaId;
+  nextSmaId;
   smaClass = window.innerWidth > 577 ? "sma hide-phone" : "phone-sma show-phone  rounded-lg border-0";
 
   adExposureTime = 45;        // in seconds
@@ -104,7 +105,7 @@ export class PublicPageComponent implements OnInit {
   private loadNextAd(): Promise<any> {
     return RestCall.getRandSma(this.smaId)
       .then(response => {this.hiddenIframe = this.createIframe(response["html"]);
-                                  this.smaId=response["sma_id"];
+                                  this.nextSmaId=response["sma_id"];
               }
       );
   }
@@ -126,6 +127,7 @@ export class PublicPageComponent implements OnInit {
       RestCall.logSmaImpression(this.smaId).then(()=>{
         iframe.style.animation = 'shown-sma ' + this.adFadeInTime + ' forwards';
         this.shownIframe = this.hiddenIframe;
+        this.smaId = this.nextSmaId;
         this.hiddenIframe = null;
         });
       }
