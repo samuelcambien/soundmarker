@@ -350,7 +350,7 @@ export class PublicTrackPlayerComponent implements OnInit, AfterViewChecked, OnC
   scrollInitialWait: number= 1250;
   scrollWaitAtEnd: number= 50;
   overflowTitle: boolean= false;
-  scrollspeed = 0.015;
+  scrollFPS = 45;
 
   // Stop scrolling and reset the track title to it's start position.
   clearScroll() {
@@ -383,33 +383,24 @@ export class PublicTrackPlayerComponent implements OnInit, AfterViewChecked, OnC
 
       this.trackTitleDOM.nativeElement.setAttribute("style", "text-overflow: none");
       this.trackTitleDOM.nativeElement.removeEventListener("click", this.autoScroll);
-      let end = this.trackTitleDOM.nativeElement.scrollWidth - this.trackTitleDOM.nativeElement.offsetWidth + this.scrollWaitAtEnd;
-      let duration = end/this.scrollspeed;
+      let titleScrollDiv = this.trackTitleDOM.nativeElement.scrollWidth - this.trackTitleDOM.nativeElement.offsetWidth + this.scrollWaitAtEnd;
 
-      // Easing function for scrolling back and forth.
-      // t = current time or position
-      // c = change or delta of value
-      // d = duration / total time or position
-      let easing = (t, c, d) => {
-        return 1-Math.abs(1-c*t/d);
-      };
-
-      let startTime;
-      if (window.performance && window.performance.now) startTime = performance.now();
-      else if (Date.now)                                startTime = Date.now();
-      else                                              startTime = new Date().getTime();
-
-      let scrollLoop = (time?) => {
-        let t = (!time ? 0 : time - startTime);
-        let factor = easing(t, 2, duration);
-        this.trackTitleDOM.nativeElement.scrollLeft =  end * factor;
-        if (t < duration && this.launchTitleScroll)
+      let i = 1;
+      let scrollLoop = () => {
+        setTimeout(()=>{
+        titleScrollDiv -= 1;
+        this.trackTitleDOM.nativeElement.scrollLeft +=  i;
+        if (titleScrollDiv > 0 && this.launchTitleScroll)
           requestAnimationFrame(scrollLoop);
-        else if (t>duration){
+        else if (titleScrollDiv === 0 && i === 1){
+          titleScrollDiv = this.trackTitleDOM.nativeElement.scrollLeft;
+          i=-i;
+          requestAnimationFrame(scrollLoop);}
+        else{
           this.trackTitleDOM.nativeElement.setAttribute("style", "text-overflow: ellipsis");
           this.trackTitleDOM.nativeElement.addEventListener("click", this.autoScroll);
           this.overflowTitle = true;
-        }
+        }},1000/this.scrollFPS)
       };
       scrollLoop();
   };
