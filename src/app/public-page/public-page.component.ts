@@ -57,7 +57,7 @@ export class PublicPageComponent implements OnInit {
     if (!this.localStorageService.termsAccepted()) {
       this.openIntroduction();
     }
-    this.smaId = 4;
+    this.smaId = 1;
 
     //////////////////        Advertisement refresh algorithm.             //////////////////
     //  The idea is that the ad only refreshes if the web page is active in the browser or
@@ -125,10 +125,10 @@ export class PublicPageComponent implements OnInit {
   // Fade in iframe
   private showIframe(iframe){
     if(iframe) {
+      this.smaId = this.nextSmaId;
       RestCall.logSmaImpression(this.smaId).then(()=>{
         iframe.style.animation = 'shown-sma ' + this.adFadeInTime + ' forwards';
         this.shownIframe = this.hiddenIframe;
-        this.smaId = this.nextSmaId;
         this.hiddenIframe = null;
         });
       }
