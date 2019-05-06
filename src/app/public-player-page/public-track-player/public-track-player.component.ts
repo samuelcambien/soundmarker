@@ -1,11 +1,10 @@
 import {
-  AfterViewChecked,
+  AfterViewChecked, AfterViewInit,
   ChangeDetectorRef,
   Component,
   ElementRef,
-  EventEmitter,
-  Input,
-  NgZone,
+  EventEmitter, HostListener,
+  Input, OnChanges,
   OnInit,
   Output,
   ViewChild
@@ -24,15 +23,16 @@ import {LocalStorageService} from "../../services/local-storage.service";
 @Component({
   selector: 'app-public-track-player',
   templateUrl: './public-track-player.component.html',
-  styleUrls: ['./public-track-player.component.scss']
+  styleUrls: ['./public-track-player.component.scss'],
 })
-export class PublicTrackPlayerComponent implements OnInit, AfterViewChecked {
+export class PublicTrackPlayerComponent implements OnInit, AfterViewChecked, OnChanges  {
 
   static MINIMAL_INTERVAL: number = 1;
 
   @Input() track: Track;
   @Input() enableOverview: boolean;
   @Input() expired: boolean = false;
+  @Input() launchTitleScroll: boolean;
 
   @Output() error = new EventEmitter();
   @Output() overview = new EventEmitter();
@@ -40,7 +40,8 @@ export class PublicTrackPlayerComponent implements OnInit, AfterViewChecked {
   @ViewChild('waveform') waveform: ElementRef;
   @ViewChild('startTime') startTime: ElementRef;
   @ViewChild('endTime') endTime: ElementRef;
-  @ViewChild('phonesearch') phonesearch: ElementRef;
+  @ViewChild('phoneSearchInput') phoneSearchInput: ElementRef;
+  @ViewChild('trackTitle') trackTitleDOM: ElementRef;
 
   commentSorters: CommentSorter[] = [
     CommentSorter.MOST_RECENT,
@@ -60,8 +61,6 @@ export class PublicTrackPlayerComponent implements OnInit, AfterViewChecked {
   endPos;
 
   version: Version;
-
-  phoneSearch: boolean;
   phoneOrder: boolean;
 
   peaks;
@@ -73,6 +72,7 @@ export class PublicTrackPlayerComponent implements OnInit, AfterViewChecked {
     private projectService: ProjectService,
     private cdRef: ChangeDetectorRef,
   ) {
+
   }
 
   ngOnInit() {
@@ -94,7 +94,9 @@ export class PublicTrackPlayerComponent implements OnInit, AfterViewChecked {
             this._progress = this.getCurrentTime();
           }, 1)
         );
-    }
+     }
+
+    this.trackTitleDOM.nativeElement.setAttribute("style", "text-overflow: ellipsis");
   }
 
   private getPlayerWidth(): number {
@@ -169,8 +171,9 @@ export class PublicTrackPlayerComponent implements OnInit, AfterViewChecked {
     return this.getMatchingComments().sort(this.currentSorter.comparator);
   }
 
-  ngAfterViewChecked() {
 
+
+  ngAfterViewChecked() {
     this.cdRef.detectChanges();
   }
 
@@ -243,23 +246,34 @@ export class PublicTrackPlayerComponent implements OnInit, AfterViewChecked {
   }
 
   download() {
-
     window.open(
       this.files
         .filter(file => file.identifier == 1)
         .map(file => file.aws_path + '.' + file.extension)
         [0]
-    );
+    );}
+
+  showPhoneSearch() {
+    document.getElementById("phonesearch").setAttribute("style","display:inline-block");
+    this.phoneSearchInput.nativeElement.focus();
   }
 
-  triggerPhoneSearch() {
-    this.phoneSearch = !this.phoneSearch;
-    if (this.phoneSearch) {
-      setTimeout(() => this.phonesearch.nativeElement.focus(), 3);
+  clearSearch(){
+    this.search = null;
+    this.phoneSearchInput.nativeElement.focus();
+  }
+
+  hidePhoneSearch(event) {
+    if(event.relatedTarget && (event.relatedTarget.getAttribute('id') === "phonesearch")){
+      this.phoneSearchInput.nativeElement.focus(); //in case the search field is cleared or the search icon is clicker: re-focus on the search field.
+    }
+    else if(this.search == null) {
+      document.getElementById("phonesearch").setAttribute("style", "display:none");
     }
   }
 
   goToOverview() {
+    this.clearScroll();
     this.overview.emit();
   }
 
@@ -329,4 +343,67 @@ export class PublicTrackPlayerComponent implements OnInit, AfterViewChecked {
   playerIsReady(): boolean {
     return this.playerService.playerReady(this.track.track_id);
   }
+
+  ///////////////////////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////  SCROLLING OF LONG TITLES ////////////////////////////////////
+
+  scrollInitialWait: number= 1250;
+  scrollWaitAtEnd: number= 50;
+  overflowTitle: boolean= false;
+  scrollFPS = 45;
+
+  // Stop scrolling and reset the track title to it's start position.
+  clearScroll() {
+    this.trackTitleDOM.nativeElement.scrollLeft = 0;
+    this.trackTitleDOM.nativeElement.setAttribute("style", "text-overflow: ellipsis");
+    this.trackTitleDOM.nativeElement.removeEventListener("click", this.autoScroll);
+    this.overflowTitle = false;
+  }
+
+  // Hide the phonesearch in case the screen is resized while it was open.
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    if (window.innerWidth > 577){
+      document.getElementById("phonesearch").setAttribute("style","display:none");
+    }
+  }
+
+  // Detect changes of input variables on the component.
+  // Launches auto scrolling when opening a track.
+  ngOnChanges(changes){
+    if(this.launchTitleScroll) {
+      setTimeout(() => this.autoScroll(), this.scrollInitialWait);
+    }
+  }
+
+  //Function that does the actual scrolling back and forth of too long titles.
+  autoScroll = () => {
+    if(this.trackTitleDOM.nativeElement.offsetWidth < this.trackTitleDOM.nativeElement.scrollWidth){ //Only run this function if there is actually a title which overflows the div.
+      this.overflowTitle=false;
+
+      this.trackTitleDOM.nativeElement.setAttribute("style", "text-overflow: none");
+      this.trackTitleDOM.nativeElement.removeEventListener("click", this.autoScroll);
+      let titleScrollDiv = this.trackTitleDOM.nativeElement.scrollWidth - this.trackTitleDOM.nativeElement.offsetWidth + this.scrollWaitAtEnd;
+
+      let i = 1;
+      let scrollLoop = () => {
+        setTimeout(()=>{
+        titleScrollDiv -= 1;
+        this.trackTitleDOM.nativeElement.scrollLeft +=  i;
+        if (titleScrollDiv > 0 && this.launchTitleScroll)
+          requestAnimationFrame(scrollLoop);
+        else if (titleScrollDiv === 0 && i === 1){
+          titleScrollDiv = this.trackTitleDOM.nativeElement.scrollLeft;
+          i=-i;
+          requestAnimationFrame(scrollLoop);}
+        else{
+          this.trackTitleDOM.nativeElement.setAttribute("style", "text-overflow: ellipsis");
+          this.trackTitleDOM.nativeElement.addEventListener("click", this.autoScroll);
+          this.overflowTitle = true;
+        }},1000/this.scrollFPS)
+      };
+      scrollLoop();
+  };
+  }
+  ///////////////////////////////////////////////////////////////////////////////////////////////////
 }

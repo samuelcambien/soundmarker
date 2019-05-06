@@ -171,21 +171,21 @@ a:visited {
 }
 .tooltip {
 	font-family: 'sofia-regular';
-	font-size: 10pt !important;
-	animation-name: delayedFadeIn !important;
-	animation-duration: 1s !important;
+	font-size: 10pt;
+	animation-name: delayedFadeIn;
+	animation-duration: 1s ;
 	/* Adjust this duration */
 }
 @Keyframes delayedFadeIn {
 	0% {
-		opacity: 0 !important;
+		opacity: 0;
 	}
 	75% {
-		opacity: 0 !important;
+		opacity: 0;
 	}
 	/* Set this to 99% for no fade-in. */
 	100% {
-		opacity: 1 !important;
+		opacity: 1;
 	}
 }
 @media (max-width: 576px) {
@@ -795,6 +795,11 @@ button:visited {
 	padding-bottom: 3px;
 	height: 29px;
 }
+
+.free-upload:disabled  {
+  opacity: 0.2;
+}
+
 .btn-group .btn + .btn,
 .btn-group .btn + .btn-group,
 .btn-group .btn-group + .btn,
@@ -893,11 +898,21 @@ button:visited {
 	border-radius: 0.2rem !important;
 	font-family: 'sofia-regular';
 	width: 40px !important;
-	min-width: 110px !important;
+	min-width: 110px;
 	text-decoration: none !important;
 	outline: none !important;
 	box-shadow: none !important;
 	cursor: pointer;
+}
+.ng-dropdown-panel.ng-select-top {
+	border: none;
+}
+#notify .ng-select.custom .ng-select-container,
+#notify .ng-select.custom.ng-select-single .ng-select-container {
+	background-color: #7397ff !important;
+	color: #ffffff;
+	min-width: 126px;
+	width: 100% !important;
 }
 .ng-value-container {
 	cursor: pointer;
@@ -922,6 +937,15 @@ button:visited {
 	border-width: 5px 5px 2.5px;
 	// border-color: #7397ff !important;
 
+}
+#notify .ng-select.ng-select-opened>.ng-select-container .ng-arrow {
+	order-bottom-color: #ffffff !important;
+}
+#notify .ng-arrow {
+	border-color: #ffffff transparent transparent !important;
+	border-style: solid !important;
+	border-width: 5px 5px 2.5px;
+	// border-color: #7397ff !important;
 }
 .ng-dropdown-panel {
 	box-shadow: 0 10px 30px rgba(115, 150, 255, .15) !important;
@@ -956,21 +980,25 @@ button:visited {
 // tags
  #tag-input-email {
 	padding: 0px !important;
-	max-height: 38px !important;
+	
 	overflow: auto;
-	overflow-y: scroll;
+	overflow-y: hidden;
 	overflow-x: hidden;
-	height: 38px !important;
+	min-height: 38px !important;
+	padding-bottom: 5px !important;
+	
 }
 .ng2-tag-input__text-input {
 	font-family: 'sofia-regular' !important;
 	padding: 0px !important;
 	color: #717db0 !important;
 	line-height: 1.5 !important;
-	margin-bottom: -1px;
+	margin-bottom: -6px !important;
+	
 	background: transparent;
 	margin-top: 5px;
 	height: 30px !important;
+	width: 100% !important;
 }
 .tag__text {
 	font-family: 'sofia-regular' !important;
@@ -982,14 +1010,22 @@ button:visited {
 delete-icon svg {
 	height: 12px !important;
 }
-.ng2-tags-container {} .ng2-tag-input {
+.ng2-tags-container {
+	
+	
+} 
+.ng2-tag-input {
 	border-bottom: none !important;
 	margin: 0px !important;
 	padding: 0px !important;
 	background: transparent !important;
+	
 }
 .ng-tns-c16-0 {
 	background: transparent !important;
+}
+tag-input-form.ng-tns-c16-1 {
+	width: 100%;
 }
 .tag-wrapper delete-icon {
 	margin-top: -21px !important;
@@ -1009,7 +1045,8 @@ delete-icon svg {
 .ng-trigger {
 	max-height: 19px !important;
 	padding-top: 0px !important;
-	margin-top: 4px !important;
+	margin-top: 6px !important;
+	margin-right: 6px !important;
 	margin-bottom: 0px !important;
 	background: #eef1ff !important;
 	box-shadow: none !important;
@@ -1020,7 +1057,7 @@ delete-icon svg {
 	border: 1px solid #eef1ff !important;
 	padding-left: 4px !important;
 	padding-right: 1px !important;
-	max-width: 180px !important;
+	max-width: 220px !important;
 }
 .ng2-tag-input__text-input::-webkit-input-placeholder {
 	color: #bac1da !important;

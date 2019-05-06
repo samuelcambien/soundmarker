@@ -1,6 +1,7 @@
 <app-public-page
   [message]="message"
   [expiry_date]="expiry_date"
+  [expired]="expired"
   [sender]="sender"
   [project_id]="project_id"
   [error]="error"
@@ -34,6 +35,7 @@
       [track]="track"
       [enableOverview]="project?.tracks?.length > 1"
       [ngbCollapse]="getActiveTrack() != track"
+      [launchTitleScroll]="getActiveTrack() == track"
       [expired]="expired && !commentsExpired"
       (overview)="setActiveTrack(null)"
       (error)="error = $event"

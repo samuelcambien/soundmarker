@@ -48,6 +48,7 @@ export class PublicPlayerPageComponent implements OnInit {
     };
   }
 
+
   private loadProjectInfo(projectHash: string) {
 
     RestCall.getProject(projectHash)
@@ -163,8 +164,12 @@ export class PublicPlayerPageComponent implements OnInit {
   }
 
   getMessage(project: Project, version: Version): Message {
+    let track = "track";
+    if(project.tracks.length >1){
+       track = "tracks";
+    }
     return new Message(
-      project.tracks.length + " tracks added" + (project.email_from ? " by " + project.email_from : ""),
+      project.tracks.length + " " + track + " added" + (project.email_from ? " by " + project.email_from : ""),
       version.notes,
       false,
       !this.expired

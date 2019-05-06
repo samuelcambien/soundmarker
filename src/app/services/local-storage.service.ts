@@ -19,6 +19,10 @@ export class LocalStorageService {
     localStorage.setItem("smrk_from", emailFrom);
   }
 
+  public storeNotifyID(notifyID: string):void{
+    localStorage.setItem("smrk_nfyID",  notifyID)
+  }
+
   public getEmailFrom(): string {
     return localStorage.getItem("smrk_from") != null ? localStorage.getItem("smrk_from") : "";
   }
@@ -45,6 +49,10 @@ export class LocalStorageService {
 
   public getAllowDownloads(): boolean {
     return localStorage.getItem("smrk_downl") === "true";
+  }
+
+  public getNotificationID(): string {
+    return localStorage.getItem("smrk_nfyID") != null ? localStorage.getItem("smrk_nfyID") : "2";
   }
 
   public storeCommentName(commentName: string): void {

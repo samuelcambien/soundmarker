@@ -25,8 +25,9 @@ import {DurationDirective} from './formatting/duration.directive';
 import {DurationFormatterPipe} from './formatting/duration-formatter.pipe';
 import {NgbActiveModal, NgbModule} from "@ng-bootstrap/ng-bootstrap";
 import {TimeInputComponent} from './comments/time-input/time-input.component';
+import {TrimValueAccessorModule} from 'ng-trim-value-accessor';
 import {FileUploadModule} from "./ng2-file-upload";
-import {TagInputModule} from 'ngx-chips';
+import {TagInputModule} from './ngx-chips/modules';
 
 import {PublicTrackPreviewComponent} from './public-player-page/public-track-preview/public-track-preview.component';
 import {PublicTrackPlayerComponent} from './public-player-page/public-track-player/public-track-player.component';
@@ -53,6 +54,21 @@ import { ProjectExpiredComponent } from './error/project-expired/project-expired
 import { PublicPagenotfoundPageComponent } from './public-pagenotfound-page/public-pagenotfound-page.component';
 import { ExpiredProjectComponent } from './error/expired-project/expired-project.component';
 import { DropdownToggleComponent } from './dropdown-toggle/dropdown-toggle.component';
+import { ProDashboardTopbarComponent } from './pro/pro-dashboard/pro-dashboard-topbar/pro-dashboard-topbar.component';
+import { ProDashboardSidebarComponent } from './pro/pro-dashboard/pro-dashboard-sidebar/pro-dashboard-sidebar.component';
+import { ProDashboardSidebarItemProjectComponent } from './pro/pro-dashboard/pro-dashboard-sidebar/pro-dashboard-sidebar-item-project/pro-dashboard-sidebar-item-project.component';
+import { ProDashboardSidebarItemTransferComponent } from './pro/pro-dashboard/pro-dashboard-sidebar/pro-dashboard-sidebar-item-transfer/pro-dashboard-sidebar-item-transfer.component';
+import { ProBoardComponent } from './pro/pro-board/pro-board.component';
+import { ProDashboardComponent } from './pro/pro-dashboard/pro-dashboard.component';
+import { ProBoardUploadComponent } from './pro/pro-board/pro-board-upload/pro-board-upload.component';
+import { ProBoardProjectsComponent } from './pro/pro-board/pro-board-projects/pro-board-projects.component';
+import { ProBoardProjectsProjectComponent } from './pro/pro-board/pro-board-projects/pro-board-projects-project/pro-board-projects-project.component';
+import { ProBoardProjectsTrackComponent } from './pro/pro-board/pro-board-projects/pro-board-projects-track/pro-board-projects-track.component';
+import { ProBoardTransfersComponent } from './pro/pro-board/pro-board-transfers/pro-board-transfers.component';
+import { ProBoardTransfersTransferComponent } from './pro/pro-board/pro-board-transfers/pro-board-transfers-transfer/pro-board-transfers-transfer.component';
+import { ProBoardTransferTrackComponent } from './pro/pro-board/pro-board-transfers/pro-board-transfer-track/pro-board-transfer-track.component';
+import { ProComponent } from './pro/pro.component';
+
 
 
 @NgModule({
@@ -97,9 +113,24 @@ import { DropdownToggleComponent } from './dropdown-toggle/dropdown-toggle.compo
     ProjectExpiredComponent,
     PublicPagenotfoundPageComponent,
     ExpiredProjectComponent,
-    DropdownToggleComponent
+    DropdownToggleComponent,
+    ProDashboardTopbarComponent,
+    ProDashboardSidebarComponent,
+    ProDashboardSidebarItemProjectComponent,
+    ProDashboardSidebarItemTransferComponent,
+    ProBoardComponent,
+    ProDashboardComponent,
+    ProBoardUploadComponent,
+    ProBoardProjectsComponent,
+    ProBoardProjectsProjectComponent,
+    ProBoardProjectsTrackComponent,
+    ProBoardTransfersComponent,
+    ProBoardTransfersTransferComponent,
+    ProBoardTransferTrackComponent,
+    ProComponent
   ],
   imports: [
+
     TagInputModule,
     FileUploadModule,
     NgSelectModule,
@@ -110,8 +141,8 @@ import { DropdownToggleComponent } from './dropdown-toggle/dropdown-toggle.compo
     BrowserModule,
     BrowserAnimationsModule,
     ClipboardModule,
+    TrimValueAccessorModule,
     routing,
-
   ],
   providers: [
     NgbActiveModal

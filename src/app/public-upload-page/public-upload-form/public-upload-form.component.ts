@@ -12,12 +12,10 @@ import {
 import {FileItem, FileUploader} from '../../ng2-file-upload';
 import {RestCall} from "../../rest/rest-call";
 import {NgbTooltip} from '@ng-bootstrap/ng-bootstrap';
-import {NgControl, Validators} from '@angular/forms';
+import {FormControl, NgControl, Validators} from '@angular/forms';
 import {Utils} from "../../app.component";
 import {LocalStorageService} from "../../services/local-storage.service";
 import {PublicUploadPageComponent} from "../public-upload-page.component";
-
-declare var AudioContext: any, webkitAudioContext: any;
 
 @Component({
   selector: 'app-public-upload-form',
@@ -31,7 +29,6 @@ export class PublicUploadFormComponent implements OnInit {
   email_from: string = this.localStorageService.getEmailFrom();
   email_to: string[];
 
-  sharemode: "email" | "link" = "email";
   expiration: "1week" | "1month" = "1week";
   downloadable: boolean = false;
 
@@ -39,21 +36,20 @@ export class PublicUploadFormComponent implements OnInit {
   player;
 
   @Input() uploader: FileUploader;
+  @Input() queueSizeMargin;
   @Input() tryAgain: EventEmitter<any>;
 
   @Output() uploading = new EventEmitter();
   @Output() finished = new EventEmitter();
   @Output() link = new EventEmitter<string>();
   @Output() period = new EventEmitter<string>();
+  @Output() removedFileSize = new EventEmitter<number>();
   @Output() error = new EventEmitter();
   @Output() form = new EventEmitter();
 
   @ViewChild('notes_element') notes_element: ElementRef;
   @ViewChild('ft') files_tooltip: NgbTooltip;
 
-  tracks_left = () => {
-    return this.uploader.options.queueLimit - this.uploader.queue.length
-  };
 
   onSubmit() {
     this.uploader.progress = 0;
@@ -67,13 +63,11 @@ export class PublicUploadFormComponent implements OnInit {
             this.processTrack(project_id, track)
           )
         ).then(() => {
-              if (this.sharemode === 'email') {
+                if(this.notifyID != "0")  RestCall.subscribe(project_id, this.email_from, this.notifyID);
                 return RestCall.shareProject(project_id, this.expiration, this.notes, this.email_from, this.email_to)
-              } else {
-                return RestCall.shareProject(project_id, this.expiration, this.notes)
-              }
             }
-        ).then(response => {
+        ).
+        then(response => {
           this.finished.emit();
           this.clearForm(true);
           this.link.emit(response["project_hash"]);
@@ -95,7 +89,7 @@ export class PublicUploadFormComponent implements OnInit {
     return RestCall.createNewTrack(projectId, title)
       .then(response =>
         RestCall.createNewVersion(
-          response["track_id"], this.notes_element.nativeElement.value, this.downloadable ? "1" : "0"
+          response["track_id"], this.notes_element.nativeElement.value, this.downloadable ? "0" : "1"
         )
       ).then(version => {
         let versionId = version["version_id"];
@@ -144,22 +138,26 @@ export class PublicUploadFormComponent implements OnInit {
     }
   }
 
+  notifications= [{id: '1', label: 'Notify daily'}, {id: '2', label: 'Notify directly'},{id: '0', label: 'Don\'t notify'}];
+  notifyID;
+
   ngOnInit(): void {
     // wave.init({
     //   container: canvas
     // });
     // wave.loadDecodedBuffer(buffer);
+    this.notifyID =  this.localStorageService.getNotificationID();
     this.uploader.onWhenAddingFileFailed = (item, filter) => {
       let message = '';
       switch (filter.name) {
-        case 'queueLimit':
-          message = 'Max of ' + this.uploader.options.queueLimit + ' tracks exceeded. Not all tracks were added.';
-          break;
         case 'fileSize':
-          message = "One or more tracks exceeded the limit of 500MB per track."
+          message = "You exceeded the limit of 2 GB."
           break;
         case 'onlyAudio':
-          message = "One or more files are not supported and were not added."
+          message = "One or more files are not supported and were not added.";
+          break;
+        case 'checkSizeLimit':
+          message = "You exceeded the limit of 2 GB.";
           break;
         default:
           message = "Something went wrong, please try again.";
@@ -181,15 +179,20 @@ export class PublicUploadFormComponent implements OnInit {
   }
 
   private storePreferences() {
-    if (this.sharemode == "email")
-      this.localStorageService.storeEmailFrom(this.email_from);
-    this.localStorageService.storeShareMode(this.sharemode);
+    this.localStorageService.storeEmailFrom(this.email_from);
     this.localStorageService.storeAllowDownloads(this.downloadable);
+    this.localStorageService.storeNotifyID(this.notifyID);
   }
 
   getAcceptedFileTypes() {
     return PublicUploadPageComponent.ACCEPTED_FILE_TYPES;
   }
+
+  removeFromQueue(item){
+    this.uploader.removeFromQueue(item);
+    this.removedFileSize.emit(item.file.size);
+  }
+
 }
 
 @Directive({

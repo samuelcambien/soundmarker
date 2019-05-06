@@ -11,6 +11,7 @@
 	 top:0px;
 	 left: 0px;
 	 padding: 10px;
+    display: none;
 }
 
 .audio-wave {
@@ -99,12 +100,13 @@
 
 
 .clear-search {
+
 	position: relative;
 	top: -27px;
-	right: 6px;
+	right: 1px;
 	float: right;
-	width: 16px;
-	height: 16px;
+	width: 21px;
+	height: 21px;
 	cursor: pointer;
 	color: #bac1da;
 }
@@ -165,7 +167,7 @@
 }
 
 
-@media (max-width: 576px) {
+@media (max-width: 575.98px) {
 	
 	.title h4 {
 	margin-right: 10px;
@@ -511,11 +513,14 @@ margin-top: 4px;
 .title h4 {
 	margin-bottom: 0px;
 	color: #7397FF;
-		max-width: 100%;
+  max-width: 100%;
 	overflow: hidden;
-  text-overflow: ellipsis;
   white-space: nowrap;
   text-align: left;
+}
+
+.overflowTitle:hover{
+  cursor: pointer;
 }
 
 .title p {
@@ -523,10 +528,10 @@ margin-top: 4px;
 }
 
 .unselectable {
-		-webkit-user-select: none; /* Safari */        
--moz-user-select: none; /* Firefox */
--ms-user-select: none; /* IE10+/Edge */
-user-select: none; /* Standard */
+  -webkit-user-select: none; /* Safari */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* IE10+/Edge */
+  user-select: none; /* Standard */
 }
 
 .icon-action {

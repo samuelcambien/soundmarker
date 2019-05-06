@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
 import {Track} from "../../model/track";
 import {saveAs} from 'file-saver/FileSaver';
 import {animate, transition, trigger} from "@angular/animations";
@@ -24,6 +24,8 @@ export class PublicTrackPreviewComponent implements OnInit {
   @Input() expired: boolean;
   @Output() selected = new EventEmitter<Track>();
 
+  @ViewChild('trackTitle') trackTitleDOM: ElementRef;
+
   version: Version;
   private files: File[];
 
@@ -35,6 +37,7 @@ export class PublicTrackPreviewComponent implements OnInit {
       this.version = versions[0];
       this.version.files.then(files => this.files = files);
     });
+    this.trackTitleDOM.nativeElement.setAttribute("style", "text-overflow: ellipsis");
   }
 
   play() {
