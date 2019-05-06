@@ -44,7 +44,7 @@
 
     # Prefer .php over .html
     DirectoryIndex index.php index.html index.shtml index.htm Index.html Index.htm Index.shtml default.htm Default.htm default.html Default.html default.shtml Default.shtml page1.html index.pl index.cgi index.php3 index.phtml home.htm home.html home.shtml index.wml index.pcgi quickstart.html
-    Header set Access-Control-Allow-Origin "http://192.168.2.122:9000"
+    Header set Access-Control-Allow-Origin "http://localhost:4200"
 </IfModule>
 
 # password protect single file
