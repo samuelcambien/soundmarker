@@ -25,10 +25,26 @@ export class ProjectService {
       .then((project: Project) => {
         this.setActiveProject(project);
 
+        if (!this.isActive(project)) {
+          return Promise.resolve();
+        }
+
         return Utils.promiseSequential(
           project.tracks.map(track => () => this.loadVersions(track))
         );
       });
+  }
+
+  public isActive(project: Project) {
+    return project.status == "active";
+  }
+
+  public getExpiryDate(project: Project) {
+    return project.expiration.substr(0, 10);
+  }
+
+  public areCommentsActive(project: Project) {
+    return project.status != "expired";
   }
 
   private loadVersions(track: Track): Promise<void> {

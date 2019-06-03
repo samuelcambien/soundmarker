@@ -129,9 +129,7 @@ export class RestCall {
 
 export class Endpoints {
 
-  private static MOCK: string = "http://localhost:3000";
-
-private static BACKEND: string = "http://localhost";
+  private static BACKEND: string = "http://localhost";
 
   private static DATA: string = Endpoints.BACKEND;
 
@@ -149,8 +147,6 @@ private static BACKEND: string = "http://localhost";
 
   public static PROJECT_NEW: string = Endpoints.BACKEND + "/project/new";
 
-  public static PROJECT_TRACKS: string = Endpoints.BACKEND + "/project/tracks";
-
   public static TRACK: string = Endpoints.BACKEND + "/track";
 
   public static TRACK_NEW: string = Endpoints.TRACK + "/new";
@@ -159,15 +155,11 @@ private static BACKEND: string = "http://localhost";
 
   public static VERSION_NEW: string = Endpoints.VERSION;
 
-  public static PROJECT_URL: string = Endpoints.PROJECT + "/url";
-
   public static COMMENTS: string = Endpoints.TRACK + "/version/comments";
 
   public static COMMENT: string = Endpoints.TRACK + "/version/comment";
 
   public static COMMENT_DELETE: string = Endpoints.TRACK + "/version/delete/comment";
-
-  public static REPLIES: string = Endpoints.COMMENTS + "/replies";
 }
 
 export class Request {
@@ -252,18 +244,18 @@ export class Request {
         endpoint += "/" + entry;
       }
 
-      // if (parameters.cache && endpoint in Request.xhrCache) {
-      //
-      //   if (Request.xhrCache[endpoint] === 'pending') {
-      //     setTimeout(() => {
-      //       resolve(Request.get(endpoint))
-      //     }, 1000);
-      //   } else {
-      //     resolve(Request.xhrCache[endpoint]);
-      //   }
-      //
-      //   return;
-      // }
+      if (parameters.cache && endpoint in Request.xhrCache) {
+
+        if (Request.xhrCache[endpoint] === 'pending') {
+          setTimeout(() => {
+            resolve(Request.get(endpoint))
+          }, 1000);
+        } else {
+          resolve(Request.xhrCache[endpoint]);
+        }
+
+        return;
+      }
 
       Request.xhrCache[endpoint] = 'pending';
 

@@ -60,18 +60,6 @@ export class PublicPlayerPageComponent implements OnInit {
     );
   }
 
-  private isActive() {
-    return this.getProject().status == "active";
-  }
-
-  private getExpiryDate() {
-    return this.getProject().expiration.substr(0, 10);
-  }
-
-  private areCommentsActive() {
-    return this.getProject().status != "expired";
-  }
-
   getActiveTrack(): Observable<Track> {
     return this.projectService.getActiveTrack();
   }
@@ -119,13 +107,13 @@ export class PublicPlayerPageComponent implements OnInit {
       return;
     }
 
-    // if (!this.isActive()) {
-    //   this.expired = true;
-    //   if (!this.areCommentsActive()) {
-    //     this.commentsExpired = true;
-    //   }
-    //   this.message = null;
-    // }
+    if (!this.projectService.isActive(this.project)) {
+      this.expired = true;
+      if (!this.projectService.areCommentsActive(this.project)) {
+        this.commentsExpired = true;
+      }
+      this.message = null;
+    }
 
     this.expiry_date = this.project.expiration.substr(0, 10);
 
