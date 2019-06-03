@@ -1,33 +1,34 @@
 import {Injectable} from '@angular/core';
-import {Project} from "../model/project";
+import {Player} from "../player";
+import {Track} from "../model/track";
 
 @Injectable({
   providedIn: 'root'
 })
 export class PlayerService {
 
-  private players: Map<string, any> = new Map();
+  private players: Map<string, Player> = new Map();
 
   constructor() { }
 
-  public getPlayer(trackId: string) {
+  loadPlayer(track: Track) {
+    const version = track.versions[0];
+    const peaks = JSON.parse(version.wave_png);
+  }
+
+  public getPlayer(trackId: string): Player {
     return this.players.get(trackId);
   }
 
-  public addPlayer(trackId: string, player) {
+  public addPlayer(trackId: string, player: Player) {
     this.players.set(trackId, player);
-    player.backend.on("pauseothers", () =>
-      this.players.forEach(otherplayer => {
-        if (otherplayer !== player) {
-          otherplayer.pause();
-        }
-      })
-    );
   }
 
-  public playerReady(trackId: string): boolean {
-
-    let player = this.getPlayer(trackId);
-    return player && player.isReady();
+  stopAllExcept(player: Player) {
+    this.players.forEach(otherplayer => {
+      if (otherplayer !== player) {
+        otherplayer.stop();
+      }
+    })
   }
 }

@@ -1,19 +1,20 @@
-import {Component, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
-import {Comment} from "../model/comment";
 import {Track} from "../model/track";
 import {Project} from "../model/project";
 import {Message} from "../message";
-import {RestCall} from "../rest/rest-call";
 import {Version} from "../model/version";
 import {PlayerService} from "../services/player.service";
-import {interval} from "rxjs";
 import {ProjectService} from "../services/project.service";
+import {Observable} from "rxjs";
+import {Player} from "../player";
+import {filter, map} from "rxjs/operators";
 
 @Component({
   selector: 'app-public-player',
   templateUrl: './public-player-page.component.html',
-  styleUrls: ['./public-player-page.component.scss']
+  styleUrls: ['./public-player-page.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PublicPlayerPageComponent implements OnInit {
 
@@ -34,89 +35,32 @@ export class PublicPlayerPageComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private playerService: PlayerService,
-    private projectService: ProjectService
+    private projectService: ProjectService,
+    private cdr: ChangeDetectorRef
   ) {
   }
 
   ngOnInit() {
     this.route.params.subscribe(params => {
-      this.loadProjectInfo(params['project_hash']);
+      this.cdr.detectChanges();
+      this.projectService.loadProject(params['project_hash'])
+        .then(() => {
+
+          this.project = this.projectService.getActiveProject();
+          this.initFields();
+
+          if (this.getProject().tracks.length == 1)
+            this.projectService.setActiveTrack(this.getProject().tracks[0]);
+
+          this.cdr.detectChanges();
+        })
     });
-    window.onresize = () => {
-      if (this.getActivePlayer())
-        this.getActivePlayer().redraw();
-    };
+    this.getActivePlayer().subscribe(
+      player => player.redraw()
+    );
   }
 
-
-  private loadProjectInfo(projectHash: string) {
-
-    RestCall.getProject(projectHash)
-      .then((project: Project) => {
-        this.project_id = project.project_id;
-        this.project = project;
-        this.projectService.setActiveProject(project);
-
-        if (!this.doesExist()) {
-          this.exists = false;
-          this.message = null;
-          return;
-        }
-
-        if (!this.isActive()) {
-          this.expired = true;
-          if (!this.areCommentsActive()) {
-            this.commentsExpired = true;
-          }
-          this.message = null;
-        }
-
-        this.expiry_date = project.expiration.substr(0, 10);
-
-        if (project.sender) {
-          this.sender = "by " + project.sender;
-        }
-
-        for (let track of project.tracks) {
-          track.versions = RestCall.getTrack(track.track_id)
-            .then(response => response["versions"]);
-          track.versions
-            .then((versions: Version[]) => {
-              this.message = this.getMessage(project, versions[0]);
-              if (this.message.text == '') {
-                this.message.text = "No notes included";
-              }
-              versions.forEach(version => {
-                if (version.downloadable == 0) version.downloadable = false
-              });
-              versions[0].files = RestCall.getVersion(versions[0].version_id)
-                .then(response => versions[0].files = response["files"]);
-              versions[0].files.then(() => {
-                this.loadComments(track, versions[0].version_id);
-                interval(20 * 1000)
-                  .subscribe(() => this.loadComments(track, versions[0].version_id))
-              })
-            });
-
-          if (project.tracks.length == 1)
-            this.projectService.setActiveTrack(project.tracks[0]);
-        }
-      });
-  }
-
-  private doesExist() {
-    return this.project.project_id != null;
-  }
-
-  private isActive() {
-    return this.project.status == "active";
-  }
-
-  private areCommentsActive() {
-    return this.project.status != "expired";
-  }
-
-  getActiveTrack() {
+  getActiveTrack(): Observable<Track> {
     return this.projectService.getActiveTrack();
   }
 
@@ -124,39 +68,14 @@ export class PublicPlayerPageComponent implements OnInit {
     this.projectService.setActiveTrack(track);
   }
 
-  getActivePlayer() {
-    return this.getPlayer(this.projectService.getActiveTrack().track_id);
+  getActivePlayer(): Observable<Player> {
+    return this.getActiveTrack()
+      .pipe(filter(track => track != null))
+      .pipe(map(track => this.getPlayer(track.track_id)));
   }
 
   getPlayer(trackId: string) {
     return this.playerService.getPlayer(trackId);
-  }
-
-  private loadComments(track: Track, version_id: string) {
-    RestCall.getComments(version_id)
-      .then(response => {
-        let allComments: Comment[] = response["comments"];
-        track.comments = (track.comments || [])
-          .concat(
-            allComments
-              .filter(comment => comment.parent_comment_id == 0)
-              .filter(comment =>
-                !(track.comments || [])
-                  .map(loadedComment => loadedComment.comment_id)
-                  .includes(comment.comment_id)
-              )
-          );
-        for (let comment of track.comments) {
-          if (comment.include_end == 0) comment.include_end = false;
-          if (comment.include_start == 0) comment.include_start = false;
-          comment.version_id = version_id;
-          this.loadReplies(comment, allComments);
-        }
-      })
-  }
-
-  private loadReplies(comment: Comment, allComments: Comment[]) {
-    comment.replies = allComments.filter(reply => reply.parent_comment_id == comment.comment_id);
   }
 
   selectTrack(track: Track) {
@@ -178,5 +97,37 @@ export class PublicPlayerPageComponent implements OnInit {
 
   backToHome() {
     this.router.navigate(['./']);
+  }
+
+  private getProject() {
+    return this.project;
+  }
+
+  private initFields() {
+
+    if (this.project.project_id == null) {
+      this.exists = false;
+      this.message = null;
+      return;
+    }
+
+    if (!this.projectService.isActive(this.project)) {
+      this.expired = true;
+      if (!this.projectService.areCommentsActive(this.project)) {
+        this.commentsExpired = true;
+      }
+      this.message = null;
+    }
+
+    this.expiry_date = this.project.expiration.substr(0, 10);
+
+    if (this.project.sender) {
+      this.sender = "by " + this.project.sender;
+    }
+
+    this.message = this.getMessage(this.project, this.project.tracks[0].versions[0]);
+    if (this.message.text == '') {
+      this.message.text = "No notes included";
+    }
   }
 }

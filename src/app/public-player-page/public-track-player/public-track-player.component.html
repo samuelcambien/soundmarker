@@ -1,10 +1,11 @@
+
 <div class="container-fluid player-container" #firstNameElement>
 
   <div id="popup-playbar" ngClass="shadow-topbar hide-phone" [class.hidden]="isInViewport(waveform)">
 
     <div class="row popup-row">
 
-      <div class="popup-play-btn" [class.disabled]="!playerIsReady()">
+      <div class="popup-play-btn">
 
         <button *ngIf="isPlaying(); then popuppausebutton else popupplaybutton"></button>
 
@@ -50,7 +51,7 @@
 
       <div class="popup-title"><h4>{{track?.title}}</h4></div>
 
-      <div class="popup-time"><p>{{_progress | timeFormat}} / {{version?.track_length | timeFormat}}</p></div>
+      <div class="popup-time"><p>{{getCurrentTime() | timeFormat}} / {{getDuration() | timeFormat}}</p></div>
 
       <div class="top-icon icon-action ml-auto"></div>
 
@@ -172,7 +173,7 @@
 
       <div class="col">
 
-        <div class="popup-play-btn" [class.disabled]="!playerIsReady()">
+        <div class="popup-play-btn">
 
           <button *ngIf="isPlaying(); then pausebutton else playbutton"></button>
 
@@ -235,7 +236,7 @@
 
   <div class="player-header row">
 
-    <div class="mini-play-btn hide-phone" [class.disabled]="!playerIsReady()">
+    <div class="mini-play-btn hide-phone">
 
       <button *ngIf="isPlaying(); then pausebutton else playbutton"></button>
 
@@ -281,7 +282,7 @@
 
     <div class="title unselectable" >
       <h4 #trackTitle [ngClass]="{overflowTitle: overflowTitle}"> {{track?.title}} </h4>
-      <p *ngIf="!expired">{{_progress | timeFormat}} / {{version?.track_length | timeFormat}}</p>
+      <p *ngIf="!expired">{{_progress | timeFormat}} / {{getDuration() | timeFormat}}</p>
       <p *ngIf="expired">
         Sorry, this track has expired.
       </p>
@@ -350,20 +351,14 @@
 
   </div>
 
-  <div class="player-content row" *ngIf="!expired">
+  <div class="player-content row">
 
     <div class="player-container col-md-12">
 
       <div class="waveform-container">
 
-        <div class="audio-wave" id="waveform_{{track.track_id}}" #waveform>
+        <div class="audio-wave" id="waveform" #waveform></div>
 
-        </div>
-        <!-- <div class="progress-container">
-           <div id="progress" #waveform>
-             <ng-container *ngTemplateOutlet="waveformsvg"></ng-container>
-           </div>
-         </div>-->
       </div>
 
       <div class="timebar-container">

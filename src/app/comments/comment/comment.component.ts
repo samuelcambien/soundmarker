@@ -3,6 +3,7 @@ import {Comment} from "../../model/comment";
 import {Utils} from "../../app.component";
 import {LocalStorageService} from "../../services/local-storage.service";
 import {RestCall} from "../../rest/rest-call";
+import {Player} from "../../player";
 
 @Component({
   selector: 'app-comment',
@@ -12,7 +13,7 @@ import {RestCall} from "../../rest/rest-call";
 export class CommentComponent implements OnInit {
 
   @Input() comment: Comment;
-  @Input() player;
+  @Input() player: Player;
   @Input() search: string;
   @Input() expired: boolean;
   @Output() delete = new EventEmitter<Comment>();
@@ -69,24 +70,15 @@ export class CommentComponent implements OnInit {
   }
 
   play() {
-
-    if (this.comment.include_start) {
-      this.comment.include_end ?
-        this.player.play(this.comment.start_time, this.comment.end_time, this.comment) :
-        this.player.play(this.comment.start_time, this.player.getDuration(), this.comment);
-    }
+    this.player.play(this.comment);
   }
 
   stop() {
     this.player.pause();
-    this.player.seekTo(this.comment.start_time / this.player.getDuration());
+    this.player.seekTo(this.comment.start_time);
   }
 
   isPlaying() {
-    return this.player && this.player.backend.getComment() == this.comment;
-  }
-
-  playerIsReady(): boolean {
-    return this.player ? this.player.isReady() : false;
+    return this.player && this.player.getComment() == this.comment;
   }
 }

@@ -7,8 +7,7 @@
     <div class="comment-toolbar">
 
       <div class="comment-play-button"
-           [class.hidden]="!comment?.include_start"
-           [class.disabled]="!playerIsReady()">
+           [class.hidden]="!comment?.include_start">
 
         <div *ngIf="isPlaying(); then stopbutton else playbutton"></div>
 
