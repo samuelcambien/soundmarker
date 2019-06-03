@@ -14,7 +14,7 @@
 
   <div *ngIf="exists && !(expired && commentsExpired)">
 
-    <div class="list-container" [ngbCollapse]="getActiveTrack() != null">
+    <div class="list-container" [ngbCollapse]="getActiveTrack() | async">
 	    
       <div *ngFor="let track of project?.tracks; let last = last;">
 
@@ -34,8 +34,8 @@
       *ngFor="let track of project?.tracks"
       [track]="track"
       [enableOverview]="project?.tracks?.length > 1"
-      [ngbCollapse]="getActiveTrack() != track"
-      [launchTitleScroll]="getActiveTrack() == track"
+      [ngbCollapse]="(getActiveTrack() | async) != track"
+      [launchTitleScroll]="(getActiveTrack() | async) == track"
       [expired]="expired && !commentsExpired"
       (overview)="setActiveTrack(null)"
       (error)="error = $event"

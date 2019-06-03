@@ -1,9 +1,9 @@
 import {
-  AfterViewChecked, AfterViewInit,
-  ChangeDetectorRef,
+  ChangeDetectionStrategy, ChangeDetectorRef,
   Component,
   ElementRef,
-  EventEmitter, HostListener,
+  EventEmitter,
+  HostListener,
   Input, OnChanges,
   OnInit,
   Output,
@@ -14,18 +14,18 @@ import {Comment, CommentSorter} from "../../model/comment";
 import {saveAs} from 'file-saver/FileSaver';
 import {Version} from "../../model/version";
 import {File} from "../../model/file";
-import * as player from "../../player/dist/player.js";
 import {RestCall} from "../../rest/rest-call";
 import {PlayerService} from "../../services/player.service";
-import {ProjectService} from "../../services/project.service";
 import {LocalStorageService} from "../../services/local-storage.service";
+import {Player} from "../../player";
 
 @Component({
   selector: 'app-public-track-player',
   templateUrl: './public-track-player.component.html',
   styleUrls: ['./public-track-player.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class PublicTrackPlayerComponent implements OnInit, AfterViewChecked, OnChanges  {
+export class PublicTrackPlayerComponent implements OnInit, OnChanges {
 
   static MINIMAL_INTERVAL: number = 1;
 
@@ -63,40 +63,27 @@ export class PublicTrackPlayerComponent implements OnInit, AfterViewChecked, OnC
   version: Version;
   phoneOrder: boolean;
 
-  peaks;
   private files: File[];
 
   constructor(
     private localStorageService: LocalStorageService,
     private playerService: PlayerService,
-    private projectService: ProjectService,
-    private cdRef: ChangeDetectorRef,
+    private cdr: ChangeDetectorRef
   ) {
 
   }
 
-  ngOnInit() {
-    if (!this.expired) {
-      this.track.versions.then(versions => {
-        this.version = versions[0];
-        this.peaks = JSON.parse(this.version.wave_png);
-        this.createNewComment();
-        return this.loadPlayer();
-      })
-      // .catch(
-      // e => {
-      //   console.log(e);
-      //   this.error.emit(e);
-      // }
-      // )
-        .then(() =>
-          setInterval(() => {
-            this._progress = this.getCurrentTime();
-          }, 1)
-        );
-     }
-
+  ngOnInit(): void {
+    this.version = this.track.versions[0];
+    setInterval(() => {
+      this._progress = this.getCurrentTime();
+      this.cdr.detectChanges();
+    }, 1);
+    this.playerService.getPlayer(this.track.track_id)
+      .addWaveform(this.waveform.nativeElement);
+    this.createNewComment();
     this.trackTitleDOM.nativeElement.setAttribute("style", "text-overflow: ellipsis");
+    this.cdr.detectChanges();
   }
 
   private getPlayerWidth(): number {
@@ -171,58 +158,33 @@ export class PublicTrackPlayerComponent implements OnInit, AfterViewChecked, OnC
     return this.getMatchingComments().sort(this.currentSorter.comparator);
   }
 
-
-
-  ngAfterViewChecked() {
-    this.cdRef.detectChanges();
-  }
-
   getMatchingComments(): Comment[] {
 
-    if (!this.track.comments) return [];
+    if (!this.version.comments) return [];
 
-    if (!this.search) return this.track.comments;
+    if (!this.search) return this.version.comments;
 
     let search = new RegExp(this.search, 'i');
 
-    return this.track.comments.filter(
+    return this.version.comments.filter(
       comment => search.test(comment.notes) || search.test(comment.name)
     );
   }
 
   hasComments() {
-    return this.track.comments && this.track.comments.length > 0;
+    return this.version.comments && this.version.comments.length > 0;
   }
 
   hasMatchingComments() {
     return this.getMatchingComments().length > 0;
   }
 
-  public loadPlayer(): Promise<any> {
-
-    return this.version.files.then((files) => {
-      this.files = files;
-      let streamFile = files.filter(file => file.identifier == 0)[0];
-      this.playerService.addPlayer(this.track.track_id, player.create(
-        {
-          container: "#waveform_" + this.track.track_id,
-          peaks: this.peaks,
-          duration: this.version.track_length,
-          aws_path: streamFile.aws_path,
-          extension: streamFile.extension
-        }
-      ));
-      this.getPlayer().drawBuffer();
-      this.getPlayer().backend.load();
-      this.getPlayer().on('finish', () => {
-        if (this.projectService.autoPlay) this.projectService.playNextTrack(this.track)
-      });
-      return this.getPlayer().backend.loadChunk(0);
-    });
-  }
-
   getCurrentTime(): number {
     return this.getPlayer() != null ? this.getPlayer().getCurrentTime() : 0;
+  }
+
+  getDuration(): number {
+    return this.version && this.version.track_length;
   }
 
   private getPosition(element, commentTime) {
@@ -273,7 +235,7 @@ export class PublicTrackPlayerComponent implements OnInit, AfterViewChecked, OnC
   }
 
   goToOverview() {
-    this.clearScroll();
+    // this.clearScroll();
     this.overview.emit();
   }
 
@@ -293,7 +255,7 @@ export class PublicTrackPlayerComponent implements OnInit, AfterViewChecked, OnC
   }
 
   addComment(comment: Comment) {
-    this.track.comments.push(comment);
+    this.version.comments.push(comment);
     this.localStorageService.storeCommentName(comment.name);
     RestCall.addComment(this.comment)
       .then(response => {
@@ -307,7 +269,7 @@ export class PublicTrackPlayerComponent implements OnInit, AfterViewChecked, OnC
   }
 
   removeComment(comment: Comment) {
-    this.track.comments = this.track.comments.filter(
+    this.version.comments = this.version.comments.filter(
       loadedComment => loadedComment != comment
     );
   }
@@ -317,7 +279,7 @@ export class PublicTrackPlayerComponent implements OnInit, AfterViewChecked, OnC
     this.removeComment(comment);
   }
 
-  getPlayer() {
+  getPlayer(): Player {
     return this.playerService.getPlayer(this.track.track_id);
   }
 
@@ -338,10 +300,6 @@ export class PublicTrackPlayerComponent implements OnInit, AfterViewChecked, OnC
 
   scrollToTop(waveform) {
     waveform.nativeElement.closest(".comments-scrolltainer").scrollTop = 0;
-  }
-
-  playerIsReady(): boolean {
-    return this.playerService.playerReady(this.track.track_id);
   }
 
   ///////////////////////////////////////////////////////////////////////////////////////////////////
