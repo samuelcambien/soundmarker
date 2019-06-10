@@ -13,7 +13,7 @@ export class Player {
 
   constructor(
     private peaks: number[],
-    private duration: number,
+    private title: string,
     private awsPath: string,
     private extension: string
   ) {
@@ -31,6 +31,7 @@ export class Player {
     this.media = new Audio(this.awsPath + "." + this.extension);
     this.media.crossOrigin = 'anonymous';
     this.media.preload = 'metadata';
+    this.media.title = this.title;
     this.media.addEventListener('ended', () => this.finished.emit());
     document.body.appendChild(this.media);
 
@@ -134,7 +135,7 @@ export class Player {
   }
 
   getDuration() {
-    return this.duration;
+    return this.media.duration;
   }
 
   addWaveform(div: HTMLElement) {
@@ -147,7 +148,7 @@ export class Player {
       div,
       {
         height: 128,
-        duration: this.duration,
+        duration: this.getDuration(),
         peaks: this.peaks,
         pixelRatio: 2,
         minPxPerSec: 20,
