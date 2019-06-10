@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {Comment} from "../../model/comment";
 import {Utils} from "../../app.component";
 import {LocalStorageService} from "../../services/local-storage.service";
@@ -24,6 +24,7 @@ export class CommentComponent implements OnInit {
 
   constructor(
     private localStorageService: LocalStorageService,
+    private cdr: ChangeDetectorRef
   ) {
   }
 
@@ -80,5 +81,10 @@ export class CommentComponent implements OnInit {
 
   isPlaying() {
     return this.player && this.player.getComment() == this.comment;
+  }
+
+  toggleLoop() {
+    this.comment.loop = !this.comment.loop;
+    this.cdr.detectChanges();
   }
 }
