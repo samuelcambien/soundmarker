@@ -30,6 +30,7 @@ export class Player {
 
     this.media = new Audio(this.awsPath + "." + this.extension);
     this.media.crossOrigin = 'anonymous';
+    this.media.preload = 'metadata';
     this.media.addEventListener('ended', () => this.finished.emit());
     document.body.appendChild(this.media);
 
