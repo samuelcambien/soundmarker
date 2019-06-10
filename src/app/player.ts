@@ -28,8 +28,8 @@ export class Player {
 
   createMedia() {
 
-    this.media = new Audio();
-    this.media.src = this.awsPath + "." + this.extension;
+    this.media = new Audio(this.awsPath + "." + this.extension);
+    this.media.crossOrigin = 'anonymous';
     this.media.addEventListener('ended', () => this.finished.emit());
     document.body.appendChild(this.media);
 
