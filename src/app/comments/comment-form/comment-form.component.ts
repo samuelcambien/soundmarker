@@ -1,6 +1,7 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {Comment} from "../../model/comment";
 import {PublicTrackPlayerComponent} from "../../public-player-page/public-track-player/public-track-player.component";
+import {Player} from "../../player";
 
 @Component({
   selector: 'app-comment-form',
@@ -13,7 +14,7 @@ export class CommentFormComponent implements OnInit {
 
   @Input() version_id;
   @Input() comment: Comment;
-  @Input() player;
+  @Input() player: Player;
   @Output() newComment = new EventEmitter<Comment>();
 
   constructor() {
@@ -30,6 +31,18 @@ export class CommentFormComponent implements OnInit {
     this.active = false;
     this.newComment.emit(this.comment);
     this.comment = new Comment();
+  }
+
+  preview() {
+    this.player.play(this.comment);
+  }
+
+  stopPreview() {
+    this.player.stop();
+  }
+
+  isPlaying() {
+    return this.player && this.player.getComment() == this.comment;
   }
 
   triggerStart() {
