@@ -6,8 +6,17 @@
 	cursor: pointer;
 }
 
+.comment-preview.disabled {
+	pointer-events: none !important;
+	cursor: auto !important; 
+}
+
+.comment-preview.disabled svg circle {
+	fill: #eef1ff
+}
+
 .comment-form-text {
-	padding-left: 0px;
+	padding-left: 24px !important;
 }
 
 .free-upload {
