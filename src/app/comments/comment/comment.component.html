@@ -17,7 +17,7 @@
            ngbTooltip="Loop region"
            [class.hidden]="!(comment?.include_start && comment?.include_end)"
            [class.active]="comment.loop"
-           (click)="comment.loop = !comment.loop"
+           (click)="toggleLoop()"
       >
         <ng-container *ngTemplateOutlet="loopbutton"></ng-container>
       </div>

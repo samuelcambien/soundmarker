@@ -108,7 +108,7 @@ export class ProjectService {
     const streamFile = this.getStreamFile(version);
     const player = new Player(
       JSON.parse(version.wave_png),
-      version.track_length,
+      track.title,
       streamFile.aws_path,
       streamFile.extension
     );
