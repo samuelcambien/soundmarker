@@ -6,6 +6,10 @@
 	cursor: pointer;
 }
 
+.comment-preview.disabled svg circle {
+	fill: #eef1ff
+}
+
 .comment-form-text {
 	padding-left: 24px !important;
 }
