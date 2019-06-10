@@ -104,12 +104,12 @@ export class CommentFormComponent implements OnInit {
   private getValidEndTime(time: number) {
     if (time < this.comment.start_time + PublicTrackPlayerComponent.MINIMAL_INTERVAL)
       return this.comment.start_time + PublicTrackPlayerComponent.MINIMAL_INTERVAL;
-    if (time > this.player.duration)
-      return this.player.duration;
+    if (time > this.player.getDuration())
+      return this.player.getDuration();
     return time;
   }
 
   public isValidEndTime = (time) =>
     time >= this.comment.start_time + PublicTrackPlayerComponent.MINIMAL_INTERVAL
-    && time <= this.player.duration;
+    && time <= this.player.getDuration();
 }
