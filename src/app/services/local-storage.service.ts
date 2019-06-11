@@ -23,6 +23,10 @@ export class LocalStorageService {
     localStorage.setItem("smrk_nfyID",  notifyID)
   }
 
+  public storeExpirationType(expiration: string):void{
+    localStorage.setItem("smrk_exp",  expiration)
+  }
+
   public getEmailFrom(): string {
     return localStorage.getItem("smrk_from") != null ? localStorage.getItem("smrk_from") : "";
   }
@@ -48,11 +52,15 @@ export class LocalStorageService {
   }
 
   public getAllowDownloads(): boolean {
-    return localStorage.getItem("smrk_downl") === "true";
+    return localStorage.getItem("smrk_downl") == "true" ? true : false;
   }
 
   public getNotificationID(): string {
     return localStorage.getItem("smrk_nfyID") != null ? localStorage.getItem("smrk_nfyID") : "2";
+  }
+
+  public getExpirationType(): string {
+    return localStorage.getItem("smrk_exp") != null ? localStorage.getItem("smrk_exp") : "1week";
   }
 
   public storeCommentName(commentName: string): void {

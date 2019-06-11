@@ -118,33 +118,33 @@
       </div>
 
       <div class="form-row radios">
-    
+
+        <div class="col">
+          <ng-select
+            class="custom noselect"
+            bindValue="id"
+            [items]="expirations"
+            [searchable]="false"
+            [clearable]="false"
+            [(ngModel)]="expiration"
+            name = "expirations"
+            dropdownPosition="top">
+          </ng-select>
+        </div>
+
         <div class="col">
         <ng-select
                 class="custom noselect"
                 bindValue="id"
-                [items]="notifications"
+                [items]="availability"
                 [searchable]="false"
                 [clearable]="false"
-                [(ngModel)]="notifyID"
-                name = "notifications"
+                [(ngModel)]="downloadable"
+                name = "downloads"
                 dropdownPosition="top">
             </ng-select>
-
         </div>
-        <div class="col">
-          <ng-select
-                class="custom noselect"
-                bindValue="id"
-                [items]="notifications"
-                [searchable]="false"
-                [clearable]="false"
-                [(ngModel)]="notifyID"
-                name = "notifications"
-                dropdownPosition="top">
-            </ng-select>
 
-        </div>
         <div class="col" id="notify">
             <ng-select
                 class="custom noselect"

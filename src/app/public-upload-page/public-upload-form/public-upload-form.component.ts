@@ -29,9 +29,6 @@ export class PublicUploadFormComponent implements OnInit {
   email_from: string = this.localStorageService.getEmailFrom();
   email_to: string[];
 
-  expiration: "1week" | "1month" = "1week";
-  downloadable: boolean = false;
-
   validators = [Validators.required, Validators.pattern('^\\w+([\\.-]?\\w+)*@\\w+([\\.-]?\\w+)*(\\.\\w{2,3})+$')];
   player;
 
@@ -89,7 +86,7 @@ export class PublicUploadFormComponent implements OnInit {
     return RestCall.createNewTrack(projectId, title)
       .then(response =>
         RestCall.createNewVersion(
-          response["track_id"], this.notes_element.nativeElement.value, this.downloadable ? "0" : "1"
+          response["track_id"], this.notes_element.nativeElement.value, this.downloadable ? "1" : "0"
         )
       ).then(version => {
         let versionId = version["version_id"];
@@ -141,12 +138,20 @@ export class PublicUploadFormComponent implements OnInit {
   notifications= [{id: '1', label: 'Notify daily'}, {id: '2', label: 'Notify directly'},{id: '0', label: 'Don\'t notify'}];
   notifyID;
 
+  expirations= [{id: '1week', label: 'Week'}, {id: '1month', label: 'Month'}];
+  expiration;
+
+  availability= [{id: false, label: 'Stream'}, {id: true, label: '+ download'}];
+  downloadable;
+
   ngOnInit(): void {
     // wave.init({
     //   container: canvas
     // });
     // wave.loadDecodedBuffer(buffer);
     this.notifyID =  this.localStorageService.getNotificationID();
+    this.expiration =  this.localStorageService.getExpirationType();
+    this.downloadable =  this.localStorageService.getAllowDownloads();
     this.uploader.onWhenAddingFileFailed = (item, filter) => {
       let message = '';
       switch (filter.name) {
@@ -182,6 +187,7 @@ export class PublicUploadFormComponent implements OnInit {
     this.localStorageService.storeEmailFrom(this.email_from);
     this.localStorageService.storeAllowDownloads(this.downloadable);
     this.localStorageService.storeNotifyID(this.notifyID);
+    this.localStorageService.storeExpirationType(this.expiration);
   }
 
   getAcceptedFileTypes() {
