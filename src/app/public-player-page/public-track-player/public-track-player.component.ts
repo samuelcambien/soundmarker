@@ -235,9 +235,16 @@ export class PublicTrackPlayerComponent implements OnInit, OnChanges {
     }
   }
 
+  // Separate function to go back to project overview to clear the browser history entry added when
+  overviewByOverviewIconClick(){
+    this.goToOverview();
+    history.back();
+  }
+
   goToOverview() {
-    // this.clearScroll();
+    //this.clearScroll();
     this.overview.emit();
+
   }
 
   getCommentIntervalWidth() {
@@ -289,7 +296,6 @@ export class PublicTrackPlayerComponent implements OnInit, OnChanges {
   }
 
   isInViewport(waveform) {
-
     try {
       let bounding = waveform.nativeElement.getBoundingClientRect();
       let scrollPane = waveform.nativeElement.closest(".comments-scrolltainer");
@@ -319,6 +325,8 @@ export class PublicTrackPlayerComponent implements OnInit, OnChanges {
     this.overflowTitle = false;
   }
 
+
+
   // Hide the phonesearch in case the screen is resized while it was open.
   @HostListener('window:resize', ['$event'])
   onResize(event) {
@@ -326,6 +334,8 @@ export class PublicTrackPlayerComponent implements OnInit, OnChanges {
       document.getElementById("phonesearch").setAttribute("style","display:none");
     }
   }
+
+
 
   // Detect changes of input variables on the component.
   // Launches auto scrolling when opening a track.
@@ -365,4 +375,12 @@ export class PublicTrackPlayerComponent implements OnInit, OnChanges {
   };
   }
   ///////////////////////////////////////////////////////////////////////////////////////////////////
+  // Catch back button when there is a project with multiple tracks to go back to overview instead of to previous website.
+  @HostListener('window:popstate', ['$event'])
+  onPopState(event) {
+    if (this.enableOverview){
+      this.goToOverview();
+    }
+    else history.go(2);
+  }
 }

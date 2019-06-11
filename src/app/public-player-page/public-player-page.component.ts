@@ -80,6 +80,7 @@ export class PublicPlayerPageComponent implements OnInit {
 
   selectTrack(track: Track) {
     this.projectService.setActiveTrack(track);
+    history.pushState({}, '');
   }
 
   getMessage(project: Project, version: Version): Message {
