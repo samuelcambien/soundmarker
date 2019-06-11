@@ -242,7 +242,7 @@ export class PublicTrackPlayerComponent implements OnInit, OnChanges {
   }
 
   goToOverview() {
-    //this.clearScroll();
+    this.clearScroll();
     this.overview.emit();
 
   }
