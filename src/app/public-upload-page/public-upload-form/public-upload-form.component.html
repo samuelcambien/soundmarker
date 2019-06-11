@@ -120,23 +120,30 @@
       <div class="form-row radios">
     
         <div class="col">
-          <div class="btn-group btn-group-sm btn-group-toggle" name="expiration" ngbRadioGroup [(ngModel)]="expiration"
-               placement="top" ngbTooltip="Expire after a">
-            <label ngbButtonLabel class="btn btn-outline-form active">
-              <input ngbButton name="week" class="slide-selector left-btn" type="radio" [value]="'1week'">Week
-            </label>
-            <label ngbButtonLabel class="btn btn-outline-form">
-              <input ngbButton name="month" class="slide-selector" type="radio" [value]="'1month'">Month
-            </label>
-          </div>
+        <ng-select
+                class="custom noselect"
+                bindValue="id"
+                [items]="notifications"
+                [searchable]="false"
+                [clearable]="false"
+                [(ngModel)]="notifyID"
+                name = "notifications"
+                dropdownPosition="top">
+            </ng-select>
+
         </div>
         <div class="col">
-          <div class="btn-group btn-group-sm btn-group-toggle allow-downloads" placement="top"
-               ngbTooltip="No download">
-            <label ngbButtonLabel class="btn btn-outline-form">
-              <input ngbButton class="slide-selector" type="checkbox" [(ngModel)]="downloadable" name="usage">Stream only
-            </label>
-          </div>
+          <ng-select
+                class="custom noselect"
+                bindValue="id"
+                [items]="notifications"
+                [searchable]="false"
+                [clearable]="false"
+                [(ngModel)]="notifyID"
+                name = "notifications"
+                dropdownPosition="top">
+            </ng-select>
+
         </div>
         <div class="col" id="notify">
             <ng-select
