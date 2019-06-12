@@ -897,12 +897,20 @@ button:visited {
 	color: #7397ff;
 	border-radius: 0.2rem !important;
 	font-family: 'sofia-regular';
-	width: 40px !important;
-	min-width: 110px;
+	width: 100% !important;
+	min-width: 110px !important;
 	text-decoration: none !important;
 	outline: none !important;
 	box-shadow: none !important;
 	cursor: pointer;
+}
+.ng-select.custom.expiration .ng-select-container,
+.ng-select.custom.expiration.ng-select-single .ng-select-container {
+	// min-width: 100px;
+}
+.ng-select.custom.downloadable .ng-select-container,
+.ng-select.custom.downloadable.ng-select-single .ng-select-container {
+	// min-width: 110px;
 }
 .ng-dropdown-panel.ng-select-top {
 	border: none;
@@ -911,7 +919,6 @@ button:visited {
 #notify .ng-select.custom.ng-select-single .ng-select-container {
 	background-color: #eef1ff !important;
 	color: #7397ff;
-	min-width: 126px;
 	width: 100% !important;
 }
 .ng-value-container {
@@ -934,13 +941,20 @@ button:visited {
 .ng-select .ng-arrow-wrapper .ng-arrow {
     display: none !important;
 }
-
+p.dropdown-info {
+	margin-bottom: -2px;
+	margin-top: -4px;
+	font-size: 8pt;
+	background: #eef1ff;
+	border-radius: 0.2rem;
+	color: #717db0;
+	padding: 6px;
+}
 .ng-select span.ng-arrow-wrapper:before {
-    content: "\f0ab";
-    display: inline-block;
-    font: normal normal normal 14px/1 FontAwesome;
-    font-size: inherit;
-    text-rendering: auto;
+    content: url(chevron.svg);
+    display: block;
+
+  
 }
 .ng-arrow {
 	border-color: #7397ff transparent transparent !important;
@@ -967,10 +981,13 @@ button:visited {
 	border-radius: 0.2rem !important;
 }
 .ng-dropdown-panel .ng-dropdown-panel-items {
-	margin: 7px;
+	margin: 6px;
 }
 .ng-dropdown-panel .ng-dropdown-panel-items .ng-option {
 	border-radius: 0.2rem;
+	padding: 3px;
+	padding-left: 7px;
+	padding-top: 4px;
 	
 }
 .ng-dropdown-panel .ng-dropdown-panel-items .ng-option.ng-option-marked {
@@ -985,7 +1002,7 @@ button:visited {
 	display: none;
 }
 .ng-dropdown-panel .ng-dropdown-panel-items .ng-option {
-	color: #717db0 !important;
+	color: #7397ff !important;
 	font-weight: normal !important;
 }
 .sma {

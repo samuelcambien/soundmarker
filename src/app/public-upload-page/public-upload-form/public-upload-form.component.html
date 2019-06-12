@@ -107,21 +107,22 @@
         <div class="form-group col hide-phone">
                 <textarea #notes_element [(ngModel)]="notes" type="text" placeholder="Notes" name="notes"
                           class="form-control form-control-sm"
-                          rows="1"></textarea>
+                          rows="2"></textarea>
         </div>
 
         <div class="form-group col show-phone">
                 <textarea #notes_element [(ngModel)]="notes" type="text" placeholder="Notes" name="notes"
                           class="form-control form-control-sm"
-                          rows="3"></textarea>
+                          rows="5"></textarea>
         </div>
       </div>
 
       <div class="form-row radios">
 
         <div class="col">
+	       
           <ng-select
-            class="custom noselect"
+            class="custom noselect expiration"
             bindValue="id"
             [items]="expirations"
             [searchable]="false"
@@ -134,7 +135,7 @@
 
         <div class="col">
         <ng-select
-                class="custom noselect"
+                class="custom noselect downloadable"
                 bindValue="id"
                 [items]="availability"
                 [searchable]="false"
