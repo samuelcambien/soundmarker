@@ -124,12 +124,15 @@
           <ng-select
             class="custom noselect expiration"
             bindValue="id"
+            groupBy = "heading"
             [items]="expirations"
             [searchable]="false"
             [clearable]="false"
             [(ngModel)]="expiration"
+            placeholder="Expire*"
             name = "expirations"
-            dropdownPosition="top">
+            dropdownPosition="top"
+            required>
           </ng-select>
         </div>
 
@@ -137,25 +140,31 @@
         <ng-select
                 class="custom noselect downloadable"
                 bindValue="id"
+                groupBy = "heading"
                 [items]="availability"
                 [searchable]="false"
                 [clearable]="false"
                 [(ngModel)]="downloadable"
+                placeholder="Download*"
                 name = "downloads"
-                dropdownPosition="top">
+                dropdownPosition="top"
+                required>
             </ng-select>
         </div>
 
         <div class="col" id="notify">
             <ng-select
                 class="custom noselect"
+                groupBy = "heading"
                 bindValue="id"
                 [items]="notifications"
                 [searchable]="false"
                 [clearable]="false"
                 [(ngModel)]="notifyID"
+                placeholder="Notify*"
                 name = "notifications"
-                dropdownPosition="top">
+                dropdownPosition="top"
+                required>
             </ng-select>
         </div>
 

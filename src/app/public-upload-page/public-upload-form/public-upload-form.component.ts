@@ -135,23 +135,23 @@ export class PublicUploadFormComponent implements OnInit {
     }
   }
 
-  notifications= [{id: 'notify', label: 'Notify*'},{id: '1', label: 'Daily'}, {id: '2', label: 'Directly'},{id: '0', label: 'None'}];
-  notifyID;
-
-  expirations= [{id: 'expire', label: 'Expire*'},{id: '1week', label: 'Week'}, {id: '1month', label: 'Month'}];
+  expirations= [{id: '1week', label: 'Week', heading: 'Expire*'}, {id: '1month', label: 'Month', heading: 'Expire*'}];
   expiration;
 
-  availability= [{id: 'download', label: 'Download*'},{id: false, label: 'No'}, {id: true, label: 'Yes'}];
+  availability= [{id: false, label: 'No', heading: 'Download*'}, {id: true, label: 'Yes', heading: 'Download*'}];
   downloadable;
+
+  notifications= [{id: '1', label: 'Daily', heading: 'Notify*'}, {id: '2', label: 'Directly', heading: 'Notify*'},{id: '0', label: 'None', heading: 'Notify*'}];
+  notifyID;
 
   ngOnInit(): void {
     // wave.init({
     //   container: canvas
     // });
     // wave.loadDecodedBuffer(buffer);
-    this.notifyID =  this.localStorageService.getNotificationID();
-    this.expiration =  this.localStorageService.getExpirationType();
-    this.downloadable =  this.localStorageService.getAllowDownloads();
+    // this.notifyID =  this.localStorageService.getNotificationID();
+    // this.expiration =  this.localStorageService.getExpirationType();
+    // this.downloadable =  this.localStorageService.getAllowDownloads();
     this.uploader.onWhenAddingFileFailed = (item, filter) => {
       let message = '';
       switch (filter.name) {
