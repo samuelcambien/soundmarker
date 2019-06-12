@@ -13,5 +13,42 @@
 
   </div>
   <div><p class="row reply-row comment-tx"> {{reply.notes}}</p></div>
+  
+   <div class="comment-options" *ngIf="reply.deleteable">
+        <div class="dropdown">
+          <a class="dropdown-toggle" href="#" role="button" id="dropdown-options" data-toggle="dropdown"
+             aria-haspopup="true" aria-expanded="false">
+            <div *ngIf="true; then deletebutton"></div>
+          </a>
+          <div class="dropdown-menu" aria-labelledby="dropdown-options">
+            <div class="arrow-up"></div>
+            <div class="dropdown-container shadow-dropdown">
+              <a class="dropdown-item" (click)="delete.emit(comment)">Delete</a>
+            </div>
+          </div>
+        </div>
+      </div>
+  
+  
 
+  
 </div>
+
+<ng-template #deletebutton>
+  <svg width="17px" height="5px" viewBox="0 0 24 8" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <g id="Page-1" stroke="none" stroke-width="1" fill="#bac1da" class="comment-options-fill" fill-rule="evenodd" stroke-linecap="round"
+       stroke-linejoin="round">
+      <g id="Interface-Essential-/-Menu-/-navigation-menu-horizontal"
+         transform="translate(0.000000, -9.000000)"
+         class="menu-icon" stroke="#bac1da" stroke-width="1.5">
+        <g id="Group" transform="translate(0.000000, 9.000000)">
+          <g id="navigation-menu-horizontal">
+            <circle id="Oval" cx="4" cy="4" r="2.5"></circle>
+            <circle id="Oval" cx="13" cy="4" r="2.5"></circle>
+            <circle id="Oval" cx="22" cy="4" r="2.5"></circle>
+          </g>
+        </g>
+      </g>
+    </g>
+  </svg>
+</ng-template>
