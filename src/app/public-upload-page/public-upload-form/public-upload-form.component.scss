@@ -67,6 +67,10 @@ option {
   flex-wrap: wrap;
 }
 
+.form-row.radios .col .custom {
+	margin-bottom: 10px;
+}
+
 .upload-songs-area {
 	position: relative !important;
 	max-height: 100px !important;
@@ -85,6 +89,14 @@ option {
 	.form-row .radios {
   margin-bottom: 0px;
 }
+
+}
+
+@media (max-width: 389px) {
+	.form-row .radios {
+  margin-bottom: -10px;
+}
+
 }
 
 .btn-outline-form {
@@ -127,7 +139,7 @@ option {
   width: 70px;
   height: 70px;
   margin: 0 auto;
-  margin-top: 28px;
+  margin-top: 38px;
   margin-bottom: 8px;
 }
 
@@ -340,3 +352,5 @@ table tr td p {
   background: transparent;
   pointer-events: none !important;
 }
+
+
