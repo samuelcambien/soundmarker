@@ -73,16 +73,26 @@ option {
 
 .upload-songs-area {
 	position: relative !important;
-	max-height: 100px !important;
+	min-height: 183px !important;
+	
 	padding-top: 10px !important;
 }
 
+}
+
+@media (max-width: 576px) {
+	.upload-songs-area {
+	
+	min-height: 168px !important;
+	
+}
 }
 
 @media (max-width: 499px) {
 	.form-row .radios {
   margin-bottom: 0px;
 }
+
 }
 
 @media (max-width: 415px) {
