@@ -57,7 +57,15 @@
             <tbody>
               <tr *ngFor="let item of uploader.queue">
                 <td><p>{{ item?.file?.name }}</p></td>
-                <span (click)="removeFromQueue(item)" class="delete cross" aria-hidden="true">&times;</span>
+                <span (click)="removeFromQueue(item)" class="delete cross" aria-hidden="true">
+<svg width="9px" height="9px" viewBox="0 0 9 9" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round">
+        <g id="Internet-Networks-Servers-/-Upload/Download-/-upload-dash-arrow-1" transform="translate(-344.000000, -234.000000)" fill-rule="nonzero" stroke="#7397FF" stroke-width="1.5">
+            <path d="M345.5,235.5 L351.488196,241.488196" id="Line-8"></path>
+            <path d="M345.5,235.5 L351.488196,241.488196" id="Line-8" transform="translate(348.500000, 238.500000) scale(-1, 1) translate(-348.500000, -238.500000) "></path>
+        </g>
+    </g>
+</svg></span>
               </tr>
             </tbody>
           </table>

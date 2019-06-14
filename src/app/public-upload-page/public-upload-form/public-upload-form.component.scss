@@ -290,13 +290,10 @@ table tr td p {
 
 .cross {
   background: -webkit-linear-gradient(left, rgba(255, 255, 255, 0) 0%, #ffffff 100%);
-  color: red;
-  font-size: 22pt;
-  line-height: 1.2;
+  padding: 1px;
   margin-left: -16px;
   border: 0;
-  padding: 1px;
-  font-family: 'sofia-regular';
+ line-height: 1.9;
 }
 
 .btn-cross:focus {
@@ -305,7 +302,7 @@ table tr td p {
 
 .delete {
   color: #7397FF;
-  margin-top: 4px;
+  margin-top: 0px;
 }
 
 // upload fields
