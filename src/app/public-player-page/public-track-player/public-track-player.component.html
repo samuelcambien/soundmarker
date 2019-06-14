@@ -224,7 +224,7 @@
 
   <div [ngbCollapse]="!phoneOrder" id="phoneorder" class="show-phone shadow">
 
-    <div class="comment-sort select-button">
+    <div class="comment-sort custom select-button">
       <select>
         <option>Most recent</option>
         <option>Track time</option>
@@ -478,11 +478,14 @@
 
       </div>
 
-      <div class="comment-sort" placement="top" ngbTooltip="Order by" [class.disabled]="!hasMatchingComments()"
+      <div class="comment-sort" [class.disabled]="!hasMatchingComments()"
       >
         <!--[class.disabled]="track.comments.length < 2"-->
         <ng-select class="custom noselect" [items]="commentSorters"
                    bindLabel="description"
+                   groupBy = "heading"
+                   dropdownPosition="top"
+                   placeholder="Order by"
                    [clearable]="false"
                    [searchable]="false"
                    [(ngModel)]="currentSorter">
