@@ -469,13 +469,23 @@ $project_id = $getbody->project_id;
 $notify_id = $getbody->notify_id;
 
 $db = Flight::db();
-$sql = "INSERT INTO DailyUpdates (project_id, emailaddress, notify_id) VALUES ('$project_id', '$emailaddress', '$notify_id')";
-$result = $db->query($sql);
 
-// return ok
-Flight::json(array(
-   'return' => "ok"
-), 200);
+// Check to make sure it doesn't exist yet.
+$sql = "SELECT emailaddress FROM DailyUpdates WHERE project_id = '$project_id' AND emailaddress = '$emailaddress' AND notify_id = '$notify_id'";
+$response = $db->query($sql)->fetchAll(PDO::FETCH_ASSOC);
+if (!isset($response[0])) {
+  $sql = "INSERT INTO DailyUpdates (project_id, emailaddress, notify_id) VALUES ('$project_id', '$emailaddress', '$notify_id')";
+  $result = $db->query($sql);
+  // return ok
+  Flight::json(array(
+     'return' => "ok"
+  ), 200);
+} else {
+  // return alreadyindatabase
+  Flight::json(array(
+     'return' => "alreadyindatabase"
+  ), 200); 
+}
 });
 
 
