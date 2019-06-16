@@ -277,9 +277,18 @@ export class PublicTrackPlayerComponent implements OnInit, OnChanges {
   }
 
   removeComment(comment: Comment) {
+    if(!comment.parent_comment_id){
     this.version.comments = this.version.comments.filter(
       loadedComment => loadedComment != comment
-    );
+    );}
+    else {
+      let a = this.version.comments.findIndex(loadedComment => {
+        return loadedComment.comment_id == comment.parent_comment_id;
+      });
+      this.version.comments[a].replies = this.version.comments[a].replies.filter(
+          loadedComment => loadedComment != comment
+        );
+    }
   }
 
   deleteComment(comment: Comment) {

@@ -156,8 +156,8 @@
           <app-reply
             *ngFor="let reply of this.comment.replies"
             [reply]="reply"
+            (delete)="delete.emit($event)"
           ></app-reply>
-
         </div>
 
         <app-reply-form *ngIf="reply != null" [reply]="reply" (cancel)="clearReply()"

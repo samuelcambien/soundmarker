@@ -96,7 +96,12 @@ export class ProjectService {
   }
 
   private loadReplies(comment: Comment, allComments: Comment[]) {
-    comment.replies = allComments.filter(reply => reply.parent_comment_id == comment.comment_id);
+    comment.replies = (comment.replies || []).concat(allComments.filter(reply => reply.parent_comment_id == comment.comment_id)
+      .filter(reply =>
+        !(comment.replies || [])
+          .map(loadedReply => loadedReply.comment_id)
+          .includes(reply.comment_id)
+      ));
   }
 
   private getStreamFile(version: Version): File {
