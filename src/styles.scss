@@ -985,10 +985,14 @@ p.dropdown-info {
 }
 .ng-dropdown-panel .ng-dropdown-panel-items .ng-option {
 	border-radius: 0.2rem;
-	padding: 3px;
-	padding-left: 3px;
-	padding-top: 4px;
-	
+	padding: 7px !important;
+	padding-top: 8px !important;
+}
+.form-row .ng-dropdown-panel .ng-dropdown-panel-items .ng-option {
+	border-radius: 0.2rem;
+	padding: 5px !important;
+	padding-top: 6px !important;
+	padding-left: 7px !important;
 }
 .ng-dropdown-panel .ng-dropdown-panel-items .ng-option.ng-option-marked {
 	color: #7397ff !important;
@@ -1000,7 +1004,7 @@ p.dropdown-info {
 }
 .ng-dropdown-panel .ng-dropdown-panel-items .ng-option.ng-option-selected {
 	// display: none;
-	background-color: #f9faff !important;
+	background-color: #f5f6ff !important;
 }
 .ng-dropdown-panel .ng-dropdown-panel-items .ng-option {
 	color: #7397ff !important;
