@@ -48,6 +48,7 @@ textarea.form-control {
 	padding-left: 0px !important;
 	padding-right: 2px !important;
 	border: none !important;
+	background-color: #eef1ff !important;
 }
 
 
@@ -66,24 +67,46 @@ option {
   flex-wrap: wrap;
 }
 
+.form-row.radios .col .custom {
+	margin-bottom: 10px;
+}
+
 .upload-songs-area {
 	position: relative !important;
-	max-height: 100px !important;
+	min-height: 183px !important;
+	
 	padding-top: 10px !important;
 }
 
+}
+
+@media (max-width: 576px) {
+	.upload-songs-area {
+	
+	min-height: 168px !important;
+	
+}
 }
 
 @media (max-width: 499px) {
 	.form-row .radios {
   margin-bottom: 0px;
 }
+
 }
 
 @media (max-width: 415px) {
 	.form-row .radios {
   margin-bottom: 0px;
 }
+
+}
+
+@media (max-width: 389px) {
+	.form-row .radios {
+  margin-bottom: -10px;
+}
+
 }
 
 .btn-outline-form {
@@ -126,7 +149,7 @@ option {
   width: 70px;
   height: 70px;
   margin: 0 auto;
-  margin-top: 28px;
+  margin-top: 38px;
   margin-bottom: 8px;
 }
 
@@ -336,3 +359,5 @@ table tr td p {
   background: transparent;
   pointer-events: none !important;
 }
+
+

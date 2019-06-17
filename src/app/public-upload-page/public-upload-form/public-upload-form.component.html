@@ -115,47 +115,64 @@
         <div class="form-group col hide-phone">
                 <textarea #notes_element [(ngModel)]="notes" type="text" placeholder="Notes" name="notes"
                           class="form-control form-control-sm"
-                          rows="1"></textarea>
+                          rows="2"></textarea>
         </div>
 
         <div class="form-group col show-phone">
                 <textarea #notes_element [(ngModel)]="notes" type="text" placeholder="Notes" name="notes"
                           class="form-control form-control-sm"
-                          rows="3"></textarea>
+                          rows="5"></textarea>
         </div>
       </div>
 
       <div class="form-row radios">
-    
+
         <div class="col">
-          <div class="btn-group btn-group-sm btn-group-toggle" name="expiration" ngbRadioGroup [(ngModel)]="expiration"
-               placement="top" ngbTooltip="Expire after a">
-            <label ngbButtonLabel class="btn btn-outline-form active">
-              <input ngbButton name="week" class="slide-selector left-btn" type="radio" [value]="'1week'">Week
-            </label>
-            <label ngbButtonLabel class="btn btn-outline-form">
-              <input ngbButton name="month" class="slide-selector" type="radio" [value]="'1month'">Month
-            </label>
-          </div>
+	       
+          <ng-select
+            class="custom noselect expiration"
+            bindValue="id"
+            groupBy = "heading"
+            [items]="expirations"
+            [searchable]="false"
+            [clearable]="false"
+            [(ngModel)]="expiration"
+            placeholder="Expire*"
+            name = "expirations"
+            dropdownPosition="top"
+            required>
+          </ng-select>
         </div>
+
         <div class="col">
-          <div class="btn-group btn-group-sm btn-group-toggle allow-downloads" placement="top"
-               ngbTooltip="No download">
-            <label ngbButtonLabel class="btn btn-outline-form">
-              <input ngbButton class="slide-selector" type="checkbox" [(ngModel)]="downloadable" name="usage">Stream only
-            </label>
-          </div>
+        <ng-select
+                class="custom noselect downloadable"
+                bindValue="id"
+                groupBy = "heading"
+                [items]="availability"
+                [searchable]="false"
+                [clearable]="false"
+                [(ngModel)]="downloadable"
+                placeholder="Download*"
+                name = "downloads"
+                dropdownPosition="top"
+                required>
+            </ng-select>
         </div>
+
         <div class="col" id="notify">
             <ng-select
                 class="custom noselect"
+                groupBy = "heading"
                 bindValue="id"
                 [items]="notifications"
                 [searchable]="false"
                 [clearable]="false"
                 [(ngModel)]="notifyID"
+                placeholder="Notify*"
                 name = "notifications"
-                dropdownPosition="top">
+                dropdownPosition="top"
+                required>
             </ng-select>
         </div>
 

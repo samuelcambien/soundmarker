@@ -22,6 +22,8 @@ export class Comment {
 
 export class CommentSorter {
 
+  public heading: string = "Order by";
+
   constructor(
     public comparator: (a: Comment, b: Comment) => number,
     public description: string
