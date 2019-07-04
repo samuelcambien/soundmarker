@@ -141,18 +141,14 @@
             </g>
           </svg>
         </span>
-
           </p>
-
         </div>
-
       </div>
 
 
       <div class="replies">
 
         <div class="comment-replies" id="comment-replies" [ngbCollapse]="!showReplies">
-
           <app-reply
             *ngFor="let reply of this.comment.replies"
             [reply]="reply"
@@ -160,8 +156,8 @@
           ></app-reply>
         </div>
 
-        <app-reply-form *ngIf="reply != null" [reply]="reply" (cancel)="clearReply()"
-                        (newReply)="newReply()"></app-reply-form>
+        <app-reply-form #replyform *ngIf="reply != null" [reply]="reply" (cancel)="clearReply()"
+                        (newReply)="newReply()" ></app-reply-form>
 
       </div>
     </div>
