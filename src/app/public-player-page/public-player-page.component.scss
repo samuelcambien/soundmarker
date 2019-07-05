@@ -123,28 +123,22 @@
 }
 
 #popup-playbar {
-    background-color: #ffffff; /* Black background color */
-    position: absolute; /* Make it stick/fixed */
-    top: 48px; /* Hide the navbar 50 px outside of the top view */
-    width: 100%; /* Full width */
-    transition: top 0.1s; /* Transition effect when sliding down (and up) */
-    height: 48px;
-    left: 0px;
-    right: 0px;
-    z-index: 99;
-    display: block;
-    padding-top: 10px;
-    padding-bottom: 10px;
-    border-bottom: 1px solid #eef1ff;
-
-    &.hidden {
-      display: none;
-    }
+    background-color: #ffffff ; /* Black background color */
+    position: absolute ; /* Make it stick/fixed */
+    top: 48px ; /* Hide the navbar 50 px outside of the top view */
+    width: 100% ; /* Full width */
+    height: 48px ;
+    left: 0px ;
+    right: 0px ;
+    z-index: 2 ;
+    padding-top: 10px ;
+    padding-bottom: 10px ;
+    border-bottom: 1px solid #eef1ff ;
 }
 
 #phone-popup-playbar {
 	  background-color: #ffffff;
-	   border-top: 1px solid #eef1ff;
+    border-top: 1px solid #eef1ff;
     position: fixed; /* Make it stick/fixed */
     bottom: 0px;
     width: 100%; /* Full width */

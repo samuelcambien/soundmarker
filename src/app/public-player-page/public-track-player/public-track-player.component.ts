@@ -19,11 +19,30 @@ import {RestCall} from "../../rest/rest-call";
 import {PlayerService} from "../../services/player.service";
 import {LocalStorageService} from "../../services/local-storage.service";
 import {Player} from "../../player";
+import {trigger, state,  style,  animate,  transition} from '@angular/animations';
 
 @Component({
   selector: 'app-public-track-player',
   templateUrl: './public-track-player.component.html',
   styleUrls: ['./public-track-player.component.scss'],
+  animations: [
+    trigger('openClose', [
+      state('closed', style({
+        transform: 'translateY(-100%)',
+        display: 'none'
+      })),
+      state('open', style({
+        transform: 'translateY(0%)',
+        display: 'block'
+      })),
+      transition('open => closed', [
+        animate('350ms ease-in')
+      ]),
+      transition('closed => open', [
+        animate('250ms ease-in')
+      ]),
+    ]),
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PublicTrackPlayerComponent implements OnInit, OnChanges {
@@ -63,6 +82,7 @@ export class PublicTrackPlayerComponent implements OnInit, OnChanges {
 
   version: Version;
   phoneOrder: boolean;
+  waveformInViewPort = true;
 
   private files: File[];
 
@@ -71,10 +91,19 @@ export class PublicTrackPlayerComponent implements OnInit, OnChanges {
     private playerService: PlayerService,
     private cdr: ChangeDetectorRef
   ) {
-
+    document.addEventListener('scroll', ()=>{
+      try {
+          let bounding = this.waveform.nativeElement.getBoundingClientRect();
+          let scrollPane = this.waveform.nativeElement.closest(".comments-scrolltainer");
+          this.waveformInViewPort = bounding.top + bounding.height / 2 > scrollPane.getBoundingClientRect().top;
+        }
+      catch (e) {
+        this.waveformInViewPort = true;}
+        }, true);
   }
 
   ngOnInit(): void {
+    this.waveformInViewPort = true;
     this.version = this.track.versions[0];
     setInterval(() => {
       this._progress = this.getCurrentTime();
@@ -242,9 +271,9 @@ export class PublicTrackPlayerComponent implements OnInit, OnChanges {
   }
 
   goToOverview() {
+    this.waveformInViewPort = true;
     this.clearScroll();
     this.overview.emit();
-
   }
 
   getCommentIntervalWidth() {
@@ -304,18 +333,11 @@ export class PublicTrackPlayerComponent implements OnInit, OnChanges {
     this.comment.include_start = true;
   }
 
-  isInViewport(waveform) {
-    try {
-      let bounding = waveform.nativeElement.getBoundingClientRect();
-      let scrollPane = waveform.nativeElement.closest(".comments-scrolltainer");
-      return bounding.top + bounding.height / 2 > scrollPane.getBoundingClientRect().top;
-    } catch (e) {
-      return true;
-    }
-  }
-
-  scrollToTop(waveform) {
-    waveform.nativeElement.closest(".comments-scrolltainer").scrollTop = 0;
+  scrollToTop() {
+    this.waveformInViewPort = true;
+    this.pauseTitleScroll= true;
+    this.trackTitleDOM.nativeElement.scrollIntoView({behavior: "smooth", block: "end", inline: "nearest"});
+    setTimeout(()=>this.pauseTitleScroll = false,700);
   }
 
   ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -325,6 +347,7 @@ export class PublicTrackPlayerComponent implements OnInit, OnChanges {
   scrollWaitAtEnd: number= 50;
   overflowTitle: boolean= false;
   scrollFPS = 45;
+  pauseTitleScroll:boolean =  false;
 
   // Stop scrolling and reset the track title to it's start position.
   clearScroll() {
@@ -345,10 +368,10 @@ export class PublicTrackPlayerComponent implements OnInit, OnChanges {
   }
 
 
-
   // Detect changes of input variables on the component.
   // Launches auto scrolling when opening a track.
   ngOnChanges(changes){
+    this.waveformInViewPort = true;
     if(this.launchTitleScroll) {
       setTimeout(() => this.autoScroll(), this.scrollInitialWait);
     }
@@ -367,7 +390,7 @@ export class PublicTrackPlayerComponent implements OnInit, OnChanges {
       let scrollLoop = () => {
         setTimeout(()=>{
         titleScrollDiv -= 1;
-        this.trackTitleDOM.nativeElement.scrollLeft +=  i;
+        if(!this.pauseTitleScroll) this.trackTitleDOM.nativeElement.scrollLeft += i;
         if (titleScrollDiv > 0 && this.launchTitleScroll)
           requestAnimationFrame(scrollLoop);
         else if (titleScrollDiv === 0 && i === 1){
