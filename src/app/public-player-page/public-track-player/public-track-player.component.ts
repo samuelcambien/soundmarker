@@ -32,7 +32,7 @@ export class PublicTrackPlayerComponent implements OnInit, OnChanges {
 
   @Input() track: Track;
   @Input() enableOverview: boolean;
-  @Input() expired: boolean = false;
+  @Input() expired: boolean = true;
   @Input() launchTitleScroll: boolean;
 
   @Output() error = new EventEmitter();
@@ -80,11 +80,10 @@ export class PublicTrackPlayerComponent implements OnInit, OnChanges {
       this._progress = this.getCurrentTime();
       this.cdr.detectChanges();
     }, 1);
-    this.playerService.getPlayer(this.track.track_id)
-      .addWaveform(this.waveform.nativeElement);
     this.createNewComment();
     this.trackTitleDOM.nativeElement.setAttribute("style", "text-overflow: ellipsis");
     this.cdr.detectChanges();
+    if(!this.expired) this.playerService.getPlayer(this.track.track_id).addWaveform(this.waveform.nativeElement);
   }
 
   private getPlayerWidth(): number {
@@ -392,4 +391,9 @@ export class PublicTrackPlayerComponent implements OnInit, OnChanges {
     }
     else history.go(2);
   }
+
+  isExpiredProject(): boolean{
+    console.log(this.expired);
+    return this.expired;
+}
 }

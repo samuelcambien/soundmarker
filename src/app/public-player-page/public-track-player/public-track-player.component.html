@@ -7,8 +7,7 @@
 
       <div class="popup-play-btn">
 
-        <button *ngIf="isPlaying(); then popuppausebutton else popupplaybutton"></button>
-
+        <button *ngIf="isPlaying(); then popuppausebutton else popupplaybutton" ></button>
         <ng-template #popuppausebutton>
           <button class="mini-btn mini-pause-btn btn btn-link" (click)="pause()">
             <svg width="43px" height="43px" viewBox="0 0 27 27" version="1.1" xmlns="http://www.w3.org/2000/svg">
@@ -29,7 +28,7 @@
         </ng-template>
 
         <ng-template #popupplaybutton>
-          <button class="mini-btn mini-play-btn btn btn-link" (click)="play()">
+          <button class="mini-btn mini-play-btn btn btn-link" (click)="play()" [class.disabled]="expired">
             <svg width="43px" height="43px" viewBox="0 0 27 27" version="1.1" xmlns="http://www.w3.org/2000/svg">
               <defs></defs>
               <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
@@ -183,7 +182,7 @@
           </ng-template>
 
           <ng-template #playbutton>
-            <button class="mini-btn mini-play-btn btn btn-link" (click)="play()">
+            <button class="mini-btn mini-play-btn btn btn-link" (click)="play()" [class.disabled]="expired">
             </button>
           </ng-template>
 
@@ -260,7 +259,7 @@
       </ng-template>
 
       <ng-template #playbutton>
-        <button class="mini-btn mini-play-btn btn btn-link" (click)="play()">
+        <button class="mini-btn mini-play-btn btn btn-link" (click)="play()" [class.disabled]="expired">
           <svg width="43px" height="43px" viewBox="0 0 27 27" version="1.1" xmlns="http://www.w3.org/2000/svg">
             <defs></defs>
             <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
@@ -353,7 +352,7 @@
 
   <div class="player-content row">
 
-    <div class="player-container col-md-12">
+    <div class="player-container col-md-12" *ngIf="!expired">
 
       <div class="waveform-container">
 

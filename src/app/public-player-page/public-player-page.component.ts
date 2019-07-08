@@ -56,7 +56,7 @@ export class PublicPlayerPageComponent implements OnInit {
         })
     });
     this.getActivePlayer().subscribe(
-      player => player.redraw()
+      player =>{if(!this.expired) player.redraw();}
     );
   }
 

@@ -25,9 +25,9 @@ export class ProjectService {
       .then((project: Project) => {
         this.setActiveProject(project);
 
-        if(this.areCommentsActive(project)){
+        if(this.areCommentsActive(project) && !this.isActive(project)){
           return Utils.promiseSequential(
-            project.tracks.map(track => () => this.loadVersionsCommentsActive(track))
+            project.tracks.map(track => () => this.loadVersions(track, true))
           );
         }
 
@@ -36,7 +36,7 @@ export class ProjectService {
         }
 
         return Utils.promiseSequential(
-          project.tracks.map(track => () => this.loadVersions(track))
+          project.tracks.map(track => () => this.loadVersions(track, false))
         );
       });
   }
@@ -53,7 +53,7 @@ export class ProjectService {
     return project.status != "expired";
   }
 
-  private loadVersionsCommentsActive(track: Track): Promise<void> {
+  private loadVersions(track: Track, commentsOnly: boolean): Promise<void> {
     return RestCall.getTrack(track.track_id)
       .then(response => {
         track.versions = response["versions"];
@@ -63,29 +63,17 @@ export class ProjectService {
         });
 
         const version = track.versions[0];
-        return this.loadFiles(version)
-      });
-  }
-
-  private loadVersions(track: Track): Promise<void> {
-    return RestCall.getTrack(track.track_id)
-      .then(response => {
-        track.versions = response["versions"];
-
-        track.versions.forEach(version => {
-          if (version.downloadable == 0) version.downloadable = false
-        });
-
-        const version = track.versions[0];
-        return this.loadFiles(version)
-          .then(() => this.loadPlayer(track, version))
+        if(commentsOnly){
+        return this.loadFiles(version);}
+        else{
+          return this.loadFiles(version)
+          .then(() => this.loadPlayer(track, version))}
       });
   }
 
   private loadFiles(version: Version): Promise<void> {
     return RestCall.getVersion(version.version_id)
       .then(response => {
-        console.log(response);
         version.files = response["files"];
         this.loadComments(version);
         interval(20 * 1000)
