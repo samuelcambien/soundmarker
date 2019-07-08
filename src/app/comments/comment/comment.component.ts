@@ -1,22 +1,25 @@
-import {ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {AfterViewChecked, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
 import {Comment} from "../../model/comment";
 import {Utils} from "../../app.component";
 import {LocalStorageService} from "../../services/local-storage.service";
 import {RestCall} from "../../rest/rest-call";
 import {Player} from "../../player";
+import {ReplyFormComponent} from '../reply-form/reply-form.component';
 
 @Component({
   selector: 'app-comment',
   templateUrl: './comment.component.html',
   styleUrls: ['./comment.component.scss']
 })
-export class CommentComponent implements OnInit {
+
+export class CommentComponent implements OnInit{
 
   @Input() comment: Comment;
   @Input() player: Player;
   @Input() search: string;
   @Input() expired: boolean;
   @Output() delete = new EventEmitter<Comment>();
+  @Output() scrollIntoReply = new EventEmitter<boolean>();
 
   reply: Comment;
 
@@ -31,12 +34,23 @@ export class CommentComponent implements OnInit {
   ngOnInit() {
   }
 
+  @ViewChild('replyform') replyform;
+
   createReply() {
     this.reply = new Comment();
     this.reply.name = this.localStorageService.getCommentName();
     this.reply.parent_comment_id = this.comment.comment_id;
     this.reply.version_id = this.comment.version_id;
     this.showReplies = true;
+
+    this.cdr.detectChanges();
+    this.scrollIntoReply.emit(true);
+    if (!this.isMobileDevice()) {
+      setTimeout(() => this.replyform.focusOnInputDesktop());
+      setTimeout(() => this.scrollIntoReply.emit(false),400);
+    } else {
+      this.replyform.focusOnInputMobile();
+    }
   }
 
   clearReply() {
@@ -87,4 +101,9 @@ export class CommentComponent implements OnInit {
     this.comment.loop = !this.comment.loop;
     this.cdr.detectChanges();
   }
+
+  isMobileDevice() {
+    return (typeof window.orientation !== "undefined") || (navigator.userAgent.indexOf('IEMobile') !== -1);
+  };
+
 }

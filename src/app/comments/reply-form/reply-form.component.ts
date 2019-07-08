@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
 import {Comment} from "../../model/comment";
 import {NgForm} from "@angular/forms";
 import {RestCall} from "../../rest/rest-call";
@@ -14,6 +14,7 @@ export class ReplyFormComponent implements OnInit {
   @Output() cancel = new EventEmitter();
   @Output() newReply = new EventEmitter<Comment>();
 
+  @ViewChild('replytext') replytext;
   constructor() {
   }
 
@@ -24,4 +25,14 @@ export class ReplyFormComponent implements OnInit {
     this.reply.comment_time = Date.now();
     this.newReply.emit(this.reply);
   }
+
+  focusOnInputDesktop(){
+    this.replytext.nativeElement.scrollIntoView({duration: 400, behavior: "smooth", block: "center", inline: "nearest"});
+    setTimeout(()=>this.replytext.nativeElement.focus(),400);
+  }
+
+  focusOnInputMobile(){
+    this.replytext.nativeElement.focus();
+  }
 }
+

@@ -321,6 +321,7 @@ export class PublicTrackPlayerComponent implements OnInit, OnChanges {
   ///////////////////////////////////////////////////////////////////////////////////////////////////
   ////////////////////////////////////  SCROLLING OF LONG TITLES ////////////////////////////////////
 
+  scrollIntoReply:boolean = false;
   scrollInitialWait: number= 1250;
   scrollWaitAtEnd: number= 50;
   overflowTitle: boolean= false;
@@ -335,7 +336,6 @@ export class PublicTrackPlayerComponent implements OnInit, OnChanges {
   }
 
 
-
   // Hide the phonesearch in case the screen is resized while it was open.
   @HostListener('window:resize', ['$event'])
   onResize(event) {
@@ -344,14 +344,16 @@ export class PublicTrackPlayerComponent implements OnInit, OnChanges {
     }
   }
 
-
-
   // Detect changes of input variables on the component.
   // Launches auto scrolling when opening a track.
   ngOnChanges(changes){
     if(this.launchTitleScroll) {
       setTimeout(() => this.autoScroll(), this.scrollInitialWait);
     }
+  }
+
+  pauseAutoScroll(event){
+    this.scrollIntoReply = event ;
   }
 
   //Function that does the actual scrolling back and forth of too long titles.
@@ -367,7 +369,8 @@ export class PublicTrackPlayerComponent implements OnInit, OnChanges {
       let scrollLoop = () => {
         setTimeout(()=>{
         titleScrollDiv -= 1;
-        this.trackTitleDOM.nativeElement.scrollLeft +=  i;
+        if(!this.scrollIntoReply) this.trackTitleDOM.nativeElement.scrollLeft += i;
+
         if (titleScrollDiv > 0 && this.launchTitleScroll)
           requestAnimationFrame(scrollLoop);
         else if (titleScrollDiv === 0 && i === 1){
