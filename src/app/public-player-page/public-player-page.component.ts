@@ -118,6 +118,7 @@ export class PublicPlayerPageComponent implements OnInit {
         this.commentsExpired = true;
       }
       this.message = null;
+      return;
     }
 
     this.expiry_date = this.project.expiration.substr(0, 10);
