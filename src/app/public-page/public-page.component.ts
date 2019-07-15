@@ -73,7 +73,7 @@ export class PublicPageComponent implements OnInit {
           this.adTimer = timer(0, this.adExposureTime * 1000).pipe             // Initiate the advertisement cycle
          (tap(() => {if(!this.hiddenIframe) this.loadNextAd()}),                                  // Only load a new ad if there is not one waiting (in case page was inactive and there is already an ad waiting)
           tap(() => {if(!this.pageIsActive()) {this.adWait();}}),                                 // If page is inactive: break the chain and wait for user interaction.
-          delay(this.firstAd? this.adPostFetchDelay/1.5 : this.adPostFetchDelay),                     // Delay between loading an ad an refreshing the ad.
+          delay(this.firstAd? this.adPostFetchDelay/1.5 : this.adPostFetchDelay),                // Delay between loading an ad an refreshing the ad.
           tap(() => {this.firstAd = false; this.hideIframe(this.shownIframe)}),                   // Fadeout old ad
           delay(this.adTransitionWait),                                                                 // Wait for fadeout before destroying the iframe
           tap(() => this.destroyIframe(this.shownIframe))                                         // Destroy the old iframe
@@ -105,9 +105,17 @@ export class PublicPageComponent implements OnInit {
   // Fetch next ad.
   private loadNextAd(): Promise<any> {
     return RestCall.getRandSma(this.smaId)
-      .then(response => {this.hiddenIframe = this.createIframe(response["html"]);
-                                  this.nextSmaId=response["sma_id"];
-              }
+      .then(response => {
+        if(response["html"]){
+          this.hiddenIframe = this.createIframe(response["html"]);
+          this.nextSmaId=response["sma_id"];}
+        else{
+          this.adTimer.unsubscribe();                                         // If there is no add fetched from the backend stop the refresh algorithm for this session.
+          this.screenAction.unsubscribe();
+          document.removeEventListener("visibilitychange", this.toggleBrowserTab, true);
+          document.removeEventListener("visibilitychange", this.onFocus, false);
+        }
+        }
       );
   }
 
@@ -213,7 +221,7 @@ export class PublicPageComponent implements OnInit {
       document.removeEventListener('focus', this.onFocus, false);
       document.removeEventListener('mouseover', this.onVisibilityChange, true);
       this.mostRecentUserActivity = null;
-      this.screenAction.next();
+      if(this.adTimer.closed) this.screenAction.next();
     }
   };
 
@@ -221,7 +229,7 @@ export class PublicPageComponent implements OnInit {
     if(document.visibilityState == "visible") {
       document.removeEventListener('mouseover', this.onVisibilityChange, true);
       this.updateMostRecentUserActivity();
-      this.screenAction.next();
+      if(this.adTimer.closed) this.screenAction.next();
     }
   };
 

@@ -129,8 +129,6 @@ export class Endpoints {
 
   private static DATA: string = Endpoints.BACKEND;
 
-  public static AD: string = Endpoints.BACKEND + "/sma";
-
   public static SMA: string = Endpoints.BACKEND + "/sma";
 
   public static SMA_IMPRESSION: string = Endpoints.BACKEND + "/sma/imp";
