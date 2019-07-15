@@ -32,7 +32,7 @@ export class PublicTrackPlayerComponent implements OnInit, OnChanges {
 
   @Input() track: Track;
   @Input() enableOverview: boolean;
-  @Input() expired: boolean = false;
+  @Input() expired: boolean = true;
   @Input() launchTitleScroll: boolean;
 
   @Output() error = new EventEmitter();
@@ -80,11 +80,10 @@ export class PublicTrackPlayerComponent implements OnInit, OnChanges {
       this._progress = this.getCurrentTime();
       this.cdr.detectChanges();
     }, 1);
-    this.playerService.getPlayer(this.track.track_id)
-      .addWaveform(this.waveform.nativeElement);
     this.createNewComment();
     this.trackTitleDOM.nativeElement.setAttribute("style", "text-overflow: ellipsis");
     this.cdr.detectChanges();
+    if(!this.expired) this.playerService.getPlayer(this.track.track_id).addWaveform(this.waveform.nativeElement);
   }
 
   private getPlayerWidth(): number {
@@ -235,9 +234,16 @@ export class PublicTrackPlayerComponent implements OnInit, OnChanges {
     }
   }
 
+  // Separate function to go back to project overview to clear the browser history entry added when
+  overviewByOverviewIconClick(){
+    this.goToOverview();
+    history.back();
+  }
+
   goToOverview() {
-    // this.clearScroll();
+    this.clearScroll();
     this.overview.emit();
+
   }
 
   getCommentIntervalWidth() {
@@ -270,9 +276,18 @@ export class PublicTrackPlayerComponent implements OnInit, OnChanges {
   }
 
   removeComment(comment: Comment) {
+    if(!comment.parent_comment_id){
     this.version.comments = this.version.comments.filter(
       loadedComment => loadedComment != comment
-    );
+    );}
+    else {
+      let a = this.version.comments.findIndex(loadedComment => {
+        return loadedComment.comment_id == comment.parent_comment_id;
+      });
+      this.version.comments[a].replies = this.version.comments[a].replies.filter(
+          loadedComment => loadedComment != comment
+        );
+    }
   }
 
   deleteComment(comment: Comment) {
@@ -289,7 +304,6 @@ export class PublicTrackPlayerComponent implements OnInit, OnChanges {
   }
 
   isInViewport(waveform) {
-
     try {
       let bounding = waveform.nativeElement.getBoundingClientRect();
       let scrollPane = waveform.nativeElement.closest(".comments-scrolltainer");
@@ -306,6 +320,7 @@ export class PublicTrackPlayerComponent implements OnInit, OnChanges {
   ///////////////////////////////////////////////////////////////////////////////////////////////////
   ////////////////////////////////////  SCROLLING OF LONG TITLES ////////////////////////////////////
 
+  scrollIntoReply:boolean = false;
   scrollInitialWait: number= 1250;
   scrollWaitAtEnd: number= 50;
   overflowTitle: boolean= false;
@@ -318,6 +333,7 @@ export class PublicTrackPlayerComponent implements OnInit, OnChanges {
     this.trackTitleDOM.nativeElement.removeEventListener("click", this.autoScroll);
     this.overflowTitle = false;
   }
+
 
   // Hide the phonesearch in case the screen is resized while it was open.
   @HostListener('window:resize', ['$event'])
@@ -335,6 +351,10 @@ export class PublicTrackPlayerComponent implements OnInit, OnChanges {
     }
   }
 
+  pauseAutoScroll(event){
+    this.scrollIntoReply = event ;
+  }
+
   //Function that does the actual scrolling back and forth of too long titles.
   autoScroll = () => {
     if(this.trackTitleDOM.nativeElement.offsetWidth < this.trackTitleDOM.nativeElement.scrollWidth){ //Only run this function if there is actually a title which overflows the div.
@@ -348,7 +368,8 @@ export class PublicTrackPlayerComponent implements OnInit, OnChanges {
       let scrollLoop = () => {
         setTimeout(()=>{
         titleScrollDiv -= 1;
-        this.trackTitleDOM.nativeElement.scrollLeft +=  i;
+        if(!this.scrollIntoReply) this.trackTitleDOM.nativeElement.scrollLeft += i;
+
         if (titleScrollDiv > 0 && this.launchTitleScroll)
           requestAnimationFrame(scrollLoop);
         else if (titleScrollDiv === 0 && i === 1){
@@ -365,4 +386,17 @@ export class PublicTrackPlayerComponent implements OnInit, OnChanges {
   };
   }
   ///////////////////////////////////////////////////////////////////////////////////////////////////
+  // Catch back button when there is a project with multiple tracks to go back to overview instead of to previous website.
+  @HostListener('window:popstate', ['$event'])
+  onPopState(event) {
+    if (this.enableOverview){
+      this.goToOverview();
+    }
+    else history.go(2);
+  }
+
+  isExpiredProject(): boolean{
+    console.log(this.expired);
+    return this.expired;
+}
 }

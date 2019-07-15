@@ -1,3 +1,5 @@
+@import "../comment/comment.component";
+
 .reply {
   padding-top: 10px;
   padding-bottom: 10px;
@@ -13,6 +15,19 @@
   &.pending {
     opacity: 0.5;
   }
+}
+
+.comment-options {
+	margin-top: -9px;
+	margin-bottom: -5px;
+}
+
+.comment-options:hover .comment-options-fill, .comment-options:focus-within .comment-options-fill {
+	fill: #7397ff;
+}
+
+.comment-options:hover .menu-icon, .comment-options:focus-within .menu-icon {
+	stroke: #7397ff;
 }
 
 .name-tx {

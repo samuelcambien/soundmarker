@@ -38,8 +38,7 @@
       [launchTitleScroll]="(getActiveTrack() | async) == track"
       [expired]="expired && !commentsExpired"
       (overview)="setActiveTrack(null)"
-      (error)="error = $event"
-    >
+      (error)="error = $event">
     </app-public-track-player>
 
   </div>

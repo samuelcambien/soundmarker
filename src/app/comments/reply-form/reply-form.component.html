@@ -2,19 +2,14 @@
 
 <form #myForm="ngForm" (ngSubmit)="onSubmit(myForm)" class="reply-form container-fluid">
   <div class="top">
-	  
-	  
-  
-    <textarea type="text" required name="text" [(ngModel)]='reply.notes' name="text" placeholder="Type comment"
-              class="comment-form-text form-control form-control-sm" rows="1"></textarea>
-
+    <textarea #replytext type="text" required name="text" [(ngModel)]='reply.notes' name="text" placeholder="Type reply"
+              class="form-control form-control-sm" rows="1"></textarea>
   </div>
   
   <div class="form-row sub">
-	  
     <div class="form-group col-md-4">
       <input type="text" required name="name" [(ngModel)]='reply.name' placeholder="Your name"
-             class="comment-form-name sub-form name-box" id="name-box"/>
+             class="comment-form-name sub-form name-box" id="name-box" />
     </div>
     
     <label class="form-check-label cancel noselect ml-auto" (click)="cancel.emit()">

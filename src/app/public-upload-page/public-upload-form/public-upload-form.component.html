@@ -57,7 +57,15 @@
             <tbody>
               <tr *ngFor="let item of uploader.queue">
                 <td><p>{{ item?.file?.name }}</p></td>
-                <span (click)="removeFromQueue(item)" class="delete cross" aria-hidden="true">&times;</span>
+                <span (click)="removeFromQueue(item)" class="delete cross" aria-hidden="true">
+<svg width="9px" height="9px" viewBox="0 0 9 9" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round">
+        <g id="Internet-Networks-Servers-/-Upload/Download-/-upload-dash-arrow-1" transform="translate(-344.000000, -234.000000)" fill-rule="nonzero" stroke="#7397FF" stroke-width="1.5">
+            <path d="M345.5,235.5 L351.488196,241.488196" id="Line-8"></path>
+            <path d="M345.5,235.5 L351.488196,241.488196" id="Line-8" transform="translate(348.500000, 238.500000) scale(-1, 1) translate(-348.500000, -238.500000) "></path>
+        </g>
+    </g>
+</svg></span>
               </tr>
             </tbody>
           </table>
@@ -107,47 +115,64 @@
         <div class="form-group col hide-phone">
                 <textarea #notes_element [(ngModel)]="notes" type="text" placeholder="Notes" name="notes"
                           class="form-control form-control-sm"
-                          rows="1"></textarea>
+                          rows="2"></textarea>
         </div>
 
         <div class="form-group col show-phone">
                 <textarea #notes_element [(ngModel)]="notes" type="text" placeholder="Notes" name="notes"
                           class="form-control form-control-sm"
-                          rows="3"></textarea>
+                          rows="5"></textarea>
         </div>
       </div>
 
       <div class="form-row radios">
-    
+
         <div class="col">
-          <div class="btn-group btn-group-sm btn-group-toggle" name="expiration" ngbRadioGroup [(ngModel)]="expiration"
-               placement="top" ngbTooltip="Expire after a">
-            <label ngbButtonLabel class="btn btn-outline-form active">
-              <input ngbButton name="week" class="slide-selector left-btn" type="radio" [value]="'1week'">Week
-            </label>
-            <label ngbButtonLabel class="btn btn-outline-form">
-              <input ngbButton name="month" class="slide-selector" type="radio" [value]="'1month'">Month
-            </label>
-          </div>
+	       
+          <ng-select
+            class="custom noselect expiration"
+            bindValue="id"
+            groupBy = "heading"
+            [items]="expirations"
+            [searchable]="false"
+            [clearable]="false"
+            [(ngModel)]="expiration"
+            placeholder="Expire*"
+            name = "expirations"
+            dropdownPosition="top"
+            required>
+          </ng-select>
         </div>
+
         <div class="col">
-          <div class="btn-group btn-group-sm btn-group-toggle allow-downloads" placement="top"
-               ngbTooltip="No download">
-            <label ngbButtonLabel class="btn btn-outline-form">
-              <input ngbButton class="slide-selector" type="checkbox" [(ngModel)]="downloadable" name="usage">Stream only
-            </label>
-          </div>
+        <ng-select
+                class="custom noselect downloadable"
+                bindValue="id"
+                groupBy = "heading"
+                [items]="availability"
+                [searchable]="false"
+                [clearable]="false"
+                [(ngModel)]="downloadable"
+                placeholder="Download*"
+                name = "downloads"
+                dropdownPosition="top"
+                required>
+            </ng-select>
         </div>
+
         <div class="col" id="notify">
             <ng-select
                 class="custom noselect"
+                groupBy = "heading"
                 bindValue="id"
                 [items]="notifications"
                 [searchable]="false"
                 [clearable]="false"
                 [(ngModel)]="notifyID"
+                placeholder="Notify*"
                 name = "notifications"
-                dropdownPosition="top">
+                dropdownPosition="top"
+                required>
             </ng-select>
         </div>
 

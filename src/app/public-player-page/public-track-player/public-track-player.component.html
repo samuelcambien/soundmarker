@@ -7,8 +7,7 @@
 
       <div class="popup-play-btn">
 
-        <button *ngIf="isPlaying(); then popuppausebutton else popupplaybutton"></button>
-
+        <button *ngIf="isPlaying(); then popuppausebutton else popupplaybutton" ></button>
         <ng-template #popuppausebutton>
           <button class="mini-btn mini-pause-btn btn btn-link" (click)="pause()">
             <svg width="43px" height="43px" viewBox="0 0 27 27" version="1.1" xmlns="http://www.w3.org/2000/svg">
@@ -29,7 +28,7 @@
         </ng-template>
 
         <ng-template #popupplaybutton>
-          <button class="mini-btn mini-play-btn btn btn-link" (click)="play()">
+          <button class="mini-btn mini-play-btn btn btn-link" (click)="play()" [class.disabled]="expired">
             <svg width="43px" height="43px" viewBox="0 0 27 27" version="1.1" xmlns="http://www.w3.org/2000/svg">
               <defs></defs>
               <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
@@ -183,7 +182,7 @@
           </ng-template>
 
           <ng-template #playbutton>
-            <button class="mini-btn mini-play-btn btn btn-link" (click)="play()">
+            <button class="mini-btn mini-play-btn btn btn-link" (click)="play()" [class.disabled]="expired">
             </button>
           </ng-template>
 
@@ -224,7 +223,7 @@
 
   <div [ngbCollapse]="!phoneOrder" id="phoneorder" class="show-phone shadow">
 
-    <div class="comment-sort select-button">
+    <div class="comment-sort custom select-button">
       <select>
         <option>Most recent</option>
         <option>Track time</option>
@@ -260,7 +259,7 @@
       </ng-template>
 
       <ng-template #playbutton>
-        <button class="mini-btn mini-play-btn btn btn-link" (click)="play()">
+        <button class="mini-btn mini-play-btn btn btn-link" (click)="play()" [class.disabled]="expired">
           <svg width="43px" height="43px" viewBox="0 0 27 27" version="1.1" xmlns="http://www.w3.org/2000/svg">
             <defs></defs>
             <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
@@ -321,7 +320,7 @@
       </div>
 
       <div *ngIf="enableOverview" class="top-icon list-icon margin-tooltip" id="list-icon" role="button"
-           (click)="goToOverview()"
+           (click)="overviewByOverviewIconClick()"
            placement="top" ngbTooltip="Overview">
 
 
@@ -353,7 +352,7 @@
 
   <div class="player-content row">
 
-    <div class="player-container col-md-12">
+    <div class="player-container col-md-12" *ngIf="!expired">
 
       <div class="waveform-container">
 
@@ -478,11 +477,14 @@
 
       </div>
 
-      <div class="comment-sort" placement="top" ngbTooltip="Order by" [class.disabled]="!hasMatchingComments()"
+      <div class="comment-sort" [class.disabled]="!hasMatchingComments()"
       >
         <!--[class.disabled]="track.comments.length < 2"-->
         <ng-select class="custom noselect" [items]="commentSorters"
                    bindLabel="description"
+                   groupBy = "heading"
+                   dropdownPosition="top"
+                   placeholder="Order by"
                    [clearable]="false"
                    [searchable]="false"
                    [(ngModel)]="currentSorter">
@@ -506,11 +508,11 @@
       [search]="search"
       [expired]="expired"
       (delete)="deleteComment($event)"
+      (scrollIntoReply)="pauseAutoScroll($event)"
     >
     </app-comment>
 
     <div *ngIf="search && getMatchingComments().length == 0" class="no-comments">
-
       <p>We couldn't find any comments related to your search.</p>
     </div>
 
