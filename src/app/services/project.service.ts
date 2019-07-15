@@ -25,12 +25,18 @@ export class ProjectService {
       .then((project: Project) => {
         this.setActiveProject(project);
 
+        if(this.areCommentsActive(project) && !this.isActive(project)){
+          return Utils.promiseSequential(
+            project.tracks.map(track => () => this.loadVersions(track, true))
+          );
+        }
+
         if (!this.isActive(project)) {
           return Promise.resolve();
         }
 
         return Utils.promiseSequential(
-          project.tracks.map(track => () => this.loadVersions(track))
+          project.tracks.map(track => () => this.loadVersions(track, false))
         );
       });
   }
@@ -47,7 +53,7 @@ export class ProjectService {
     return project.status != "expired";
   }
 
-  private loadVersions(track: Track): Promise<void> {
+  private loadVersions(track: Track, commentsOnly: boolean): Promise<void> {
     return RestCall.getTrack(track.track_id)
       .then(response => {
         track.versions = response["versions"];
@@ -57,8 +63,11 @@ export class ProjectService {
         });
 
         const version = track.versions[0];
-        return this.loadFiles(version)
-          .then(() => this.loadPlayer(track, version))
+        if(commentsOnly){
+        return this.loadFiles(version);}
+        else{
+          return this.loadFiles(version)
+          .then(() => this.loadPlayer(track, version))}
       });
   }
 

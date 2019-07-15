@@ -6,7 +6,7 @@
 
     <ng-template #playbutton>
 
-      <button (click)="play();" class="mini-btn mini-play-btn btn btn-link">
+      <button (click)="play();" class="mini-btn mini-play-btn btn btn-link" [class.disabled]="expired">
 
         <svg width="43px" height="43px" viewBox="0 0 27 27" version="1.1" xmlns="http://www.w3.org/2000/svg">
           <defs></defs>
