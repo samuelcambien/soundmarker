@@ -34,6 +34,6 @@ export class PublicInfoHeaderComponent implements OnInit {
 
   showAutoplayToggle(): boolean {
     return this.projectService.getActiveProject()
-      && this.projectService.getActiveProject().tracks.length > 1;
+      && this.projectService.getActiveProject().tracks.length > 1 && this.message.enableNotifications;
   }
 }
