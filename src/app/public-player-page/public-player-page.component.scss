@@ -130,10 +130,12 @@
     height: 48px ;
     left: 0px ;
     right: 0px ;
-    z-index: 2 ;
+    z-index: 99;
     padding-top: 10px ;
     padding-bottom: 10px ;
     border-bottom: 1px solid #eef1ff ;
+    border-top-left-radius: 0.4rem;
+    border-top-right-radius: 0.4rem;
 }
 
 #phone-popup-playbar {
