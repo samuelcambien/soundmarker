@@ -278,93 +278,98 @@ if (in_array($project_id, $_SESSION['user_projects'])) {
   $result = $db->query($sql);
   $hash = $result->fetch()[0];
 
-  // only send if opted in for email
+  // https://www.functions-online.com/htmlentities.html
+  // htmlentities('', ENT_COMPAT, 'ISO-8859-1');
+  // html_entity_decode('', ENT_COMPAT, 'ISO-8859-1');
+  // Send Email to Sender
+  $sql = "SELECT email_string FROM Emails WHERE email_name = 'soundmarker-initial-email-to-sender'";
+  $emailstring = html_entity_decode($db->query($sql)->fetch()[0], ENT_COMPAT, 'ISO-8859-1');
+  $sql = "SELECT email_string_text FROM Emails WHERE email_name = 'soundmarker-initial-email-to-sender'";
+  $emailstring_text = html_entity_decode($db->query($sql)->fetch()[0], ENT_COMPAT, 'ISO-8859-1');
+  
+  // Replace strings
+  // Replace strings -> %projectdate%
+  $emailstring = str_replace("%projectdate%",$projectdate->format('F jS Y'),$emailstring);
+  $emailstring_text = str_replace("%projectdate%",$projectdate->format('F jS Y'),$emailstring_text);
+  // Replace strings -> %projectlink%
+  $sql = "SELECT hash FROM Project WHERE project_id = '$project_id'";
+  $projectlink = $config['SERVER_URL']."/project/" . $db->query($sql)->fetch()[0];
+  $emailstring = str_replace("%projectlink%",$projectlink,$emailstring);
+  $emailstring_text = str_replace("%projectlink%",$projectlink,$emailstring_text);
+  // Replace strings -> %recipientmail%
   if ($receiver) {
-    // https://www.functions-online.com/htmlentities.html
-    // htmlentities('', ENT_COMPAT, 'ISO-8859-1');
-    // html_entity_decode('', ENT_COMPAT, 'ISO-8859-1');
-    // Send Email to Sender
-    $sql = "SELECT email_string FROM Emails WHERE email_name = 'soundmarker-initial-email-to-sender'";
-    $emailstring = html_entity_decode($db->query($sql)->fetch()[0], ENT_COMPAT, 'ISO-8859-1');
-    $sql = "SELECT email_string_text FROM Emails WHERE email_name = 'soundmarker-initial-email-to-sender'";
-    $emailstring_text = html_entity_decode($db->query($sql)->fetch()[0], ENT_COMPAT, 'ISO-8859-1');
-    
-    // Replace strings
-    // Replace strings -> %projectdate%
-    $emailstring = str_replace("%projectdate%",$projectdate->format('F jS Y'),$emailstring);
-    $emailstring_text = str_replace("%projectdate%",$projectdate->format('F jS Y'),$emailstring_text);
-    // Replace strings -> %projectlink%
-    $sql = "SELECT hash FROM Project WHERE project_id = '$project_id'";
-    $projectlink = $config['SERVER_URL']."/project/" . $db->query($sql)->fetch()[0];
-    $emailstring = str_replace("%projectlink%",$projectlink,$emailstring);
-    $emailstring_text = str_replace("%projectlink%",$projectlink,$emailstring_text);
-    // Replace strings -> %recipientmail%
     $emailstring = str_replace("%recipientmail%",implode("<br>", $receiver),$emailstring);
     $emailstring_text = str_replace("%recipientmail%",implode("\n", $receiver),$emailstring_text);
-    // Replace strings -> %trackamount%
-    $sql = "SELECT track_id FROM Track WHERE project_id = '$project_id'";
-    $tracks = $db->query($sql)->fetchAll(PDO::FETCH_ASSOC);
-    foreach ($tracks as &$track) {
-        $trackid = $track["track_id"];
-        $sqlversion = "SELECT version_id FROM Version WHERE track_id = '$trackid'";
-        $versions[] = $db->query($sqlversion)->fetchAll(PDO::FETCH_ASSOC);
+  } else {
+    $emailstring = str_replace("%recipientmail%",implode("<br>", "Link only"),$emailstring);
+    $emailstring_text = str_replace("%recipientmail%",implode("\n", "Link only"),$emailstring_text);   
+  }
+  // Replace strings -> %trackamount%
+  $sql = "SELECT track_id FROM Track WHERE project_id = '$project_id'";
+  $tracks = $db->query($sql)->fetchAll(PDO::FETCH_ASSOC);
+  foreach ($tracks as &$track) {
+      $trackid = $track["track_id"];
+      $sqlversion = "SELECT version_id FROM Version WHERE track_id = '$trackid'";
+      $versions[] = $db->query($sqlversion)->fetchAll(PDO::FETCH_ASSOC);
+  }
+  foreach ($versions as &$versions2) {
+    foreach ($versions2 as &$version) {
+        $versionid = $version["version_id"];
+        $sqlfiles = "SELECT file_name FROM File WHERE version_id = '$versionid'";
+        $files[] = $db->query($sqlfiles)->fetchAll(PDO::FETCH_ASSOC)[0];
     }
-    foreach ($versions as &$versions2) {
-      foreach ($versions2 as &$version) {
-          $versionid = $version["version_id"];
-          $sqlfiles = "SELECT file_name FROM File WHERE version_id = '$versionid'";
-          $files[] = $db->query($sqlfiles)->fetchAll(PDO::FETCH_ASSOC)[0];
-      }
-    }
-    if (count($files) == 1) {
-      $trackcount = count($files). " track";
-    } else {
-      $trackcount = count($files). " tracks";
-    }
-    $emailstring = str_replace("%trackamount%",$trackcount,$emailstring);
-    $emailstring_text = str_replace("%trackamount%",$trackcount,$emailstring_text);   
-    // Replace strings -> %tracktitle%
-    $tracktitle = "";
-    foreach ($files as &$file) {
-        $tracktitle .= urldecode($file["file_name"]) . "<br>";
-    }
-    $emailstring = str_replace("%tracktitle%",$tracktitle,$emailstring);
-    $emailstring_text = str_replace("%tracktitle%",$tracktitle,$emailstring_text);   
+  }
+  if (count($files) == 1) {
+    $trackcount = count($files). " track";
+  } else {
+    $trackcount = count($files). " tracks";
+  }
+  $emailstring = str_replace("%trackamount%",$trackcount,$emailstring);
+  $emailstring_text = str_replace("%trackamount%",$trackcount,$emailstring_text);   
+  // Replace strings -> %tracktitle%
+  $tracktitle = "";
+  foreach ($files as &$file) {
+      $tracktitle .= urldecode($file["file_name"]) . "<br>";
+  }
+  $emailstring = str_replace("%tracktitle%",$tracktitle,$emailstring);
+  $emailstring_text = str_replace("%tracktitle%",$tracktitle,$emailstring_text);   
 
-    $subject = 'Your tracks have been shared successfully via Soundmarker';
-    $char_set = 'UTF-8';
+  $subject = 'Your tracks have been shared successfully via Soundmarker';
+  $char_set = 'UTF-8';
 
-    try {
-        $result = Flight::get("SesClient")->sendEmail([
-            'Destination' => [
-                'ToAddresses' => [$sender],
+  try {
+      $result = Flight::get("SesClient")->sendEmail([
+          'Destination' => [
+              'ToAddresses' => [$sender],
+          ],
+          'ReplyToAddresses' => ["noreply@soundmarker.com"],
+          'Source' => "Soundmarker <noreply@soundmarker.com>",
+          'Message' => [
+            'Body' => [
+                'Html' => [
+                    'Charset' => $char_set,
+                    'Data' => $emailstring,
+                ],
+                'Text' => [
+                    'Charset' => $char_set,
+                    'Data' => $emailstring_text,
+                ],
             ],
-            'ReplyToAddresses' => ["noreply@soundmarker.com"],
-            'Source' => "Soundmarker <noreply@soundmarker.com>",
-            'Message' => [
-              'Body' => [
-                  'Html' => [
-                      'Charset' => $char_set,
-                      'Data' => $emailstring,
-                  ],
-                  'Text' => [
-                      'Charset' => $char_set,
-                      'Data' => $emailstring_text,
-                  ],
-              ],
-              'Subject' => [
-                  'Charset' => $char_set,
-                  'Data' => $subject,
-              ],
+            'Subject' => [
+                'Charset' => $char_set,
+                'Data' => $subject,
             ],
-        ]);
-        $messageId = $result['MessageId'];
-    } catch (AwsException $e) {
-        // output error message if fails
-        echo $e->getMessage();
-        echo("The email was not sent. Error message: ".$e->getAwsErrorMessage()."\n");
-    }
+          ],
+      ]);
+      $messageId = $result['MessageId'];
+  } catch (AwsException $e) {
+      // output error message if fails
+      echo $e->getMessage();
+      echo("The email was not sent. Error message: ".$e->getAwsErrorMessage()."\n");
+  }
 
+  // only send if opted in for email
+  if ($receiver) {
     // Send Email to Recipient
     $sql = "SELECT email_string FROM Emails WHERE email_name = 'soundmarker-initial-email-to-recipient'";
     $emailstring = html_entity_decode($db->query($sql)->fetch()[0], ENT_COMPAT, 'ISO-8859-1');
@@ -471,7 +476,7 @@ $notify_id = $getbody->notify_id;
 $db = Flight::db();
 
 // Check to make sure it doesn't exist yet.
-$sql = "SELECT emailaddress FROM DailyUpdates WHERE project_id = '$project_id' AND emailaddress = '$emailaddress' AND notify_id = '$notify_id'";
+$sql = "SELECT emailaddress FROM DailyUpdates WHERE project_id = '$project_id' AND emailaddress = '$emailaddress'";
 $response = $db->query($sql)->fetchAll(PDO::FETCH_ASSOC);
 if (!isset($response[0])) {
   $sql = "INSERT INTO DailyUpdates (project_id, emailaddress, notify_id) VALUES ('$project_id', '$emailaddress', '$notify_id')";
