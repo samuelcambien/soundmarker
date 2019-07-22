@@ -301,8 +301,8 @@ if (in_array($project_id, $_SESSION['user_projects'])) {
     $emailstring = str_replace("%recipientmail%",implode("<br>", $receiver),$emailstring);
     $emailstring_text = str_replace("%recipientmail%",implode("\n", $receiver),$emailstring_text);
   } else {
-    $emailstring = str_replace("%recipientmail%",implode("<br>", "Link only"),$emailstring);
-    $emailstring_text = str_replace("%recipientmail%",implode("\n", "Link only"),$emailstring_text);   
+    $emailstring = str_replace("%recipientmail%","Link only",$emailstring);
+    $emailstring_text = str_replace("%recipientmail%","Link only",$emailstring_text);   
   }
   // Replace strings -> %trackamount%
   $sql = "SELECT track_id FROM Track WHERE project_id = '$project_id'";
