@@ -113,10 +113,10 @@ export class PublicUploadPageComponent implements OnInit {
   successfullUpload() {
     this.stage = this.statusEnum.GREAT_SUCCESS;
     this.uploader.clearQueue();
+    this.uploader.uploaded = 0;
   }
 
   static accept(fileType: string): boolean {
-
     return PublicUploadPageComponent.ACCEPTED_FILE_TYPES.find(
       acceptedType => acceptedType == fileType
     ) != null;

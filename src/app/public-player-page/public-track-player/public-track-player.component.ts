@@ -418,7 +418,6 @@ export class PublicTrackPlayerComponent implements OnInit, OnChanges {
   }
 
   isExpiredProject(): boolean{
-    console.log(this.expired);
     return this.expired;
 }
 }
