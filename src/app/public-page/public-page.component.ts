@@ -31,7 +31,7 @@ export class PublicPageComponent implements OnInit {
   nextSmaId;
   smaClass = window.innerWidth > 577 ? "sma hide-phone" : "phone-sma show-phone  rounded-lg border-0";
 
-  adExposureTime = 10;        // in seconds
+  adExposureTime = 45;        // in seconds
   adFadeInTime = "0.73s";     // Needs to be a string.
   adFadeOutTime = "0.5s";     // Needs to be a string.
   adInitialDelay = 350;      // in ms, this is also the delay between loading an add and showing it. (Enough time to load it)
