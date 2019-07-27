@@ -8,18 +8,18 @@ export class RestCall {
 
   // POST
 
-  public static createNewProject(): Promise<any> {
+  public static async createNewProject(): Promise<any> {
     return Request.post(Endpoints.PROJECT_NEW, {});
   }
 
-  public static createNewTrack(project_id, title): Promise<any> {
+  public static async createNewTrack(project_id, title): Promise<any> {
     return Request.post(Endpoints.TRACK_NEW, {
       project_id: project_id,
       track_title: title
     });
   }
 
-  public static createNewVersion(trackId: string, versionNotes: string, downloadable): Promise<Version> {
+  public static async createNewVersion(trackId: string, versionNotes: string, downloadable): Promise<Version> {
     return Request.post(Endpoints.VERSION_NEW, {
       track_id: trackId,
       notes: versionNotes,
@@ -27,7 +27,7 @@ export class RestCall {
     });
   }
 
-  public static createNewFile(file: File, file_name: string, extension: string, size: number, versionId: string, identifier: number, length: number): Promise<{ fileId: string, buffer: ArrayBuffer }> {
+  public static async createNewFile(file: File, file_name: string, extension: string, size: number, versionId: string, identifier: number, length: number): Promise<{ fileId: string, buffer: ArrayBuffer }> {
     return Promise.all([
       Request.post(Endpoints.UPLOAD, {
         version_id: versionId,
@@ -44,11 +44,11 @@ export class RestCall {
     });
   }
 
-  public static uploadChunk(buffer, streamFileId: string, downloadFileId: string, index: number, ext: string, onProgress): Promise<any> {
+  public static async uploadChunk(buffer, streamFileId: string, downloadFileId: string, index: number, ext: string, onProgress): Promise<any> {
     return Request.postData(Endpoints.UPLOAD_CHUNK, buffer, [streamFileId, downloadFileId, index, ext], onProgress);
   }
 
-  public static shareProject(project_id: string, expiration: string, notes: string, emailFrom?: string, emailTo?: string[]): Promise<any> {
+  public static async shareProject(project_id: string, expiration: string, notes: string, emailFrom?: string, emailTo?: string[]): Promise<any> {
     return Request.post(Endpoints.PROJECT_SHARE, {
       project_id: project_id,
       expiration: expiration,
@@ -58,11 +58,11 @@ export class RestCall {
     });
   }
 
-  public static addComment(comment: Comment): Promise<any> {
+  public static async addComment(comment: Comment): Promise<any> {
     return Request.post(Endpoints.COMMENT, comment);
   }
 
-  public static subscribe(project_id: string, email, notifyID): Promise<any> {
+  public static async subscribe(project_id: string, email, notifyID): Promise<any> {
     return Request.post(Endpoints.PROJECT_SUBSCRIBE, {
       project_id: project_id,
       notify_id: notifyID,
@@ -83,7 +83,7 @@ export class RestCall {
   }
 
   // DELETE
-  public static deleteComment(commentId: string) {
+  public static async deleteComment(commentId: string) {
     return Request.post(Endpoints.COMMENT_DELETE, {
       comment_id: commentId
     })
@@ -91,34 +91,37 @@ export class RestCall {
 
   // GET
 
-  public static getSma(sma_id: string): Promise<any> {
+  public static async getSma(sma_id: string): Promise<any> {
     return Request.getNonCaching(Endpoints.SMA, [sma_id]);
   }
 
-  public static getRandSma(id: string): Promise<any> {
-    return Request.getNonCaching(Endpoints.SMA, {sma_id: id});
+  public static async getRandSma(id: string): Promise<any> {
+    if(!id)
+      return Request.getNonCaching(Endpoints.SMA);
+    else
+      return Request.post(Endpoints.SMA, {sma_id: id});
   }
 
-  public static getProject(projectHash: string): Promise<Project> {
+  public static async getProject(projectHash: string): Promise<Project> {
     return Request.get(Endpoints.PROJECT, [projectHash]);
   }
 
-  public static getTrack(trackId: string): Promise<Version[]> {
+  public static async getTrack(trackId: string): Promise<Version[]> {
     return Request.get(Endpoints.TRACK, [trackId]);
   }
 
-  public static getVersion(versionId: string): Promise<any> {
+  public static async getVersion(versionId: string): Promise<any> {
     return Request.get(Endpoints.VERSION, [versionId]);
   }
 
-  public static getChunk(awsPath: string, extension: string, index: number) {
+  public static async getChunk(awsPath: string, extension: string, index: number) {
     return Request.getData(
       awsPath + index.toString().padStart(3, "0") + "." + extension, [],
       'arraybuffer'
     );
   }
 
-  public static getComments(versionId: string): Promise<any> {
+  public static async getComments(versionId: string): Promise<any> {
     return Request.getNonCaching(Endpoints.COMMENTS, [versionId]);
   }
 }
@@ -166,7 +169,7 @@ export class Request {
 
   private static xhrCache = {};
 
-  public static get(endpoint, path?): Promise<any> {
+  public static async get(endpoint, path?): Promise<any> {
     return Request.execute(
       "GET", endpoint,
       {
@@ -177,7 +180,7 @@ export class Request {
     );
   }
 
-  public static getNonCaching(endpoint, path?): Promise<any> {
+  public static async getNonCaching(endpoint, path?): Promise<any> {
     return Request.execute(
       "GET", endpoint,
       {
@@ -188,7 +191,7 @@ export class Request {
     );
   }
 
-  public static getData(endpoint, path?, responseType?): Promise<any> {
+  public static async getData(endpoint, path?, responseType?): Promise<any> {
     return Request.execute(
       "GET", endpoint,
       {
@@ -200,7 +203,7 @@ export class Request {
     );
   }
 
-  public static post(endpoint, data, path?): Promise<any> {
+  public static async post(endpoint, data, path?): Promise<any> {
     return Request.execute(
       "POST", endpoint,
       {
@@ -213,7 +216,7 @@ export class Request {
     );
   }
 
-  public static postData(endpoint, data, path?, onProgress?): Promise<any> {
+  public static async postData(endpoint, data, path?, onProgress?): Promise<any> {
     return Request.execute(
       "POST", endpoint,
       {
@@ -228,7 +231,7 @@ export class Request {
   }
 
 
-  public static execute(method: RequestMethod, endpoint: string, parameters: RequestParameters): Promise<any> {
+  public static async execute(method: RequestMethod, endpoint: string, parameters: RequestParameters): Promise<any> {
 
     let contentType = parameters.contentType;
     let responseType = parameters.responseType;

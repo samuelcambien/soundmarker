@@ -88,7 +88,13 @@ input:checked + .slider:before {
   border-top-left-radius: 0.6rem;
   border-top-right-radius: 0.6rem;
  border-bottom: 1px solid #eef1ff;
+ z-index: 100 !important;
 
+
+}
+
+.wide-nav.navbar {
+	 background: #ffffff;
 }
 
 // Logo

@@ -26,6 +26,8 @@ export class PublicPageComponent implements OnInit {
   @Output() tryAgain = new EventEmitter();
 
   @ViewChild('sma') sma: ElementRef;
+  @ViewChild('content') content: ElementRef;
+  @ViewChild('header') header: ElementRef;
 
   smaId;
   nextSmaId;
@@ -57,7 +59,6 @@ export class PublicPageComponent implements OnInit {
     if (!this.localStorageService.termsAccepted()) {
       this.openIntroduction();
     }
-    this.smaId = 1;
 
     //////////////////        Advertisement refresh algorithm.             //////////////////
     //  The idea is that the ad only refreshes if the web page is active in the browser or
@@ -88,13 +89,27 @@ export class PublicPageComponent implements OnInit {
     if (window.addEventListener) {
       window.addEventListener("message", this.clickSma.bind(this), false);
     }
+
+    this.header.nativeElement.addEventListener("wheel", event => {
+      this.contentScroll(event.deltaY);
+    });
+
+    this.sma.nativeElement.addEventListener("wheel", event => {
+      this.contentScroll(event.deltaY);
+    });
   }
 
   // Registering a click and opening the ad.
   private clickSma(event) {
       if (event.origin !== Utils.getSmaDomain()) return; // Make sure that the click from the iframe click is coming from the correct domain.
-      if (event.data) {
-        RestCall.logSmaClick(this.smaId).then(()  => window.open(event.data, "blank_"));
+
+      if(event.data) {
+        if (Number.isInteger(event.data)) {
+          this.contentScroll(event.data);
+          return
+        } else {
+          RestCall.logSmaClick(this.smaId).then(() => window.open(event.data, "blank_"));
+        }
       }
   }
 
@@ -104,6 +119,7 @@ export class PublicPageComponent implements OnInit {
 
   // Fetch next ad.
   private loadNextAd(): Promise<any> {
+    console.log(this.smaId);
     return RestCall.getRandSma(this.smaId)
       .then(response => {
         if(response["html"]){
@@ -258,5 +274,9 @@ export class PublicPageComponent implements OnInit {
 
   private reset() {
     this.tryAgain.emit();
+  }
+
+  contentScroll(deltaY){
+    this.content.nativeElement.scrollTop = this.content.nativeElement.scrollTop + deltaY;
   }
 }
