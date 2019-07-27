@@ -209,7 +209,7 @@ export class PublicTrackPlayerComponent implements OnInit, OnChanges {
 
   download() {
     window.open(
-      this.files
+      this.version.files
         .filter(file => file.identifier == 1)
         .map(file => file.aws_path + '.' + file.extension)
         [0]
