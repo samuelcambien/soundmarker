@@ -122,6 +122,7 @@ export class PublicPlayerPageComponent implements OnInit {
     }
 
     this.expiry_date = this.project.expiration.substr(0, 10);
+    this.project_id = this.project.project_id;
 
     if (this.project.sender) {
       this.sender = "by " + this.project.sender;
