@@ -4,11 +4,11 @@ import {Track} from "../model/track";
 import {Project} from "../model/project";
 import {Message} from "../message";
 import {Version} from "../model/version";
-import {PlayerService} from "../services/player.service";
 import {ProjectService} from "../services/project.service";
 import {Observable} from "rxjs";
-import {Player} from "../player";
-import {filter, map} from "rxjs/operators";
+import {Player} from "../player.service";
+import {DrawerService} from "../services/drawer.service";
+import {StateService} from "../services/state.service";
 
 @Component({
   selector: 'app-public-player',
@@ -34,8 +34,10 @@ export class PublicPlayerPageComponent implements OnInit {
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    private playerService: PlayerService,
+    private playerService: Player,
     private projectService: ProjectService,
+    private drawerService: DrawerService,
+    private stateService: StateService,
     private cdr: ChangeDetectorRef
   ) {
   }
@@ -46,40 +48,27 @@ export class PublicPlayerPageComponent implements OnInit {
       this.projectService.loadProject(params['project_hash'])
         .then(() => {
 
-          this.project = this.projectService.getActiveProject();
+          this.project = this.stateService.getActiveProject();
           this.initFields();
 
           if (this.getProject().tracks.length == 1)
-            this.projectService.setActiveTrack(this.getProject().tracks[0]);
+            this.stateService.setActiveTrack(this.getProject().tracks[0]);
 
           this.cdr.detectChanges();
         })
     });
-    this.getActivePlayer().subscribe(
-      player =>{if(!this.expired) player.redraw();}
-    );
   }
 
   getActiveTrack(): Observable<Track> {
-    return this.projectService.getActiveTrack();
+    return this.stateService.getActiveTrack();
   }
 
   setActiveTrack(track: Track) {
-    this.projectService.setActiveTrack(track);
-  }
-
-  getActivePlayer(): Observable<Player> {
-    return this.getActiveTrack()
-      .pipe(filter(track => track != null))
-      .pipe(map(track => this.getPlayer(track.track_id)));
-  }
-
-  getPlayer(trackId: string) {
-    return this.playerService.getPlayer(trackId);
+    this.stateService.setActiveTrack(track);
   }
 
   selectTrack(track: Track) {
-    this.projectService.setActiveTrack(track);
+    this.stateService.setActiveTrack(track);
     history.pushState({}, '');
   }
 

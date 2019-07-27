@@ -2,7 +2,10 @@ import {BrowserModule} from '@angular/platform-browser';
 import {NgModule} from '@angular/core';
 
 import {AppComponent} from './app.component';
-import {PublicUploadFormComponent, EmailValidationToolTip} from './public-upload-page/public-upload-form/public-upload-form.component';
+import {
+  EmailValidationToolTip,
+  PublicUploadFormComponent
+} from './public-upload-page/public-upload-form/public-upload-form.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {PublicUploadingFilesComponent} from './public-upload-page/public-upload-progress/public-uploading-files.component';
 import {PublicUploadFinishedComponent} from './public-upload-page/public-upload-finished/public-upload-finished.component';
@@ -49,31 +52,32 @@ import {ClipboardModule} from "ngx-clipboard";
 import {TimeFormatDirective} from './time-format.directive';
 import {SubscribeComponent} from './subscribe/subscribe.component';
 import {ErrorComponent} from "./error/error.component";
-import { PageNotFoundComponent } from './error/page-not-found/page-not-found.component';
-import { ProjectExpiredComponent } from './error/project-expired/project-expired.component';
-import { PublicPagenotfoundPageComponent } from './public-pagenotfound-page/public-pagenotfound-page.component';
-import { ExpiredProjectComponent } from './error/expired-project/expired-project.component';
-import { DropdownToggleComponent } from './dropdown-toggle/dropdown-toggle.component';
-import { ProDashboardTopbarComponent } from './pro/pro-dashboard/pro-dashboard-topbar/pro-dashboard-topbar.component';
-import { ProDashboardSidebarComponent } from './pro/pro-dashboard/pro-dashboard-sidebar/pro-dashboard-sidebar.component';
-import { ProDashboardSidebarItemProjectComponent } from './pro/pro-dashboard/pro-dashboard-sidebar/pro-dashboard-sidebar-item-project/pro-dashboard-sidebar-item-project.component';
-import { ProDashboardSidebarItemTransferComponent } from './pro/pro-dashboard/pro-dashboard-sidebar/pro-dashboard-sidebar-item-transfer/pro-dashboard-sidebar-item-transfer.component';
-import { ProBoardComponent } from './pro/pro-board/pro-board.component';
-import { ProDashboardComponent } from './pro/pro-dashboard/pro-dashboard.component';
-import { ProBoardUploadComponent } from './pro/pro-board/pro-board-upload/pro-board-upload.component';
-import { ProBoardProjectsComponent } from './pro/pro-board/pro-board-projects/pro-board-projects.component';
-import { ProBoardProjectsProjectComponent } from './pro/pro-board/pro-board-projects/pro-board-projects-project/pro-board-projects-project.component';
-import { ProBoardProjectsTrackComponent } from './pro/pro-board/pro-board-projects/pro-board-projects-track/pro-board-projects-track.component';
-import { ProBoardTransfersComponent } from './pro/pro-board/pro-board-transfers/pro-board-transfers.component';
-import { ProBoardTransfersTransferComponent } from './pro/pro-board/pro-board-transfers/pro-board-transfers-transfer/pro-board-transfers-transfer.component';
-import { ProBoardTransferTrackComponent } from './pro/pro-board/pro-board-transfers/pro-board-transfer-track/pro-board-transfer-track.component';
-import { ProComponent } from './pro/pro.component';
-
+import {PageNotFoundComponent} from './error/page-not-found/page-not-found.component';
+import {ProjectExpiredComponent} from './error/project-expired/project-expired.component';
+import {PublicPagenotfoundPageComponent} from './public-pagenotfound-page/public-pagenotfound-page.component';
+import {ExpiredProjectComponent} from './error/expired-project/expired-project.component';
+import {DropdownToggleComponent} from './dropdown-toggle/dropdown-toggle.component';
+import {ProDashboardTopbarComponent} from './pro/pro-dashboard/pro-dashboard-topbar/pro-dashboard-topbar.component';
+import {ProDashboardSidebarComponent} from './pro/pro-dashboard/pro-dashboard-sidebar/pro-dashboard-sidebar.component';
+import {ProDashboardSidebarItemProjectComponent} from './pro/pro-dashboard/pro-dashboard-sidebar/pro-dashboard-sidebar-item-project/pro-dashboard-sidebar-item-project.component';
+import {ProDashboardSidebarItemTransferComponent} from './pro/pro-dashboard/pro-dashboard-sidebar/pro-dashboard-sidebar-item-transfer/pro-dashboard-sidebar-item-transfer.component';
+import {ProBoardComponent} from './pro/pro-board/pro-board.component';
+import {ProDashboardComponent} from './pro/pro-dashboard/pro-dashboard.component';
+import {ProBoardUploadComponent} from './pro/pro-board/pro-board-upload/pro-board-upload.component';
+import {ProBoardProjectsComponent} from './pro/pro-board/pro-board-projects/pro-board-projects.component';
+import {ProBoardProjectsProjectComponent} from './pro/pro-board/pro-board-projects/pro-board-projects-project/pro-board-projects-project.component';
+import {ProBoardProjectsTrackComponent} from './pro/pro-board/pro-board-projects/pro-board-projects-track/pro-board-projects-track.component';
+import {ProBoardTransfersComponent} from './pro/pro-board/pro-board-transfers/pro-board-transfers.component';
+import {ProBoardTransfersTransferComponent} from './pro/pro-board/pro-board-transfers/pro-board-transfers-transfer/pro-board-transfers-transfer.component';
+import {ProBoardTransferTrackComponent} from './pro/pro-board/pro-board-transfers/pro-board-transfer-track/pro-board-transfer-track.component';
+import {ProComponent} from './pro/pro.component';
+import {WaveformComponent} from "./public-player-page/public-track-player/waveform/waveform.component";
 
 
 @NgModule({
   declarations: [
     AppComponent,
+    WaveformComponent,
     PublicUploadFormComponent,
     PublicUploadingFilesComponent,
     PublicUploadFinishedComponent,

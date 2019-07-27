@@ -19,21 +19,24 @@ export class Drawer {
   private maxCanvasWidth: number;
 
   private canvases: any;
-  private hasProgressCanvas: boolean;
   private halfPixel: number;
   private peaks: number[];
-  private duration: any;
 
   @Output() seek = new EventEmitter();
+
+  private pixelRatio: number = 2;
+
+  private waveColor: string = '#eef1ff';
+  private progressColor: string = '#b9caff';
+  private commentColor = '#7397ff';
 
   constructor(container, params) {
 
     this.container = container;
     this.params = params;
 
-    this.height = params.height * this.params.pixelRatio;
+    this.height = params.height * this.pixelRatio;
 
-    this.duration = params.duration;
     this.peaks = params.peaks;
 
     this.lastPos = 0;
@@ -74,7 +77,7 @@ export class Drawer {
 
     this.updateSize();
     this.updateProgress(this.getPos(this.progressStart));
-    this.updateComment(this.getPos(this.commentStart), this.getPos(this.commentEnd));
+    this.updateHighlight(this.getPos(this.commentStart), this.getPos(this.commentEnd));
 
     this.drawWave(this.peaks, 0, start, end);
   }
@@ -88,72 +91,18 @@ export class Drawer {
     return el;
   }
 
-  recenter(percent) {
-    var position = this.wrapper.scrollWidth * percent;
-    this.recenterOnPosition(position, true);
-  }
-
-  recenterOnPosition(position, immediate?) {
-    var scrollLeft = this.wrapper.scrollLeft;
-    var half = ~~(this.wrapper.clientWidth / 2);
-    var target = position - half;
-    var offset = target - scrollLeft;
-    var maxScroll = this.wrapper.scrollWidth - this.wrapper.clientWidth;
-
-    if (maxScroll == 0) {
-      // no need to continue if scrollbar is not there
-      return;
-    }
-
-    // if the cursor is currently visible...
-    if (!immediate && -half <= offset && offset < half) {
-      // we'll limit the "re-center" rate.
-      var rate = 5;
-      offset = Math.max(-rate, Math.min(rate, offset));
-      target = scrollLeft + offset;
-    }
-
-    // limit target to valid range (0 to maxScroll)
-    target = Math.max(0, Math.min(maxScroll, target));
-    // no use attempting to scroll if we're not moving
-    if (target != scrollLeft) {
-      this.wrapper.scrollLeft = target;
-    }
-
-  }
-
-  getScrollX() {
-    return Math.round(this.wrapper.scrollLeft * this.params.pixelRatio);
-  }
-
   getWidth() {
-    return Math.round(this.container.clientWidth * this.params.pixelRatio);
-  }
-
-  setHeight(height) {
-    if (height == this.height) {
-      return;
-    }
-    this.height = height;
-    this.style(this.wrapper, {
-      height: ~~(this.height / this.params.pixelRatio) + 'px'
-    });
-    this.updateSize();
+    return Math.round(this.container.clientWidth * this.pixelRatio);
   }
 
   progress(progress, start?) {
 
-    var minPxDelta = 1 / this.params.pixelRatio;
+    var minPxDelta = 1 / this.pixelRatio;
     this.progressStart = progress;
     var pos = this.getPos(progress);
 
     if (pos < this.lastPos || pos - this.lastPos >= minPxDelta) {
       this.lastPos = pos;
-
-      if (this.params.scrollParent && this.params.autoCenter) {
-        var newPos = ~~(this.wrapper.scrollWidth * progress);
-        this.recenterOnPosition(newPos);
-      }
 
       this.updateProgress(pos, this.getPos(start));
     }
@@ -161,29 +110,27 @@ export class Drawer {
     this.drawBuffer();
   }
 
-  highlightComment(start, end) {
-    this.commentStart = start;
-    this.commentEnd = end;
-    this.updateComment(this.getPos(this.commentStart), this.getPos(this.commentEnd));
+  highlight(start, end) {
+    this.updateHighlight(this.getPos(start), this.getPos(end));
   }
 
   getPos(time) {
-    var minPxDelta = 1 / this.params.pixelRatio;
+    var minPxDelta = 1 / this.pixelRatio;
     return Math.round(time * this.getWidth()) * minPxDelta;
   }
 
-  updateComment(start, end) {
+  private updateHighlight(start, end) {
     this.style(
       this.commentWave,
       {
-        clip: 'rect(0px, ' + end + 'px, ' + this.height + 'px, ' + start + 'px)'
+        clip: 'rect(0px, ' + end + 'px, ' + this.getHeight() + 'px, ' + start + 'px)'
       }
     );
   }
 
   initDrawer (params) {
     this.maxCanvasWidth = params.maxCanvasWidth != null ? params.maxCanvasWidth : 4000;
-    this.maxCanvasElementWidth = Math.round(this.maxCanvasWidth / this.params.pixelRatio);
+    this.maxCanvasElementWidth = Math.round(this.maxCanvasWidth / this.pixelRatio);
 
     if (this.maxCanvasWidth <= 1) {
       throw 'maxCanvasWidth must be greater than 1.';
@@ -191,8 +138,7 @@ export class Drawer {
       throw 'maxCanvasWidth must be an even number.';
     }
 
-    this.hasProgressCanvas = this.params.waveColor != this.params.progressColor;
-    this.halfPixel = 0.5 / this.params.pixelRatio;
+    this.halfPixel = 0.5 / this.pixelRatio;
     this.canvases = [];
   }
 
@@ -231,7 +177,7 @@ export class Drawer {
   }
 
   updateSize () {
-    var totalWidth = Math.round(this.getWidth() / this.params.pixelRatio),
+    var totalWidth = Math.round(this.getWidth() / this.pixelRatio),
       requiredCanvases = Math.ceil(totalWidth / this.maxCanvasElementWidth);
 
     while (this.canvases.length < requiredCanvases) {
@@ -244,13 +190,13 @@ export class Drawer {
 
     for (let i = 0; i < this.canvases.length; i++) {
       // Add some overlap to prevent vertical white stripes, keep the width even for simplicity.
-      let canvasWidth = this.maxCanvasWidth + 2 * Math.ceil(this.params.pixelRatio / 2);
+      let canvasWidth = this.maxCanvasWidth + 2 * Math.ceil(this.pixelRatio / 2);
 
       if (i == this.canvases.length - 1) {
         canvasWidth = this.getWidth() - (this.maxCanvasWidth * (this.canvases.length - 1));
       }
 
-      this.updateDimensions(this.canvases[i], canvasWidth, this.height);
+      this.updateDimensions(this.canvases[i], canvasWidth, this.getHeight());
       this.clearWaveForEntry(this.canvases[i]);
     }
   }
@@ -273,27 +219,24 @@ export class Drawer {
     );
     entry.waveCtx = entry.wave.getContext('2d');
 
-    if (this.hasProgressCanvas) {
-      entry.progress = this.progressWave.appendChild(
-        this.style(document.createElement('canvas'), {
-          position: 'absolute',
-          left: leftOffset + 'px',
-          top: 0,
-          bottom: 0
-        })
-      );
-      entry.progressCtx = entry.progress.getContext('2d');
-
-      entry.comment = this.commentWave.appendChild(
-        this.style(document.createElement('canvas'), {
-          position: 'absolute',
-          left: leftOffset + 'px',
-          top: 0,
-          bottom: 0
-        })
-      );
-      entry.commentCtx = entry.comment.getContext('2d');
-    }
+    entry.progress = this.progressWave.appendChild(
+      this.style(document.createElement('canvas'), {
+        position: 'absolute',
+        left: leftOffset + 'px',
+        top: 0,
+        bottom: 0
+      })
+    );
+    entry.progressCtx = entry.progress.getContext('2d');
+    entry.comment = this.commentWave.appendChild(
+      this.style(document.createElement('canvas'), {
+        position: 'absolute',
+        left: leftOffset + 'px',
+        top: 0,
+        bottom: 0
+      })
+    );
+    entry.commentCtx = entry.comment.getContext('2d');
 
     this.canvases.push(entry);
   }
@@ -301,14 +244,12 @@ export class Drawer {
   removeCanvas () {
     var lastEntry = this.canvases.pop();
     lastEntry.wave.parentElement.removeChild(lastEntry.wave);
-    if (this.hasProgressCanvas) {
-      lastEntry.progress.parentElement.removeChild(lastEntry.progress);
-    }
+    lastEntry.progress.parentElement.removeChild(lastEntry.progress);
   }
 
   updateDimensions (entry, width, height) {
-    var elementWidth = Math.round(width / this.params.pixelRatio),
-      totalWidth = Math.round(this.getWidth() / this.params.pixelRatio);
+    var elementWidth = Math.round(width / this.pixelRatio),
+      totalWidth = Math.round(this.getWidth() / this.pixelRatio);
 
     // Where the canvas starts and ends in the waveform, represented as a decimal between 0 and 1.
     entry.start = (entry.waveCtx.canvas.offsetLeft / totalWidth) || 0;
@@ -324,39 +265,20 @@ export class Drawer {
     this.style(this.progressWave, {display: 'block'});
     this.style(this.commentWave, {display: 'block'});
 
-    if (this.hasProgressCanvas) {
-      entry.progressCtx.canvas.width = width;
-      entry.progressCtx.canvas.height = height;
-      this.style(entry.progressCtx.canvas, {width: elementWidth + 'px'});
-
-      entry.commentCtx.canvas.width = width;
-      entry.commentCtx.canvas.height = height;
-      this.style(entry.commentCtx.canvas, {width: elementWidth + 'px'});
-    }
+    entry.progressCtx.canvas.width = width;
+    entry.progressCtx.canvas.height = height;
+    this.style(entry.progressCtx.canvas, {width: elementWidth + 'px'});
+    entry.commentCtx.canvas.width = width;
+    entry.commentCtx.canvas.height = height;
+    this.style(entry.commentCtx.canvas, {width: elementWidth + 'px'});
   }
 
   clearWaveForEntry (entry) {
     entry.waveCtx.clearRect(0, 0, entry.waveCtx.canvas.width, entry.waveCtx.canvas.height);
-    if (this.hasProgressCanvas) {
-      entry.progressCtx.clearRect(0, 0, entry.progressCtx.canvas.width, entry.progressCtx.canvas.height);
-    }
+    entry.progressCtx.clearRect(0, 0, entry.progressCtx.canvas.width, entry.progressCtx.canvas.height);
   }
 
   drawWave (peaks, channelIndex, start, end) {
-    var my = this;
-    // Split channels
-    if (peaks[0] instanceof Array) {
-      var channels = peaks;
-      if (this.params.splitChannels) {
-        this.setHeight(channels.length * this.params.height * this.params.pixelRatio);
-        channels.forEach(function (channelPeaks, i) {
-          my.drawWave(channelPeaks, i, start, end);
-        });
-        return;
-      } else {
-        peaks = channels[0];
-      }
-    }
 
     // Support arrays without negative peaks
     var hasMinValues = [].some.call(peaks, function (val) {
@@ -372,7 +294,7 @@ export class Drawer {
     }
 
     // A half-pixel offset makes lines crisp
-    var height = this.params.height * this.params.pixelRatio;
+    var height = this.params.height * this.pixelRatio;
     var offsetY = height * channelIndex || 0;
     var halfH = height / 2;
 
@@ -483,22 +405,24 @@ export class Drawer {
   }
 
   setFillStyles (entry) {
-    entry.waveCtx.fillStyle = this.params.waveColor;
-    if (this.hasProgressCanvas) {
-      entry.progressCtx.fillStyle = this.params.progressColor;
-      entry.commentCtx.fillStyle = '#7397ff';
-    }
+    entry.waveCtx.fillStyle = this.waveColor;
+    entry.progressCtx.fillStyle = this.progressColor;
+    entry.commentCtx.fillStyle = this.commentColor;
   }
 
   updateProgress (pos, start?) {
     if (!start) start = 0;
     this.style(this.progressWave, {
-      clip: 'rect(0px, ' + pos + 'px, ' + this.height + 'px, ' + start + 'px)'
+      clip: 'rect(0px, ' + pos + 'px, ' + this.getHeight() + 'px, ' + start + 'px)'
     });
   }
 
   drawBuffer() {
     const start = 0;
     this.drawPeaks(this.getWidth(), start, this.getWidth());
+  }
+
+  private getHeight() {
+    return this.height;
   }
 }

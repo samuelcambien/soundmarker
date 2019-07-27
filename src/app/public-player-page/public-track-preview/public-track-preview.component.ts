@@ -2,10 +2,10 @@ import {Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild} f
 import {Track} from "../../model/track";
 import {animate, transition, trigger} from "@angular/animations";
 import {Version} from "../../model/version";
-import {PlayerService} from "../../services/player.service";
 import {File} from "../../model/file";
 import {Comment, CommentSorter} from "../../model/comment";
 import {Utils} from "../../app.component";
+import {Player} from "../../player.service";
 
 @Component({
   selector: 'app-public-track-preview',
@@ -28,7 +28,7 @@ export class PublicTrackPreviewComponent implements OnInit {
   version: Version;
   private files: File[];
 
-  constructor(private playerService: PlayerService) {
+  constructor(private player: Player) {
   }
 
   ngOnInit() {
@@ -38,15 +38,15 @@ export class PublicTrackPreviewComponent implements OnInit {
   }
 
   play() {
-    this.getPlayer().play();
+    this.player.play(this.version);
   }
 
   isPlaying() {
-    return this.getPlayer() && this.getPlayer().isPlaying();
+    return this.player.version == this.version && this.player.isPlaying();
   }
 
   private getPlayer() {
-    return this.playerService.getPlayer(this.track.track_id);
+    return this.player;
   }
 
   trackSelected() {
