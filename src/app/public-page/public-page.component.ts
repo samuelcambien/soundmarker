@@ -31,7 +31,7 @@ export class PublicPageComponent implements OnInit {
   nextSmaId;
   smaClass = window.innerWidth > 577 ? "sma hide-phone" : "phone-sma show-phone  rounded-lg border-0";
 
-  adExposureTime = 45;        // in seconds
+  adExposureTime = 10;        // in seconds
   adFadeInTime = "0.73s";     // Needs to be a string.
   adFadeOutTime = "0.5s";     // Needs to be a string.
   adInitialDelay = 350;      // in ms, this is also the delay between loading an add and showing it. (Enough time to load it)
@@ -57,7 +57,6 @@ export class PublicPageComponent implements OnInit {
     if (!this.localStorageService.termsAccepted()) {
       this.openIntroduction();
     }
-    this.smaId = 1;
 
     //////////////////        Advertisement refresh algorithm.             //////////////////
     //  The idea is that the ad only refreshes if the web page is active in the browser or

@@ -96,7 +96,8 @@ export class RestCall {
   }
 
   public static getRandSma(id: string): Promise<any> {
-    return Request.getNonCaching(Endpoints.SMA, {sma_id: id});
+    if(!id)       {return Request.getNonCaching(Endpoints.SMA)}
+    else          {return Request.post(Endpoints.SMA, {sma_id: id})}
   }
 
   public static getProject(projectHash: string): Promise<Project> {
