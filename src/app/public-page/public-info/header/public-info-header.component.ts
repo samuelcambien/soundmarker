@@ -2,6 +2,7 @@ import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {SubscribeComponent} from "../../../subscribe/subscribe.component";
 import {Message} from "../../../message";
+import {StateService} from "../../../services/state.service";
 import {ProjectService} from "../../../services/project.service";
 
 @Component({
@@ -17,7 +18,8 @@ export class PublicInfoHeaderComponent implements OnInit {
 
   constructor(
     private modalService: NgbModal,
-    public projectService: ProjectService
+    public projectService: ProjectService,
+    public stateService: StateService
   ) {
   }
 
@@ -33,7 +35,7 @@ export class PublicInfoHeaderComponent implements OnInit {
   }
 
   showAutoplayToggle(): boolean {
-    return this.projectService.getActiveProject()
-      && this.projectService.getActiveProject().tracks.length > 1 && this.message.enableNotifications;
+    return this.stateService.getActiveProject()
+      && this.stateService.getActiveProject().tracks.length > 1 && this.message && this.message.enableNotifications;
   }
 }

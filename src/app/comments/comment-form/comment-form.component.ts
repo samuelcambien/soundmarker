@@ -1,7 +1,9 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {Comment} from "../../model/comment";
 import {PublicTrackPlayerComponent} from "../../public-player-page/public-track-player/public-track-player.component";
-import {Player} from "../../player";
+import {Player} from "../../player.service";
+import {Version} from "../../model/version";
+import {StateService} from "../../services/state.service";
 
 @Component({
   selector: 'app-comment-form',
@@ -12,20 +14,22 @@ export class CommentFormComponent implements OnInit {
 
   active: boolean = false;
 
-  @Input() version_id;
+  @Input() version: Version;
   @Input() comment: Comment;
-  @Input() player: Player;
   @Output() newComment = new EventEmitter<Comment>();
 
-  constructor() {
+  constructor(
+    private player: Player,
+    private stateService: StateService
+  ) {
   }
 
   ngOnInit() {
+    this.comment.version_id = this.version.version_id;
   }
 
   onSubmit() {
     this.comment.comment_time = Date.now();
-    this.comment.version_id = this.version_id;
     if (!this.comment.include_start) delete this.comment.start_time;
     if (!this.comment.include_end) delete this.comment.end_time;
     this.active = false;
@@ -34,15 +38,17 @@ export class CommentFormComponent implements OnInit {
   }
 
   preview() {
-    this.player.play(this.comment);
+    this.player.play(this.version, this.comment.start_time);
+    this.stateService.setActiveComment(this.comment);
   }
 
   stopPreview() {
-    this.player.stop();
+    this.player.pause();
+    this.player.seekTo(this.version, this.comment.start_time);
   }
 
   isPlaying() {
-    return this.player && this.player.getComment() == this.comment;
+    return this.player && this.stateService.getActiveComment().getValue() == this.comment;
   }
 
   triggerStart() {

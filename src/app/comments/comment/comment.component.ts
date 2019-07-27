@@ -3,8 +3,9 @@ import {Comment} from "../../model/comment";
 import {Utils} from "../../app.component";
 import {LocalStorageService} from "../../services/local-storage.service";
 import {RestCall} from "../../rest/rest-call";
-import {Player} from "../../player";
-import {ReplyFormComponent} from '../reply-form/reply-form.component';
+import {Player} from "../../player.service";
+import {Version} from "../../model/version";
+import {StateService} from "../../services/state.service";
 
 @Component({
   selector: 'app-comment',
@@ -15,7 +16,7 @@ import {ReplyFormComponent} from '../reply-form/reply-form.component';
 export class CommentComponent implements OnInit{
 
   @Input() comment: Comment;
-  @Input() player: Player;
+  @Input() version: Version;
   @Input() search: string;
   @Input() expired: boolean;
   @Output() delete = new EventEmitter<Comment>();
@@ -27,7 +28,9 @@ export class CommentComponent implements OnInit{
 
   constructor(
     private localStorageService: LocalStorageService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private player: Player,
+    private stateService: StateService
   ) {
   }
 
@@ -85,16 +88,17 @@ export class CommentComponent implements OnInit{
   }
 
   play() {
-    this.player.play(this.comment);
+    this.player.play(this.version, this.comment.start_time);
+    this.stateService.setActiveComment(this.comment);
   }
 
   stop() {
     this.player.pause();
-    this.player.seekTo(this.comment.start_time);
+    this.player.seekTo(this.version, this.comment.start_time);
   }
 
   isPlaying() {
-    return this.player && this.player.getComment() == this.comment;
+    return this.stateService.getActiveComment().getValue() == this.comment;
   }
 
   toggleLoop() {

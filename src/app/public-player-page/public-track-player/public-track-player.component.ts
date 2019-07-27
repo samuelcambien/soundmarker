@@ -16,9 +16,9 @@ import {Comment, CommentSorter} from "../../model/comment";
 import {Version} from "../../model/version";
 import {File} from "../../model/file";
 import {RestCall} from "../../rest/rest-call";
-import {PlayerService} from "../../services/player.service";
 import {LocalStorageService} from "../../services/local-storage.service";
-import {Player} from "../../player";
+import {DrawerService} from "../../services/drawer.service";
+import {Player} from "../../player.service";
 import {animate, state, style, transition, trigger} from '@angular/animations';
 
 @Component({
@@ -75,7 +75,7 @@ export class PublicTrackPlayerComponent implements OnInit, OnChanges {
 
   search: string;
 
-  _progress: number;
+  _currentTime: number = 0;
 
   startPos;
   endPos;
@@ -88,7 +88,8 @@ export class PublicTrackPlayerComponent implements OnInit, OnChanges {
 
   constructor(
     private localStorageService: LocalStorageService,
-    private playerService: PlayerService,
+    private player: Player,
+    private drawerService: DrawerService,
     private cdr: ChangeDetectorRef
   ) {
     document.addEventListener('scroll', ()=>{
@@ -105,14 +106,15 @@ export class PublicTrackPlayerComponent implements OnInit, OnChanges {
   ngOnInit(): void {
     this.waveformInViewPort = true;
     this.version = this.track.versions[0];
-    setInterval(() => {
-      this._progress = this.getCurrentTime();
-      this.cdr.detectChanges();
-    }, 1);
+    this.player.progress.subscribe(e => {
+      if (this.version === e.version) {
+        this._currentTime = e.currentTime;
+        this.cdr.detectChanges();
+      }
+    });
     this.createNewComment();
     this.trackTitleDOM.nativeElement.setAttribute("style", "text-overflow: ellipsis");
     this.cdr.detectChanges();
-    if(!this.expired) this.playerService.getPlayer(this.track.track_id).addWaveform(this.waveform.nativeElement);
   }
 
   private getPlayerWidth(): number {
@@ -171,15 +173,15 @@ export class PublicTrackPlayerComponent implements OnInit, OnChanges {
   }
 
   play() {
-    this.getPlayer().play();
+    this.player.play(this.version);
   }
 
   pause() {
-    this.getPlayer().pause();
+    this.player.pause();
   }
 
   isPlaying() {
-    return this.getPlayer() && this.getPlayer().isPlaying();
+    return this.player.version == this.version && this.player.isPlaying();
   }
 
   getMatchingCommentsSorted(): Comment[] {
@@ -209,7 +211,7 @@ export class PublicTrackPlayerComponent implements OnInit, OnChanges {
   }
 
   getCurrentTime(): number {
-    return this.getPlayer() != null ? this.getPlayer().getCurrentTime() : 0;
+    return this._currentTime;
   }
 
   getDuration(): number {
@@ -242,29 +244,30 @@ export class PublicTrackPlayerComponent implements OnInit, OnChanges {
         .filter(file => file.identifier == 1)
         .map(file => file.aws_path + '.' + file.extension)
         [0]
-    );}
+    );
+  }
 
   showPhoneSearch() {
-    document.getElementById("phonesearch").setAttribute("style","display:inline-block");
+    document.getElementById("phonesearch").setAttribute("style", "display:inline-block");
     this.phoneSearchInput.nativeElement.focus();
   }
 
-  clearSearch(){
+  clearSearch() {
     this.search = null;
     this.phoneSearchInput.nativeElement.focus();
   }
 
   hidePhoneSearch(event) {
-    if(event.relatedTarget && (event.relatedTarget.getAttribute('id') === "phonesearch")){
+    if (event.relatedTarget && (event.relatedTarget.getAttribute('id') === "phonesearch")) {
       this.phoneSearchInput.nativeElement.focus(); //in case the search field is cleared or the search icon is clicker: re-focus on the search field.
     }
-    else if(this.search == null) {
+    else if (this.search == null) {
       document.getElementById("phonesearch").setAttribute("style", "display:none");
     }
   }
 
   // Separate function to go back to project overview to clear the browser history entry added when
-  overviewByOverviewIconClick(){
+  overviewByOverviewIconClick() {
     this.goToOverview();
     history.back();
   }
@@ -324,10 +327,6 @@ export class PublicTrackPlayerComponent implements OnInit, OnChanges {
     this.removeComment(comment);
   }
 
-  getPlayer(): Player {
-    return this.playerService.getPlayer(this.track.track_id);
-  }
-
   dragStart() {
     this.comment.include_start = true;
   }
@@ -342,9 +341,9 @@ export class PublicTrackPlayerComponent implements OnInit, OnChanges {
   ///////////////////////////////////////////////////////////////////////////////////////////////////
   ////////////////////////////////////  SCROLLING OF LONG TITLES ////////////////////////////////////
 
-  scrollInitialWait: number= 1250;
-  scrollWaitAtEnd: number= 50;
-  overflowTitle: boolean= false;
+  scrollInitialWait: number = 1250;
+  scrollWaitAtEnd: number = 50;
+  overflowTitle: boolean = false;
   scrollFPS = 45;
   pauseTitleScroll:boolean =  false;
 
@@ -360,16 +359,16 @@ export class PublicTrackPlayerComponent implements OnInit, OnChanges {
   // Hide the phonesearch in case the screen is resized while it was open.
   @HostListener('window:resize', ['$event'])
   onResize(event) {
-    if (window.innerWidth > 577){
-      document.getElementById("phonesearch").setAttribute("style","display:none");
+    if (window.innerWidth > 577) {
+      document.getElementById("phonesearch").setAttribute("style", "display:none");
     }
   }
 
   // Detect changes of input variables on the component.
   // Launches auto scrolling when opening a track.
-  ngOnChanges(changes){
+  ngOnChanges(changes) {
     this.waveformInViewPort = true;
-    if(this.launchTitleScroll) {
+    if (this.launchTitleScroll) {
       setTimeout(() => this.autoScroll(), this.scrollInitialWait);
     }
   }
@@ -380,8 +379,8 @@ export class PublicTrackPlayerComponent implements OnInit, OnChanges {
 
   //Function that does the actual scrolling back and forth of too long titles.
   autoScroll = () => {
-    if(this.trackTitleDOM.nativeElement.offsetWidth < this.trackTitleDOM.nativeElement.scrollWidth){ //Only run this function if there is actually a title which overflows the div.
-      this.overflowTitle=false;
+    if (this.trackTitleDOM.nativeElement.offsetWidth < this.trackTitleDOM.nativeElement.scrollWidth) { //Only run this function if there is actually a title which overflows the div.
+      this.overflowTitle = false;
 
       this.trackTitleDOM.nativeElement.setAttribute("style", "text-overflow: none");
       this.trackTitleDOM.nativeElement.removeEventListener("click", this.autoScroll);
@@ -389,29 +388,32 @@ export class PublicTrackPlayerComponent implements OnInit, OnChanges {
 
       let i = 1;
       let scrollLoop = () => {
-        setTimeout(()=>{
-        titleScrollDiv -= 1;
-        if(!this.pauseTitleScroll) this.trackTitleDOM.nativeElement.scrollLeft += i;
-        if (titleScrollDiv > 0 && this.launchTitleScroll)
-          requestAnimationFrame(scrollLoop);
-        else if (titleScrollDiv === 0 && i === 1){
-          titleScrollDiv = this.trackTitleDOM.nativeElement.scrollLeft;
-          i=-i;
-          requestAnimationFrame(scrollLoop);}
-        else{
-          this.trackTitleDOM.nativeElement.setAttribute("style", "text-overflow: ellipsis");
-          this.trackTitleDOM.nativeElement.addEventListener("click", this.autoScroll);
-          this.overflowTitle = true;
-        }},1000/this.scrollFPS)
+        setTimeout(() => {
+          titleScrollDiv -= 1;
+          if(!this.pauseTitleScroll) this.trackTitleDOM.nativeElement.scrollLeft += i;
+          if (titleScrollDiv > 0 && this.launchTitleScroll)
+            requestAnimationFrame(scrollLoop);
+          else if (titleScrollDiv === 0 && i === 1) {
+            titleScrollDiv = this.trackTitleDOM.nativeElement.scrollLeft;
+            i = -i;
+            requestAnimationFrame(scrollLoop);
+          }
+          else {
+            this.trackTitleDOM.nativeElement.setAttribute("style", "text-overflow: ellipsis");
+            this.trackTitleDOM.nativeElement.addEventListener("click", this.autoScroll);
+            this.overflowTitle = true;
+          }
+        }, 1000 / this.scrollFPS)
       };
       scrollLoop();
-  };
+    }
+    ;
   }
   ///////////////////////////////////////////////////////////////////////////////////////////////////
   // Catch back button when there is a project with multiple tracks to go back to overview instead of to previous website.
   @HostListener('window:popstate', ['$event'])
   onPopState(event) {
-    if (this.enableOverview){
+    if (this.enableOverview) {
       this.goToOverview();
     }
     else history.go(2);
