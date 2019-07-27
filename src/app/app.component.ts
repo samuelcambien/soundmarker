@@ -27,7 +27,6 @@ export class Utils {
   }
 
   public static getSmaDomain(): string{
-    // return "http://127.0.0.1";
     return environment.smaDomain;
   }
 

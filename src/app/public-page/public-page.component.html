@@ -7,19 +7,19 @@
 
 <div  class="container rounded phone-scroll">
   <div>
-    <div [ngClass]="smaClass" #sma> </div>
+    <div [ngClass]="smaClass" #sma > </div>
   </div>
 
   <div class="public-page card shadow-lg rounded-lg border-0">
-    <div class="hide-phone">
-      <app-public-info-header [message]="message"></app-public-info-header>
+    <div class="hide-phone" #header>
+      <app-public-info-header [message]="message" ></app-public-info-header>
     </div>
-   
-    <div class="upload-container comments-scrolltainer card-body bg-light rounded-lg">
+
+    <div class="upload-container comments-scrolltainer card-body bg-light rounded-lg" #content>
       <ng-content *ngIf="!error"></ng-content>
       <app-error *ngIf="error" (reset)="reset()"></app-error>
     </div>
-   
+
   </div>
 </div>
 
