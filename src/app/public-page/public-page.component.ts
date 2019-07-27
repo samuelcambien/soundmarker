@@ -59,7 +59,6 @@ export class PublicPageComponent implements OnInit {
     if (!this.localStorageService.termsAccepted()) {
       this.openIntroduction();
     }
-    this.smaId = 1;
 
     //////////////////        Advertisement refresh algorithm.             //////////////////
     //  The idea is that the ad only refreshes if the web page is active in the browser or
@@ -120,6 +119,7 @@ export class PublicPageComponent implements OnInit {
 
   // Fetch next ad.
   private loadNextAd(): Promise<any> {
+    console.log(this.smaId);
     return RestCall.getRandSma(this.smaId)
       .then(response => {
         if(response["html"]){

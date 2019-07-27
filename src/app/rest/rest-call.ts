@@ -95,7 +95,7 @@ export class RestCall {
     return Request.getNonCaching(Endpoints.SMA, [sma_id]);
   }
 
-  public static getRandSma(id: string): Promise<any> {
+  public static getRandSma(id?: string): Promise<any> {
     return Request.getNonCaching(Endpoints.SMA, {sma_id: id});
   }
 
