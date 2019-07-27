@@ -24,7 +24,7 @@ $s3 = new Aws\S3\S3Client([
     'region'      => $config['AWS_S3_REGION'],
 ]);
 
-// Send daily updates
+// Send update every 10 minutes
 // Go through Daily Updates and get project_ids, then check first if they're not expired
 $sql = "SELECT update_id, project_id, emailaddress, last_comment_id FROM DailyUpdates WHERE notify_id = '2'";
 $updates = $db->query($sql)->fetchAll(PDO::FETCH_ASSOC);
@@ -121,9 +121,9 @@ foreach ($updates as &$update) {
 
   // If we do have new comments
   if ($count > 0) {
-      $sql = "SELECT email_string FROM Emails WHERE email_name = 'soundmarker-daily-updates'";
+      $sql = "SELECT email_string FROM Emails WHERE email_name = 'soundmarker-instant-updates'";
       $emailstring = html_entity_decode($db->query($sql)->fetch()[0], ENT_COMPAT, 'ISO-8859-1');
-      $sql = "SELECT email_string_text FROM Emails WHERE email_name = 'soundmarker-daily-updates'";
+      $sql = "SELECT email_string_text FROM Emails WHERE email_name = 'soundmarker-instant-updates'";
       $emailstring_text = html_entity_decode($db->query($sql)->fetch()[0], ENT_COMPAT, 'ISO-8859-1');
 
       // Replace strings

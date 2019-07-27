@@ -8,14 +8,14 @@ phases:
             - echo Installing source NPM dependencies...
             - npm install
             - npm install -g node-sass
-            - npm install -g @angular/cli
-            - npm install -g @angular/core
-            - npm install --save-dev @angular-devkit/build-angular
+            - npm install -g @angular/core@7.0.4
+            - npm install -g @angular/cli@7.0.4
+            - npm install -g --save-dev @angular-devkit/build-angular@0.13.7
             - npm link
     build:
         commands:
             - echo Build started on `date`
-            - ng build --prod
+            - ng build --prod --aot
             - cd dist/Soundmarker-sass && mv *.* .. && cd ..
             - cp -r server/.htaccess dist
             - cp -r .ebextensions dist

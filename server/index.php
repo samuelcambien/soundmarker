@@ -21,7 +21,7 @@ $s3 = new Aws\S3\S3Client([
     'profile'     => 's3',
     'version'     => 'latest',
     'region'      => $config['AWS_S3_REGION'],
-    'scheme' => 'http',
+    'scheme'      => 'http',
 ]);
 
 Flight::set("s3", $s3);
@@ -50,7 +50,7 @@ if(!isset($_SESSION)) {
   session_start(); 
 } 
 if (isset($_SESSION["USER"])) {
-$access_token = json_decode($_SESSION["USER"])->access_token;
+  $access_token = json_decode($_SESSION["USER"])->access_token;
 }
 
 // Error handling
@@ -278,93 +278,98 @@ if (true) {
   $result = $db->query($sql);
   $hash = $result->fetch()[0];
 
-  // only send if opted in for email
+  // https://www.functions-online.com/htmlentities.html
+  // htmlentities('', ENT_COMPAT, 'ISO-8859-1');
+  // html_entity_decode('', ENT_COMPAT, 'ISO-8859-1');
+  // Send Email to Sender
+  $sql = "SELECT email_string FROM Emails WHERE email_name = 'soundmarker-initial-email-to-sender'";
+  $emailstring = html_entity_decode($db->query($sql)->fetch()[0], ENT_COMPAT, 'ISO-8859-1');
+  $sql = "SELECT email_string_text FROM Emails WHERE email_name = 'soundmarker-initial-email-to-sender'";
+  $emailstring_text = html_entity_decode($db->query($sql)->fetch()[0], ENT_COMPAT, 'ISO-8859-1');
+  
+  // Replace strings
+  // Replace strings -> %projectdate%
+  $emailstring = str_replace("%projectdate%",$projectdate->format('F jS Y'),$emailstring);
+  $emailstring_text = str_replace("%projectdate%",$projectdate->format('F jS Y'),$emailstring_text);
+  // Replace strings -> %projectlink%
+  $sql = "SELECT hash FROM Project WHERE project_id = '$project_id'";
+  $projectlink = $config['SERVER_URL']."/project/" . $db->query($sql)->fetch()[0];
+  $emailstring = str_replace("%projectlink%",$projectlink,$emailstring);
+  $emailstring_text = str_replace("%projectlink%",$projectlink,$emailstring_text);
+  // Replace strings -> %recipientmail%
   if ($receiver) {
-    // https://www.functions-online.com/htmlentities.html
-    // htmlentities('', ENT_COMPAT, 'ISO-8859-1');
-    // html_entity_decode('', ENT_COMPAT, 'ISO-8859-1');
-    // Send Email to Sender
-    $sql = "SELECT email_string FROM Emails WHERE email_name = 'soundmarker-initial-email-to-sender'";
-    $emailstring = html_entity_decode($db->query($sql)->fetch()[0], ENT_COMPAT, 'ISO-8859-1');
-    $sql = "SELECT email_string_text FROM Emails WHERE email_name = 'soundmarker-initial-email-to-sender'";
-    $emailstring_text = html_entity_decode($db->query($sql)->fetch()[0], ENT_COMPAT, 'ISO-8859-1');
-    
-    // Replace strings
-    // Replace strings -> %projectdate%
-    $emailstring = str_replace("%projectdate%",$projectdate->format('F jS Y'),$emailstring);
-    $emailstring_text = str_replace("%projectdate%",$projectdate->format('F jS Y'),$emailstring_text);
-    // Replace strings -> %projectlink%
-    $sql = "SELECT hash FROM Project WHERE project_id = '$project_id'";
-    $projectlink = $config['SERVER_URL']."/project/" . $db->query($sql)->fetch()[0];
-    $emailstring = str_replace("%projectlink%",$projectlink,$emailstring);
-    $emailstring_text = str_replace("%projectlink%",$projectlink,$emailstring_text);
-    // Replace strings -> %recipientmail%
     $emailstring = str_replace("%recipientmail%",implode("<br>", $receiver),$emailstring);
     $emailstring_text = str_replace("%recipientmail%",implode("\n", $receiver),$emailstring_text);
-    // Replace strings -> %trackamount%
-    $sql = "SELECT track_id FROM Track WHERE project_id = '$project_id'";
-    $tracks = $db->query($sql)->fetchAll(PDO::FETCH_ASSOC);
-    foreach ($tracks as &$track) {
-        $trackid = $track["track_id"];
-        $sqlversion = "SELECT version_id FROM Version WHERE track_id = '$trackid'";
-        $versions[] = $db->query($sqlversion)->fetchAll(PDO::FETCH_ASSOC);
+  } else {
+    $emailstring = str_replace("%recipientmail%","Link only",$emailstring);
+    $emailstring_text = str_replace("%recipientmail%","Link only",$emailstring_text);   
+  }
+  // Replace strings -> %trackamount%
+  $sql = "SELECT track_id FROM Track WHERE project_id = '$project_id'";
+  $tracks = $db->query($sql)->fetchAll(PDO::FETCH_ASSOC);
+  foreach ($tracks as &$track) {
+      $trackid = $track["track_id"];
+      $sqlversion = "SELECT version_id FROM Version WHERE track_id = '$trackid'";
+      $versions[] = $db->query($sqlversion)->fetchAll(PDO::FETCH_ASSOC);
+  }
+  foreach ($versions as &$versions2) {
+    foreach ($versions2 as &$version) {
+        $versionid = $version["version_id"];
+        $sqlfiles = "SELECT file_name FROM File WHERE version_id = '$versionid'";
+        $files[] = $db->query($sqlfiles)->fetchAll(PDO::FETCH_ASSOC)[0];
     }
-    foreach ($versions as &$versions2) {
-      foreach ($versions2 as &$version) {
-          $versionid = $version["version_id"];
-          $sqlfiles = "SELECT file_name FROM File WHERE version_id = '$versionid'";
-          $files[] = $db->query($sqlfiles)->fetchAll(PDO::FETCH_ASSOC)[0];
-      }
-    }
-    if (count($files) == 1) {
-      $trackcount = count($files). " track";
-    } else {
-      $trackcount = count($files). " tracks";
-    }
-    $emailstring = str_replace("%trackamount%",$trackcount,$emailstring);
-    $emailstring_text = str_replace("%trackamount%",$trackcount,$emailstring_text);   
-    // Replace strings -> %tracktitle%
-    $tracktitle = "";
-    foreach ($files as &$file) {
-        $tracktitle .= $file["file_name"] . "<br>";
-    }
-    $emailstring = str_replace("%tracktitle%",$tracktitle,$emailstring);
-    $emailstring_text = str_replace("%tracktitle%",$tracktitle,$emailstring_text);   
+  }
+  if (count($files) == 1) {
+    $trackcount = count($files). " track";
+  } else {
+    $trackcount = count($files). " tracks";
+  }
+  $emailstring = str_replace("%trackamount%",$trackcount,$emailstring);
+  $emailstring_text = str_replace("%trackamount%",$trackcount,$emailstring_text);   
+  // Replace strings -> %tracktitle%
+  $tracktitle = "";
+  foreach ($files as &$file) {
+      $tracktitle .= urldecode($file["file_name"]) . "<br>";
+  }
+  $emailstring = str_replace("%tracktitle%",$tracktitle,$emailstring);
+  $emailstring_text = str_replace("%tracktitle%",$tracktitle,$emailstring_text);   
 
-    $subject = 'Your tracks have been shared successfully via Soundmarker';
-    $char_set = 'UTF-8';
+  $subject = 'Your tracks have been shared successfully via Soundmarker';
+  $char_set = 'UTF-8';
 
-    try {
-        $result = Flight::get("SesClient")->sendEmail([
-            'Destination' => [
-                'ToAddresses' => [$sender],
+  try {
+      $result = Flight::get("SesClient")->sendEmail([
+          'Destination' => [
+              'ToAddresses' => [$sender],
+          ],
+          'ReplyToAddresses' => ["noreply@soundmarker.com"],
+          'Source' => "Soundmarker <noreply@soundmarker.com>",
+          'Message' => [
+            'Body' => [
+                'Html' => [
+                    'Charset' => $char_set,
+                    'Data' => $emailstring,
+                ],
+                'Text' => [
+                    'Charset' => $char_set,
+                    'Data' => $emailstring_text,
+                ],
             ],
-            'ReplyToAddresses' => ["noreply@soundmarker.com"],
-            'Source' => "Soundmarker <noreply@soundmarker.com>",
-            'Message' => [
-              'Body' => [
-                  'Html' => [
-                      'Charset' => $char_set,
-                      'Data' => $emailstring,
-                  ],
-                  'Text' => [
-                      'Charset' => $char_set,
-                      'Data' => $emailstring_text,
-                  ],
-              ],
-              'Subject' => [
-                  'Charset' => $char_set,
-                  'Data' => $subject,
-              ],
+            'Subject' => [
+                'Charset' => $char_set,
+                'Data' => $subject,
             ],
-        ]);
-        $messageId = $result['MessageId'];
-    } catch (AwsException $e) {
-        // output error message if fails
-        echo $e->getMessage();
-        echo("The email was not sent. Error message: ".$e->getAwsErrorMessage()."\n");
-    }
+          ],
+      ]);
+      $messageId = $result['MessageId'];
+  } catch (AwsException $e) {
+      // output error message if fails
+      echo $e->getMessage();
+      echo("The email was not sent. Error message: ".$e->getAwsErrorMessage()."\n");
+  }
 
+  // only send if opted in for email
+  if ($receiver) {
     // Send Email to Recipient
     $sql = "SELECT email_string FROM Emails WHERE email_name = 'soundmarker-initial-email-to-recipient'";
     $emailstring = html_entity_decode($db->query($sql)->fetch()[0], ENT_COMPAT, 'ISO-8859-1');
@@ -469,13 +474,23 @@ $project_id = $getbody->project_id;
 $notify_id = $getbody->notify_id;
 
 $db = Flight::db();
-$sql = "INSERT INTO DailyUpdates (project_id, emailaddress, notify_id) VALUES ('$project_id', '$emailaddress', '$notify_id')";
-$result = $db->query($sql);
 
-// return ok
-Flight::json(array(
-   'return' => "ok"
-), 200);
+// Check to make sure it doesn't exist yet.
+$sql = "SELECT emailaddress FROM DailyUpdates WHERE project_id = '$project_id' AND emailaddress = '$emailaddress'";
+$response = $db->query($sql)->fetchAll(PDO::FETCH_ASSOC);
+if (!isset($response[0])) {
+  $sql = "INSERT INTO DailyUpdates (project_id, emailaddress, notify_id) VALUES ('$project_id', '$emailaddress', '$notify_id')";
+  $result = $db->query($sql);
+  // return ok
+  Flight::json(array(
+     'return' => "ok"
+  ), 200);
+} else {
+  // return alreadyindatabase
+  Flight::json(array(
+     'return' => "alreadyindatabase"
+  ), 200); 
+}
 });
 
 
@@ -988,7 +1003,7 @@ $file_size = isset($getbody->file_size) ? $getbody->file_size : 0;
 $file_name = isset($getbody->file_name) ? $getbody->file_name : "";
 $metadata = isset($getbody->metadata) ? $getbody->metadata : "";
 $extension = isset($getbody->extension) ? $getbody->extension : "";
-$aws_path = urlencode($config['AWS_S3_PATH'].$version_id . "/" . urlencode($file_name));
+$aws_path = urlencode($config['AWS_S3_PATH'] . $version_id . "/" . urlencode($file_name));
 
 // if user is able to upload file
 if (true) {
@@ -1091,7 +1106,7 @@ if (true) {
     $format = new FFMpeg\Format\Audio\Mp3();
     $format
         ->setAudioChannels(2)
-        ->setAudioKiloBitrate(192);
+        ->setAudioKiloBitrate(320);
 
     $audio->save($format, "/tmp/mp3".$file_id.".mp3");
 
@@ -1133,8 +1148,8 @@ if (true) {
           $zerotohundred = 0;
         }
         $wave_png[] = $zerotohundred;
-      }
     }
+  }
   $wave_png_json = json_encode($wave_png);
 
   // Update wave_png in dB
@@ -1249,54 +1264,6 @@ Flight::json(array(
    'html' => $html
 ), 200);
 
-});
-
-////////////////////////////////////////////////////////// Routes - /sma/imp POST //////////////////////////////////////////////////////////
-Flight::route('POST /sma/imp', function() {
-
-$config = Flight::get("config");
-$getbody = json_decode(Flight::request()->getBody());
-
-$ad_id = $getbody->sma_id;
-
-$db = Flight::db();
-$sql = "SELECT clicks, exposure_time, impressions FROM Ad WHERE ad_id = '$ad_id'";
-$result = $db->query($sql);
-$resultfetch = $result->fetchAll(PDO::FETCH_ASSOC);
-
-$impressionsnew = intval($resultfetch[0]["impressions"]) + 1;
-
-$sql = "UPDATE Ad SET impressions = '$impressionsnew' WHERE ad_id = '$ad_id'";
-$result = $db->query($sql);
-
-// return ok
-Flight::json(array(
-   'ok' => 'ok'
-), 200);
-});
-
-////////////////////////////////////////////////////////// Routes - /sma/imp POST //////////////////////////////////////////////////////////
-Flight::route('POST /sma/click', function() {
-
-$config = Flight::get("config");
-$getbody = json_decode(Flight::request()->getBody());
-
-$ad_id = $getbody->sma_id;
-
-$db = Flight::db();
-$sql = "SELECT clicks, exposure_time, impressions FROM Ad WHERE ad_id = '$ad_id'";
-$result = $db->query($sql);
-$resultfetch = $result->fetchAll(PDO::FETCH_ASSOC);
-
-$clicksnew = intval($resultfetch[0]["clicks"]) + 1;
-
-$sql = "UPDATE Ad SET clicks = '$clicksnew' WHERE ad_id = '$ad_id'";
-$result = $db->query($sql);
-
-// return ok
-Flight::json(array(
-   'ok' => 'ok'
-), 200);
 });
 
 ////////////////////////////////////////////////////////// Routes - /sma/imp POST //////////////////////////////////////////////////////////
