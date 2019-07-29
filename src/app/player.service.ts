@@ -2,6 +2,7 @@ import {EventEmitter, Injectable, Output} from "@angular/core";
 import {Version} from "./model/version";
 import {File} from "./model/file";
 import {StateService} from "./services/state.service";
+import {Track} from "./model/track";
 
 @Injectable({
   providedIn: 'root'
@@ -23,34 +24,7 @@ export class Player {
   constructor(
     private stateService: StateService
   ) {
-    this.createMedia();
     this.setupProgress();
-  }
-
-  private createMedia() {
-
-    this.media = new Audio();
-    this.getMedia().crossOrigin = 'anonymous';
-    this.getMedia().preload = 'metadata';
-    this.getMedia().addEventListener('ended', () => this.finished.emit(this.version));
-    document.body.appendChild(this.getMedia());
-
-    const context = new ((<any>window).AudioContext || (<any>window).webkitAudioContext)();
-    const analyser = context.createAnalyser();
-
-    window.addEventListener('load', () => {
-      const source = context.createMediaElementSource(this.getMedia());
-      source.connect(analyser);
-      analyser.connect(context.destination);
-    }, false);
-  }
-
-  private getMedia() {
-    return this.media;
-  }
-
-  setTitle(title: string) {
-    this.getMedia().title = title;
   }
 
   setupProgress() {
@@ -81,13 +55,50 @@ export class Player {
     this.playing.subscribe(() => onAudioProcess());
   }
 
+  async initialize() {
+    await this.createMedia();
+  }
+
+  private createMedia() {
+
+    return new Promise(resolve => {
+      this.media = new Audio();
+      this.getMedia().crossOrigin = 'anonymous';
+      this.getMedia().preload = 'metadata';
+      this.getMedia().addEventListener('ended', () => this.finished.emit(this.version));
+      document.body.appendChild(this.getMedia());
+
+      const context = new ((<any>window).AudioContext || (<any>window).webkitAudioContext)();
+      const analyser = context.createAnalyser();
+
+      window.addEventListener('load', () => {
+        const source = context.createMediaElementSource(this.getMedia());
+        source.connect(analyser);
+        analyser.connect(context.destination);
+        resolve();
+      }, false);
+    });
+  }
+
+  private getMedia() {
+    return this.media;
+  }
+
+  setTitle(title: string) {
+    this.getMedia().title = title;
+  }
+
   async load(version: Version) {
+
+    if (!this.media) await this.initialize();
+
     return new Promise(resolve => {
       if (this._version !== version) {
         this._version = version;
         const file: File = Player.getStreamFile(this.version);
         this.getMedia().src = file.aws_path + "." + file.extension;
         this.getMedia().addEventListener('loadedmetadata', () => {
+          this.setTitle(this.getTrack().title);
           resolve();
         });
       } else {
@@ -145,6 +156,16 @@ export class Player {
 
   getDuration() {
     return this.getMedia().duration;
+  }
+
+  getTrack(): Track {
+
+    return this.stateService.getActiveProject().tracks
+      .filter(track =>
+        track.versions
+          .filter(version => version.version_id == this.version.version_id)
+          .length > 0
+      )[0];
   }
 
   public static getStreamFile(version: Version): File {
