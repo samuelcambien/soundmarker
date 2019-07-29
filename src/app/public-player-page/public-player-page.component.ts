@@ -40,6 +40,7 @@ export class PublicPlayerPageComponent implements OnInit {
     private stateService: StateService,
     private cdr: ChangeDetectorRef
   ) {
+    this.playerService.playing.subscribe(() => this.cdr.detectChanges());
   }
 
   ngOnInit() {
