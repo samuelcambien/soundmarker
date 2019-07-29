@@ -55,29 +55,20 @@ export class Player {
     this.playing.subscribe(() => onAudioProcess());
   }
 
-  async initialize() {
-    await this.createMedia();
-  }
-
   private createMedia() {
 
-    return new Promise(resolve => {
-      this.media = new Audio();
-      this.getMedia().crossOrigin = 'anonymous';
-      this.getMedia().preload = 'metadata';
-      this.getMedia().addEventListener('ended', () => this.finished.emit(this.version));
-      document.body.appendChild(this.getMedia());
+    this.media = new Audio();
+    this.getMedia().crossOrigin = 'anonymous';
+    this.getMedia().preload = 'metadata';
+    this.getMedia().addEventListener('ended', () => this.finished.emit(this.version));
+    document.body.appendChild(this.getMedia());
 
-      const context = new ((<any>window).AudioContext || (<any>window).webkitAudioContext)();
-      const analyser = context.createAnalyser();
+    const context = new ((<any>window).AudioContext || (<any>window).webkitAudioContext)();
+    const analyser = context.createAnalyser();
 
-      window.addEventListener('load', () => {
-        const source = context.createMediaElementSource(this.getMedia());
-        source.connect(analyser);
-        analyser.connect(context.destination);
-        resolve();
-      }, false);
-    });
+    const source = context.createMediaElementSource(this.getMedia());
+    source.connect(analyser);
+    analyser.connect(context.destination);
   }
 
   private getMedia() {
@@ -90,7 +81,7 @@ export class Player {
 
   async load(version: Version) {
 
-    if (!this.media) await this.initialize();
+    if (!this.media) this.createMedia();
 
     return new Promise(resolve => {
       if (this._version !== version) {
