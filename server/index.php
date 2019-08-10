@@ -502,67 +502,75 @@ $db = Flight::db();
 $sql = "SELECT project_id, active, expiration_date, user_id, password FROM Project WHERE hash = '$project_hash'";
 $response = $db->query($sql)->fetchAll(PDO::FETCH_ASSOC);
 
-$project_id = $response[0]["project_id"];
-$active = $response[0]["active"];
-$expiration_date = $response[0]["expiration_date"];
-$user_id = $response[0]["user_id"];
-$project_password = $response[0]["password"];
+// check if project hash was valid
+if ($response[0]["project_id"]) {
+  $project_id = $response[0]["project_id"];
+  $active = $response[0]["active"];
+  $expiration_date = $response[0]["expiration_date"];
+  $user_id = $response[0]["user_id"];
+  $project_password = $response[0]["password"];
 
-$lastmonth = new \DateTime('-1 month');
-$lastmonthf = $lastmonth->format('Y-m-d H:i:s');
-$currentmonth = new \DateTime();
-$currentmonthf = $currentmonth->format('Y-m-d H:i:s');
+  $lastmonth = new \DateTime('-1 month');
+  $lastmonthf = $lastmonth->format('Y-m-d H:i:s');
+  $currentmonth = new \DateTime();
+  $currentmonthf = $currentmonth->format('Y-m-d H:i:s');
 
-if ($user_id) {
-  $status = "pro";
-} elseif ($active == 0) {
-  $status = "inactive";
-} elseif ($expiration_date < $lastmonthf) {
-  $status = "expired";
-} elseif ($expiration_date < $currentmonthf) {
-  $status = "commentsonly";
-} else {
-  $status = "active";
-}
+  if ($user_id) {
+    $status = "pro";
+  } elseif ($active == 0) {
+    $status = "inactive";
+  } elseif ($expiration_date < $lastmonthf) {
+    $status = "expired";
+  } elseif ($expiration_date < $currentmonthf) {
+    $status = "commentsonly";
+  } else {
+    $status = "active";
+  }
 
-$sql = "SELECT track_id, title FROM Track WHERE project_id = '$project_id'";
-$result = $db->query($sql);
-$tracks = $result->fetchAll(PDO::FETCH_ASSOC);
-if ($status == "expired") {
-  $tracks = "";
-}
+  $sql = "SELECT track_id, title FROM Track WHERE project_id = '$project_id'";
+  $result = $db->query($sql);
+  $tracks = $result->fetchAll(PDO::FETCH_ASSOC);
+  if ($status == "expired") {
+    $tracks = "";
+  }
 
-// if project is password protected
-if ($project_password) {
-  if (in_array($project_id, $_SESSION['approved_user_projects'])) {
+  // if project is password protected
+  if ($project_password) {
+    if (in_array($project_id, $_SESSION['approved_user_projects'])) {
+      $_SESSION['view_user_projects'][] = $project_id;
+      // return ok
+      Flight::json(array(
+         'project_id' => $project_id, 'status' => $status, 'tracks' => $tracks
+      ), 200);  
+    } else {
+      // return ok
+      Flight::json(array(
+         'return' => 'passwordmissing'
+      ), 200);  
+    }
+  } else {
     $_SESSION['view_user_projects'][] = $project_id;
+
+    // also send sender
+    $sql = "SELECT emailaddress, user_id FROM Notification WHERE type = '0' AND type_id = '$project_id'";
+    $response = $db->query($sql)->fetchAll(PDO::FETCH_ASSOC);
+    // if only link is created, then no sender
+    if (isset($response[0])) {
+      $emailaddress = $response[0]["emailaddress"];
+    } else {
+      $emailaddress = "";
+    }
+
     // return ok
     Flight::json(array(
-       'project_id' => $project_id, 'status' => $status, 'tracks' => $tracks
-    ), 200);  
-  } else {
-    // return ok
-    Flight::json(array(
-       'return' => 'passwordmissing'
+       'project_id' => $project_id, 'status' => $status, 'expiration' => $expiration_date, 'sender' => $emailaddress, 'tracks' => $tracks
     ), 200);  
   }
 } else {
-  $_SESSION['view_user_projects'][] = $project_id;
-
-  // also send sender
-  $sql = "SELECT emailaddress, user_id FROM Notification WHERE type = '0' AND type_id = '$project_id'";
-  $response = $db->query($sql)->fetchAll(PDO::FETCH_ASSOC);
-  // if only link is created, then no sender
-  if (isset($response[0])) {
-    $emailaddress = $response[0]["emailaddress"];
-  } else {
-    $emailaddress = "";
-  }
-
-  // return ok
-  Flight::json(array(
-     'project_id' => $project_id, 'status' => $status, 'expiration' => $expiration_date, 'sender' => $emailaddress, 'tracks' => $tracks
-  ), 200);  
+    // project hash was not valid.
+    Flight::json(array(
+     'return' => 'nook'
+    ), 200);
 }
 });
 
