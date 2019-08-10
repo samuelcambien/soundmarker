@@ -503,7 +503,7 @@ $sql = "SELECT project_id, active, expiration_date, user_id, password FROM Proje
 $response = $db->query($sql)->fetchAll(PDO::FETCH_ASSOC);
 
 // check if project hash was valid
-if ($response[0]["project_id"]) {
+if ($response[0]) {
   $project_id = $response[0]["project_id"];
   $active = $response[0]["active"];
   $expiration_date = $response[0]["expiration_date"];
