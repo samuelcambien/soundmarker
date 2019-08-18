@@ -217,6 +217,5 @@ foreach ($updates as &$update) {
           echo("The email was not sent. Error message: ".$e->getAwsErrorMessage()."\n");
       }
   }
- }
 }
 ?>
