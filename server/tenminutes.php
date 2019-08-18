@@ -28,6 +28,7 @@ $s3 = new Aws\S3\S3Client([
 // Go through Daily Updates and get project_ids, then check first if they're not expired
 $sql = "SELECT update_id, project_id, emailaddress, last_comment_id FROM DailyUpdates WHERE notify_id = '2'";
 $updates = $db->query($sql)->fetchAll(PDO::FETCH_ASSOC);
+$testtosend = json_encode($updates);
 foreach ($updates as &$update) {
   $count = 0;
   $update_id = $update["update_id"];
@@ -116,14 +117,13 @@ foreach ($updates as &$update) {
 
 
   $commentsjson = json_encode($comments);
-  $testtosend = json_encode($updates);
   // Set daily updates to trackcount to check.
-  if (empty($comments) == false) {
+  // if (empty($comments) == false) {
     $sql = "UPDATE DailyUpdates SET last_comment_id = '$commentsjson' WHERE project_id = '$project_id' AND update_id = '$update_id'";
     $result = $db->query($sql);
     $sql = "UPDATE DailyUpdates SET test = '$testtosend' WHERE project_id = '$project_id' AND update_id = '$update_id'";
     $result = $db->query($sql);
-  }
+  // }
   unset($comments);
   unset($value);
 
