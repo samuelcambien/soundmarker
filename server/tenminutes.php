@@ -101,6 +101,8 @@ foreach ($updates as &$update) {
   unset($versions2);
   unset($tracks);
 
+  $commentsjson = json_encode($comments);
+
   // clean up array
   foreach ($comments as $key => $value) {
       if ($value["comment"] <= $latestcomment) {
@@ -112,8 +114,6 @@ foreach ($updates as &$update) {
   $latestversion = $value["version"];
   }
 
-
-  $commentsjson = json_encode($comments);
   unset($comments);
   // Set daily updates to trackcount to check.
   $sql = "UPDATE DailyUpdates SET last_comment_id = '$commentsjson' WHERE project_id = '$project_id'";
@@ -182,7 +182,7 @@ foreach ($updates as &$update) {
       // Too many tracks shown in email (both mp3 and wav I assume)
       // Show how many comments were sent properly (now always shows 1 per version)
 
-      $subject = 'Daily status update from Soundmarker';
+      $subject = 'Status update from Soundmarker';
       $char_set = 'UTF-8';
       try {
           $result = $SesClient->sendEmail([

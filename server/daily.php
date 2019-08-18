@@ -100,6 +100,7 @@ foreach ($updates as &$update) {
   unset($versions);
   unset($versions2);
   unset($tracks);
+  $commentsjson = json_encode($comments);
 
   // clean up array
   foreach ($comments as $key => $value) {
@@ -112,8 +113,6 @@ foreach ($updates as &$update) {
   $latestversion = $value["version"];
   }
 
-
-  $commentsjson = json_encode($comments);
   unset($comments);
   // Set daily updates to trackcount to check.
   $sql = "UPDATE DailyUpdates SET last_comment_id = '$commentsjson' WHERE project_id = '$project_id'";
