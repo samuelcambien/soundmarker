@@ -221,4 +221,5 @@ foreach ($updates as &$update) {
       }
   }
 }
+}
 ?>
