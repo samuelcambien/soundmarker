@@ -100,6 +100,8 @@ foreach ($updates as &$update) {
   unset($versions);
   unset($versions2);
   unset($tracks);
+  unset($comment1);
+  unset($comment2);
 
   // clean up array
   foreach ($comments as $key => $value) {
@@ -120,6 +122,7 @@ foreach ($updates as &$update) {
     $result = $db->query($sql);
   }
   unset($comments);
+  unset($value);
 
   // If we do have new comments
   if ($count > 0) {
