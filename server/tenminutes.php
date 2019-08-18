@@ -120,6 +120,8 @@ foreach ($updates as &$update) {
   if (empty($comments) == false) {
     $sql = "UPDATE DailyUpdates SET last_comment_id = '$commentsjson' WHERE project_id = '$project_id' AND update_id = '$update_id'";
     $result = $db->query($sql);
+    $sql = "UPDATE DailyUpdates SET test = '$latestcomment' WHERE project_id = '$project_id' AND update_id = '$update_id'";
+    $result = $db->query($sql);
   }
   unset($comments);
   unset($value);
