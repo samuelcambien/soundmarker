@@ -38,7 +38,7 @@ foreach ($updates as &$update) {
   // Check if expired
   $lastmonth = new \DateTime('-1 month');
   $lastmonthf = $lastmonth->format('Y-m-d H:i:s');
-  $project_ids = "SELECT project_id, expiration_date FROM Project WHERE project_id = '$project_id'";
+  $project_ids = "SELECT project_id, expiration_date FROM Project WHERE project_id = '$project_id' AND update_id = '$update_id'";
   $project_idsreturn = $db->query($project_ids)->fetchAll(PDO::FETCH_ASSOC)[0];
   $project_id_notexpired = $project_idsreturn["project_id"];
   $expiration_date = $project_idsreturn["expiration_date"];
@@ -116,7 +116,7 @@ foreach ($updates as &$update) {
   $commentsjson = json_encode($comments);
   unset($comments);
   // Set daily updates to trackcount to check.
-  $sql = "UPDATE DailyUpdates SET last_comment_id = '$commentsjson' WHERE project_id = '$project_id'";
+  $sql = "UPDATE DailyUpdates SET last_comment_id = '$commentsjson' WHERE project_id = '$project_id' AND update_id = '$update_id'";
   $result = $db->query($sql);
 
   // If we do have new comments
@@ -182,7 +182,7 @@ foreach ($updates as &$update) {
       // Too many tracks shown in email (both mp3 and wav I assume)
       // Show how many comments were sent properly (now always shows 1 per version)
 
-      $subject = 'Daily status update from Soundmarker';
+      $subject = 'Status update from Soundmarker';
       $char_set = 'UTF-8';
       try {
           $result = $SesClient->sendEmail([
