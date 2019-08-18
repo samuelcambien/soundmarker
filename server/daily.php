@@ -116,7 +116,7 @@ foreach ($updates as &$update) {
   $commentsjson = json_encode($comments);
   unset($comments);
   // Set daily updates to trackcount to check.
-  $sql = "UPDATE DailyUpdates SET last_comment_id = '$commentsjson' WHERE project_id = '$project_id'";
+  $sql = "UPDATE DailyUpdates SET last_comment_id = '$commentsjson' WHERE project_id = '$project_id' AND update_id = '$update_id'";
   $result = $db->query($sql);
 
   // If we do have new comments

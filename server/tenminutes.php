@@ -38,7 +38,7 @@ foreach ($updates as &$update) {
   // Check if expired
   $lastmonth = new \DateTime('-1 month');
   $lastmonthf = $lastmonth->format('Y-m-d H:i:s');
-  $project_ids = "SELECT project_id, expiration_date FROM Project WHERE project_id = '$project_id' AND update_id = '$update_id'";
+  $project_ids = "SELECT project_id, expiration_date FROM Project WHERE project_id = '$project_id'";
   $project_idsreturn = $db->query($project_ids)->fetchAll(PDO::FETCH_ASSOC)[0];
   $project_id_notexpired = $project_idsreturn["project_id"];
   $expiration_date = $project_idsreturn["expiration_date"];
