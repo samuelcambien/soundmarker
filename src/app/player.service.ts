@@ -83,8 +83,10 @@ export class Player {
 
     if (!this.media) this.createMedia();
 
-    return new Promise(resolve => {
+    return new Promise(async resolve  => {
       if (this._version !== version) {
+        if (this.version)
+          await this.stop();
         this._version = version;
         const file: File = Player.getStreamFile(this.version);
         this.getMedia().src = file.aws_path + "." + file.extension;
@@ -126,6 +128,11 @@ export class Player {
     this.stateService.setActiveComment(null);
   }
 
+  private async stop() {
+    this.pause();
+    await this.seekTo(this.version, 0);
+  }
+
   isPlaying() {
     return this.getMedia() && !this.getMedia().paused;
   }
@@ -135,10 +142,6 @@ export class Player {
       version: this.version,
       currentTime: this.getCurrentTime()
     })
-  }
-
-  getProgress() {
-    return this.getCurrentTime() / this.getDuration();
   }
 
   getCurrentTime() {
