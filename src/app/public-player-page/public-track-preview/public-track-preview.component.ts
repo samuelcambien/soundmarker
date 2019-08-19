@@ -1,4 +1,4 @@
-import {Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
+import {ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
 import {Track} from "../../model/track";
 import {animate, transition, trigger} from "@angular/animations";
 import {Version} from "../../model/version";
@@ -28,7 +28,10 @@ export class PublicTrackPreviewComponent implements OnInit {
   version: Version;
   private files: File[];
 
-  constructor(private player: Player) {
+  constructor(
+    private player: Player,
+    private cdr: ChangeDetectorRef
+  ) {
   }
 
   ngOnInit() {
@@ -37,8 +40,14 @@ export class PublicTrackPreviewComponent implements OnInit {
     this.trackTitleDOM.nativeElement.setAttribute("style", "text-overflow: ellipsis");
   }
 
-  play() {
-    this.player.play(this.version);
+  async play() {
+    await this.player.play(this.version);
+    this.cdr.detectChanges();
+  }
+
+  pause() {
+    this.getPlayer().pause();
+    this.cdr.detectChanges();
   }
 
   isPlaying() {

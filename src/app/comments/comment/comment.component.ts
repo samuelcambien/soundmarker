@@ -1,4 +1,4 @@
-import {AfterViewChecked, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
+import {ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
 import {Comment} from "../../model/comment";
 import {Utils} from "../../app.component";
 import {LocalStorageService} from "../../services/local-storage.service";
@@ -87,8 +87,8 @@ export class CommentComponent implements OnInit{
     return Utils.getTimeAccurate(time);
   }
 
-  play() {
-    this.player.play(this.version, this.comment.start_time);
+  async play() {
+    await this.player.play(this.version, this.comment.start_time);
     this.stateService.setActiveComment(this.comment);
   }
 
