@@ -14,7 +14,6 @@ import {
 import {Track} from "../../model/track";
 import {Comment, CommentSorter} from "../../model/comment";
 import {Version} from "../../model/version";
-import {File} from "../../model/file";
 import {RestCall} from "../../rest/rest-call";
 import {LocalStorageService} from "../../services/local-storage.service";
 import {DrawerService} from "../../services/drawer.service";
@@ -83,8 +82,6 @@ export class PublicTrackPlayerComponent implements OnInit, OnChanges {
   version: Version;
   phoneOrder: boolean;
   waveformInViewPort = true;
-
-  private files: File[];
 
   constructor(
     private localStorageService: LocalStorageService,
@@ -174,10 +171,12 @@ export class PublicTrackPlayerComponent implements OnInit, OnChanges {
 
   play() {
     this.player.play(this.version);
+    this.cdr.detectChanges();
   }
 
   pause() {
     this.player.pause();
+    this.cdr.detectChanges();
   }
 
   isPlaying() {
