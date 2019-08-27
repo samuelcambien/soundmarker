@@ -22,7 +22,7 @@ import {Player} from "../../player.service";
 import {animate, state, style, transition, trigger} from '@angular/animations';
 
 @Component({
-  selector: 'app-public-track-player',
+  selector: 'public-track-player',
   templateUrl: './public-track-player.component.html',
   styleUrls: ['./public-track-player.component.scss'],
   animations: [

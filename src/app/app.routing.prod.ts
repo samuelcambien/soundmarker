@@ -19,7 +19,7 @@ const appRoutes: Routes = [
   },
   {
     path: "project/:project_hash",
-    component: PublicPlayerPageComponent,
+    loadChildren: './project.module#ProjectModule',
   },
   {
     path: "project/",

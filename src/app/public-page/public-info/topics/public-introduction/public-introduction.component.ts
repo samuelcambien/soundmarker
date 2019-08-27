@@ -1,6 +1,5 @@
 import {Component, OnInit} from '@angular/core';
 import {NgbActiveModal, NgbModal} from "@ng-bootstrap/ng-bootstrap";
-import {PrivacyAndTermsComponent} from "../privacy-and-terms/privacy-and-terms.component";
 import {LocalStorageService} from "../../../../services/local-storage.service";
 
 @Component({
@@ -12,10 +11,6 @@ export class PublicIntroductionComponent implements OnInit {
 
   constructor(private modalService: NgbModal, private activeModal: NgbActiveModal, private termsAcceptedService: LocalStorageService) { }
 
-  openTerms() {
-    this.modalService.open(PrivacyAndTermsComponent);
-  }
-
   accept() {
     this.termsAcceptedService.acceptTerms(new Date());
     this.activeModal.close();
@@ -23,5 +18,4 @@ export class PublicIntroductionComponent implements OnInit {
 
   ngOnInit() {
   }
-
 }

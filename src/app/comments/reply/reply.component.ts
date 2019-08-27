@@ -3,7 +3,7 @@ import {Comment} from "../../model/comment";
 import {Utils} from "../../app.component";
 
 @Component({
-  selector: 'app-reply',
+  selector: 'reply-lazy',
   templateUrl: './reply.component.html',
   styleUrls: ['./reply.component.scss']
 })

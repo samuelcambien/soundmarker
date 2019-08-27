@@ -1,12 +1,10 @@
-import {ModuleWithProviders} from '@angular/core';
-import {RouterModule, Routes} from '@angular/router';
+import {ModuleWithProviders, NgModule} from '@angular/core';
+import {PreloadAllModules, RouterModule, Routes} from '@angular/router';
 import {PublicUploadPageComponent} from "./public-upload-page/public-upload-page.component";
-import {PublicPlayerPageComponent} from "./public-player-page/public-player-page.component";
 import {PublicUploadingFilesComponent} from "./public-upload-page/public-upload-progress/public-uploading-files.component";
 import {AboutUsInfoComponent} from "./public-page/public-info/public-info.component";
 import {PublicPagenotfoundPageComponent} from "./public-pagenotfound-page/public-pagenotfound-page.component";
 import {ProComponent} from './pro/pro.component';
-
 
 const appRoutes: Routes = [
   {
@@ -18,12 +16,8 @@ const appRoutes: Routes = [
     component: PublicUploadingFilesComponent
   },
   {
-    path: "project/:project_hash",
-    component: PublicPlayerPageComponent,
-  },
-  {
-    path: "project/",
-    component: PublicPagenotfoundPageComponent,
+    path: 'project',
+    loadChildren: './project.module#ProjectModule'
   },
   {
     path: "about-us",
@@ -39,4 +33,11 @@ const appRoutes: Routes = [
   }
 ];
 
-export const routing: ModuleWithProviders = RouterModule.forRoot(appRoutes);
+// export const routing: ModuleWithProviders = RouterModule.forRoot(appRoutes);
+
+@NgModule({
+  imports: [RouterModule.forRoot(appRoutes)],
+  exports: [RouterModule]
+})
+
+export class AppRoutingModule { }

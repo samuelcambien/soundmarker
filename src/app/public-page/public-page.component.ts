@@ -119,7 +119,6 @@ export class PublicPageComponent implements OnInit {
 
   // Fetch next ad.
   private loadNextAd(): Promise<any> {
-    console.log(this.smaId);
     return RestCall.getRandSma(this.smaId)
       .then(response => {
         if(response["html"]){
