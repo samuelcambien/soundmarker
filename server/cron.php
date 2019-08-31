@@ -112,35 +112,37 @@ foreach ($notifications as &$notification) {
 
         $subject = 'Your tracks have expired';
         $char_set = 'UTF-8';
-        try {
-            $result = $SesClient->sendEmail([
-                'Destination' => [
-                    'ToAddresses' => [$notification["emailaddress"]],
-                ],
-                'ReplyToAddresses' => ["noreply@soundmarker.com"],
-                'Source' => "Soundmarker <noreply@soundmarker.com>",
-                'Message' => [
-                  'Body' => [
-                      'Html' => [
-                          'Charset' => $char_set,
-                          'Data' => $emailstring,
-                      ],
-                      'Text' => [
-                          'Charset' => $char_set,
-                          'Data' => $emailstring_text,
-                      ],
+        if (count($files) < 100) {
+          try {
+              $result = $SesClient->sendEmail([
+                  'Destination' => [
+                      'ToAddresses' => [$notification["emailaddress"]],
                   ],
-                  'Subject' => [
-                      'Charset' => $char_set,
-                      'Data' => $subject,
+                  'ReplyToAddresses' => ["noreply@soundmarker.com"],
+                  'Source' => "Soundmarker <noreply@soundmarker.com>",
+                  'Message' => [
+                    'Body' => [
+                        'Html' => [
+                            'Charset' => $char_set,
+                            'Data' => $emailstring,
+                        ],
+                        'Text' => [
+                            'Charset' => $char_set,
+                            'Data' => $emailstring_text,
+                        ],
+                    ],
+                    'Subject' => [
+                        'Charset' => $char_set,
+                        'Data' => $subject,
+                    ],
                   ],
-                ],
-            ]);
-            $messageId = $result['MessageId'];
-        } catch (AwsException $e) {
-            // output error message if fails
-            echo $e->getMessage();
-            echo("The email was not sent. Error message: ".$e->getAwsErrorMessage()."\n");
+              ]);
+              $messageId = $result['MessageId'];
+          } catch (AwsException $e) {
+              // output error message if fails
+              echo $e->getMessage();
+              echo("The email was not sent. Error message: ".$e->getAwsErrorMessage()."\n");
+          }
         }
 
         // Set notification status to 1
