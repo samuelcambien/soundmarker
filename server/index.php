@@ -90,7 +90,6 @@ Flight::map('error', function(Exception $ex){
 
 
 
-
 /*
 ROUTING TO FRONT-END
 */
