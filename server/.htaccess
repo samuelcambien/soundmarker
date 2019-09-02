@@ -2,7 +2,7 @@
     <IfModule mod_negotiation.c>
         Options -MultiViews
     </IfModule>
-
+    Header set Access-Control-Allow-Origin "*"
     RewriteEngine On
 
     # Redirect to https
@@ -40,8 +40,6 @@
     RewriteCond %{REQUEST_URI} "/subscribe/([a-z0-9/-]+)$" [OR]
     RewriteCond %{REQUEST_URI} "/sma"
     RewriteRule ^ index.php [L]
-
-    Header set Access-Control-Allow-Origin "*soundmarker.com"
 
     # Prefer .php over .html
     DirectoryIndex index.php index.html index.shtml index.htm Index.html Index.htm Index.shtml default.htm Default.htm default.html Default.html default.shtml Default.shtml page1.html index.pl index.cgi index.php3 index.phtml home.htm home.html home.shtml index.wml index.pcgi quickstart.html
