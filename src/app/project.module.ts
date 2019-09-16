@@ -15,10 +15,13 @@ import {ReplyComponent} from './comments/reply/reply.component';
 import {ReplyFormComponent} from './comments/reply-form/reply-form.component';
 import {TimeInputComponent} from './comments/time-input/time-input.component';
 import {WaveformComponent} from './public-player-page/public-track-player/waveform/waveform.component';
+import {AboutUsInfoComponent, HelpInfoComponent, ProInfoComponent} from './public-page/public-info/public-info.component';
+import {PublicIntroductionComponent} from './public-page/public-info/topics/public-introduction/public-introduction.component';
+import {SubscribeComponent} from './subscribe/subscribe.component';
 
 const routes: Routes = [
     {
-    path: ':project_hash',
+    path: 'project/:project_hash',
     component: PublicPlayerPageComponent,
   }
 ];
@@ -54,6 +57,9 @@ const routes: Routes = [
     ReplyFormComponent,
     TimeInputComponent,
     WaveformComponent
+  ],
+  entryComponents: [
+    ReplyFormComponent
   ]
 })
 

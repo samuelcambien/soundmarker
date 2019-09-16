@@ -37,6 +37,7 @@ import {TimeFormatDirective} from './time-format.directive';
 import {DurationFormatterPipe} from './formatting/duration-formatter.pipe';
 import {HighlightPipe} from './formatting/highlight.pipe';
 import {TimeFormatPipe} from './time-format.pipe';
+import {RouterModule} from '@angular/router';
 
 @NgModule({
 ////////////////////////////////////////////////////////  IMPORTS   ////////////////////////////////////////////////////////
@@ -97,6 +98,7 @@ import {TimeFormatPipe} from './time-format.pipe';
     NgbModule,
     NgSelectModule,
     ReactiveFormsModule,
+    RouterModule,
     TrimValueAccessorModule,
     TagInputModule,
 
@@ -123,6 +125,16 @@ import {TimeFormatPipe} from './time-format.pipe';
     DurationFormatterPipe,
     HighlightPipe,
     TimeFormatPipe
+  ],
+
+  entryComponents: [
+    AboutUsInfoComponent,
+    ProInfoComponent,
+    HelpInfoComponent,
+    // ReplyFormComponent,
+    PublicIntroductionComponent,
+    // PrivacyAndTermsComponent,
+    SubscribeComponent
   ]
 })
 
