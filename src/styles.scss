@@ -1073,13 +1073,15 @@ delete-icon svg {
 	margin: 0px !important;
 	padding: 0px !important;
 	background: transparent !important;
+	width: 100%;
 	
 }
-.ng-tns-c16-0 {
+tag-input-form.ng-tns-c16-0 {
 	background: transparent !important;
+	width: 100% !important;
 }
 tag-input-form.ng-tns-c16-1 {
-	width: 100%;
+	width: 100% !important;
 }
 .tag-wrapper delete-icon {
 	margin-top: -21px !important;
@@ -1095,6 +1097,23 @@ tag-input-form.ng-tns-c16-1 {
 .tag-wrapper delete-icon:hover span svg path {
 	stroke: #717db0 !important;
 	fill: #717db0 !important;
+}
+.ng2-tags-container .ng-trigger{
+	max-height: 19px !important;
+	padding-top: 0px !important;
+	margin-top: 6px !important;
+	margin-right: 6px !important;
+	margin-bottom: 0px !important;
+	background: #eef1ff !important;
+	box-shadow: none !important;
+	-webkit-box-shadow: none !important;
+	-moz-box-shadow: none !important;
+	padding-top: 2px !important;
+	border-radius: 0.3rem !important;
+	border: 1px solid #eef1ff !important;
+	padding-left: 4px !important;
+	padding-right: 1px !important;
+	max-width: 220px !important;
 }
 
 .ng2-tag-input__text-input::-webkit-input-placeholder {
