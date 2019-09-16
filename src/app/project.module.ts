@@ -21,7 +21,7 @@ import {SubscribeComponent} from './subscribe/subscribe.component';
 
 const routes: Routes = [
     {
-    path: 'project/:project_hash',
+    path: ':project_hash',
     component: PublicPlayerPageComponent,
   }
 ];

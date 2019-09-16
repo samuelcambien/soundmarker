@@ -3,6 +3,9 @@ import {ProjectModule} from './project.module';
 import {SharedModule} from './shared.module';
 import {AppRoutingModule} from './app.routing';
 
+import {BrowserModule} from '@angular/platform-browser';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+
 import {AppComponent} from './app.component';
 import {EmailValidationToolTip, PublicUploadFormComponent} from './public-upload-page/public-upload-form/public-upload-form.component';
 
@@ -50,8 +53,9 @@ import {ProComponent} from './pro/pro.component';
     ProComponent
   ],
   imports: [
+    BrowserModule,
+    BrowserAnimationsModule,
     SharedModule,
-    ProjectModule,
     AppRoutingModule,
   ],
   providers: [

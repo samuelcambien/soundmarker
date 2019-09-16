@@ -1,7 +1,5 @@
 //////////////    MODULES     //////////////
 import {NgModule} from '@angular/core';
-import {BrowserModule} from '@angular/platform-browser';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {CommonModule} from '@angular/common';
 import {ClipboardModule} from 'ngx-clipboard';
 import {DragAndDropModule} from 'angular-draggable-droppable';
@@ -42,8 +40,6 @@ import {RouterModule} from '@angular/router';
 @NgModule({
 ////////////////////////////////////////////////////////  IMPORTS   ////////////////////////////////////////////////////////
   imports: [
-    BrowserAnimationsModule,
-    BrowserModule,
     ClipboardModule,
     CommonModule,
     DragAndDropModule.forRoot(),
@@ -89,8 +85,6 @@ import {RouterModule} from '@angular/router';
 ////////////////////////////////////////////////////////  EXPORTS   ////////////////////////////////////////////////////////
   exports:[
     //////////////    MODULES     //////////////
-    BrowserAnimationsModule,
-    BrowserModule,
     ClipboardModule,
     DragAndDropModule,
     FileUploadModule,
