@@ -1,5 +1,4 @@
 import {NgModule} from '@angular/core';
-import {ProjectModule} from './project.module';
 import {SharedModule} from './shared.module';
 import {AppRoutingModule} from './app.routing';
 
@@ -9,9 +8,6 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {AppComponent} from './app.component';
 import {EmailValidationToolTip, PublicUploadFormComponent} from './public-upload-page/public-upload-form/public-upload-form.component';
 
-import {PublicUploadingFilesComponent} from './public-upload-page/public-upload-progress/public-uploading-files.component';
-import {PublicUploadFinishedComponent} from './public-upload-page/public-upload-finished/public-upload-finished.component';
-import {PublicUploadPageComponent} from './public-upload-page/public-upload-page.component';
 // import {routing} from './app.routing';
 
 import {ProDashboardTopbarComponent} from './pro/pro-dashboard/pro-dashboard-topbar/pro-dashboard-topbar.component';
@@ -29,13 +25,20 @@ import {ProBoardTransfersTransferComponent} from './pro/pro-board/pro-board-tran
 import {ProBoardTransferTrackComponent} from './pro/pro-board/pro-board-transfers/pro-board-transfer-track/pro-board-transfer-track.component';
 import {ProComponent} from './pro/pro.component';
 
+// import {RouterModule} from '@angular/router';
+
 @NgModule({
+  imports: [
+    BrowserModule,
+    BrowserAnimationsModule,
+    SharedModule,
+    AppRoutingModule
+  ],
   declarations: [
     AppComponent,
-    PublicUploadFormComponent,
-    PublicUploadingFilesComponent,
-    PublicUploadFinishedComponent,
-    PublicUploadPageComponent,
+    // PublicUploadingFilesComponent,
+    // PublicUploadFinishedComponent,
+    // PublicUploadPageComponent,
     EmailValidationToolTip,
     ProDashboardTopbarComponent,
     ProDashboardSidebarComponent,
@@ -51,12 +54,6 @@ import {ProComponent} from './pro/pro.component';
     ProBoardTransfersTransferComponent,
     ProBoardTransferTrackComponent,
     ProComponent
-  ],
-  imports: [
-    BrowserModule,
-    BrowserAnimationsModule,
-    SharedModule,
-    AppRoutingModule,
   ],
   providers: [
   ],

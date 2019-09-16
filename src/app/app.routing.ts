@@ -1,7 +1,5 @@
 import {ModuleWithProviders, NgModule} from '@angular/core';
 import {PreloadAllModules, RouterModule, Routes} from '@angular/router';
-import {PublicUploadPageComponent} from "./public-upload-page/public-upload-page.component";
-import {PublicUploadingFilesComponent} from "./public-upload-page/public-upload-progress/public-uploading-files.component";
 import {AboutUsInfoComponent} from "./public-page/public-info/public-info.component";
 import {PublicPagenotfoundPageComponent} from "./public-pagenotfound-page/public-pagenotfound-page.component";
 import {ProComponent} from './pro/pro.component';
@@ -9,12 +7,13 @@ import {ProComponent} from './pro/pro.component';
 const appRoutes: Routes = [
   {
     path: '',
-    component: PublicUploadPageComponent
+    // component: PublicUploadPageComponent
+    loadChildren: './home.module#HomeModule'
   },
-  {
-    path: "uploading-files-dev",
-    component: PublicUploadingFilesComponent
-  },
+  // {
+  //   path: "uploading-files-dev",
+  //   component: PublicUploadingFilesComponent
+  // },
   {
     path: 'project',
     loadChildren: './project.module#ProjectModule'
@@ -32,7 +31,6 @@ const appRoutes: Routes = [
     component: PublicPagenotfoundPageComponent
   }
 ];
-
 // export const routing: ModuleWithProviders = RouterModule.forRoot(appRoutes);
 
 @NgModule({
@@ -40,4 +38,4 @@ const appRoutes: Routes = [
   exports: [RouterModule]
 })
 
-export class AppRoutingModule { }
+export class AppRoutingModule {}

@@ -2,8 +2,6 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {ClipboardModule} from 'ngx-clipboard';
-import {DragAndDropModule} from 'angular-draggable-droppable';
-import {FileUploadModule} from './ng2-file-upload';
 import {FormsModule} from '@angular/forms';
 import {NgbActiveModal, NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {NgSelectModule} from '@ng-select/ng-select';
@@ -42,8 +40,6 @@ import {RouterModule} from '@angular/router';
   imports: [
     ClipboardModule,
     CommonModule,
-    DragAndDropModule.forRoot(),
-    FileUploadModule,
     FormsModule,
     NgbModule.forRoot(),
     NgSelectModule,
@@ -86,8 +82,6 @@ import {RouterModule} from '@angular/router';
   exports:[
     //////////////    MODULES     //////////////
     ClipboardModule,
-    DragAndDropModule,
-    FileUploadModule,
     FormsModule,
     NgbModule,
     NgSelectModule,
