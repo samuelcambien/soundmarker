@@ -1,12 +1,12 @@
 import {NgModule} from '@angular/core';
-import {SharedModule} from './shared.module';
+import {SharedModule} from './modules/shared.module';
 import {AppRoutingModule} from './app.routing';
+import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
 
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
 import {AppComponent} from './app.component';
-import {EmailValidationToolTip, PublicUploadFormComponent} from './public-upload-page/public-upload-form/public-upload-form.component';
 
 // import {routing} from './app.routing';
 
@@ -36,10 +36,6 @@ import {ProComponent} from './pro/pro.component';
   ],
   declarations: [
     AppComponent,
-    // PublicUploadingFilesComponent,
-    // PublicUploadFinishedComponent,
-    // PublicUploadPageComponent,
-    EmailValidationToolTip,
     ProDashboardTopbarComponent,
     ProDashboardSidebarComponent,
     ProDashboardSidebarItemProjectComponent,
@@ -56,16 +52,10 @@ import {ProComponent} from './pro/pro.component';
     ProComponent
   ],
   providers: [
+    NgbActiveModal
   ],
   bootstrap: [AppComponent],
   entryComponents: [
-    // AboutUsInfoComponent,
-    // ProInfoComponent,
-    // HelpInfoComponent,
-    // ReplyFormComponent,
-    // PublicIntroductionComponent,
-    // PrivacyAndTermsComponent,
-    // SubscribeComponent
   ]
 })
 export class AppModule {

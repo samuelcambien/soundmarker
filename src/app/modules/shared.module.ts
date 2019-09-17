@@ -1,38 +1,38 @@
 //////////////    MODULES     //////////////
-import {NgModule} from '@angular/core';
+import {Component, NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {ClipboardModule} from 'ngx-clipboard';
 import {FormsModule} from '@angular/forms';
-import {NgbActiveModal, NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {NgSelectModule} from '@ng-select/ng-select';
 import {ReactiveFormsModule} from '@angular/forms';
-import {TagInputModule} from './ngx-chips/modules';
+import {TagInputModule} from '../ngx-chips/modules';
 import {TrimValueAccessorModule} from 'ng-trim-value-accessor';
+import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 
 //////////////    COMPONENTS     //////////////
-import {AboutUsInfoComponent} from './public-page/public-info/public-info.component';
-import {DropdownToggleComponent} from './dropdown-toggle/dropdown-toggle.component';
-import {ErrorComponent} from './error/error.component';
-import {HelpInfoComponent} from './public-page/public-info/public-info.component';
-import {InfoFooterComponent} from './public-page/public-info/topics/info-footer/info-footer.component';
-import {PageNotFoundComponent} from './error/page-not-found/page-not-found.component';
-import {PlayerIntroductionComponent} from './public-page/public-info/topics/player-introduction/player-introduction.component';
-import {ProInfoComponent} from './public-page/public-info/public-info.component';
-import {PublicPageComponent} from './public-page/public-page.component';
-import {PublicPagenotfoundPageComponent} from './public-pagenotfound-page/public-pagenotfound-page.component';
-import {PublicInfoHeaderComponent} from './public-page/public-info/header/public-info-header.component';
-import {PublicIntroductionComponent} from './public-page/public-info/topics/public-introduction/public-introduction.component';
-import {SubscribeComponent} from './subscribe/subscribe.component';
+import {AboutUsInfoComponent} from '../public-page/public-info/public-info.component';
+import {DropdownToggleComponent} from '../dropdown-toggle/dropdown-toggle.component';
+import {ErrorComponent} from '../error/error.component';
+import {HelpInfoComponent} from '../public-page/public-info/public-info.component';
+import {InfoFooterComponent} from '../public-page/public-info/topics/info-footer/info-footer.component';
+import {PageNotFoundComponent} from '../error/page-not-found/page-not-found.component';
+import {PlayerIntroductionComponent} from '../public-page/public-info/topics/player-introduction/player-introduction.component';
+import {ProInfoComponent} from '../public-page/public-info/public-info.component';
+import {PublicPageComponent} from '../public-page/public-page.component';
+import {PublicPagenotfoundPageComponent} from '../public-pagenotfound-page/public-pagenotfound-page.component';
+import {PublicInfoHeaderComponent} from '../public-page/public-info/header/public-info-header.component';
+import {PublicIntroductionComponent} from '../public-page/public-info/topics/public-introduction/public-introduction.component';
+import {SubscribeComponent} from '../subscribe/subscribe.component';
 
 //////////////    DIRECTIVES    //////////////
-import {DraggableDirective} from './public-player-page/public-track-player/draggable.directive';
-import {DurationDirective} from './formatting/duration.directive';
-import {TimeFormatDirective} from './time-format.directive';
+import {DraggableDirective} from '../public-player-page/public-track-player/draggable.directive';
+import {DurationDirective} from '../formatting/duration.directive';
+import {TimeFormatDirective} from '../time-format.directive';
 
 //////////////    PIPES     //////////////
-import {DurationFormatterPipe} from './formatting/duration-formatter.pipe';
-import {HighlightPipe} from './formatting/highlight.pipe';
-import {TimeFormatPipe} from './time-format.pipe';
+import {DurationFormatterPipe} from '../formatting/duration-formatter.pipe';
+import {HighlightPipe} from '../formatting/highlight.pipe';
+import {TimeFormatPipe} from '../time-format.pipe';
 import {RouterModule} from '@angular/router';
 
 @NgModule({
@@ -48,9 +48,7 @@ import {RouterModule} from '@angular/router';
     TagInputModule,
   ],
 ////////////////////////////////////////////////////////  PROVIDERS   ////////////////////////////////////////////////////////
-  providers: [
-    NgbActiveModal
-  ],
+// ACCORDING TO https://angular.io/guide/ngmodule-faq#q-why-bad you shouldn't add providers in shared modules.
 //////////////////////////////////////////////////////// DECLARATIONS ////////////////////////////////////////////////////////
   declarations: [
     //////////////    COMPONENTS  //////////////
@@ -119,11 +117,11 @@ import {RouterModule} from '@angular/router';
     AboutUsInfoComponent,
     ProInfoComponent,
     HelpInfoComponent,
-    // ReplyFormComponent,
     PublicIntroductionComponent,
-    // PrivacyAndTermsComponent,
     SubscribeComponent
   ]
 })
 
-export class SharedModule { }
+
+export class SharedModule {
+}
