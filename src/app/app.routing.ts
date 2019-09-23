@@ -1,29 +1,20 @@
-import {ModuleWithProviders} from '@angular/core';
+import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
-import {PublicUploadPageComponent} from "./public-upload-page/public-upload-page.component";
-import {PublicPlayerPageComponent} from "./public-player-page/public-player-page.component";
-import {PublicUploadingFilesComponent} from "./public-upload-page/public-upload-progress/public-uploading-files.component";
 import {AboutUsInfoComponent} from "./public-page/public-info/public-info.component";
 import {PublicPagenotfoundPageComponent} from "./public-pagenotfound-page/public-pagenotfound-page.component";
 import {ProComponent} from './pro/pro.component';
-
+import { CustomPreloadingStrategy } from './custom-preloading';
 
 const appRoutes: Routes = [
   {
     path: '',
-    component: PublicUploadPageComponent
+    loadChildren: './modules/home.module#HomeModule',
+    data: { preload: false }
   },
   {
-    path: "uploading-files-dev",
-    component: PublicUploadingFilesComponent
-  },
-  {
-    path: "project/:project_hash",
-    component: PublicPlayerPageComponent,
-  },
-  {
-    path: "project/",
-    component: PublicPagenotfoundPageComponent,
+    path: 'project',
+    loadChildren: './modules/project.module#ProjectModule',
+    data: { preload: false }
   },
   {
     path: "about-us",
@@ -39,4 +30,10 @@ const appRoutes: Routes = [
   }
 ];
 
-export const routing: ModuleWithProviders = RouterModule.forRoot(appRoutes);
+@NgModule({
+  imports: [RouterModule.forRoot(appRoutes,{preloadingStrategy: CustomPreloadingStrategy})],
+  providers: [CustomPreloadingStrategy],
+  exports: [RouterModule],
+})
+
+export class AppRoutingModule {}

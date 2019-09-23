@@ -18,18 +18,22 @@
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
             "outputPath": "dist/Soundmarker-sass",
+            "resourcesOutputPath": "assets",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
             "tsConfig": "src/tsconfig.app.json",
-            "assets": [
-              "src/favicon.ico",
-              "src/assets"
-            ],
             "styles": [
               "src/styles.scss"
             ],
             "scripts": [
+            ],
+            "assets": [
+              {
+                "glob": "**/*",
+                "input": "src/assets/",
+                "output": "/assets/"
+              }
             ]
           },
           "configurations": {
@@ -83,11 +87,7 @@
             "styles": [
               "src/styles.scss"
             ],
-            "scripts": [],
-            "assets": [
-              "src/favicon.ico",
-              "src/assets"
-            ]
+            "scripts": []
           }
         },
         "lint": {

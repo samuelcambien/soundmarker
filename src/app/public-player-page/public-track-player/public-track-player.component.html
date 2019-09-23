@@ -502,7 +502,7 @@
       (newComment)="addComment($event)">
     </app-comment-form>
 
-    <app-comment
+    <comment-lazy
       *ngFor="let comment of getMatchingCommentsSorted()"
       [comment]="comment"
       [version]="version"
@@ -511,7 +511,7 @@
       (delete)="deleteComment($event)"
       (scrollIntoReply)="pauseAutoScroll($event)"
     >
-    </app-comment>
+    </comment-lazy>
 
     <div *ngIf="search && getMatchingComments().length == 0" class="no-comments">
       <p>We couldn't find any comments related to your search.</p>

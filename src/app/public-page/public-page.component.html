@@ -7,7 +7,9 @@
 
 <div  class="container rounded phone-scroll">
   <div>
-    <div [ngClass]="smaClass" #sma > </div>
+    <loadable-component [componentId]="SMA_COMPONENT_ID" [loadComponent]="smaComponent">
+        <app-sma (scroll)="contentScroll($event)"></app-sma>
+    </loadable-component>
   </div>
 
   <div class="public-page card shadow-lg rounded-lg border-0">
@@ -44,24 +46,6 @@
   <div class="modal-dialog  modal-lg">
     <div class="modal-content">
       <app-pro-info></app-pro-info>
-    </div>
-  </div>
-</div>
-
-<div class="modal fade info-modal-terms" tabindex="1" role="dialog" aria-labelledby="myLargeModalLabel"
-     aria-hidden="true">
-  <div class="modal-dialog  modal-lg">
-    <div class="modal-content">
-      <app-privacy-and-terms></app-privacy-and-terms>
-    </div>
-  </div>
-</div>
-
-<div class="modal fade info-modal-contact" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
-     aria-hidden="true">
-  <div class="modal-dialog  modal-lg">
-    <div class="modal-content">
-      <app-contact></app-contact>
     </div>
   </div>
 </div>

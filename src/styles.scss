@@ -95,52 +95,21 @@ body {
 }
 // typography
 @font-face {
-	font-family:'avenirnext-regular';
-	src:url(fonts/AvenirNext-Regular.ttf);
-}
-@font-face {
-	font-family:'avenirnext-bold';
-	src:url(fonts/AvenirNext-Bold.ttf);
-}
-@font-face {
-	font-family:'kollektif-bold';
-	src:url(fonts/Kollektif-Bold.ttf);
-}
-@font-face {
-	font-family:'kollektif';
-	src:url(fonts/Kollektif.ttf);
-}
-@font-face {
-	font-family:'brandon-bold';
-	src:url(fonts/Brandon-Text-Bold.otf);
-}
-@font-face {
-	font-family:'brandon';
-	src:url(fonts/Brandon-Text-Regular.otf);
-}
-@font-face {
 	font-family:'sofia-bold';
 	font-display: block;
-	src:url(fonts/sofiapro-bold.otf);
+	src:url('/assets/sofiapro-bold.otf');
 }
 @font-face {
 	font-family:'sofia-medium';
 	font-display: block;
-	src:url(fonts/sofiapro-medium.otf);
+	src:url('/assets/sofiapro-medium.otf');
 }
 @font-face {
 	font-family:'sofia-regular';
 	font-display: block;
-	src:url(fonts/sofiapro-regular.otf);
+	src:url('/assets/sofiapro-regular.otf');
 }
-@font-face {
-	font-family:'halant-bold';
-	src:url(fonts/Halant-Bold.ttf);
-}
-@font-face {
-	font-family:'gabriela';
-	src:url(fonts/gabriela.otf)
-}
+
 ::-moz-selection {
 	background: rgba(96, 150, 248, 0.4);
 }
@@ -172,46 +141,18 @@ a:visited {
 .tooltip {
 	font-family: 'sofia-regular';
 	font-size: 10pt;
-	animation-name: delayedFadeIn;
-	animation-duration: 1s ;
-	/* Adjust this duration */
 }
-@Keyframes delayedFadeIn {
-	0% {
-		opacity: 0;
-	}
-	75% {
-		opacity: 0;
-	}
-	/* Set this to 99% for no fade-in. */
-	100% {
-		opacity: 1;
-	}
-}
+
 @media (max-width: 576px) {
 	.tooltip {
 		display: none !important;
 	}
 }
 
-/*
- .tooltip > .tooltip-inner {
-	background-color: #717db0 !important;
-}
-.tooltip > .arrow::before {
-	border-top-color: #717db0;
-}
-.tooltip.bs-tooltip-bottom > .arrow::before {
-	border-bottom-color: #717db0;
-}
-
- */
 .margin-tooltip + .tooltip {
 	margin-bottom: 5px;
-	animation-name: delayedFadeIn;
-	animation-duration: 1s;
-
 }
+
 .sm-black {
 	color: #717db0;
 }
