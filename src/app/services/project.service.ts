@@ -120,7 +120,7 @@ export class ProjectService {
     let nextTrack = tracks[tracks.indexOf(currentTrack) + 1];
     if (nextTrack) {
       await this.player.playFromStart(nextTrack.versions[0]);
-      if (currentTrack != null) {
+      if (this.stateService.getActiveTrack().getValue() != null) {
         this.stateService.setActiveTrack(nextTrack);
       }
     }
