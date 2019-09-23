@@ -7,7 +7,8 @@ import {NgSelectModule} from '@ng-select/ng-select';
 import {ReactiveFormsModule} from '@angular/forms';
 import {TagInputModule} from '../ngx-chips/modules';
 import {TrimValueAccessorModule} from 'ng-trim-value-accessor';
-import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import {NgbActiveModal, NgbModule} from '@ng-bootstrap/ng-bootstrap';
+
 
 //////////////    COMPONENTS     //////////////
 import {AboutUsInfoComponent} from '../public-page/public-info/public-info.component';
@@ -23,7 +24,7 @@ import {PublicPagenotfoundPageComponent} from '../public-pagenotfound-page/publi
 import {PublicInfoHeaderComponent} from '../public-page/public-info/header/public-info-header.component';
 import {PublicIntroductionComponent} from '../public-page/public-info/topics/public-introduction/public-introduction.component';
 import {SubscribeComponent} from '../subscribe/subscribe.component';
-
+import {SmaComponent} from '../sma/sma.component';
 //////////////    DIRECTIVES    //////////////
 import {DraggableDirective} from '../public-player-page/public-track-player/draggable.directive';
 import {DurationDirective} from '../formatting/duration.directive';
@@ -34,6 +35,7 @@ import {DurationFormatterPipe} from '../formatting/duration-formatter.pipe';
 import {HighlightPipe} from '../formatting/highlight.pipe';
 import {TimeFormatPipe} from '../time-format.pipe';
 import {RouterModule} from '@angular/router';
+import {LoadableComponentModule} from 'ngx-loadable-component';
 
 @NgModule({
 ////////////////////////////////////////////////////////  IMPORTS   ////////////////////////////////////////////////////////
@@ -44,11 +46,15 @@ import {RouterModule} from '@angular/router';
     NgbModule.forRoot(),
     NgSelectModule,
     ReactiveFormsModule,
+    LoadableComponentModule.forFeature(),
     TrimValueAccessorModule,
-    TagInputModule,
+    TagInputModule
   ],
 ////////////////////////////////////////////////////////  PROVIDERS   ////////////////////////////////////////////////////////
-// ACCORDING TO https://angular.io/guide/ngmodule-faq#q-why-bad you shouldn't add providers in shared modules.
+// ACCORDING TO https://angular.io/guide/ngmodule-faq#q-why-bad you shouldn't add services providers in shared modules.
+  providers: [
+    NgbActiveModal
+  ],
 //////////////////////////////////////////////////////// DECLARATIONS ////////////////////////////////////////////////////////
   declarations: [
     //////////////    COMPONENTS  //////////////
@@ -64,6 +70,7 @@ import {RouterModule} from '@angular/router';
     PublicIntroductionComponent,
     PublicPageComponent,
     PublicPagenotfoundPageComponent,
+    SmaComponent,
     SubscribeComponent,
 
     //////////////    DIRECTIVES  //////////////
@@ -84,6 +91,7 @@ import {RouterModule} from '@angular/router';
     NgbModule,
     NgSelectModule,
     ReactiveFormsModule,
+    LoadableComponentModule,
     RouterModule,
     TrimValueAccessorModule,
     TagInputModule,
@@ -100,6 +108,7 @@ import {RouterModule} from '@angular/router';
     PublicIntroductionComponent,
     PublicPageComponent,
     PublicPagenotfoundPageComponent,
+    SmaComponent,
     SubscribeComponent,
 
     //////////////    DIRECTIVES  //////////////

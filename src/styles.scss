@@ -95,52 +95,21 @@ body {
 }
 // typography
 @font-face {
-	font-family:'avenirnext-regular';
-	src:url(fonts/AvenirNext-Regular.ttf);
-}
-@font-face {
-	font-family:'avenirnext-bold';
-	src:url(fonts/AvenirNext-Bold.ttf);
-}
-@font-face {
-	font-family:'kollektif-bold';
-	src:url(fonts/Kollektif-Bold.ttf);
-}
-@font-face {
-	font-family:'kollektif';
-	src:url(fonts/Kollektif.ttf);
-}
-@font-face {
-	font-family:'brandon-bold';
-	src:url(fonts/Brandon-Text-Bold.otf);
-}
-@font-face {
-	font-family:'brandon';
-	src:url(fonts/Brandon-Text-Regular.otf);
-}
-@font-face {
 	font-family:'sofia-bold';
 	font-display: block;
-	src:url(fonts/sofiapro-bold.otf);
+	src:url('/assets/sofiapro-bold.otf');
 }
 @font-face {
 	font-family:'sofia-medium';
 	font-display: block;
-	src:url(fonts/sofiapro-medium.otf);
+	src:url('/assets/sofiapro-medium.otf');
 }
 @font-face {
 	font-family:'sofia-regular';
 	font-display: block;
-	src:url(fonts/sofiapro-regular.otf);
+	src:url('/assets/sofiapro-regular.otf');
 }
-@font-face {
-	font-family:'halant-bold';
-	src:url(fonts/Halant-Bold.ttf);
-}
-@font-face {
-	font-family:'gabriela';
-	src:url(fonts/gabriela.otf)
-}
+
 ::-moz-selection {
 	background: rgba(96, 150, 248, 0.4);
 }

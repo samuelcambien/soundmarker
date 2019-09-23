@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  smaDomain: "https://s3.eu-central-1.amazonaws.com",
+  smaDomain: "http://127.0.0.1",
 };
 
 /*

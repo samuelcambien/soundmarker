@@ -1,7 +1,6 @@
 import {NgModule} from '@angular/core';
 import {SharedModule} from './modules/shared.module';
 import {AppRoutingModule} from './app.routing';
-import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
 
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
@@ -25,14 +24,18 @@ import {ProBoardTransfersTransferComponent} from './pro/pro-board/pro-board-tran
 import {ProBoardTransferTrackComponent} from './pro/pro-board/pro-board-transfers/pro-board-transfer-track/pro-board-transfer-track.component';
 import {ProComponent} from './pro/pro.component';
 
-// import {RouterModule} from '@angular/router';
+import { LoadableComponentModule } from 'ngx-loadable-component';
+
+// loadable components manifest
+import { appLoadableManifests } from './modules/app-loadable.manifests';
 
 @NgModule({
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
     SharedModule,
-    AppRoutingModule
+    AppRoutingModule,
+    LoadableComponentModule.forRoot(appLoadableManifests)
   ],
   declarations: [
     AppComponent,
@@ -49,10 +52,9 @@ import {ProComponent} from './pro/pro.component';
     ProBoardTransfersComponent,
     ProBoardTransfersTransferComponent,
     ProBoardTransferTrackComponent,
-    ProComponent
+    ProComponent,
   ],
   providers: [
-    NgbActiveModal
   ],
   bootstrap: [AppComponent],
   entryComponents: [

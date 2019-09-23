@@ -1,18 +1,20 @@
-import {ModuleWithProviders, NgModule} from '@angular/core';
-import {PreloadAllModules, RouterModule, Routes} from '@angular/router';
+import {NgModule} from '@angular/core';
+import {RouterModule, Routes} from '@angular/router';
 import {AboutUsInfoComponent} from "./public-page/public-info/public-info.component";
 import {PublicPagenotfoundPageComponent} from "./public-pagenotfound-page/public-pagenotfound-page.component";
 import {ProComponent} from './pro/pro.component';
+import { CustomPreloadingStrategy } from './custom-preloading';
 
 const appRoutes: Routes = [
   {
     path: '',
-    // component: PublicUploadPageComponent
-    loadChildren: './modules/home.module#HomeModule'
+    loadChildren: './modules/home.module#HomeModule',
+    data: { preload: false }
   },
   {
     path: 'project',
-    loadChildren: './modules/project.module#ProjectModule'
+    loadChildren: './modules/project.module#ProjectModule',
+    data: { preload: false }
   },
   {
     path: "about-us",
@@ -27,11 +29,11 @@ const appRoutes: Routes = [
     component: PublicPagenotfoundPageComponent
   }
 ];
-// export const routing: ModuleWithProviders = RouterModule.forRoot(appRoutes);
 
 @NgModule({
-  imports: [RouterModule.forRoot(appRoutes,{preloadingStrategy: PreloadAllModules})],
-  exports: [RouterModule]
+  imports: [RouterModule.forRoot(appRoutes,{preloadingStrategy: CustomPreloadingStrategy})],
+  providers: [CustomPreloadingStrategy],
+  exports: [RouterModule],
 })
 
 export class AppRoutingModule {}

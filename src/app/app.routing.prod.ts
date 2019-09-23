@@ -9,11 +9,11 @@ const appRoutes: Routes = [
   {
     path: '',
     // component: PublicUploadPageComponent
-    loadChildren: './home.module#HomeModule'
+    loadChildren: './modules/home.module#HomeModule'
   },
   {
     path: 'project',
-    loadChildren: './project.module#ProjectModule'
+    loadChildren: './modules/project.module#ProjectModule'
   },
   {
     path: "about-us",
