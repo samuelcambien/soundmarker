@@ -30,7 +30,7 @@
       </div>
     </div>
 
-    <app-public-track-player
+    <public-track-player
       *ngFor="let track of project?.tracks"
       [track]="track"
       [enableOverview]="project?.tracks?.length > 1"
@@ -39,7 +39,7 @@
       [expired]="expired && !commentsExpired"
       (overview)="setActiveTrack(null)"
       (error)="error = $event">
-    </app-public-track-player>
+    </public-track-player>
 
   </div>
 

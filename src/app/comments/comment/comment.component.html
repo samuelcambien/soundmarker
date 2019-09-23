@@ -150,11 +150,11 @@
       <div class="replies">
 
         <div class="comment-replies" id="comment-replies" [ngbCollapse]="!showReplies">
-          <app-reply
+          <reply-lazy
             *ngFor="let reply of this.comment.replies"
             [reply]="reply"
             (delete)="delete.emit($event)"
-          ></app-reply>
+          ></reply-lazy>
         </div>
 
         <app-reply-form #replyform *ngIf="reply != null" [reply]="reply" (cancel)="clearReply()"

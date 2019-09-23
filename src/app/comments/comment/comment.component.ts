@@ -8,7 +8,7 @@ import {Version} from "../../model/version";
 import {StateService} from "../../services/state.service";
 
 @Component({
-  selector: 'app-comment',
+  selector: 'comment-lazy',
   templateUrl: './comment.component.html',
   styleUrls: ['./comment.component.scss']
 })
