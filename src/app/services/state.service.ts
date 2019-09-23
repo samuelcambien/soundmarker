@@ -23,7 +23,7 @@ export class StateService {
 
   private activeProject: Project;
 
-  public getActiveTrack(): ReplaySubject<Track> {
+  public getActiveTrack(): BehaviorSubject<Track> {
     return this.activeTrack;
   }
 
@@ -31,7 +31,7 @@ export class StateService {
     this.activeTrack.next(track);
   }
 
-  private activeTrack: ReplaySubject<Track> = new ReplaySubject<Track>();
+  private activeTrack: BehaviorSubject<Track> = new BehaviorSubject<Track>(null);
 
   public getActiveComment(): BehaviorSubject<Comment> {
     return this.activeComment;
