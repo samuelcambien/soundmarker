@@ -36,10 +36,10 @@ export class WaveformComponent implements OnInit {
         peaks: JSON.parse(this.version.wave_png),
       }
     );
-    this.drawer.seek.subscribe(progress => {
+    this.drawer.seek.subscribe(async progress => {
       this.stateService.setActiveComment(null);
-      this.player.seekTo(this.version, progress * this.version.track_length);
-      this.player.play(this.version);
+      await this.player.seekTo(this.version, progress * this.version.track_length);
+      await this.player.play(this.version);
     });
 
     this.drawerService.register(this.version, this.drawer);

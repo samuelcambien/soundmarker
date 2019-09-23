@@ -19,7 +19,6 @@ export class DrawerService {
 
     player.progress.subscribe((e) => {
       this.getDrawer(e.version.version_id).progress(e.currentTime / e.version.track_length);
-      this.redraw(e.version.version_id);
     });
 
     this.stateService.getActiveTrack().subscribe(track => {
