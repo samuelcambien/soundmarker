@@ -17,6 +17,8 @@ export class Player {
 
   private _version: Version;
 
+  @Output() playEvent = new EventEmitter();
+  @Output() pauseEvent = new EventEmitter();
   @Output() playing = new EventEmitter();
   @Output() progress = new EventEmitter();
   @Output() finished = new EventEmitter();
@@ -24,35 +26,6 @@ export class Player {
   constructor(
     private stateService: StateService
   ) {
-    this.setupProgress();
-  }
-
-  setupProgress() {
-
-    const onAudioProcess = async () => {
-
-      if (!this.isPlaying()) {
-        return;
-      }
-
-      let comment = this.stateService.getActiveComment().getValue();
-      if (comment && comment.include_end && this.getCurrentTime() > comment.end_time) {
-        if (comment.loop) {
-          await this.play(this.version, comment.start_time);
-        } else {
-          this.pause();
-          await this.seekTo(this.version, comment.start_time);
-        }
-      }
-
-      this.emitProgress();
-
-      // Call again in the next frame
-      const requestAnimationFrame = window.requestAnimationFrame || window.webkitRequestAnimationFrame;
-      requestAnimationFrame(onAudioProcess);
-    };
-
-    this.playing.subscribe(() => onAudioProcess());
   }
 
   private createMedia() {
@@ -69,6 +42,10 @@ export class Player {
     const source = context.createMediaElementSource(this.getMedia());
     source.connect(analyser);
     analyser.connect(context.destination);
+
+    this.getMedia().addEventListener('play', e => this.playEvent.emit(e));
+    this.getMedia().addEventListener('pause', e => this.pauseEvent.emit(e));
+    this.getMedia().addEventListener('timeupdate', () => this.emitProgress());
   }
 
   private getMedia() {
@@ -83,20 +60,26 @@ export class Player {
 
     if (!this.media) this.createMedia();
 
-    return new Promise(async resolve  => {
-      if (this._version !== version) {
-        if (this.version)
-          await this.stop();
-        this._version = version;
-        const file: File = Player.getStreamFile(this.version);
-        this.getMedia().src = file.aws_path + "." + file.extension;
-        this.getMedia().addEventListener('loadedmetadata', () => {
-          this.setTitle(this.getTrack().title);
-          resolve();
-        });
-      } else {
+    return new Promise(async resolve => {
+
+      if (this.version && (this.version.version_id === version.version_id)) {
         resolve();
+        return;
       }
+
+      if (this.version)
+        await this.stop();
+
+      this._version = version;
+      const file: File = Player.getStreamFile(this.version);
+
+      this.getMedia().addEventListener('loadedmetadata', () => {
+        this.setTitle(this.getTrack().title);
+        resolve();
+      });
+
+      this.getMedia().src = file.aws_path + "." + file.extension;
+      this.getMedia().load();
     })
   }
 
@@ -117,10 +100,16 @@ export class Player {
   }
 
   async seekTo(version: Version, progress: number) {
-
     await this.load(version);
-    this.getMedia().currentTime = progress;
-    this.emitProgress();
+    return new Promise(resolve => {
+      this.getMedia().addEventListener('seeked', () => {
+          resolve();
+        },
+        {once: true}
+      );
+      this.getMedia().currentTime = progress;
+      this.getMedia().currentTime = progress;
+    });
   }
 
   pause() {
