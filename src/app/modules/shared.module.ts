@@ -36,6 +36,7 @@ import {HighlightPipe} from '../formatting/highlight.pipe';
 import {TimeFormatPipe} from '../time-format.pipe';
 import {RouterModule} from '@angular/router';
 import {LoadableComponentModule} from 'ngx-loadable-component';
+import {LoadingComponent} from "../loading/loading.component";
 
 @NgModule({
 ////////////////////////////////////////////////////////  IMPORTS   ////////////////////////////////////////////////////////
@@ -63,6 +64,7 @@ import {LoadableComponentModule} from 'ngx-loadable-component';
     ErrorComponent,
     HelpInfoComponent,
     InfoFooterComponent,
+    LoadingComponent,
     PageNotFoundComponent,
     PlayerIntroductionComponent,
     ProInfoComponent,
@@ -101,6 +103,7 @@ import {LoadableComponentModule} from 'ngx-loadable-component';
     DropdownToggleComponent,
     ErrorComponent,
     HelpInfoComponent,
+    LoadingComponent,
     PageNotFoundComponent,
     PlayerIntroductionComponent,
     ProInfoComponent,
