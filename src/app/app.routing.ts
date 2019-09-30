@@ -13,6 +13,11 @@ const appRoutes: Routes = [
   },
   {
     path: 'project',
+    component: PublicPagenotfoundPageComponent,
+    pathMatch: 'full'
+  },
+  {
+    path: 'project',
     loadChildren: './modules/project.module#ProjectModule',
     data: { preload: false }
   },

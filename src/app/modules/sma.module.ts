@@ -1,12 +1,15 @@
-import {NgModule} from '@angular/core';
+import {CommonModule} from '@angular/common';
 import {LoadableComponentModule} from 'ngx-loadable-component';
-import {SmaLazyComponent} from '../sma/sma-lazy/sma-lazy.component';
+import {NgModule} from '@angular/core';
+import {SmaComponent} from '../sma/sma.component';
+import {SharedModule} from './shared.module';
 
 @NgModule({
   imports: [
-    LoadableComponentModule.forChild(SmaLazyComponent)
+    CommonModule,
+    LoadableComponentModule.forChild(SmaComponent)
   ],
-  declarations: [SmaLazyComponent]
+  declarations: [SmaComponent]
 })
 
-export class SmaLazyComponentModule {}
+export class SmaComponentModule {}

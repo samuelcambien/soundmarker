@@ -8,7 +8,7 @@ import {Utils} from '../app.component';
 @Component({
   selector: 'app-sma',
   templateUrl: './sma.component.html',
-  styleUrls: ['./sma.component.scss']
+  styleUrls: ['./sma.component.scss'],
 })
 export class SmaComponent implements OnInit {
 
@@ -25,7 +25,7 @@ export class SmaComponent implements OnInit {
   adExposureTime = 45;        // in seconds
   adFadeInTime = "0.73s";     // Needs to be a string.
   adFadeOutTime = "0.5s";     // Needs to be a string.
-  adInitialDelay = 350;      // in ms, this is also the delay between loading an add and showing it. (Enough time to load it)
+  adInitialDelay = 350;      // in ms, this is also the delay between loading an ad and showing it. (Enough time to load it)
   adTransitionWait = 500;     // in ms. Needs to be at least the adFadeOutTime or otherwise the ad's iframe is destroyed before the ad has faded out.
   adPostFetchDelay = 3500;    // Time between the ad loading in the iframe ad the ad showing.
   pageInactiveTolerance = 5;  // If there was no activity on the page in these seconds before ad refresh, the ad will wait for new user activity.
