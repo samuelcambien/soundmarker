@@ -17,9 +17,8 @@ export class Player {
 
   private _version: Version;
 
-  @Output() playEvent = new EventEmitter();
-  @Output() pauseEvent = new EventEmitter();
-  @Output() playing = new EventEmitter();
+  @Output() started = new EventEmitter();
+  @Output() paused = new EventEmitter();
   @Output() progress = new EventEmitter();
   @Output() finished = new EventEmitter();
 
@@ -43,8 +42,8 @@ export class Player {
     source.connect(analyser);
     analyser.connect(context.destination);
 
-    this.getMedia().addEventListener('play', e => this.playEvent.emit(e));
-    this.getMedia().addEventListener('pause', e => this.pauseEvent.emit(e));
+    this.getMedia().addEventListener('play', e => this.started.emit(e));
+    this.getMedia().addEventListener('pause', e => this.paused.emit(e));
     this.getMedia().addEventListener('timeupdate', () => this.emitProgress());
   }
 
@@ -95,7 +94,6 @@ export class Player {
     }
 
     await this.getMedia().play();
-    this.playing.emit();
   }
 
   async playFromStart(version: Version) {
@@ -110,7 +108,6 @@ export class Player {
         },
         {once: true}
       );
-      this.getMedia().currentTime = progress;
       this.getMedia().currentTime = progress;
     });
   }
@@ -133,7 +130,7 @@ export class Player {
     this.progress.emit({
       version: this.version,
       currentTime: this.getCurrentTime()
-    })
+    });
   }
 
   getCurrentTime() {
