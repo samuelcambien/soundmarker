@@ -7,8 +7,7 @@
 
 <div  class="container rounded phone-scroll">
   <div>
-    <loadable-component [componentId]="SMA_COMPONENT_ID" [loadComponent]="smaComponent">
-        <app-sma (scroll)="contentScroll($event)"></app-sma>
+    <loadable-component [componentId]="SMA_COMPONENT_ID" [componentOutputs]="smaOutputs" [loadComponent]="loadSMA()">
     </loadable-component>
   </div>
 

@@ -16,7 +16,7 @@ import {TimeInputComponent} from '../comments/time-input/time-input.component';
 import {WaveformComponent} from '../public-player-page/public-track-player/waveform/waveform.component';
 
 const routes: Routes = [
-    {
+  {
     path: ':project_hash',
     component: PublicPlayerPageComponent,
   }
@@ -25,8 +25,9 @@ const routes: Routes = [
 @NgModule({
   imports: [
     CommonModule,
+    SharedModule,
     RouterModule.forChild(routes),
-    SharedModule
+
   ],
   declarations: [
     CommentComponent,

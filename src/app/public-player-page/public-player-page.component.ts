@@ -40,7 +40,8 @@ export class PublicPlayerPageComponent implements OnInit {
     private stateService: StateService,
     private cdr: ChangeDetectorRef
   ) {
-    this.playerService.playing.subscribe(() => this.cdr.detectChanges());
+    this.playerService.started.subscribe(() => this.cdr.detectChanges());
+    this.playerService.paused.subscribe(() => this.cdr.detectChanges());
   }
 
   ngOnInit() {
@@ -123,4 +124,5 @@ export class PublicPlayerPageComponent implements OnInit {
       this.message.text = "No notes included";
     }
   }
+
 }

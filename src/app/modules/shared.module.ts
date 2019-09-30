@@ -24,7 +24,6 @@ import {PublicPagenotfoundPageComponent} from '../public-pagenotfound-page/publi
 import {PublicInfoHeaderComponent} from '../public-page/public-info/header/public-info-header.component';
 import {PublicIntroductionComponent} from '../public-page/public-info/topics/public-introduction/public-introduction.component';
 import {SubscribeComponent} from '../subscribe/subscribe.component';
-import {SmaComponent} from '../sma/sma.component';
 //////////////    DIRECTIVES    //////////////
 import {DraggableDirective} from '../public-player-page/public-track-player/draggable.directive';
 import {DurationDirective} from '../formatting/duration.directive';
@@ -70,7 +69,6 @@ import {LoadableComponentModule} from 'ngx-loadable-component';
     PublicIntroductionComponent,
     PublicPageComponent,
     PublicPagenotfoundPageComponent,
-    SmaComponent,
     SubscribeComponent,
 
     //////////////    DIRECTIVES  //////////////
@@ -108,7 +106,6 @@ import {LoadableComponentModule} from 'ngx-loadable-component';
     PublicIntroductionComponent,
     PublicPageComponent,
     PublicPagenotfoundPageComponent,
-    SmaComponent,
     SubscribeComponent,
 
     //////////////    DIRECTIVES  //////////////

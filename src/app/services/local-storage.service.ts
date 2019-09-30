@@ -19,48 +19,32 @@ export class LocalStorageService {
     localStorage.setItem("smrk_from", emailFrom);
   }
 
-  public storeNotifyID(notifyID: string):void{
-    localStorage.setItem("smrk_nfyID",  notifyID)
-  }
-
-  public storeExpirationType(expiration: string):void{
-    localStorage.setItem("smrk_exp",  expiration)
-  }
-
   public getEmailFrom(): string {
-    return localStorage.getItem("smrk_from") != null ? localStorage.getItem("smrk_from") : "";
+    return localStorage.getItem("smrk_from");
   }
 
-  public storeShareMode(shareMode: string): void {
-    localStorage.setItem("smrk_type", shareMode);
+  public storeExpiration(expiration: string): void {
+    localStorage.setItem("smrk_exp",  expiration);
   }
 
-  public getShareMode(): string {
-    return localStorage.getItem("smrk_type") != null ? localStorage.getItem("smrk_type") : "";
+  public getExpiration(): string {
+    return localStorage.getItem("smrk_exp");
   }
 
-  public storePeriod(period: string): void {
-    localStorage.setItem("smrk_period", period);
+  public storeAvailability(availability: boolean): void {
+    localStorage.setItem("smrk_downl", availability ? "true" : "false");
   }
 
-  public getPeriod(): string {
-    return localStorage.getItem("smrk_period") != null ? localStorage.getItem("smrk_period") : "";
+  public getAvailability(): boolean {
+    return localStorage.getItem("smrk_downl") != null ? localStorage.getItem("smrk_downl") === "true" : null;
   }
 
-  public storeAllowDownloads(allowDownloads: boolean): void {
-    localStorage.setItem("smrk_downl", allowDownloads ? "true" : "false");
+  public storeNotificationType(notificationType: string): void {
+    localStorage.setItem("smrk_nfyID",  notificationType)
   }
 
-  public getAllowDownloads(): boolean {
-    return localStorage.getItem("smrk_downl") == "true" ? true : false;
-  }
-
-  public getNotificationID(): string {
-    return localStorage.getItem("smrk_nfyID") != null ? localStorage.getItem("smrk_nfyID") : "2";
-  }
-
-  public getExpirationType(): string {
-    return localStorage.getItem("smrk_exp") != null ? localStorage.getItem("smrk_exp") : "1week";
+  public getNotificationType(): string {
+    return localStorage.getItem("smrk_nfyID");
   }
 
   public storeCommentName(commentName: string): void {
