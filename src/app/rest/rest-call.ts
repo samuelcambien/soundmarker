@@ -27,20 +27,15 @@ export class RestCall {
     });
   }
 
-  public static async createNewFile(file: File, file_name: string, extension: string, size: number, versionId: string, identifier: number, length: number): Promise<{ fileId: string, buffer: ArrayBuffer }> {
-    return Promise.all([
-      Request.post(Endpoints.UPLOAD, {
-        version_id: versionId,
-        identifier: identifier,
-        track_length: length,
-        chunk_length: 10,
-        file_name: file_name,
-        extension: extension,
-        file_size: size
-      }),
-      Utils.read(file)
-    ]).then(result => {
-      return {fileId: result[0]["file_id"], buffer: result[1]};
+  public static async createNewFile(file: File, file_name: string, extension: string, size: number, versionId: string, identifier: number, length: number): Promise<string> {
+    return Request.post(Endpoints.UPLOAD, {
+      version_id: versionId,
+      identifier: identifier,
+      track_length: length,
+      chunk_length: 10,
+      file_name: file_name,
+      extension: extension,
+      file_size: size
     });
   }
 
