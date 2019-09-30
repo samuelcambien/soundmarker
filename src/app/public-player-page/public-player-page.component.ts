@@ -123,4 +123,5 @@ export class PublicPlayerPageComponent implements OnInit {
       this.message.text = "No notes included";
     }
   }
+
 }

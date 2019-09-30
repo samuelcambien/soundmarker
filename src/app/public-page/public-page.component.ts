@@ -1,9 +1,21 @@
-import {AfterViewInit, Component, ElementRef, EventEmitter, HostListener, Input, OnInit, Output, ViewChild} from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  EventEmitter,
+  HostListener,
+  Input,
+  OnInit,
+  Output,
+  ViewChild
+} from '@angular/core';
 import {Message} from "../message";
 import {PublicIntroductionComponent} from "./public-info/topics/public-introduction/public-introduction.component";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {LocalStorageService} from "../services/local-storage.service";
 import { LoadableComponentIds } from '../modules/app-loadable.manifests';
+import {SmaComponentOutputs} from '../modules/sma.outputs.module'
 
 @Component({
   selector: 'app-public-page',
@@ -29,9 +41,9 @@ export class PublicPageComponent implements OnInit, AfterViewInit {
   // flags to load components
   // setting this to 'true' will cause the loadable component
   // to load the specified component id
-  smaComponent: boolean = true;
+  smaComponent: boolean = false;
 
-  constructor(private modalService: NgbModal, private localStorageService: LocalStorageService) {
+  constructor(private modalService: NgbModal, private localStorageService: LocalStorageService, private cdr: ChangeDetectorRef) {
   }
 
   openIntroduction() {
@@ -42,8 +54,11 @@ export class PublicPageComponent implements OnInit, AfterViewInit {
     this.header.nativeElement.addEventListener("wheel", event => {
       this.contentScroll(event.deltaY);
     });
-    this.smaComponent = false;
-  }
+    setTimeout(()=>{
+      this.smaComponent = !this.smaComponent;
+      this.cdr.detectChanges()}
+      , 1500);
+    }
 
   ngAfterViewInit() {
     this.localStorageService.storeVisit();
@@ -53,11 +68,21 @@ export class PublicPageComponent implements OnInit, AfterViewInit {
      }});
   }
 
+  get smaOutputs(): SmaComponentOutputs {
+    return {
+      scroll: (deltaY: number) => this.contentScroll(deltaY)
+    }
+  }
+
   private reset() {
     this.tryAgain.emit();
   }
 
   contentScroll(deltaY){
     this.content.nativeElement.scrollTop = this.content.nativeElement.scrollTop + deltaY;
+  }
+
+  loadSMA(){
+    return this.smaComponent;
   }
 }
