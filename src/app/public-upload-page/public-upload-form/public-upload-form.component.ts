@@ -12,7 +12,7 @@ import {
 import {FileItem, FileUploader} from '../../ng2-file-upload';
 import {RestCall} from "../../rest/rest-call";
 import {NgbTooltip} from '@ng-bootstrap/ng-bootstrap';
-import {FormControl, NgControl, Validators} from '@angular/forms';
+import {NgControl, Validators} from '@angular/forms';
 import {Utils} from "../../app.component";
 import {LocalStorageService} from "../../services/local-storage.service";
 import {PublicUploadPageComponent} from "../public-upload-page.component";
@@ -59,7 +59,7 @@ export class PublicUploadFormComponent implements OnInit {
             this.processTrack(project_id, track)
           )
         ).then(() => {
-                if(this.notifyID != "0")  RestCall.subscribe(project_id, this.email_from, this.notifyID);
+                if(this.notificationType != "0")  RestCall.subscribe(project_id, this.email_from, this.notificationType);
                 return RestCall.shareProject(project_id, this.expiration, this.notes, this.email_from, this.email_to)
             }
         ).
@@ -67,7 +67,7 @@ export class PublicUploadFormComponent implements OnInit {
           this.finished.emit();
           this.clearForm(true);
           this.link.emit(response["project_hash"]);
-          this.period.emit(this.expiration.substr(1,this.expiration.length));
+          this.period.emit(this.expiration.substr(1, this.expiration.length));
         })
       })
       .catch((e) => {
@@ -76,27 +76,34 @@ export class PublicUploadFormComponent implements OnInit {
       });
   }
 
-  private processTrack(projectId, track: FileItem): Promise<any> {
+  private async processTrack(projectId, track: FileItem): Promise<void> {
 
-    let length = 0;
-    let title = Utils.getName(track._file.name);
-    let extension = Utils.getExtension(track._file.name);
+    const length = 0;
+    const title = Utils.getName(track._file.name);
+    const extension = Utils.getExtension(track._file.name);
 
-    return RestCall.createNewTrack(projectId, title)
-      .then(response =>
-        RestCall.createNewVersion(
-          response["track_id"], this.notes_element.nativeElement.value, this.downloadable ? "1" : "0"
-        )
-      ).then(version => {
-        let versionId = version["version_id"];
-        return this.getStreamFileId(track._file, title, extension, track, versionId, length)
-          .then(({fileId: streamFileId, buffer: buffer}) =>
-            this.getDownloadFileId(track._file, title, extension, track, versionId, length)
-              .then(downloadFileId =>
-                RestCall.uploadChunk(buffer, streamFileId, downloadFileId, 0, extension, progress => this.setChunkProgress(progress))
-              ).then(() => this.setChunkCompleted())
-          );
-      })
+    const trackResponse = await RestCall.createNewTrack(projectId, title);
+    const trackId = trackResponse["track_id"];
+
+    const versionResponse = await RestCall.createNewVersion(
+      trackId, this.notes_element.nativeElement.value, this.availability ? "1" : "0"
+    );
+    const versionId = versionResponse["version_id"];
+
+    const streamFileResponse = await RestCall.createNewFile(track._file, title, this.getStreamFileExtension(extension), track._file.size, versionId, 0, length);
+    const streamFileId = streamFileResponse["file_id"];
+
+    let downloadFileId: string;
+    if (this.availability) {
+      const downloadFileResponse = await RestCall.createNewFile(track._file, title, extension, track._file.size, versionId, 1, length);
+      downloadFileId = downloadFileResponse["file_id"];
+    } else {
+      downloadFileId = "null";
+    }
+
+    const buffer: ArrayBuffer = await Utils.read(track._file);
+    await RestCall.uploadChunk(buffer, streamFileId, downloadFileId, 0, extension, progress => this.setChunkProgress(progress));
+    this.setChunkCompleted();
   }
 
   private setChunkProgress(progress: number) {
@@ -112,10 +119,6 @@ export class PublicUploadFormComponent implements OnInit {
     this.uploader.progress = progress;
   }
 
-  private getStreamFileId(file, title, extension, track: FileItem, versionId, length: number): Promise<{ fileId: string, buffer: ArrayBuffer }> {
-    return RestCall.createNewFile(file, title, this.getStreamFileExtension(extension), track._file.size, versionId, 0, length);
-  }
-
   private getStreamFileExtension(extension: string) {
     switch (extension) {
       case "aac":
@@ -125,23 +128,14 @@ export class PublicUploadFormComponent implements OnInit {
     }
   }
 
-  private getDownloadFileId(file, title, extension, track: FileItem, versionId, length: number): Promise<string> {
-    if (this.downloadable) {
-      return RestCall.createNewFile(file, title, extension, track._file.size, versionId, 1, length)
-        .then(({fileId: fileId}) => fileId);
-    } else {
-      return new Promise(resolve => resolve("null"));
-    }
-  }
+  expirations = [{id: '1week', label: 'Week', heading: 'Expire*'}, {id: '1month', label: 'Month', heading: 'Expire*'}];
+  expiration: string = this.localStorageService.getExpiration();
 
-  expirations= [{id: '1week', label: 'Week', heading: 'Expire*'}, {id: '1month', label: 'Month', heading: 'Expire*'}];
-  expiration;
+  availabilities = [{id: false, label: 'No', heading: 'Download*'}, {id: true, label: 'Yes', heading: 'Download*'}];
+  availability: boolean = this.localStorageService.getAvailability();
 
-  availability= [{id: false, label: 'No', heading: 'Download*'}, {id: true, label: 'Yes', heading: 'Download*'}];
-  downloadable;
-
-  notifications= [{id: '1', label: 'Daily', heading: 'Notify*'}, {id: '2', label: 'Instantly', heading: 'Notify*'},{id: '0', label: 'Never', heading: 'Notify*'}];
-  notifyID;
+  notificationTypes = [{id: '1', label: 'Daily', heading: 'Notify*'}, {id: '2', label: 'Instantly', heading: 'Notify*'},{id: '0', label: 'Never', heading: 'Notify*'}];
+  notificationType: string = this.localStorageService.getNotificationType();
 
   ngOnInit(): void {
     // wave.init({
@@ -184,9 +178,9 @@ export class PublicUploadFormComponent implements OnInit {
 
   private storePreferences() {
     this.localStorageService.storeEmailFrom(this.email_from);
-    this.localStorageService.storeAllowDownloads(this.downloadable);
-    this.localStorageService.storeNotifyID(this.notifyID);
-    this.localStorageService.storeExpirationType(this.expiration);
+    this.localStorageService.storeExpiration(this.expiration);
+    this.localStorageService.storeAvailability(this.availability);
+    this.localStorageService.storeNotificationType(this.notificationType);
   }
 
   getAcceptedFileTypes() {
