@@ -103,8 +103,6 @@ export class PublicTrackPlayerComponent implements OnInit, OnChanges {
   ngOnInit(): void {
     this.waveformInViewPort = true;
     this.version = this.track.versions[0];
-    this.player.playEvent.subscribe(e => this.cdr.detectChanges());
-    this.player.pauseEvent.subscribe(e => this.cdr.detectChanges());
     this.player.progress.subscribe(e => {
       if (this.version === e.version) {
         this._currentTime = e.currentTime;
