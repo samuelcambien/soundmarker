@@ -75,6 +75,9 @@ export class Player {
 
       this.getMedia().addEventListener('loadedmetadata', () => {
         this.setTitle(this.getTrack().title);
+      });
+
+      this.getMedia().addEventListener('canplay', () => {
         resolve();
       });
 
