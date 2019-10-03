@@ -1099,7 +1099,7 @@ if (in_array($file_id, $_SESSION['user_files'])) {
     exec("rm -rf /tmp/".$file_id."/*");
 
   // if coded is not lossy, transcode
-  if ((strpos($codec_name, 'pcm') !== false) || (strpos($codec_name, 'lac') !== false) || (strpos($codec_name, 'wavpack') !== false)) {
+  // if ((strpos($codec_name, 'pcm') !== false) || (strpos($codec_name, 'lac') !== false) || (strpos($codec_name, 'wavpack') !== false)) {
     // now we split up the song in 10sec fragments
     // now let's convert the file
     $ffmpeg = FFMpeg\FFMpeg::create(array(
@@ -1129,16 +1129,16 @@ if (in_array($file_id, $_SESSION['user_files'])) {
 
      // delete file again
      unlink("/tmp/mp3".$file_id.".mp3");
-  } else {
-         $result = $s3->putObject([
-             'Bucket' => $config['AWS_S3_BUCKET'],
-             'Key'    => $files[0]["version_id"] . "/" . $files[0]["file_name"] . '.' . $ext,
-             'Body'   => file_get_contents("/tmp/orig".$file_id.".".$ext),
-             'ACL'    => 'public-read',
-             'ContentType' => 'application/octet-stream; charset=utf-8',
-             'ContentDisposition' => 'attachment; filename='. $files[0]["file_name"] . '.' . $ext
-         ]);
-  }
+  // } else {
+  //        $result = $s3->putObject([
+  //            'Bucket' => $config['AWS_S3_BUCKET'],
+  //            'Key'    => $files[0]["version_id"] . "/" . $files[0]["file_name"] . '.' . $ext,
+  //            'Body'   => file_get_contents("/tmp/orig".$file_id.".".$ext),
+  //            'ACL'    => 'public-read',
+  //            'ContentType' => 'application/octet-stream; charset=utf-8',
+  //            'ContentDisposition' => 'attachment; filename='. $files[0]["file_name"] . '.' . $ext
+  //        ]);
+  // }
   
   // now it's time to create the png
   // let's create wave_png
