@@ -29,6 +29,7 @@ export class CommentFormComponent implements OnInit {
   }
 
   onSubmit() {
+    this.comment.version_id = this.version.version_id;
     this.comment.comment_time = Date.now();
     if (!this.comment.include_start) delete this.comment.start_time;
     if (!this.comment.include_end) delete this.comment.end_time;
