@@ -1,6 +1,6 @@
 import {Component, ElementRef, EventEmitter, HostListener, OnInit, Output, ViewChild} from '@angular/core';
 import {RestCall} from "../rest/rest-call";
-import {Subject, timer} from 'rxjs';
+import {Subject, Subscription, timer} from 'rxjs';
 import {delay, tap} from 'rxjs/operators';
 import * as moment from "moment";
 import {Utils} from '../app.component';
@@ -33,12 +33,13 @@ export class SmaComponent implements OnInit {
   firstAd = true;
   hiddenIframe;
   shownIframe;
-  adTimer;
+  adTimer = new Subscription();
   screenAction = new Subject();
 
   constructor() { }
 
   ngOnInit() {
+    this.adTimer.unsubscribe();
     ////////////////        Advertisement refresh algorithm.             //////////////////
     //  The idea is that the ad only refreshes if the web page is active in the browser or
     //  there has been activity detected from a moving mouse, so the page is active.
@@ -223,7 +224,7 @@ export class SmaComponent implements OnInit {
     this.mostRecentUserActivity = t;
   }
 
-  // Browser user activity (page visibility API) has different prefixes in different browser.
+  // Browser user activity (page visibility API) has different prefixes in different browsers.
   getHiddenPrefix(): string{
     let prefixes = ['webkit','moz','ms','o'];
     if ('hidden' in document) return 'hidden';
