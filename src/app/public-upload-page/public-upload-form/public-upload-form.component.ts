@@ -47,33 +47,32 @@ export class PublicUploadFormComponent implements OnInit {
   @ViewChild('notes_element') notes_element: ElementRef;
   @ViewChild('ft') files_tooltip: NgbTooltip;
 
+  async onSubmit() {
 
-  onSubmit() {
     this.uploading.emit();
     this.storePreferences();
-    RestCall.createNewProject()
-      .then(response => {
-        let project_id = response["project_id"];
-        return Utils.promiseSequential(
-          this.uploader.queue.map(track => () =>
-            this.processTrack(project_id, track)
-          )
-        ).then(() => {
-                if(this.notificationType != "0")  RestCall.subscribe(project_id, this.email_from, this.notificationType);
-                return RestCall.shareProject(project_id, this.expiration, this.notes, this.email_from, this.email_to)
-            }
-        ).
-        then(response => {
-          this.finished.emit();
-          this.clearForm(true);
-          this.link.emit(response["project_hash"]);
-          this.period.emit(this.expiration.substr(1, this.expiration.length));
-        })
-      })
-      .catch((e) => {
-        this.clearForm(false);
-        this.error.emit(e)
-      });
+
+    try {
+      const projectResponse = RestCall.createNewProject();
+      let project_id = projectResponse["project_id"];
+
+      await Utils.promiseSequential(
+        this.uploader.queue.map(track => () => this.processTrack(project_id, track))
+      );
+
+      if (this.notificationType != "0")
+        RestCall.subscribe(project_id, this.email_from, this.notificationType);
+
+      const shareResponse = await RestCall.shareProject(project_id, this.expiration, this.notes, this.email_from, this.email_to);
+      this.clearForm(true);
+      this.finished.emit();
+      this.link.emit(shareResponse["project_hash"]);
+      this.period.emit(this.expiration.substr(1, this.expiration.length));
+
+    } catch (e) {
+      this.clearForm(false);
+      this.error.emit(e);
+    }
   }
 
   private async processTrack(projectId, track: FileItem): Promise<void> {
