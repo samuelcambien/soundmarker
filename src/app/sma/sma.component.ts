@@ -20,7 +20,7 @@ export class SmaComponent implements OnInit {
   smaId;
   nextSmaId;
 
-  smaClass = window.innerWidth > 577 ? "sma hide-phone" : "phone-sma show-phone  rounded-lg border-0";
+  smaClass = this.getSmaClass();
 
   adExposureTime = 45;        // in seconds
   adFadeInTime = "0.74s";     // Needs to be a string.
@@ -111,7 +111,7 @@ export class SmaComponent implements OnInit {
     iframe.setAttribute('id', 'iframe');
     iframe.setAttribute('src', src);
     iframe.setAttribute('scrolling', "no");
-    iframe.setAttribute('class','sma-content rounded-lg');
+    iframe.setAttribute('class', 'sma-content');
     this.sma.nativeElement.appendChild(iframe);
     return iframe;
   }
@@ -188,7 +188,7 @@ export class SmaComponent implements OnInit {
 
   // If user goes away from window, start listening for different types of user activity.
   @HostListener('window:blur', ['$event'])
-  onBlurOut(event){
+  onBlurOut(){
     if(document.visibilityState != this.browserPrefix){
       this.updateMostRecentUserActivity();
       document.addEventListener("mouseover", this.mouseEventHandler, true);
@@ -238,7 +238,12 @@ export class SmaComponent implements OnInit {
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   // Change class of ads when browser is resized.
   @HostListener('window:resize', ['$event'])
-  onResize(event) {
-    this.smaClass = window.innerWidth > 577 ? "sma hide-phone" : "phone-sma show-phone  rounded-lg border-0";
+  onResize() {
+    this.smaClass = this.getSmaClass();
+  }
+
+  private getSmaClass(): string {
+
+    return window.innerWidth > 577 ? "sma" : "phone-sma rounded-lg border-0";
   }
 }

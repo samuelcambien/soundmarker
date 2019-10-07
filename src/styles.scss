@@ -783,7 +783,9 @@ button:visited {
 	-moz-box-shadow: 0 0px 30px rgba(115, 150, 255, .35) !important;
 }
 #sm .rounded-lg {
-	border-radius: 0.6rem;
+  &, .sma-content {
+    border-radius: 0.6rem;
+  }
 }
 #sm .rounded-sm,
 .rounded-sm {
