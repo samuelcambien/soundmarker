@@ -119,10 +119,10 @@ export class ProjectService {
     let tracks = this.stateService.getActiveProject().tracks;
     let nextTrack = tracks[tracks.indexOf(currentTrack) + 1];
     if (nextTrack) {
-      await this.player.playFromStart(nextTrack.versions[0]);
       if (this.stateService.getActiveTrack().getValue() != null) {
         this.stateService.setActiveTrack(nextTrack);
       }
+      await this.player.playFromStart(nextTrack.versions[0]);
     }
   }
 
