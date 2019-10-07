@@ -19,6 +19,8 @@ import {LocalStorageService} from "../../services/local-storage.service";
 import {DrawerService} from "../../services/drawer.service";
 import {Player} from "../../player.service";
 import {animate, state, style, transition, trigger} from '@angular/animations';
+import {BehaviorSubject, Observable} from 'rxjs';
+import { distinctUntilChanged } from 'rxjs/operators';
 
 @Component({
   selector: 'public-track-player',
@@ -35,7 +37,7 @@ import {animate, state, style, transition, trigger} from '@angular/animations';
         display: 'block'
       })),
       transition('open => closed', [
-        animate('350ms ease-in')
+        animate('250ms ease-in')
       ]),
       transition('closed => open', [
         animate('250ms ease-in')
@@ -83,6 +85,8 @@ export class PublicTrackPlayerComponent implements OnInit, OnChanges {
   phoneOrder: boolean;
   waveformInViewPort = true;
 
+  waveformInViewPortObservable = new BehaviorSubject<boolean>(true);
+
   constructor(
     private localStorageService: LocalStorageService,
     private player: Player,
@@ -92,8 +96,12 @@ export class PublicTrackPlayerComponent implements OnInit, OnChanges {
     document.addEventListener('scroll', ()=>{
       try {
           let bounding = this.waveform.nativeElement.getBoundingClientRect();
-          let scrollPane = this.waveform.nativeElement.closest(".comments-scrolltainer");
-          this.waveformInViewPort = bounding.top + bounding.height / 2 > scrollPane.getBoundingClientRect().top;
+          if(bounding.y != 0) {
+            let scrollPane = this.waveform.nativeElement.closest(".comments-scrolltainer");
+            console.log("l");
+            this.waveformInViewPort = bounding.top + bounding.height / 2 > scrollPane.getBoundingClientRect().top;
+            this.waveformInViewPortObservable.next(this.waveformInViewPort)
+          }
         }
       catch (e) {
         this.waveformInViewPort = true;}
@@ -112,6 +120,11 @@ export class PublicTrackPlayerComponent implements OnInit, OnChanges {
     this.createNewComment();
     this.trackTitleDOM.nativeElement.setAttribute("style", "text-overflow: ellipsis");
     this.cdr.detectChanges();
+
+    this.waveformInViewPortObservable.pipe(distinctUntilChanged()).
+    subscribe(() => {
+      this.cdr.detectChanges();
+    });
   }
 
   private getPlayerWidth(): number {
