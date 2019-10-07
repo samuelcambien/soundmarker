@@ -53,7 +53,7 @@ export class PublicUploadFormComponent implements OnInit {
     this.storePreferences();
 
     try {
-      const projectResponse = RestCall.createNewProject();
+      const projectResponse = await RestCall.createNewProject();
       let project_id = projectResponse["project_id"];
 
       await Utils.promiseSequential(
@@ -64,10 +64,12 @@ export class PublicUploadFormComponent implements OnInit {
         RestCall.subscribe(project_id, this.email_from, this.notificationType);
 
       const shareResponse = await RestCall.shareProject(project_id, this.expiration, this.notes, this.email_from, this.email_to);
-      this.clearForm(true);
-      this.finished.emit();
+
       this.link.emit(shareResponse["project_hash"]);
+      this.finished.emit();
       this.period.emit(this.expiration.substr(1, this.expiration.length));
+
+      this.clearForm(true);
 
     } catch (e) {
       this.clearForm(false);
