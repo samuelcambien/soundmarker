@@ -244,6 +244,6 @@ export class SmaComponent implements OnInit {
 
   private getSmaClass(): string {
 
-    return window.innerWidth > 577 ? "sma" : "phone-sma rounded-lg border-0";
+    return window.innerWidth > 577 ? "sma hide-phone" : "phone-sma show-phone rounded-lg border-0";
   }
 }
