@@ -23,7 +23,7 @@ export class SmaComponent implements OnInit {
   smaClass = window.innerWidth > 577 ? "sma hide-phone" : "phone-sma show-phone  rounded-lg border-0";
 
   adExposureTime = 45;        // in seconds
-  adFadeInTime = "0.73s";     // Needs to be a string.
+  adFadeInTime = "0.74s";     // Needs to be a string.
   adFadeOutTime = "0.5s";     // Needs to be a string.
   adInitialDelay = 350;      // in ms, this is also the delay between loading an ad and showing it. (Enough time to load it)
   adTransitionWait = 500;     // in ms. Needs to be at least the adFadeOutTime or otherwise the ad's iframe is destroyed before the ad has faded out.
@@ -111,7 +111,7 @@ export class SmaComponent implements OnInit {
     iframe.setAttribute('id', 'iframe');
     iframe.setAttribute('src', src);
     iframe.setAttribute('scrolling', "no");
-    iframe.setAttribute('style','width:100%; height:100%; border:none; opacity: 0;');
+    iframe.setAttribute('class','sma-content rounded-lg');
     this.sma.nativeElement.appendChild(iframe);
     return iframe;
   }
