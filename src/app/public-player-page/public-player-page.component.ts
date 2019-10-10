@@ -50,7 +50,7 @@ export class PublicPlayerPageComponent implements OnInit {
       this.projectService.loadProject(params['project_hash'])
         .then(() => {
 
-          this.project = this.stateService.getActiveProject();
+          this.project = this.stateService.getActiveProject(); 
           this.initFields();
 
           if (this.getProject().tracks.length == 1)
