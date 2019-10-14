@@ -1,0 +1,37 @@
+.loader-svg-button {
+	height: 43px;
+	width: 43px;
+	margin-left: 5px;
+	margin-top: 5px;
+}
+
+.loader-svg-text {
+	height: 40px;
+	width: 200px;
+	margin-left: 10px;
+	margin-top: 5px
+}
+
+@media (max-width: 576px) {
+	.loader-svg-button {
+		display: none;
+	}
+	.loader-svg-text {
+	margin-top: 5px;
+	margin-left: -5px;
+	
+}
+}
+
+.color {
+	fill: #eef1ff;
+	animation: col 3s linear infinite;
+	}
+
+@keyframes col {
+0% {fill:#eef1ff}
+50% {fill:#fafbff}
+100% {fill:#eef1ff}
+}
+
+

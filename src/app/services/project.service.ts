@@ -19,6 +19,18 @@ export class ProjectService {
     private stateService: StateService,
   ) {
 
+    player.progress.subscribe(async e => {
+      const comment: Comment = this.stateService.getActiveComment().getValue();
+      if (comment && comment.end_time && e.currentTime >= comment.end_time) {
+        if (comment.loop == true) {
+          await this.player.play(e.version, comment.start_time);
+        } else {
+          this.player.pause();
+          await this.player.seekTo(e.version, comment.start_time);
+        }
+      }
+    });
+
     player.finished.subscribe((version) => {
       if (this.autoPlay) {
         this.playNextTrack(this.getTrack(version));
