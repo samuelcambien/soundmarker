@@ -25,15 +25,14 @@ export class Player {
   constructor(
     private stateService: StateService
   ) {
-  }
-
-  private createMedia() {
-
     this.media = new Audio();
     this.getMedia().crossOrigin = 'anonymous';
     this.getMedia().preload = 'metadata';
     this.getMedia().addEventListener('ended', () => this.finished.emit(this.version));
     document.body.appendChild(this.getMedia());
+  }
+
+  private createMedia() {
 
     const context = new ((<any>window).AudioContext || (<any>window).webkitAudioContext)();
     const analyser = context.createAnalyser();
@@ -57,7 +56,7 @@ export class Player {
 
   async load(version: Version) {
 
-    if (!this.media) this.createMedia();
+    if (!this.media.src) this.createMedia();
 
     return new Promise(async resolve => {
 
