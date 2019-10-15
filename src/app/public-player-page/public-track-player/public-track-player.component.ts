@@ -183,12 +183,10 @@ export class PublicTrackPlayerComponent implements OnInit, OnChanges {
 
   async play() {
     await this.player.play(this.version);
-    this.cdr.detectChanges();
   }
 
   pause() {
     this.player.pause();
-    this.cdr.detectChanges();
   }
 
   isPlaying() {
