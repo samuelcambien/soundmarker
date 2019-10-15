@@ -21,7 +21,7 @@ export class ProjectService {
 
     player.progress.subscribe(async e => {
       const comment: Comment = this.stateService.getActiveComment().getValue();
-      if (comment && comment.end_time && e.currentTime >= comment.end_time) {
+      if (comment && comment.include_end && e.currentTime >= comment.end_time) {
         if (comment.loop == true) {
           await this.player.play(e.version, comment.start_time);
         } else {
