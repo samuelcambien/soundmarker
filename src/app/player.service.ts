@@ -30,6 +30,7 @@ export class Player {
     this.getMedia().preload = 'metadata';
     this.getMedia().addEventListener('ended', () => this.finished.emit(this.version));
     document.body.appendChild(this.getMedia());
+    this.getMedia().addEventListener('timeupdate', () => this.emitProgress());
   }
 
   private createMedia() {
@@ -43,7 +44,6 @@ export class Player {
 
     this.getMedia().addEventListener('play', e => this.started.emit(e));
     this.getMedia().addEventListener('pause', e => this.paused.emit(e));
-    this.getMedia().addEventListener('timeupdate', () => this.emitProgress());
   }
 
   private getMedia() {
@@ -56,10 +56,8 @@ export class Player {
 
   async load(version: Version) {
 
-    if (!this.media.src) this.createMedia();
-
+    if (!this.media) this.createMedia();
     return new Promise(async resolve => {
-
       if (this.version && (this.version.version_id === version.version_id)) {
         resolve();
         return;
@@ -70,6 +68,7 @@ export class Player {
 
       this._version = version;
       const file: File = Player.getStreamFile(this.version);
+      this.getMedia().src = file.aws_path + "." + file.extension;
 
       this.getMedia().addEventListener('loadedmetadata', () => {
         this.setTitle(this.getTrack().title);
@@ -79,7 +78,7 @@ export class Player {
         resolve();
       });
 
-      this.getMedia().src = file.aws_path + "." + file.extension;
+
       this.getMedia().load();
     })
   }
