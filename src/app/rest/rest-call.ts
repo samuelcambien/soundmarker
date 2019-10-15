@@ -123,7 +123,7 @@ export class RestCall {
 
 export class Endpoints {
 
-  private static BACKEND: string = "http://localhost";
+  private static BACKEND: string = "http://192.168.1.44";
 
   private static DATA: string = Endpoints.BACKEND;
 
