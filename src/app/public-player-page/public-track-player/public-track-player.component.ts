@@ -98,7 +98,6 @@ export class PublicTrackPlayerComponent implements OnInit, OnChanges {
           let bounding = this.waveform.nativeElement.getBoundingClientRect();
           if(bounding.y != 0) {
             let scrollPane = this.waveform.nativeElement.closest(".comments-scrolltainer");
-            console.log("l");
             this.waveformInViewPort = bounding.top + bounding.height / 2 > scrollPane.getBoundingClientRect().top;
             this.waveformInViewPortObservable.next(this.waveformInViewPort)
           }
