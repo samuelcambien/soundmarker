@@ -88,8 +88,8 @@ export class CommentComponent implements OnInit{
   }
 
   async play() {
-    await this.player.play(this.version, this.comment.start_time);
     this.stateService.setActiveComment(this.comment);
+    await this.player.play(this.version, this.comment.start_time);
   }
 
   stop() {
