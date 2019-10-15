@@ -1,4 +1,5 @@
 import {
+  AfterViewInit,
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
@@ -46,7 +47,7 @@ import { distinctUntilChanged } from 'rxjs/operators';
   ],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class PublicTrackPlayerComponent implements OnInit, OnChanges {
+export class PublicTrackPlayerComponent implements OnInit, OnChanges, AfterViewInit {
 
   static MINIMAL_INTERVAL: number = 1;
 
@@ -98,7 +99,6 @@ export class PublicTrackPlayerComponent implements OnInit, OnChanges {
           let bounding = this.waveform.nativeElement.getBoundingClientRect();
           if(bounding.y != 0) {
             let scrollPane = this.waveform.nativeElement.closest(".comments-scrolltainer");
-            console.log("l");
             this.waveformInViewPort = bounding.top + bounding.height / 2 > scrollPane.getBoundingClientRect().top;
             this.waveformInViewPortObservable.next(this.waveformInViewPort)
           }
@@ -258,8 +258,9 @@ export class PublicTrackPlayerComponent implements OnInit, OnChanges {
   }
 
   showPhoneSearch() {
-    document.getElementById("phonesearch").setAttribute("style", "display:inline-block");
+    this.phonesearch.nativeElement.setAttribute("style", "display:inline-block");
     this.phoneSearchInput.nativeElement.focus();
+    this.phonesearch.nativeElement.scrollIntoView();
   }
 
   clearSearch() {
@@ -267,12 +268,17 @@ export class PublicTrackPlayerComponent implements OnInit, OnChanges {
     this.phoneSearchInput.nativeElement.focus();
   }
 
+  @ViewChild('phonesearch') phonesearch: ElementRef;
+
+  ngAfterViewInit(){
+    console.log(this.phonesearch);
+}
   hidePhoneSearch(event) {
     if (event.relatedTarget && (event.relatedTarget.getAttribute('id') === "phonesearch")) {
       this.phoneSearchInput.nativeElement.focus(); //in case the search field is cleared or the search icon is clicker: re-focus on the search field.
     }
     else if (this.search == null) {
-      document.getElementById("phonesearch").setAttribute("style", "display:none");
+      this.phonesearch.nativeElement.setAttribute("style", "display:none");
     }
   }
 
