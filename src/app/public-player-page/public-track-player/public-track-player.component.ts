@@ -1,4 +1,5 @@
 import {
+  AfterViewInit,
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
@@ -62,6 +63,7 @@ export class PublicTrackPlayerComponent implements OnInit, OnChanges {
   @ViewChild('startTime') startTime: ElementRef;
   @ViewChild('endTime') endTime: ElementRef;
   @ViewChild('phoneSearchInput') phoneSearchInput: ElementRef;
+  @ViewChild('phonesearch') phonesearch: ElementRef;
   @ViewChild('trackTitle') trackTitleDOM: ElementRef;
 
   commentSorters: CommentSorter[] = [
@@ -257,8 +259,9 @@ export class PublicTrackPlayerComponent implements OnInit, OnChanges {
   }
 
   showPhoneSearch() {
-    document.getElementById("phonesearch").setAttribute("style", "display:inline-block");
+    this.phonesearch.nativeElement.setAttribute("style", "display:inline-block");
     this.phoneSearchInput.nativeElement.focus();
+    this.phonesearch.nativeElement.scrollIntoView();
   }
 
   clearSearch() {
@@ -271,7 +274,7 @@ export class PublicTrackPlayerComponent implements OnInit, OnChanges {
       this.phoneSearchInput.nativeElement.focus(); //in case the search field is cleared or the search icon is clicker: re-focus on the search field.
     }
     else if (this.search == null) {
-      document.getElementById("phonesearch").setAttribute("style", "display:none");
+      this.phonesearch.nativeElement.setAttribute("style", "display:none");
     }
   }
 
