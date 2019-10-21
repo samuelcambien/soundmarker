@@ -115,6 +115,7 @@ foreach ($updates as &$update) {
 
   foreach ($comments as $key => $value) {
       if ($value["version"] == $previous_version) {
+      $count = $count - 1;
       unset($comments[$key]);
       }
       $previous_version = $value["version"];

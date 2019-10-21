@@ -102,6 +102,16 @@ foreach ($updates as &$update) {
   unset($tracks);
 
   $previous_version = 0;
+  foreach ($comments as $key => $value) {
+      if ($value["version"] == $previous_version) {
+      $count = $count - 1;
+      unset($comments[$key]);
+      }
+      $previous_version = $value["version"];
+  }
+
+  $commentsjson = json_encode($comments);
+  
   // clean up array
   foreach ($comments as $key => $value) {
       if ($value["comment"] <= $latestcomment) {
@@ -112,14 +122,6 @@ foreach ($updates as &$update) {
   $latestcomment = $value["comment"];
   $latestversion = $value["version"];
 
-  foreach ($comments as $key => $value) {
-      if ($value["version"] == $previous_version) {
-      unset($comments[$key]);
-      }
-      $previous_version = $value["version"];
-  }
-
-  $commentsjson = json_encode($comments);
   }
 
   unset($comments);
