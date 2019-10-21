@@ -102,12 +102,12 @@ foreach ($updates as &$update) {
   unset($versions2);
   unset($tracks);
 
-  foreach ($comments as $key => $value) {
-      if ($value["version"] == $previous_version) {
-      unset($comments[$key]);
-      }
-      $previous_version = $value["version"];
-  }
+  // foreach ($comments as $key => $value) {
+  //     if ($value["version"] == $previous_version) {
+  //     unset($comments[$key]);
+  //     }
+  //     $previous_version = $value["version"];
+  // }
 
   $commentsjson = json_encode($comments);
 
