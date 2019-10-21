@@ -56,6 +56,7 @@ foreach ($updates as &$update) {
   foreach ($versions as &$versions2) {
     foreach ($versions2 as &$version) {
         $versionid = $version["version_id"];
+        $commentloopid = 0;
         $version_ids = "SELECT comment_id, version_id FROM Comment WHERE version_id = '$versionid' ORDER BY comment_id DESC";
         $comment_ids = $db->query($version_ids)->fetchAll(PDO::FETCH_ASSOC);
         $last_comment_idsdec = json_decode($last_comment_ids, true);
@@ -71,9 +72,12 @@ foreach ($updates as &$update) {
               foreach ($last_comment_idsdec as &$comment2) {
                 if ($comment2["version"] == $versionid) {
                   if ($comment_id > $comment2["comment"]) {
-                  $count++;
+                    if ($comment_id > $commentloopid) {
+                      $count++;
+                    }
+                    $commentloopid = $comment_id;
                   }
-                } 
+                }
               }
             }
 
