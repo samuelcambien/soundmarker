@@ -111,7 +111,7 @@ foreach ($updates as &$update) {
   }
 
   $commentsjson = json_encode($comments);
-  
+
   // clean up array
   foreach ($comments as $key => $value) {
       if ($value["comment"] <= $latestcomment) {
@@ -121,7 +121,6 @@ foreach ($updates as &$update) {
     }
   $latestcomment = $value["comment"];
   $latestversion = $value["version"];
-
   }
 
   unset($comments);
