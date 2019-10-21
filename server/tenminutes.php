@@ -111,7 +111,15 @@ foreach ($updates as &$update) {
       if ($value["version"] == $latestversion) {
       unset($comments[$key]);
       }
-    }
+  }
+
+  $previous_version = 0;
+  foreach ($comments as $key => $value) {
+      if ($value["version"] == $previous_version) {
+      unset($comments[$key]);
+      }
+      $previous_version = $value["version"];
+  }
 
   $commentsjson = json_encode($comments);
   $latestcomment = $value["comment"];
