@@ -6,6 +6,7 @@ import {File} from "../../model/file";
 import {Comment, CommentSorter} from "../../model/comment";
 import {Utils} from "../../app.component";
 import {Player} from "../../player.service";
+import {State} from "../../play-button/play-button.component";
 
 @Component({
   selector: 'app-public-track-preview',
@@ -38,6 +39,27 @@ export class PublicTrackPreviewComponent implements OnInit {
     this.version = this.track.versions[0];
     this.files = this.version.files;
     this.trackTitleDOM.nativeElement.setAttribute("style", "text-overflow: ellipsis");
+  }
+
+  getPlaybuttonState() {
+    if (this.player.isLoading(this.version)) {
+      return State.loading;
+    } else if (this.isPlaying()) {
+      return State.pause;
+    } else {
+      return State.play;
+    }
+  }
+
+  async clickPlaybutton(state: State) {
+    switch (state) {
+      case State.play:
+        await this.play();
+        break;
+      case State.pause:
+        this.pause();
+        break;
+    }
   }
 
   async play() {

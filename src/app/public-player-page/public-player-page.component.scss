@@ -1,6 +1,3 @@
-
-
-
 #phonesearch {
 	width: 100%;
 	height: 48px;
@@ -18,11 +15,6 @@
 	max-height: 70px;
 	cursor: text;
 	overflow: hidden;
-}
-
-.mini-play-btn.disabled, .popup-play-btn.disabled {
-	opacity: 0.2;
-	pointer-events: none;
 }
 
 .preview-hr {
@@ -698,4 +690,13 @@ hr {
   left: -8px;
   display: inline;
   opacity: 100%;
+}
+
+play-button {
+  width: 43px;
+  height: 43px;
+}
+
+.mini-btn {
+  max-height: 43px;
 }

@@ -17,6 +17,8 @@ export class Player {
 
   private _version: Version;
 
+  private loading: Version;
+
   @Output() started = new EventEmitter();
   @Output() paused = new EventEmitter();
   @Output() progress = new EventEmitter();
@@ -45,7 +47,7 @@ export class Player {
     this.getMedia().title = title;
   }
 
-  async load(version: Version) {
+  private async load(version: Version) {
 
     return new Promise(async resolve => {
 
@@ -75,13 +77,14 @@ export class Player {
 
   async play(version: Version, startTime?: number) {
 
+    this.loading = version;
+    await this.load(version);
     if (startTime >= 0) {
       await this.seekTo(version, startTime);
-    } else {
-      await this.load(version);
     }
 
     await this.getMedia().play();
+    this.loading = null;
   }
 
   async playFromStart(version: Version) {
@@ -108,6 +111,10 @@ export class Player {
   private async stop() {
     this.pause();
     await this.seekTo(this.version, 0);
+  }
+
+  isLoading(version: Version) {
+    return this.loading == version;
   }
 
   isPlaying() {
