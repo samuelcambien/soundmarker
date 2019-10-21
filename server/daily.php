@@ -101,6 +101,7 @@ foreach ($updates as &$update) {
   unset($versions2);
   unset($tracks);
 
+  $previous_version = 0;
   // clean up array
   foreach ($comments as $key => $value) {
       if ($value["comment"] <= $latestcomment) {
