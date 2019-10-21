@@ -79,7 +79,7 @@ foreach ($updates as &$update) {
                 }
               }
             }
-        $commentloopid = $comment_id;
+            $commentloopid = $comment_id;
 
             // Then compare with what we have done, we we only update the DB with the latest version
             // Only update DB with the last comment_id so we can compare next time
@@ -105,8 +105,6 @@ foreach ($updates as &$update) {
   unset($versions2);
   unset($tracks);
 
-  $commentsjson = json_encode($comments);
-
   // clean up array
   foreach ($comments as $key => $value) {
       if ($value["comment"] <= $latestcomment) {
@@ -114,6 +112,8 @@ foreach ($updates as &$update) {
       unset($comments[$key]);
       }
     }
+
+  $commentsjson = json_encode($comments);
   $latestcomment = $value["comment"];
   $latestversion = $value["version"];
   }
