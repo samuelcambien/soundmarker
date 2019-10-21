@@ -73,7 +73,7 @@ foreach ($updates as &$update) {
                 if ($comment2["version"] == $versionid) {
                   if ($comment_id > $comment2["comment"]) {
                     if ($comment_id > $commentloopid) {
-                      //$count++;
+                      $count++;
                     }
                   }
                 }
