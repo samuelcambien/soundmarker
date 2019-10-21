@@ -53,10 +53,10 @@ foreach ($updates as &$update) {
       $sqlversion = "SELECT version_id FROM Version WHERE track_id = '$trackid' ORDER BY version_id ASC";
       $versions[] = $db->query($sqlversion)->fetchAll(PDO::FETCH_ASSOC);
   }
+  $commentloopid = 0;
   foreach ($versions as &$versions2) {
     foreach ($versions2 as &$version) {
         $versionid = $version["version_id"];
-        $commentloopid = 0;
         $version_ids = "SELECT comment_id, version_id FROM Comment WHERE version_id = '$versionid' ORDER BY comment_id DESC";
         $comment_ids = $db->query($version_ids)->fetchAll(PDO::FETCH_ASSOC);
         $last_comment_idsdec = json_decode($last_comment_ids, true);
@@ -73,13 +73,13 @@ foreach ($updates as &$update) {
                 if ($comment2["version"] == $versionid) {
                   if ($comment_id > $comment2["comment"]) {
                     if ($comment_id > $commentloopid) {
-                      $count++;
+                      //$count++;
                     }
-                    $commentloopid = $comment_id;
                   }
                 }
               }
             }
+        $commentloopid = $comment_id;
 
             // Then compare with what we have done, we we only update the DB with the latest version
             // Only update DB with the last comment_id so we can compare next time
