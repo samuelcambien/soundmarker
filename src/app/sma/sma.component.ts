@@ -22,7 +22,7 @@ export class SmaComponent implements OnInit {
 
   smaClass = this.getSmaClass();
 
-  adExposureTime = 45;        // in seconds
+  adExposureTime = 45 ;        // in seconds
   adFadeInTime = "0.74s";     // Needs to be a string.
   adFadeOutTime = "0.5s";     // Needs to be a string.
   adInitialDelay = 350;      // in ms, this is also the delay between loading an ad and showing it. (Enough time to load it)
@@ -76,7 +76,7 @@ export class SmaComponent implements OnInit {
     });
   }
 
-  // Registering a click and opening the ad.
+  // Registering a click.
   private clickSma(event) {
     if (event.origin !== Utils.getSmaDomain()) return; // Make sure that the click from the iframe click is coming from the correct domain.
     if(event.data) {
@@ -84,7 +84,7 @@ export class SmaComponent implements OnInit {
         this.scroll.emit(event.data);
         return
       } else {
-        RestCall.logSmaClick(this.smaId).then(() => window.open(event.data, "blank_"));
+        RestCall.logSmaClick(this.smaId);
       }
     }
   }
