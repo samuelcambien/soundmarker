@@ -38,8 +38,12 @@ export class WaveformComponent implements OnInit {
     );
     this.drawer.seek.subscribe(async progress => {
       this.stateService.setActiveComment(null);
-      await this.player.seekTo(this.version, progress * this.version.track_length);
-      await this.player.play(this.version);
+      const startTime = progress * this.version.track_length;
+      if (this.player.isPlaying()) {
+        await this.player.play(this.version, startTime);
+      } else {
+        await this.player.seekTo(this.version, startTime);
+      }
     });
 
     this.drawerService.register(this.version, this.drawer);
