@@ -25,9 +25,9 @@ $s3 = new Aws\S3\S3Client([
 ]);
 
 // See if emails are active, otherwise don't send email
-$settings = "SELECT id, email FROM Settings WHERE id = '1'";
+$settings = "SELECT setting, status FROM Settings WHERE setting = 'emails'";
 $settingsquery = $db->query($settings)->fetchAll(PDO::FETCH_ASSOC)[0];
-if ($settingsquery["email"] != 0) {
+if ($settingsquery["status"] != 0) {
 
 // Send daily updates
 // Go through Daily Updates and get project_ids, then check first if they're not expired
