@@ -24,6 +24,11 @@ $s3 = new Aws\S3\S3Client([
     'region'      => $config['AWS_S3_REGION'],
 ]);
 
+// See if emails are active, otherwise don't send email
+$settings = "SELECT id, email FROM Settings WHERE id = '1'";
+$settingsquery = $db->query($settings)->fetchAll(PDO::FETCH_ASSOC)[0];
+if ($settingsquery["email"] != 0) {
+
 // Send daily updates
 // Go through Daily Updates and get project_ids, then check first if they're not expired
 $sql = "SELECT update_id, project_id, emailaddress, last_comment_id FROM DailyUpdates WHERE notify_id = '1'";
@@ -124,18 +129,22 @@ foreach ($updates as &$update) {
   }
 
   unset($comments);
-  // Set daily updates to trackcount to check.
-  $sql = "UPDATE DailyUpdates SET last_comment_id = '$commentsjson' WHERE project_id = '$project_id'";
-  $result = $db->query($sql);
+  
 
-  // If we do have new comments
-  if ($count > 0) {
+  // If we have new comments, update DB and send email
+  if ($last_comment_ids != $commentsjson) {
+
+      // Set daily updates to trackcount to check.
+      $sql = "UPDATE DailyUpdates SET last_comment_id = '$commentsjson' WHERE project_id = '$project_id'";
+      $result = $db->query($sql);
+
       $sql = "SELECT email_string FROM Emails WHERE email_name = 'soundmarker-daily-updates'";
       $emailstring = html_entity_decode($db->query($sql)->fetch()[0], ENT_COMPAT, 'ISO-8859-1');
       $sql = "SELECT email_string_text FROM Emails WHERE email_name = 'soundmarker-daily-updates'";
       $emailstring_text = html_entity_decode($db->query($sql)->fetch()[0], ENT_COMPAT, 'ISO-8859-1');
 
       // Replace strings
+      if ($count == 0) { $count = 1; }
       $emailstring = str_replace("%commentamount%",$count,$emailstring);
       $emailstring_text = str_replace("%commentamount%",$count,$emailstring_text);   
 
@@ -225,5 +234,6 @@ foreach ($updates as &$update) {
       }
   }
  }
+}
 }
 ?>
