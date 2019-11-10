@@ -133,7 +133,7 @@ foreach ($updates as &$update) {
   // Set daily updates to trackcount to check.
 
   // If we have new comments, update DB and send email
-  if ($last_comment_ids != $commentsjson) {
+  if (($last_comment_ids != $commentsjson) AND ($commentsjson != null))  {
 
       $sql = "UPDATE DailyUpdates SET last_comment_id = '$commentsjson' WHERE project_id = '$project_id'";
       $result = $db->query($sql);
