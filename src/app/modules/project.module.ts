@@ -14,6 +14,7 @@ import {ReplyComponent} from '../comments/reply/reply.component';
 import {ReplyFormComponent} from '../comments/reply-form/reply-form.component';
 import {TimeInputComponent} from '../comments/time-input/time-input.component';
 import {WaveformComponent} from '../public-player-page/public-track-player/waveform/waveform.component';
+import {PlayButtonComponent} from "../play-button/play-button.component";
 
 const routes: Routes = [
   {
@@ -41,6 +42,7 @@ const routes: Routes = [
     ReplyFormComponent,
     TimeInputComponent,
     WaveformComponent,
+    PlayButtonComponent,
   ],
   exports: [
     CommentComponent,

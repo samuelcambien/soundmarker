@@ -2,6 +2,7 @@
 
 .title {
   margin-top: 3px;
+  margin-left: 4px;
 }
 
 .top-icon {
@@ -22,10 +23,6 @@
 .show-track-button {
   cursor: pointer !important;
   width: 80%;
-}
-
-.mini-btn {
-	max-height: 45px;
 }
 
 @media (max-width: 576px) {

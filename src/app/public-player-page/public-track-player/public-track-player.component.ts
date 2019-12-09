@@ -1,5 +1,4 @@
 import {
-  AfterViewInit,
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
@@ -20,8 +19,9 @@ import {LocalStorageService} from "../../services/local-storage.service";
 import {DrawerService} from "../../services/drawer.service";
 import {Player} from "../../player.service";
 import {animate, state, style, transition, trigger} from '@angular/animations';
-import {BehaviorSubject, Observable} from 'rxjs';
-import { distinctUntilChanged } from 'rxjs/operators';
+import {BehaviorSubject} from 'rxjs';
+import {distinctUntilChanged} from 'rxjs/operators';
+import {State} from "../../play-button/play-button.component";
 
 @Component({
   selector: 'public-track-player',
@@ -95,18 +95,19 @@ export class PublicTrackPlayerComponent implements OnInit, OnChanges {
     private drawerService: DrawerService,
     private cdr: ChangeDetectorRef
   ) {
-    document.addEventListener('scroll', ()=>{
+    document.addEventListener('scroll', () => {
       try {
-          let bounding = this.waveform.nativeElement.getBoundingClientRect();
-          if(bounding.y != 0) {
-            let scrollPane = this.waveform.nativeElement.closest(".comments-scrolltainer");
-            this.waveformInViewPort = bounding.top + bounding.height / 2 > scrollPane.getBoundingClientRect().top;
-            this.waveformInViewPortObservable.next(this.waveformInViewPort)
-          }
+        let bounding = this.waveform.nativeElement.getBoundingClientRect();
+        if (bounding.y != 0) {
+          let scrollPane = this.waveform.nativeElement.closest(".comments-scrolltainer");
+          this.waveformInViewPort = bounding.top + bounding.height / 2 > scrollPane.getBoundingClientRect().top;
+          this.waveformInViewPortObservable.next(this.waveformInViewPort)
         }
+      }
       catch (e) {
-        this.waveformInViewPort = true;}
-        }, true);
+        this.waveformInViewPort = true;
+      }
+    }, true);
   }
 
   ngOnInit(): void {
@@ -122,8 +123,7 @@ export class PublicTrackPlayerComponent implements OnInit, OnChanges {
     this.trackTitleDOM.nativeElement.setAttribute("style", "text-overflow: ellipsis");
     this.cdr.detectChanges();
 
-    this.waveformInViewPortObservable.pipe(distinctUntilChanged()).
-    subscribe(() => {
+    this.waveformInViewPortObservable.pipe(distinctUntilChanged()).subscribe(() => {
       this.cdr.detectChanges();
     });
   }
@@ -181,6 +181,27 @@ export class PublicTrackPlayerComponent implements OnInit, OnChanges {
     if (commentTime < this.comment.start_time + PublicTrackPlayerComponent.MINIMAL_INTERVAL) return this.comment.start_time + PublicTrackPlayerComponent.MINIMAL_INTERVAL;
     if (commentTime > this.getTrackLength()) return this.getTrackLength();
     return commentTime;
+  }
+
+  getPlaybuttonState(): State {
+    if (this.player.isLoading(this.version)) {
+      return State.loading;
+    } else if (this.isPlaying()) {
+      return State.pause;
+    } else {
+      return State.play;
+    }
+  }
+
+  async clickPlaybutton(state: State) {
+    switch (state) {
+      case State.play:
+        await this.play();
+        break;
+      case State.pause:
+        this.pause();
+        break;
+    }
   }
 
   async play() {
@@ -320,17 +341,18 @@ export class PublicTrackPlayerComponent implements OnInit, OnChanges {
   }
 
   removeComment(comment: Comment) {
-    if(!comment.parent_comment_id){
-    this.version.comments = this.version.comments.filter(
-      loadedComment => loadedComment != comment
-    );}
+    if (!comment.parent_comment_id) {
+      this.version.comments = this.version.comments.filter(
+        loadedComment => loadedComment != comment
+      );
+    }
     else {
       let a = this.version.comments.findIndex(loadedComment => {
         return loadedComment.comment_id == comment.parent_comment_id;
       });
       this.version.comments[a].replies = this.version.comments[a].replies.filter(
-          loadedComment => loadedComment != comment
-        );
+        loadedComment => loadedComment != comment
+      );
     }
   }
 
@@ -345,9 +367,9 @@ export class PublicTrackPlayerComponent implements OnInit, OnChanges {
 
   scrollToTop() {
     this.waveformInViewPort = true;
-    this.pauseTitleScroll= true;
+    this.pauseTitleScroll = true;
     this.trackTitleDOM.nativeElement.scrollIntoView({behavior: "smooth", block: "end", inline: "nearest"});
-    setTimeout(()=>this.pauseTitleScroll = false,700);
+    setTimeout(() => this.pauseTitleScroll = false, 700);
   }
 
   ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -357,7 +379,7 @@ export class PublicTrackPlayerComponent implements OnInit, OnChanges {
   scrollWaitAtEnd: number = 50;
   overflowTitle: boolean = false;
   scrollFPS = 45;
-  pauseTitleScroll:boolean =  false;
+  pauseTitleScroll: boolean = false;
 
   // Stop scrolling and reset the track title to it's start position.
   clearScroll() {
@@ -385,8 +407,8 @@ export class PublicTrackPlayerComponent implements OnInit, OnChanges {
     }
   }
 
-  pauseAutoScroll(event){
-    this.pauseTitleScroll = event ;
+  pauseAutoScroll(event) {
+    this.pauseTitleScroll = event;
   }
 
   //Function that does the actual scrolling back and forth of too long titles.
@@ -402,7 +424,7 @@ export class PublicTrackPlayerComponent implements OnInit, OnChanges {
       let scrollLoop = () => {
         setTimeout(() => {
           titleScrollDiv -= 1;
-          if(!this.pauseTitleScroll) this.trackTitleDOM.nativeElement.scrollLeft += i;
+          if (!this.pauseTitleScroll) this.trackTitleDOM.nativeElement.scrollLeft += i;
           if (titleScrollDiv > 0 && this.launchTitleScroll)
             requestAnimationFrame(scrollLoop);
           else if (titleScrollDiv === 0 && i === 1) {
@@ -424,14 +446,10 @@ export class PublicTrackPlayerComponent implements OnInit, OnChanges {
   ///////////////////////////////////////////////////////////////////////////////////////////////////
   // Catch back button when there is a project with multiple tracks to go back to overview instead of to previous website.
   @HostListener('window:popstate', ['$event'])
-  onPopState(event) {
+  onPopState() {
     if (this.enableOverview) {
       this.goToOverview();
     }
     else history.go(2);
   }
-
-  isExpiredProject(): boolean{
-    return this.expired;
-}
 }
