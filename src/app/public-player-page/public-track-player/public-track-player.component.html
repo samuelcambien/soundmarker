@@ -139,18 +139,10 @@
 
         <div class="popup-play-btn">
 
-          <button *ngIf="isPlaying(); then pausebutton else playbutton"></button>
-
-          <ng-template #pausebutton>
-            <button class="mini-btn mini-pause-btn btn btn-link" (click)="pause()">
-            </button>
-          </ng-template>
-
-          <ng-template #playbutton>
-            <button class="mini-btn mini-play-btn btn btn-link" (click)="play()" [class.disabled]="expired">
-            </button>
-          </ng-template>
-
+          <play-button
+            [state]="getPlaybuttonState()"
+            (clicked)="clickPlaybutton($event)"
+          ></play-button>
 
         </div>
       </div>
