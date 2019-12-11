@@ -2,6 +2,7 @@
 import {Component, NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {ClipboardModule} from 'ngx-clipboard';
+import {DeviceDetectorModule} from 'ngx-device-detector';
 import {FormsModule} from '@angular/forms';
 import {NgSelectModule} from '@ng-select/ng-select';
 import {ReactiveFormsModule} from '@angular/forms';
@@ -42,6 +43,7 @@ import {LoadingComponent} from "../loading/loading.component";
   imports: [
     ClipboardModule,
     CommonModule,
+    DeviceDetectorModule.forRoot(),
     FormsModule,
     NgbModule.forRoot(),
     NgSelectModule,
@@ -89,6 +91,7 @@ import {LoadingComponent} from "../loading/loading.component";
     ClipboardModule,
     FormsModule,
     NgbModule,
+    DeviceDetectorModule,
     NgSelectModule,
     ReactiveFormsModule,
     LoadableComponentModule,
