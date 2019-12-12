@@ -7,6 +7,7 @@ import {Comment, CommentSorter} from "../../model/comment";
 import {Utils} from "../../app.component";
 import {Player} from "../../player.service";
 import {State} from "../../play-button/play-button.component";
+import {DeviceDetectorService} from 'ngx-device-detector';
 
 @Component({
   selector: 'app-public-track-preview',
@@ -31,7 +32,8 @@ export class PublicTrackPreviewComponent implements OnInit {
 
   constructor(
     private player: Player,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private deviceService: DeviceDetectorService
   ) {
   }
 
@@ -54,6 +56,9 @@ export class PublicTrackPreviewComponent implements OnInit {
   async clickPlaybutton(state: State) {
     switch (state) {
       case State.play:
+        if(this.deviceService.isMobile() || this.deviceService.isTablet()){
+          this.trackSelected();
+        }
         await this.play();
         break;
       case State.pause:

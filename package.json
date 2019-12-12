@@ -28,6 +28,7 @@
     "ng-trim-value-accessor": "^2.0.4",
     "ngx-chips": "^2.0.0-beta.0",
     "ngx-clipboard": "^11.1.9",
+    "ngx-device-detector": "^1.3.20",
     "ngx-loadable-component": "0.0.4",
     "rxjs": "^6.5.3",
     "zone.js": "^0.8.26"
