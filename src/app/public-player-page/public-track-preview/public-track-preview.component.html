@@ -18,29 +18,26 @@
     </div>
 
     <div class="ml-auto hide-phone player-toolbar">
-      <div *ngIf="version?.downloadable && !expired" class="top-icon cloud-icon" id="cloud-icon" (click)="download()">
-        <svg width="22px" height="22px" viewBox="0 0 22 22" version="1.1" xmlns="http://www.w3.org/2000/svg">
-          <desc>Download track</desc>
-          <defs></defs>
-          <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round"
-             stroke-linejoin="round">
-            <g id="Internet-Networks-Servers-/-Upload/Download-/-upload-dash-arrow-1"
-               transform="translate(-95.000000, -20.000000)" class="icon-stroke" stroke-width="1.5">
-              <g id="Group" transform="translate(96.000000, 21.000000)">
+      <div *ngIf="version?.downloadable && !expired" class="top-icon cloud-icon margin-tooltip" id="cloud-icon" (click)="download()" placement="top"
+           ngbTooltip="Download">
+
+        
+<svg width="22px" height="18px" viewBox="0 0 22 18" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
+        <g id="Internet-Networks-Servers-/-Upload/Download-/-upload-dash-arrow-1" transform="translate(-389.000000, -447.000000)" class="icon-stroke" stroke-width="1.5">
+            <g id="Group-Copy-14" transform="translate(389.000000, 448.000000)">
                 <g id="upload-brackets">
-                  <path d="M10.0008333,5 L10.0008333,15" id="Shape"></path>
-                  <polyline id="Shape" points="6.25083333 11.25 10.0008333 15 13.7508333 11.25"></polyline>
-                  <path
-                    d="M5,19.375 L1.87583333,19.375 C1.1854774,19.375 0.625833333,18.8153559 0.625833333,18.125 L0.625833333,1.875 C0.625833333,1.18464406 1.1854774,0.625 1.87583333,0.625 L5,0.625"
-                    id="Shape"></path>
-                  <path
-                    d="M15,0.625 L18.125,0.625 C18.8153559,0.625 19.375,1.18464406 19.375,1.875 L19.375,18.125 C19.375,18.8153559 18.8153559,19.375 18.125,19.375 L15,19.375"
-                    id="Shape"></path>
+                    <path d="M11,0.5 L11.0008333,11.7368421" id="Shape"></path>
+                    <polyline id="Shape" points="7.25083333 7.78947368 11.0008333 11.7368421 14.7508333 7.78947368"></polyline>
+                    <g id="Group-24" transform="translate(11.000000, 14.368421) rotate(90.000000) translate(-11.000000, -14.368421) translate(8.500000, 3.842105)">
+                        <path d="M0,0.657894737 L3.125,0.657894737 C3.81535594,0.657894737 4.375,1.24699375 4.375,1.97368421 L4.375,19.0789474 C4.375,19.8056378 3.81535594,20.3947368 3.125,20.3947368 L0,20.3947368" id="Shape"></path>
+                    </g>
                 </g>
-              </g>
             </g>
-          </g>
-        </svg>
+        </g>
+    </g>
+</svg>
+        
       </div>
 
     </div>
