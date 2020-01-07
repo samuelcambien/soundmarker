@@ -70,7 +70,11 @@ export class Drawer {
     var clientX = e.targetTouches ? e.targetTouches[0].clientX : e.clientX;
     var bbox = this.wrapper.getBoundingClientRect();
 
-    return ((clientX - bbox.left + this.wrapper.scrollLeft) / this.wrapper.scrollWidth) || 0;
+    let progress = ((clientX - bbox.left + this.wrapper.scrollLeft) / this.wrapper.scrollWidth) || 0;
+
+    if (progress <= 0.05) progress = 0;
+
+    return progress;
   }
 
   drawPeaks(length, start, end) {
