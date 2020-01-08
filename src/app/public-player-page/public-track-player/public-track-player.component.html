@@ -5,9 +5,9 @@
     <div class="row popup-row">
 
       <div class="popup-play-btn">
-
         <play-button
           [state]="getPlaybuttonState()"
+          [disabled]="expired"
           (clicked)="clickPlaybutton($event)"
         ></play-button>
 
@@ -133,6 +133,7 @@
         <div class="popup-play-btn">
 
           <play-button
+            [disabled]="expired"
             [state]="getPlaybuttonState()"
             (clicked)="clickPlaybutton($event)"
           ></play-button>
@@ -188,6 +189,7 @@
     <div class="hide-phone">
 
       <play-button
+        [disabled]="expired"
         [state]="getPlaybuttonState()"
         (clicked)="clickPlaybutton($event)"
       ></play-button>
