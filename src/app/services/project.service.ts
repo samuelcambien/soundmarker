@@ -52,17 +52,17 @@ export class ProjectService {
   }
 
   async loadProject(projectHash: string): Promise<void> {
-
     const project = await RestCall.getProject(projectHash);
-    this.stateService.setActiveProject(project);
+    if(project.project_id){
+      this.stateService.setActiveProject(project);
+      if (!this.isActive(project) && !this.areCommentsActive(project)) {
+        return Promise.resolve();
+      }
 
-    if (!this.isActive(project) && !this.areCommentsActive(project)) {
-      return Promise.resolve();
+      return Utils.promiseSequential(
+        project.tracks.map(track => () => this.loadVersions(track))
+      );
     }
-
-    return Utils.promiseSequential(
-      project.tracks.map(track => () => this.loadVersions(track))
-    );
   }
 
   public isActive(project: Project) {
