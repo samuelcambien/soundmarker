@@ -49,13 +49,17 @@ export class PublicPlayerPageComponent implements OnInit {
       this.cdr.detectChanges();
       this.projectService.loadProject(params['project_hash'])
         .then(() => {
+          if(this.stateService.getActiveProject()) {
+            this.project = this.stateService.getActiveProject();
+            this.initFields();
 
-          this.project = this.stateService.getActiveProject(); 
-          this.initFields();
-
-          if (this.getProject().tracks.length == 1)
-            this.stateService.setActiveTrack(this.getProject().tracks[0]);
-
+            if (this.getProject().tracks.length == 1)
+              this.stateService.setActiveTrack(this.getProject().tracks[0]);
+          }
+          else{
+            this.exists = false;
+            this.message = null;
+          }
           this.cdr.detectChanges();
         })
     });
@@ -96,13 +100,6 @@ export class PublicPlayerPageComponent implements OnInit {
   }
 
   private initFields() {
-
-    if (this.project.project_id == null) {
-      this.exists = false;
-      this.message = null;
-      return;
-    }
-
     if (!this.projectService.isActive(this.project)) {
       this.expired = true;
       if (!this.projectService.areCommentsActive(this.project)) {

@@ -8,7 +8,7 @@
   (tryAgain)="backToHome()"
   xmlns="http://www.w3.org/1999/html">
 
-  <app-loading *ngIf="!project"></app-loading>
+  <app-loading *ngIf="!project && exists"></app-loading>
 
   <app-page-not-found *ngIf="!exists" ></app-page-not-found>
 
