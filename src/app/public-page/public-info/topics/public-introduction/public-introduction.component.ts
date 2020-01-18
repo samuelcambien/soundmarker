@@ -25,6 +25,12 @@ export class PublicIntroductionComponent implements OnInit {
 
   ngOnInit() {
   }
-  
 
+  next(){
+    this.carousel.next();
+  }
+
+  prev(){
+    this.carousel.prev();
+  }
 }
