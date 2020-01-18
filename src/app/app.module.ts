@@ -29,6 +29,7 @@ import { LoadableComponentModule } from 'ngx-loadable-component';
 // loadable components manifest
 import { appLoadableManifests } from './modules/app-loadable.manifests';
 
+
 @NgModule({
   imports: [
     BrowserModule,
