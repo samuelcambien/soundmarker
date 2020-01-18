@@ -1,5 +1,5 @@
-import {Component, OnInit} from '@angular/core';
-import {NgbActiveModal, NgbModal} from "@ng-bootstrap/ng-bootstrap";
+import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
+import {NgbActiveModal, NgbCarousel, NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {LocalStorageService} from "../../../../services/local-storage.service";
 
 @Component({
@@ -7,7 +7,9 @@ import {LocalStorageService} from "../../../../services/local-storage.service";
   templateUrl: './public-introduction.component.html',
   styleUrls: ['./public-introduction.component.scss']
 })
-export class PublicIntroductionComponent implements OnInit {
+export class PublicIntroductionComponent implements OnInit, AfterViewInit {
+
+  @ViewChild('carousel') carousel: NgbCarousel;
 
   constructor(private modalService: NgbModal, private activeModal: NgbActiveModal, private termsAcceptedService: LocalStorageService) { }
 
@@ -17,5 +19,9 @@ export class PublicIntroductionComponent implements OnInit {
   }
 
   ngOnInit() {
+  }
+
+  ngAfterViewInit() {
+    this.carousel.pause();
   }
 }
