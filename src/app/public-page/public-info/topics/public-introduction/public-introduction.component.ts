@@ -1,5 +1,5 @@
-import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
-import {NgbActiveModal, NgbCarousel, NgbModal} from '@ng-bootstrap/ng-bootstrap';
+import {Component, OnInit, ViewChild} from '@angular/core';
+import {NgbActiveModal, NgbCarousel, NgbCarouselConfig, NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {LocalStorageService} from "../../../../services/local-storage.service";
 
 @Component({
@@ -7,11 +7,16 @@ import {LocalStorageService} from "../../../../services/local-storage.service";
   templateUrl: './public-introduction.component.html',
   styleUrls: ['./public-introduction.component.scss']
 })
-export class PublicIntroductionComponent implements OnInit, AfterViewInit {
+export class PublicIntroductionComponent implements OnInit {
 
   @ViewChild('carousel') carousel: NgbCarousel;
 
-  constructor(private modalService: NgbModal, private activeModal: NgbActiveModal, private termsAcceptedService: LocalStorageService) { }
+  constructor(private modalService: NgbModal, private activeModal: NgbActiveModal, private termsAcceptedService: LocalStorageService, config: NgbCarouselConfig) {
+    config.interval = 0;
+    config.wrap = false;
+    config.keyboard = false;
+    config.pauseOnHover = false;
+  }
 
   accept() {
     this.termsAcceptedService.acceptTerms(new Date());
@@ -19,9 +24,5 @@ export class PublicIntroductionComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
-  }
-
-  ngAfterViewInit() {
-    this.carousel.pause();
   }
 }
