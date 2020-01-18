@@ -794,6 +794,9 @@ button:visited {
 #sm .dropdown-toggle::after {
 	display: none;
 }
+.carousel-control-prev, .carousel-control-next {
+//	display: none !important;
+}
 // pages
 // -- public
 // ---- bottom info

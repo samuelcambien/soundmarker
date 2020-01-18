@@ -1,11 +1,65 @@
 @import "../about-us/about-us-info.component.scss";
 
+.carousel, .slide {
+	box-shadow: none !important;
+	outline: none !important;
+}
 
+.fadedfont {
+	color: #eef1ff !important;
+}
+
+.intro-png {
+	margin-left: -40px;
+	margin-right: -40px;
+	width: calc(100% + 80px);
+	
+	height: 0;
+	padding-bottom: 77%;
+	margin-bottom: -179px;
+}
+
+#intro-png-0 {
+	background: url(sm-intro.png);
+	background-size: contain;
+	background-repeat: no-repeat;
+}
+
+#intro-png-1 {
+	background: url(intro-1.png);
+	background-size: contain;
+	background-repeat: no-repeat;
+}
+
+#intro-png-2 {
+	background: url(intro-2.png);
+	background-size: contain;
+	background-repeat: no-repeat;
+}
+
+#intro-png-3 {
+	background: url(intro-3.png);
+	background-size: contain;
+	background-repeat: no-repeat;
+}
+
+#intro-png-4 {
+	background: url(intro-4.png);
+	background-size: contain;
+	background-repeat: no-repeat;
+}
+
+#intro-png-5 {
+	background: url(intro-5.png);
+	background-size: contain;
+	background-repeat: no-repeat;
+}
 
 
 .intro-footer button {
 	height: 30px;
 	margin-left: 10px;
+	margin-bottom: 25px;
 	
 }
 
@@ -29,6 +83,7 @@
 
 .accept-text, .accept-button {
 	float: right;
+	
 }
 
 @media (max-width: 576px) {
