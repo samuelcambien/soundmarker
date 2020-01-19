@@ -42,4 +42,6 @@ export class StateService {
   }
 
   private activeComment: BehaviorSubject<Comment> = new BehaviorSubject<Comment>(null);
+
+  sidebarToggled: boolean;
 }

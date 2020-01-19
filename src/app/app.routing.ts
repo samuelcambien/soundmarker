@@ -1,10 +1,10 @@
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
-import {AboutUsInfoComponent} from "./public-page/public-info/public-info.component";
-import {PublicPagenotfoundPageComponent} from "./public-pagenotfound-page/public-pagenotfound-page.component";
-import { CustomPreloadingStrategy } from './custom-preloading';
+import {CustomPreloadingStrategy} from './custom-preloading';
 import {AuthGuard} from "./auth/auth.guard";
 import {LoginComponent} from "./auth/login/login.component";
+import {PublicPagenotfoundPageComponent} from "./+public/public-pagenotfound-page/public-pagenotfound-page.component";
+import {AboutUsInfoComponent} from "./+public/public-page/public-info/public-info.component";
 
 const appRoutes: Routes = [
   {
@@ -13,7 +13,7 @@ const appRoutes: Routes = [
   },
   {
     path: 'pro',
-    loadChildren: './+pro-page/pro-page.module#ProPageModule',
+    loadChildren: './+pro/pro.module#ProModule',
     canActivate: [AuthGuard],
   },
   {

@@ -2,14 +2,15 @@ import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {RouterModule, Routes} from '@angular/router';
 import {SharedModule} from './shared.module';
-import {PublicUploadPageComponent} from '../public-upload-page/public-upload-page.component';
-import {PublicUploadingFilesComponent} from '../public-upload-page/public-upload-progress/public-uploading-files.component';
-import {PublicUploadFinishedComponent} from '../public-upload-page/public-upload-finished/public-upload-finished.component';
 import {DragAndDropModule} from 'angular-draggable-droppable';
-import {FileUploadModule} from '../ng2-file-upload';
-import {PublicUploadFormComponent} from '../public-upload-page/public-upload-form/public-upload-form.component';
-
-import {EmailValidationToolTip} from '../public-upload-page/public-upload-form/public-upload-form.component';
+import {PublicUploadPageComponent} from "../+public/public-upload-page/public-upload-page.component";
+import {FileUploadModule} from "../tools/ng2-file-upload";
+import {
+  EmailValidationToolTip,
+  PublicUploadFormComponent
+} from "../+public/public-upload-page/public-upload-form/public-upload-form.component";
+import {PublicUploadFinishedComponent} from "../+public/public-upload-page/public-upload-finished/public-upload-finished.component";
+import {PublicUploadingFilesComponent} from "../+public/public-upload-page/public-upload-progress/public-uploading-files.component";
 
 const routes: Routes = [
   {
@@ -41,8 +42,6 @@ const routes: Routes = [
     PublicUploadingFilesComponent,
     EmailValidationToolTip
   ],
-  entryComponents: [
-  ]
 })
 
 export class HomeModule {

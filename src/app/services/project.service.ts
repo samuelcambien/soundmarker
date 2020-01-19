@@ -5,9 +5,9 @@ import {Track} from "../model/track";
 import {Version} from "../model/version";
 import {Comment} from "../model/comment";
 import {Utils} from "../app.component";
-import {Player} from "../player.service";
 import {RestCall} from "../rest/rest-call";
 import {StateService} from "./state.service";
+import {Player} from "../player/player.service";
 
 @Injectable({
   providedIn: 'root'

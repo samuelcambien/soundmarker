@@ -1,9 +1,9 @@
 import {ApplicationRef, Injectable} from '@angular/core';
-import {Drawer} from "../drawer";
 import {Version} from "../model/version";
-import {Player} from "../player.service";
 import {ProjectService} from "./project.service";
 import {StateService} from "./state.service";
+import {Drawer} from "../player/drawer";
+import {Player} from "../player/player.service";
 
 @Injectable({
   providedIn: 'root'

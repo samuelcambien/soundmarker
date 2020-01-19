@@ -3,9 +3,9 @@ import {Comment} from "../../model/comment";
 import {Utils} from "../../app.component";
 import {LocalStorageService} from "../../services/local-storage.service";
 import {RestCall} from "../../rest/rest-call";
-import {Player} from "../../player.service";
 import {Version} from "../../model/version";
 import {StateService} from "../../services/state.service";
+import {Player} from "../../player/player.service";
 
 @Component({
   selector: 'comment-lazy',

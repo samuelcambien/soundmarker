@@ -7,24 +7,18 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
 import {AppComponent} from './app.component';
 
-// import {routing} from './app.routing';
-
-import {ProBoardComponent} from './pro/pro-board/pro-board.component';
-import {ProBoardProjectsTrackComponent} from './pro/pro-board/pro-board-projects/pro-board-projects-track/pro-board-projects-track.component';
-import {ProBoardTransfersComponent} from './pro/pro-board/pro-board-transfers/pro-board-transfers.component';
-import {ProBoardTransfersTransferComponent} from './pro/pro-board/pro-board-transfers/pro-board-transfers-transfer/pro-board-transfers-transfer.component';
-import {ProBoardTransferTrackComponent} from './pro/pro-board/pro-board-transfers/pro-board-transfer-track/pro-board-transfer-track.component';
-
-import { LoadableComponentModule } from 'ngx-loadable-component';
-
+import {LoadableComponentModule} from 'ngx-loadable-component';
 // loadable components manifest
-import { appLoadableManifests } from './modules/app-loadable.manifests';
+import {appLoadableManifests} from './modules/app-loadable.manifests';
 import {appReducers} from "./app.reducer";
 import {StoreModule} from '@ngrx/store';
 import {coreReducers} from "./core.reducers";
 import {AuthGuard} from "./auth/auth.guard";
 import {AuthService} from "./auth/auth.service";
-import { LoginComponent } from './auth/login/login.component';
+import {LoginComponent} from './auth/login/login.component';
+import {ProfileComponent} from './+pro/profile/profile.component';
+
+// import {routing} from './app.routing';
 
 @NgModule({
   imports: [
@@ -39,6 +33,7 @@ import { LoginComponent } from './auth/login/login.component';
   declarations: [
     AppComponent,
     LoginComponent,
+    ProfileComponent,
   ],
   providers: [
     AuthGuard,

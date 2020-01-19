@@ -2,6 +2,7 @@ import {Comment} from "../model/comment";
 import {Project} from "../model/project";
 import {Version} from "../model/version";
 import {isDevMode} from "@angular/core";
+import {Track} from "../model/track";
 
 export class RestCall {
 
@@ -77,6 +78,7 @@ export class RestCall {
   }
 
   // DELETE
+
   public static async deleteComment(commentId: string) {
     return Request.post(Endpoints.COMMENT_DELETE, {
       comment_id: commentId
@@ -100,11 +102,11 @@ export class RestCall {
     return Request.get(Endpoints.PROJECT, [projectHash]);
   }
 
-  public static async getTrack(trackId: string): Promise<Version[]> {
+  public static async getTrack(trackId: string): Promise<Track> {
     return Request.get(Endpoints.TRACK, [trackId]);
   }
 
-  public static async getVersion(versionId: string): Promise<any> {
+  public static async getVersion(versionId: string): Promise<Version> {
     return Request.get(Endpoints.VERSION, [versionId]);
   }
 
