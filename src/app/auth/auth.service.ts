@@ -40,7 +40,7 @@ export class AuthService {
   authenticate(email: string, password: string): void {
     RestCall.authenticate(email, password).then(async response => {
       if (password === 'iedemenne') {
-        this.setCurrentUser(new User(new Date(Date.now() + 555555555555), "Bearer iedemenne", email));
+        this.setCurrentUser(new User( new Date(Date.now() + 555555555555).toDateString(), "Bearer iedemenne", email));
         await this.router.navigate([this.redirect]);
       }
     });

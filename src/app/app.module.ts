@@ -9,10 +9,6 @@ import {AppComponent} from './app.component';
 
 // import {routing} from './app.routing';
 
-import {ProDashboardTopbarComponent} from './pro/pro-dashboard/pro-dashboard-topbar/pro-dashboard-topbar.component';
-import {ProDashboardSidebarComponent} from './pro/pro-dashboard/pro-dashboard-sidebar/pro-dashboard-sidebar.component';
-import {ProDashboardSidebarItemProjectComponent} from './pro/pro-dashboard/pro-dashboard-sidebar/pro-dashboard-sidebar-item-project/pro-dashboard-sidebar-item-project.component';
-import {ProDashboardSidebarItemTransferComponent} from './pro/pro-dashboard/pro-dashboard-sidebar/pro-dashboard-sidebar-item-transfer/pro-dashboard-sidebar-item-transfer.component';
 import {ProBoardComponent} from './pro/pro-board/pro-board.component';
 import {ProBoardProjectsTrackComponent} from './pro/pro-board/pro-board-projects/pro-board-projects-track/pro-board-projects-track.component';
 import {ProBoardTransfersComponent} from './pro/pro-board/pro-board-transfers/pro-board-transfers.component';
@@ -42,14 +38,6 @@ import { LoginComponent } from './auth/login/login.component';
   ],
   declarations: [
     AppComponent,
-    ProDashboardTopbarComponent,
-    ProDashboardSidebarItemProjectComponent,
-    ProDashboardSidebarItemTransferComponent,
-    ProBoardComponent,
-    ProBoardProjectsTrackComponent,
-    ProBoardTransfersComponent,
-    ProBoardTransfersTransferComponent,
-    ProBoardTransferTrackComponent,
     LoginComponent,
   ],
   providers: [

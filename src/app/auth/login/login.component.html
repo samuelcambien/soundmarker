@@ -1,0 +1,5 @@
+<form #myForm="ngForm" (ngSubmit)="onSubmit()" class="d-flex flex-column">
+  <input name="email" [(ngModel)]="email">
+  <input name="password" [(ngModel)]="password">
+  <button type="submit">log in</button>
+</form>

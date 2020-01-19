@@ -1,7 +1,7 @@
 export class User {
 
   constructor(
-    private expiryDate?: Date,
+    private expiryDate?: string,
     public token?: string,
     public email?: string,
   ) {
@@ -10,6 +10,6 @@ export class User {
   name;
 
   isValid(): boolean {
-    return this.expiryDate && new Date() < this.expiryDate;
+    return new Date().getTime() < Date.parse(this.expiryDate);
   }
 }
