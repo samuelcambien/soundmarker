@@ -9,6 +9,7 @@ import {ReactiveFormsModule} from '@angular/forms';
 import {TagInputModule} from '../ngx-chips/modules';
 import {TrimValueAccessorModule} from 'ng-trim-value-accessor';
 import {NgbActiveModal, NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import { DemoComponent } from '../public-page/public-info/topics/demo/demo.component';
 
 
 //////////////    COMPONENTS     //////////////
@@ -61,6 +62,7 @@ import {LoadingComponent} from "../loading/loading.component";
   declarations: [
     //////////////    COMPONENTS  //////////////
     AboutUsInfoComponent,
+    DemoComponent,
     DropdownToggleComponent,
     ErrorComponent,
     HelpInfoComponent,
@@ -101,6 +103,7 @@ import {LoadingComponent} from "../loading/loading.component";
 
     //////////////    COMPONENTS  //////////////
     AboutUsInfoComponent,
+    DemoComponent,
     DropdownToggleComponent,
     ErrorComponent,
     HelpInfoComponent,
@@ -127,6 +130,7 @@ import {LoadingComponent} from "../loading/loading.component";
 
   entryComponents: [
     AboutUsInfoComponent,
+    DemoComponent,
     ProInfoComponent,
     HelpInfoComponent,
     PublicIntroductionComponent,

@@ -5,9 +5,9 @@
     <div class="row popup-row">
 
       <div class="popup-play-btn">
-
         <play-button
           [state]="getPlaybuttonState()"
+          [disabled]="expired"
           (clicked)="clickPlaybutton($event)"
         ></play-button>
 
@@ -18,8 +18,6 @@
       <div class="popup-time"><p>{{getCurrentTime() | timeFormat}} / {{getDuration() | timeFormat}}</p></div>
 
       <div class="top-icon icon-action ml-auto"></div>
-
-
       <div class="top-icon list-icon" id="scroll-icon" role="button" (click)="scrollToTop()">
 
 
@@ -133,6 +131,7 @@
         <div class="popup-play-btn">
 
           <play-button
+            [disabled]="expired"
             [state]="getPlaybuttonState()"
             (clicked)="clickPlaybutton($event)"
           ></play-button>
@@ -188,6 +187,7 @@
     <div class="hide-phone">
 
       <play-button
+        [disabled]="expired"
         [state]="getPlaybuttonState()"
         (clicked)="clickPlaybutton($event)"
       ></play-button>

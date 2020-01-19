@@ -4,6 +4,7 @@ import {SubscribeComponent} from "../../../subscribe/subscribe.component";
 import {Message} from "../../../message";
 import {StateService} from "../../../services/state.service";
 import {ProjectService} from "../../../services/project.service";
+import {DemoComponent} from '../topics/demo/demo.component';
 
 @Component({
   selector: 'app-public-info-header',
@@ -24,10 +25,6 @@ export class PublicInfoHeaderComponent implements OnInit {
   }
 
   ngOnInit() {
-  }
-
-  subscribe() {
-    this.modalService.open(SubscribeComponent, {size: "lg", backdrop: 'static', keyboard: false});
   }
 
   goToPage() {
