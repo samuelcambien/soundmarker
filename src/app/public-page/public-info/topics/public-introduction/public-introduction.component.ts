@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
 import {NgbActiveModal, NgbCarousel, NgbCarouselConfig, NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {LocalStorageService} from "../../../../services/local-storage.service";
 
@@ -8,6 +8,8 @@ import {LocalStorageService} from "../../../../services/local-storage.service";
   styleUrls: ['./public-introduction.component.scss']
 })
 export class PublicIntroductionComponent implements OnInit {
+
+  images = [`../assets/topics-img/sm-intro.png`, `../assets/topics-img/intro-1.png` , `../assets/topics-img/intro-2.png`, `../assets/topics-img/intro-3.png`, `../assets/topics-img/intro-4.png`];
 
   @ViewChild('carousel') carousel: NgbCarousel;
 
@@ -22,6 +24,7 @@ export class PublicIntroductionComponent implements OnInit {
     this.termsAcceptedService.acceptTerms(new Date());
     this.activeModal.close();
   }
+
 
   ngOnInit() {
   }

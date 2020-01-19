@@ -8,6 +8,8 @@ import {NgbActiveModal, NgbCarousel, NgbModal} from '@ng-bootstrap/ng-bootstrap'
 })
 export class DemoComponent implements OnInit {
 
+  images = [`../assets/topics-img/sm-intro.png`, `../assets/topics-img/intro-1.png` , `../assets/topics-img/intro-2.png`, `../assets/topics-img/intro-3.png`, `../assets/topics-img/intro-4.png`];
+
   constructor(private modalService: NgbModal, private activeModal: NgbActiveModal) { }
 
   ngOnInit() {
