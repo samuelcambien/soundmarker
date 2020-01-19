@@ -14,20 +14,21 @@ import {ProDashboardSidebarComponent} from './pro/pro-dashboard/pro-dashboard-si
 import {ProDashboardSidebarItemProjectComponent} from './pro/pro-dashboard/pro-dashboard-sidebar/pro-dashboard-sidebar-item-project/pro-dashboard-sidebar-item-project.component';
 import {ProDashboardSidebarItemTransferComponent} from './pro/pro-dashboard/pro-dashboard-sidebar/pro-dashboard-sidebar-item-transfer/pro-dashboard-sidebar-item-transfer.component';
 import {ProBoardComponent} from './pro/pro-board/pro-board.component';
-import {ProDashboardComponent} from './pro/pro-dashboard/pro-dashboard.component';
-import {ProBoardUploadComponent} from './pro/pro-board/pro-board-upload/pro-board-upload.component';
-import {ProBoardProjectsComponent} from './pro/pro-board/pro-board-projects/pro-board-projects.component';
-import {ProBoardProjectsProjectComponent} from './pro/pro-board/pro-board-projects/pro-board-projects-project/pro-board-projects-project.component';
 import {ProBoardProjectsTrackComponent} from './pro/pro-board/pro-board-projects/pro-board-projects-track/pro-board-projects-track.component';
 import {ProBoardTransfersComponent} from './pro/pro-board/pro-board-transfers/pro-board-transfers.component';
 import {ProBoardTransfersTransferComponent} from './pro/pro-board/pro-board-transfers/pro-board-transfers-transfer/pro-board-transfers-transfer.component';
 import {ProBoardTransferTrackComponent} from './pro/pro-board/pro-board-transfers/pro-board-transfer-track/pro-board-transfer-track.component';
-import {ProComponent} from './pro/pro.component';
 
 import { LoadableComponentModule } from 'ngx-loadable-component';
 
 // loadable components manifest
 import { appLoadableManifests } from './modules/app-loadable.manifests';
+import {appReducers} from "./app.reducer";
+import {StoreModule} from '@ngrx/store';
+import {coreReducers} from "./core.reducers";
+import {AuthGuard} from "./auth/auth.guard";
+import {AuthService} from "./auth/auth.service";
+import { LoginComponent } from './auth/login/login.component';
 
 @NgModule({
   imports: [
@@ -35,26 +36,25 @@ import { appLoadableManifests } from './modules/app-loadable.manifests';
     BrowserAnimationsModule,
     SharedModule,
     AppRoutingModule,
-    LoadableComponentModule.forRoot(appLoadableManifests)
+    LoadableComponentModule.forRoot(appLoadableManifests),
+    StoreModule.forRoot(appReducers),
+    StoreModule.forFeature('core', coreReducers, {}),
   ],
   declarations: [
     AppComponent,
     ProDashboardTopbarComponent,
-    ProDashboardSidebarComponent,
     ProDashboardSidebarItemProjectComponent,
     ProDashboardSidebarItemTransferComponent,
     ProBoardComponent,
-    ProDashboardComponent,
-    ProBoardUploadComponent,
-    ProBoardProjectsComponent,
-    ProBoardProjectsProjectComponent,
     ProBoardProjectsTrackComponent,
     ProBoardTransfersComponent,
     ProBoardTransfersTransferComponent,
     ProBoardTransferTrackComponent,
-    ProComponent,
+    LoginComponent,
   ],
   providers: [
+    AuthGuard,
+    AuthService,
   ],
   bootstrap: [AppComponent],
   entryComponents: [

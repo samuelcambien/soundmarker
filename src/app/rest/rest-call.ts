@@ -2,7 +2,6 @@ import {Comment} from "../model/comment";
 import {Project} from "../model/project";
 import {Version} from "../model/version";
 import {isDevMode} from "@angular/core";
-import {Utils} from "../app.component";
 
 export class RestCall {
 
@@ -118,6 +117,10 @@ export class RestCall {
 
   public static async getComments(versionId: string): Promise<any> {
     return Request.getNonCaching(Endpoints.COMMENTS, [versionId]);
+  }
+
+  public static authenticate(email: string, password: string): Promise<any> {
+    return this.getTrack('47');
   }
 }
 

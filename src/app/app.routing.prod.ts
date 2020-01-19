@@ -2,7 +2,7 @@ import {ModuleWithProviders, NgModule} from '@angular/core';
 import {PreloadAllModules, RouterModule, Routes} from '@angular/router';
 import {AboutUsInfoComponent} from "./public-page/public-info/public-info.component";
 import {PublicPagenotfoundPageComponent} from "./public-pagenotfound-page/public-pagenotfound-page.component";
-import {ProComponent} from './pro/pro.component';
+import {ProPageComponent} from './pro/pro-page.component';
 
 
 const appRoutes: Routes = [
@@ -21,7 +21,7 @@ const appRoutes: Routes = [
   },
   {
     path: "pro",
-    component: ProComponent
+    component: ProPageComponent
   },
   {
     path: '**',

@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ProComponent } from './pro.component';
+import { ProPageComponent } from './pro-page.component';
 
 describe('ProComponent', () => {
-  let component: ProComponent;
-  let fixture: ComponentFixture<ProComponent>;
+  let component: ProPageComponent;
+  let fixture: ComponentFixture<ProPageComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ProComponent ]
+      declarations: [ ProPageComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ProComponent);
+    fixture = TestBed.createComponent(ProPageComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

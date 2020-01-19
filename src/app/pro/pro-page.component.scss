@@ -1,0 +1,13 @@
+@import "../../../node_modules/bootstrap/scss/bootstrap.scss";
+
+* {
+  background-color: white;
+}
+
+.pro-page {
+  height: 100vh;
+}
+
+.active {
+  background-color: pink;
+}
