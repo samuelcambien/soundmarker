@@ -6,8 +6,27 @@
 
   <div class="ml-auto">
     <div>
-      <button> Help </button>
+      <button class="btn-outline-form btn-sm demo-btn hide-medium" href="#demo" data-toggle="modal">
+      	  <svg width="8px" height="13px" viewBox="0 0 8 13" version="1.1" xmlns="http://www.w3.org/2000/svg"
+                     xmlns:xlink="http://www.w3.org/1999/xlink">
+                  <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round"
+                     stroke-linejoin="round">
+                    <g id="Internet-Networks-Servers-/-Upload/Download-/-upload-dash-arrow-1"
+                       transform="translate(-148.000000, -203.000000)" stroke="#7397FF" stroke-width="1.5">
+                      <g id="Group-2" transform="translate(149.000000, 204.000000)">
+                        <path
+                          d="M0,2.99962395 C0.000291330428,1.47405315 1.14545376,0.191634081 2.66126884,0.0193813162 C4.17708392,-0.152871449 5.58079247,0.839901421 5.92337884,2.32650861 C6.26596521,3.81311581 5.43832197,5.32010031 4,5.82862395 C3.40040813,6.04061159 2.9996666,6.60766086 3,7.24362395 L3,7.49962395"
+                          id="Shape"></path>
+                        <path
+                          d="M3,10.499624 C2.79289322,10.499624 2.625,10.6675172 2.625,10.874624 C2.625,11.0817307 2.79289322,11.249624 3,11.249624 C3.20710678,11.249624 3.375,11.0817307 3.375,10.874624 C3.375,10.6675172 3.20710678,10.499624 3,10.499624"
+                          id="Shape"></path>
+                      </g>
+                    </g>
+                  </g>
+                </svg>
+      </button>
     </div>
+  </div>
     <div *ngIf="showAutoplayToggle()">
 
       <div class="navbar autoplay-button">
@@ -30,7 +49,7 @@
         </div>
       </div>
 
-    </div>
+   
   </div>
 
   <div *ngIf="message">
