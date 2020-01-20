@@ -7,11 +7,6 @@ import { CustomPreloadingStrategy } from './custom-preloading';
 
 const appRoutes: Routes = [
   {
-    path: '',
-    loadChildren: './modules/home.module#HomeModule',
-    data: { preload: false }
-  },
-  {
     path: 'project',
     component: PublicPagenotfoundPageComponent,
     pathMatch: 'full'
@@ -28,6 +23,11 @@ const appRoutes: Routes = [
   {
     path: "pro",
     component: ProComponent
+  },
+  {
+    path: '',
+    loadChildren: './modules/home.module#HomeModule',
+    data: { preload: false }
   },
   {
     path: '**',
