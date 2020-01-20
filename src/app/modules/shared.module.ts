@@ -31,6 +31,7 @@ import {PublicIntroductionComponent} from "../+public/public-page/public-info/to
 import {PublicInfoHeaderComponent} from "../+public/public-page/public-info/header/public-info-header.component";
 import {PlayerIntroductionComponent} from "../+public/public-page/public-info/topics/player-introduction/player-introduction.component";
 import {InfoFooterComponent} from "../+public/public-page/public-info/topics/info-footer/info-footer.component";
+import {DemoComponent} from "../+public/public-page/public-info/topics/demo/demo.component";
 
 @NgModule({
   imports: [
@@ -50,6 +51,7 @@ import {InfoFooterComponent} from "../+public/public-page/public-info/topics/inf
   ],
   declarations: [
     AboutUsInfoComponent,
+    DemoComponent,
     DropdownToggleComponent,
     ErrorComponent,
     HelpInfoComponent,
@@ -89,6 +91,7 @@ import {InfoFooterComponent} from "../+public/public-page/public-info/topics/inf
 
     //////////////    COMPONENTS  //////////////
     AboutUsInfoComponent,
+    DemoComponent,
     DropdownToggleComponent,
     ErrorComponent,
     HelpInfoComponent,
@@ -112,16 +115,14 @@ import {InfoFooterComponent} from "../+public/public-page/public-info/topics/inf
     HighlightPipe,
     TimeFormatPipe
   ],
-
   entryComponents: [
     AboutUsInfoComponent,
+    DemoComponent,
     ProInfoComponent,
     HelpInfoComponent,
     PublicIntroductionComponent,
     SubscribeComponent
   ]
 })
-
-
 export class SharedModule {
 }

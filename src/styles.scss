@@ -12,6 +12,8 @@ LIGHT BlURPLE	-- #eef1ff
 LIGHT TURGREEN	-- #89C5CC
 DARK TURGREEN	-- #69A1AC
 
+MAIN BLURPLE:HOVER -- #6388f5
+
 CONTENTS
 
 - typography
@@ -331,25 +333,18 @@ h2 {
 .modal-backdrop.show {
 	opacity: 0.7 !important;
 }
-.close-modal-btn {
-	position: fixed;
-	background-color: #7397ff;
-	width: 40px;
-	height: 40px;
-	border: none;
-	right: 0px;
+
+.close-modal {
+	float: right;
+	position: absolute;
+	right: 5px;
 	top: 0px;
-	margin-right: 15px;
-	margin-top: 15px;
-	border-radius: 2rem;
-	// border-top-right-radius: 0.4rem;
 	cursor: pointer;
-	transition: all .2s ease-in-out;
+	padding: 10px;
+	z-index: 1000;
 }
-.close-modal-btn:hover {
-	transition: all .2s ease-in-out;
-	border-top-right-radius: 0.4rem;
-	transform: scale(1.2);
+.close-modal:hover > svg g {
+	stroke: #6388f5;
 }
 .info-modal-terms {
 	z-index: 2050;
@@ -782,11 +777,6 @@ button:visited {
 	-webkit-box-shadow: 0 0px 30px rgba(115, 150, 255, .35) !important;
 	-moz-box-shadow: 0 0px 30px rgba(115, 150, 255, .35) !important;
 }
-.object-shadow {
-	-webkit-box-shadow: 0 0.07rem 0.3rem 0.01rem rgba(115, 150, 255, .15) !important;
-	-moz-box-shadow: 0 0.07rem 0.3rem 0.01rem rgba(115, 150, 255, .15) !important;
-	box-shadow: 0 0.07rem 0.3rem 0.01rem rgba(115, 150, 255, .15) !important;
-}
 #sm .rounded-lg {
   &, .sma-content {
     border-radius: 0.6rem;
@@ -799,6 +789,10 @@ button:visited {
 #sm .dropdown-toggle::after {
 	display: none;
 }
+.carousel-control-prev, .carousel-control-next, .carousel-indicators {
+	display: none !important;
+}
+
 // pages
 // -- public
 // ---- bottom info
@@ -1083,88 +1077,4 @@ tag-input-form {
 .ng2-tag-input__text-input::placeholder {
 	color: #bac1da !important;
 	opacity: 1 !important;
-}
-
-
-//pro
-
-
-
-//board-box
-
-.board-box-topbar {
-	border-bottom: 1px solid #eef1ff;
-	height: 48px;
-	background-color: rgba(255, 255, 255, 0.95);
-	border-bottom: 1px solid #eef1ff;
-	-webkit-box-shadow: 0 0.07rem 0.3rem 0.01rem rgba(115, 150, 255, .1) !important;
-	-moz-box-shadow: 0 0.07rem 0.3rem 0.01rem rgba(115, 150, 255, .1) !important;
-	box-shadow: 0 0.07rem 0.3rem 0.01rem rgba(115, 150, 255, .1) !important;
-	border-top-right-radius: 0.4rem;
-	border-top-left-radius: 0.4rem;
-	padding: 16px;
-}
-
-.board-box-topbar .more {
-	float: right;
-	margin-top: -14px;
-	margin-right: -6px;
-	padding-left: 6px;
-	padding-right: 6px;
-	padding-bottom: 2px;
-	padding-top: 2px;
-	border-radius: 0.2rem;
-	transition: 0.2s;
-	-webkit-transition: 0.2s;
-	-moz-transition: 0.2s;
-	-o-transition: 0.2s;
-	cursor: pointer;
-}
-
-.board-box-topbar .more:hover {
-	background-color: #eef1ff;
-}
-
-.board-box-topbar .more .more-svg {
-	fill: #7397FF;
-	stroke: #7397FF;
-	background-color: aqua;
-}
-
-.board-box-title {
-	color: #BAC1DA;
-	float: left;
-}
-
-.board-box-dropdown {
-	margin-top: 22px;
-	margin-right: -10px;
-	border: 1px solid #eef1ff;
-	padding: 10px;
-	border-radius: 0.3rem;
-	min-width: 100px;
-}
-
-.board-box-dropdown .dropdown-item {
-	font-family: 'sofia-regular';
-	color: #7397FF !important;
-	font-size: 10pt;
-	padding: 10px;
-	padding-top: 7px;
-	padding-bottom: 6px;
-	border-radius: 0.2rem;
-}
-
-.board-box-dropdown .dropdown-item:hover {
-	background-color: #eef1ff;
-}
-
-.board-box-dropdown .dropdown-divider {
-	margin-left: -10px;
-	margin-right: -10px;
-	border-color: #eef1ff;
-	margin-top: 10px;
-	margin-bottom: 10px;
-	padding: 0px;
-
 }

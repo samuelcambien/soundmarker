@@ -16,7 +16,7 @@ phases:
         commands:
             - echo Build started on `date`
             - ng build --prod --aot
-            - cd dist/Soundmarker-sass && mv *.* .. && cd ..
+            - cd dist/Soundmarker-sass && mv *.* .. && mv assets .. && cd ..
             - cp -r server/.htaccess dist
             - cp -r .ebextensions dist
             - cp -r server/* dist

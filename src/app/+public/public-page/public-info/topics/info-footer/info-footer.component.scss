@@ -1,10 +1,10 @@
 
 .info-footer {
 	background-color: #eef1ff;
-	min-height: 80px;
+	min-height: 70px;
 	width: 100%;
-	padding-top: 20px;
-	padding-bottom: 20px;
+	padding-top: 15px;
+	padding-bottom: 15px;
 	padding-left: 10px;
 	padding-right: 10px;
 	
@@ -63,7 +63,7 @@ a:hover {
 }
 
 @media (max-width: 576px) {
-	.social-icons,  {
+	.social-icons {
 	float: left;
 	margin-top: 5px;
 }

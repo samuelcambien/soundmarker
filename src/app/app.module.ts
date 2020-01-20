@@ -39,9 +39,9 @@ import {ProfileComponent} from './+pro/profile/profile.component';
     AuthGuard,
     AuthService,
   ],
-  bootstrap: [AppComponent],
-  entryComponents: [
-  ]
+  bootstrap: [
+    AppComponent,
+  ],
 })
 export class AppModule {
 }

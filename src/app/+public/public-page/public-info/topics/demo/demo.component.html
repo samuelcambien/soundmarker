@@ -1,42 +1,28 @@
 <div id="sm" class="shadow public-bottom-container bg-card intro-card card rounded-lg w-100 shadow">
+	
+	<span class="close-modal" data-dismiss="modal" aria-label="Close">
+		<svg width="12px" height="12px" viewBox="0 0 12 12" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+		    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round">
+		        <g id="Internet-Networks-Servers-/-Upload/Download-/-upload-dash-arrow-1" transform="translate(-404.000000, -229.000000)" fill-rule="nonzero" stroke="#7397FF" stroke-width="1.95">
+		            <g id="Group-26" transform="translate(410.000000, 235.000000) rotate(45.000000) translate(-410.000000, -235.000000) translate(403.000000, 228.000000)">
+		                <path d="M0.636363636,7 L13.3636364,7" id="Line-10"></path>
+		                <path d="M0.636363636,7 L13.3636364,7" id="Line-10" transform="translate(7.000000, 7.000000) rotate(90.000000) translate(-7.000000, -7.000000) "></path>
+		            </g>
+		        </g>
+		    </g>
+		</svg>
+	</span>
 
   	<ngb-carousel #carousel>
-    	<ng-template ngbSlide>
-
-			  <div class="container-fluid">
-				<div class="col-sm-12">
-					<div class="info-heading">
-						<h1>Share. Stream.<br>Collaborate.</h1>
-
-					</div>
-				</div>
-			</div>
-			<div class="container-fluid">
-				<div class="row info-card-row">
-          <img  width="100%" src={{images[0]}}>
-				</div>
-			</div>
-			<div class="spacing-lg"></div>
-			<div class="container-fluid intro-footer" >
-				<div class="col-sm-12">
-					<div>
-						<button type="button" class="btn btn-primary btn-sm accept-button" aria-label="Close" (click)="accept()">Start</button>
-						<button type="button" role="button" class="btn btn-outline-form btn-sm accept-button hide-medium" aria-label="Next" (click)="next()">See the demo</button>
-						<p class="accept-text">By starting, you agree to our <a href="https://more.soundmarker.com/terms/" target="_blank">Terms of Service</a>
-						</p>
-					</div>
-				</div>
-			</div>
-
-		</ng-template>
-
+    
+		
 		<ng-template ngbSlide>
-
+		
 		  <div class="container-fluid">
 				<div class="col-sm-12">
 					<div class="info-heading">
 						<h1>Share. <span class="fadedfont">Stream.<br>Collaborate.</span></h1>
-
+						
 					</div>
 				</div>
 			</div>
@@ -50,21 +36,22 @@
 				<div class="col-sm-12">
 					<div>
 						<button type="button" class="btn btn-primary btn-sm accept-button" aria-label="Close" (click)="next()">Next</button>
-						<button type="button" class="btn btn-outline-form btn-sm accept-button" aria-label="Close" (click)="prev()">Previous</button>
+						<button type="button" class="btn btn-primary btn-sm accept-button disabled" aria-label="Close" (click)="prev()">Previous</button>
+						
 						<p class="accept-text"><a></a></p>
 					</div>
 				</div>
-			</div>
+			</div> 
 
 		</ng-template>
-
+		
 		<ng-template ngbSlide>
-
+		
 		  <div class="container-fluid">
 				<div class="col-sm-12">
 					<div class="info-heading">
 						<h1>Share. <span class="fadedfont">Stream.<br>Collaborate.</span></h1>
-
+						
 					</div>
 				</div>
 			</div>
@@ -82,17 +69,17 @@
 						<p class="accept-text"><a></a></p>
 					</div>
 				</div>
-			</div>
+			</div> 
 
 		</ng-template>
-
+		
 		<ng-template ngbSlide>
-
+		
 		  <div class="container-fluid">
 				<div class="col-sm-12">
 					<div class="info-heading">
 						<h1><span class="fadedfont">Share.</span> Stream.<br><span class="fadedfont">Collaborate.</span></h1>
-
+						
 					</div>
 				</div>
 			</div>
@@ -110,17 +97,17 @@
 						<p class="accept-text"><a></a></p>
 					</div>
 				</div>
-			</div>
+			</div> 
 
 		</ng-template>
-
+			
 		<ng-template ngbSlide>
-
+		
 		  <div class="container-fluid">
 				<div class="col-sm-12">
 					<div class="info-heading">
 						<h1><span class="fadedfont">Share. Stream.</span><br>Collaborate.</h1>
-
+						
 					</div>
 				</div>
 			</div>
@@ -138,17 +125,17 @@
 						<p class="accept-text"><a></a></p>
 					</div>
 				</div>
-			</div>
+			</div> 
 
 		</ng-template>
-
+		
 				<ng-template ngbSlide>
-
+		
 		  <div class="container-fluid">
 				<div class="col-sm-12">
 					<div class="info-heading">
 						<h1>Share. Stream.<br>Collaborate.</h1>
-
+						
 					</div>
 				</div>
 			</div>
@@ -161,15 +148,24 @@
 			<div class="container-fluid intro-footer">
 				<div class="col-sm-12">
 					<div>
-						<button type="button" class="btn btn-primary btn-sm accept-button" aria-label="Close" (click)="accept()">Start</button>
+						<button  type="button" class="btn btn-primary btn-sm accept-button disabled" aria-label="Close">Next</button>
 						<button type="button" class="btn btn-outline-form btn-sm accept-button" aria-label="Close" (click)="prev()">Previous</button>
-						<p class="accept-text">By starting, you agree to our <a href="https://more.soundmarker.com/terms/" target="_blank">Terms of Service</a></p>
+						
 					</div>
 				</div>
-			</div>
+			</div> 
 
 		</ng-template>
 	</ngb-carousel>
 
-  </div>
+ 
+
+
+
+  <app-info-footer></app-info-footer>
+
+</div>
+
+
+
 

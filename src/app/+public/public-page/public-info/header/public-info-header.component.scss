@@ -1,3 +1,19 @@
+// Demo button
+
+.demo-btn {
+	background: transparent !important;
+	border: none !important;
+	cursor: pointer !important;
+	padding-top: 8px !important;
+}
+
+.demo-btn:hover {
+	background: #eef1ff !important;
+	border: #eef1ff !important;
+	color: #7397ff !important;
+	
+}
+
 // Toggle Switch
 
 /* The switch - the box around the slider */
@@ -216,7 +232,7 @@ input:checked + .slider:before {
 
 
 .soundmarker-logo {
-  background: url(../../public-info/header/sm-logo-topbar.svg);
+  background: url(sm-logo-topbar.svg);
   width: 154px;
   height: 46px;
   background-size: 100%;

@@ -1,14 +1,12 @@
 import {NgModule} from '@angular/core';
 import {PreloadAllModules, RouterModule, Routes} from '@angular/router';
 import {AboutUsInfoComponent} from "./+public/public-page/public-info/public-info.component";
-import {ProPageComponent} from "./+pro/page/pro-page.component";
 import {PublicPagenotfoundPageComponent} from "./+public/public-pagenotfound-page/public-pagenotfound-page.component";
-
+import {ProPageComponent} from "./+pro/page/pro-page.component";
 
 const appRoutes: Routes = [
   {
     path: '',
-    // component: PublicUploadPageComponent
     loadChildren: './modules/home.module#HomeModule'
   },
   {
