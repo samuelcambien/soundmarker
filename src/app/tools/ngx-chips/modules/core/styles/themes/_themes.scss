@@ -1,0 +1,36 @@
+// THEMES
+
+@import "../core/core";
+@import "default-theme";
+@import "minimal-theme";
+@import "dark-theme";
+@import "bootstrap-theme";
+@import "bootstrap3-info-theme";
+
+.ng2-tag-input {
+    @include tag-input-theme($default-theme);
+}
+
+.minimal.ng2-tag-input {
+    @include tag-input-theme($minimal-theme);
+}
+
+.dark.ng2-tag-input {
+    @include tag-input-theme($dark-theme);
+}
+
+.bootstrap.ng2-tag-input {
+    @include tag-input-theme($bootstrap-theme);
+}
+
+.bootstrap3-info.ng2-tag-input {
+    @include tag-input-theme($bootstrap3-info-theme);
+}
+
+.error-message {
+    @include error-message($default-theme);
+}
+
+.bootstrap .error-message {
+    @include error-message($bootstrap-theme);
+}

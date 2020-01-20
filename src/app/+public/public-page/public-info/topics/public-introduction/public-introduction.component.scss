@@ -1,0 +1,87 @@
+@import "../about-us/about-us-info.component";
+
+.carousel, .slide {
+	box-shadow: none !important;
+	outline: none !important;
+}
+
+img {
+	margin-bottom: -90px;
+}
+
+.fadedfont {
+	color: #eef1ff !important;
+}
+
+.intro-png {
+	margin-left: -40px;
+	margin-right: -40px;
+	width: calc(100% + 80px);
+	
+	height: 0;
+	padding-bottom: 77%;
+	margin-bottom: -179px;
+}
+
+.intro-footer button {
+	height: 30px;
+	margin-left: 10px;
+	margin-bottom: 25px;
+	
+}
+
+.intro-footer p {
+	padding-top: 7px;
+	color: #717db0;
+}
+
+.intro-footer a {
+	padding-top: 7px;
+	font-size: 10pt;
+	color: #7397ff !important;
+	text-decoration: none;
+	font-family: 'sofia-regular';
+}
+
+.intro-footer {
+	margin-top: 30px;
+	padding-bottom: 15px;
+}
+
+.accept-text, .accept-button {
+	float: right;
+	
+}
+
+@media (max-width: 576px) {
+
+.accept-text, .accept-button {
+	float: none;
+	text-align: center;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.accept-text {
+	margin-top: -75px;
+	
+}
+
+.intro-footer button {
+	height: 30px;
+	margin-left: calc(50% - 60px);
+	margin-right: auto;
+	margin-top: 60px;
+	width: 120px;
+}
+
+.intro-footer {
+	
+	
+}
+
+.intro-footer p, .intro-footer a {
+	font-size: 8pt;
+}
+
+}

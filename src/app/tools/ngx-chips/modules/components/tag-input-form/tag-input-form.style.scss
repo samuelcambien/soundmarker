@@ -1,0 +1,5 @@
+@import "../../core/styles/themes/themes";
+
+.ng2-tag-input__text-input {
+    @include tag-input-form-theme($default-theme);
+}

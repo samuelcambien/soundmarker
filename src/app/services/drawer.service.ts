@@ -1,7 +1,7 @@
 import {ApplicationRef, Injectable} from '@angular/core';
-import {Drawer} from "../drawer";
+import {Drawer} from "../player/drawer";
 import {Version} from "../model/version";
-import {Player} from "../player.service";
+import {Player} from "../player/player.service";
 import {ProjectService} from "./project.service";
 import {StateService} from "./state.service";
 

@@ -1,7 +1,7 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {Comment} from "../../model/comment";
-import {PublicTrackPlayerComponent} from "../../public-player-page/public-track-player/public-track-player.component";
-import {Player} from "../../player.service";
+import {PublicTrackPlayerComponent} from "../../+public/public-player-page/public-track-player/public-track-player.component";
+import {Player} from "../../player/player.service";
 import {Version} from "../../model/version";
 import {StateService} from "../../services/state.service";
 

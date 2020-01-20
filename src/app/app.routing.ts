@@ -1,7 +1,7 @@
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
-import {AboutUsInfoComponent} from "./public-page/public-info/public-info.component";
-import {PublicPagenotfoundPageComponent} from "./public-pagenotfound-page/public-pagenotfound-page.component";
+import {AboutUsInfoComponent} from "./+public/public-page/public-info/public-info.component";
+import {PublicPagenotfoundPageComponent} from "./+public/public-pagenotfound-page/public-pagenotfound-page.component";
 import {ProComponent} from './pro/pro.component';
 import { CustomPreloadingStrategy } from './custom-preloading';
 
