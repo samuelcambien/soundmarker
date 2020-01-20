@@ -9,7 +9,7 @@ import {LocalStorageService} from "../../../../services/local-storage.service";
 })
 export class PublicIntroductionComponent implements OnInit {
 
-  images = [`../assets/topics-img/sm-intro.png`, `../assets/topics-img/intro-1.png` , `../assets/topics-img/intro-2.png`, `../assets/topics-img/intro-3.png`, `../assets/topics-img/intro-4.png`, `../assets/topics-img/intro-5.png`];
+  images = [`../assets/topics-img/sm-intro.webp`, `../assets/topics-img/intro-1.webp` , `../assets/topics-img/intro-2.webp`, `../assets/topics-img/intro-3.webp`, `../assets/topics-img/intro-4.webp`, `../assets/topics-img/intro-5.webp`];
 
   @ViewChild('carousel') carousel: NgbCarousel;
 
