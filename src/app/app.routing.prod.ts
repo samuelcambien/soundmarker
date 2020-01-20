@@ -7,11 +7,6 @@ import {ProComponent} from './pro/pro.component';
 
 const appRoutes: Routes = [
   {
-    path: '',
-    // component: PublicUploadPageComponent
-    loadChildren: './modules/home.module#HomeModule'
-  },
-  {
     path: 'project',
     loadChildren: './modules/project.module#ProjectModule'
   },
@@ -22,6 +17,10 @@ const appRoutes: Routes = [
   {
     path: "pro",
     component: ProComponent
+  },
+  {
+    path: '',
+    loadChildren: './modules/home.module#HomeModule'
   },
   {
     path: '**',
