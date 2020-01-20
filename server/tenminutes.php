@@ -24,6 +24,11 @@ $s3 = new Aws\S3\S3Client([
     'region'      => $config['AWS_S3_REGION'],
 ]);
 
+// See if emails are active, otherwise don't send email
+$settings = "SELECT setting, status FROM Settings WHERE setting = 'emails'";
+$settingsquery = $db->query($settings)->fetchAll(PDO::FETCH_ASSOC)[0];
+if ($settingsquery["status"] != 0) {
+
 // Send update every 10 minutes
 // Go through Daily Updates and get project_ids, then check first if they're not expired
 $sql = "SELECT update_id, project_id, emailaddress, last_comment_id FROM DailyUpdates WHERE notify_id = '2'";
@@ -53,6 +58,7 @@ foreach ($updates as &$update) {
       $sqlversion = "SELECT version_id FROM Version WHERE track_id = '$trackid' ORDER BY version_id ASC";
       $versions[] = $db->query($sqlversion)->fetchAll(PDO::FETCH_ASSOC);
   }
+  $commentloopid = 0;
   foreach ($versions as &$versions2) {
     foreach ($versions2 as &$version) {
         $versionid = $version["version_id"];
@@ -71,9 +77,9 @@ foreach ($updates as &$update) {
               foreach ($last_comment_idsdec as &$comment2) {
                 if ($comment2["version"] == $versionid) {
                   if ($comment_id > $comment2["comment"]) {
-                  $count++;
+                    $count++;
                   }
-                } 
+                }
               }
             }
 
@@ -101,6 +107,17 @@ foreach ($updates as &$update) {
   unset($versions2);
   unset($tracks);
 
+  $previous_version = 0;
+  foreach ($comments as $key => $value) {
+      if ($value["version"] == $previous_version) {
+      $count = $count - 1;
+      unset($comments[$key]);
+      }
+      $previous_version = $value["version"];
+  }
+
+  $commentsjson = json_encode($comments);
+
   // clean up array
   foreach ($comments as $key => $value) {
       if ($value["comment"] <= $latestcomment) {
@@ -112,21 +129,22 @@ foreach ($updates as &$update) {
   $latestversion = $value["version"];
   }
 
-
-  $commentsjson = json_encode($comments);
   unset($comments);
   // Set daily updates to trackcount to check.
-  $sql = "UPDATE DailyUpdates SET last_comment_id = '$commentsjson' WHERE project_id = '$project_id'";
-  $result = $db->query($sql);
 
-  // If we do have new comments
-  if ($count > 0) {
+  // If we have new comments, update DB and send email
+  if (($last_comment_ids != $commentsjson) AND ($commentsjson != "null"))  {
+
+      $sql = "UPDATE DailyUpdates SET last_comment_id = '$commentsjson' WHERE project_id = '$project_id'";
+      $result = $db->query($sql);
+
       $sql = "SELECT email_string FROM Emails WHERE email_name = 'soundmarker-instant-updates'";
       $emailstring = html_entity_decode($db->query($sql)->fetch()[0], ENT_COMPAT, 'ISO-8859-1');
       $sql = "SELECT email_string_text FROM Emails WHERE email_name = 'soundmarker-instant-updates'";
       $emailstring_text = html_entity_decode($db->query($sql)->fetch()[0], ENT_COMPAT, 'ISO-8859-1');
 
       // Replace strings
+      if ($count == 0) { $count = 1; }
       $emailstring = str_replace("%commentamount%",$count,$emailstring);
       $emailstring_text = str_replace("%commentamount%",$count,$emailstring_text);   
 
@@ -182,7 +200,7 @@ foreach ($updates as &$update) {
       // Too many tracks shown in email (both mp3 and wav I assume)
       // Show how many comments were sent properly (now always shows 1 per version)
 
-      $subject = 'Daily status update from Soundmarker';
+      $subject = 'Status update from Soundmarker';
       $char_set = 'UTF-8';
       try {
           $result = $SesClient->sendEmail([
@@ -216,5 +234,6 @@ foreach ($updates as &$update) {
       }
   }
  }
+}
 }
 ?>

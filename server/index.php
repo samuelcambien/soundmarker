@@ -90,7 +90,6 @@ Flight::map('error', function(Exception $ex){
 
 
 
-
 /*
 ROUTING TO FRONT-END
 */
@@ -502,67 +501,75 @@ $db = Flight::db();
 $sql = "SELECT project_id, active, expiration_date, user_id, password FROM Project WHERE hash = '$project_hash'";
 $response = $db->query($sql)->fetchAll(PDO::FETCH_ASSOC);
 
-$project_id = $response[0]["project_id"];
-$active = $response[0]["active"];
-$expiration_date = $response[0]["expiration_date"];
-$user_id = $response[0]["user_id"];
-$project_password = $response[0]["password"];
+// check if project hash was valid
+if ($response) {
+  $project_id = $response[0]["project_id"];
+  $active = $response[0]["active"];
+  $expiration_date = $response[0]["expiration_date"];
+  $user_id = $response[0]["user_id"];
+  $project_password = $response[0]["password"];
 
-$lastmonth = new \DateTime('-1 month');
-$lastmonthf = $lastmonth->format('Y-m-d H:i:s');
-$currentmonth = new \DateTime();
-$currentmonthf = $currentmonth->format('Y-m-d H:i:s');
+  $lastmonth = new \DateTime('-1 month');
+  $lastmonthf = $lastmonth->format('Y-m-d H:i:s');
+  $currentmonth = new \DateTime();
+  $currentmonthf = $currentmonth->format('Y-m-d H:i:s');
 
-if ($user_id) {
-  $status = "pro";
-} elseif ($active == 0) {
-  $status = "inactive";
-} elseif ($expiration_date < $lastmonthf) {
-  $status = "expired";
-} elseif ($expiration_date < $currentmonthf) {
-  $status = "commentsonly";
-} else {
-  $status = "active";
-}
+  if ($user_id) {
+    $status = "pro";
+  } elseif ($active == 0) {
+    $status = "inactive";
+  } elseif ($expiration_date < $lastmonthf) {
+    $status = "expired";
+  } elseif ($expiration_date < $currentmonthf) {
+    $status = "commentsonly";
+  } else {
+    $status = "active";
+  }
 
-$sql = "SELECT track_id, title FROM Track WHERE project_id = '$project_id'";
-$result = $db->query($sql);
-$tracks = $result->fetchAll(PDO::FETCH_ASSOC);
-if ($status == "expired") {
-  $tracks = "";
-}
+  $sql = "SELECT track_id, title FROM Track WHERE project_id = '$project_id'";
+  $result = $db->query($sql);
+  $tracks = $result->fetchAll(PDO::FETCH_ASSOC);
+  if ($status == "expired") {
+    $tracks = "";
+  }
 
-// if project is password protected
-if ($project_password) {
-  if (true) {
+  // if project is password protected
+  if ($project_password) {
+    if (true) {
+      $_SESSION['view_user_projects'][] = $project_id;
+      // return ok
+      Flight::json(array(
+         'project_id' => $project_id, 'status' => $status, 'tracks' => $tracks
+      ), 200);  
+    } else {
+      // return ok
+      Flight::json(array(
+         'return' => 'passwordmissing'
+      ), 200);  
+    }
+  } else {
     $_SESSION['view_user_projects'][] = $project_id;
+
+    // also send sender
+    $sql = "SELECT emailaddress, user_id FROM Notification WHERE type = '0' AND type_id = '$project_id'";
+    $response = $db->query($sql)->fetchAll(PDO::FETCH_ASSOC);
+    // if only link is created, then no sender
+    if (isset($response[0])) {
+      $emailaddress = $response[0]["emailaddress"];
+    } else {
+      $emailaddress = "";
+    }
+
     // return ok
     Flight::json(array(
-       'project_id' => $project_id, 'status' => $status, 'tracks' => $tracks
-    ), 200);  
-  } else {
-    // return ok
-    Flight::json(array(
-       'return' => 'passwordmissing'
+       'project_id' => $project_id, 'status' => $status, 'expiration' => $expiration_date, 'sender' => $emailaddress, 'tracks' => $tracks
     ), 200);  
   }
 } else {
-  $_SESSION['view_user_projects'][] = $project_id;
-
-  // also send sender
-  $sql = "SELECT emailaddress, user_id FROM Notification WHERE type = '0' AND type_id = '$project_id'";
-  $response = $db->query($sql)->fetchAll(PDO::FETCH_ASSOC);
-  // if only link is created, then no sender
-  if (isset($response[0])) {
-    $emailaddress = $response[0]["emailaddress"];
-  } else {
-    $emailaddress = "";
-  }
-
-  // return ok
-  Flight::json(array(
-     'project_id' => $project_id, 'status' => $status, 'expiration' => $expiration_date, 'sender' => $emailaddress, 'tracks' => $tracks
-  ), 200);  
+    // project hash was not valid.
+    Flight::json(array(
+     'return' => 'nook'
+    ), 200);
 }
 });
 
@@ -606,7 +613,7 @@ if (true) {
 
   Flight::json(array(
      'project_id' => $project_id,
-     'project_password' => $result->fetch()[0] 
+     'project_password' => $result->fetch()[0]
   ), 200);
 } else {
   // return not allowed
@@ -1092,7 +1099,7 @@ if (true) {
     exec("rm -rf /tmp/".$file_id."/*");
 
   // if coded is not lossy, transcode
-  if ((strpos($codec_name, 'pcm') !== false) || (strpos($codec_name, 'lac') !== false) || (strpos($codec_name, 'wavpack') !== false)) {
+  // if ((strpos($codec_name, 'pcm') !== false) || (strpos($codec_name, 'lac') !== false) || (strpos($codec_name, 'wavpack') !== false)) {
     // now we split up the song in 10sec fragments
     // now let's convert the file
     $ffmpeg = FFMpeg\FFMpeg::create(array(
@@ -1122,16 +1129,16 @@ if (true) {
 
      // delete file again
      unlink("/tmp/mp3".$file_id.".mp3");
-  } else {
-         $result = $s3->putObject([
-             'Bucket' => $config['AWS_S3_BUCKET'],
-             'Key'    => $files[0]["version_id"] . "/" . $files[0]["file_name"] . '.' . $ext,
-             'Body'   => file_get_contents("/tmp/orig".$file_id.".".$ext),
-             'ACL'    => 'public-read',
-             'ContentType' => 'application/octet-stream; charset=utf-8',
-             'ContentDisposition' => 'attachment; filename='. $files[0]["file_name"] . '.' . $ext
-         ]);
-  }
+  // } else {
+  //        $result = $s3->putObject([
+  //            'Bucket' => $config['AWS_S3_BUCKET'],
+  //            'Key'    => $files[0]["version_id"] . "/" . $files[0]["file_name"] . '.' . $ext,
+  //            'Body'   => file_get_contents("/tmp/orig".$file_id.".".$ext),
+  //            'ACL'    => 'public-read',
+  //            'ContentType' => 'application/octet-stream; charset=utf-8',
+  //            'ContentDisposition' => 'attachment; filename='. $files[0]["file_name"] . '.' . $ext
+  //        ]);
+  // }
   
   // now it's time to create the png
   // let's create wave_png
