@@ -60,8 +60,10 @@
         <ng-container *ngTemplateOutlet="playbutton"></ng-container>
       </span>
 
-      <a href=""><h5>{{(activeTrack | async)?.title}} · V3</h5></a>
-      <p>02:43 / 03:56</p></div>
+      <div *ngIf="activeTrack">
+        <a href=""><h5>{{activeTrack.title}} · V3</h5></a>
+        <p>{{player.getCurrentTime() | timeFormat}} / {{player.getDuration() | timeFormat}}</p>
+      </div>
 
   </div>
 

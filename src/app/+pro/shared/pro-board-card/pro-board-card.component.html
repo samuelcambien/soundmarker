@@ -1,4 +1,4 @@
-<div class="big-bb board-box rounded-lg object-shadow">
+<div class="big-bb board-box rounded-lg object-shadow p-2">
   <div class="d-flex flex-row">
     <h5 class="board-box-title">
       <ng-content select=".title"></ng-content>
@@ -16,7 +16,9 @@
       </div>
     </div>
   </div>
-  <ng-content select=".body"></ng-content>
+  <div>
+    <ng-content select=".body"></ng-content>
+  </div>
 </div>
 
 <ng-template #more_dots>

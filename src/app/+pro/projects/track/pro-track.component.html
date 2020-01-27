@@ -1,14 +1,19 @@
 <app-pro-board-card>
-  <ng-container class="title">{{track?.title}}</ng-container>
+  <ng-container class="title">{{track?.title}} · V3</ng-container>
   <ng-container class="menu">
     <a class="dropdown-item" href="#">Show statistics</a>
     <a class="dropdown-item" href="#">Check loudness</a>
     <a class="dropdown-item" href="#">Track settings</a>
   </ng-container>
   <ng-container class="body">
-    <div class="waveform-container" *ngIf="track?.versions[0]">
-      <div class="audio-wave" id="waveform" #waveform></div>
-      <app-waveform [audioSource]="audioSource"></app-waveform>
+    <public-track-player
+      *ngIf="track"
+      [track]="track"
+      [enableOverview]="false"
+      [launchTitleScroll]="true"
+      [expired]="expired && !commentsExpired">
+    </public-track-player>
+    <div class="waveform-container w-100" *ngIf="track?.versions[0]">
     </div>
   </ng-container>
 </app-pro-board-card>

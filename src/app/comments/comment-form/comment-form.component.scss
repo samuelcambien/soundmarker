@@ -1,79 +1,63 @@
 .comment-preview {
-	position: relative;
-	margin-top: 10px;
-	margin-bottom: -100px;
-	float: left;
-	cursor: pointer;
+  position: relative;
+  margin-top: 10px;
+  margin-bottom: -100px;
+  float: left;
+  cursor: pointer;
 }
 
 .comment-preview.disabled {
-	pointer-events: none !important;
-	cursor: auto !important; 
+  pointer-events: none !important;
+  cursor: auto !important;
 }
 
 .comment-preview.disabled svg circle {
-	fill: #eef1ff
+  fill: #eef1ff
 }
 
 .comment-form-text {
-	padding-left: 24px !important;
-}
-
-.free-upload {
-	margin-top: 9px;
+  padding-left: 24px !important;
 }
 
 textarea {
   resize: none;
-  padding-left: 0px ;
 }
 
 .input-group-text {
-	border: none;
-}
-
-.form-row.sub {
-	margin-top: 12px;
-	margin-bottom: -15px;
-	margin-right: 0px !important;
-  max-height: 45px;
+  border: none;
 }
 
 .name-box {
-	width: 100%;
-	margin-left: 0px;
+  width: 100%;
 }
 
 .check-tag-box {
-	margin-right: 0px !important;
-	border-bottom-right-radius: 0px !important;
-	border-top-right-radius: 0px !important;
+  border-bottom-right-radius: 0 !important;
+  border-top-right-radius: 0 !important;
 }
 
 .tag-box {
-	width: 54px;
-	margin-left: -10px !important;
-	border-bottom-left-radius: 0px !important;
-	border-top-left-radius: 0px !important;
-	border-left: 0px !important;
+  width: 54px;
+  border-bottom-left-radius: 0 !important;
+  border-top-left-radius: 0 !important;
+  border-left: 0 !important;
 }
 
 .cancel {
-	margin-right: 8px;
-	cursor: pointer;
-}	 
+  cursor: pointer;
+}
 
 .cancel:hover {
-	cursor: pointer;
+  cursor: pointer;
 }
+
 .cancel p {
-	padding-top: 6px;
-	color: #7397FF;	
+  color: #7397FF;
 }
 
 .cancel p:hover {
-	color: #4479db;
-	cursor: pointer;
+  color: #4479db;
+  cursor: pointer;
 }
 
 input.disabled {
@@ -83,29 +67,20 @@ input.disabled {
 // responsive
 
 @media (max-width: 768px) {
-	.form-row.sub {
-	margin-top: 12px;
-	margin-bottom: -15px;
-	margin-right: 0px !important;
-  max-height: 90px;
-}
 
-.name-box {
-	margin-right: -5px;
-}
-
-.col-md-3.name {
-	padding-right: 0px;
-}
-
+  .form-row.sub {
+    margin-top: 12px;
+    margin-bottom: -15px;
+    margin-right: 0px !important;
+    max-height: 90px;
+  }
 }
 
 @media (max-width: 576px) {
-	
-	.check-tag-box {
-	margin-right: 0px !important;
-	border-bottom-right-radius: 0.2rem !important;
-	border-top-right-radius: 0.2rem !important;
-}
-	
+
+  .check-tag-box {
+    margin-right: 0px !important;
+    border-bottom-right-radius: 0.2rem !important;
+    border-top-right-radius: 0.2rem !important;
+  }
 }

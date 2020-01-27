@@ -13,16 +13,16 @@ import {Player} from "../../../player/player.service";
 export class ProSidebarComponent {
 
   constructor(
-    private stateService: StateService,
-    private player: Player,
+    protected stateService: StateService,
+    protected player: Player,
   ) { }
 
   get toggled(): boolean {
     return this.stateService.sidebarToggled;
   }
 
-  get activeTrack(): Observable<Track> {
-    return this.stateService.getActiveTrack()
+  get activeTrack(): Track {
+    return this.player.track;
   }
 
   play() {

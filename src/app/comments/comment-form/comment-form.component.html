@@ -1,58 +1,53 @@
 <form #myForm="ngForm" (ngSubmit)="onSubmit()" class="comment-form"
       [ngFormOptions]="{ updateOn: 'change'}">
 
-  <div class="top">
-    <div class="row">
-      <div class="container-fluid">
-        <div *ngIf="isPlaying(); then stopbutton else playbutton"></div>
-        <textarea type="text" required [(ngModel)]="comment.notes" name="text" placeholder="Type comment"
-                  class="comment-form-text form-control form-control-sm" rows="1" (click)="active = true"></textarea>
-      </div>
-    </div>
+  <div class="row">
+    <div *ngIf="isPlaying(); then stopbutton else playbutton"></div>
+    <textarea type="text" required [(ngModel)]="comment.notes" name="text" placeholder="Type comment"
+              class="comment-form-text form-control form-control-sm" rows="1" (click)="active = true"></textarea>
   </div>
 
-  <div class="form-row sub" [ngbCollapse]="!active">
+  <div [ngbCollapse]="!active">
 
-    <div class="form-group name col-md-3">
-      <input type="text" required [(ngModel)]='comment.name' name="name" placeholder="Your name"
-             class="comment-form-name sub-form name-box">
-    </div>
+    <div class="d-flex flex-row pt-2">
 
-    <div class="form-group col-auto">
-      <div class="btn-group-toggle">
-        <label class="btn btn-sm btn-outline-form check-tag-box" [class.active]="this.comment.include_start">
-          <input type="checkbox" [(ngModel)]="comment.include_start" name="include_start" (change)="triggerStart()">Start
-        </label>
+      <div class="name">
+        <input type="text" required [(ngModel)]='comment.name' name="name" placeholder="Your name"
+               class="comment-form-name sub-form name-box">
       </div>
-    </div>
 
-    <div class="form-group col-auto hide-phone">
-      <input type="text" [ngModel]="comment.start_time | timeFormat" name="start"
-             (ngModel)="this.comment.start_time" [appTimeFormat]="isValidStartTime" (updated)="updateStartTime($event)"
-             [ngClass]="['comment-form-start-time sub-form tag-box', comment.include_start ? 'enabled' : 'disabled']">
-    </div>
-
-    <div class="form-group col-auto">
-      <div class="btn-group-toggle">
-        <label class="btn btn-sm btn-outline-form check-tag-box" [class.active]="this.comment.include_end">
-          <input type="checkbox" [(ngModel)]="comment.include_end" name="include_end" (change)="triggerEnd()">End
-        </label>
+      <div>
+        <div class="btn-group-toggle">
+          <label class="btn btn-sm btn-outline-form check-tag-box" [class.active]="this.comment.include_start">
+            <input type="checkbox" [(ngModel)]="comment.include_start" name="include_start" (change)="triggerStart()">Start
+          </label>
+        </div>
       </div>
-    </div>
 
-    <div class="form-group col-auto hide-phone">
-      <input type="text" [ngModel]="this.comment.end_time | timeFormat" name="end"
-             (ngModel)="this.comment.end_time" [appTimeFormat]="isValidEndTime" (updated)="updateEndTime($event);"
-             [ngClass]="['comment-form-end-time sub-form tag-box', comment.include_end ? 'enabled' : 'disabled']">
-    </div>
+      <div class="hide-phone">
+        <input type="text" [ngModel]="comment.start_time | timeFormat" name="start"
+               (ngModel)="this.comment.start_time" [appTimeFormat]="isValidStartTime"
+               (updated)="updateStartTime($event)"
+               [ngClass]="['comment-form-start-time sub-form tag-box', comment.include_start ? 'enabled' : 'disabled']">
+      </div>
 
-    <div class="form-group ml-auto">
+      <div>
+        <div class="btn-group-toggle">
+          <label class="btn btn-sm btn-outline-form check-tag-box" [class.active]="this.comment.include_end">
+            <input type="checkbox" [(ngModel)]="comment.include_end" name="include_end" (change)="triggerEnd()">End
+          </label>
+        </div>
+      </div>
 
-      <label class="form-check-label cancel noselect" (click)="active = false">
-        <p>Cancel</p>
-      </label>
+      <div class="hide-phone">
+        <input type="text" [ngModel]="this.comment.end_time | timeFormat" name="end"
+               (ngModel)="this.comment.end_time" [appTimeFormat]="isValidEndTime" (updated)="updateEndTime($event);"
+               [ngClass]="['comment-form-end-time sub-form tag-box', comment.include_end ? 'enabled' : 'disabled']">
+      </div>
 
-      <button type="submit" class="btn btn-primary btn-sm" [disabled]="!myForm.valid">Add comment</button>
+      <button class="btn btn-primary btn-sm ml-auto" (click)="active = false">Cancel</button>
+
+      <button type="submit" class="btn btn-secondary btn-sm" [disabled]="!myForm.valid">Add comment</button>
 
     </div>
 

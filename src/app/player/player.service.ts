@@ -14,7 +14,7 @@ export class Player {
   }
 
   get track(): Track {
-    return this.audioSource.track;
+    return this.audioSource && this.audioSource.track;
   }
 
   get audioSource(): AudioSource {
