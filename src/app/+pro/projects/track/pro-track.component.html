@@ -8,7 +8,7 @@
   <ng-container class="body">
     <div class="waveform-container" *ngIf="track?.versions[0]">
       <div class="audio-wave" id="waveform" #waveform></div>
-      <app-waveform [version]="track?.versions[0]"></app-waveform>
+      <app-waveform [audioSource]="audioSource"></app-waveform>
     </div>
   </ng-container>
 </app-pro-board-card>

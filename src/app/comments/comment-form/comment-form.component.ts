@@ -39,13 +39,13 @@ export class CommentFormComponent implements OnInit {
   }
 
   preview() {
-    this.player.play(this.version, this.comment.start_time);
+    // this.player.play(this.version, this.comment.start_time);
     this.stateService.setActiveComment(this.comment);
   }
 
   stopPreview() {
     this.player.pause();
-    this.player.seekTo(this.version, this.comment.start_time);
+    // this.player.seekTo(this.version, this.comment.start_time);
   }
 
   isPlaying() {

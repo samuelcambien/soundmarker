@@ -10,7 +10,7 @@ import {Track} from "../model/track";
 export class Player {
 
   get version(): Version {
-    return this.audioSource.version;
+    return this.audioSource && this.audioSource.version;
   }
 
   get track(): Track {
@@ -59,10 +59,10 @@ export class Player {
 
     return new Promise(async resolve => {
 
-      // if (this.audioSource && this.audioSource.equals()) {
-      //   resolve();
-      //   return;
-      // }
+      if (this.audioSource && this.audioSource.version.version_id === audioSource.version.version_id) {
+        resolve();
+        return;
+      }
 
       if (this.audioSource)
         await this.stop();
@@ -83,10 +83,15 @@ export class Player {
     })
   }
 
-  async play(audioSource: AudioSource, startTime?: number) {
+  async play(audioSource?: AudioSource, startTime?: number) {
 
     this.loading = this.version;
-    await this.load(audioSource);
+    if (audioSource) {
+      await this.load(audioSource);
+    }
+
+    if (!this.audioSource) return;
+
     if (startTime >= 0) {
       await this.seekTo(audioSource, startTime);
     }
@@ -149,6 +154,4 @@ export interface AudioSource {
   track: Track,
   version: Version,
   file?: File,
-
-  equals(): AudioSource;
 }

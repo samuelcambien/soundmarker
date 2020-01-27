@@ -2,7 +2,7 @@ import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output,
 import {Version} from "../../../../model/version";
 import {Drawer} from "../../../../player/drawer";
 import {DrawerService} from "../../../../services/drawer.service";
-import {Player} from "../../../../player/player.service";
+import {AudioSource, Player} from "../../../../player/player.service";
 import {StateService} from "../../../../services/state.service";
 
 @Component({
@@ -13,7 +13,7 @@ import {StateService} from "../../../../services/state.service";
 })
 export class WaveformComponent implements OnInit {
 
-  @Input() version: Version;
+  @Input() audioSource: AudioSource;
 
   @Output() seek = new EventEmitter();
 
@@ -33,19 +33,19 @@ export class WaveformComponent implements OnInit {
       this.waveform.nativeElement,
       {
         height: 128,
-        peaks: JSON.parse(this.version.wave_png),
+        peaks: JSON.parse(this.audioSource.version.wave_png),
       }
     );
     this.drawer.seek.subscribe(async progress => {
       this.stateService.setActiveComment(null);
-      const startTime = progress * this.version.track_length;
+      const startTime = progress * this.audioSource.version.track_length;
       if (this.player.isPlaying()) {
-        await this.player.play(this.version, startTime);
+        await this.player.play(this.audioSource, startTime);
       } else {
-        await this.player.seekTo(this.version, startTime);
+        await this.player.seekTo(this.audioSource, startTime);
       }
     });
 
-    this.drawerService.register(this.version, this.drawer);
+    this.drawerService.register(this.audioSource.version, this.drawer);
   }
 }

@@ -19,7 +19,7 @@ import {Comment} from "../../../model/comment";
 import {CommentSorter} from "../../../model/comment";
 import {DrawerService} from "../../../services/drawer.service";
 import {State} from "../../../player/play-button/play-button.component";
-import {Player} from "../../../player/player.service";
+import {AudioSource, Player} from "../../../player/player.service";
 import {Version} from "../../../model/version";
 import {LocalStorageService} from "../../../services/local-storage.service";
 import {RestCall} from "../../../rest/rest-call";
@@ -206,7 +206,7 @@ export class PublicTrackPlayerComponent implements OnInit, OnChanges {
   }
 
   async play() {
-    await this.player.play(this.version);
+    await this.player.play(this.audioSource);
   }
 
   pause() {
@@ -249,6 +249,13 @@ export class PublicTrackPlayerComponent implements OnInit, OnChanges {
 
   getDuration(): number {
     return this.version && this.version.track_length;
+  }
+
+  get audioSource(): AudioSource {
+    return {
+      track: this.track,
+      version: this.track.versions[0],
+    };
   }
 
   private getPosition(element, commentTime) {
