@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ProBoardUploadComponent } from './pro-board-upload.component';
+import { ProBoardCardComponent } from './pro-board-card.component';
 
-describe('ProBoardUploadComponent', () => {
-  let component: ProBoardUploadComponent;
-  let fixture: ComponentFixture<ProBoardUploadComponent>;
+describe('ProBoardCardComponent', () => {
+  let component: ProBoardCardComponent;
+  let fixture: ComponentFixture<ProBoardCardComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ProBoardUploadComponent ]
+      declarations: [ ProBoardCardComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ProBoardUploadComponent);
+    fixture = TestBed.createComponent(ProBoardCardComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

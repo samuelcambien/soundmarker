@@ -1,8 +1,6 @@
 import {NgModule} from '@angular/core';
 import {RouterModule} from '@angular/router';
-import {ProBoardUploadComponent} from "../pro/pro-board/pro-board-upload/pro-board-upload.component";
-import {ProBoardComponent} from "../pro/pro-board/pro-board.component";
-import {ProBoardTransfersComponent} from "../pro/pro-board/pro-board-transfers/pro-board-transfers.component";
+import {ProBoardComponent} from "./page/board/pro-board.component";
 import {ProPageComponent} from "./page/pro-page.component";
 import {ProProjectComponent} from "./projects/project/pro-project.component";
 import {ProjectResolver} from "./projects/project/ProjectResolver";
@@ -26,7 +24,7 @@ import {TrackResolver} from "./projects/track/TrackResolver";
           },
           {
             path: 'upload',
-            component: ProBoardUploadComponent,
+            component: ProBoardComponent,
           },
           {
             path: 'projects',
@@ -37,18 +35,19 @@ import {TrackResolver} from "./projects/track/TrackResolver";
             component: ProProjectComponent,
             resolve: {
               project: ProjectResolver,
-            }
+            },
           },
           {
-            path: 'track/:id',
+            path: 'project/:project_hash/track/:id',
             component: ProTrackComponent,
             resolve: {
+              project: ProjectResolver,
               track: TrackResolver,
-            }
+            },
           },
           {
             path: 'transfers',
-            component: ProBoardTransfersComponent,
+            component: ProBoardComponent,
           },
         ]
       },

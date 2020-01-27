@@ -26,7 +26,10 @@ export class ProjectService {
           await this.player.play(e.version, comment.start_time);
         } else {
           this.player.pause();
-          await this.player.seekTo(e.version, comment.start_time);
+          await this.player.seekTo({
+            track: this.player.track,
+            version: e.version,
+          }, comment.start_time);
         }
       }
     });
@@ -53,7 +56,7 @@ export class ProjectService {
 
   async loadProject(projectHash: string): Promise<void> {
     const project = await RestCall.getProject(projectHash);
-    if(project.project_id){
+    if (project.project_id) {
       this.stateService.setActiveProject(project);
       if (!this.isActive(project) && !this.areCommentsActive(project)) {
         return Promise.resolve();
@@ -134,7 +137,10 @@ export class ProjectService {
       if (this.stateService.getActiveTrack().getValue() != null) {
         this.stateService.setActiveTrack(nextTrack);
       }
-      await this.player.playFromStart(nextTrack.versions[0]);
+      await this.player.play({
+        track: nextTrack,
+        version: nextTrack.versions[0],
+      }, 0);
     }
   }
 

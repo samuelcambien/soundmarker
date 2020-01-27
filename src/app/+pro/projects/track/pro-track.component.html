@@ -1,39 +1,14 @@
-<div class="board-box-topbar">
-
-  <h5 class="board-box-title">{{track?.title}}</h5>
-  <ul class="navbar-nav ml-auto">
-    <li class="nav-item dropdown ml-auto">
-      <a class="nav-link dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown"
-         aria-haspopup="true" aria-expanded="false">
-        <span class="more">
-          <ng-container *ngTemplateOutlet="more_dots"></ng-container>
-        </span>
-      </a>
-      <div class="dropdown-menu dropdown-menu-right object-shadow board-box-dropdown"
-           aria-labelledby="dropdownMenuLink">
-        <a class="dropdown-item" href="#">Show statistics</a>
-        <a class="dropdown-item" href="#">Check loudness</a>
-        <a class="dropdown-item" href="#">Track settings</a>
-      </div>
-    </li>
-  </ul>
-
-  <ng-template #more_dots>
-    <svg width="28px" height="8px" viewBox="0 0 24 8" version="1.1" xmlns="http://www.w3.org/2000/svg">
-      <g id="Page-1" stroke="none" stroke-width="1" fill="#7397FF" fill-rule="evenodd" stroke-linecap="round"
-         stroke-linejoin="round">
-        <g id="Interface-Essential-/-Menu-/-navigation-menu-horizontal" transform="translate(0.000000, -9.000000)"
-           class="menu-icon" stroke="#7397FF" stroke-width="1.5">
-          <g id="Group" transform="translate(0.000000, 9.000000)">
-            <g id="navigation-menu-horizontal">
-              <circle id="Oval" cx="4" cy="4" r="2"></circle>
-              <circle id="Oval" cx="12.5" cy="4" r="2"></circle>
-              <circle id="Oval" cx="21" cy="4" r="2"></circle>
-            </g>
-          </g>
-        </g>
-      </g>
-    </svg>
-  </ng-template>
-
-</div>
+<app-pro-board-card>
+  <ng-container class="title">{{track?.title}}</ng-container>
+  <ng-container class="menu">
+    <a class="dropdown-item" href="#">Show statistics</a>
+    <a class="dropdown-item" href="#">Check loudness</a>
+    <a class="dropdown-item" href="#">Track settings</a>
+  </ng-container>
+  <ng-container class="body">
+    <div class="waveform-container" *ngIf="track?.versions[0]">
+      <div class="audio-wave" id="waveform" #waveform></div>
+      <app-waveform [version]="track?.versions[0]"></app-waveform>
+    </div>
+  </ng-container>
+</app-pro-board-card>

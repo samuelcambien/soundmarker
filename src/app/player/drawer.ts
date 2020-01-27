@@ -45,6 +45,7 @@ export class Drawer {
 
     this.createWrapper();
     this.createElements();
+    this.drawBuffer();
   }
 
   createWrapper() {

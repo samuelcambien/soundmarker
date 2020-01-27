@@ -55,10 +55,10 @@ const routes: Routes = [
     ReplyComponent,
     ReplyFormComponent,
     TimeInputComponent,
-    WaveformComponent
+    WaveformComponent,
   ],
   entryComponents: [
-    ReplyFormComponent
+    ReplyFormComponent,
   ]
 })
 

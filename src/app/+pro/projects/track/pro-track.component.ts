@@ -1,6 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute} from "@angular/router";
 import {Track} from "../../../model/track";
+import {Project} from "../../../model/project";
+import {RestCall} from "../../../rest/rest-call";
 
 @Component({
   selector: 'app-pro-board-projects-track',
@@ -9,6 +11,7 @@ import {Track} from "../../../model/track";
 })
 export class ProTrackComponent implements OnInit {
 
+  private project: Project;
   private track: Track;
 
   constructor(
@@ -17,7 +20,11 @@ export class ProTrackComponent implements OnInit {
 
   ngOnInit(): void {
     this.route.data.subscribe(async data => {
+      this.project = await data.project;
       this.track = await data.track;
+      this.track.versions.forEach(async version => {
+        version.files = (await RestCall.getVersion(version.version_id))["files"];
+      });
     });
   }
 }

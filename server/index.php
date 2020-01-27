@@ -843,7 +843,7 @@ foreach ($versions as &$version) {
 
 // return ok
 Flight::json(array(
-  'track_title' => $title,
+  'title' => $title,
    'versions' => $versions
 ), 200);
 });

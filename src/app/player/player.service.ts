@@ -10,12 +10,20 @@ import {Track} from "../model/track";
 export class Player {
 
   get version(): Version {
-    return this._version;
+    return this.audioSource.version;
+  }
+
+  get track(): Track {
+    return this.audioSource.track;
+  }
+
+  get audioSource(): AudioSource {
+    return this._audioSource;
   }
 
   private media: HTMLMediaElement;
 
-  private _version: Version;
+  private _audioSource: AudioSource;
 
   private loading: Version;
 
@@ -47,23 +55,23 @@ export class Player {
     this.getMedia().title = title;
   }
 
-  private async load(version: Version) {
+  private async load(audioSource: AudioSource) {
 
     return new Promise(async resolve => {
 
-      if (this.version && (this.version.version_id === version.version_id)) {
-        resolve();
-        return;
-      }
+      // if (this.audioSource && this.audioSource.equals()) {
+      //   resolve();
+      //   return;
+      // }
 
-      if (this.version)
+      if (this.audioSource)
         await this.stop();
 
-      this._version = version;
-      const file: File = Player.getStreamFile(this.version);
+      this._audioSource = audioSource;
+      const file: File = this.getStreamFile();
 
       this.getMedia().addEventListener('loadedmetadata', () => {
-        this.setTitle(this.getTrack().title);
+        this.setTitle("test");
       });
 
       this.getMedia().addEventListener('canplay', () => {
@@ -75,24 +83,20 @@ export class Player {
     })
   }
 
-  async play(version: Version, startTime?: number) {
+  async play(audioSource: AudioSource, startTime?: number) {
 
-    this.loading = version;
-    await this.load(version);
+    this.loading = this.version;
+    await this.load(audioSource);
     if (startTime >= 0) {
-      await this.seekTo(version, startTime);
+      await this.seekTo(audioSource, startTime);
     }
 
     await this.getMedia().play();
     this.loading = null;
   }
 
-  async playFromStart(version: Version) {
-    await this.play(version, 0);
-  }
-
-  async seekTo(version: Version, progress: number) {
-    await this.load(version);
+  async seekTo(audioSource: AudioSource, progress: number) {
+    await this.load(audioSource);
     return new Promise(resolve => {
       this.getMedia().addEventListener('seeked', () => {
           resolve();
@@ -110,7 +114,7 @@ export class Player {
 
   private async stop() {
     this.pause();
-    await this.seekTo(this.version, 0);
+    await this.seekTo(this.audioSource, 0);
   }
 
   isLoading(version: Version) {
@@ -136,17 +140,15 @@ export class Player {
     return this.getMedia().duration;
   }
 
-  getTrack(): Track {
-
-    return this.stateService.getActiveProject().tracks
-      .filter(track =>
-        track.versions
-          .filter(version => version.version_id == this.version.version_id)
-          .length > 0
-      )[0];
+  private getStreamFile(): File {
+    return this.version.files.filter(file => file.identifier == 0)[0];
   }
+}
 
-  public static getStreamFile(version: Version): File {
-    return version.files.filter(file => file.identifier == 0)[0];
-  }
+export interface AudioSource {
+  track: Track,
+  version: Version,
+  file?: File,
+
+  equals(): AudioSource;
 }
