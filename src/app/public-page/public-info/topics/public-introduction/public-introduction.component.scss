@@ -17,7 +17,7 @@ img {
 	margin-left: -40px;
 	margin-right: -40px;
 	width: calc(100% + 80px);
-	
+
 	height: 0;
 	padding-bottom: 77%;
 	margin-bottom: -179px;
@@ -27,7 +27,7 @@ img {
 	height: 30px;
 	margin-left: 10px;
 	margin-bottom: 25px;
-	
+
 }
 
 .intro-footer p {
@@ -50,34 +50,51 @@ img {
 
 .accept-text, .accept-button {
 	float: right;
-	
+
 }
 
 @media (max-width: 576px) {
 
-.accept-text, .accept-button {
-	float: none;
-	text-align: center;
-	margin-left: auto;
-	margin-right: auto;
+.welcome-img-phone {
+	width: 174%;
+	margin-left: -37%;
 }
 
+.accept-button {
+	float: none;
+	width: calc(100% - 40px) !important;
+	height: 50px !important;
+	text-align: center;
+	margin-left: 20px !important;
+	margin-right: 20px !important;
+	position: fixed;
+	bottom: 36px;
+	left: 0px;
+}
+
+
+
 .accept-text {
-	margin-top: -75px;
-	
+	float: none;
+	position: fixed;
+	bottom: 110px;
+	width: 220px;
+	left: calc( 50% - 110px);
+	text-align: center;
 }
 
 .intro-footer button {
-	height: 30px;
-	margin-left: calc(50% - 60px);
-	margin-right: auto;
-	margin-top: 60px;
-	width: 120px;
+
+
+
+
+
 }
 
 .intro-footer {
-	
-	
+
+
+
 }
 
 .intro-footer p, .intro-footer a {

@@ -795,6 +795,17 @@ button:visited {
 	display: none !important;
 }
 
+@media (max-width: 576px) {
+	.intro-card {
+		height: calc(100vh - 20px);
+		padding-bottom: 0px !important;
+	}
+.carousel, .carousel-inner, .carousel-item {
+ height: 100% !important;
+}
+}
+
+
 // pages
 // -- public
 // ---- bottom info
