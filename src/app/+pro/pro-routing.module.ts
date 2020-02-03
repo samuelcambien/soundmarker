@@ -6,6 +6,7 @@ import {ProProjectComponent} from "./projects/project/pro-project.component";
 import {ProjectResolver} from "./projects/project/ProjectResolver";
 import {ProTrackComponent} from "./projects/track/pro-track.component";
 import {TrackResolver} from "./projects/track/TrackResolver";
+import {ProUploadPageComponent} from './pro-upload-page/pro-upload-page.component';
 
 @NgModule({
   imports: [
@@ -24,7 +25,7 @@ import {TrackResolver} from "./projects/track/TrackResolver";
           },
           {
             path: 'upload',
-            component: ProBoardComponent,
+            component: ProUploadPageComponent,
           },
           {
             path: 'projects',

@@ -13,6 +13,11 @@ import {ProSidebarComponent} from "./page/sidebar/pro-sidebar.component";
 import {ProTopbarComponent} from "./page/topbar/pro-topbar.component";
 import {ProBoardCardComponent} from './shared/pro-board-card/pro-board-card.component';
 import {ProjectModule} from "../modules/project.module";
+import {ProUploadFinishedComponent} from './pro-upload-page/pro-upload-finished/pro-upload-finished.component';
+import {ProUploadPageComponent} from './pro-upload-page/pro-upload-page.component';
+import {ProUploadFormComponent} from './pro-upload-page/pro-upload-form/pro-upload-form.component';
+import {ProUploadingFilesComponent} from './pro-upload-page/pro-upload-progress/pro-uploading-files.component';
+import {FileUploadModule} from "../tools/ng2-file-upload";
 
 @NgModule({
   imports: [
@@ -20,6 +25,7 @@ import {ProjectModule} from "../modules/project.module";
     SharedModule,
     ProRoutingModule,
     ProjectModule,
+    FileUploadModule
   ],
   declarations: [
     ProPageComponent,
@@ -32,6 +38,10 @@ import {ProjectModule} from "../modules/project.module";
     ProSidebarComponent,
     ProTopbarComponent,
     ProBoardCardComponent,
+    ProUploadFinishedComponent,
+    ProUploadPageComponent,
+    ProUploadFormComponent,
+    ProUploadingFilesComponent
   ],
 })
 export class ProModule {
