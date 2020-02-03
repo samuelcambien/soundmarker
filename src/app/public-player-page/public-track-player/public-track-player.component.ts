@@ -93,7 +93,7 @@ export class PublicTrackPlayerComponent implements OnInit, OnChanges {
     private localStorageService: LocalStorageService,
     private player: Player,
     private drawerService: DrawerService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
   ) {
     document.addEventListener('scroll', () => {
       try {
@@ -121,11 +121,11 @@ export class PublicTrackPlayerComponent implements OnInit, OnChanges {
     });
     this.createNewComment();
     this.trackTitleDOM.nativeElement.setAttribute("style", "text-overflow: ellipsis");
-    this.cdr.detectChanges();
 
     this.waveformInViewPortObservable.pipe(distinctUntilChanged()).subscribe(() => {
       this.cdr.detectChanges();
     });
+    setTimeout(()=>this.cdr.detectChanges(),50);
   }
 
   private getPlayerWidth(): number {
@@ -217,7 +217,6 @@ export class PublicTrackPlayerComponent implements OnInit, OnChanges {
   }
 
   getMatchingCommentsSorted(): Comment[] {
-
     return this.getMatchingComments().sort(this.currentSorter.comparator);
   }
 
@@ -334,10 +333,11 @@ export class PublicTrackPlayerComponent implements OnInit, OnChanges {
         this.comment.comment_id = response["comment_id"];
         this.comment.deleteable = true;
         this.createNewComment();
+        this.cdr.detectChanges();
       })
-      .catch(() =>
-        this.removeComment(comment)
-      );
+      .catch(() =>{
+        this.removeComment(comment);
+        this.cdr.detectChanges();});
   }
 
   removeComment(comment: Comment) {

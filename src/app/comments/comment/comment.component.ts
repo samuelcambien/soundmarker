@@ -69,8 +69,10 @@ export class CommentComponent implements OnInit{
       .then(response => {
         reply.comment_id = response["comment_id"];
         reply.deleteable = true;
+        this.cdr.detectChanges();
       })
-      .catch(() => this.removeReply(reply));
+      .catch(() => {this.removeReply(reply);
+    this.cdr.detectChanges();});
   }
 
   removeReply(reply: Comment) {
