@@ -1054,6 +1054,9 @@ if (true) {
   fwrite($myfile, Flight::request()->getBody());
   fclose($myfile);
 
+  // close session
+  session_write_close();
+
   // return ok -> let's try
   Flight::json(array(
      'ok' => 'ok'
