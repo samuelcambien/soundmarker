@@ -7,6 +7,7 @@ import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 })
 export class PlayButtonComponent implements OnInit {
 
+  @Input() popup?= false;
   @Input() disabled: boolean;
   @Input() size;
   @Input() state: State;
@@ -20,7 +21,6 @@ export class PlayButtonComponent implements OnInit {
 }
 
 export enum State {
-
   loading = "loading",
   play = "play",
   pause = "pause",

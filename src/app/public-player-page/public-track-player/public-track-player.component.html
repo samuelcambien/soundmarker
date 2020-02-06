@@ -8,9 +8,9 @@
         <play-button
           [state]="getPlaybuttonState()"
           [disabled]="expired"
+          [popup]="true"
           (clicked)="clickPlaybutton($event)"
         ></play-button>
-
       </div>
 
       <div class="popup-title"><h4>{{track?.title}}</h4></div>
