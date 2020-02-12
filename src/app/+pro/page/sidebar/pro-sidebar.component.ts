@@ -3,6 +3,7 @@ import {StateService} from "../../../services/state.service";
 import {ProjectService} from "../../../services/project.service";
 import {Track} from "../../../model/track";
 import {Observable} from "rxjs";
+import {Player} from "../../../player/player.service";
 
 @Component({
   selector: 'app-pro-sidebar',
@@ -12,14 +13,19 @@ import {Observable} from "rxjs";
 export class ProSidebarComponent {
 
   constructor(
-    private stateService: StateService,
+    protected stateService: StateService,
+    protected player: Player,
   ) { }
 
   get toggled(): boolean {
     return this.stateService.sidebarToggled;
   }
 
-  get activeTrack(): Observable<Track> {
-    return this.stateService.getActiveTrack()
+  get activeTrack(): Track {
+    return this.player.track;
+  }
+
+  play() {
+    this.player.play();
   }
 }

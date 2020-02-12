@@ -7,7 +7,7 @@ import {Comment, CommentSorter} from "../../../model/comment";
 import {Utils} from "../../../app.component";
 import {DeviceDetectorService} from 'ngx-device-detector';
 import {State} from "../../../player/play-button/play-button.component";
-import {Player} from "../../../player/player.service";
+import {AudioSource, Player} from "../../../player/player.service";
 
 @Component({
   selector: 'app-public-track-preview',
@@ -68,7 +68,7 @@ export class PublicTrackPreviewComponent implements OnInit {
   }
 
   async play() {
-    await this.player.play(this.version);
+    await this.player.play(this.audioSource);
     this.cdr.detectChanges();
   }
 
@@ -122,5 +122,12 @@ export class PublicTrackPreviewComponent implements OnInit {
       "· " + Utils.getTimeHumanized(
         commentsAndReplies.sort(CommentSorter.MOST_RECENT.comparator)[0].comment_time
       ) : "";
+  }
+
+  get audioSource(): AudioSource {
+    return {
+      track: this.track,
+      version: this.track.versions[0],
+    };
   }
 }

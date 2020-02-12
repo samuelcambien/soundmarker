@@ -260,7 +260,7 @@
 
         <div class="audio-wave" id="waveform" #waveform></div>
 
-        <app-waveform [version]="version"></app-waveform>
+        <app-waveform [audioSource]="audioSource"></app-waveform>
 
       </div>
 
@@ -340,7 +340,7 @@
 
   </div>
 
-  <div class="comments">
+  <div class="comments mb-2">
 
     <div class="comments-divider">
       <hr>
@@ -407,7 +407,7 @@
     <comment-lazy
       *ngFor="let comment of getMatchingCommentsSorted()"
       [comment]="comment"
-      [version]="version"
+      [audioSource]="audioSource"
       [search]="search"
       [expired]="expired"
       (delete)="deleteComment($event)"
