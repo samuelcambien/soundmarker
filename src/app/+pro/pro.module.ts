@@ -18,6 +18,10 @@ import {ProUploadPageComponent} from './pro-upload-page/pro-upload-page.componen
 import {ProUploadFormComponent} from './pro-upload-page/pro-upload-form/pro-upload-form.component';
 import {ProUploadingFilesComponent} from './pro-upload-page/pro-upload-progress/pro-uploading-files.component';
 import {FileUploadModule} from "../tools/ng2-file-upload";
+import { ProUploadStartComponent } from './pro-upload-page/pro-upload-start/pro-upload-start.component';
+import {Uploader} from '../services/uploader.service';
+import {ConfirmDialogComponent} from '../services/confirmation-dialog/confirmation-dialog.component';
+import {ConfirmDialogService} from '../services/confirmation-dialog/confirmation-dialog.service';
 
 @NgModule({
   imports: [
@@ -28,6 +32,7 @@ import {FileUploadModule} from "../tools/ng2-file-upload";
     FileUploadModule
   ],
   declarations: [
+    ConfirmDialogComponent,
     ProPageComponent,
     ProBoardProjectsComponent,
     ProProjectComponent,
@@ -40,9 +45,16 @@ import {FileUploadModule} from "../tools/ng2-file-upload";
     ProBoardCardComponent,
     ProUploadFinishedComponent,
     ProUploadPageComponent,
+    ProUploadStartComponent,
     ProUploadFormComponent,
-    ProUploadingFilesComponent
+    ProUploadingFilesComponent,
+    ProUploadStartComponent
   ],
+  providers:
+  [
+    ConfirmDialogService,
+    Uploader
+  ]
 })
 export class ProModule {
 

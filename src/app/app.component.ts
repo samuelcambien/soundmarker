@@ -22,7 +22,6 @@ export class Utils {
   }
 
   public static getName(name: string): string {
-
     return name.split(/(.*)\.(.*)/)[1];
   }
 

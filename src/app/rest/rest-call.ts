@@ -8,8 +8,10 @@ export class RestCall {
 
   // POST
 
-  public static async createNewProject(): Promise<any> {
-    return Request.post(Endpoints.PROJECT_NEW, {});
+  public static async createNewProject(projectTitle?: string): Promise<any> {
+    return Request.post(Endpoints.PROJECT_NEW, {
+      project_title: projectTitle
+    });
   }
 
   public static async createNewTrack(project_id, title): Promise<any> {

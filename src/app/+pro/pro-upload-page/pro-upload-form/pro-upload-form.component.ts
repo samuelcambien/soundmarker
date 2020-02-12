@@ -1,21 +1,21 @@
 import {
   Component,
-  Directive,
   ElementRef,
   EventEmitter,
-  HostListener,
-  Input,
+  Input, NgZone,
   OnInit,
   Output,
   ViewChild
 } from '@angular/core';
 import {NgbTooltip} from '@ng-bootstrap/ng-bootstrap';
-import {NgControl, Validators} from '@angular/forms';
-import {ProUploadPageComponent} from "../pro-upload-page.component";
-import {FileItem, FileUploader} from "../../../tools/ng2-file-upload";
+import {NgForm, Validators} from '@angular/forms';
+import {FileItem} from "../../../tools/ng2-file-upload";
 import {LocalStorageService} from "../../../services/local-storage.service";
 import {Utils} from "../../../app.component";
 import {RestCall} from "../../../rest/rest-call";
+import {Uploader} from '../../../services/uploader.service';
+import {ConfirmDialogService} from '../../../services/confirmation-dialog/confirmation-dialog.service';
+import {ActivatedRoute, Router, RouterModule} from '@angular/router';
 
 @Component({
   selector: 'app-pro-upload-form',
@@ -26,14 +26,14 @@ import {RestCall} from "../../../rest/rest-call";
 export class ProUploadFormComponent implements OnInit {
 
   notes: string;
-  email_from: string = this.localStorageService.getEmailFrom();
   email_to: string[];
+  project_title: string;
 
   validators = [Validators.required, Validators.pattern('^\\w+([\\.-]?\\w+)*@\\w+([\\.-]?\\w+)*(\\.\\w{2,3})+$')];
   player;
 
-  @Input() uploader: FileUploader;
-  @Input() queueSizeMargin;
+  @ViewChild('ngForm') public userFrm: NgForm;
+
   @Input() tryAgain: EventEmitter<any>;
 
   @Output() uploading = new EventEmitter();
@@ -50,20 +50,16 @@ export class ProUploadFormComponent implements OnInit {
   async onSubmit() {
 
     this.uploading.emit();
-    this.storePreferences();
 
     try {
-      const projectResponse = await RestCall.createNewProject();
+      const projectResponse = await RestCall.createNewProject(this.project_title);
       let project_id = projectResponse["project_id"];
 
       await Utils.promiseSequential(
-        this.uploader.queue.map(track => () => this.processTrack(project_id, track))
+        this.uploader.fileUploader.queue.map(track => () => this.processTrack(project_id, track))
       );
 
-      if (this.notificationType != "0")
-        RestCall.subscribe(project_id, this.email_from, this.notificationType);
-
-      const shareResponse = await RestCall.shareProject(project_id, this.expiration, this.notes, this.email_from, this.email_to);
+      const shareResponse = await RestCall.shareProject(project_id, this.expiration, this.notes, "", this.email_to);
 
       this.link.emit(shareResponse["project_hash"]);
       this.finished.emit();
@@ -80,7 +76,8 @@ export class ProUploadFormComponent implements OnInit {
   private async processTrack(projectId, track: FileItem): Promise<void> {
 
     const length = 0;
-    const title = Utils.getName(track._file.name);
+    const title = this.uploader.getTitle(track);
+    const file_name = Utils.getName(track._file.name);
     const extension = Utils.getExtension(track._file.name);
 
     const trackResponse = await RestCall.createNewTrack(projectId, title);
@@ -91,12 +88,12 @@ export class ProUploadFormComponent implements OnInit {
     );
     const versionId = versionResponse["version_id"];
 
-    const streamFileResponse = await RestCall.createNewFile(track._file, title, this.getStreamFileExtension(extension), track._file.size, versionId, 0, length);
+    const streamFileResponse = await RestCall.createNewFile(track._file, file_name, this.getStreamFileExtension(extension), track._file.size, versionId, 0, length);
     const streamFileId = streamFileResponse["file_id"];
 
     let downloadFileId: string;
     if (this.availability) {
-      const downloadFileResponse = await RestCall.createNewFile(track._file, title, extension, track._file.size, versionId, 1, length);
+      const downloadFileResponse = await RestCall.createNewFile(track._file, file_name, extension, track._file.size, versionId, 1, length);
       downloadFileId = downloadFileResponse["file_id"];
     } else {
       downloadFileId = "null";
@@ -104,20 +101,11 @@ export class ProUploadFormComponent implements OnInit {
 
     const buffer: ArrayBuffer = await Utils.read(track._file);
     await RestCall.uploadChunk(buffer, streamFileId, downloadFileId, 0, extension, progress => this.setChunkProgress(progress));
-    this.setChunkCompleted();
   }
 
-  private setChunkProgress(progress: number) {
-    this.setProgress(((100 * this.uploader.uploaded + progress) / this.uploader.queue.length));
-  }
-
-  private setChunkCompleted() {
-    this.uploader.uploaded++;
-    this.setProgress(100 * this.uploader.uploaded / this.uploader.queue.length);
-  }
 
   private setProgress(progress: number) {
-    this.uploader.progress = progress;
+    this.uploader.fileUploader.progress = progress;
   }
 
   private getStreamFileExtension(extension: string) {
@@ -129,48 +117,42 @@ export class ProUploadFormComponent implements OnInit {
     }
   }
 
+  private setChunkProgress(progress: number) {
+    this.setProgress(((100 * this.uploader.fileUploader.uploaded + progress) / this.uploader.fileUploader.queue.length));
+  }
+
   expirations = [{id: '1week', label: 'Week', heading: 'Expire*'}, {id: '1month', label: 'Month', heading: 'Expire*'}];
-  expiration: string = this.localStorageService.getExpiration();
+  expiration;
 
   availabilities = [{id: false, label: 'No', heading: 'Download*'}, {id: true, label: 'Yes', heading: 'Download*'}];
-  availability: boolean = this.localStorageService.getAvailability();
+  availability;
 
-  notificationTypes = [{id: '1', label: 'Daily', heading: 'Notify*'}, {id: '2', label: 'Instantly', heading: 'Notify*'},{id: '0', label: 'Never', heading: 'Notify*'}];
-  notificationType: string = this.localStorageService.getNotificationType();
+  smppw_enable = [{id: false, label: 'No', heading: 'Password*'}, {id: true, label: 'Yes', heading: 'Password*'}];
+  smppw;
 
-  projects = [{id: '1', label: 'project1', heading: 'Project'}, {id: '2', label: 'project2', heading: 'Project'},{id: '0', label: 'Project', heading: 'Project'}];
+  stream_types = [{id: false, label: 'Lossy', heading: 'Stream*'}, {id: true, label: 'Lossless', heading: 'Stream*'}];
+  stream_type;
+
+  projects = [{id: '1', label: 'project1', heading: 'Project'}, {id: '2', label: 'project2', heading: 'Project'}, {
+    id: '0',
+    label: 'Project',
+    heading: 'Project'
+  }];
+
   project;
 
   ngOnInit(): void {
-    console.log(this.uploader);
-    // wave.init({
-    //   container: canvas
-    // });
-    // wave.loadDecodedBuffer(buffer);
-    // this.notifyID =  this.localStorageService.getNotificationID();
-    // this.expiration =  this.localStorageService.getExpirationType();
-    // this.downloadable =  this.localStorageService.getAllowDownloads();
-    this.uploader.onWhenAddingFileFailed = (item, filter) => {
-      let message = '';
-      switch (filter.name) {
-        case 'fileSize':
-          message = "You exceeded the limit of 2 GB."
-          break;
-        case 'onlyAudio':
-          message = "One or more files are not supported and were not added.";
-          break;
-        case 'checkSizeLimit':
-          message = "You exceeded the limit of 2 GB.";
-          break;
-        default:
-          message = "Something went wrong, please try again.";
-          break;
-      }
-      this.files_tooltip.open(this.files_tooltip.ngbTooltip = message);
-    };
+    this.uploader.fileUploader.onAfterAddingAll = (items) => {
+      this.uploader.addTitles(items);
+    }
   }
 
-  constructor(private localStorageService: LocalStorageService) {
+  constructor(private uploader: Uploader,
+              private localStorageService: LocalStorageService,
+              private confirmDialogService: ConfirmDialogService,
+              private router: Router,
+              private activatedRoute: ActivatedRoute,
+              private zone:NgZone) {
   }
 
   private clearForm(clearData): void {
@@ -178,50 +160,19 @@ export class ProUploadFormComponent implements OnInit {
       this.notes = '';
       this.email_to = [];
     }
-    this.uploader.clearQueue();
   }
 
-  private storePreferences() {
-    this.localStorageService.storeEmailFrom(this.email_from);
-    this.localStorageService.storeExpiration(this.expiration);
-    this.localStorageService.storeAvailability(this.availability);
-    this.localStorageService.storeNotificationType(this.notificationType);
-  }
+  cancelUpload(dirty_form, file_nb) {
+    if(dirty_form || file_nb>0){
+    this.confirmDialogService.confirmThis("There are unsaved changes. Are sure you want to discard this project.", () => {
+      // YES CLICKED
+      this.uploader.reset();
+      this.router.navigate(["../dashboard"], {relativeTo: this.activatedRoute});
 
-  getAcceptedFileTypes() {
-    return ProUploadPageComponent.ACCEPTED_FILE_TYPES;
-  }
-
-  removeFromQueue(item){
-    this.uploader.removeFromQueue(item);
-    this.removedFileSize.emit(item.file.size);
-  }
-}
-
-@Directive({
-  selector: '[emailValidationTooltip]'
-})
-
-export class EmailValidationToolTip {
-  control: any;
-  tooltip: NgbTooltip;
-
-  constructor(control: NgControl, tooltip: NgbTooltip) {
-    this.tooltip = tooltip;
-    this.control = control;
-    this.control.statusChanges.subscribe((status) => {
-      if (control.dirty && control.invalid) {
-      } else {
-        tooltip.close();
-      }
-    });
-  }
-
-  @HostListener('focusout') onFocusOutMethod() {
-    if (this.control.dirty && this.control.invalid && this.control.value) {
-      this.tooltip.open();
-    } else {
-      this.tooltip.close();
+    }, function () {
+    })}
+    else{
+      this.router.navigate(["../dashboard"], {relativeTo: this.activatedRoute});
     }
   }
 }

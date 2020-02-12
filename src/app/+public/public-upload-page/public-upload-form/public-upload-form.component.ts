@@ -46,7 +46,7 @@ export class PublicUploadFormComponent implements OnInit {
 
   @ViewChild('notes_element') notes_element: ElementRef;
   @ViewChild('ft') files_tooltip: NgbTooltip;
-
+// TODO: Add extension detector in case a person has added both Lossless and lossy files: https://github.com/borewit/music-metadata#readme
   async onSubmit() {
 
     this.uploading.emit();
