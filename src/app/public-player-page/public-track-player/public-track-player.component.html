@@ -8,9 +8,9 @@
         <play-button
           [state]="getPlaybuttonState()"
           [disabled]="expired"
+          [popup]="true"
           (clicked)="clickPlaybutton($event)"
         ></play-button>
-
       </div>
 
       <div class="popup-title"><h4>{{track?.title}}</h4></div>
@@ -21,21 +21,18 @@
       <div class="top-icon list-icon" id="scroll-icon" role="button" (click)="scrollToTop()">
 
 
-        <svg width="22px" height="17px" viewBox="0 0 22 17" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
-        <g id="Internet-Networks-Servers-/-Upload/Download-/-upload-dash-arrow-1" class="icon-stroke" transform="translate(-254.000000, -27.000000)" stroke-width="1.5">
-            <g id="Group-Copy-8" transform="translate(255.000000, 28.000000)">
-                <g id="upload-brackets">
-                    <path d="M10.0008333,0 L10.0008333,10" id="Shape"></path>
-                    <polyline id="Shape" points="6.25083333 6.25 10.0008333 10 13.7508333 6.25"></polyline>
-                    <g id="Group-24" transform="translate(10.000000, 12.500000) rotate(90.000000) translate(-10.000000, -12.500000) translate(7.500000, 2.500000)">
-                        <path d="M0,0.625 L3.125,0.625 C3.81535594,0.625 4.375,1.18464406 4.375,1.875 L4.375,18.125 C4.375,18.8153559 3.81535594,19.375 3.125,19.375 L0,19.375" id="Shape"></path>
+
+
+        <svg width="13px" height="8px" viewBox="0 0 13 8" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+            <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round">
+                <g id="Internet-Networks-Servers-/-Upload/Download-/-upload-dash-arrow-1" transform="translate(-326.000000, -253.000000)" fill-rule="nonzero" stroke="#7397FF" stroke-width="1.5">
+                    <g id="Group-16-Copy" transform="translate(326.000000, 253.000000)">
+                        <path d="M0.7,7 L6.3,1.4" id="Line-7"></path>
+                        <path d="M6.3,7 L11.9,1.4" id="Line-7-Copy" transform="translate(9.100000, 4.200000) scale(-1, 1) translate(-9.100000, -4.200000) "></path>
                     </g>
                 </g>
             </g>
-        </g>
-    </g>
-</svg>
+        </svg>
 
       </div>
 
@@ -234,7 +231,7 @@
            placement="top" ngbTooltip="Overview">
 
 
-      
+
 
 <svg width="21px" height="18px" viewBox="0 0 21 18" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
     <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
@@ -362,7 +359,7 @@
 
         <span class="search-icon">
           <svg width="16px" height="16px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg">
-           
+
             <desc></desc>
             <defs></defs>
             <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round"
