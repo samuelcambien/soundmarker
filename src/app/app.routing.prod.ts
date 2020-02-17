@@ -16,7 +16,7 @@ const appRoutes: Routes = [
   },
   {
     path: "pro",
-    component: ProComponent
+    component: PublicPagenotfoundPageComponent
   },
   {
     path: '',

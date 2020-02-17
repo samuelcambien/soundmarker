@@ -11,6 +11,10 @@
 
 }
 
+.card-body p {
+	color: #717db0;
+}
+
 
 .dark-card {
 	background-color: #7397ff;
@@ -36,8 +40,7 @@
 .info-svg {
 	width: 120px;
 
-	margin-bottom: 12px;
-	margin-top: 11px;
+	margin: 0px;
 }
 
 .info-svg.flow {

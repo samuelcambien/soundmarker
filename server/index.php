@@ -540,12 +540,12 @@ if ($response) {
       // return ok
       Flight::json(array(
          'project_id' => $project_id, 'status' => $status, 'tracks' => $tracks
-      ), 200);  
+      ), 200);
     } else {
       // return ok
       Flight::json(array(
          'return' => 'passwordmissing'
-      ), 200);  
+      ), 200);
     }
   } else {
     $_SESSION['view_user_projects'][] = $project_id;
@@ -563,7 +563,7 @@ if ($response) {
     // return ok
     Flight::json(array(
        'project_id' => $project_id, 'status' => $status, 'expiration' => $expiration_date, 'sender' => $emailaddress, 'tracks' => $tracks
-    ), 200);  
+    ), 200);
   }
 } else {
     // project hash was not valid.
@@ -613,7 +613,7 @@ if (in_array($project_id, $_SESSION['user_projects'])) {
 
   Flight::json(array(
      'project_id' => $project_id,
-     'project_password' => $result->fetch()[0] 
+     'project_password' => $result->fetch()[0]
   ), 200);
 } else {
   // return not allowed

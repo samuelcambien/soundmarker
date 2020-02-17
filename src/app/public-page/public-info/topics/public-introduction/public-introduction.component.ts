@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
+import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {NgbActiveModal, NgbCarousel, NgbCarouselConfig, NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {LocalStorageService} from "../../../../services/local-storage.service";
 
@@ -10,6 +10,8 @@ import {LocalStorageService} from "../../../../services/local-storage.service";
 export class PublicIntroductionComponent implements OnInit {
 
   images = [`../assets/topics-img/sm-intro.webp`, `../assets/topics-img/intro-1.webp` , `../assets/topics-img/intro-2.webp`, `../assets/topics-img/intro-3.webp`, `../assets/topics-img/intro-4.webp`, `../assets/topics-img/intro-5.webp`];
+  images_loaded;
+
 
   @ViewChild('carousel') carousel: NgbCarousel;
 
@@ -25,8 +27,12 @@ export class PublicIntroductionComponent implements OnInit {
     this.activeModal.close();
   }
 
-
   ngOnInit() {
+    this.images_loaded = this.images.slice(0,2);
+    this.carousel.slide.subscribe(()=>{
+      if(this.images_loaded.length < this.images.length) this.images_loaded.push(this.images[this.images_loaded.length]);
+      else this.carousel.slide.complete();}
+    );
   }
 
   next(){

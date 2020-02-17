@@ -27,7 +27,7 @@ CONTENTS
 --- public
 ------ bottom info
 --- pro
-	
+
 */
 
 
@@ -64,7 +64,7 @@ body {
 		overflow-x: hidden;
 		height: auto !important;
 		width: auto !important;
-		
+
 
 	}
 }
@@ -144,7 +144,9 @@ a:visited {
 	font-family: 'sofia-regular';
 	font-size: 10pt;
 }
-
+.success-text, .error-text {
+	color: #717db0;
+}
 @media (max-width: 576px) {
 	.tooltip {
 		display: none !important;
@@ -178,7 +180,7 @@ h2 {
 	margin-bottom: 4px;
 }
 #sm h4 {
-	font-family: 'sofia-medium';
+	font-family: 'sofia-regular';
 	font-size: 14pt;
 	padding-top: 2px;
 }
@@ -211,7 +213,7 @@ h2 {
 	font-size: 32pt !important;
 }
 .info-heading p {
-	color: #bac1da !important;
+	color: #717db0 !important;
 	font-size: 12pt !important;
 	text-align: center;
 }
@@ -253,7 +255,7 @@ h2 {
 		display: block;
 	}
 }
-// containers 
+// containers
  .container {
 	display: flex;
 	justify-content: center;
@@ -369,7 +371,7 @@ h2 {
 }
 @media (max-width: 1199.98px) {
 
-	
+
 	#sm .modal-lg, .modal-lg {
 
 	top: inherit;
@@ -377,7 +379,7 @@ h2 {
 	    margin-right: auto !important;
 	    left: inherit;
 	    right: inherit;
-	    
+
 	}
 }
 @media (max-width: 767.98px) {
@@ -639,7 +641,7 @@ select:-webkit-autofill:focus {
 	-webkit-text-fill-color: #717db0;
 	transition: background-color 5000s ease-in-out 0s;
 }
-// buttons 
+// buttons
  .wp-block-button__link {
 	background-color: #7397ff;
 	border-radius: 0.3rem !important;
@@ -793,6 +795,17 @@ button:visited {
 	display: none !important;
 }
 
+@media (max-width: 576px) {
+	.intro-card {
+		height: calc(100vh - 20px);
+		padding-bottom: 0px !important;
+	}
+.carousel, .carousel-inner, .carousel-item {
+ height: 100% !important;
+}
+}
+
+
 // pages
 // -- public
 // ---- bottom info
@@ -896,7 +909,7 @@ p.dropdown-info {
     content: url(chevron.svg);
     display: block;
 
-  
+
 }
 .ng-arrow {
 	border-color: #7397ff transparent transparent !important;
@@ -957,14 +970,14 @@ p.dropdown-info {
 }
 .ng-select .ng-select-container .ng-value-container .ng-placeholder {
 	color: #bac1da !important;
-	
+
 }
 .ng-dropdown-panel .ng-dropdown-panel-items .ng-optgroup {
 	color: #bac1da !important;
 }
 .ng-dropdown-panel .ng-dropdown-panel-items .ng-optgroup.ng-option-disabled {
 	padding: 4px;
-	
+
 }
 .ng-dropdown-panel .ng-dropdown-panel-items .ng-option.ng-option-child {
 	padding-left: 8px;
@@ -978,13 +991,13 @@ p.dropdown-info {
 // tags
  #tag-input-email {
 	padding: 0px !important;
-	
+
 	overflow: auto;
 	overflow-y: hidden;
 	overflow-x: hidden;
 	min-height: 38px !important;
 	padding-bottom: 5px !important;
-	
+
 }
 .ng2-tag-input__text-input {
 	font-family: 'sofia-regular' !important;
@@ -992,7 +1005,7 @@ p.dropdown-info {
 	color: #717db0 !important;
 	line-height: 1.5 !important;
 	margin-bottom: -6px !important;
-	
+
 	background: transparent;
 	margin-top: 5px;
 	height: 30px !important;
@@ -1009,16 +1022,16 @@ delete-icon svg {
 	height: 12px !important;
 }
 .ng2-tags-container {
-	
-	
-} 
+
+
+}
 .ng2-tag-input {
 	border-bottom: none !important;
 	margin: 0px !important;
 	padding: 0px !important;
 	background: transparent !important;
 	width: 100%;
-	
+
 }
 
 tag-input-form {
