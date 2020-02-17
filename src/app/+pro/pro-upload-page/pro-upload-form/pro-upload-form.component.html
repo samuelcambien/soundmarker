@@ -108,7 +108,7 @@
             [items]="smppw_enable"
             [searchable]="false"
             [clearable]="false"
-            [(ngModel)]="smppw"
+            [(ngModel)]="smppw_bool"
             placeholder="Password*"
             name="smppw"
             dropdownPosition="top"
@@ -116,7 +116,7 @@
           </ng-select>
         </div>
         <div class="col">
-          <input [disabled]="!smppw" name="smppwv" required >
+          <input [disabled]="!smppw_bool" name="smppwv" [(ngModel)]="smppw" required>
          </div>
       </div>
     </div>

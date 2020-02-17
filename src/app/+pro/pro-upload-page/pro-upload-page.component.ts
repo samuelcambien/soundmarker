@@ -1,5 +1,6 @@
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {FileUploader} from "../../tools/ng2-file-upload";
+import {Uploader} from '../../services/uploader.service';
 
 enum Status {
   UPLOAD_FORM, UPLOADING_SONGS, GREAT_SUCCESS
@@ -18,21 +19,20 @@ export class ProUploadPageComponent implements OnInit {
 
   period;
   statusEnum = Status;
-  stage: Status = Status.UPLOAD_FORM;
+  stage: Status = this.statusEnum.UPLOAD_FORM;
 
   @ViewChild('waveform') waveform: ElementRef;
 
-  constructor() {
+  constructor(private uploader: Uploader) {
   }
 
   ngOnInit() {
+    if(this.uploader.fileUploader.isUploading) this.stage = this.statusEnum.UPLOADING_SONGS;
   }
 
   successfullUpload() {
     this.stage = this.statusEnum.GREAT_SUCCESS;
-    // this.uploader.clearQueue();
-    // this.uploader.uploaded = 0;
+    this.uploader.fileUploader.clearQueue();
+    this.uploader.fileUploader.uploaded = 0;
   }
-
-
 }

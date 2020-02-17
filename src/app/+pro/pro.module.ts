@@ -22,6 +22,7 @@ import { ProUploadStartComponent } from './pro-upload-page/pro-upload-start/pro-
 import {Uploader} from '../services/uploader.service';
 import {ConfirmDialogComponent} from '../services/confirmation-dialog/confirmation-dialog.component';
 import {ConfirmDialogService} from '../services/confirmation-dialog/confirmation-dialog.service';
+import { ProUploadPopoverComponent } from './pro-upload-page/pro-upload-popover/pro-upload-popover.component';
 
 @NgModule({
   imports: [
@@ -48,7 +49,8 @@ import {ConfirmDialogService} from '../services/confirmation-dialog/confirmation
     ProUploadStartComponent,
     ProUploadFormComponent,
     ProUploadingFilesComponent,
-    ProUploadStartComponent
+    ProUploadStartComponent,
+    ProUploadPopoverComponent
   ],
   providers:
   [

@@ -1,5 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {FileUploader} from "../../../tools/ng2-file-upload";
+import {Uploader} from '../../../services/uploader.service';
 
 @Component({
   selector: 'app-pro-uploading-files',
@@ -8,14 +8,12 @@ import {FileUploader} from "../../../tools/ng2-file-upload";
 })
 export class ProUploadingFilesComponent implements OnInit {
 
-  @Input() uploader: FileUploader;
-
-  constructor() { }
+  constructor(private uploader: Uploader) { }
 
   ngOnInit() {
   }
 
   getProgress() {
-    return this.uploader.progress * 0.99;
+    return this.uploader.fileUploader.progress * 0.99;
   }
 }

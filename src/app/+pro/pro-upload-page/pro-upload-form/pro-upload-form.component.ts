@@ -48,11 +48,10 @@ export class ProUploadFormComponent implements OnInit {
   @ViewChild('ft') files_tooltip: NgbTooltip;
 
   async onSubmit() {
-
-    this.uploading.emit();
+    this.uploader.uploading = true;
 
     try {
-      const projectResponse = await RestCall.createNewProject(this.project_title);
+      const projectResponse = await RestCall.createNewProject(this.project_title, this.smppw);
       let project_id = projectResponse["project_id"];
 
       await Utils.promiseSequential(
@@ -66,6 +65,7 @@ export class ProUploadFormComponent implements OnInit {
       this.period.emit(this.expiration.substr(1, this.expiration.length));
 
       this.clearForm(true);
+      this.uploader.uploading = false;
 
     } catch (e) {
       this.clearForm(false);
@@ -129,6 +129,7 @@ export class ProUploadFormComponent implements OnInit {
 
   smppw_enable = [{id: false, label: 'No', heading: 'Password*'}, {id: true, label: 'Yes', heading: 'Password*'}];
   smppw;
+  smppw_bool;
 
   stream_types = [{id: false, label: 'Lossy', heading: 'Stream*'}, {id: true, label: 'Lossless', heading: 'Stream*'}];
   stream_type;

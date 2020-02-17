@@ -1,22 +1,22 @@
-<app-pro-board-card [class.hidden]="stage != statusEnum.UPLOAD_FORM">
+<app-pro-board-card>
   <ng-container class="title">
     New project
   </ng-container>
   <ng-container class="body">
-    <app-pro-upload-form
+    <app-pro-upload-form    [class.hidden]="stage != statusEnum.UPLOAD_FORM"
                             (uploading)="stage = statusEnum.UPLOADING_SONGS"
                             (finished)="successfullUpload()"
                             (error)="error = $event"
                             (link)="link = $event"
                             (period)="period = $event">
     </app-pro-upload-form>
+    <app-pro-uploading-files [class.hidden]="stage != statusEnum.UPLOADING_SONGS"
+                             ></app-pro-uploading-files>
   </ng-container>
 </app-pro-board-card>
 
 
 <!---->
-<!--<app-pro-uploading-files [class.hidden]="stage != statusEnum.UPLOADING_SONGS"-->
-<!--[uploader]="uploader"></app-pro-uploading-files>-->
 <!--<app-pro-upload-finished [class.hidden]="stage != statusEnum.GREAT_SUCCESS"-->
 <!--[link]="link" (sendNewFiles)="tryAgain()"-->
 <!--[period]="period"></app-pro-upload-finished>-->

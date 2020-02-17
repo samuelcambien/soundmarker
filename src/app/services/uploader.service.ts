@@ -1,24 +1,22 @@
 import {Injectable} from '@angular/core';
 import {FileUploader} from '../tools/ng2-file-upload';
-import {ProUploadPageComponent} from '../+pro/pro-upload-page/pro-upload-page.component';
-import {ActivatedRoute, Router} from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
 })
 
-const UPLOAD_FILES_ENDPOINT = 'http://localhost:8080/rest/upload/file';
-
 export class Uploader {
+  UPLOAD_FILES_ENDPOINT = 'http://localhost:8080/rest/upload/file';
 
   acceptedQueueMargin = 80000000; // 80 MB
   titles = [];
   soundmarkerLimit = 2000000000; //
   queueSizeRemaining: number; // 2000000000 2 000 000 000
   queueSizeRemainingString:  string = "2 GB";
+  uploading: boolean = false;
 
   fileUploader: FileUploader = new FileUploader({
-    url: UPLOAD_FILES_ENDPOINT,
+    url: this.UPLOAD_FILES_ENDPOINT,
     disableMultipart: true,
     maxFileSize: 2080000000, // 2GB 2 000 000 000 + 80 MB margin
     filters: [
@@ -122,4 +120,9 @@ export class Uploader {
   getTitle(track){
     return this.titles[this.fileUploader.getIndexOfItem(track)];
   }
+
+  isUploading(){
+    // return this.fileUploader.isUploading;
+    return this.uploading;
+}
 }

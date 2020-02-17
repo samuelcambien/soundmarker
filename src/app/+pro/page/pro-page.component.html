@@ -5,6 +5,7 @@
     <div class="w-100 h-100">
       <div class="content w-100 h-100 p-20 d-flex">
         <router-outlet></router-outlet>
+        <app-pro-upload-popover *ngIf="uploader.uploading" [@fadeAnimation]></app-pro-upload-popover>
       </div>
     </div>
   </div>

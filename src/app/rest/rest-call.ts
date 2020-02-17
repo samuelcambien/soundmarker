@@ -8,9 +8,10 @@ export class RestCall {
 
   // POST
 
-  public static async createNewProject(projectTitle?: string): Promise<any> {
+  public static async createNewProject(projectTitle?: string, projectSmppw?: string): Promise<any> {
     return Request.post(Endpoints.PROJECT_NEW, {
-      project_title: projectTitle
+      project_title: projectTitle,
+      project_password: projectSmppw
     });
   }
 
