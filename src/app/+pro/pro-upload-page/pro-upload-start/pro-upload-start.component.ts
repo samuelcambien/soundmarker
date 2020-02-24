@@ -1,5 +1,5 @@
 import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
-import {Uploader} from '../../../services/uploader.service';
+import {Status, Uploader} from '../../../services/uploader.service';
 import {ActivatedRoute, Router} from '@angular/router';
 
 @Component({
@@ -30,7 +30,8 @@ export class ProUploadStartComponent implements OnInit {
     };
 
     this.uploader.fileUploader.onAfterAddingAll = (items) => {
-      this.router.navigate(["../upload"], {relativeTo: this.activatedRoute});
+      this.router.navigate(["../upload"],{queryParams: {origin:'dashboard'}, relativeTo: this.activatedRoute, skipLocationChange:true});
+      this.uploader.setStatus(Status.UPLOAD_FORM);
       this.uploader.addTitles(items);
     }
   }

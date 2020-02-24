@@ -7,6 +7,7 @@ import {ProjectResolver} from "./projects/project/ProjectResolver";
 import {ProTrackComponent} from "./projects/track/pro-track.component";
 import {TrackResolver} from "./projects/track/TrackResolver";
 import {ProUploadPageComponent} from './pro-upload-page/pro-upload-page.component';
+import {UploadGuard} from '../auth/upload/upload.guard';
 
 @NgModule({
   imports: [
@@ -26,6 +27,7 @@ import {ProUploadPageComponent} from './pro-upload-page/pro-upload-page.componen
           {
             path: 'upload',
             component: ProUploadPageComponent,
+            canActivate: [UploadGuard]
           },
           {
             path: 'projects',

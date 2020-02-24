@@ -1,3 +1,367 @@
 .hidden {
   display: none;
 }
+
+
+
+
+// form
+
+textarea {
+  resize: none;
+}
+
+.free-upload {
+  margin-right: -1px !important;
+  padding: 0px !important;
+  margin-bottom: 0px !important;
+  height: 29px;
+  width: 100%;
+}
+
+.sep-line {
+  height: 1px;
+  margin-bottom: -1px;
+  background-color: #eef1ff;
+  width: calc(100% + 40px);
+  margin-left: -20px;
+  margin-right: -20px;
+  margin-bottom: 5px;
+}
+
+.plane-icon {
+  margin-top: -1px;
+  margin-left: -1px;
+}
+
+textarea.form-control {
+  padding-top: 0px;
+}
+
+.form-group {
+  margin-bottom: 0px;
+}
+
+.form-row .radios {
+  margin-top: 10px;
+  flex-wrap: nowrap;
+}
+
+.notification-sort {
+  padding-top: 6px;
+  padding-left: 0px !important;
+  padding-right: 2px !important;
+  border: none !important;
+  background-color: #eef1ff !important;
+}
+
+
+
+select {
+  padding-left: 0px;
+}
+
+option {
+  padding-left: 0px;
+}
+
+@media (max-width: 767.98px) {
+  .form-row .radios {
+    margin-bottom: -10px;
+    flex-wrap: wrap;
+  }
+
+  .form-row.radios .col .custom {
+    margin-bottom: 10px;
+  }
+
+  .upload-songs-area {
+    position: relative !important;
+    min-height: 183px !important;
+
+    padding-top: 10px !important;
+  }
+
+}
+
+@media (max-width: 576px) {
+  .upload-songs-area {
+
+    min-height: 168px !important;
+
+  }
+}
+
+@media (max-width: 499px) {
+  .form-row .radios {
+    margin-bottom: 0px;
+  }
+
+}
+
+@media (max-width: 415px) {
+  .form-row .radios {
+    margin-bottom: 0px;
+  }
+
+}
+
+@media (max-width: 389px) {
+  .form-row .radios {
+    margin-bottom: -10px;
+  }
+
+}
+
+.btn-outline-form {
+  padding-left: 9.4px !important;
+  padding-right: 9.4px !important;
+
+}
+
+.free-upload:disabled  {
+  opacity: 0.2;
+}
+
+.free-upload .show-medium {
+  padding-left: 9.4px;
+  padding-right: 9.4px;
+}
+
+.allow-downloads {
+  width: 100%;
+}
+
+
+// file select
+
+.note-image {
+  position: relative;
+  display: block;
+  background-size: 100%;
+  background-repeat: no-repeat;
+  cursor: pointer;
+  pointer-events: auto;
+  fill: yellow;
+}
+
+.note-image svg:hover {
+  fill: #ffffff;
+}
+
+#ni1.note-image {
+  width: 70px;
+  height: 70px;
+  margin: 0 auto;
+  margin-top: 38px;
+  margin-bottom: 8px;
+}
+
+#ni2.note-image {
+  width: 27px;
+  height: 27px;
+  margin: 0 auto;
+  margin-top: 0px;
+  margin-bottom: 2px;
+  margin-left: 28px;
+  float: left;
+}
+
+.upload-songs-area {
+  position: absolute;
+  min-height: 153px;
+  max-height: 100%;
+  padding-top: 0;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  padding: 0 !important;
+  cursor: pointer;
+  pointer-events: auto !important;
+  pointer-events: all;
+  background: transparent !important;
+}
+
+.upload-songs-area::-webkit-scrollbar, textarea::-webkit-scrollbar, tag-input::-webkit-scrollbar {
+  width: 4px;
+}
+
+.upload-songs-area::-webkit-scrollbar-thumb, textarea::-webkit-scrollbar-thumb, tag-input::-webkit-scrollbar-thumb {
+  background-color: #eef1ff;
+  border-radius: 4px;
+  transition: 0.2s;
+}
+
+.upload-songs-area::-webkit-scrollbar-thumb:hover, textarea::-webkit-scrollbar-thumb:hover, tag-input::-webkit-scrollbar-thumb:hover {
+  background-color: #bac1da;
+  cursor: pointer;
+  pointer-events: auto;
+  transition: 0.2s;
+}
+
+.upload-songs-text {
+  text-align: center;
+  font-size: 12pt;
+  margin-bottom: 0px;
+  color: #7397FF;
+  cursor: pointer;
+  pointer-events: auto;
+  z-index: -10px;
+}
+
+
+
+.addsongs {
+  padding-bottom: -4px;
+}
+
+.addsongs .note-image, .addsongs h5 {
+  -webkit-transition: 200ms ease-in;
+  -moz-transition: 200ms ease-in;
+  -o-transition: 200ms ease-in;
+  transition: 200ms ease-in;
+}
+
+.upload-songs-area:hover .addsongs .note-image, .upload-songs-area:hover .addsongs h5 {
+  transform: translateY(-8px);
+  -webkit-transition: 200ms ease-in;
+  -moz-transition: 200ms ease-in;
+  -o-transition: 200ms ease-in;
+  transition: 200ms ease-in;
+}
+
+.addsongs h6 {
+  opacity: 0;
+  margin-top: -16px;
+  -webkit-transition: 200ms ease-in;
+  -moz-transition: 200ms ease-in;
+  -o-transition: 200ms ease-in;
+  transition: 200ms ease-in;
+}
+
+.upload-songs-area:hover .addsongs h6 {
+  opacity: 1;
+  transform: translateY(8px);
+  -webkit-transition: 200ms ease-in;
+  -moz-transition: 200ms ease-in;
+  -o-transition: 200ms ease-in;
+  transition: 200ms ease-in;
+}
+
+.addmoresongs {
+  text-align: center;
+  cursor: pointer !important;
+  pointer-events: auto;
+  padding-bottom: 20px;
+}
+
+input[type='file'] {
+  color: transparent;
+}
+
+// file overview
+
+.tabletainer {
+  padding-right: 4px;
+  z-index: 4;
+}
+
+.table {
+  margin-bottom: auto;
+  margin-top: -10px;
+  table-layout: fixed;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+table tr {
+  width: 100%;
+
+}
+
+table .cross {
+  opacity: 0;
+  -webkit-transition: 100ms;
+  -moz-transition: 100ms;
+  -o-transition: 100ms;
+  transition: 100ms;
+}
+
+table tr:hover .cross {
+  opacity: 1;
+}
+
+table tr td {
+  padding-bottom: 0rem;
+  padding-left: 0.5rem;
+  padding-top: 0.5rem;
+  width: 100%;
+  height: 32px;
+  white-space: nowrap;
+  overflow: hidden;
+  border-top: 1px solid #eef1ff;
+}
+
+table tr td p {
+  font-size: 8pt;
+  font-family: 'sofia-regular';
+  color: #717db0;
+  font-size: 10pt;
+  margin-bottom: 0;
+  padding-bottom: 0;
+  width: 94%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+
+}
+
+.cross {
+  background: -webkit-linear-gradient(left, rgba(255, 255, 255, 0) 0%, #ffffff 100%);
+  padding: 1px;
+  margin-left: -16px;
+  border: 0;
+  line-height: 1.9;
+}
+
+.btn-cross:focus {
+  outline: 0;
+}
+
+.delete {
+  color: #7397FF;
+  margin-top: 0px;
+}
+
+// upload fields
+
+.form-field .col-md-4 {
+  cursor: pointer;
+  pointer-events: auto;
+}
+
+.upload-songs-input {
+  opacity: 0;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  z-index: 2;
+  cursor: pointer;
+  pointer-events: auto;
+  padding: 0;
+}
+
+.my-drop-zone {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 2000;
+  opacity: 100%;
+  background: transparent;
+  pointer-events: none !important;
+}
+
+

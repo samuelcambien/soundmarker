@@ -5,7 +5,7 @@
   pointer-events: auto;
 }
 
-.upload-songs-input {
+.pro-upload-songs-input {
   opacity: 0;
   position: absolute;
   width: 100%;
@@ -16,6 +16,14 @@
   cursor: pointer;
   pointer-events: auto;
   padding: 0;
+}
+
+.pro-upload-songs-input.disabled{
+  pointer-events: none;
+}
+
+.pro-upload-songs-area.disabled{
+  opacity: 0.2;
 }
 
 .my-drop-zone {

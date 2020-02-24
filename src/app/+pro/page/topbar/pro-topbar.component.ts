@@ -1,8 +1,9 @@
-import {Component} from '@angular/core';
-import {Observable} from "rxjs";
+import {Component, EventEmitter, Input, Output} from '@angular/core';
+import {Observable, Subscription} from 'rxjs';
 import {StateService} from "../../../services/state.service";
 import {AuthService} from "../../../auth/auth.service";
 import {User} from "../../../model/user";
+import {Uploader} from '../../../services/uploader.service';
 
 @Component({
   selector: 'app-pro-topbar',
@@ -12,12 +13,21 @@ import {User} from "../../../model/user";
 export class ProTopbarComponent {
 
   private currentUser$: Observable<User>;
+  private eventsSubscription: Subscription;
+  showUploading= false;
+  @Output() popover = new EventEmitter();
+  @Input() upload: Observable<boolean>;
 
   constructor(
     private authService: AuthService,
     private stateService: StateService,
+    private uploader: Uploader
   ) {
     this.currentUser$ = authService.getCurrentUser();
+  }
+
+  ngOnInit(){
+    this.eventsSubscription = this.upload.subscribe(() => this.showUploading = true);
   }
 
   toggleSidebar() {
@@ -26,5 +36,10 @@ export class ProTopbarComponent {
 
   logout() {
     this.authService.logOut();
+  }
+
+  openPopover(){
+    this.showUploading = false;
+    this.popover.emit();
   }
 }

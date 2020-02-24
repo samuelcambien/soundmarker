@@ -11,5 +11,4 @@ export class ProBoardComponent implements OnInit {
 
   ngOnInit() {
   }
-
 }

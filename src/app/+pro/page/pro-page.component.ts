@@ -1,6 +1,7 @@
 import {Component} from '@angular/core';
-import {Uploader} from '../../services/uploader.service';
+import {Status, Uploader} from '../../services/uploader.service';
 import {animate, state, style, transition, trigger} from '@angular/animations';
+import {Subject} from 'rxjs';
 
 @Component({
   selector: 'app-pro',
@@ -15,9 +16,30 @@ import {animate, state, style, transition, trigger} from '@angular/animations';
     ])
   ]
 })
-export class ProPageComponent {
-  constructor(private uploader: Uploader){
 
+export class ProPageComponent {
+
+  popover: boolean = true;
+  eventLoadingTopbar: Subject<void> = new Subject<void>();
+
+  constructor(private uploader: Uploader){
   }
 
+  showPopover(){
+    return this.popover;
+  }
+
+  closePopover(){
+    if (this.uploader.isUploading()) {
+      this.eventLoadingTopbar.next();
+      this.popover = false;
+    }
+    else if(this.uploader.isReady()){
+      this.uploader.setStatus(Status.UPLOAD_FORM);
+    }
+  }
+
+  openPopover(){
+    this.popover = true;
+  }
 }

@@ -1,12 +1,20 @@
 import {Injectable} from '@angular/core';
 import {FileUploader} from '../tools/ng2-file-upload';
 
+export enum Status {
+  UPLOAD_FORM, UPLOADING_SONGS, GREAT_SUCCESS
+}
+
 @Injectable({
   providedIn: 'root'
 })
 
 export class Uploader {
   UPLOAD_FILES_ENDPOINT = 'http://localhost:8080/rest/upload/file';
+
+  statusEnum = Status;
+  // stage: Status = this.statusEnum.UPLOAD_FORM;
+  stage: Status = this.statusEnum.UPLOAD_FORM;
 
   acceptedQueueMargin = 80000000; // 80 MB
   titles = [];
@@ -57,7 +65,7 @@ export class Uploader {
     ];
 
 
-  constructor(  ) {
+  constructor() {
   }
 
   getAcceptedFileTypes() {
@@ -123,6 +131,22 @@ export class Uploader {
 
   isUploading(){
     // return this.fileUploader.isUploading;
-    return this.uploading;
+    return this.stage == Status.UPLOADING_SONGS;
+}
+
+  getStage(){
+    return this.stage;
+  }
+
+  isOpen(){
+    return this.stage == Status.UPLOAD_FORM;
+  }
+
+  isReady(){
+    return this.stage == Status.GREAT_SUCCESS;
+  }
+
+setStatus(e){
+    this.stage = e;
 }
 }
