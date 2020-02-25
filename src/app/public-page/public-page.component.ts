@@ -44,11 +44,10 @@ export class PublicPageComponent implements OnInit, AfterViewInit {
   smaComponent: boolean = false;
 
   constructor(private modalService: NgbModal, private localStorageService: LocalStorageService, private cdr: ChangeDetectorRef) {
-
   }
 
   openIntroduction() {
-    this.modalService.open(PublicIntroductionComponent, {size: "lg", backdrop: 'static', keyboard: false});
+    this.modalService.open(PublicIntroductionComponent, {size: "lg", windowClass: 'intro-modal', backdrop: 'static', keyboard: false});
   }
 
   ngOnInit() {
