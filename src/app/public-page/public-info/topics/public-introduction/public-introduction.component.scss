@@ -13,10 +13,7 @@ img {
 	color: #eef1ff !important;
 }
 
-.intro-card {
-	max-height: calc(100vh - 200px);
-	overflow: hidden;
-}
+
 
 .intro-png {
 	margin-left: -40px;
@@ -85,7 +82,7 @@ img {
 	margin-left: 20px !important;
 	margin-right: 20px !important;
 	position: fixed;
-	bottom: 96px;
+	bottom: 71px;
 	left: 0px;
 }
 
@@ -94,7 +91,7 @@ img {
 .accept-text {
 	float: none;
 	position: fixed;
-	bottom: 170px;
+	bottom: 145px;
 	width: 250px;
 	left: calc( 50% - 125px);
 	text-align: center;
@@ -106,6 +103,11 @@ img {
 
 
 
+}
+
+.intro-card {
+	max-height: calc(100vh - 200px);
+	overflow: hidden;
 }
 
 .intro-footer {
@@ -129,19 +131,19 @@ img {
 }
 
 .intro-heading {
-	margin-top: -30px;
+	margin-top: -10px;
 }
 
-.intro-footer button {
+.accept-button {
 
-
+bottom: 71px;
 
 
 
 }
 
 .accept-text {
-
+bottom: 145px;
 }
 
 }
