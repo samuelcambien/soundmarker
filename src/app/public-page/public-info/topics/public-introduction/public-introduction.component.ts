@@ -9,7 +9,7 @@ import {LocalStorageService} from "../../../../services/local-storage.service";
 })
 export class PublicIntroductionComponent implements OnInit {
 
-  images = [`../assets/topics-img/sm-intro.jpg`, `../assets/topics-img/intro-1.jpg` , `../assets/topics-img/intro-2.jpg`, `../assets/topics-img/intro-3.jpg`, `../assets/topics-img/intro-4.webp`, `../assets/topics-img/intro-5.webp`];
+  images = [`../assets/topics-img/sm-intro.jpg`, `../assets/topics-img/intro-1.jpg` , `../assets/topics-img/intro-2.jpg`, `../assets/topics-img/intro-3.jpg`, `../assets/topics-img/intro-4.jpg`, `../assets/topics-img/intro-5.jpg`];
   images_loaded;
 
 
