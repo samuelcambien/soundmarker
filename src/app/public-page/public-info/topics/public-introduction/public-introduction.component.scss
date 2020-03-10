@@ -13,6 +13,11 @@ img {
 	color: #eef1ff !important;
 }
 
+.intro-card {
+	max-height: calc(100vh - 200px);
+	overflow: hidden;
+}
+
 .intro-png {
 	margin-left: -40px;
 	margin-right: -40px;
@@ -64,10 +69,11 @@ img {
 
 }
 
+
 @media (max-width: 576px) {
 
 .welcome-img-phone {
-	width: 174%;
+	width: 174% !important;
 	margin-left: -37%;
 }
 
@@ -79,7 +85,7 @@ img {
 	margin-left: 20px !important;
 	margin-right: 20px !important;
 	position: fixed;
-	bottom: 36px;
+	bottom: 96px;
 	left: 0px;
 }
 
@@ -88,9 +94,9 @@ img {
 .accept-text {
 	float: none;
 	position: fixed;
-	bottom: 110px;
-	width: 220px;
-	left: calc( 50% - 110px);
+	bottom: 170px;
+	width: 250px;
+	left: calc( 50% - 125px);
 	text-align: center;
 }
 
@@ -110,6 +116,32 @@ img {
 
 .intro-footer p, .intro-footer a {
 	font-size: 8pt;
+}
+
+}
+
+@media (max-width: 340px) {
+
+.welcome-img-phone {
+	width: 100% !important;
+	margin-left: 0px;
+
+}
+
+.intro-heading {
+	margin-top: -30px;
+}
+
+.intro-footer button {
+
+
+
+
+
+}
+
+.accept-text {
+
 }
 
 }
