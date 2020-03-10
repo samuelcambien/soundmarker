@@ -12,7 +12,11 @@
 		</svg>
 	</span>
 
-  <div class="container-fluid progress-container" *ngIf="uploader.stage == uploader.statusEnum.UPLOADING_SONGS">
+  <div *ngFor="let fileUploader of uploader.fileUploaders">
+  <div class="container-fluid progress-container" *ngIf="fileUploader.stage == fileUploader.statusEnum.UPLOADING_SONGS">
+    <div>
+      {{fileUploader.project_title}}
+    </div>
     <div>
       <div class="load">
         <i></i>
@@ -40,14 +44,14 @@
           </g>
           </svg>
       </div>
-      <h5>Uploading tracks</h5><h6> {{getProgress() | number:'1.0-0'}}% </h6>
+      <h5>Uploading tracks</h5><h6> {{getProgress(fileUploader) | number:'1.0-0'}}% </h6>
       <div class="progress row">
-        <div class="progress-bar" role="progressbar" [ngStyle]="{ 'width': getProgress() + '%' }"></div>
+        <div class="progress-bar" role="progressbar" [ngStyle]="{ 'width': getProgress(fileUploader) + '%' }"></div>
       </div>
     </div>
   </div>
 
-  <div class="container-fluid" *ngIf="uploader.stage == uploader.statusEnum.GREAT_SUCCESS">
+  <div class="container-fluid" *ngIf="fileUploader.stage == fileUploader.statusEnum.GREAT_SUCCESS">
             <form class="form-inline">
                 <input type="text" class="sub-form" id="copy-link" value="{{getLink()}}">
                 <button class="btn btn-outline-form btn-sm copy-link-btn" ngxClipboard [cbContent]="getLink()">
@@ -55,6 +59,7 @@
                 </button>
             </form>
     </div>
+  </div>
 </div>
 
 

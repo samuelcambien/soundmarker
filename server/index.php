@@ -232,8 +232,9 @@ Flight::route('GET /project/all', function() {
 $config = Flight::get("config");
 
 $db = Flight::db();
-$user_id = isset($_SESSION['USER']) ? $_SESSION['USER'] : "";
-if (isset($_SESSION['USER'])) {
+//$user_id = isset($_SESSION['USER']) ? $_SESSION['USER'] : "";
+$user_id = 1;
+//if (isset($_SESSION['USER'])) {
   $sql = "SELECT project_id, title, expiration_date, hash FROM Project WHERE user_id = '$user_id' AND active = '1'";
   $result = $db->query($sql)->fetchAll(PDO::FETCH_ASSOC);
 
@@ -241,12 +242,12 @@ if (isset($_SESSION['USER'])) {
   Flight::json(array(
      'projects' => $result
   ), 200);
-} else {
-  // return ok
-  Flight::json(array(
-     'return' => 'notloggedin'
-  ), 200);
-}
+//} else {
+//  // return ok
+//  Flight::json(array(
+//     'return' => 'notloggedin'
+//  ), 200);
+//}
 
 });
 

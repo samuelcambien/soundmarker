@@ -30,12 +30,10 @@ export class ProPageComponent {
   }
 
   closePopover(){
+    this.uploader.clearFileUploaders();
     if (this.uploader.isUploading()) {
       this.eventLoadingTopbar.next();
       this.popover = false;
-    }
-    else if(this.uploader.isReady()){
-      this.uploader.setStatus(Status.UPLOAD_FORM);
     }
   }
 

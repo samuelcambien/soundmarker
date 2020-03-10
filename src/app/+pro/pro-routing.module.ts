@@ -27,7 +27,7 @@ import {UploadGuard} from '../auth/upload/upload.guard';
           {
             path: 'upload',
             component: ProUploadPageComponent,
-            canActivate: [UploadGuard]
+            // canActivate: [UploadGuard]
           },
           {
             path: 'projects',

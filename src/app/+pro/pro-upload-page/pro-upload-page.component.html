@@ -1,25 +1,36 @@
 <app-pro-board-card>
   <ng-container class="title">
-    New project
+    New Project
+    <button (click)="toggleExistingProject()" type="button" class="btn btn-sm btn-primary free-upload" [class.disabled]="!existing_projects.length">{{ existing_project == false ? 'Existing' : 'New' }} Project</button>
   </ng-container>
   <ng-container class="body">
-    <!--<app-pro-upload-form    [class.hidden]="stage != statusEnum.UPLOAD_FORM"-->
-                            <!--(uploading)="stage = statusEnum.UPLOADING_SONGS"-->
-                            <!--(finished)="successfullUpload()"-->
-                            <!--(error)="error = $event"-->
-                            <!--(link)="link = $event"-->
-                            <!--(period)="period = $event">-->
-    <!--</app-pro-upload-form>-->
-
-    <form #myForm="ngForm" (ngSubmit)="onSubmit()">
+      <form #myForm="ngForm" (ngSubmit)="onSubmit()">
       <div class="form-row">
         <div class="col-md-8">
           <div class="form-row">
-            <input placeholder="Project title" name="projecttitle" [(ngModel)]="project_title" required>
+            <input *ngIf="!existing_project" placeholder="Project title" name="projecttitle" [(ngModel)]="smUploader.project_title" required>
           </div>
+          <div class="form-row radios">
+            <div class="col" *ngIf="existing_project">
+              <ng-select
+                class="custom noselect expiration"
+                bindLabel="title"
+                bindValue="project_id"
+                groupBy="heading"
+                [items]="existing_projects"
+                [searchable]="false"
+                [clearable]="false"
+                [(ngModel)]="project_id"
+                placeholder="Existing projects*"
+                name="existing_projects"
+                dropdownPosition="auto"
+                required>
+              </ng-select>
+            </div>
+            </div>
           <div class="form-row">
             <div class="col-sm-12">
-              <tag-input [(ngModel)]='email_to'
+              <tag-input [(ngModel)]='smUploader.email_to'
                          [trimTags]="true"
                          [separatorKeyCodes]="[13, 188, 186]"
                          [addOnBlur]="true"
@@ -41,7 +52,7 @@
           <div class="form-row">
             <div class="form-group col hide-phone">
                 <textarea #notes_element
-                          [(ngModel)]="notes"
+                          [(ngModel)]="smUploader.notes"
                           type="text"
                           placeholder="Notes"
                           name="notes"
@@ -53,7 +64,7 @@
 
             <div class="form-group col show-phone">
                 <textarea #notes_element
-                          [(ngModel)]="notes"
+                          [(ngModel)]="smUploader.notes"
                           type="text"
                           placeholder="Notes"
                           name="notes"
@@ -70,10 +81,10 @@
                 class="custom noselect expiration"
                 bindValue="id"
                 groupBy="heading"
-                [items]="expirations"
+                [items]="smUploader.expirations"
                 [searchable]="false"
                 [clearable]="false"
-                [(ngModel)]="expiration"
+                [(ngModel)]="smUploader.expiration"
                 placeholder="Expire*"
                 name="expirations"
                 dropdownPosition="top"
@@ -86,10 +97,10 @@
                 class="custom noselect downloadable"
                 bindValue="id"
                 groupBy="heading"
-                [items]="availabilities"
+                [items]="smUploader.availabilities"
                 [searchable]="false"
                 [clearable]="false"
-                [(ngModel)]="availability"
+                [(ngModel)]="smUploader.availability"
                 placeholder="Download*"
                 name="downloads"
                 dropdownPosition="top"
@@ -102,10 +113,10 @@
                 class="custom noselect downloadable"
                 bindValue="id"
                 groupBy="heading"
-                [items]="stream_types"
+                [items]="smUploader.stream_types"
                 [searchable]="false"
                 [clearable]="false"
-                [(ngModel)]="stream_type"
+                [(ngModel)]="smUploader.stream_type"
                 placeholder="Stream*"
                 name="stream_type"
                 dropdownPosition="top"
@@ -118,10 +129,10 @@
                 class="custom noselect downloadable"
                 bindValue="id"
                 groupBy="heading"
-                [items]="smppw_enable"
+                [items]="smUploader.smppw_enable"
                 [searchable]="false"
                 [clearable]="false"
-                [(ngModel)]="smppw_bool"
+                [(ngModel)]="smUploader.smppw_bool"
                 placeholder="Password*"
                 name="smppw"
                 dropdownPosition="top"
@@ -129,7 +140,7 @@
               </ng-select>
             </div>
             <div class="col">
-              <input [disabled]="!smppw_bool" name="smppwv" [(ngModel)]="smppw" required>
+              <input [disabled]="!smUploader.smppw_bool" name="smppwv" [(ngModel)]="smUploader.smppw" required>
             </div>
           </div>
         </div>
@@ -138,29 +149,24 @@
       <div class="form-field col-md-4 bottom-tooltip" placement="bottom" [ngbTooltip]="" #ft='ngbTooltip'
            triggers="manual" (click)="ft.close()">
         <div class="card   rounded border-0">
-          <!--<div class="upload-songs-text">-->
           <a>
-            <!--<div class="addmoresongs">-->
             <h5>Add more tracks</h5>
-            <!--</div>-->
           </a>
           <input class="upload-songs-input"
                  id="pro-uploader"
                  type="file"
                  title=""
                  ng2FileSelect
-                 [uploader]="uploader.fileUploader"
+                 [uploader]="smUploader.getFileUploader()"
                  multiple
                  name="files"
-                 accept="{{uploader.getAcceptedFileTypes().join(',')}}"/>
-          <!--</div>-->
+                 accept="{{smUploader.getAcceptedFileTypes().join(',')}}"/>
           <div class="tabletainer">
             <table class="table noselect" >
               <tbody>
-              <tr *ngFor="let item of uploader.fileUploader.queue; index as i">
-                <!--<td><p>{{ item?.file?.name }}</p></td>-->
-                <td><input [(ngModel)]="uploader.titles[i]" name="title-{{i}}"></td>
-                <span (click)="uploader.removeFromQueue(item)" class="delete cross" aria-hidden="true">
+              <tr *ngFor="let item of smUploader.getFileUploader().queue; index as i">
+                <td><input [(ngModel)]="smUploader.titles[i]" name="title-{{i}}"></td> {{item.file.type.substring(6).toUpperCase()}} {{getFileSize(item)}}
+                <span (click)="smUploader.removeFromQueue(item)" class="delete cross" aria-hidden="true">
                   <svg width="9px" height="9px" viewBox="0 0 9 9" version="1.1" xmlns="http://www.w3.org/2000/svg">
                   <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round">
                   <g id="Internet-Networks-Servers-/-Upload/Download-/-upload-dash-arrow-1"
@@ -180,8 +186,8 @@
         <div class="sep-line show-medium"></div>
       </div>
       <div class="col">
-        <button style="width:40%" type="button" class="btn btn-sm btn-primary free-upload" placement="bottom" (click)="cancelUpload(myForm.dirty, uploader.fileUploader.getNotUploadedItems().length )">Cancel</button>
-        <button  style="width:40%" type="submit" [disabled]="!uploader.fileUploader.getNotUploadedItems().length || !myForm.valid"
+        <button style="width:40%" type="button" class="btn btn-sm btn-primary free-upload" placement="bottom" (click)="cancelUpload(myForm.dirty, smUploader.getFileUploader().getNotUploadedItems().length )">Cancel</button>
+        <button  style="width:40%" type="submit" [disabled]="!smUploader.getFileUploader().getNotUploadedItems().length || !myForm.valid"
                  class="btn btn-sm btn-primary free-upload" placement="bottom">
           <div class="show-medium">Share tracks</div>
           <svg width="30px" height="30px" viewBox="0 0 38 38" class="plane-icon hide-medium" version="1.1"
@@ -206,7 +212,7 @@
       </div>
     </form>
         <div ng2FileDrop
-         [uploader]="uploader.fileUploader"
+         [uploader]="smUploader.getFileUploader()"
          class="well my-drop-zone">
     </div>
     <app-confirm-dialog></app-confirm-dialog>

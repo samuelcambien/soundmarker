@@ -6,7 +6,7 @@
       <div class="content w-100 h-100 p-20 d-flex">
         <router-outlet></router-outlet>
         <!--<app-pro-upload-popover *ngIf="uploader.uploading" [@fadeAnimation]></app-pro-upload-popover>-->
-        <app-pro-upload-popover (close)=closePopover() *ngIf="!uploader.isOpen() && showPopover()" [@fadeAnimation]></app-pro-upload-popover>
+        <app-pro-upload-popover (close)=closePopover() *ngIf="(uploader.isUploading() || uploader.isReady()) && showPopover()" [@fadeAnimation]></app-pro-upload-popover>
       </div>
     </div>
   </div>

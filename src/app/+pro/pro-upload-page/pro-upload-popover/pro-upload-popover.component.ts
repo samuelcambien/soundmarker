@@ -1,6 +1,6 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {animate, state, style, transition, trigger} from '@angular/animations';
-import {Uploader} from '../../../services/uploader.service';
+import {SMFileUploader, Uploader} from '../../../services/uploader.service';
 
 @Component({
   selector: 'app-pro-upload-popover',
@@ -20,8 +20,8 @@ export class ProUploadPopoverComponent implements OnInit {
   ngOnInit() {
   }
 
-  getProgress() {
-    return this.uploader.fileUploader.progress * 0.99;
+  getProgress(e: SMFileUploader ) {
+    return e.getFileUploader().progress * 0.99;
   }
 
   getLink() {

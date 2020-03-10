@@ -3,7 +3,8 @@
     <div class="form-row">
       <div class="form-field col-md-4 bottom-tooltip" placement="bottom" [ngbTooltip]="" #ft='ngbTooltip'
            triggers="manual" (click)="ft.close()">
-        <div class="card pro-upload-songs-area rounded border-0" [class.disabled]="uploader.isUploading()">
+        <!--<div class="card pro-upload-songs-area rounded border-0" [class.disabled]="uploader.isUploading()">-->
+        <div class="card pro-upload-songs-area rounded border-0">
           <div class="upload-songs-text">
               <div class="addsongs">
 
@@ -34,10 +35,10 @@
                 <h5>Add tracks</h5>
               </div>
           </div>
-          <input class="pro-upload-songs-input" id="pro-uploader" type="file" title="" ng2FileSelect [uploader]="uploader.fileUploader"
+          <input class="pro-upload-songs-input" id="pro-uploader" type="file" title="" ng2FileSelect [uploader]="uploader.getOpenFileUploader()"
                  multiple
-                 [class.disabled]="uploader.isUploading()"
-                 name="files" accept="{{uploader.getAcceptedFileTypes().join(',')}}"/>
+                 name="files" accept="{{uploader.getOpenSMFileUploader().getAcceptedFileTypes().join(',')}}"/>
+                 <!--[class.disabled]="uploader.isUploading()"-->
         </div>
       </div>
     </div>

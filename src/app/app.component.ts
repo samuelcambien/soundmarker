@@ -62,6 +62,17 @@ export class Utils {
     }).asSeconds();
   }
 
+  // Convert the queue size left to a human readable string.
+  public static getSizeHumanized(bytes: number): string {
+    let sizes = ['Bytes', 'KB', 'MB', 'GB'];
+    // if (bytes <= 0) {
+    //   bytes = bytes + this.acceptedQueueMargin;
+    // }
+    let i = Math.floor(Math.log(bytes) / Math.log(1000));
+    let p = Math.round(bytes / (Math.pow(1000, i)) * 100) / 100;
+    return p + ' ' + sizes[i];
+  }
+
   public static getDaysDiff(date){
     return moment(date).diff(moment(), 'days')+1;
   }

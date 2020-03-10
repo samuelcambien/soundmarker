@@ -124,6 +124,10 @@ export class RestCall {
     return Request.getNonCaching(Endpoints.COMMENTS, [versionId]);
   }
 
+  public static async getProjects():Promise<any>{
+    return Request.getNonCaching(Endpoints.PROJECT_ALL);
+  }
+
   public static authenticate(email: string, password: string): Promise<any> {
     return this.getTrack('47');
   }
@@ -166,6 +170,8 @@ export class Endpoints {
   public static COMMENT: string = Endpoints.TRACK + "/version/comment";
 
   public static COMMENT_DELETE: string = Endpoints.TRACK + "/version/delete/comment";
+
+  public static PROJECT_ALL: string = Endpoints.BACKEND + "/project/all"
 }
 
 export class Request {

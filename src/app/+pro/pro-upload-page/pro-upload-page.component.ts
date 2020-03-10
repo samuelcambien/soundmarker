@@ -9,6 +9,8 @@ import {LocalStorageService} from '../../services/local-storage.service';
 import {ConfirmDialogService} from '../../services/confirmation-dialog/confirmation-dialog.service';
 import {ActivatedRoute, Router} from '@angular/router';
 
+// TODO: Als availabily stream only is dan wordt de downloadfile niet opgeslagen, bij Pro moet dat wel want daar kan dat achteraf nog aangepast worden.
+
 @Component({
   selector: 'app-pro-upload-page',
   templateUrl: './pro-upload-page.component.html',
@@ -17,6 +19,11 @@ import {ActivatedRoute, Router} from '@angular/router';
 export class ProUploadPageComponent implements OnInit {
 
   link: string;
+  existing_projects=[];
+  existing_project = false;
+  project_id;
+  smUploader;
+  smFileUploader;
 
   @ViewChild('waveform') waveform: ElementRef;
 
@@ -28,15 +35,21 @@ export class ProUploadPageComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.uploader.fileUploader.onAfterAddingAll = (items) => {
-      this.uploader.addTitles(items);
+    this.smUploader = this.uploader.getOpenSMFileUploader();
+    this.uploader.getOpenFileUploader().onAfterAddingAll = (items) => {
+      this.uploader.getOpenSMFileUploader().addTitles(items);
+    }
+    try{
+      RestCall.getProjects().then(res => {this.existing_projects = res["projects"];})
+    }
+    catch{
     }
     // if(this.uploader.fileUploader.isUploading) this.stage = this.statusEnum.UPLOADING_SONGS;
   }
 
-  notes: string;
-  email_to: string[];
-  project_title: string="Random example";
+  toggleExistingProject(){
+    this.existing_project = !this.existing_project;
+  }
 
   validators = [Validators.required, Validators.pattern('^\\w+([\\.-]?\\w+)*@\\w+([\\.-]?\\w+)*(\\.\\w{2,3})+$')];
   player;
@@ -53,40 +66,40 @@ export class ProUploadPageComponent implements OnInit {
   @ViewChild('ft') files_tooltip: NgbTooltip;
 
   async onSubmit() {
+    this.uploader.newFileUploader();
     this.router.navigate(["../dashboard"], {relativeTo: this.activatedRoute});
-    this.uploader.setStatus(Status.UPLOADING_SONGS);
+    this.smUploader.setStatus(Status.UPLOADING_SONGS);
     try {
-      const projectResponse = await RestCall.createNewProject(this.project_title, this.smppw);
-      let project_id = projectResponse["project_id"];
+      if(!this.existing_project){
+      const projectResponse = await RestCall.createNewProject(this.smUploader.getProjectTitle(), this.smUploader.getSMPPW());
+      this.project_id = projectResponse["project_id"];
+      }
 
       await Utils.promiseSequential(
-        this.uploader.fileUploader.queue.map(track => () => this.processTrack(project_id, track))
+        this.smUploader.fileUploader.queue.map(track => () => this.processTrack(this.project_id, track, this.smUploader.getTitle(track)))
       );
-
-      const shareResponse = await RestCall.shareProject(project_id, this.expiration, this.notes, "", this.email_to);
-
+      const shareResponse = await RestCall.shareProject(this.project_id, this.smUploader.expiration, this.smUploader.getProjectNotes(), "", this.smUploader.getReceivers());
+      console.log(shareResponse);
       // this.link.emit(shareResponse["project_hash"]);
-      this.uploader.setStatus(Status.GREAT_SUCCESS);
-      this.clearForm(true);
+      // this.uploader.removeFileUploader(running_uploader);
+      this.smUploader.setStatus(Status.GREAT_SUCCESS);
+      // this.clearForm(true);
 
     } catch (e) {
-      this.clearForm(false);
+      // this.clearForm(false);
       this.error.emit(e);
     }
   }
 
-  private async processTrack(projectId, track: FileItem): Promise<void> {
-
+  private async processTrack(projectId, track: FileItem, title): Promise<void> {
     const length = 0;
-    const title = this.uploader.getTitle(track);
     const file_name = Utils.getName(track._file.name);
     const extension = Utils.getExtension(track._file.name);
 
     const trackResponse = await RestCall.createNewTrack(projectId, title);
     const trackId = trackResponse["track_id"];
-
     const versionResponse = await RestCall.createNewVersion(
-      trackId, this.notes_element.nativeElement.value, this.availability ? "1" : "0"
+      trackId, this.notes_element.nativeElement.value, this.smUploader.getAvailability() ? "1" : "0"
     );
     const versionId = versionResponse["version_id"];
 
@@ -94,7 +107,7 @@ export class ProUploadPageComponent implements OnInit {
     const streamFileId = streamFileResponse["file_id"];
 
     let downloadFileId: string;
-    if (this.availability) {
+    if (this.smUploader.getAvailability()) {
       const downloadFileResponse = await RestCall.createNewFile(track._file, file_name, extension, track._file.size, versionId, 1, length);
       downloadFileId = downloadFileResponse["file_id"];
     } else {
@@ -106,7 +119,7 @@ export class ProUploadPageComponent implements OnInit {
   }
 
   private setProgress(progress: number) {
-    this.uploader.fileUploader.progress = progress;
+    this.uploader.getOpenFileUploader().progress = progress;
   }
 
   private getStreamFileExtension(extension: string) {
@@ -119,51 +132,22 @@ export class ProUploadPageComponent implements OnInit {
   }
 
   private setChunkProgress(progress: number) {
-    this.setProgress(((100 * this.uploader.fileUploader.uploaded + progress) / this.uploader.fileUploader.queue.length));
-  }
-
-  expirations = [{id: '1week', label: 'Week', heading: 'Expire*'}, {id: '1month', label: 'Month', heading: 'Expire*'}];
-  expiration="1week";
-
-  availabilities = [{id: false, label: 'No', heading: 'Download*'}, {id: true, label: 'Yes', heading: 'Download*'}];
-  availability=false;
-
-  smppw_enable = [{id: false, label: 'No', heading: 'Password*'}, {id: true, label: 'Yes', heading: 'Password*'}];
-  smppw;
-  smppw_bool=false;
-
-  stream_types = [{id: false, label: 'Lossy', heading: 'Stream*'}, {id: true, label: 'Lossless', heading: 'Stream*'}];
-  stream_type=false;
-
-  projects = [{id: '1', label: 'project1', heading: 'Project'}, {id: '2', label: 'project2', heading: 'Project'}, {
-    id: '0',
-    label: 'Project',
-    heading: 'Project'
-  }];
-
-  project;
-
-  private clearForm(clearData): void {
-    if (clearData) {
-      this.notes = '';
-      this.email_to = [];
-      this.project_title="";
-      this.smppw="";
-      this.uploader.reset();
-    }
+    this.setProgress(((100 * this.uploader.getOpenFileUploader().uploaded + progress) / this.uploader.getOpenFileUploader().queue.length));
   }
 
   cancelUpload(dirty_form, file_nb) {
     if(dirty_form || file_nb>0){
       this.confirmDialogService.confirmThis("There are unsaved changes. Are sure you want to discard this project.", () => {
-        // YES CLICKED
-        this.clearForm(true)
+        this.smUploader.resetSMFileUploader();
         this.router.navigate(["../dashboard"], {relativeTo: this.activatedRoute});
-
       }, function () {
       })}
     else{
       this.router.navigate(["../dashboard"], {relativeTo: this.activatedRoute});
     }
+  }
+
+  getFileSize(file){
+    return Utils.getSizeHumanized(file.file.size);
   }
 }

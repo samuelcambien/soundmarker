@@ -82,7 +82,7 @@ export class PublicUploadPageComponent implements OnInit {
     this.uploader.onAfterAddingFile = (item) => this.removeFileSize(item.file.size);
   }
 
-  // Remove the size of a added file again to the leftover queuesize.
+  // Remove the size of an added file again to the leftover queuesize.
   removeFileSize(fileSize){
     this.queueSizeRemaining = this.queueSizeRemaining - fileSize;
     this.queueSizeRemainingString = this.bytesToSize(this.queueSizeRemaining);

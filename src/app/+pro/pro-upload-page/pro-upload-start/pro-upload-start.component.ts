@@ -10,8 +10,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 export class ProUploadStartComponent implements OnInit {
 
   ngOnInit(): void {
-    this.uploader.fileUploader.onWhenAddingFileFailed = (item, filter) => {
-
+    this.uploader.getOpenFileUploader().onWhenAddingFileFailed = (item, filter) => {
       let message = '';
       switch (filter.name) {
         case 'fileSize':
@@ -29,10 +28,10 @@ export class ProUploadStartComponent implements OnInit {
       }
     };
 
-    this.uploader.fileUploader.onAfterAddingAll = (items) => {
+    this.uploader.getOpenFileUploader().onAfterAddingAll = (items) => {
       this.router.navigate(["../upload"],{queryParams: {origin:'dashboard'}, relativeTo: this.activatedRoute, skipLocationChange:true});
-      this.uploader.setStatus(Status.UPLOAD_FORM);
-      this.uploader.addTitles(items);
+      this.uploader.getOpenSMFileUploader().setStatus(Status.UPLOAD_FORM);
+      this.uploader.getOpenSMFileUploader().addTitles(items);
     }
   }
 
