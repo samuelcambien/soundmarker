@@ -10,7 +10,7 @@ import {BehaviorSubject, Observable, fromEvent, Subject} from 'rxjs';
 export class DemoComponent implements OnInit {
 
   @ViewChild('carousel') carousel: NgbCarousel;
-  images = [`../assets/topics-img/sm-intro.webp`, `../assets/topics-img/intro-1.webp` , `../assets/topics-img/intro-2.webp`, `../assets/topics-img/intro-3.webp`, `../assets/topics-img/intro-4.webp`, `../assets/topics-img/intro-5.webp`];
+  images = [`../assets/topics-img/sm-intro.jpg`, `../assets/topics-img/intro-1.jpg` , `../assets/topics-img/intro-2.jpg`, `../assets/topics-img/intro-3.jpg`, `../assets/topics-img/intro-4.jpg`, `../assets/topics-img/intro-5.jpg`];
   images_loaded;
 
   constructor(private modalService: NgbModal, private activeModal: NgbActiveModal) {

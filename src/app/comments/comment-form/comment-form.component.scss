@@ -1,14 +1,17 @@
 .comment-preview {
 	position: relative;
-	margin-top: 10px;
+	margin-top: 0px;
+	padding: 10px;
+	margin-left: -10px;
 	margin-bottom: -100px;
 	float: left;
 	cursor: pointer;
+	z-index: 99;
 }
 
 .comment-preview.disabled {
 	pointer-events: none !important;
-	cursor: auto !important; 
+	cursor: auto !important;
 }
 
 .comment-preview.disabled svg circle {
@@ -61,14 +64,14 @@ textarea {
 .cancel {
 	margin-right: 8px;
 	cursor: pointer;
-}	 
+}
 
 .cancel:hover {
 	cursor: pointer;
 }
 .cancel p {
 	padding-top: 6px;
-	color: #7397FF;	
+	color: #7397FF;
 }
 
 .cancel p:hover {
@@ -101,11 +104,11 @@ input.disabled {
 }
 
 @media (max-width: 576px) {
-	
+
 	.check-tag-box {
 	margin-right: 0px !important;
 	border-bottom-right-radius: 0.2rem !important;
 	border-top-right-radius: 0.2rem !important;
 }
-	
+
 }
