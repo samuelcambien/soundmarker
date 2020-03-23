@@ -218,7 +218,7 @@ export class Request {
         data: data,
         path: path,
         stringify: false,
-        parse: true,
+        parse: false,
         cache: false,
         onProgress: onProgress,
       }
