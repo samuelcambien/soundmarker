@@ -1038,10 +1038,6 @@ Flight::route('POST /file/chunk/@file_id/@download_id/@idno/@ext', function($fil
 $config = Flight::get("config");
 ignore_user_abort(true);
 set_time_limit(0);
-ini_set('upload_max_filesize', '2G');
-ini_set('post_max_size', '2G');
-ini_set('max_input_time', 36000);
-ini_set('max_execution_time', 36000);
 
 // if user is able to upload file
 if (in_array($file_id, $_SESSION['user_files'])) {
