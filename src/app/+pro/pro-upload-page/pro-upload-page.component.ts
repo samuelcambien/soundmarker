@@ -1,4 +1,14 @@
-import {Component, ElementRef, EventEmitter, Input, NgZone, OnInit, Output, ViewChild} from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  EventEmitter,
+  Input,
+  NgZone,
+  OnInit,
+  Output,
+  ViewChild
+} from '@angular/core';
 import {FileItem, FileUploader} from '../../tools/ng2-file-upload';
 import {Status, Uploader} from '../../services/uploader.service';
 import {NgForm, Validators} from '@angular/forms';
@@ -8,6 +18,7 @@ import {Utils} from '../../app.component';
 import {LocalStorageService} from '../../services/local-storage.service';
 import {ConfirmDialogService} from '../../services/confirmation-dialog/confirmation-dialog.service';
 import {ActivatedRoute, Router} from '@angular/router';
+import {ProjectService} from '../../services/project.service';
 
 // TODO: Als availabily stream only is dan wordt de downloadfile niet opgeslagen, bij Pro moet dat wel want daar kan dat achteraf nog aangepast worden.
 
@@ -20,7 +31,9 @@ export class ProUploadPageComponent implements OnInit {
 
   link: string;
   existing_projects=[];
-  existing_project = false;
+  existing_project = true;
+  existing_tracks_id = [];
+  existing_tracks = [];
   project_id;
   smUploader;
   smFileUploader;
@@ -30,8 +43,10 @@ export class ProUploadPageComponent implements OnInit {
   constructor(private uploader: Uploader,
   private localStorageService: LocalStorageService,
   private confirmDialogService: ConfirmDialogService,
+  private projectService: ProjectService,
   private router: Router,
-  private activatedRoute: ActivatedRoute) {
+  private activatedRoute: ActivatedRoute,
+  private cdr: ChangeDetectorRef) {
   }
 
   ngOnInit() {
@@ -40,11 +55,27 @@ export class ProUploadPageComponent implements OnInit {
       this.uploader.getOpenSMFileUploader().addTitles(items);
     }
     try{
-      RestCall.getProjects().then(res => {this.existing_projects = res["projects"];})
+      RestCall.getProjects().then(res => {this.existing_projects = res["projects"]})
     }
     catch{
     }
     // if(this.uploader.fileUploader.isUploading) this.stage = this.statusEnum.UPLOADING_SONGS;
+  }
+  private leftExistingTracks() {
+    return this.existing_tracks.filter(e => !this.existing_tracks_id.includes(e.track_id));
+  }
+
+  getProjectInfo(project_id){
+   let project = this.existing_projects.find(x => x.project_id === project_id);
+   RestCall.getProject(project.hash).then(res => this.existing_tracks = res["tracks"])
+  }
+
+  addVersion(i){
+    console.log(this.existing_tracks_id);
+  }
+
+  getTrackTitle(trackId){
+    return (this.existing_tracks.find(track => track.track_id === trackId).title);
   }
 
   toggleExistingProject(){
@@ -76,7 +107,7 @@ export class ProUploadPageComponent implements OnInit {
       }
 
       await Utils.promiseSequential(
-        this.smUploader.fileUploader.queue.map(track => () => this.processTrack(this.project_id, track, this.smUploader.getTitle(track)))
+        this.smUploader.fileUploader.queue.map((track, index) => () => this.processTrack(this.project_id, track, this.smUploader.getTitle(track), this.existing_tracks_id[index]))
       );
       const shareResponse = await RestCall.shareProject(this.project_id, this.smUploader.expiration, this.smUploader.getProjectNotes(), "", this.smUploader.getReceivers());
       console.log(shareResponse);
@@ -91,13 +122,14 @@ export class ProUploadPageComponent implements OnInit {
     }
   }
 
-  private async processTrack(projectId, track: FileItem, title): Promise<void> {
+  private async processTrack(projectId, track: FileItem, title, trackId?): Promise<void> {
     const length = 0;
     const file_name = Utils.getName(track._file.name);
     const extension = Utils.getExtension(track._file.name);
-
-    const trackResponse = await RestCall.createNewTrack(projectId, title);
-    const trackId = trackResponse["track_id"];
+    if(!trackId) {
+      const trackResponse = await RestCall.createNewTrack(projectId, title);
+      trackId = trackResponse["track_id"];
+    }
     const versionResponse = await RestCall.createNewVersion(
       trackId, this.notes_element.nativeElement.value, this.smUploader.getAvailability() ? "1" : "0"
     );

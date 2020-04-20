@@ -21,6 +21,7 @@
                 [searchable]="false"
                 [clearable]="false"
                 [(ngModel)]="project_id"
+                (close)="getProjectInfo(project_id)"
                 placeholder="Existing projects*"
                 name="existing_projects"
                 dropdownPosition="auto"
@@ -162,10 +163,28 @@
                  name="files"
                  accept="{{smUploader.getAcceptedFileTypes().join(',')}}"/>
           <div class="tabletainer">
-            <table class="table noselect" >
-              <tbody>
               <tr *ngFor="let item of smUploader.getFileUploader().queue; index as i">
-                <td><input [(ngModel)]="smUploader.titles[i]" name="title-{{i}}"></td> {{item.file.type.substring(6).toUpperCase()}} {{getFileSize(item)}}
+                <td><input *ngIf="!existing_tracks_id[i]" [(ngModel)]="smUploader.titles[i]" name="title-{{i}}"></td>
+                      <div *ngIf="existing_tracks_id[i]"> {{getTrackTitle(existing_tracks_id[i])}}</div>
+                <div>
+                  {{item.file.type.substring(6).toUpperCase()}} {{getFileSize(item)}}
+                </div>
+
+                <ng-select
+                  *ngIf=existing_project
+                  class="custom noselect downloadable"
+                  bindLabel="title"
+                  bindValue="track_id"
+                  [items]="leftExistingTracks()"
+                  [searchable]="false"
+                  [(ngModel)]="existing_tracks_id[i]"
+                  (close)="addVersion(i)"
+                  placeholder="Add as new version*"
+                  name="version_track"
+                  dropdownPosition="auto"
+                  required>
+                </ng-select>
+
                 <span (click)="smUploader.removeFromQueue(item)" class="delete cross" aria-hidden="true">
                   <svg width="9px" height="9px" viewBox="0 0 9 9" version="1.1" xmlns="http://www.w3.org/2000/svg">
                   <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round">
@@ -179,8 +198,6 @@
                   </svg>
               </span>
               </tr>
-              </tbody>
-            </table>
           </div>
         </div>
         <div class="sep-line show-medium"></div>
