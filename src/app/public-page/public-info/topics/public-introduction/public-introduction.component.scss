@@ -25,11 +25,18 @@ img {
 	margin-bottom: -179px;
 }
 
+h2#tagline {
+	font-family: 'sofia-medium' !important;
+	line-height: 1.1 !important;
+	letter-spacing: -0.6px !important;
+}
+
 .info-heading h4 {
 	text-align: center;
 	margin-bottom: -20px;
 	color: #717db0;
-
+	font-size: 13pt !important;
+	line-height: 1.6;
 }
 
 .spacing-start {
@@ -66,12 +73,17 @@ img {
 
 }
 
+.welcome-img-phone {
+	margin-top: -10px;
+	margin-bottom: -64px;
+}
+
 
 @media (max-width: 576px) {
 
 .welcome-img-phone {
 	width: 174% !important;
-	margin-left: -37%;
+
 }
 
 .accept-button {
@@ -133,6 +145,8 @@ img {
 .intro-heading {
 	margin-top: -10px;
 }
+
+
 
 .accept-button {
 
