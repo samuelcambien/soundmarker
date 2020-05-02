@@ -81,15 +81,15 @@
     </div>
 
     <div class="col-md-8">
-      
+
       <div class="form-row">
 
         <div class="col-sm-12"  >
             <input type="text" [(ngModel)]="email_from" name="email_from" placeholder="Email from*" pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$"
                    class="form-control form-control-sm" required ngbTooltip="Invalid email address" triggers="manual" emailValidationTooltip>
-                   
+
         </div>
-       
+
 
         <div class="col-sm-12">
           <tag-input [(ngModel)]='email_to'
@@ -110,7 +110,7 @@
           </tag-input>
         </div>
       </div>
-      
+
       <div class="form-row">
         <div class="form-group col hide-phone">
                 <textarea #notes_element [(ngModel)]="notes" type="text" placeholder="Notes" name="notes"
@@ -128,8 +128,15 @@
       <div class="form-row radios">
 
         <div class="col">
-	       
-          <ng-select
+
+          <label class="custom noselect expiration btn btn-sm btn-outline-form btn-settings">
+            <div class="switch">
+              <input type="checkbox">
+              <span class="slider round"></span>
+            </div>
+            <div class="slider-text">Downloads</div>
+          </label>
+        <!--  <ng-select
             class="custom noselect expiration"
             bindValue="id"
             groupBy = "heading"
@@ -141,11 +148,23 @@
             name = "expirations"
             dropdownPosition="top"
             required>
-          </ng-select>
+          </ng-select> -->
         </div>
 
         <div class="col">
-        <ng-select
+
+
+                <label class="custom noselect downloadable btn btn-sm btn-outline-form btn-settings">
+                  <div class="switch">
+                  <input type="checkbox">
+                  <span class="slider round"></span>
+                  </div>
+                  <div class="slider-text">Notifications</div>
+                </label>
+
+
+
+      <!--  <ng-select
                 class="custom noselect downloadable"
                 bindValue="id"
                 groupBy = "heading"
@@ -157,10 +176,10 @@
                 name = "downloads"
                 dropdownPosition="top"
                 required>
-            </ng-select>
+            </ng-select> -->
         </div>
 
-        <div class="col" id="notify">
+    <!--    <div class="col" id="notify">
             <ng-select
                 class="custom noselect"
                 groupBy = "heading"
@@ -174,15 +193,15 @@
                 dropdownPosition="top"
                 required>
             </ng-select>
-        </div>
+        </div> -->
 
         <div class="col">
           <button type="submit" [disabled]="!uploader.getNotUploadedItems().length || !myForm.valid"
                   class="btn btn-sm btn-primary free-upload">
 
-            <div class="show-medium">Share tracks</div>
+            <div class="">Upload tracks</div>
 
-            <svg width="30px" height="30px" viewBox="0 0 38 38" class="plane-icon hide-medium" version="1.1"
+          <!--  <svg width="30px" height="30px" viewBox="0 0 38 38" class="plane-icon hide-medium" version="1.1"
                  xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
               <desc></desc>
               <defs></defs>
@@ -199,7 +218,7 @@
                   </g>
                 </g>
               </g>
-            </svg>
+            </svg> -->
           </button>
         </div>
       </div>

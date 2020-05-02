@@ -1,5 +1,33 @@
 
 
+.btn-settings {
+  width: 100%;
+  display: inline-flex;
+}
+
+.switch {
+  margin-top: 2px;
+  margin-right: 7px;
+  margin-left: -2px;
+}
+
+label input + .slider > .slider-text {
+  color: #eef1ff !important;
+}
+
+label input:checked + .slider > .slider-text {
+  color: #7397ff !important;
+}
+
+label.btn-outline-form {
+  margin-bottom: 0px !important;
+}
+
+label.btn-outline-form:active {
+  background: #eef1ff !important;
+  border-color: #eef1ff !important;
+  color: #7397ff !important;
+}
 
 // form
 
@@ -9,7 +37,10 @@ textarea {
 
 .free-upload {
   margin-right: -1px !important;
-  padding: 0px !important;
+  padding-top: 0px !important;
+  padding-bottom: 0px !important;
+  padding-right: 10px;
+  padding-left: 10px;
   margin-bottom: 0px !important;
   height: 29px;
   width: 100%;
@@ -68,13 +99,13 @@ option {
 }
 
 .form-row.radios .col .custom {
-	margin-bottom: 10px;
+	margin-bottom: 10px !important;
 }
 
 .upload-songs-area {
 	position: relative !important;
 	min-height: 183px !important;
-	
+
 	padding-top: 10px !important;
 }
 
@@ -82,25 +113,20 @@ option {
 
 @media (max-width: 576px) {
 	.upload-songs-area {
-	
+
 	min-height: 168px !important;
-	
+
 }
 }
 
-@media (max-width: 499px) {
+
+@media (max-width: 405px) {
 	.form-row .radios {
   margin-bottom: 0px;
 }
 
 }
 
-@media (max-width: 415px) {
-	.form-row .radios {
-  margin-bottom: 0px;
-}
-
-}
 
 @media (max-width: 389px) {
 	.form-row .radios {
@@ -112,11 +138,13 @@ option {
 .btn-outline-form {
 	padding-left: 9.4px !important;
 	padding-right: 9.4px !important;
-	
+
 }
 
 .free-upload:disabled  {
-	opacity: 0.2;
+	opacity: 1 !important;
+  background-color: #7397ff !important;
+  border: 1px solid #7397ff !important;
 }
 
 .free-upload .show-medium {
@@ -251,7 +279,7 @@ option {
 }
 
 input[type='file'] {
-  color: transparent;   
+  color: transparent;
 }
 
 // file overview
@@ -359,5 +387,3 @@ table tr td p {
   background: transparent;
   pointer-events: none !important;
 }
-
-
