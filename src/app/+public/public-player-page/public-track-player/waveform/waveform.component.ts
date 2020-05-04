@@ -1,4 +1,13 @@
-import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  ViewChild
+} from '@angular/core';
 import {Version} from "../../../../model/version";
 import {Drawer} from "../../../../player/drawer";
 import {DrawerService} from "../../../../services/drawer.service";
@@ -24,11 +33,16 @@ export class WaveformComponent implements OnInit {
   constructor(
     private drawerService: DrawerService,
     private player: Player,
-    private stateService: StateService
+    private stateService: StateService,
+    private cdr: ChangeDetectorRef
   ) {
   }
 
   ngOnInit() {
+    this.drawWaveform();
+  }
+
+  drawWaveform() {
     this.drawer = new Drawer(
       this.waveform.nativeElement,
       {
@@ -45,7 +59,13 @@ export class WaveformComponent implements OnInit {
         await this.player.seekTo(this.audioSource, startTime);
       }
     });
-
     this.drawerService.register(this.audioSource.version, this.drawer);
+  }
+
+  updateVersion(){
+    this.waveform.nativeElement.innerHTML = "";
+    this.drawWaveform();
+    this.drawerService.redraw(this.audioSource.version.version_id);
+
   }
 }

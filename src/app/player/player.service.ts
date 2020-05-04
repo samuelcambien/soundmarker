@@ -58,7 +58,6 @@ export class Player {
   private async load(audioSource: AudioSource) {
 
     return new Promise(async resolve => {
-
       if (this.audioSource && this.audioSource.version.version_id === audioSource.version.version_id) {
         resolve();
         return;
@@ -117,7 +116,7 @@ export class Player {
     this.stateService.setActiveComment(null);
   }
 
-  private async stop() {
+  async stop() {
     this.pause();
     await this.seekTo(this.audioSource, 0);
   }
@@ -146,6 +145,7 @@ export class Player {
   }
 
   private getStreamFile(): File {
+    console.log(this.version);
     return this.version.files.filter(file => file.identifier == 0)[0];
   }
 }

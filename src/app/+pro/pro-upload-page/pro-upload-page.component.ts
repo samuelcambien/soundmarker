@@ -67,7 +67,8 @@ export class ProUploadPageComponent implements OnInit {
 
   getProjectInfo(project_id){
    let project = this.existing_projects.find(x => x.project_id === project_id);
-   RestCall.getProject(project.hash).then(res => this.existing_tracks = res["tracks"])
+   RestCall.getProject(project.hash).then(res => this.existing_tracks = res["tracks"]);
+   this.existing_tracks_id = [];
   }
 
   addVersion(i){
@@ -110,7 +111,6 @@ export class ProUploadPageComponent implements OnInit {
         this.smUploader.fileUploader.queue.map((track, index) => () => this.processTrack(this.project_id, track, this.smUploader.getTitle(track), this.existing_tracks_id[index]))
       );
       const shareResponse = await RestCall.shareProject(this.project_id, this.smUploader.expiration, this.smUploader.getProjectNotes(), "", this.smUploader.getReceivers());
-      console.log(shareResponse);
       // this.link.emit(shareResponse["project_hash"]);
       // this.uploader.removeFileUploader(running_uploader);
       this.smUploader.setStatus(Status.GREAT_SUCCESS);
@@ -161,6 +161,11 @@ export class ProUploadPageComponent implements OnInit {
       default:
         return "mp3"
     }
+  }
+
+  private removeFromQueue(item, index){
+    this.smUploader.removeFromQueue(item);
+    this.existing_tracks_id.splice(index, 1);
   }
 
   private setChunkProgress(progress: number) {

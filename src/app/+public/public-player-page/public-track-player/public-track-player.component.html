@@ -10,7 +10,6 @@
           [disabled]="expired"
           (clicked)="clickPlaybutton($event)"
         ></play-button>
-
       </div>
 
       <div class="popup-title"><h4>{{track?.title}}</h4></div>
@@ -36,7 +35,6 @@
         </g>
     </g>
 </svg>
-
       </div>
 
 
@@ -98,8 +96,8 @@
         </g>
     </g>
 </svg>
-
         </div>
+
         <div class="phone-playbar-text">Download</div>
       </div>
 
@@ -203,6 +201,24 @@
     </div>
 
     <div class="player-toolbar hide-phone  ml-auto">
+      <ng-select
+        class="custom expiration"
+        bindLabel="version_id"
+        [items]="track.versions"
+        [searchable]="false"
+        [clearable]="false"
+        [(ngModel)]="version"
+        (change)="selectVersion()"
+        placeholder="Version"
+        name="versions_control"
+        dropdownPosition="auto">
+        <ng-template ng-label-tmp let-item="item">
+          Version <b>{{getVersionIndex(item)+1}}</b>
+        </ng-template>
+        <ng-template ng-option-tmp let-item="item" let-index="index">
+          Version <b>{{index+1}}</b>
+        </ng-template>
+      </ng-select>
 
       <div *ngIf="version?.downloadable && !expired" class="top-icon cloud-icon margin-tooltip" id="cloud-icon"
            (click)="download()" placement="top"
@@ -228,6 +244,7 @@
 </svg>
 
       </div>
+
 
       <div *ngIf="enableOverview" class="top-icon list-icon margin-tooltip" id="list-icon" role="button"
            (click)="overviewByOverviewIconClick()"
@@ -260,7 +277,7 @@
 
         <div class="audio-wave" id="waveform" #waveform></div>
 
-        <app-waveform [audioSource]="audioSource"></app-waveform>
+        <app-waveform #appwaveform [audioSource]="audioSource"></app-waveform>
 
       </div>
 

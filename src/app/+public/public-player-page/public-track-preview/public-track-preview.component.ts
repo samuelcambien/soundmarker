@@ -8,6 +8,7 @@ import {Utils} from "../../../app.component";
 import {DeviceDetectorService} from 'ngx-device-detector';
 import {State} from "../../../player/play-button/play-button.component";
 import {AudioSource, Player} from "../../../player/player.service";
+import {StateService} from '../../../services/state.service';
 
 @Component({
   selector: 'app-public-track-preview',
@@ -33,6 +34,7 @@ export class PublicTrackPreviewComponent implements OnInit {
   constructor(
     private player: Player,
     private cdr: ChangeDetectorRef,
+    private stateService: StateService,
     private deviceService: DeviceDetectorService
   ) {
   }
@@ -41,6 +43,9 @@ export class PublicTrackPreviewComponent implements OnInit {
     this.version = this.track.versions[0];
     this.files = this.version.files;
     this.trackTitleDOM.nativeElement.setAttribute("style", "text-overflow: ellipsis");
+    this.stateService.getActiveVersion().subscribe(version => {
+      if (this.track.versions.includes(version)) this.version = version;
+    });
   }
 
   getPlaybuttonState() {
@@ -90,7 +95,6 @@ export class PublicTrackPreviewComponent implements OnInit {
   }
 
   download() {
-
     window.open(
       this.files
         .filter(file => file.identifier == 1)
@@ -127,7 +131,7 @@ export class PublicTrackPreviewComponent implements OnInit {
   get audioSource(): AudioSource {
     return {
       track: this.track,
-      version: this.track.versions[0],
+      version: this.version,
     };
   }
 }

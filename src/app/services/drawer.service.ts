@@ -30,7 +30,7 @@ export class DrawerService {
         );
       // }
     });
-
+    
     this.stateService.getActiveComment().subscribe(
       comment => {
         if (comment && comment.include_end) {
@@ -45,7 +45,6 @@ export class DrawerService {
   private drawers: Map<string, Drawer> = new Map();
 
   redraw(versionId?: string) {
-
     if (versionId)
       this.getDrawer(versionId).drawBuffer();
     else

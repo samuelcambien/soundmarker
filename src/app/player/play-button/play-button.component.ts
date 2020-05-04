@@ -19,7 +19,7 @@ export class PlayButtonComponent implements OnInit {
   }
 }
 
-export enum State {
+export enum  State {
 
   loading = "loading",
   play = "play",

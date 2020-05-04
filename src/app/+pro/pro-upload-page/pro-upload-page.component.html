@@ -164,7 +164,7 @@
                  accept="{{smUploader.getAcceptedFileTypes().join(',')}}"/>
           <div class="tabletainer">
               <tr *ngFor="let item of smUploader.getFileUploader().queue; index as i">
-                <td><input *ngIf="!existing_tracks_id[i]" [(ngModel)]="smUploader.titles[i]" name="title-{{i}}"></td>
+                <td><input *ngIf="!existing_tracks_id[i]" [(ngModel)]="smUploader.titles[i]" name="title-{{i}}" required></td>
                       <div *ngIf="existing_tracks_id[i]"> {{getTrackTitle(existing_tracks_id[i])}}</div>
                 <div>
                   {{item.file.type.substring(6).toUpperCase()}} {{getFileSize(item)}}
@@ -181,11 +181,10 @@
                   (close)="addVersion(i)"
                   placeholder="Add as new version*"
                   name="version_track"
-                  dropdownPosition="auto"
-                  required>
+                  dropdownPosition="auto">
                 </ng-select>
 
-                <span (click)="smUploader.removeFromQueue(item)" class="delete cross" aria-hidden="true">
+                <span (click)="removeFromQueue(item, i)" class="delete cross" aria-hidden="true">
                   <svg width="9px" height="9px" viewBox="0 0 9 9" version="1.1" xmlns="http://www.w3.org/2000/svg">
                   <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round">
                   <g id="Internet-Networks-Servers-/-Upload/Download-/-upload-dash-arrow-1"

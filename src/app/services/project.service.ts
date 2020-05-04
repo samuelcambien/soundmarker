@@ -89,11 +89,12 @@ export class ProjectService {
       if (version.downloadable == 0) version.downloadable = false
     });
 
+
     const version = track.versions[0];
     await this.loadFiles(version);
   }
 
-  private async loadFiles(version: Version) {
+  async loadFiles(version: Version) {
     version.files = (await RestCall.getVersion(version.version_id))["files"];
     this.loadComments(version);
     interval(20 * 1000)

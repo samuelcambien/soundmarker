@@ -23,6 +23,9 @@ import {AudioSource, Player} from "../../../player/player.service";
 import {Version} from "../../../model/version";
 import {LocalStorageService} from "../../../services/local-storage.service";
 import {RestCall} from "../../../rest/rest-call";
+import {WaveformComponent} from './waveform/waveform.component';
+import {ProjectService} from '../../../services/project.service';
+import {StateService} from '../../../services/state.service';
 
 @Component({
   selector: 'public-track-player',
@@ -66,6 +69,7 @@ export class PublicTrackPlayerComponent implements OnInit, OnChanges {
   @ViewChild('phoneSearchInput') phoneSearchInput: ElementRef;
   @ViewChild('phonesearch') phonesearch: ElementRef;
   @ViewChild('trackTitle') trackTitleDOM: ElementRef;
+  @ViewChild('appwaveform') appwaveform: WaveformComponent;
 
   commentSorters: CommentSorter[] = [
     CommentSorter.MOST_RECENT,
@@ -92,6 +96,8 @@ export class PublicTrackPlayerComponent implements OnInit, OnChanges {
 
   constructor(
     private localStorageService: LocalStorageService,
+    private stateService: StateService,
+    private project: ProjectService,
     private player: Player,
     private drawerService: DrawerService,
     private cdr: ChangeDetectorRef
@@ -129,6 +135,19 @@ export class PublicTrackPlayerComponent implements OnInit, OnChanges {
     });
   }
 
+  selectVersion(){
+    if(this.player.isPlaying()) this.player.stop();
+    this.cdr.detectChanges();
+    this.stateService.setActiveVersion(this.version);
+    this.appwaveform.updateVersion();
+    this.createNewComment();
+    this.project.loadFiles(this.version);
+  }
+
+  getVersionIndex(version){
+    return this.track.versions.findIndex(e => e == version);
+  }
+
   private getPlayerWidth(): number {
     return this.waveform && this.waveform.nativeElement.clientWidth;
   }
@@ -158,7 +177,6 @@ export class PublicTrackPlayerComponent implements OnInit, OnChanges {
   }
 
   updateStartTime(x) {
-
     this.comment.include_start = true;
     this.comment.start_time = this.getValidStartTime(
       this.getCommentTime(this.startTime, x)
@@ -254,7 +272,7 @@ export class PublicTrackPlayerComponent implements OnInit, OnChanges {
   get audioSource(): AudioSource {
     return {
       track: this.track,
-      version: this.track.versions[0],
+      version: this.version,
     };
   }
 
