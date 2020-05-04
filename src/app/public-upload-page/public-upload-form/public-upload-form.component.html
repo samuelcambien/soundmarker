@@ -15,7 +15,7 @@
             <div class="addsongs">
 
               <div class="note-image" id="ni1">
-                <svg version="1.1" id="Laag_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                <svg version="1.1" id="Laag_1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px"
                      viewBox="0 0 1417.3 1417.3" enable-background="new 0 0 1417.3 1417.3" xml:space="preserve">
                   <circle class="upload-circle" fill="#eef1ff" cx="707.8" cy="708.8" r="701.6"/>
                   <g id="Music-Audio__x2F__Music__x2F__music-note-2_2_">
@@ -58,7 +58,7 @@
               <tr *ngFor="let item of uploader.queue">
                 <td><p>{{ item?.file?.name }}</p></td>
                 <span (click)="removeFromQueue(item)" class="delete cross" aria-hidden="true">
-<svg width="9px" height="9px" viewBox="0 0 9 9" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<svg width="9px" height="9px" viewBox="0 0 9 9" version="1.1" xmlns="http://www.w3.org/2000/svg">
     <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round">
         <g id="Internet-Networks-Servers-/-Upload/Download-/-upload-dash-arrow-1" transform="translate(-344.000000, -234.000000)" fill-rule="nonzero" stroke="#7397FF" stroke-width="1.5">
             <path d="M345.5,235.5 L351.488196,241.488196" id="Line-8"></path>
@@ -128,97 +128,29 @@
       <div class="form-row radios">
 
         <div class="col">
-
-          <label class="custom noselect expiration btn btn-sm btn-outline-form btn-settings">
+          <label class="custom expiration btn btn-sm btn-outline-form btn-settings noselect">
             <div class="switch">
-              <input type="checkbox">
+              <input type="checkbox" [checked]="availability" (click)="toggleDownload()">
               <span class="slider round"></span>
             </div>
             <div class="slider-text">Downloads</div>
           </label>
-        <!--  <ng-select
-            class="custom noselect expiration"
-            bindValue="id"
-            groupBy = "heading"
-            [items]="expirations"
-            [searchable]="false"
-            [clearable]="false"
-            [(ngModel)]="expiration"
-            placeholder="Expire*"
-            name = "expirations"
-            dropdownPosition="top"
-            required>
-          </ng-select> -->
         </div>
 
         <div class="col">
-
-
-                <label class="custom noselect downloadable btn btn-sm btn-outline-form btn-settings">
-                  <div class="switch">
-                  <input type="checkbox">
-                  <span class="slider round"></span>
-                  </div>
-                  <div class="slider-text">Notifications</div>
-                </label>
-
-
-
-      <!--  <ng-select
-                class="custom noselect downloadable"
-                bindValue="id"
-                groupBy = "heading"
-                [items]="availabilities"
-                [searchable]="false"
-                [clearable]="false"
-                [(ngModel)]="availability"
-                placeholder="Download*"
-                name = "downloads"
-                dropdownPosition="top"
-                required>
-            </ng-select> -->
+          <label class="custom noselect downloadable btn btn-sm btn-outline-form btn-settings">
+            <div class="switch">
+              <input type="checkbox" [checked]="notifications" (click)="toggleNotifications()">
+              <span class="slider round"></span>
+            </div>
+            <div class="slider-text">Notifications</div>
+          </label>
         </div>
-
-    <!--    <div class="col" id="notify">
-            <ng-select
-                class="custom noselect"
-                groupBy = "heading"
-                bindValue="id"
-                [items]="notificationTypes"
-                [searchable]="false"
-                [clearable]="false"
-                [(ngModel)]="notificationType"
-                placeholder="Notify*"
-                name = "notifications"
-                dropdownPosition="top"
-                required>
-            </ng-select>
-        </div> -->
 
         <div class="col">
           <button type="submit" [disabled]="!uploader.getNotUploadedItems().length || !myForm.valid"
                   class="btn btn-sm btn-primary free-upload">
-
             <div class="">Upload tracks</div>
-
-          <!--  <svg width="30px" height="30px" viewBox="0 0 38 38" class="plane-icon hide-medium" version="1.1"
-                 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-              <desc></desc>
-              <defs></defs>
-              <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                <g id="Internet-Networks-Servers-/-Upload/Download-/-upload-dash-arrow-1"
-                   transform="translate(-30.000000, -209.000000)">
-                  <g id="send-email-2" transform="translate(30.000000, 209.000000)">
-                    <path
-                      d="M10.4,10.743 C10.0795417,10.1695961 10.1694462,9.45439019 10.6218509,8.97813854 C11.0742555,8.50188689 11.7839045,8.37539349 12.373,8.666 L31.387,18.325 C31.6385553,18.4529457 31.7969886,18.7112764 31.7969886,18.9935 C31.7969886,19.2757236 31.6385553,19.5340543 31.387,19.662 L12.373,29.334 C11.7839045,29.6246065 11.0742555,29.4981131 10.6218509,29.0218615 C10.1694462,28.5456098 10.0795417,27.8304039 10.4,27.257 L15.458,18.993 L10.4,10.743 Z"
-                      id="Shape" stroke="#FFFFFF" stroke-width="1.5" stroke-linecap="round"
-                      stroke-linejoin="round"></path>
-                    <path d="M31.797,18.993 L15.453,18.993" id="Shape" stroke="#FFFFFF" stroke-width="1.5"
-                          stroke-linecap="round" stroke-linejoin="round"></path>
-                  </g>
-                </g>
-              </g>
-            </svg> -->
           </button>
         </div>
       </div>

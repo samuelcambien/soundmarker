@@ -60,14 +60,13 @@ export class PublicUploadFormComponent implements OnInit {
         this.uploader.queue.map(track => () => this.processTrack(project_id, track))
       );
 
-      if (this.notificationType != "0")
-        RestCall.subscribe(project_id, this.email_from, this.notificationType);
+      if (this.notifications)
+        RestCall.subscribe(project_id, this.email_from, 2);
 
-      const shareResponse = await RestCall.shareProject(project_id, this.expiration, this.notes, this.email_from, this.email_to);
+      const shareResponse = await RestCall.shareProject(project_id, "1month", this.notes, this.email_from, this.email_to);
 
       this.link.emit(shareResponse["project_hash"]);
       this.finished.emit();
-      this.period.emit(this.expiration.substr(1, this.expiration.length));
 
       this.clearForm(true);
 
@@ -129,23 +128,17 @@ export class PublicUploadFormComponent implements OnInit {
     }
   }
 
-  expirations = [{id: '1week', label: 'Week', heading: 'Expire*'}, {id: '1month', label: 'Month', heading: 'Expire*'}];
-  expiration: string = this.localStorageService.getExpiration();
+  availability: boolean = this.localStorageService.getAvailability() ? this.localStorageService.getAvailability(): false;
+  notifications: boolean = this.localStorageService.getAvailability() ? this.localStorageService.getAvailability(): false;
 
-  availabilities = [{id: false, label: 'No', heading: 'Download*'}, {id: true, label: 'Yes', heading: 'Download*'}];
-  availability: boolean = this.localStorageService.getAvailability();
+  toggleDownload(){
+    this.availability = !this.availability;
+  }
 
-  notificationTypes = [{id: '1', label: 'Daily', heading: 'Notify*'}, {id: '2', label: 'Instantly', heading: 'Notify*'},{id: '0', label: 'Never', heading: 'Notify*'}];
-  notificationType: string = this.localStorageService.getNotificationType();
-
+  toggleNotifications(){
+    this.notifications =  !this.notifications;
+  }
   ngOnInit(): void {
-    // wave.init({
-    //   container: canvas
-    // });
-    // wave.loadDecodedBuffer(buffer);
-    // this.notifyID =  this.localStorageService.getNotificationID();
-    // this.expiration =  this.localStorageService.getExpirationType();
-    // this.downloadable =  this.localStorageService.getAllowDownloads();
     this.uploader.onWhenAddingFileFailed = (item, filter) => {
       let message = '';
       switch (filter.name) {
@@ -179,9 +172,8 @@ export class PublicUploadFormComponent implements OnInit {
 
   private storePreferences() {
     this.localStorageService.storeEmailFrom(this.email_from);
-    this.localStorageService.storeExpiration(this.expiration);
     this.localStorageService.storeAvailability(this.availability);
-    this.localStorageService.storeNotificationType(this.notificationType);
+    this.localStorageService.storeNotificationType(this.notifications);
   }
 
   getAcceptedFileTypes() {
@@ -192,7 +184,6 @@ export class PublicUploadFormComponent implements OnInit {
     this.uploader.removeFromQueue(item);
     this.removedFileSize.emit(item.file.size);
   }
-
 }
 
 @Directive({
