@@ -1,5 +1,4 @@
 
-
 .btn-settings {
   width: 100%;
   display: inline-flex;
@@ -34,6 +33,12 @@ label.btn-outline-form:active {
 textarea {
   resize: none;
 }
+
+.unchecked{
+  color: #BACBFD;
+}
+
+
 
 .free-upload {
   margin-right: -1px !important;

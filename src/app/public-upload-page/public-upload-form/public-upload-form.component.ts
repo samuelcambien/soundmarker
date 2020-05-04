@@ -11,7 +11,7 @@ import {
 } from '@angular/core';
 import {FileItem, FileUploader} from '../../ng2-file-upload';
 import {RestCall} from "../../rest/rest-call";
-import {NgbTooltip} from '@ng-bootstrap/ng-bootstrap';
+import {NgbPopover, NgbTooltip} from '@ng-bootstrap/ng-bootstrap';
 import {NgControl, Validators} from '@angular/forms';
 import {Utils} from "../../app.component";
 import {LocalStorageService} from "../../services/local-storage.service";
@@ -45,7 +45,7 @@ export class PublicUploadFormComponent implements OnInit {
   @Output() form = new EventEmitter();
 
   @ViewChild('notes_element') notes_element: ElementRef;
-  @ViewChild('ft') files_tooltip: NgbTooltip;
+  @ViewChild('fp') files_popover: NgbPopover;
 
   async onSubmit() {
 
@@ -155,7 +155,7 @@ export class PublicUploadFormComponent implements OnInit {
           message = "Something went wrong, please try again.";
           break;
       }
-      this.files_tooltip.open(this.files_tooltip.ngbTooltip = message);
+      this.files_popover.open(this.files_popover.ngbPopover = message);
     };
   }
 
@@ -187,29 +187,29 @@ export class PublicUploadFormComponent implements OnInit {
 }
 
 @Directive({
-  selector: '[emailValidationTooltip]'
+  selector: '[emailValidationPopover]'
 })
 
-export class EmailValidationToolTip {
+export class EmailValidationPopover {
   control: any;
-  tooltip: NgbTooltip;
+  popover: NgbPopover;
 
-  constructor(control: NgControl, tooltip: NgbTooltip) {
-    this.tooltip = tooltip;
+  constructor(control: NgControl, popover: NgbPopover) {
+    this.popover = popover;
     this.control = control;
     this.control.statusChanges.subscribe((status) => {
       if (control.dirty && control.invalid) {
       } else {
-        tooltip.close();
+        popover.close();
       }
     });
   }
 
   @HostListener('focusout') onFocusOutMethod() {
     if (this.control.dirty && this.control.invalid && this.control.value) {
-      this.tooltip.open();
+      this.popover.open();
     } else {
-      this.tooltip.close();
+      this.popover.close();
     }
   }
 }

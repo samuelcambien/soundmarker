@@ -41,7 +41,7 @@
           <form #subscribeForm="ngForm" (ngSubmit)="subscribe()" >
             <div class="form-row">
               <input type="email" [(ngModel)]="email" placeholder="Email address" name="email"
-                     pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$"  ngbTooltip="Invalid email address" triggers="manual" emailValidationTooltip required>
+                     pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$"  ngbPopover="Invalid email address" triggers="manual" emailValidationPopover required>
           
               <button type="submit" [disabled]="!subscribeForm.valid">Submit</button>
             </div>

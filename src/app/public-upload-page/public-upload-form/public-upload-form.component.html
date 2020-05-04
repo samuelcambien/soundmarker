@@ -2,7 +2,7 @@
 
   <div class="form-row">
 
-    <div class="form-field col-md-4 bottom-tooltip" placement="bottom" [ngbTooltip]="" #ft='ngbTooltip' triggers="manual" (click)="ft.close()">
+    <div class="form-field col-md-4" placement="bottom" [ngbPopover]="" #fp='ngbPopover' triggers="manual" (click)="fp.close()">
 
       <div class="card upload-songs-area rounded border-0">
 
@@ -86,7 +86,7 @@
 
         <div class="col-sm-12"  >
             <input type="text" [(ngModel)]="email_from" name="email_from" placeholder="Email from*" pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$"
-                   class="form-control form-control-sm" required ngbTooltip="Invalid email address" triggers="manual" emailValidationTooltip>
+                   class="form-control form-control-sm" required ngbPopover="Invalid email address" triggers="manual" container="body" emailValidationPopover popoverClass="popover-class">
 
         </div>
 
@@ -133,7 +133,7 @@
               <input type="checkbox" [checked]="availability" (click)="toggleDownload()">
               <span class="slider round"></span>
             </div>
-            <div class="slider-text">Downloads</div>
+            <div [ngClass]="{'unchecked': !availability}" class="slider-text">Downloads</div>
           </label>
         </div>
 
@@ -143,14 +143,14 @@
               <input type="checkbox" [checked]="notifications" (click)="toggleNotifications()">
               <span class="slider round"></span>
             </div>
-            <div class="slider-text">Notifications</div>
+            <div [ngClass]="{'unchecked': !notifications}" class="slider-text">Notifications</div>
           </label>
         </div>
 
-        <div class="col">
+        <div class="col" ngbPopover="Nice class!" popoverClass="popover-class">
           <button type="submit" [disabled]="!uploader.getNotUploadedItems().length || !myForm.valid"
                   class="btn btn-sm btn-primary free-upload">
-            <div class="">Upload tracks</div>
+            <div class=""> Upload tracks</div>
           </button>
         </div>
       </div>
