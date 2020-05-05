@@ -46,6 +46,7 @@ export class PublicUploadFormComponent implements OnInit {
 
   @ViewChild('notes_element') notes_element: ElementRef;
   @ViewChild('ft') files_tooltip: NgbTooltip;
+  @ViewChild('dropZone') dropZone;
 
   async onSubmit() {
 
@@ -164,7 +165,25 @@ export class PublicUploadFormComponent implements OnInit {
       }
       this.files_tooltip.open(this.files_tooltip.ngbTooltip = message);
     };
+
+    window.addEventListener('dragenter', (e) => {
+      this.showDropZone();
+    });
+
+    this.dropZone.nativeElement.addEventListener('dragleave', (e) => {
+      this.hideDropZone();
+    });
+
+    this.dropZone.nativeElement.addEventListener('drop', () => this.hideDropZone());
   }
+
+  showDropZone() {
+    this.dropZone.nativeElement.style.visibility = "visible";
+  }
+  hideDropZone() {
+    this.dropZone.nativeElement.style.visibility = "hidden";
+  }
+
 
   constructor(private localStorageService: LocalStorageService) {
   }
@@ -192,7 +211,6 @@ export class PublicUploadFormComponent implements OnInit {
     this.uploader.removeFromQueue(item);
     this.removedFileSize.emit(item.file.size);
   }
-
 }
 
 @Directive({
@@ -213,6 +231,8 @@ export class EmailValidationToolTip {
       }
     });
   }
+
+
 
   @HostListener('focusout') onFocusOutMethod() {
     if (this.control.dirty && this.control.invalid && this.control.value) {

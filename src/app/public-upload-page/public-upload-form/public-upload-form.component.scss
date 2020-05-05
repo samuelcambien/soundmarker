@@ -357,7 +357,7 @@ table tr td p {
   z-index: 2000;
   opacity: 100%;
   background: transparent;
-  pointer-events: none !important;
+  visibility: hidden;
+  border: dotted 3px green;
 }
-
 
