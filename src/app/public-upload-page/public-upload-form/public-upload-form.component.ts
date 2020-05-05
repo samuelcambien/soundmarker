@@ -132,7 +132,7 @@ export class PublicUploadFormComponent implements OnInit {
 
   validationCheck(form: NgForm){
      if(this.uploader.queue.length == 0){
-       this.ngbPopOverMessage = "Geen items";
+       this.ngbPopOverMessage = "No tracks were added.";
        this.ngbPopover.open();
        return;
      }
@@ -142,12 +142,12 @@ export class PublicUploadFormComponent implements OnInit {
   emailCheck(form: NgForm){
      if (form.controls.email_from.value && form.controls.email_from.invalid){
        console.log("email ingevuld maar fout");
-       this.ngbPopOverMessage = "Fout email address";
+       this.ngbPopOverMessage = "Your email is invalid";
        this.ngbPopover.open();
      }
     else if (!form.controls.email_from.value && form.controls.email_from.invalid){
       console.log("Geen email");
-      this.ngbPopOverMessage = "Geen email address";
+      this.ngbPopOverMessage = "Your email is missing";
        this.ngbPopover.open();
     }
     else{
