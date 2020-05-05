@@ -10,12 +10,8 @@
   margin-left: -2px;
 }
 
-label input + .slider > .slider-text {
-  color: #eef1ff !important;
-}
-
-label input:checked + .slider > .slider-text {
-  color: #7397ff !important;
+.unchecked{
+  color: #BACBFD;
 }
 
 label.btn-outline-form {
@@ -34,9 +30,7 @@ textarea {
   resize: none;
 }
 
-.unchecked{
-  color: #BACBFD;
-}
+
 
 
 

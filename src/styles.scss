@@ -30,6 +30,37 @@ CONTENTS
 
 */
 
+//popover
+
+.popover-class {
+	border: 1px solid #eef1ff;
+	box-shadow: 0 11px 30px rgba(115, 150, 255, .25) !important;
+	-webkit-box-shadow: 0 11px 30px rgba(115, 150, 255, .25) !important;
+	-moz-box-shadow: 0 11px 30px rgba(115, 150, 255, .25) !important;
+}
+
+.bs-popover-auto[x-placement^=bottom] .arrow::before, .bs-popover-bottom .arrow::before {
+	border-bottom-color: #eef1ff;
+}
+
+.bs-popover-auto[x-placement^=top] .arrow::before, .bs-popover-top .arrow::before {
+    bottom: 0;
+    border-top-color: #eef1ff;
+}
+
+.popover-class .popover-header {
+	color: #7397ff;
+	background: white;
+	border-bottom: 1px solid #eef1ff;
+	-webkit-box-shadow: 0 0.07rem 0.3rem 0.01rem rgba(115, 150, 255, 0.1) !important;
+	-moz-box-shadow: 0 0.07rem 0.3rem 0.01rem rgba(115, 150, 255, 0.1) !important;
+	box-shadow: 0 0.07rem 0.3rem 0.01rem rgba(115, 150, 255, 0.1) !important;
+}
+
+.popover-class .popover-body {
+	color: #717db0;
+}
+
 // Toggle Switch
 
 /* The switch - the box around the slider */
@@ -1176,4 +1207,3 @@ tag-input-form {
 .popover-class {
   //Styling van Popover
 }
-

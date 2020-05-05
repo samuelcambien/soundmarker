@@ -2,7 +2,7 @@
 
   <div class="form-row">
 
-    <div class="form-field col-md-4" placement="bottom" [ngbPopover]="" #fp='ngbPopover' triggers="manual" (click)="fp.close()">
+    <div class="form-field col-md-4" placement="bottom" [ngbPopover]="" popoverClass="popover-class" #fp='ngbPopover' triggers="manual" (click)="fp.close()">
 
       <div class="card upload-songs-area rounded border-0">
 
@@ -147,7 +147,7 @@
           </label>
         </div>
 
-        <div class="col" ngbPopover="Nice class!" popoverClass="popover-class">
+        <div class="col" popoverTitle="Oops..." ngbPopover="Some required information is missing or incorrect. Please correct and try again" popoverClass="popover-class" container="body">
           <button type="submit" [disabled]="!uploader.getNotUploadedItems().length || !myForm.valid"
                   class="btn btn-sm btn-primary free-upload">
             <div class=""> Upload tracks</div>
