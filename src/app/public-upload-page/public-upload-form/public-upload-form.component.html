@@ -2,7 +2,7 @@
 
   <div class="form-row">
 
-    <div class="form-field col-md-4" placement="bottom" [ngbPopover]="" popoverClass="popover-class" #fp='ngbPopover' triggers="manual" (click)="fp.close()">
+    <div class="form-field col-md-4">
 
       <div class="card upload-songs-area rounded border-0">
 
@@ -86,10 +86,8 @@
 
         <div class="col-sm-12"  >
             <input type="text" [(ngModel)]="email_from" name="email_from" placeholder="Email from*" pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$"
-                   class="form-control form-control-sm" required ngbPopover="Invalid email address" triggers="manual" container="body" emailValidationPopover popoverClass="popover-class">
-
+                   class="form-control form-control-sm" (blur)="emailCheck(myForm)" required>
         </div>
-
 
         <div class="col-sm-12">
           <tag-input [(ngModel)]='email_to'
@@ -147,7 +145,8 @@
           </label>
         </div>
 
-        <div class="col" popoverTitle="Oops..." ngbPopover="Some required information is missing or incorrect. Please correct and try again" popoverClass="popover-class" container="body">
+          <ng-template #popContent>{{ngbPopOverMessage}}</ng-template>
+          <div class="col" popoverTitle="Oops..." [ngbPopover]=popContent triggers="manual" popoverClass="popover-class"  [autoClose]="false" container="body" #ngbPopover="ngbPopover" (click)="validationCheck(myForm)">
           <button type="submit" [disabled]="!uploader.getNotUploadedItems().length || !myForm.valid"
                   class="btn btn-sm btn-primary free-upload">
             <div class=""> Upload tracks</div>

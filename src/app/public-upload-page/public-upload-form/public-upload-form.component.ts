@@ -12,7 +12,7 @@ import {
 import {FileItem, FileUploader} from '../../ng2-file-upload';
 import {RestCall} from "../../rest/rest-call";
 import {NgbPopover, NgbTooltip} from '@ng-bootstrap/ng-bootstrap';
-import {NgControl, Validators} from '@angular/forms';
+import {NgControl, NgForm, Validators} from '@angular/forms';
 import {Utils} from "../../app.component";
 import {LocalStorageService} from "../../services/local-storage.service";
 import {PublicUploadPageComponent} from "../public-upload-page.component";
@@ -45,7 +45,7 @@ export class PublicUploadFormComponent implements OnInit {
   @Output() form = new EventEmitter();
 
   @ViewChild('notes_element') notes_element: ElementRef;
-  @ViewChild('fp') files_popover: NgbPopover;
+  @ViewChild('ngbPopover') ngbPopover: NgbPopover;
 
   async onSubmit() {
 
@@ -128,6 +128,38 @@ export class PublicUploadFormComponent implements OnInit {
     }
   }
 
+  ngbPopOverMessage;
+
+  validationCheck(form: NgForm){
+     if(this.uploader.queue.length == 0){
+       this.ngbPopOverMessage = "Geen items";
+       this.ngbPopover.open();
+       return;
+     }
+     this.emailCheck(form);
+  }
+
+  emailCheck(form: NgForm){
+     if (form.controls.email_from.value && form.controls.email_from.invalid){
+       console.log("email ingevuld maar fout");
+       this.ngbPopOverMessage = "Fout email address";
+       this.ngbPopover.open();
+     }
+    else if (!form.controls.email_from.value && form.controls.email_from.invalid){
+      console.log("Geen email");
+      this.ngbPopOverMessage = "Geen email address";
+       this.ngbPopover.open();
+    }
+    else{
+       this.ngbPopover.close();
+    }
+
+    //
+    // else if (!form.controls[0].dirty && form.controls[0].invalid){
+    //   console.log("email niet ingevuld");
+    // }
+  }
+
   availability: boolean = this.localStorageService.getAvailability() ? this.localStorageService.getAvailability(): false;
   notifications: boolean = this.localStorageService.getAvailability() ? this.localStorageService.getAvailability(): false;
 
@@ -143,20 +175,24 @@ export class PublicUploadFormComponent implements OnInit {
       let message = '';
       switch (filter.name) {
         case 'fileSize':
-          message = "You exceeded the limit of 2 GB."
+          this.ngbPopOverMessage = "You exceeded the limit of 2 GB."
           break;
         case 'onlyAudio':
-          message = "One or more files are not supported and were not added.";
+          this.ngbPopOverMessage = "One or more files are not supported and were not added.";
           break;
         case 'checkSizeLimit':
-          message = "You exceeded the limit of 2 GB.";
+          this.ngbPopOverMessage = "You exceeded the limit of 2 GB.";
           break;
         default:
-          message = "Something went wrong, please try again.";
+          this.ngbPopOverMessage = "Something went wrong, please try again.";
           break;
       }
-      this.files_popover.open(this.files_popover.ngbPopover = message);
+      this.ngbPopover.open();
     };
+
+    this.uploader.onAfterAddingAll = (item) => {
+      this.ngbPopover.close();
+    }
   }
 
   constructor(private localStorageService: LocalStorageService) {
