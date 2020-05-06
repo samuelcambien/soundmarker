@@ -81,15 +81,15 @@
     </div>
 
     <div class="col-md-8">
-      
+
       <div class="form-row">
 
         <div class="col-sm-12"  >
             <input type="text" [(ngModel)]="email_from" name="email_from" placeholder="Email from*" pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$"
                    class="form-control form-control-sm" required ngbTooltip="Invalid email address" triggers="manual" emailValidationTooltip>
-                   
+
         </div>
-       
+
 
         <div class="col-sm-12">
           <tag-input [(ngModel)]='email_to'
@@ -110,7 +110,7 @@
           </tag-input>
         </div>
       </div>
-      
+
       <div class="form-row">
         <div class="form-group col hide-phone">
                 <textarea #notes_element [(ngModel)]="notes" type="text" placeholder="Notes" name="notes"
@@ -128,7 +128,7 @@
       <div class="form-row radios">
 
         <div class="col">
-	       
+
           <ng-select
             class="custom noselect expiration"
             bindValue="id"
@@ -212,4 +212,5 @@
      [uploader]="uploader"
      class="well my-drop-zone"
      >
+     <h3>Drop that boogie</h3>
 </div>
