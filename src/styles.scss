@@ -35,18 +35,24 @@ CONTENTS
 
 
 .popover-class {
-	width: 164px;
-	margin-bottom: 10px;
-	margin-left: -19px;
+
+
 	border: none;
 	background: #7397ff;
 	box-shadow: 0 11px 30px rgba(115, 150, 255, .25) !important;
 	-webkit-box-shadow: 0 11px 30px rgba(115, 150, 255, .25) !important;
 	-moz-box-shadow: 0 11px 30px rgba(115, 150, 255, .25) !important;
 	border-radius: 0.2rem;
+	max-width: 300px;
 }
 
-.popover-class .arrow {
+.popover-class.popover-submit {
+	margin-bottom: 10px;
+	margin-left: -19px;
+	width: 164px;
+}
+
+.popover-class.popover-submit .arrow {
 	left: 60% !important;
 }
 

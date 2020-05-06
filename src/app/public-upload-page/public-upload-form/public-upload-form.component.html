@@ -110,7 +110,7 @@
       </div>
 
       <div class="form-row">
-        <div class="form-group col hide-phone">
+        <div class="form-group col hide-phone" >
                 <textarea #notes_element [(ngModel)]="notes" type="text" placeholder="Notes" name="notes"
                           class="form-control form-control-sm"
                           rows="2"></textarea>
@@ -126,7 +126,8 @@
       <div class="form-row radios">
 
         <div class="col">
-          <label class="custom expiration btn btn-sm btn-outline-form btn-settings noselect">
+          <label class="custom expiration btn btn-sm btn-outline-form btn-settings noselect" popoverClass="popover-class" ngbPopover="Allow downloading of uploaded tracks"
+  [openDelay]="300" [closeDelay]="300" triggers="mouseenter:mouseleave">
             <div class="switch">
               <input type="checkbox" [checked]="availability" (click)="toggleDownload()">
               <span class="slider round"></span>
@@ -136,7 +137,8 @@
         </div>
 
         <div class="col">
-          <label class="custom noselect downloadable btn btn-sm btn-outline-form btn-settings">
+          <label class="custom noselect downloadable btn btn-sm btn-outline-form btn-settings" popoverClass="popover-class" ngbPopover="Get notified by email on new comments"
+  [openDelay]="300" [closeDelay]="300" triggers="mouseenter:mouseleave">
             <div class="switch">
               <input type="checkbox" [checked]="notifications" (click)="toggleNotifications()">
               <span class="slider round"></span>
@@ -146,7 +148,7 @@
         </div>
 
           <ng-template #popContent>{{ngbPopOverMessage}}</ng-template>
-          <div class="col last" popoverTitle="Oops!" [ngbPopover]=popContent triggers="manual" placement="top" popoverClass="popover-class"  [autoClose]="'outside'" container="body" #ngbPopover="ngbPopover" (click)="validationCheck(myForm)">
+          <div class="col last" popoverTitle="Oops!" [ngbPopover]=popContent triggers="manual" placement="top" popoverClass="popover-class popover-submit"  [autoClose]="'outside'" container="body" #ngbPopover="ngbPopover" (click)="validationCheck(myForm)">
           <button type="submit" [disabled]="!uploader.getNotUploadedItems().length || !myForm.valid"
                   class="btn btn-sm btn-primary free-upload">
             <div class=""> Upload tracks</div>
