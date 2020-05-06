@@ -23,7 +23,7 @@
   margin-bottom: 60px;
   width: 640px;
   left: 60px;
-  min-height: 243px;
+  min-height: 260px;
   max-height: calc(100% - 120px);
   position: fixed;
   z-index: 100;
@@ -43,11 +43,11 @@
 
 
 
-// responsive 
+// responsive
 
 @media (max-width: 1199.98px) {
 
-	
+
 	.public-page {
 	margin-top: 240px;
 	top: inherit;
@@ -59,26 +59,26 @@
 }
 
 @media (max-width: 767.98px) {
-	
+
 	.public-page {
 		top: inherit;
-		
+
 		min-height: 160px;
-		
+
 		width: calc(100% - 120px);
 	    left: inherit;
 	    right: 60px;
 	    max-width: 640px;
 	    min-width: 536px;
-	   
+
 	    position: fixed;
 	    margin-bottom: 60px;
     }
-    
+
 }
 
 @media (max-width: 696px) {
-	
+
 	.public-page {
 		left: inherit;
 		right: inherit;
@@ -88,31 +88,31 @@
 }
 
 @media (max-width: 666px) {
-	
+
 	.public-page {
 	  top: inherit;
-	 
-	  
+
+
     }
-    
+
 }
 
 @media (max-width: 636px) {
-	
+
 	.public-page {
-	  
-	  
+
+
     }
-    
+
 }
 
 @media (max-width: 606px) {
-	
+
 	.public-page {
-		
-		
+
+
    }
-   
+
 }
 
 
@@ -135,24 +135,24 @@
   -webkit-box-shadow: 0 0rem 0.3rem 0.01rem rgba(115, 150, 255, 0.25) !important;
 	 -moz-box-shadow:  0 0rem 0.3rem 0.01rem rgba(115, 150, 255, 0.25) !important;
         box-shadow: 0 0rem 0.3rem 0.01rem rgba(115, 150, 255, 0.25) !important;
-       
-    
+
+
   }
-  
+
   .phone-scroll {
 	  overflow-y: inherit;
 	  height: 100%;
 	 padding-left: 10px;
 	 padding-right: 10px;
-	  
+
   }
-  
+
   .upload-container {
     min-height: 100px;
     padding: 10px !important;
     overflow: hidden;
   }
-  
+
     .btn-group {
     margin-bottom: 10px;
     width: 100%;
@@ -166,10 +166,5 @@
     width: 96%;
   }
 
-  
+
   }
-  
-
-
-
-
