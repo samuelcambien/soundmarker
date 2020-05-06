@@ -8,9 +8,14 @@
 	-webkit-box-shadow: 0 11px 30px rgba(115, 150, 255, .25) !important;
 	-moz-box-shadow: 0 11px 30px rgba(115, 150, 255, .25) !important;
 	position: relative;
-	// background: url('/assets/demo-project.png');
+	overflow: hidden;
+	 background: white;
 	// background-size: contain;
 	// background-repeat: no-repeat;
+}
+
+.start-image #source {
+	left: 1px;
 }
 
 #public-landing {
