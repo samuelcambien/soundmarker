@@ -47,7 +47,7 @@ export class PublicPageComponent implements OnInit, AfterViewInit {
   }
 
   openIntroduction() {
-    this.modalService.open(PublicIntroductionComponent, {size: "lg", windowClass: 'intro-modal', backdrop: 'static', keyboard: false});
+    this.modalService.open(PublicIntroductionComponent, {size: "full", windowClass: 'intro-modal', backdrop: 'static', keyboard: false});
   }
 
   ngOnInit() {
