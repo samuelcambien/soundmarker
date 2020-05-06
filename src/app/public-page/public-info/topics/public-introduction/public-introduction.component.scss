@@ -19,6 +19,41 @@
 	padding: 30px;
 }
 
+#public-landing .start-logo {
+	width: 175px;
+	height: 35px;
+	position: fixed;
+	top: 20px;
+	left: 20px;
+}
+
+#public-landing .start-link {
+	position: fixed;
+	top: 20px;
+	right: 5px;
+	border-radius: 0.3rem !important;
+	box-shadow: 0 11px 30px rgba(115, 150, 255, .25) !important;
+	-webkit-box-shadow: 0 11px 30px rgba(115, 150, 255, .25) !important;
+	-moz-box-shadow: 0 11px 30px rgba(115, 150, 255, .25) !important;
+	transition: 0.2s;
+	-webkit-transition: 0.2s;
+	font-family: 'sofia-regular' !important;
+	border: none;
+	cursor: pointer;
+	font-size: 18px;
+	margin: 0;
+	padding: 12px 24px;
+	text-align: center;
+	text-decoration: none;
+	overflow-wrap: break-word;
+	margin-right: 15px;
+}
+
+.start-link.learn {
+	background-color: white !important;
+	color: #7397ff !important;
+}
+
 #public-landing .container {
 	min-height: 460px;
 }
@@ -106,11 +141,12 @@
 	display: inline-block;
 	font-size: 18px;
 	margin: 0;
-	padding: 12px 24px;
+	padding: 12px 92px;
 	text-align: center;
 	text-decoration: none;
 	overflow-wrap: break-word;
 	margin-right: 15px;
+
 }
 
 .start-button.accept {
@@ -140,7 +176,7 @@
 }
 
 // Large devices (desktops, less than 1200px)
-@media (max-width: 1199.98px) {
+@media screen and (max-width: 1199.98px) , screen and (max-height: 780px) {
 
 	.start-image {
 		width: 360px;
@@ -199,6 +235,7 @@
 		overflow-y: scroll;
 	}
 
+
 	#public-landing .col {
 		margin: auto;
 	}
@@ -214,11 +251,17 @@
 
 	#public-landing h2 {
 		margin-bottom: 20px;
+
 	}
 
 	#public-landing ul {
 		margin-top: -10px;
 
+	}
+
+	.start-button {
+		width: 100%;
+		margin-bottom: 15px;
 	}
 
 	.show-vert {
@@ -262,10 +305,7 @@
 
 	}
 
-	.start-button {
-		width: 100%;
-		margin-bottom: 15px;
-	}
+
 
  }
 
