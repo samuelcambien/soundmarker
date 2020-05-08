@@ -146,7 +146,7 @@ option {
 }
 
 .free-upload:disabled  {
-	opacity: 1 !important;
+	opacity: 0.4 !important;
   background-color: #7397ff !important;
   border: 1px solid #7397ff !important;
 }
@@ -196,13 +196,10 @@ option {
   border-radius: 50px;
 }
 
-.note-image svg:hover {
-  fill: #ffffff;
-}
 
 #ni1.note-image {
-  width: 70px;
-  height: 70px;
+  width: 43px;
+  height: 43px;
   margin: 0 auto;
   margin-top: 38px;
   margin-bottom: 8px;
@@ -261,6 +258,7 @@ option {
 
 .addsongs {
   padding-bottom: -4px;
+  margin-top: 54px;
 }
 
 .addsongs .note-image, .addsongs h5 {

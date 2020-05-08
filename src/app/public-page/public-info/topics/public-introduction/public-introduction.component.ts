@@ -27,19 +27,19 @@ export class PublicIntroductionComponent implements OnInit {
     this.activeModal.close();
   }
 
-  ngOnInit() {
-    this.images_loaded = this.images.slice(0,2);
-    this.carousel.slide.subscribe(()=>{
-      if(this.images_loaded.length < this.images.length) this.images_loaded.push(this.images[this.images_loaded.length]);
-      else this.carousel.slide.complete();}
-    );
-  }
+//  ngOnInit() {
+  //  this.images_loaded = this.images.slice(0,2);
+    //this.carousel.slide.subscribe(()=>{
+      //if(this.images_loaded.length < this.images.length) this.images_loaded.push(this.images[this.images_loaded.length]);
+      //else this.carousel.slide.complete();}
+    //);
+  //}
 
-  next(){
-    this.carousel.next();
-  }
+  //next(){
+    //this.carousel.next();
+  //}
 
-  prev(){
-    this.carousel.prev();
-  }
+  //prev(){
+  //  this.carousel.prev();
+  // }
 }
