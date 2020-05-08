@@ -22,7 +22,7 @@ import {SmaComponentOutputs} from '../modules/sma.outputs.module'
   templateUrl: './public-page.component.html',
   styleUrls: ['./public-page.component.scss'],
 })
-export class PublicPageComponent implements OnInit, AfterViewInit {
+export class PublicPageComponent implements OnInit {
 
   @Input() project_id;
   @Input() sender;
@@ -47,26 +47,34 @@ export class PublicPageComponent implements OnInit, AfterViewInit {
   }
 
   openIntroduction() {
-    this.modalService.open(PublicIntroductionComponent, {size: "full", windowClass: 'intro-modal', backdrop: 'static', keyboard: false});
+    this.modalService.open(PublicIntroductionComponent, {windowClass: "intro-modal", keyboard: false});
   }
 
   ngOnInit() {
     this.header.nativeElement.addEventListener("wheel", event => {
       this.contentScroll(event.deltaY);
     });
-    setTimeout(()=>{
-      this.smaComponent = !this.smaComponent;
-      this.cdr.detectChanges()}
-      , 1500);
-    }
 
-  ngAfterViewInit() {
-    this.localStorageService.storeVisit();
+    // setTimeout(() => {
+    //   if (this.localStorageService.termsAccepted()) {
+    //     this.openIntroduction();
+    //   }});
+
     setTimeout(() => {
-      if (!this.localStorageService.termsAccepted()) {
-        this.openIntroduction();
-     }});
+        this.smaComponent = !this.smaComponent;
+        this.cdr.detectChanges()
+      }
+      , 1500);
+
+    this.termsAccepted=  false;
+     if (this.localStorageService.termsAccepted()) this.termsAccepted = true;
   }
+
+  acceptTerms(){
+    this.termsAccepted = true;
+  }
+
+  termsAccepted = false;
 
   get smaOutputs(): SmaComponentOutputs {
     return {

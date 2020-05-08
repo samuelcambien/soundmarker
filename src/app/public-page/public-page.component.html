@@ -1,11 +1,12 @@
+<app-public-introduction (acceptTerms)="acceptTerms()" *ngIf="!termsAccepted" class="full-welcome"></app-public-introduction>
+
 <div class="phone-topbar show-phone ">
   <app-public-info-header
-    [message]="message"
-    (openIntroduction)="openIntroduction()">
+    [message]="message">
   </app-public-info-header>
 </div>
 
-<div  class="container rounded phone-scroll">
+<div class="container rounded phone-scroll">
   <div>
     <loadable-component [componentId]="SMA_COMPONENT_ID" [componentOutputs]="smaOutputs" [loadComponent]="loadSMA()">
     </loadable-component>
@@ -23,31 +24,31 @@
   </div>
 </div>
 
-<div class="modal fade info-modal-faq" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
-     aria-hidden="true">
-  <div class="modal-dialog  modal-lg">
-    <div class="modal-content">
-      <app-help-info></app-help-info>
-    </div>
-  </div>
-</div>
+<!--<div class="modal fade info-modal-faq" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"-->
+     <!--aria-hidden="true">-->
+  <!--<div class="modal-dialog  modal-lg">-->
+    <!--<div class="modal-content">-->
+      <!--<app-help-info></app-help-info>-->
+    <!--</div>-->
+  <!--</div>-->
+<!--</div>-->
 
-<div class="modal fade info-modal-aboutus" id="about-us">
-  <div class="modal-dialog  modal-lg">
-    <div class="modal-content">
-      <app-about-us-info></app-about-us-info>
-    </div>
-  </div>
-</div>
+<!--<div class="modal fade info-modal-aboutus" id="about-us">-->
+  <!--<div class="modal-dialog  modal-lg">-->
+    <!--<div class="modal-content">-->
+      <!--<app-about-us-info></app-about-us-info>-->
+    <!--</div>-->
+  <!--</div>-->
+<!--</div>-->
 
-<div class="modal fade info-modal-pro" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
-     aria-hidden="true">
-  <div class="modal-dialog  modal-lg">
-    <div class="modal-content">
-      <app-pro-info></app-pro-info>
-    </div>
-  </div>
-</div>
+<!--<div class="modal fade info-modal-pro" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"-->
+     <!--aria-hidden="true">-->
+  <!--<div class="modal-dialog  modal-lg">-->
+    <!--<div class="modal-content">-->
+      <!--<app-pro-info></app-pro-info>-->
+    <!--</div>-->
+  <!--</div>-->
+<!--</div>-->
 
 <div class="modal fade info-modal-player-introduction" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
      aria-hidden="true">
@@ -68,21 +69,21 @@
 </div>
 
 
-<div class="modal fade info-modal-demo hide-medium" id="demo" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
-     aria-hidden="true">
-  <div class="modal-dialog  modal-lg">
-    <div class="modal-content">
-      <app-demo></app-demo>
-    </div>
-  </div>
-</div>
+<!--<div class="modal fade info-modal-demo hide-medium" id="demo" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"-->
+     <!--aria-hidden="true">-->
+  <!--<div class="modal-dialog  modal-lg">-->
+    <!--<div class="modal-content">-->
+      <!--<app-demo></app-demo>-->
+    <!--</div>-->
+  <!--</div>-->
+<!--</div>-->
 
-<div id="openModal" data-backdrop="static" data-keyboard="false"
-     class="modal modal-intro fade info-modal-public-introduction" role="dialog" aria-labelledby="myLargeModalLabel"
-     aria-hidden="true">
-  <div class="modal-dialog modal-lg modal-lg-intro">
-    <div class="modal-content modal-content-intro">
-      <app-public-introduction></app-public-introduction>
-    </div>
-  </div>
-</div>
+<!--<div id="openModal" data-backdrop="static" data-keyboard="false"-->
+     <!--class="modal-intro info-modal-public-introduction" role="dialog" aria-labelledby="myLargeModalLabel"-->
+     <!--aria-hidden="true">-->
+  <!--<div width="100%" height="100%" class="modal-dialog" >-->
+    <!--<div width="100%" height="100%" class="modal-content">-->
+
+    <!--</div>-->
+  <!--</div>-->
+<!--</div>-->
