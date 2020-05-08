@@ -1,3 +1,5 @@
+<app-public-introduction (acceptTerms)="acceptTerms()" *ngIf="!termsAccepted" class="full-welcome"></app-public-introduction>
+
 <div class="phone-topbar show-phone ">
   <app-public-info-header
     [message]="message">
@@ -81,7 +83,7 @@
      <!--aria-hidden="true">-->
   <!--<div width="100%" height="100%" class="modal-dialog" >-->
     <!--<div width="100%" height="100%" class="modal-content">-->
-      <app-public-introduction (acceptTerms)="acceptTerms()" *ngIf="!termsAccepted" width="100%" height="100%"></app-public-introduction>
+
     <!--</div>-->
   <!--</div>-->
 <!--</div>-->

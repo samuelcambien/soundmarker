@@ -67,7 +67,7 @@ export class PublicPageComponent implements OnInit {
       , 1500);
 
     this.termsAccepted=  false;
-    // if (this.localStorageService.termsAccepted()) this.termsAccepted = true;
+     if (this.localStorageService.termsAccepted()) this.termsAccepted = true;
   }
 
   acceptTerms(){

@@ -169,6 +169,21 @@ input:checked + .slider:before {
 
 // landing
 
+.full-welcome {
+	min-width: 100vw !important;
+	min-height: 100vh !important;
+	position: fixed;
+	border: none !important;
+	z-index: 1050 !important;
+	left: 0px;
+	right: 0px;
+	margin: 0px !important;
+	background: white;
+	// background: url(https://s3.eu-central-1.amazonaws.com/soundmarker-extraresources/LIVE/191109+-+LIVE/SMA-START/SMA-START-A/sm-bg-1.jpg);
+	background-size: cover;
+	background-repeat: no-repeat;
+}
+
 #sm .modal-full, .modal-full {
 	min-width: 100vw !important;
 	min-height: 100vh !important;
