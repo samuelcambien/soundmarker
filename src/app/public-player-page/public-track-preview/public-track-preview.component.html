@@ -18,10 +18,10 @@
     </div>
 
     <div class="ml-auto hide-phone player-toolbar">
-      <div *ngIf="version?.downloadable && !expired" class="top-icon cloud-icon margin-tooltip" id="cloud-icon" (click)="download()" placement="top"
-           ngbTooltip="Download">
+      <div *ngIf="version?.downloadable && !expired" class="top-icon cloud-icon" id="cloud-icon" (click)="download()" popoverClass="popover-class" ngbPopover="Download"
+[openDelay]="300" [closeDelay]="300" triggers="mouseenter:mouseleave" placement="bottom">
 
-        
+
 <svg width="22px" height="18px" viewBox="0 0 22 18" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
     <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
         <g id="Internet-Networks-Servers-/-Upload/Download-/-upload-dash-arrow-1" transform="translate(-389.000000, -447.000000)" class="icon-stroke" stroke-width="1.5">
@@ -37,7 +37,7 @@
         </g>
     </g>
 </svg>
-        
+
       </div>
 
     </div>
@@ -45,4 +45,3 @@
   </div>
 
 </div>
-

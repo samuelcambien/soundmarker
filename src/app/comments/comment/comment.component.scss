@@ -48,7 +48,7 @@
 	border-top-left-radius: 1.2rem;
 	border-top-right-radius: 0rem;
 	border-bottom-right-radius: 0rem;
-	background-color: #e2e7f5;
+	background-color: #eef1ff;
 	padding-left: 10px;
 	padding-top: 10px;
 }
@@ -94,7 +94,7 @@
     pointer-events: none;
   }
 
-  &:hover,
+  
   &.active {
     .stroke {
       stroke: #7397ff;
@@ -116,13 +116,13 @@
 }
 
 .comment {
-	background-color: #eef1ff;
+	background-color: #f5f7fc;
 	border-radius: 0.6rem;
 	margin-top: 10px;
   border-top-left-radius: 1.2rem;
 
   &.highlight {
-    background-color: #e2e7f5;
+    background-color: #eef1ff;
   }
 }
 
@@ -144,7 +144,7 @@
     background: #cbd1e9 !important;
     border: none !important;
     border-radius: 0.8rem;
-    
+
 }*/
 
 .comment-tag {
@@ -169,11 +169,11 @@
 	text-align: left;
 	color: #fff !important;
 	margin-right: 6px;
-	
+
 }
 
 .comment-play p {
-	
+
 	font-size: 8pt;
 	text-align: left;
 	color: #fff !important;

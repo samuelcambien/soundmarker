@@ -127,7 +127,7 @@
 
         <div class="col">
           <label class="custom expiration btn btn-sm btn-outline-form btn-settings noselect" popoverClass="popover-class" ngbPopover="Allow downloading of uploaded tracks"
-  [openDelay]="300" [closeDelay]="300" triggers="mouseenter:mouseleave">
+  [openDelay]="300" [autoClose]="false" triggers="mouseenter:mouseleave">
             <div class="switch">
               <input type="checkbox" [checked]="availability" (click)="toggleDownload()">
               <span class="slider round"></span>
@@ -138,7 +138,7 @@
 
         <div class="col">
           <label class="custom noselect downloadable btn btn-sm btn-outline-form btn-settings" popoverClass="popover-class" ngbPopover="Get notified by email on new comments"
-  [openDelay]="300" [closeDelay]="300" triggers="mouseenter:mouseleave">
+  [openDelay]="300" [autoClose]="false" triggers="mouseenter:mouseleave">
             <div class="switch">
               <input type="checkbox" [checked]="notifications" (click)="toggleNotifications()">
               <span class="slider round"></span>
