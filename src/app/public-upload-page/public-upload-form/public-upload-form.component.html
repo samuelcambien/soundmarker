@@ -150,7 +150,8 @@
           <ng-template #popContent>{{ngbPopOverMessage}}</ng-template>
           <div class="col last" popoverTitle="Oops!" [ngbPopover]=popContent triggers="manual" placement="top" popoverClass="popover-class popover-submit"  [autoClose]="'outside'" container="body" #ngbPopover="ngbPopover" (click)="validationCheck(myForm)">
           <button type="submit" [disabled]="!uploader.getNotUploadedItems().length || !myForm.valid"
-                  class="btn btn-sm btn-primary free-upload">
+                  class="btn btn-sm btn-primary free-upload"
+                  [ngClass]="uploader.getNotUploadedItems().length > 0 ? 'upload-tracks': 'upload-tracks-disabled'" >
             <div class=""> Upload tracks</div>
           </button>
         </div>

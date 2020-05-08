@@ -146,7 +146,7 @@ option {
 }
 
 .free-upload:disabled  {
-	opacity: 0.4 !important;
+	//opacity: 0.4 !important;
   background-color: #7397ff !important;
   border: 1px solid #7397ff !important;
 }
@@ -418,4 +418,13 @@ table tr td p {
   position: absolute;
   top: 47%;
   width: 100%;
+}
+
+.upload-tracks{
+  background: #7397ff !important;
+  opacity: 1 !important;
+}
+
+.upload-tracks-disabled{
+  opacity: 0.45 !important;
 }
