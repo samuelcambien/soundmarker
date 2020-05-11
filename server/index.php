@@ -434,19 +434,19 @@ if (in_array($project_id, $_SESSION['user_projects'])) {
         echo("The email was not sent. Error message: ".$e->getAwsErrorMessage()."\n");
     }
 
-    // Create notifications
-    // Notification -> Expired
-    $senddate = $projectdate->modify('-3 days');
-    $senddatef = $senddate->format('Y-m-d H:i:s');
-    $db = Flight::db();
-    $receiverstring = implode("\n", $receiver);
-    $sql = "INSERT INTO Notification (emailaddress, senddate, type, status, type_id, recipientemail) VALUES ('$sender', '$projectdatef', '0', '0', '$project_id', '$receiverstring')";
-    $result = $db->query($sql);
-
     // Create DailyUpdates in dB
     // $sql = "INSERT INTO DailyUpdates (emailaddress, project_id) VALUES ('$sender', '$project_id')";
     // $result = $db->query($sql);
   }
+
+  // Create notifications
+  // Notification -> Expired
+  $senddate = $projectdate->modify('-3 days');
+  $senddatef = $senddate->format('Y-m-d H:i:s');
+  $db = Flight::db();
+  $receiverstring = implode("\n", $receiver);
+  $sql = "INSERT INTO Notification (emailaddress, senddate, type, status, type_id, recipientemail) VALUES ('$sender', '$projectdatef', '0', '0', '$project_id', '$receiverstring')";
+  $result = $db->query($sql);
 
   // return ok
   Flight::json(array(
