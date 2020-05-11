@@ -444,7 +444,11 @@ if (in_array($project_id, $_SESSION['user_projects'])) {
   $senddate = $projectdate->modify('-3 days');
   $senddatef = $senddate->format('Y-m-d H:i:s');
   $db = Flight::db();
-  $receiverstring = implode("\n", $receiver);
+  if ($receiver) {
+    $receiverstring = implode("\n", $receiver);
+  } else {
+    $receiverstring = "";
+  }
   $sql = "INSERT INTO Notification (emailaddress, senddate, type, status, type_id, recipientemail) VALUES ('$sender', '$projectdatef', '0', '0', '$project_id', '$receiverstring')";
   $result = $db->query($sql);
 
