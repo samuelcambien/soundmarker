@@ -120,7 +120,7 @@ if (isset($_SESSION["status"]) && isset($_SESSION['ENDTIME'])) {
            'client_secret' => $config['OAUTH_CLIENT_SECRET'] // Only need if server is running CGI
         );
 
-        $curl = curl_init( $config['oauth_server_location'] . '/oauth/token/' );
+        $curl = curl_init( $config['OAUTH_SERVER_LOCATION'] . '/oauth/token/' );
 
         // Uncomment if you want to use CLIENTID AND SECRET IN THE HEADER
         //curl_setopt($curl, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
@@ -152,6 +152,13 @@ if (isset($_SESSION["status"]) && isset($_SESSION['ENDTIME'])) {
   } 
 }
 include 'index.html';
+});
+
+
+Flight::route('GET /login', function() {
+
+$config = Flight::get("config");
+echo "<script>window.location = \"" . $config['OAUTH_SERVER_LOCATION'] . "/oauth/authorize/?response_type=code&client_id=" . $config['OAUTH_CLIENT_ID'] . "&state=soundmarkerpro&redirect_uri=" . $config['PHPSERVER_URL'] ."callback.php" . "\";</script>";
 });
 
 
