@@ -1107,7 +1107,7 @@ if (in_array($file_id, $_SESSION['user_files'])) {
     }
 
     // delete files
-    //exec("rm -rf /tmp/".$file_id."/*");
+    exec("rm -rf /tmp/".$file_id."/*");
 
   // if coded is not lossy, transcode
   // if ((strpos($codec_name, 'pcm') !== false) || (strpos($codec_name, 'lac') !== false) || (strpos($codec_name, 'wavpack') !== false)) {
@@ -1139,7 +1139,7 @@ if (in_array($file_id, $_SESSION['user_files'])) {
        ]);
 
      // delete file again
-     //unlink("/tmp/mp3".$file_id.".mp3");
+     unlink("/tmp/mp3".$file_id.".mp3");
   // } else {
   //        $result = $s3->putObject([
   //            'Bucket' => $config['AWS_S3_BUCKET'],
