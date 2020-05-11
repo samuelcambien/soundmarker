@@ -6,14 +6,16 @@
   <div class="row reply-row">
     <p class="name-tx">{{reply.name}}</p>
     <p class="date-tx ml-auto hide-phone noselect"
-       placement="top"
-       ngbTooltip="{{getTimeAccurate(reply.comment_time)}}">
+    popoverClass="popover-class"
+    ngbPopover="{{getTimeAccurate(reply.comment_time)}}"
+[autoClose]="false" triggers="mouseenter:mouseleave" placement="top"
+       >
       {{getTimeHumanized(reply.comment_time)}}
     </p>
 
   </div>
   <div><p class="row reply-row comment-tx"> {{reply.notes}}</p></div>
-  
+
    <div class="comment-options" *ngIf="reply.deleteable">
         <div class="dropdown">
           <a class="dropdown-toggle" href role="button" id="dropdown-options" data-toggle="dropdown"
@@ -28,10 +30,10 @@
           </div>
         </div>
       </div>
-  
-  
 
-  
+
+
+
 </div>
 
 <ng-template #deletebutton>

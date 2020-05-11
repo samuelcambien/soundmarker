@@ -48,7 +48,7 @@
 	border-top-left-radius: 1.2rem;
 	border-top-right-radius: 0rem;
 	border-bottom-right-radius: 0rem;
-	background-color: #eef1ff;
+	background-color: #e1e6fd;
 	padding-left: 10px;
 	padding-top: 10px;
 }
@@ -94,7 +94,7 @@
     pointer-events: none;
   }
 
-  
+
   &.active {
     .stroke {
       stroke: #7397ff;
@@ -116,13 +116,13 @@
 }
 
 .comment {
-	background-color: #f5f7fc;
+	background-color: #eef1ff;
 	border-radius: 0.6rem;
 	margin-top: 10px;
   border-top-left-radius: 1.2rem;
 
   &.highlight {
-    background-color: #eef1ff;
+    background-color: #e1e6fd;
   }
 }
 
