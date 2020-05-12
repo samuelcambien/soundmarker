@@ -33,6 +33,10 @@
     </div>
 
     <public-track-player
+      [message]="message"
+      [expiry_date]="expiry_date"
+      [sender]="project.sender"
+
       *ngFor="let track of project?.tracks"
       [track]="track"
       [enableOverview]="project?.tracks?.length > 1"

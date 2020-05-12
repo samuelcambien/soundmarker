@@ -22,6 +22,9 @@ import {animate, state, style, transition, trigger} from '@angular/animations';
 import {BehaviorSubject} from 'rxjs';
 import {distinctUntilChanged} from 'rxjs/operators';
 import {State} from "../../play-button/play-button.component";
+import {Message} from '../../message';
+import {Utils} from '../../app.component';
+import {NgbPopover} from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'public-track-player',
@@ -55,6 +58,9 @@ export class PublicTrackPlayerComponent implements OnInit, OnChanges {
   @Input() enableOverview: boolean;
   @Input() expired: boolean = true;
   @Input() launchTitleScroll: boolean;
+  @Input() message: Message;
+  @Input() sender;
+  @Input() expiry_date;
 
   @Output() error = new EventEmitter();
   @Output() overview = new EventEmitter();
@@ -65,6 +71,7 @@ export class PublicTrackPlayerComponent implements OnInit, OnChanges {
   @ViewChild('phoneSearchInput') phoneSearchInput: ElementRef;
   @ViewChild('phonesearch') phonesearch: ElementRef;
   @ViewChild('trackTitle') trackTitleDOM: ElementRef;
+  @ViewChild('markerPopover') markerPopover: NgbPopover;
 
   commentSorters: CommentSorter[] = [
     CommentSorter.MOST_RECENT,
@@ -86,6 +93,8 @@ export class PublicTrackPlayerComponent implements OnInit, OnChanges {
   version: Version;
   phoneOrder: boolean;
   waveformInViewPort = true;
+
+  public notesCollapsed = true;
 
   waveformInViewPortObservable = new BehaviorSubject<boolean>(true);
 
@@ -111,6 +120,7 @@ export class PublicTrackPlayerComponent implements OnInit, OnChanges {
   }
 
   ngOnInit(): void {
+    console.log(this.message);
     this.waveformInViewPort = true;
     this.version = this.track.versions[0];
     this.player.progress.subscribe(e => {
@@ -126,6 +136,7 @@ export class PublicTrackPlayerComponent implements OnInit, OnChanges {
       this.cdr.detectChanges();
     });
     setTimeout(()=>this.cdr.detectChanges(),50);
+    this.markerPopover.open();
   }
 
   private getPlayerWidth(): number {
@@ -316,6 +327,21 @@ export class PublicTrackPlayerComponent implements OnInit, OnChanges {
 
   playInterval() {
 
+  }
+
+  getDateHumanized() {
+    if(this.expiry_date) {
+      Utils.getDaysDiff(this.expiry_date);
+      return Utils.getDateHumanized(this.expiry_date);
+    }
+    return null;
+  }
+
+  getDaysToExpired() {
+    if(this.expiry_date) {
+      return Utils.getDaysDiff(this.expiry_date);
+    }
+    return null;
   }
 
   createNewComment() {

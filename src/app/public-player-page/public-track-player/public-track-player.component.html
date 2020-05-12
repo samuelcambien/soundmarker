@@ -279,8 +279,10 @@
               appDraggable
               (dragStart)="dragStart()"
               (dragMove)="updateStartTime($event)"
+              #markerPopover="ngbPopover"
               popoverClass="popover-class marker" ngbPopover="Drag marker for time stamped comment" placement="right"
-      [openDelay]="300" [closeDelay]="300" triggers="mouseenter:mouseleave"
+      [openDelay]="300" [closeDelay]="300" triggers="manual"
+              (mousedown)="markerPopover.close()"
             >
               <div class="phone-draggable"></div>
             </div>
@@ -342,11 +344,23 @@
 
   </div>
 
-  <div class="session-notes shadow-topbar"><h3>By michiel@soundmarker.com</h3><h4><!--Expires on May 9th 2020 --><a>Show more</a></h4><!--<p>No noted included<br><a>Show less</a><a>Show more</a></p>--></div>
+  <div class="session-notes shadow-topbar">
+    <h3>By {{sender}}</h3>
+    <div *ngIf="!message.text">
+      <h4 *ngIf="!expired"> Expires in {{getDaysToExpired()}} days ({{getDateHumanized()}}) </h4>
+      <h4 *ngIf="expired"> Expired on {{getDateHumanized()}} </h4>
+    </div>
+    <h4 *ngIf="message.text"><a *ngIf="notesCollapsed" (click)="notesCollapsed = !notesCollapsed">Show more</a></h4>
+      <div [ngbCollapse]="notesCollapsed">
+        <h4 *ngIf="!expired"> Expires in {{getDaysToExpired()}} days ({{getDateHumanized()}}) </h4>
+        <h4 *ngIf="expired"> Expired on {{getDateHumanized()}} </h4>
+        {{message.text}}
+      <h4><a (click)="notesCollapsed = !notesCollapsed">Show less</a></h4>
+      </div>
+  </div>
+
 
   <div class="comments">
-
-
 
     <div class="comments-header row">
 
