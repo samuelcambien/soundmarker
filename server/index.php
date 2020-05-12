@@ -120,7 +120,7 @@ if (isset($_SESSION["status"]) && isset($_SESSION['ENDTIME'])) {
            'client_secret' => $config['OAUTH_CLIENT_SECRET'] // Only need if server is running CGI
         );
 
-        $curl = curl_init( $config['oauth_server_location'] . '/oauth/token/' );
+        $curl = curl_init( $config['OAUTH_SERVER_LOCATION'] . '/oauth/token/' );
 
         // Uncomment if you want to use CLIENTID AND SECRET IN THE HEADER
         //curl_setopt($curl, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
@@ -152,6 +152,13 @@ if (isset($_SESSION["status"]) && isset($_SESSION['ENDTIME'])) {
   } 
 }
 include 'index.html';
+});
+
+
+Flight::route('GET /login', function() {
+
+$config = Flight::get("config");
+echo "<script>window.location = \"" . $config['OAUTH_SERVER_LOCATION'] . "/oauth/authorize/?response_type=code&client_id=" . $config['OAUTH_CLIENT_ID'] . "&state=soundmarkerpro&redirect_uri=" . $config['PHPSERVER_URL'] ."callback.php" . "\";</script>";
 });
 
 
@@ -434,19 +441,23 @@ if (true) {
         echo("The email was not sent. Error message: ".$e->getAwsErrorMessage()."\n");
     }
 
-    // Create notifications
-    // Notification -> Expired
-    $senddate = $projectdate->modify('-3 days');
-    $senddatef = $senddate->format('Y-m-d H:i:s');
-    $db = Flight::db();
-    $receiverstring = implode("\n", $receiver);
-    $sql = "INSERT INTO Notification (emailaddress, senddate, type, status, type_id, recipientemail) VALUES ('$sender', '$projectdatef', '0', '0', '$project_id', '$receiverstring')";
-    $result = $db->query($sql);
-
     // Create DailyUpdates in dB
     // $sql = "INSERT INTO DailyUpdates (emailaddress, project_id) VALUES ('$sender', '$project_id')";
     // $result = $db->query($sql);
   }
+
+  // Create notifications
+  // Notification -> Expired
+  $senddate = $projectdate->modify('-3 days');
+  $senddatef = $senddate->format('Y-m-d H:i:s');
+  $db = Flight::db();
+  if ($receiver) {
+    $receiverstring = implode("\n", $receiver);
+  } else {
+    $receiverstring = "";
+  }
+  $sql = "INSERT INTO Notification (emailaddress, senddate, type, status, type_id, recipientemail) VALUES ('$sender', '$projectdatef', '0', '0', '$project_id', '$receiverstring')";
+  $result = $db->query($sql);
 
   // return ok
   Flight::json(array(
@@ -540,12 +551,12 @@ if ($response) {
       // return ok
       Flight::json(array(
          'project_id' => $project_id, 'status' => $status, 'tracks' => $tracks
-      ), 200);  
+      ), 200);
     } else {
       // return ok
       Flight::json(array(
          'return' => 'passwordmissing'
-      ), 200);  
+      ), 200);
     }
   } else {
     $_SESSION['view_user_projects'][] = $project_id;
@@ -563,7 +574,7 @@ if ($response) {
     // return ok
     Flight::json(array(
        'project_id' => $project_id, 'status' => $status, 'expiration' => $expiration_date, 'sender' => $emailaddress, 'tracks' => $tracks
-    ), 200);  
+    ), 200);
   }
 } else {
     // project hash was not valid.
@@ -1050,9 +1061,17 @@ if (true) {
   $s3 = Flight::get("s3");
 
   // store tmp file.
-  $myfile = fopen("/tmp/orig".$file_id.".".$ext, "w") or die("Unable to open file!");
-  fwrite($myfile, Flight::request()->getBody());
-  fclose($myfile);
+  // $myfile = fopen("/tmp/orig".$file_id.".".$ext, "w") or die("Unable to open file!");
+  // fwrite($myfile, Flight::request()->getBody());
+  // fclose($myfile);
+  $source = fopen("php://input", "r") or die("Unable to open file!");
+  $dest = fopen("/tmp/orig".$file_id.".".$ext, "w") or die("Unable to open file!");
+
+  while (! feof($source)) {
+    fwrite($dest, fgets($source));
+  }
+
+  fclose($dest);
 
   // close session
   session_write_close();

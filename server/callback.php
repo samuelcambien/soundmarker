@@ -56,7 +56,7 @@ if( isset( $_GET['code'] ) ) {
     $now = new DateTime();
     $_SESSION['ENDTIME'] = $now->getTimestamp() + 60*60*24;
     $response = getSubscriptions(json_decode($curl_response)->access_token, $config, $now);
-    $_SESSION["status"] = "";
+    $_SESSION["status"] = "pro";
   }
   
   // Once you have an access token, you know that user has signed in sucessfully and that they have
