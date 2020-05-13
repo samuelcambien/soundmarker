@@ -15,7 +15,6 @@
 	width: 117.5px;
 }
 
-
 input[type='text'], input[type='email'], input[type='url'], input[type='password'], input[type='search'], input[type='number'], input[type='tel'], input[type='range'], input[type='date'], input[type='month'], input[type='week'], input[type='time'], input[type='datetime'], input[type='datetime-local'], input[type='file'], input[type='color'], textarea {
 	background: #ffffff !important;
 	border: 1px solid #ffffff !important;
@@ -61,8 +60,13 @@ button[type='submit'] {
 }
 
 button:hover, button:active, button:focus input[type='button']:hover, input[type="button"]:active, input[type="button"]:focus, input[type='reset']:hover, input[type='submit']:hover, input[type='submit']:active, input[type='submit']:focus {
-	background-color: #5a80f3 !important;
+	//background-color: #5a80f3 !important;
 	
+}
+
+.notify-submit:disabled, .notify-submit:hover:disabled{
+  opacity:0.4;
+  cursor: default;
 }
 
 input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {

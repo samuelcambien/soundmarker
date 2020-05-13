@@ -120,7 +120,6 @@ export class PublicTrackPlayerComponent implements OnInit, OnChanges {
   }
 
   ngOnInit(): void {
-    console.log(this.message);
     this.waveformInViewPort = true;
     this.version = this.track.versions[0];
     this.player.progress.subscribe(e => {

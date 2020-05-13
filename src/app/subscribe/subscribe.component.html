@@ -21,19 +21,6 @@
         <h2>Get notified</h2>
         <p>Get status updates via email to see<br>new comments and replies.</p>
       </div>
-      
-      <div class="spacing"></div>
-      <div class="toggle-buttons">
-          <div class="btn-group btn-group-sm btn-group-toggle" name="notify" ngbRadioGroup [(ngModel)]="notifyID">
-                  <label ngbButtonLabel class="btn btn-outline-form active">
-                    <input ngbButton name="daily" class="slide-selector left-btn" type="radio" [value]="'1'">Daily
-                  </label>
-                  <label ngbButtonLabel class="btn btn-outline-form">
-                    <input ngbButton name="instantly" class="slide-selector" type="radio" [value]="'2'">Instantly
-                  </label>
-              </div>
-      </div>
-              <div class="spacing"></div>
 
       <div class="message-content">
 
@@ -43,7 +30,8 @@
               <input type="email" [(ngModel)]="email" placeholder="Email address" name="email"
                      pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$"  ngbPopover="Invalid email address" triggers="manual" emailValidationPopover required>
           
-              <button type="submit" [disabled]="!subscribeForm.valid">Submit</button>
+              <button type="submit" [disabled]="!subscribeForm.valid" class="notify-submit">Submit</button>
+
             </div>
           </form>
         </div>
