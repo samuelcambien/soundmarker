@@ -9,7 +9,7 @@ import {DragAndDropModule} from 'angular-draggable-droppable';
 import {FileUploadModule} from '../ng2-file-upload';
 import {PublicUploadFormComponent} from '../public-upload-page/public-upload-form/public-upload-form.component';
 
-import {EmailValidationToolTip} from '../public-upload-page/public-upload-form/public-upload-form.component';
+import {EmailValidationPopover} from '../public-upload-page/public-upload-form/public-upload-form.component';
 
 const routes: Routes = [
   {
@@ -32,14 +32,14 @@ const routes: Routes = [
     PublicUploadPageComponent,
     PublicUploadFinishedComponent,
     PublicUploadingFilesComponent,
-    EmailValidationToolTip
+    EmailValidationPopover
   ],
   exports: [
     PublicUploadFormComponent,
     PublicUploadPageComponent,
     PublicUploadFinishedComponent,
     PublicUploadingFilesComponent,
-    EmailValidationToolTip
+    EmailValidationPopover
   ],
   entryComponents: [
   ]

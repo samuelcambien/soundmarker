@@ -15,7 +15,6 @@ export class PublicInfoHeaderComponent implements OnInit {
 
   @Input() message: Message;
   @Input() error;
-  @Output() openIntroduction = new EventEmitter();
 
   constructor(
     private modalService: NgbModal,

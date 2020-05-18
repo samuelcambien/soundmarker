@@ -11,8 +11,8 @@ import {
 } from '@angular/core';
 import {FileItem, FileUploader} from '../../ng2-file-upload';
 import {RestCall} from "../../rest/rest-call";
-import {NgbTooltip} from '@ng-bootstrap/ng-bootstrap';
-import {NgControl, Validators} from '@angular/forms';
+import {NgbPopover, NgbTooltip} from '@ng-bootstrap/ng-bootstrap';
+import {NgControl, NgForm, Validators} from '@angular/forms';
 import {Utils} from "../../app.component";
 import {LocalStorageService} from "../../services/local-storage.service";
 import {PublicUploadPageComponent} from "../public-upload-page.component";
@@ -45,7 +45,8 @@ export class PublicUploadFormComponent implements OnInit {
   @Output() form = new EventEmitter();
 
   @ViewChild('notes_element') notes_element: ElementRef;
-  @ViewChild('ft') files_tooltip: NgbTooltip;
+  @ViewChild('ngbPopover') ngbPopover: NgbPopover;
+  @ViewChild('dropZone') dropZone;
 
   async onSubmit() {
 
@@ -60,14 +61,13 @@ export class PublicUploadFormComponent implements OnInit {
         this.uploader.queue.map(track => () => this.processTrack(project_id, track))
       );
 
-      if (this.notificationType != "0")
-        RestCall.subscribe(project_id, this.email_from, this.notificationType);
+      if (this.notifications)
+        RestCall.subscribe(project_id, this.email_from, 2);
 
-      const shareResponse = await RestCall.shareProject(project_id, this.expiration, this.notes, this.email_from, this.email_to);
+      const shareResponse = await RestCall.shareProject(project_id, "1month", this.notes, this.email_from, this.email_to);
 
       this.link.emit(shareResponse["project_hash"]);
       this.finished.emit();
-      this.period.emit(this.expiration.substr(1, this.expiration.length));
 
       this.clearForm(true);
 
@@ -129,42 +129,90 @@ export class PublicUploadFormComponent implements OnInit {
     }
   }
 
-  expirations = [{id: '1week', label: 'Week', heading: 'Expire*'}, {id: '1month', label: 'Month', heading: 'Expire*'}];
-  expiration: string = this.localStorageService.getExpiration();
+  ngbPopOverMessage;
 
-  availabilities = [{id: false, label: 'No', heading: 'Download*'}, {id: true, label: 'Yes', heading: 'Download*'}];
-  availability: boolean = this.localStorageService.getAvailability();
+  validationCheck(form: NgForm){
+     if(this.uploader.queue.length == 0){
+       this.ngbPopOverMessage = "No tracks were added.";
+       this.ngbPopover.open();
+       return;
+     }
+     this.emailCheck(form);
+  }
 
-  notificationTypes = [{id: '1', label: 'Daily', heading: 'Notify*'}, {id: '2', label: 'Instantly', heading: 'Notify*'},{id: '0', label: 'Never', heading: 'Notify*'}];
-  notificationType: string = this.localStorageService.getNotificationType();
+  emailCheck(form: NgForm){
+     if (form.controls.email_from.value && form.controls.email_from.invalid){
+       console.log("email ingevuld maar fout");
+       this.ngbPopOverMessage = "Your email is invalid";
+       this.ngbPopover.open();
+     }
+    else if (!form.controls.email_from.value && form.controls.email_from.invalid){
+      console.log("Geen email");
+      this.ngbPopOverMessage = "Your email is missing";
+       this.ngbPopover.open();
+    }
+    else{
+       this.ngbPopover.close();
+    }
 
+    //
+    // else if (!form.controls[0].dirty && form.controls[0].invalid){
+    //   console.log("email niet ingevuld");
+    // }
+  }
+
+  availability: boolean = this.localStorageService.getAvailability() ? this.localStorageService.getAvailability(): false;
+  notifications: boolean = this.localStorageService.getAvailability() ? this.localStorageService.getAvailability(): false;
+
+  toggleDownload(){
+    this.availability = !this.availability;
+  }
+
+  toggleNotifications(){
+    this.notifications =  !this.notifications;
+  }
   ngOnInit(): void {
-    // wave.init({
-    //   container: canvas
-    // });
-    // wave.loadDecodedBuffer(buffer);
-    // this.notifyID =  this.localStorageService.getNotificationID();
-    // this.expiration =  this.localStorageService.getExpirationType();
-    // this.downloadable =  this.localStorageService.getAllowDownloads();
     this.uploader.onWhenAddingFileFailed = (item, filter) => {
       let message = '';
       switch (filter.name) {
         case 'fileSize':
-          message = "You exceeded the limit of 2 GB."
+          this.ngbPopOverMessage = "You exceeded the limit of 2 GB."
           break;
         case 'onlyAudio':
-          message = "One or more files are not supported and were not added.";
+          this.ngbPopOverMessage = "One or more files are not supported and were not added.";
           break;
         case 'checkSizeLimit':
-          message = "You exceeded the limit of 2 GB.";
+          this.ngbPopOverMessage = "You exceeded the limit of 2 GB.";
           break;
         default:
-          message = "Something went wrong, please try again.";
+          this.ngbPopOverMessage = "Something went wrong, please try again.";
           break;
       }
-      this.files_tooltip.open(this.files_tooltip.ngbTooltip = message);
+      this.ngbPopover.open();
     };
+
+    this.uploader.onAfterAddingAll = (item) => {
+      this.ngbPopover.close();
+    }
+
+    window.addEventListener('dragenter', (e) => {
+      this.showDropZone();
+    });
+
+    this.dropZone.nativeElement.addEventListener('dragleave', (e) => {
+      this.hideDropZone();
+    });
+
+    this.dropZone.nativeElement.addEventListener('drop', () => this.hideDropZone());
   }
+
+  showDropZone() {
+    this.dropZone.nativeElement.style.visibility = "visible";
+  }
+  hideDropZone() {
+    this.dropZone.nativeElement.style.visibility = "hidden";
+  }
+
 
   constructor(private localStorageService: LocalStorageService) {
   }
@@ -179,9 +227,8 @@ export class PublicUploadFormComponent implements OnInit {
 
   private storePreferences() {
     this.localStorageService.storeEmailFrom(this.email_from);
-    this.localStorageService.storeExpiration(this.expiration);
     this.localStorageService.storeAvailability(this.availability);
-    this.localStorageService.storeNotificationType(this.notificationType);
+    this.localStorageService.storeNotificationType(this.notifications);
   }
 
   getAcceptedFileTypes() {
@@ -192,33 +239,34 @@ export class PublicUploadFormComponent implements OnInit {
     this.uploader.removeFromQueue(item);
     this.removedFileSize.emit(item.file.size);
   }
-
 }
 
 @Directive({
-  selector: '[emailValidationTooltip]'
+  selector: '[emailValidationPopover]'
 })
 
-export class EmailValidationToolTip {
+export class EmailValidationPopover {
   control: any;
-  tooltip: NgbTooltip;
+  popover: NgbPopover;
 
-  constructor(control: NgControl, tooltip: NgbTooltip) {
-    this.tooltip = tooltip;
+  constructor(control: NgControl, popover: NgbPopover) {
+    this.popover = popover;
     this.control = control;
     this.control.statusChanges.subscribe((status) => {
       if (control.dirty && control.invalid) {
       } else {
-        tooltip.close();
+        popover.close();
       }
     });
   }
 
+
+
   @HostListener('focusout') onFocusOutMethod() {
     if (this.control.dirty && this.control.invalid && this.control.value) {
-      this.tooltip.open();
+      this.popover.open();
     } else {
-      this.tooltip.close();
+      this.popover.close();
     }
   }
 }

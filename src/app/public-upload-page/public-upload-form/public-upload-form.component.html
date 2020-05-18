@@ -2,7 +2,7 @@
 
   <div class="form-row">
 
-    <div class="form-field col-md-4 bottom-tooltip" placement="bottom" [ngbTooltip]="" #ft='ngbTooltip' triggers="manual" (click)="ft.close()">
+    <div class="form-field col-md-4">
 
       <div class="card upload-songs-area rounded border-0">
 
@@ -15,24 +15,24 @@
             <div class="addsongs">
 
               <div class="note-image" id="ni1">
-                <svg version="1.1" id="Laag_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-                     viewBox="0 0 1417.3 1417.3" enable-background="new 0 0 1417.3 1417.3" xml:space="preserve">
-                  <circle class="upload-circle" fill="#eef1ff" cx="707.8" cy="708.8" r="701.6"/>
-                  <g id="Music-Audio__x2F__Music__x2F__music-note-2_2_">
-                    <g id="Group_9_2_">
-                      <g id="music-note-2_2_">
-                        <path id="Shape_56_2_" fill="#ffffff" stroke="#7397FF" stroke-width="36" stroke-miterlimit="10" d="M557.6,1031.9
-                        c-2.3,67.6-56.6,121.9-124.2,124.2c-68.6,0-124.2-55.6-124.2-124.2c0-68.6,55.6-124.2,124.2-124.2h124.2V1031.9z"/>
-                        <path id="Shape_57_2_" fill="#ffffff" stroke="#7397FF" stroke-width="36" stroke-miterlimit="10" d="M1012.9,866.4
-                        c-2.3,67.6-56.6,121.9-124.2,124.2c-68.6,0-124.2-55.6-124.2-124.2c0-68.6,55.6-124.2,124.2-124.2h124.2V866.4z"/>
-                        <path fill="#ffffff" stroke="#7397FF" stroke-width="36" stroke-miterlimit="10" d="M1012.8,286.5v83.2L557.5,556V438.8
-                        c0-17,10.3-31.9,25.7-38.5L955.7,248c12.8-5,27.7-3.7,38.9,4.1C1006.2,260,1013.2,272.9,1012.8,286.5z"/>
-                        <line fill="none" stroke="#7397FF" stroke-width="36" stroke-linecap="round" stroke-linejoin="round" x1="1012.8" y1="742.2" x2="1012.8" y2="369.7"/>
-                        <line fill="none" stroke="#7397FF" stroke-width="36" stroke-linecap="round" stroke-linejoin="round" x1="557.5" y1="907.8" x2="557.5" y2="556"/>
-                      </g>
+
+
+<div class="mid-shadow">
+
+                <svg width="43px" height="43px" viewBox="0 0 66 66" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                        <g id="Internet-Networks-Servers-/-Upload/Download-/-upload-dash-arrow-1" transform="translate(-462.000000, -194.000000)" fill-rule="nonzero">
+                            <g id="Group-31" transform="translate(462.000000, 194.000000)">
+                                <circle id="Oval-2" fill="#7397FF" cx="33" cy="33" r="33"></circle>
+                                <g id="Group-26-Copy" transform="translate(23.000000, 23.000000)" stroke="#ffffff" stroke-linecap="round" stroke-width="4">
+                                    <path d="M0,10.5 L20,10.5" id="Line-10"></path>
+                                    <path d="M0,10.5 L20,10.5" id="Line-10" transform="translate(10.000000, 10.500000) rotate(90.000000) translate(-10.000000, -10.500000) "></path>
+                                </g>
+                            </g>
+                        </g>
                     </g>
-                  </g>
                 </svg>
+                </div>
               </div>
 
               <h5>Add tracks</h5>
@@ -81,15 +81,13 @@
     </div>
 
     <div class="col-md-8">
-      
+
       <div class="form-row">
 
         <div class="col-sm-12"  >
             <input type="text" [(ngModel)]="email_from" name="email_from" placeholder="Email from*" pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$"
-                   class="form-control form-control-sm" required ngbTooltip="Invalid email address" triggers="manual" emailValidationTooltip>
-                   
+                   class="form-control form-control-sm" required>
         </div>
-       
 
         <div class="col-sm-12">
           <tag-input [(ngModel)]='email_to'
@@ -110,7 +108,7 @@
           </tag-input>
         </div>
       </div>
-      
+
       <div class="form-row">
         <div class="form-group col hide-phone">
                 <textarea #notes_element [(ngModel)]="notes" type="text" placeholder="Notes" name="notes"
@@ -128,78 +126,33 @@
       <div class="form-row radios">
 
         <div class="col">
-	       
-          <ng-select
-            class="custom noselect expiration"
-            bindValue="id"
-            groupBy = "heading"
-            [items]="expirations"
-            [searchable]="false"
-            [clearable]="false"
-            [(ngModel)]="expiration"
-            placeholder="Expire*"
-            name = "expirations"
-            dropdownPosition="top"
-            required>
-          </ng-select>
+          <label class="custom expiration btn btn-sm btn-outline-form btn-settings noselect" popoverClass="popover-class" ngbPopover="Allow downloading of uploaded tracks"
+  [openDelay]="300" [closeDelay]="300" triggers="mouseenter:mouseleave">
+            <div class="switch">
+              <input type="checkbox" [checked]="availability" (click)="toggleDownload()">
+              <span class="slider round"></span>
+            </div>
+            <div [ngClass]="{'unchecked': !availability}" class="slider-text">Downloads</div>
+          </label>
         </div>
 
         <div class="col">
-        <ng-select
-                class="custom noselect downloadable"
-                bindValue="id"
-                groupBy = "heading"
-                [items]="availabilities"
-                [searchable]="false"
-                [clearable]="false"
-                [(ngModel)]="availability"
-                placeholder="Download*"
-                name = "downloads"
-                dropdownPosition="top"
-                required>
-            </ng-select>
+          <label class="custom noselect downloadable btn btn-sm btn-outline-form btn-settings" popoverClass="popover-class" ngbPopover="Get notified by email on new comments"
+  [openDelay]="300" [closeDelay]="300" triggers="mouseenter:mouseleave">
+            <div class="switch">
+              <input type="checkbox" [checked]="notifications" (click)="toggleNotifications()">
+              <span class="slider round"></span>
+            </div>
+            <div [ngClass]="{'unchecked': !notifications}" class="slider-text">Notifications</div>
+          </label>
         </div>
 
-        <div class="col" id="notify">
-            <ng-select
-                class="custom noselect"
-                groupBy = "heading"
-                bindValue="id"
-                [items]="notificationTypes"
-                [searchable]="false"
-                [clearable]="false"
-                [(ngModel)]="notificationType"
-                placeholder="Notify*"
-                name = "notifications"
-                dropdownPosition="top"
-                required>
-            </ng-select>
-        </div>
-
-        <div class="col">
+          <ng-template #popContent>{{ngbPopOverMessage}}</ng-template>
+          <div class="col last" popoverTitle="Oops!" [ngbPopover]=popContent triggers="manual" placement="top" popoverClass="popover-class popover-submit"  [autoClose]="'outside'" container="body" #ngbPopover="ngbPopover" (click)="validationCheck(myForm)">
           <button type="submit" [disabled]="!uploader.getNotUploadedItems().length || !myForm.valid"
-                  class="btn btn-sm btn-primary free-upload">
-
-            <div class="show-medium">Share tracks</div>
-
-            <svg width="30px" height="30px" viewBox="0 0 38 38" class="plane-icon hide-medium" version="1.1"
-                 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-              <desc></desc>
-              <defs></defs>
-              <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                <g id="Internet-Networks-Servers-/-Upload/Download-/-upload-dash-arrow-1"
-                   transform="translate(-30.000000, -209.000000)">
-                  <g id="send-email-2" transform="translate(30.000000, 209.000000)">
-                    <path
-                      d="M10.4,10.743 C10.0795417,10.1695961 10.1694462,9.45439019 10.6218509,8.97813854 C11.0742555,8.50188689 11.7839045,8.37539349 12.373,8.666 L31.387,18.325 C31.6385553,18.4529457 31.7969886,18.7112764 31.7969886,18.9935 C31.7969886,19.2757236 31.6385553,19.5340543 31.387,19.662 L12.373,29.334 C11.7839045,29.6246065 11.0742555,29.4981131 10.6218509,29.0218615 C10.1694462,28.5456098 10.0795417,27.8304039 10.4,27.257 L15.458,18.993 L10.4,10.743 Z"
-                      id="Shape" stroke="#FFFFFF" stroke-width="1.5" stroke-linecap="round"
-                      stroke-linejoin="round"></path>
-                    <path d="M31.797,18.993 L15.453,18.993" id="Shape" stroke="#FFFFFF" stroke-width="1.5"
-                          stroke-linecap="round" stroke-linejoin="round"></path>
-                  </g>
-                </g>
-              </g>
-            </svg>
+                  class="btn btn-sm btn-primary free-upload"
+                  [ngClass]="uploader.getNotUploadedItems().length > 0 ? 'upload-tracks': 'upload-tracks-disabled'" >
+            <div class=""> Upload tracks</div>
           </button>
         </div>
       </div>
@@ -208,6 +161,9 @@
 </form>
 
 <div ng2FileDrop
+     #dropZone
      [uploader]="uploader"
-     class="well my-drop-zone">
+     class="well my-drop-zone"
+     >
+     <h3>Drop that boogie</h3>
 </div>

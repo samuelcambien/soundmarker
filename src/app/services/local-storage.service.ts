@@ -39,12 +39,12 @@ export class LocalStorageService {
     return localStorage.getItem("smrk_downl") != null ? localStorage.getItem("smrk_downl") === "true" : null;
   }
 
-  public storeNotificationType(notificationType: string): void {
-    localStorage.setItem("smrk_nfyID",  notificationType)
+  public storeNotificationType(notificationType: boolean): void {
+    localStorage.setItem("smrk_nfyID",  notificationType? "true" : "false")
   }
 
-  public getNotificationType(): string {
-    return localStorage.getItem("smrk_nfyID");
+  public getNotificationType(): boolean {
+    return localStorage.getItem("smrk_nfyID") != null ? localStorage.getItem("smrk_nfyID") === "true" : null;
   }
 
   public storeCommentName(commentName: string): void {

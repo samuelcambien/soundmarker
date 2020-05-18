@@ -11,7 +11,26 @@
 	background: #eef1ff !important;
 	border: #eef1ff !important;
 	color: #7397ff !important;
-	
+
+}
+
+// Nav Link More
+
+.nav-link-more {
+	font-size: 11pt;
+	color: #7397ff !important;
+	border-radius: 0.2rem;
+	padding: 4px 10px 2px 10px !important;
+}
+
+.nav-link-more:hover {
+	color: #7397ff;
+	text-decoration: none;
+	background-color: #eef1ff;
+}
+
+.fa-angle-double-right {
+	font-size: 7pt;
 }
 
 // Toggle Switch
@@ -45,7 +64,7 @@
   background-color: #bac1da;
   border: 1px solid #bac1da;
   -webkit-transition: .4s;
-  
+
   transition: .4s;
 }
 
@@ -57,7 +76,7 @@
   left: 1px;
   bottom: 1px;
   background-color: #ffffff;
-  
+
   -webkit-transition: .4s;
   transition: .4s;
 }
@@ -127,7 +146,7 @@ input:checked + .slider:before {
 
 .main-menu-icon {
 	width: 43px;
-	
+
 }
 
 .messages-icon {
@@ -165,14 +184,14 @@ input:checked + .slider:before {
 }
 
 .arrow-up {
-  width: 0; 
-  height: 0; 
+  width: 0;
+  height: 0;
   border-left: 6px solid transparent;
   border-right: 6px solid transparent;
   border-bottom: 6px solid #ffffff;
   float: right;
   margin-top: -6px;
-  
+
 }
 
 .more-info .arrow-up {
@@ -199,9 +218,9 @@ input:checked + .slider:before {
 }
 
 .nav-item {
-	margin-right: -10px; 
+	margin-right: -10px;
 	height: 29px;
-	
+
 	border-radius: 0.2rem;
 	padding-right: 6px;
 	margin-left: 4px;
@@ -287,9 +306,9 @@ input:checked + .slider:before {
 
 .dropdown-menu {
 	padding-top: 18px;
-	
-	
-	
+
+
+
 	border: none;
 	background: transparent;
 	transition:visibility 0s linear 0.05s,opacity 0.05s linear;
@@ -312,7 +331,7 @@ input:checked + .slider:before {
 	min-width: 114px !important;
 	padding-bottom: 0px !important;
 
-	
+
 }
 
 .autoplay-text.dropdown-menu h5 {
@@ -330,7 +349,7 @@ input:checked + .slider:before {
 	opacity: 1;
 	transition: 0.2s opacity;
 	-webkit-transition: 0.2s opacity;
-} 
+}
 
 .dropdown-container {
 	border-radius: 0.3rem;
@@ -343,7 +362,7 @@ input:checked + .slider:before {
 
 .more-info.dropdown-menu .dropdown-container {
 	width: 140px;
-	
+
 }
 
 
@@ -379,7 +398,7 @@ input:checked + .slider:before {
 	background: #eef1ff;
 		transition: 0.1s;
 	-webkit-transition: 0.1s;
-	
+
 }
 
 .dropdown-icons {
@@ -393,7 +412,7 @@ input:checked + .slider:before {
     width: 20px !important;
     float: left;
     margin-top: 2px;
-	
+
 }
 
 .item-icon.help {
@@ -416,17 +435,14 @@ input:checked + .slider:before {
 // responsive
 
 @media (max-width: 768px) {
-	
+
 	 .nav-link.pro.active {
 		 display: none;
 	 }
-	 
+
 	 .pro-dropdown {
 	display: block;
 }
-	
-	
+
+
 	}
-
-
-
