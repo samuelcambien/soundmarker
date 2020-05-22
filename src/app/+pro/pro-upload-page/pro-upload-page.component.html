@@ -1,23 +1,23 @@
 <app-pro-board-card>
   <ng-container class="title">
     New Project
-    <button (click)="toggleExistingProject()" type="button" class="btn btn-sm btn-primary free-upload" [class.disabled]="!existing_projects.length">{{ existing_project == false ? 'Existing' : 'New' }} Project</button>
+    <button (click)="createNewProject = !createNewProject;" type="button" class="btn btn-sm btn-primary free-upload" [class.disabled]="!user_project_list.length">{{ createNewProject == false ? 'Existing' : 'New' }} Project</button>
   </ng-container>
   <ng-container class="body">
       <form #myForm="ngForm" (ngSubmit)="onSubmit()">
       <div class="form-row">
         <div class="col-md-8">
           <div class="form-row">
-            <input *ngIf="!existing_project" placeholder="Project title" name="projecttitle" [(ngModel)]="smUploader.project_title" required>
+            <input *ngIf="createNewProject" placeholder="Project title" name="projecttitle" [(ngModel)]="smUploader.project_title" required>
           </div>
           <div class="form-row radios">
-            <div class="col" *ngIf="existing_project">
+            <div class="col" *ngIf="!createNewProject">
               <ng-select
                 class="custom noselect expiration"
                 bindLabel="title"
                 bindValue="project_id"
                 groupBy="heading"
-                [items]="existing_projects"
+                [items]="user_project_list"
                 [searchable]="false"
                 [clearable]="false"
                 [(ngModel)]="project_id"
@@ -164,20 +164,20 @@
                  accept="{{smUploader.getAcceptedFileTypes().join(',')}}"/>
           <div class="tabletainer">
               <tr *ngFor="let item of smUploader.getFileUploader().queue; index as i">
-                <td><input *ngIf="!existing_tracks_id[i]" [(ngModel)]="smUploader.titles[i]" name="title-{{i}}" required></td>
-                      <div *ngIf="existing_tracks_id[i]"> {{getTrackTitle(existing_tracks_id[i])}}</div>
+                <td><input *ngIf="!selected_existing_tracks[i]" [(ngModel)]="smUploader.titles[i]" name="title-{{i}}" required></td>
+                      <div *ngIf="selected_existing_tracks[i]"> {{getTrackTitle(selected_existing_tracks[i])}}</div>
                 <div>
                   {{item.file.type.substring(6).toUpperCase()}} {{getFileSize(item)}}
                 </div>
 
                 <ng-select
-                  *ngIf=existing_project
+                  *ngIf=!createNewProject
                   class="custom noselect downloadable"
                   bindLabel="title"
                   bindValue="track_id"
                   [items]="leftExistingTracks()"
                   [searchable]="false"
-                  [(ngModel)]="existing_tracks_id[i]"
+                  [(ngModel)]="selected_existing_tracks[i]"
                   (close)="addVersion(i)"
                   placeholder="Add as new version*"
                   name="version_track"

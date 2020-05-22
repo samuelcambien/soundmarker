@@ -30,13 +30,12 @@ import {ProjectService} from '../../services/project.service';
 export class ProUploadPageComponent implements OnInit {
 
   link: string;
-  existing_projects=[];
-  existing_project = true;
-  existing_tracks_id = [];
-  existing_tracks = [];
+  user_project_list=[];
+  createNewProject = false;
+  selected_existing_tracks = [];
+  project_tracks_list = [];
   project_id;
   smUploader;
-  smFileUploader;
 
   @ViewChild('waveform') waveform: ElementRef;
 
@@ -55,32 +54,26 @@ export class ProUploadPageComponent implements OnInit {
       this.uploader.getOpenSMFileUploader().addTitles(items);
     }
     try{
-      RestCall.getProjects().then(res => {this.existing_projects = res["projects"]})
+      RestCall.getProjects().then(res => {this.user_project_list = res["projects"]})
     }
     catch{
     }
-    // if(this.uploader.fileUploader.isUploading) this.stage = this.statusEnum.UPLOADING_SONGS;
   }
   private leftExistingTracks() {
-    return this.existing_tracks.filter(e => !this.existing_tracks_id.includes(e.track_id));
+    return this.project_tracks_list.filter(e => !this.selected_existing_tracks.includes(e.track_id));
   }
 
   getProjectInfo(project_id){
-   let project = this.existing_projects.find(x => x.project_id === project_id);
-   RestCall.getProject(project.hash).then(res => this.existing_tracks = res["tracks"]);
-   this.existing_tracks_id = [];
+   let project = this.user_project_list.find(x => x.project_id === project_id);
+   RestCall.getProject(project.hash).then(res => this.project_tracks_list = res["tracks"]);
+   this.selected_existing_tracks = [];
   }
 
   addVersion(i){
-    console.log(this.existing_tracks_id);
   }
 
   getTrackTitle(trackId){
-    return (this.existing_tracks.find(track => track.track_id === trackId).title);
-  }
-
-  toggleExistingProject(){
-    this.existing_project = !this.existing_project;
+    return (this.project_tracks_list.find(track => track.track_id === trackId).title);
   }
 
   validators = [Validators.required, Validators.pattern('^\\w+([\\.-]?\\w+)*@\\w+([\\.-]?\\w+)*(\\.\\w{2,3})+$')];
@@ -102,13 +95,13 @@ export class ProUploadPageComponent implements OnInit {
     this.router.navigate(["../dashboard"], {relativeTo: this.activatedRoute});
     this.smUploader.setStatus(Status.UPLOADING_SONGS);
     try {
-      if(!this.existing_project){
+      if(this.createNewProject){
       const projectResponse = await RestCall.createNewProject(this.smUploader.getProjectTitle(), this.smUploader.getSMPPW());
       this.project_id = projectResponse["project_id"];
       }
 
       await Utils.promiseSequential(
-        this.smUploader.fileUploader.queue.map((track, index) => () => this.processTrack(this.project_id, track, this.smUploader.getTitle(track), this.existing_tracks_id[index]))
+        this.smUploader.fileUploader.queue.map((track, index) => () => this.processTrack(this.project_id, track, this.smUploader.getTitle(track), this.selected_existing_tracks[index]))
       );
       const shareResponse = await RestCall.shareProject(this.project_id, this.smUploader.expiration, this.smUploader.getProjectNotes(), "", this.smUploader.getReceivers());
       // this.link.emit(shareResponse["project_hash"]);
@@ -133,6 +126,7 @@ export class ProUploadPageComponent implements OnInit {
     const versionResponse = await RestCall.createNewVersion(
       trackId, this.notes_element.nativeElement.value, this.smUploader.getAvailability() ? "1" : "0"
     );
+
     const versionId = versionResponse["version_id"];
 
     const streamFileResponse = await RestCall.createNewFile(track._file, file_name, this.getStreamFileExtension(extension), track._file.size, versionId, 0, length);
@@ -165,7 +159,7 @@ export class ProUploadPageComponent implements OnInit {
 
   private removeFromQueue(item, index){
     this.smUploader.removeFromQueue(item);
-    this.existing_tracks_id.splice(index, 1);
+    this.selected_existing_tracks.splice(index, 1);
   }
 
   private setChunkProgress(progress: number) {

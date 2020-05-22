@@ -31,7 +31,7 @@ export class AuthService {
         if (currentUser && currentUser.isValid()) {
           return currentUser;
         } else {
-          return null;
+          return null
         }
       }),
     );

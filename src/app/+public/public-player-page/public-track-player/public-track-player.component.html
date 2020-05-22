@@ -201,7 +201,7 @@
     </div>
 
     <div class="player-toolbar hide-phone  ml-auto">
-      <ng-select
+      <ng-select *ngIf="track.versions.length>1"
         class="custom expiration"
         bindLabel="version_id"
         [items]="track.versions"
@@ -213,7 +213,7 @@
         name="versions_control"
         dropdownPosition="auto">
         <ng-template ng-label-tmp let-item="item">
-          Version <b>{{getVersionIndex(item)+1}}</b>
+          Version <b>{{track.getVersionIndex(item)+1}}</b>
         </ng-template>
         <ng-template ng-option-tmp let-item="item" let-index="index">
           Version <b>{{index+1}}</b>

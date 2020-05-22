@@ -22,7 +22,7 @@ import {StateService} from '../../../services/state.service';
 })
 export class PublicTrackPreviewComponent implements OnInit {
 
-  @Input() track: Track;
+  @Input() track = new Track();
   @Input() expired: boolean;
   @Output() selected = new EventEmitter<Track>();
 
@@ -30,6 +30,8 @@ export class PublicTrackPreviewComponent implements OnInit {
 
   version: Version;
   private files: File[];
+
+  lalaa = new Track();
 
   constructor(
     private player: Player,
@@ -40,11 +42,14 @@ export class PublicTrackPreviewComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.track = Object.assign(new Track(), this.track);
     this.version = this.track.versions[0];
     this.files = this.version.files;
     this.trackTitleDOM.nativeElement.setAttribute("style", "text-overflow: ellipsis");
     this.stateService.getActiveVersion().subscribe(version => {
-      if (this.track.versions.includes(version)) this.version = version;
+      if (this.track.versions.includes(version)) {
+        this.version = version;
+      }
     });
   }
 

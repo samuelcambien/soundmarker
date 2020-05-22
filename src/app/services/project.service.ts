@@ -57,6 +57,7 @@ export class ProjectService {
   async loadProject(projectHash: string): Promise<void> {
     const project = await RestCall.getProject(projectHash);
     if (project.project_id) {
+      console.log(this.isActive(project));
       this.stateService.setActiveProject(project);
       if (!this.isActive(project) && !this.areCommentsActive(project)) {
         return Promise.resolve();
@@ -69,7 +70,7 @@ export class ProjectService {
   }
 
   public isActive(project: Project) {
-    return project.status == "active";
+    return !((project.status == "commentsonly") || (project.status == "expired"));
   }
 
   public getExpiryDate(project: Project) {
@@ -77,7 +78,7 @@ export class ProjectService {
   }
 
   public areCommentsActive(project: Project) {
-    return project.status != "expired";
+    return project.status == "commentsonly";
   }
 
   private async loadVersions(track: Track): Promise<void> {
