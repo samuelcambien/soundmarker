@@ -1,5 +1,5 @@
 <div class="shadow public-bottom-container card rounded-lg position-static shadow">
-	
+
 		<span class="close-modal" data-dismiss="modal" aria-label="Close">
 		<svg width="12px" height="12px" viewBox="0 0 12 12" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
 		    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round">
@@ -15,11 +15,11 @@
 
   <div class="container-fluid">
     <div class="col-sm-12">
-   
+
 
       <div class="info-heading">
         <h2>Get notified</h2>
-        <p>Get status updates via email to see<br>new comments and replies.</p>
+        <p>Get status updates via email to<br>see new comments and replies</p>
       </div>
 
       <div class="message-content">
@@ -29,7 +29,7 @@
             <div class="form-row">
               <input type="email" [(ngModel)]="email" placeholder="Email address" name="email"
                      pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$"  ngbPopover="Invalid email address" triggers="manual" emailValidationPopover required>
-          
+
               <button type="submit" [disabled]="!subscribeForm.valid" class="notify-submit">Submit</button>
 
             </div>
@@ -59,7 +59,3 @@
   <app-info-footer></app-info-footer>
 
 </div>
-
-
-
-

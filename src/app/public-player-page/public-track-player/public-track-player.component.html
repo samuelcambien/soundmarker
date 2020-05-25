@@ -350,12 +350,12 @@
       <h4 *ngIf="!expired"> Expires in {{getDaysToExpired()}} days ({{getDateHumanized()}}) </h4>
       <h4 *ngIf="expired"> Expired on {{getDateHumanized()}} </h4>
     </div>
-    <h4 *ngIf="message.text"><a *ngIf="notesCollapsed" (click)="notesCollapsed = !notesCollapsed">Show more</a></h4>
+    <p *ngIf="message.text && notesCollapsed" (click)="notesCollapsed = !notesCollapsed"><a>Show more</a></p>
       <div [ngbCollapse]="notesCollapsed">
         <h4 *ngIf="!expired"> Expires in {{getDaysToExpired()}} days ({{getDateHumanized()}}) </h4>
         <h4 *ngIf="expired"> Expired on {{getDateHumanized()}} </h4>
-        {{message.text}}
-      <h4><a (click)="notesCollapsed = !notesCollapsed">Show less</a></h4>
+        <p>{{message.text}}<br>
+      <a (click)="notesCollapsed = !notesCollapsed">Show less</a></p>
       </div>
   </div>
 
