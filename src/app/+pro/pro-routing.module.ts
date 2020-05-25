@@ -8,6 +8,7 @@ import {ProTrackComponent} from "./projects/track/pro-track.component";
 import {TrackResolver} from "./projects/track/TrackResolver";
 import {ProUploadPageComponent} from './pro-upload-page/pro-upload-page.component';
 import {UploadGuard} from '../auth/upload/upload.guard';
+import {ProBoardProjectsComponent} from './projects/pro-board-projects.component';
 
 @NgModule({
   imports: [
@@ -31,7 +32,7 @@ import {UploadGuard} from '../auth/upload/upload.guard';
           },
           {
             path: 'projects',
-            component: ProBoardComponent,
+            component: ProBoardProjectsComponent,
           },
           {
             path: 'project/:project_hash',
