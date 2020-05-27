@@ -25,6 +25,7 @@ import {State} from "../../play-button/play-button.component";
 import {Message} from '../../message';
 import {Utils} from '../../app.component';
 import {NgbPopover} from '@ng-bootstrap/ng-bootstrap';
+import {StateService} from '../../services/state.service';
 
 @Component({
   selector: 'public-track-player',
@@ -57,7 +58,7 @@ export class PublicTrackPlayerComponent implements OnInit, OnChanges {
   @Input() track: Track;
   @Input() enableOverview: boolean;
   @Input() expired: boolean = true;
-  @Input() launchTitleScroll: boolean;
+  @Input() trackActivated: boolean;
   @Input() message: Message;
   @Input() sender;
   @Input() expiry_date;
@@ -102,6 +103,7 @@ export class PublicTrackPlayerComponent implements OnInit, OnChanges {
     private localStorageService: LocalStorageService,
     private player: Player,
     private drawerService: DrawerService,
+    private stateService: StateService,
     private cdr: ChangeDetectorRef,
   ) {
     document.addEventListener('scroll', () => {
@@ -119,6 +121,13 @@ export class PublicTrackPlayerComponent implements OnInit, OnChanges {
     }, true);
   }
 
+  markerPopoverClose($event){
+    this.markerPopover.close();
+    document.removeEventListener("click", ($event)=> this.markerPopoverClose($event))
+    // console.log(this.stateService.getActiveProject());
+    // console.log($event);
+  }
+
   ngOnInit(): void {
     this.waveformInViewPort = true;
     this.version = this.track.versions[0];
@@ -130,12 +139,14 @@ export class PublicTrackPlayerComponent implements OnInit, OnChanges {
     });
     this.createNewComment();
     this.trackTitleDOM.nativeElement.setAttribute("style", "text-overflow: ellipsis");
-
     this.waveformInViewPortObservable.pipe(distinctUntilChanged()).subscribe(() => {
       this.cdr.detectChanges();
     });
     setTimeout(()=>this.cdr.detectChanges(),50);
     this.markerPopover.open();
+    if(this.trackActivated){
+        setTimeout(()=> document.addEventListener("click", ($event)=> this.markerPopoverClose($event), false),500);
+      }
   }
 
   private getPlayerWidth(): number {
@@ -167,7 +178,6 @@ export class PublicTrackPlayerComponent implements OnInit, OnChanges {
   }
 
   updateStartTime(x) {
-
     this.comment.include_start = true;
     this.comment.start_time = this.getValidStartTime(
       this.getCommentTime(this.startTime, x)
@@ -427,8 +437,11 @@ export class PublicTrackPlayerComponent implements OnInit, OnChanges {
   // Launches auto scrolling when opening a track.
   ngOnChanges(changes) {
     this.waveformInViewPort = true;
-    if (this.launchTitleScroll) {
+    if (this.trackActivated) {
       setTimeout(() => this.autoScroll(), this.scrollInitialWait);
+    }
+    if(this.markerPopover) {
+      setTimeout(()=> document.addEventListener("click", ($event)=> this.markerPopoverClose($event), false),500);
     }
   }
 
@@ -450,7 +463,7 @@ export class PublicTrackPlayerComponent implements OnInit, OnChanges {
         setTimeout(() => {
           titleScrollDiv -= 1;
           if (!this.pauseTitleScroll) this.trackTitleDOM.nativeElement.scrollLeft += i;
-          if (titleScrollDiv > 0 && this.launchTitleScroll)
+          if (titleScrollDiv > 0 && this.trackActivated)
             requestAnimationFrame(scrollLoop);
           else if (titleScrollDiv === 0 && i === 1) {
             titleScrollDiv = this.trackTitleDOM.nativeElement.scrollLeft;
