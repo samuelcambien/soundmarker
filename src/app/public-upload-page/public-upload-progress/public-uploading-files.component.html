@@ -37,8 +37,8 @@
     </div>
     <h5>Processing tracks</h5>
     <div id="processingtracks" class="progress row">
-      <!--<div class="progress-bar" role="progressbar"  [ngStyle]="{ 'width': '100%' }"></div>-->
       <ngb-progressbar class="progress-bar" [value]="getProgress() > 99 ? 100 : 0" [striped]="true" [animated]="true" [ngStyle]="{ 'width': '100%' }"></ngb-progressbar>
+      <!--<ngb-progressbar class="progress-bar" [value]="100" [striped]="true" [animated]="true" [ngStyle]="{ 'width': '100%' }"></ngb-progressbar>-->
     </div>
   </div>
 </div>
