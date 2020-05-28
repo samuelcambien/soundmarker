@@ -1,7 +1,9 @@
 <app-public-page [error]="error" (tryAgain)="tryAgain()">
 
   <div>
-    <app-public-upload-form [class.hidden]="stage != statusEnum.SELECT_SONGS" [uploader]="uploader" [queueSizeMargin]="queueSizeRemainingString"
+    <app-public-upload-form [class.hidden]="stage != statusEnum.SELECT_SONGS"
+                            [uploader]="uploader"
+                            [queueSizeMargin]="queueSizeRemainingString"
                             (uploading)="stage = statusEnum.UPLOADING_SONGS"
                             (finished)="successfullUpload()"
                             (error)="error = $event"
