@@ -9,6 +9,7 @@
 	font-size: 10pt !important;
 	color: #717db0 !important;
 	margin-bottom: 0px !important;
+	user-select: none;
 
 }
 
@@ -16,6 +17,12 @@
 	font-size: 8pt !important;
 	color: #bac1da !important;
 	margin-top: 3px !important;
+	margin-bottom: 0px !important;
+	user-select: none;
+}
+
+.session-notes .open p {
+	margin-top: 10px !important;
 }
 
 .session-notes h4 a {
