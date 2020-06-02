@@ -1169,31 +1169,31 @@ if (in_array($file_id, $_SESSION['user_files'])) {
   gc_collect_cycles();
   // now it's time to create the png
   // let's create wave_png
-  exec($config['FFMPEG_PATH']."/ffmpeg -nostats -i /tmp/orig".$file_id.".".$ext." -af astats=length=0.1:metadata=1:reset=1,ametadata=print:key=lavfi.astats.Overall.RMS_level -f null - 2>&1", $output);
-  foreach ($output as &$value) {
-    if (strpos($value, 'lavfi.astats.Overall.RMS_level=') !== false) {
-        $momentarylufs = substr($value, strpos($value, "lavfi.astats.Overall.RMS_level=") + 31, 10);
-        if (strpos($momentarylufs, 'inf') == false) { 
-          $zerotohundred = (floatval($momentarylufs)/70)+1;
-          if ($zerotohundred < 0) {
-            $zerotohundred = 0;
-          }
-        } else {
-          $zerotohundred = 0;
-        }
-        $wave_png[] = $zerotohundred;
-    }
-  }
-  $wave_png_json = json_encode($wave_png);
+  // exec($config['FFMPEG_PATH']."/ffmpeg -nostats -i /tmp/orig".$file_id.".".$ext." -af astats=length=0.1:metadata=1:reset=1,ametadata=print:key=lavfi.astats.Overall.RMS_level -f null - 2>&1", $output);
+  // foreach ($output as &$value) {
+  //   if (strpos($value, 'lavfi.astats.Overall.RMS_level=') !== false) {
+  //       $momentarylufs = substr($value, strpos($value, "lavfi.astats.Overall.RMS_level=") + 31, 10);
+  //       if (strpos($momentarylufs, 'inf') == false) { 
+  //         $zerotohundred = (floatval($momentarylufs)/70)+1;
+  //         if ($zerotohundred < 0) {
+  //           $zerotohundred = 0;
+  //         }
+  //       } else {
+  //         $zerotohundred = 0;
+  //       }
+  //       $wave_png[] = $zerotohundred;
+  //   }
+  // }
+  // $wave_png_json = json_encode($wave_png);
 
-  // Update wave_png in dB
-  $version_id = $files[0]["version_id"];
-  $sql = "UPDATE Version SET wave_png = '$wave_png_json' WHERE version_id = '$version_id'";
-  $result = $db->query($sql);
+  // // Update wave_png in dB
+  // $version_id = $files[0]["version_id"];
+  // $sql = "UPDATE Version SET wave_png = '$wave_png_json' WHERE version_id = '$version_id'";
+  // $result = $db->query($sql);
 
-  // Update duration in dB
-  $sql = "UPDATE Version SET track_length = '$duration' WHERE version_id = '$version_id'";
-  $result = $db->query($sql);
+  // // Update duration in dB
+  // $sql = "UPDATE Version SET track_length = '$duration' WHERE version_id = '$version_id'";
+  // $result = $db->query($sql);
 
   error_log("6");
   gc_collect_cycles();
