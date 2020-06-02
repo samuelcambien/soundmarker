@@ -1099,8 +1099,10 @@ if (in_array($file_id, $_SESSION['user_files'])) {
 
    // mkdir folder
    exec("mkdir /tmp/".$file_id);
+   error_log("1");
    // now create segments
-   exec($config['FFMPEG_PATH']."/ffmpeg -i /tmp/orig".$file_id.".".$ext." -f segment -segment_time 10 -codec:a libmp3lame -qscale:a 1 /tmp/".$file_id."/".$file_id."%03d.mp3 > /dev/null &");
+   exec($config['FFMPEG_PATH']."/ffmpeg -i /tmp/orig".$file_id.".".$ext." -f segment -segment_time 10 -codec:a libmp3lame -qscale:a 1 /tmp/".$file_id."/".$file_id."%03d.mp3");
+   error_log("2");
    // loop through all files and upload them
    $di = new RecursiveDirectoryIterator('/tmp/'.$file_id);
     foreach (new RecursiveIteratorIterator($di) as $filename => $file) {
@@ -1119,7 +1121,7 @@ if (in_array($file_id, $_SESSION['user_files'])) {
 
     // delete files
     exec("rm -rf /tmp/".$file_id."/*");
-
+    error_log("3");
   // if coded is not lossy, transcode
   // if ((strpos($codec_name, 'pcm') !== false) || (strpos($codec_name, 'lac') !== false) || (strpos($codec_name, 'wavpack') !== false)) {
     // now we split up the song in 10sec fragments
@@ -1138,7 +1140,7 @@ if (in_array($file_id, $_SESSION['user_files'])) {
         ->setAudioKiloBitrate(320);
 
     $audio->save($format, "/tmp/mp3".$file_id.".mp3");
-
+    error_log("4");
       // upload in chunks to S3
        $result = $s3->putObject([
            'Bucket' => $config['AWS_S3_BUCKET'],
@@ -1161,7 +1163,7 @@ if (in_array($file_id, $_SESSION['user_files'])) {
   //            'ContentDisposition' => 'attachment; filename='. $files[0]["file_name"] . '.' . $ext
   //        ]);
   // }
-  
+  error_log("5");
   // now it's time to create the png
   // let's create wave_png
   exec($config['FFMPEG_PATH']."/ffmpeg -nostats -i /tmp/orig".$file_id.".".$ext." -af astats=length=0.1:metadata=1:reset=1,ametadata=print:key=lavfi.astats.Overall.RMS_level -f null - 2>&1", $output);
@@ -1190,6 +1192,7 @@ if (in_array($file_id, $_SESSION['user_files'])) {
   $sql = "UPDATE Version SET track_length = '$duration' WHERE version_id = '$version_id'";
   $result = $db->query($sql);
 
+  error_log("6");
   // now if downloadable, also save the original file:
   if ($download_id > 0) {
     $sql = "SELECT version_id, extension, metadata, aws_path, file_name, file_size, identifier, chunk_length FROM File WHERE file_id = '$download_id'";
@@ -1208,7 +1211,7 @@ if (in_array($file_id, $_SESSION['user_files'])) {
 
   // delete original upload
   unlink("/tmp/orig".$file_id.".".$ext);
-
+  error_log("7");
 } else {
   // return not allowed
   Flight::json(array(
