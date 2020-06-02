@@ -1164,6 +1164,7 @@ if (in_array($file_id, $_SESSION['user_files'])) {
   //        ]);
   // }
   error_log("5");
+  gc_collect_cycles();
   // now it's time to create the png
   // let's create wave_png
   exec($config['FFMPEG_PATH']."/ffmpeg -nostats -i /tmp/orig".$file_id.".".$ext." -af astats=length=0.1:metadata=1:reset=1,ametadata=print:key=lavfi.astats.Overall.RMS_level -f null - 2>&1", $output);
@@ -1193,6 +1194,7 @@ if (in_array($file_id, $_SESSION['user_files'])) {
   $result = $db->query($sql);
 
   error_log("6");
+  gc_collect_cycles();
   // now if downloadable, also save the original file:
   if ($download_id > 0) {
     $sql = "SELECT version_id, extension, metadata, aws_path, file_name, file_size, identifier, chunk_length FROM File WHERE file_id = '$download_id'";
