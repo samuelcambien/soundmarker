@@ -861,15 +861,11 @@ foreach ($versions as &$version) {
       $files2 = $result2->fetchAll(PDO::FETCH_ASSOC);
       $aws_path = $files2[0]["aws_path"];
 
-      error_log($aws_path);
-      error_log($files2[0]["version_id"] . "/" . $files2[0]["file_name"] . ".txt");
       $wave_png = $s3->getObject([
            'Bucket' => $config['AWS_S3_BUCKET'],
            'Key'    => $files2[0]["version_id"] . "/" . $files2[0]["file_name"] . ".txt"
       ]);
-      error_log($wave_png);
-      $version["wave_png"] = $wave_png['Body'];
-      error_log($version["wave_png"]);
+      $version["wave_png"] = $wave_png['Body']->getContents();
   }
 }
 
