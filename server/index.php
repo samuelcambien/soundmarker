@@ -868,7 +868,7 @@ foreach ($versions as &$version) {
            'Key'    => $files2[0]["version_id"] . "/" . $files2[0]["file_name"] . ".txt"
       ]);
       error_log($wave_png);
-      $version["wave_png"] = json_encode($wave_png);
+      $version["wave_png"] = $wave_png['Body'];
       error_log($version["wave_png"]);
   }
 }
@@ -1218,7 +1218,7 @@ if (in_array($file_id, $_SESSION['user_files'])) {
     'Key'    => $filesnew[0]["version_id"] . "/" . $filesnew[0]["file_name"] . '.txt',
     'Body'   => $wave_png_json,
     'ACL'    => 'public-read',
-    'ContentType' => 'application/octet-stream; charset=utf-8',
+    'ContentType' => 'text/plain; charset=utf-8',
     'ContentDisposition' => 'attachment; filename='. $files[0]["file_name"] . '.txt'
   ]);
 
