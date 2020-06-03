@@ -863,7 +863,7 @@ foreach ($versions as &$version) {
 
       error_log($aws_path);
       error_log($files2[0]["version_id"] . "/" . $files2[0]["file_name"] . ".txt");
-      $wave_png = $s3->putObject([
+      $wave_png = $s3->getObject([
            'Bucket' => $config['AWS_S3_BUCKET'],
            'Key'    => $files2[0]["version_id"] . "/" . $files2[0]["file_name"] . ".txt"
       ]);
@@ -1218,8 +1218,8 @@ if (in_array($file_id, $_SESSION['user_files'])) {
     'Key'    => $filesnew[0]["version_id"] . "/" . $filesnew[0]["file_name"] . '.txt',
     'Body'   => $wave_png_json,
     'ACL'    => 'public-read',
-    'ContentType' => 'text/plain; charset=utf-8',
-    'ContentDisposition' => 'attachment; filename='. $files[0]["file_name"] . '.txt'
+    'ContentType' => 'text/plain',
+    'ContentDisposition' => 'attachment; filename='. $filesnew[0]["file_name"] . '.txt'
   ]);
 
   // Update duration in dB
