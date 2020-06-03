@@ -852,8 +852,8 @@ foreach ($versions as &$version) {
 
   // get AWS 3 text wave_png
   if ($version["wave_png"] == "s3") {
-
-      $sql = "SELECT file_id, aws_path, version_id, file_name FROM File WHERE version_id = '$version["version_id"]'";
+      $version_id = $version["version_id"];
+      $sql = "SELECT file_id, aws_path, version_id, file_name FROM File WHERE version_id = '$version_id'";
       $result2 = $db->query($sql);
       $files2 = $result->fetchAll(PDO::FETCH_ASSOC);
       $aws_path = $files2["aws_path"];
@@ -863,7 +863,7 @@ foreach ($versions as &$version) {
       $version["wave_png"] = $s3->putObject([
            'Bucket' => $config['AWS_S3_BUCKET'],
            'Key'    => $files2[0]["version_id"] . "/" . $files2[0]["file_name"] . ".txt"
-       ]);
+      ]);
   }
 }
 
