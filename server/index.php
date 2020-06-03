@@ -1121,8 +1121,6 @@ if (in_array($file_id, $_SESSION['user_files'])) {
 
     // delete files
     exec("rm -rf /tmp/".$file_id."/*");
-    error_log("3");
-    gc_collect_cycles();
   // if coded is not lossy, transcode
   // if ((strpos($codec_name, 'pcm') !== false) || (strpos($codec_name, 'lac') !== false) || (strpos($codec_name, 'wavpack') !== false)) {
     // now we split up the song in 10sec fragments
@@ -1190,12 +1188,12 @@ if (in_array($file_id, $_SESSION['user_files'])) {
 
   // Update wave_png in dB
   $version_id = $files[0]["version_id"];
-  $sql = "UPDATE Version SET wave_png = '$wave_png_json' WHERE version_id = '$version_id'";
-  $result = $db->query($sql);
+  // $sql = "UPDATE Version SET wave_png = '$wave_png_json' WHERE version_id = '$version_id'";
+  // $result = $db->query($sql);
   error_log("1D");
 
   // Update duration in dB
-  $sql = "UPDATE Version SET track_length = '$duration' WHERE version_id = '$version_id'";
+  $sql = "UPDATE Version SET track_length = '$duration', wave_png = 's3' WHERE version_id = '$version_id'";
   $result = $db->query($sql);
   error_log("1E");
 
