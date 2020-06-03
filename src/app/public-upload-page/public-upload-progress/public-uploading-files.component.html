@@ -30,15 +30,18 @@
 </div>
 
 
+    <div *ngIf="getProgress()<100"><h5>Uploading {{getProgress() | number:'1.0-0'}}%</h5><h6>1/2</h6>
+      <div class="progress row">
+        <div class="progress-bar" role="progressbar" [ngStyle]="{ 'width': getProgress() + '%' }"></div>
+      </div>
+    </div>
 
-  <!--  <h5>Uploading {{getProgress() | number:'1.0-0'}}%</h5><h6>1/2</h6>
-    <div class="progress row">
-      <div class="progress-bar" role="progressbar" [ngStyle]="{ 'width': getProgress() + '%' }"></div>
-    </div> -->
-
-    <h5>Processing project</h5><h6>2/2</h6>
-    <div id="processingtracks" class="progress row">
-      <ngb-progressbar class="progress-bar" [value]="100" [striped]="true" [animated]="true" [ngStyle]="{ 'width': '100%' }"></ngb-progressbar>
+    <div *ngIf="getProgress()==100">
+      <h5>Processing project</h5><h6>2/2</h6>
+      <div id="processingtracks" class="progress row">
+        <ngb-progressbar class="progress-bar" [value]="100" [striped]="true" [animated]="true"
+                         [ngStyle]="{ 'width': '100%' }"></ngb-progressbar>
+      </div>
     </div>
 
   </div>

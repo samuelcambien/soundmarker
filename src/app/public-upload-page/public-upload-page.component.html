@@ -1,7 +1,7 @@
 <app-public-page [error]="error" (tryAgain)="tryAgain()">
 
   <div>
-    <app-public-upload-form [class.hidden]="stage != statusEnum.UPLOADING_SONGS"
+    <app-public-upload-form [class.hidden]="stage != statusEnum.SELECT_SONGS"
                             [uploader]="uploader"
                             [queueSizeMargin]="queueSizeRemainingString"
                             (uploading)="stage = statusEnum.UPLOADING_SONGS"
@@ -10,7 +10,7 @@
                             (link)="link = $event"
                             (removedFileSize)="addFileSize($event)">
     </app-public-upload-form>
-    <app-public-uploading-files [class.hidden]="stage != statusEnum.SELECT_SONGS"
+    <app-public-uploading-files [class.hidden]="stage != statusEnum.UPLOADING_SONGS"
                                 [uploader]="uploader"></app-public-uploading-files>
     <app-public-upload-finished [class.hidden]="stage != statusEnum.GREAT_SUCCESS"
                                 [link]="link" (sendNewFiles)="tryAgain()"

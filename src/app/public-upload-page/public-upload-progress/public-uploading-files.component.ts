@@ -16,6 +16,6 @@ export class PublicUploadingFilesComponent implements OnInit {
   }
 
   getProgress() {
-    return this.uploader.progress * 1;
+    return this.uploader.progress;
   }
 }
