@@ -847,14 +847,17 @@ $sql = "SELECT version_id, notes, downloadable, visibility, version_title, track
 $result = $db->query($sql);
 $versions = $result->fetchAll(PDO::FETCH_ASSOC);
 
+// get the variables
+$s3 = Flight::get("s3");
+
 foreach ($versions as &$version) {
   $_SESSION['view_versions'][] = $version["version_id"];
 
   // get AWS 3 text wave_png
   if ($version["wave_png"] == "s3") {
       $version_id = $version["version_id"];
-      $sql = "SELECT file_id, aws_path, version_id, file_name FROM File WHERE version_id = '$version_id'";
-      $result2 = $db->query($sql);
+      $sql2 = "SELECT file_id, aws_path, version_id, file_name FROM File WHERE version_id = '$version_id'";
+      $result2 = $db->query($sql2);
       $files2 = $result2->fetchAll(PDO::FETCH_ASSOC);
       $aws_path = $files2["aws_path"];
 
