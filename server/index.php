@@ -849,6 +849,22 @@ $versions = $result->fetchAll(PDO::FETCH_ASSOC);
 
 foreach ($versions as &$version) {
   $_SESSION['view_versions'][] = $version["version_id"];
+
+  // get AWS 3 text wave_png
+  if ($version["wave_png"] == "s3") {
+
+      $sql = "SELECT file_id, aws_path, version_id, file_name FROM File WHERE version_id = '$version["version_id"]'";
+      $result2 = $db->query($sql);
+      $files2 = $result->fetchAll(PDO::FETCH_ASSOC);
+      $aws_path = $files2["aws_path"];
+
+      error_log($aws_path);
+      error_log($files2[0]["version_id"] . "/" . $files2[0]["file_name"] . ".txt");
+      $version["wave_png"] = $s3->putObject([
+           'Bucket' => $config['AWS_S3_BUCKET'],
+           'Key'    => $files2[0]["version_id"] . "/" . $files2[0]["file_name"] . ".txt"
+       ]);
+  }
 }
 
 // return ok
@@ -1182,7 +1198,7 @@ if (in_array($file_id, $_SESSION['user_files'])) {
     }
   }
   $wave_png_json = json_encode($wave_png);
-  error_log("test1");
+
   // Update wave_png in dB
   $version_id = $files[0]["version_id"];
   // $sql = "UPDATE Version SET wave_png = '$wave_png_json' WHERE version_id = '$version_id'";
@@ -1199,12 +1215,10 @@ if (in_array($file_id, $_SESSION['user_files'])) {
     'ContentType' => 'application/octet-stream; charset=utf-8',
     'ContentDisposition' => 'attachment; filename='. $files[0]["file_name"] . '.txt'
   ]);
-  error_log("test2");
 
   // Update duration in dB
   $sql = "UPDATE Version SET track_length = '$duration', wave_png = 's3' WHERE version_id = '$version_id'";
   $result = $db->query($sql);
-  error_log("test3");
 
   // now if downloadable, also save the original file:
   if ($download_id > 0) {
