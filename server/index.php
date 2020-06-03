@@ -1188,10 +1188,13 @@ if (in_array($file_id, $_SESSION['user_files'])) {
   // $sql = "UPDATE Version SET wave_png = '$wave_png_json' WHERE version_id = '$version_id'";
   // $result = $db->query($sql);
   // add wave_png json to file txt
+  $sql = "SELECT version_id, extension, metadata, aws_path, file_name, file_size, identifier, chunk_length FROM File WHERE file_id = '$download_id'";
+  $result = $db->query($sql);
+  $filesnew = $result->fetchAll();
   $result = $s3->putObject([
     'Bucket' => $config['AWS_S3_BUCKET'],
     'Key'    => $filesnew[0]["version_id"] . "/" . $filesnew[0]["file_name"] . '.txt',
-    'Body'   => "text",
+    'Body'   => $wave_png_json,
     'ACL'    => 'public-read',
     'ContentType' => 'application/octet-stream; charset=utf-8',
     'ContentDisposition' => 'attachment; filename='. $files[0]["file_name"] . '.txt'
@@ -1205,9 +1208,9 @@ if (in_array($file_id, $_SESSION['user_files'])) {
 
   // now if downloadable, also save the original file:
   if ($download_id > 0) {
-    $sql = "SELECT version_id, extension, metadata, aws_path, file_name, file_size, identifier, chunk_length FROM File WHERE file_id = '$download_id'";
-    $result = $db->query($sql);
-    $filesnew = $result->fetchAll();
+    // $sql = "SELECT version_id, extension, metadata, aws_path, file_name, file_size, identifier, chunk_length FROM File WHERE file_id = '$download_id'";
+    // $result = $db->query($sql);
+    // $filesnew = $result->fetchAll();
     
     $result = $s3->putObject([
         'Bucket' => $config['AWS_S3_BUCKET'],
