@@ -1166,9 +1166,7 @@ if (in_array($file_id, $_SESSION['user_files'])) {
   gc_collect_cycles();
   // now it's time to create the png
   // let's create wave_png
-  error_log("1A");
   exec($config['FFMPEG_PATH']."/ffmpeg -nostats -i /tmp/orig".$file_id.".".$ext." -af astats=length=0.1:metadata=1:reset=1,ametadata=print:key=lavfi.astats.Overall.RMS_level -f null - 2>&1", $output);
-  error_log("1B");
   foreach ($output as &$value) {
     if (strpos($value, 'lavfi.astats.Overall.RMS_level=') !== false) {
         $momentarylufs = substr($value, strpos($value, "lavfi.astats.Overall.RMS_level=") + 31, 10);
@@ -1184,18 +1182,24 @@ if (in_array($file_id, $_SESSION['user_files'])) {
     }
   }
   $wave_png_json = json_encode($wave_png);
-  error_log("1C");
 
   // Update wave_png in dB
   $version_id = $files[0]["version_id"];
   // $sql = "UPDATE Version SET wave_png = '$wave_png_json' WHERE version_id = '$version_id'";
   // $result = $db->query($sql);
-  error_log("1D");
+  // add wave_png json to file txt
+  $result = $s3->putObject([
+    'Bucket' => $config['AWS_S3_BUCKET'],
+    'Key'    => $filesnew[0]["version_id"] . "/" . $filesnew[0]["file_name"] . '.txt',
+    'Body'   => $wave_png_json,
+    'ACL'    => 'public-read',
+    'ContentType' => 'application/octet-stream; charset=utf-8',
+    'ContentDisposition' => 'attachment; filename='. $files[0]["file_name"] . '.txt'
+]);
 
   // Update duration in dB
   $sql = "UPDATE Version SET track_length = '$duration', wave_png = 's3' WHERE version_id = '$version_id'";
   $result = $db->query($sql);
-  error_log("1E");
 
   // now if downloadable, also save the original file:
   if ($download_id > 0) {
@@ -1212,7 +1216,6 @@ if (in_array($file_id, $_SESSION['user_files'])) {
         'ContentDisposition' => 'attachment; filename='. $files[0]["file_name"] . '.' . $filesnew[0]["extension"]
     ]);
   }
-  error_log("1F");
 
   gc_collect_cycles();
   // delete original upload
