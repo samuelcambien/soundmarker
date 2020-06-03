@@ -859,7 +859,7 @@ foreach ($versions as &$version) {
       $sql2 = "SELECT file_id, aws_path, version_id, file_name FROM File WHERE version_id = '$version_id'";
       $result2 = $db->query($sql2);
       $files2 = $result2->fetchAll(PDO::FETCH_ASSOC);
-      $aws_path = $files2["aws_path"];
+      $aws_path = $files2[0]["aws_path"];
 
       error_log($aws_path);
       error_log($files2[0]["version_id"] . "/" . $files2[0]["file_name"] . ".txt");
