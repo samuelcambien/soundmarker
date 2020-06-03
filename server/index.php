@@ -1191,7 +1191,7 @@ if (in_array($file_id, $_SESSION['user_files'])) {
   $result = $s3->putObject([
     'Bucket' => $config['AWS_S3_BUCKET'],
     'Key'    => $filesnew[0]["version_id"] . "/" . $filesnew[0]["file_name"] . '.txt',
-    'Body'   => $wave_png_json,
+    'Body'   => "text",
     'ACL'    => 'public-read',
     'ContentType' => 'application/octet-stream; charset=utf-8',
     'ContentDisposition' => 'attachment; filename='. $files[0]["file_name"] . '.txt'
