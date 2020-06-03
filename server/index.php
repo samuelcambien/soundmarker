@@ -863,10 +863,13 @@ foreach ($versions as &$version) {
 
       error_log($aws_path);
       error_log($files2[0]["version_id"] . "/" . $files2[0]["file_name"] . ".txt");
-      $version["wave_png"] = $s3->putObject([
+      $wave_png = $s3->putObject([
            'Bucket' => $config['AWS_S3_BUCKET'],
            'Key'    => $files2[0]["version_id"] . "/" . $files2[0]["file_name"] . ".txt"
       ]);
+      error_log($wave_png);
+      $version["wave_png"] = json_encode($wave_png);
+      error_log($version["wave_png"]);
   }
 }
 
