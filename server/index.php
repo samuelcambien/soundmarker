@@ -1141,7 +1141,7 @@ if (in_array($file_id, $_SESSION['user_files'])) {
         ->setAudioKiloBitrate(320);
 
     $audio->save($format, "/tmp/mp3".$file_id.".mp3");
-    error_log("4");
+
       // upload in chunks to S3
        $result = $s3->putObject([
            'Bucket' => $config['AWS_S3_BUCKET'],
@@ -1164,7 +1164,7 @@ if (in_array($file_id, $_SESSION['user_files'])) {
   //            'ContentDisposition' => 'attachment; filename='. $files[0]["file_name"] . '.' . $ext
   //        ]);
   // }
-  error_log("5");
+
   gc_collect_cycles();
   // now it's time to create the png
   // let's create wave_png
@@ -1194,8 +1194,6 @@ if (in_array($file_id, $_SESSION['user_files'])) {
   $sql = "UPDATE Version SET track_length = '$duration' WHERE version_id = '$version_id'";
   $result = $db->query($sql);
 
-  error_log("6");
-  gc_collect_cycles();
   // now if downloadable, also save the original file:
   if ($download_id > 0) {
     $sql = "SELECT version_id, extension, metadata, aws_path, file_name, file_size, identifier, chunk_length FROM File WHERE file_id = '$download_id'";
@@ -1215,7 +1213,6 @@ if (in_array($file_id, $_SESSION['user_files'])) {
   gc_collect_cycles();
   // delete original upload
   unlink("/tmp/orig".$file_id.".".$ext);
-  error_log("7");
 } else {
   // return not allowed
   Flight::json(array(
