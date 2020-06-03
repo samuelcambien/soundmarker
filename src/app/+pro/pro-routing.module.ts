@@ -42,6 +42,10 @@ import {ProBoardProjectsComponent} from './projects/pro-board-projects.component
             },
           },
           {
+            path: 'projects/project/:project_hash',
+            redirectTo: 'project/:project_hash'
+          },
+          {
             path: 'project/:project_hash/track/:id',
             component: ProTrackComponent,
             resolve: {

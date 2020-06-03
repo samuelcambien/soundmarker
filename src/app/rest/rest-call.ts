@@ -15,6 +15,16 @@ export class RestCall {
     });
   }
 
+  public static async editProject(projectID, projectTitle?: string, projectSmppw?: string): Promise<any> {
+    return Request.post(Endpoints.PROJECT_EDIT, {
+      project_id: projectID,
+      project_title: projectTitle,
+      project_password: projectSmppw
+    });
+  }
+
+
+
   public static async createNewTrack(project_id, title): Promise<any> {
     return Request.post(Endpoints.TRACK_NEW, {
       project_id: project_id,
@@ -156,6 +166,8 @@ export class Endpoints {
   public static PROJECT_SUBSCRIBE: string = Endpoints.BACKEND + "/project/subscribe";
 
   public static PROJECT_NEW: string = Endpoints.BACKEND + "/project/new";
+
+  public static PROJECT_EDIT: string = Endpoints.BACKEND + "/project/edit";
 
   public static TRACK: string = Endpoints.BACKEND + "/track";
 

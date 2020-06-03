@@ -4,6 +4,7 @@ import {ProjectService} from "../../../services/project.service";
 import {Track} from "../../../model/track";
 import {Observable} from "rxjs";
 import {Player} from "../../../player/player.service";
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-pro-sidebar',
@@ -15,6 +16,7 @@ export class ProSidebarComponent {
   constructor(
     protected stateService: StateService,
     protected player: Player,
+    public router: Router
   ) { }
 
   get toggled(): boolean {
@@ -27,5 +29,9 @@ export class ProSidebarComponent {
 
   play() {
     this.player.play();
+  }
+
+  navigateTo(url){
+    this.router.navigate(url);
   }
 }

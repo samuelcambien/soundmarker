@@ -17,7 +17,7 @@
         </div>
         <div class="sidebar-tab" routerLink="projects">
 				<span class="projects-tab-icon">
-					<ng-container *ngTemplateOutlet="icon_projects"></ng-container>
+					<ng-container *ngTemplateOutlet="icon_projects" (click)="navigateTo('/pro/projects')"></ng-container>
 				</span>
           <h5>Projects</h5>
         </div>
