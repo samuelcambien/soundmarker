@@ -32,7 +32,7 @@
 
     <div *ngIf="getProgress()<100"><h5>Uploading {{getProgress() | number:'1.0-0'}}%</h5><h6>1/2</h6>
       <div class="progress row">
-        <div class="progress-bar" role="progressbar" [ngStyle]="{ 'width': getProgress() + '%' }"></div>
+        <div class="progress-bar" role="progressbar" [ngStyle]="{ 'width':'%' }"></div>
       </div>
     </div>
 
