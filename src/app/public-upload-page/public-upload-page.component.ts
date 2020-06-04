@@ -37,7 +37,7 @@ export class PublicUploadPageComponent implements OnInit {
   uploader: FileUploader = new FileUploader({
     url: UPLOAD_FILES_ENDPOINT,
     disableMultipart: true,
-    maxFileSize: 2080000000, // 2GB 2 000 000 000 + 80 MB margin
+    maxFileSize: 1000000000, // 1GB 1 000 000 000
     filters: [
       {
         name: 'avoidDuplicates',

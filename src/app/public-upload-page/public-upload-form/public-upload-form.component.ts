@@ -177,16 +177,19 @@ export class PublicUploadFormComponent implements OnInit {
       let message = '';
       switch (filter.name) {
         case 'fileSize':
-          this.ngbPopOverMessage = "You exceeded the limit of 2 GB."
+          this.ngbPopOverMessage = "You exceeded the max size of a single file: 1GB"
+          break;
+        case 'avoidDuplicates':
+          this.ngbPopOverMessage = "Some of these files were already added"
           break;
         case 'onlyAudio':
-          this.ngbPopOverMessage = "One or more files are not supported and were not added.";
+          this.ngbPopOverMessage = "One or more files are not supported and were not added";
           break;
         case 'checkSizeLimit':
-          this.ngbPopOverMessage = "You exceeded the limit of 2 GB.";
+          this.ngbPopOverMessage = "You exceeded the total limit: 2GB";
           break;
         default:
-          this.ngbPopOverMessage = "Something went wrong, please try again.";
+          this.ngbPopOverMessage = "Something went wrong, please try again";
           break;
       }
       this.ngbPopover.open();
