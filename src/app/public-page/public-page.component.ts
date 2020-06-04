@@ -25,7 +25,7 @@ import {SmaComponentOutputs} from '../modules/sma.outputs.module'
 export class PublicPageComponent implements OnInit {
 
   @Input() project_id;
-  @Input() sender;
+  // @Input() sender;
   @Input() expiry_date;
   @Input() expired;
   @Input() message: Message;
