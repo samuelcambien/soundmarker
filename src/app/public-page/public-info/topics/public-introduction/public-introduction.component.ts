@@ -25,7 +25,6 @@ export class PublicIntroductionComponent implements OnInit {
 
   accept() {
     this.termsAcceptedService.acceptTerms(new Date());
-    console.log("lalaa");
     this.acceptTerms.emit("accept");
     // this.activeModal.close();
   }
