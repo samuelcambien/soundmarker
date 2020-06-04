@@ -24,7 +24,6 @@ export class PublicPlayerPageComponent implements OnInit {
 
   project: Project;
   expiry_date;
-  sender;
   project_id: string;
 
   error;
@@ -112,13 +111,8 @@ export class PublicPlayerPageComponent implements OnInit {
     this.expiry_date = this.project.expiration.substr(0, 10);
     this.project_id = this.project.project_id;
 
-    if (this.project.sender) {
-      this.sender = "by " + this.project.sender;
-    }
-
     this.message = this.getMessage(this.project, this.project.tracks[0].versions[0]);
     if (this.message.text == '') {
-      this.message.text = "No notes included";
     }
   }
 

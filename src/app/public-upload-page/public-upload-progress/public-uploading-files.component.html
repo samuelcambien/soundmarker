@@ -1,7 +1,6 @@
 <div class="container-fluid progress-container">
   <div>
-   
-	    
+
 <div class="load">
     <i></i>
     <i></i>
@@ -20,21 +19,32 @@
 				c-2.3,67.6-56.6,121.9-124.2,124.2c-68.6,0-124.2-55.6-124.2-124.2c0-68.6,55.6-124.2,124.2-124.2h124.2V866.4z"/>
 			<path fill="#ffffff" stroke="#7397FF" stroke-width="36" stroke-miterlimit="10" d="M1012.8,286.5v83.2L557.5,556V438.8
 				c0-17,10.3-31.9,25.7-38.5L955.7,248c12.8-5,27.7-3.7,38.9,4.1C1006.2,260,1013.2,272.9,1012.8,286.5z"/>
-			
+
 				<line fill="none" stroke="#7397FF" stroke-width="36" stroke-linecap="round" stroke-linejoin="round" x1="1012.8" y1="742.2" x2="1012.8" y2="369.7"/>
-			
+
 				<line fill="none" stroke="#7397FF" stroke-width="36" stroke-linecap="round" stroke-linejoin="round" x1="557.5" y1="907.8" x2="557.5" y2="556"/>
 		</g>
 	</g>
 </g>
 </svg>
 </div>
-	    
-	    
-   
-    <h5>Uploading tracks</h5><h6> {{getProgress() | number:'1.0-0'}}% </h6>
-    <div class="progress row">
-      <div class="progress-bar" role="progressbar" [ngStyle]="{ 'width': getProgress() + '%' }"></div>
+
+
+    <div *ngIf="getProgress()<100"><h5>Uploading {{getProgress() | number:'1.0-0'}}%</h5><h6>1/2</h6>
+      <div class="progress row">
+        <div class="progress-bar" role="progressbar" [ngStyle]="{ 'width': getProgress() + '%' }"></div>
+      </div>
     </div>
+
+    <div *ngIf="getProgress()==100">
+      <h5>Processing project</h5><h6>2/2</h6>
+      <div id="processingtracks" class="progress row">
+        <ngb-progressbar class="progress-bar" [value]="100" [striped]="true" [animated]="true"
+                         [ngStyle]="{ 'width': '100%' }"></ngb-progressbar>
+      </div>
+    </div>
+
   </div>
 </div>
+
+<!--  <ngb-progressbar class="progress-bar" [value]="getProgress() > 99 ? 100 : 0" [striped]="true" [animated]="true" [ngStyle]="{ 'width': '100%' }"></ngb-progressbar> -->

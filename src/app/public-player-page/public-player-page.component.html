@@ -26,18 +26,19 @@
           (selected)="selectTrack(track)"
         >
         </app-public-track-preview>
-
         <hr *ngIf="!last" class="preview-hr">
-
       </div>
     </div>
 
     <public-track-player
+      [message]="message"
+      [expiry_date]="expiry_date"
+      [sender]="project.sender"
       *ngFor="let track of project?.tracks"
       [track]="track"
       [enableOverview]="project?.tracks?.length > 1"
       [ngbCollapse]="(getActiveTrack() | async) != track"
-      [launchTitleScroll]="(getActiveTrack() | async) == track"
+      [trackActivated]="(getActiveTrack() | async) == track"
       [expired]="expired && !commentsExpired"
       (overview)="setActiveTrack(null)"
       (error)="error = $event">

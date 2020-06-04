@@ -5,11 +5,11 @@
   margin-left: 4px;
 }
 
- 
+
 
 .show-track-button:hover .title p::after {
 	content: 'Show';
-	background-color: #2f2f2f;
+	background-color: #7397ff;
 	color: white !important;
 	border-radius: 0.2rem;
 	padding-top: 3px;
@@ -17,7 +17,7 @@
 	padding-right: 5px;
 	padding-left: 5px;
 	margin-left: 6px;
-	
+
 }
 
 
@@ -43,7 +43,7 @@
 }
 
 @media (max-width: 576px) {
-	
+
 	.title p::after {
 		display: none !important;
 	}

@@ -138,6 +138,8 @@
     </div>
   </div>
 
+
+
   <div tabindex="0" id="phonesearch" class="show-phone shadow-topbar" #phonesearch>
 
     <input
@@ -201,9 +203,9 @@
 
     <div class="player-toolbar hide-phone  ml-auto">
 
-      <div *ngIf="version?.downloadable && !expired" class="top-icon cloud-icon margin-tooltip" id="cloud-icon"
-           (click)="download()" placement="top"
-           ngbTooltip="Download">
+      <div *ngIf="version?.downloadable && !expired" class="top-icon cloud-icon" id="cloud-icon"
+           (click)="download()" popoverClass="popover-class" ngbPopover="Download"
+   [openDelay]="300" [closeDelay]="300" triggers="mouseenter:mouseleave" placement="bottom">
 
 
 
@@ -226,9 +228,10 @@
 
       </div>
 
-      <div *ngIf="enableOverview" class="top-icon list-icon margin-tooltip" id="list-icon" role="button"
-           (click)="overviewByOverviewIconClick()"
-           placement="top" ngbTooltip="Overview">
+      <div *ngIf="enableOverview" class="top-icon list-icon" id="list-icon" role="button"
+           (click)="overviewByOverviewIconClick()" popoverClass="popover-class" ngbPopover="Overview"
+   [openDelay]="300" [closeDelay]="300" triggers="mouseenter:mouseleave" placement="bottom"
+           >
 
 
 
@@ -276,6 +279,10 @@
               appDraggable
               (dragStart)="dragStart()"
               (dragMove)="updateStartTime($event)"
+              #markerPopover="ngbPopover"
+              popoverClass="popover-class marker" ngbPopover="Drag marker for time stamped comment" placement="right"
+              [openDelay]="300" [closeDelay]="300" triggers="manual" [autoClose]="false"
+              (mousedown)="markerPopoverClose($event)"
             >
               <div class="phone-draggable"></div>
             </div>
@@ -337,11 +344,23 @@
 
   </div>
 
-  <div class="comments">
-
-    <div class="comments-divider">
-      <hr>
+  <div class="session-notes shadow-topbar">
+    <h3>By {{sender}}</h3>
+    <div *ngIf="!message.text">
+      <h4 *ngIf="!expired"> Expires in {{getDaysToExpired()}} days ({{getDateHumanized()}}) </h4>
+      <h4 *ngIf="expired"> Expired on {{getDateHumanized()}} </h4>
     </div>
+    <p *ngIf="message.text && notesCollapsed" (click)="notesCollapsed = !notesCollapsed"><a>Show more</a></p>
+      <div class="open" [ngbCollapse]="notesCollapsed">
+        <h4 *ngIf="!expired"> Expires in {{getDaysToExpired()}} days ({{getDateHumanized()}}) </h4>
+        <h4 *ngIf="expired"> Expired on {{getDateHumanized()}} </h4>
+        <p>{{message.text}}<br>
+      <a (click)="notesCollapsed = !notesCollapsed">Show less</a></p>
+      </div>
+  </div>
+
+
+  <div class="comments">
 
     <div class="comments-header row">
 
@@ -351,8 +370,8 @@
         Checked</h4>
 
       <div class="comment-search ml-auto hide-phone" [class.active]="search" [class.disabled]="!hasComments()"
-           placement="top"
-           ngbTooltip="Search for words or names">
+      popoverClass="popover-class" ngbPopover="Search for words or names"
+[openDelay]="300" [closeDelay]="300" triggers="mouseenter:mouseleave">
 
         <input type="search" name="search" placeholder="Filter e.g. bass" [(ngModel)]="search"
                class="comment-form-search sub-form search-box">

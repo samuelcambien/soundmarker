@@ -13,7 +13,6 @@ export class SubscribeComponent implements OnInit {
   @Input() project_id;
   email: string="";
   status: "pending" | "greatsuccess" | "error" = "pending";
-  notifyID: "1" | "2" = "1";
 
   constructor(private modalService: NgbModal, private activeModal: NgbActiveModal, private cdr: ChangeDetectorRef) { }
 
@@ -21,7 +20,7 @@ export class SubscribeComponent implements OnInit {
   }
 
   subscribe() {
-    RestCall.subscribe(this.project_id, this.email, this.notifyID)
+    RestCall.subscribe(this.project_id, this.email, "2")
       .then(() => {this.status = "greatsuccess";
       this.cdr.detectChanges();})
       .catch(() => {this.status = "error";this.cdr.detectChanges();});

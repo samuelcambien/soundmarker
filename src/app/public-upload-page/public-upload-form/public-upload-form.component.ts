@@ -29,6 +29,9 @@ export class PublicUploadFormComponent implements OnInit {
   email_from: string = this.localStorageService.getEmailFrom();
   email_to: string[];
 
+  totalQueueSize: number = 0;
+  uploadedFilesSize: number= 0;
+
   validators = [Validators.required, Validators.pattern('^\\w+([\\.-]?\\w+)*@\\w+([\\.-]?\\w+)*(\\.\\w{2,3})+$')];
   player;
 
@@ -49,9 +52,9 @@ export class PublicUploadFormComponent implements OnInit {
   @ViewChild('dropZone') dropZone;
 
   async onSubmit() {
-
     this.uploading.emit();
     this.storePreferences();
+    this.totalQueueSize = this.calculateTotalQueueSize();
 
     try {
       const projectResponse = await RestCall.createNewProject();
@@ -103,21 +106,26 @@ export class PublicUploadFormComponent implements OnInit {
     }
 
     const buffer: ArrayBuffer = await Utils.read(track._file);
-    await RestCall.uploadChunk(new Blob([buffer]), streamFileId, downloadFileId, 0, extension, progress => this.setChunkProgress(progress));
-    this.setChunkCompleted();
+    await RestCall.uploadChunk(new Blob([buffer]), streamFileId, downloadFileId, 0, extension, progress => this.setChunkProgress(progress, track._file.size));
+    this.setChunkCompleted(track._file.size);
   }
 
-  private setChunkProgress(progress: number) {
-    this.setProgress(((100 * this.uploader.uploaded + progress) / this.uploader.queue.length));
+  private setChunkProgress(progress: number, fileSize: number) {
+    let totalDone = 100*(this.uploadedFilesSize+progress*fileSize)/this.totalQueueSize;
+    this.setProgress(totalDone);
+    // this.setProgress(((100 * this.uploader.uploaded + progress) / this.uploader.queue.length));
   }
 
-  private setChunkCompleted() {
+  private setChunkCompleted(fileSize) {
     this.uploader.uploaded++;
-    this.setProgress(100 * this.uploader.uploaded / this.uploader.queue.length);
+    this.uploadedFilesSize += fileSize;
+    this.setProgress(100*this.uploadedFilesSize/this.totalQueueSize);
+    console.log(this.uploader.progress);
   }
 
   private setProgress(progress: number) {
-    this.uploader.progress = progress;
+      this.uploader.progress = progress;
+      // this.uploader.progress = 100;
   }
 
   private getStreamFileExtension(extension: string) {
@@ -142,23 +150,16 @@ export class PublicUploadFormComponent implements OnInit {
 
   emailCheck(form: NgForm){
      if (form.controls.email_from.value && form.controls.email_from.invalid){
-       console.log("email ingevuld maar fout");
        this.ngbPopOverMessage = "Your email is invalid";
        this.ngbPopover.open();
      }
     else if (!form.controls.email_from.value && form.controls.email_from.invalid){
-      console.log("Geen email");
       this.ngbPopOverMessage = "Your email is missing";
        this.ngbPopover.open();
     }
     else{
        this.ngbPopover.close();
     }
-
-    //
-    // else if (!form.controls[0].dirty && form.controls[0].invalid){
-    //   console.log("email niet ingevuld");
-    // }
   }
 
   availability: boolean = this.localStorageService.getAvailability() ? this.localStorageService.getAvailability(): false;
@@ -222,7 +223,9 @@ export class PublicUploadFormComponent implements OnInit {
       this.notes = '';
       this.email_to = [];
     }
+    this.uploadedFilesSize = 0;
     this.uploader.clearQueue();
+    this.uploader.progress = 0;
   }
 
   private storePreferences() {
@@ -239,6 +242,14 @@ export class PublicUploadFormComponent implements OnInit {
     this.uploader.removeFromQueue(item);
     this.removedFileSize.emit(item.file.size);
   }
+
+  calculateTotalQueueSize() {
+    let temp = 0;
+    this.uploader.queue.forEach(item =>
+      temp += item._file.size);
+    return temp;
+  }
+
 }
 
 @Directive({

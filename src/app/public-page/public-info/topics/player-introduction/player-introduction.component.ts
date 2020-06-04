@@ -31,5 +31,4 @@ export class PlayerIntroductionComponent{
     }
     return null;
   }
-
 }

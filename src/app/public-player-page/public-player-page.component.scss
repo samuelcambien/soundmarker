@@ -1,3 +1,51 @@
+.session-notes {
+	border-radius: 0.3rem;
+	padding: 10px 10px 8px 10px;
+	margin-top: 28px;
+	border: 1px solid #eef1ff;
+}
+
+.session-notes h3 {
+	font-size: 10pt !important;
+	color: #717db0 !important;
+	margin-bottom: 0px !important;
+	user-select: none;
+
+}
+
+.session-notes h4 {
+	font-size: 8pt !important;
+	color: #bac1da !important;
+	margin-top: 3px !important;
+	margin-bottom: 0px !important;
+	user-select: none;
+}
+
+.session-notes .open p {
+	margin-top: 10px !important;
+}
+
+.session-notes h4 a {
+	color: #bac1da !important;
+	text-decoration: underline;
+
+}
+
+.session-notes p {
+	margin-bottom: 0px !important;
+	color: #717db0 !important;
+	margin-top: 0px !important;
+
+}
+
+.session-notes p a {
+	color: #bac1da !important;
+	text-decoration: underline;
+	cursor: pointer !important;
+	user-select: none;
+
+}
+
 #phonesearch {
 	width: 100%;
 	height: 48px;

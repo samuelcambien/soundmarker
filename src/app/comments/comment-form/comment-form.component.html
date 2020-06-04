@@ -4,7 +4,11 @@
   <div class="top">
     <div class="row">
       <div class="container-fluid">
+        <span popoverClass="popover-class preview"
+        ngbPopover="Preview marked region"
+    [autoClose]="false" triggers="mouseenter:mouseleave" placement="right">
         <div *ngIf="isPlaying(); then stopbutton else playbutton"></div>
+        </span>
         <textarea type="text" required [(ngModel)]="comment.notes" name="text" placeholder="Type comment"
                   class="comment-form-text form-control form-control-sm" rows="1" (click)="active = true"></textarea>
       </div>

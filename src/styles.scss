@@ -52,13 +52,39 @@ CONTENTS
 	width: 164px;
 }
 
+.popover-class.preview {
+	margin-top: 18px;
+	margin-left: 26px;
+}
+
+.popover-class.marker {
+	width: 154px;
+	display: block;
+	visibility: visible;
+	opacity: 1;
+}
+
 .popover-class.popover-submit .arrow {
 	left: 60% !important;
+
+}
+
+.bs-popover-auto[x-placement^=bottom] .arrow::after, .bs-popover-bottom .arrow::after {
+
+	border-bottom-color: #7397ff;
 }
 
 .bs-popover-auto[x-placement^=bottom] .arrow::before, .bs-popover-bottom .arrow::before {
-	border: none;
 
+	border: none;
+}
+
+.bs-popover-auto[x-placement^=right] .arrow::after, .bs-popover-right .arrow::after {
+	border-right-color: #7397ff;
+}
+
+.bs-popover-auto[x-placement^=right] .arrow::before, .bs-popover-right .arrow::before {
+	border: none;
 }
 
 .bs-popover-auto[x-placement^=top] .arrow::after, .bs-popover-top .arrow::after {
@@ -86,7 +112,8 @@ CONTENTS
 
 .popover-class .popover-body {
 	color: white;
-	padding-top: 5px;
+	padding: 5px 10px;
+
 
 }
 
@@ -235,7 +262,7 @@ body {
 }
 @media (max-width: 576px) {
 	body {
-		background-color: #eef1ff;
+		background-color: #ffffff;
 		overflow-y: scroll;
 		overflow-x: hidden;
 		height: auto !important;
@@ -260,6 +287,12 @@ body {
   height: 100vh;
   //max-height: 100vh;
   //width: 100vw;
+}
+
+//progress
+
+.progress-bar {
+  background-color: #7397FF !important;
 }
 
 .waveform {

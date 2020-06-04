@@ -326,12 +326,18 @@ input:checked + .slider:before {
 
 .autoplay-text.dropdown-menu {
 	width: 114px !important;
-	right: 9px !important;
+	right: 74px !important;
 	margin-top: -9px !important;
 	min-width: 114px !important;
 	padding-bottom: 0px !important;
 
 
+}
+
+@media (max-width: 576px) {
+	.autoplay-text.dropdown-menu {
+		right: 20px !important;
+	}
 }
 
 .autoplay-text.dropdown-menu h5 {
