@@ -117,7 +117,7 @@ export class PublicUploadFormComponent implements OnInit {
     console.log(progress);
     console.log("Filesize of currentfile: ");
     console.log(fileSize);
-    let totalDone = 100*(this.uploadedFilesSize+progress*fileSize)/this.totalQueueSize;
+    let totalDone = (100*this.uploadedFilesSize+progress*fileSize)/this.totalQueueSize;
     console.log("totalDoneCalculated:");
     console.log("________________");
     console.log(totalDone);
