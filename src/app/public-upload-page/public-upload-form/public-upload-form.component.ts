@@ -111,7 +111,16 @@ export class PublicUploadFormComponent implements OnInit {
   }
 
   private setChunkProgress(progress: number, fileSize: number) {
+    console.log("setChunkProgress");
+    console.log("________________");
+    console.log("Progress of currentfile: ");
+    console.log(progress);
+    console.log("Filesize of currentfile: ");
+    console.log(fileSize);
     let totalDone = 100*(this.uploadedFilesSize+progress*fileSize)/this.totalQueueSize;
+    console.log("totalDoneCalculated:");
+    console.log("________________");
+    console.log(totalDone);
     this.setProgress(totalDone);
     // this.setProgress(((100 * this.uploader.uploaded + progress) / this.uploader.queue.length));
   }
@@ -120,11 +129,15 @@ export class PublicUploadFormComponent implements OnInit {
     this.uploader.uploaded++;
     this.uploadedFilesSize += fileSize;
     this.setProgress(100*this.uploadedFilesSize/this.totalQueueSize);
-    console.log(this.uploader.progress);
   }
 
   private setProgress(progress: number) {
+    console.log("________________");
+    console.log("setProgress:");
+    // console.log("progress");
       this.uploader.progress = progress;
+      console.log(this.uploader.progress);
+    console.log("________________");
       // this.uploader.progress = 100;
   }
 
