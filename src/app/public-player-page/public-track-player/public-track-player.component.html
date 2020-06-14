@@ -271,7 +271,7 @@
               (dragStart)="dragStart()"
               (dragMove)="updateStartTime($event)"
               #markerPopover="ngbPopover"
-              popoverClass="popover-class marker" ngbPopover="Drag marker for time stamped comment" placement="right"
+              popoverClass="popover-class marker hide-phone" ngbPopover="Drag marker for time stamped comment" placement="right"
               [openDelay]="300" [closeDelay]="300" triggers="manual" [autoClose]="false"
               (mousedown)="markerPopoverClose($event)"
             >
