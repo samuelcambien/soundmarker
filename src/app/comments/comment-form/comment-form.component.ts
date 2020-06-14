@@ -102,7 +102,6 @@ export class CommentFormComponent implements OnInit {
   }
 
   updateEndTime(time) {
-
     this.setEndTime(this.getValidEndTime(time));
     this.comment.include_end = true;
     this.triggerEnd();
@@ -118,5 +117,5 @@ export class CommentFormComponent implements OnInit {
 
   public isValidEndTime = (time) =>
     time >= this.comment.start_time + PublicTrackPlayerComponent.MINIMAL_INTERVAL
-    && time <= this.player.getDuration();
+    && time <= this.version.track_length;
 }
