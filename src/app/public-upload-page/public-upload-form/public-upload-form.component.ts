@@ -102,10 +102,11 @@ export class PublicUploadFormComponent implements OnInit {
       const downloadFileResponse = await RestCall.createNewFile(track._file, title, extension, track._file.size, versionId, 1, length);
       downloadFileId = downloadFileResponse["file_id"];
     } else {
-      downloadFileId = "null";
+      downloadFileId = "0";
     }
 
     const buffer: ArrayBuffer = await Utils.read(track._file);
+    console.log(streamFileId);
     await RestCall.uploadChunk(new Blob([buffer]), streamFileId, downloadFileId, 0, extension, progress => this.setChunkProgress(progress, track._file.size));
     this.setChunkCompleted(track._file.size);
   }
