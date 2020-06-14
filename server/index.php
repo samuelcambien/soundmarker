@@ -1240,7 +1240,7 @@ if (in_array($file_id, $_SESSION['user_files'])) {
 
   gc_collect_cycles();
   // delete original upload
-  unlink("/tmp/orig".$file_id.".".$ext);
+  try { unlink("/tmp/orig".$file_id.".".$ext); } catch (AwsException $e) { }
 } else {
   // return not allowed
   Flight::json(array(
