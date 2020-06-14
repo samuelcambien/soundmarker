@@ -24,7 +24,7 @@ export class TimeFormatDirective {
   @HostListener("focus", ["$event.target.value"])
   onFocus(value) {
     this.backup = this.el.value;
-    this.el.value = "";
+    this.el.value = value;
   }
 
   @HostListener("blur", ["$event.target.value"])

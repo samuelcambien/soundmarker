@@ -8,13 +8,11 @@
 
       <div class="comment-play-button"
            [class.hidden]="!comment?.include_start" [class.disabled]="expired">
-
         <div *ngIf="isPlaying(); then stopbutton else playbutton"></div>
-
       </div>
 
-      <div class="region-loop" popoverClass="popover-class" ngbPopover="Loop region"
-[autoClose]="false" triggers="mouseenter:mouseleave" placement="top"
+      <div class="region-loop" popoverClass="popover-class hide-phone" ngbPopover="Loop region"
+           [autoClose]="false" triggers="mouseenter:mouseleave" placement="top"
            [class.hidden]="!(comment?.include_start && comment?.include_end)"
            [class.active]="comment.loop"
            (click)="toggleLoop()"
