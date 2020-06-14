@@ -97,12 +97,12 @@ export class PublicUploadFormComponent implements OnInit {
     const streamFileResponse = await RestCall.createNewFile(track._file, title, this.getStreamFileExtension(extension), track._file.size, versionId, 0, length);
     const streamFileId = streamFileResponse["file_id"];
 
-    let downloadFileId: string;
+    let downloadFileId: number;
     if (this.availability) {
       const downloadFileResponse = await RestCall.createNewFile(track._file, title, extension, track._file.size, versionId, 1, length);
       downloadFileId = downloadFileResponse["file_id"];
     } else {
-      downloadFileId = "0";
+      downloadFileId = 0;
     }
 
     const buffer: ArrayBuffer = await Utils.read(track._file);
