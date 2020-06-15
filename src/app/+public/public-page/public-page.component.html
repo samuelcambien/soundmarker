@@ -1,0 +1,44 @@
+<app-public-introduction (acceptTerms)="acceptTerms()" *ngIf="!termsAccepted" class="full-welcome"></app-public-introduction>
+
+<div class="phone-topbar show-phone ">
+  <app-public-info-header
+    [message]="message">
+  </app-public-info-header>
+</div>
+
+<div class="container rounded phone-scroll">
+  <div>
+    <loadable-component [componentId]="SMA_COMPONENT_ID" [componentOutputs]="smaOutputs" [loadComponent]="loadSMA()">
+    </loadable-component>
+  </div>
+
+  <div class="public-page card shadow-lg rounded-lg border-0">
+    <div class="hide-phone" #header>
+      <app-public-info-header [message]="message" ></app-public-info-header>
+    </div>
+
+    <div class="upload-container comments-scrolltainer card-body bg-light rounded-lg" #content>
+      <ng-content *ngIf="!error"></ng-content>
+      <app-error *ngIf="error" (reset)="reset()"></app-error>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade info-modal-player-subscribe" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog  modal-lg">
+    <div class="modal-content">
+      <app-subscribe [project_id]="project_id"></app-subscribe>
+    </div>
+  </div>
+</div>
+
+
+<!--<div id="openModal" data-backdrop="static" data-keyboard="false"-->
+     <!--class="modal-intro info-modal-public-introduction" role="dialog" aria-labelledby="myLargeModalLabel"-->
+     <!--aria-hidden="true">-->
+  <!--<div width="100%" height="100%" class="modal-dialog" >-->
+    <!--<div width="100%" height="100%" class="modal-content">-->
+    <!--</div>-->
+  <!--</div>-->
+<!--</div>-->

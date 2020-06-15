@@ -1,8 +1,7 @@
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
-import {AboutUsInfoComponent} from "./public-page/public-info/public-info.component";
-import {PublicPagenotfoundPageComponent} from "./public-pagenotfound-page/public-pagenotfound-page.component";
-import {ProComponent} from './pro/pro.component';
+import {PublicPagenotfoundPageComponent} from "./+public/public-pagenotfound-page/public-pagenotfound-page.component";
+import {ProComponent} from './+pro/pro.component';
 import { CustomPreloadingStrategy } from './custom-preloading';
 
 const appRoutes: Routes = [
@@ -15,10 +14,6 @@ const appRoutes: Routes = [
     path: 'project',
     loadChildren: './modules/project.module#ProjectModule',
     data: { preload: false }
-  },
-  {
-    path: "about-us",
-    component: AboutUsInfoComponent,
   },
   {
     path: "pro",
