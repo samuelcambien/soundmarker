@@ -1206,8 +1206,7 @@ if (in_array($file_id, $_SESSION['user_files'])) {
   // $sql = "UPDATE Version SET wave_png = '$wave_png_json' WHERE version_id = '$version_id'";
   // $result = $db->query($sql);
   // add wave_png json to file txt
-  $download_id = intval($download_id);
-  $sql = "SELECT version_id, extension, metadata, aws_path, file_name, file_size, identifier, chunk_length FROM File WHERE file_id = '$download_id'";
+  $sql = "SELECT version_id, extension, metadata, aws_path, file_name, file_size, identifier, chunk_length FROM File WHERE file_id = '$file_id'";
   $result = $db->query($sql);
   $filesnew = $result->fetchAll();
   $result = $s3->putObject([
