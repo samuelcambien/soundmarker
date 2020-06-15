@@ -1119,7 +1119,7 @@ if (in_array($file_id, $_SESSION['user_files'])) {
    exec("mkdir /tmp/".$file_id);
 
    // now create segments
-   exec($config['FFMPEG_PATH']."/ffmpeg -i /tmp/orig".$file_id.".".$ext." -f segment -segment_time 10 -codec:a libmp3lame -qscale:a 1 /tmp/".$file_id."/".$file_id."%03d.mp3");
+   exec($config['FFMPEG_PATH']."/ffmpeg -i /tmp/orig".$file_id.".".$ext." -f 96 -segment_time 10 -codec:a libmp3lame -qscale:a 1 /tmp/".$file_id."/".$file_id."%03d.mp3");
 
    // loop through all files and upload them
    $di = new RecursiveDirectoryIterator('/tmp/'.$file_id);
@@ -1206,6 +1206,7 @@ if (in_array($file_id, $_SESSION['user_files'])) {
   // $sql = "UPDATE Version SET wave_png = '$wave_png_json' WHERE version_id = '$version_id'";
   // $result = $db->query($sql);
   // add wave_png json to file txt
+  $download_id = intval($download_id);
   $sql = "SELECT version_id, extension, metadata, aws_path, file_name, file_size, identifier, chunk_length FROM File WHERE file_id = '$download_id'";
   $result = $db->query($sql);
   $filesnew = $result->fetchAll();
