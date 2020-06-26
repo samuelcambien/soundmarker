@@ -27,20 +27,14 @@
 
           <form class="form-inline">
             <div class="form-group copy-link-group">
-
               <input type="text" class="sub-form" id="copy-link" value="{{getLink()}}">
-
               <button class="btn btn-outline-form btn-sm copy-link-btn" ngxClipboard [cbContent]="getLink()">
                 Copy link
               </button>
-
             </div>
           </form>
-
           <button type="submit" class="btn btn-primary btn-sm" (click)="sendMore()">Share more</button>
-
         </div>
-
       </div>
 
     </div>

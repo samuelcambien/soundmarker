@@ -1,5 +1,5 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { FileSelectDirective, FileDropDirective, FileUploader } from 'src/app/ng2-file-upload/ng2-file-upload';
+import { FileSelectDirective, FileDropDirective, FileUploader } from 'src/app/tools/ng2-file-upload/ng2-file-upload';
 
 import { PublicUploadFormComponent } from './public-upload-form.component';
 

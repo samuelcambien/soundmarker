@@ -1,6 +1,6 @@
 import {ChangeDetectorRef, Component, Input, OnInit} from '@angular/core';
 import {NgbActiveModal, NgbModal} from "@ng-bootstrap/ng-bootstrap";
-import {RestCall} from "../rest/rest-call";
+import {RestCall} from "../../rest/rest-call";
 
 
 @Component({

@@ -1,5 +1,5 @@
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
-import {FileUploader} from "../../ng2-file-upload";
+import {FileUploader} from "../../tools/ng2-file-upload";
 
 const UPLOAD_FILES_ENDPOINT = 'http://localhost:8080/rest/upload/file';
 

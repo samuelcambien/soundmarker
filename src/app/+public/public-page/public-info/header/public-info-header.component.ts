@@ -1,6 +1,6 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
-import {SubscribeComponent} from "../../../../subscribe/subscribe.component";
+import {SubscribeComponent} from "../../../subscribe/subscribe.component";
 import {Message} from "../../../../message";
 import {StateService} from "../../../../services/state.service";
 import {ProjectService} from "../../../../services/project.service";

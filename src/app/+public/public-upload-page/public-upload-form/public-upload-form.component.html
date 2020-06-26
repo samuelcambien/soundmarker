@@ -8,7 +8,7 @@
 
         <div class="upload-songs-text">
 
-          <div  *ngIf="uploader.getNotUploadedItems().length == 0; then uploadsongs else addsongs"></div>
+          <div id="uploadsongs" *ngIf="uploader.getNotUploadedItems().length == 0; then uploadsongs else addsongs"></div>
 
           <ng-template #uploadsongs >
 
@@ -85,7 +85,7 @@
       <div class="form-row">
 
         <div class="col-sm-12"  >
-            <input type="text" [(ngModel)]="email_from" name="email_from" placeholder="Your email*" pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$"
+            <input id="emailfrom" type="text" [(ngModel)]="email_from" name="email_from" placeholder="Your email*" pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$"
                    class="form-control form-control-sm" required>
         </div>
 
@@ -103,8 +103,7 @@
                      secondaryPlaceholder="Email to"
                      name="email_to"
                      class="form-control form-control-sm"
-                     id="tag-input-email"
-                     ngbTooltip="Invalid email address" triggers="manual" #t="ngbTooltip">
+                     id="tag-input-email">
           </tag-input>
         </div>
       </div>
@@ -132,7 +131,7 @@
               <input type="checkbox" [checked]="availability" (click)="toggleDownload()">
               <span class="slider round"></span>
             </div>
-            <div [ngClass]="{'unchecked': !availability}" class="slider-text">Downloads</div>
+            <div  id="enable-download-button"  [ngClass]="{'unchecked': !availability}" class="slider-text">Downloads</div>
           </label>
         </div>
 

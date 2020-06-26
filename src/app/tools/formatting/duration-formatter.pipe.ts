@@ -1,5 +1,5 @@
 import {Pipe, PipeTransform} from '@angular/core';
-import {Utils} from "../app.component";
+import {Utils} from "../../app.component";
 
 @Pipe({
   name: 'durationFormatter'

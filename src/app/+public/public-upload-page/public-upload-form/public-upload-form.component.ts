@@ -9,7 +9,7 @@ import {
   Output,
   ViewChild
 } from '@angular/core';
-import {FileItem, FileUploader} from '../../../ng2-file-upload';
+import {FileItem, FileUploader} from '../../../tools/ng2-file-upload';
 import {RestCall} from "../../../rest/rest-call";
 import {NgbPopover, NgbTooltip} from '@ng-bootstrap/ng-bootstrap';
 import {NgControl, NgForm, Validators} from '@angular/forms';
