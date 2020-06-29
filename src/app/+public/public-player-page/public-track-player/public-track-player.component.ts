@@ -17,15 +17,17 @@ import {Version} from "../../../model/version";
 import {RestCall} from "../../../rest/rest-call";
 import {LocalStorageService} from "../../../services/local-storage.service";
 import {DrawerService} from "../../../services/drawer.service";
-import {Player} from "../../../player.service";
 import {animate, state, style, transition, trigger} from '@angular/animations';
 import {BehaviorSubject} from 'rxjs';
 import {distinctUntilChanged} from 'rxjs/operators';
-import {State} from "../../../play-button/play-button.component";
+import {State} from "../../../player/play-button/play-button.component";
+import {AudioSource, Player} from "../../../player/player.service";
+import {WaveformComponent} from './waveform/waveform.component';
+import {ProjectService} from '../../../services/project.service';
+import {StateService} from '../../../services/state.service';
 import {Message} from '../../../message';
 import {Utils} from '../../../app.component';
 import {NgbPopover} from '@ng-bootstrap/ng-bootstrap';
-import {StateService} from '../../../services/state.service';
 
 @Component({
   selector: 'public-track-player',
@@ -73,6 +75,7 @@ export class PublicTrackPlayerComponent implements OnInit, OnChanges {
   @ViewChild('phonesearch') phonesearch: ElementRef;
   @ViewChild('trackTitle') trackTitleDOM: ElementRef;
   @ViewChild('markerPopover') markerPopover: NgbPopover;
+  @ViewChild('appwaveform') appwaveform: WaveformComponent;
 
   commentSorters: CommentSorter[] = [
     CommentSorter.MOST_RECENT,
@@ -101,9 +104,10 @@ export class PublicTrackPlayerComponent implements OnInit, OnChanges {
 
   constructor(
     private localStorageService: LocalStorageService,
+    private stateService: StateService,
+    private project: ProjectService,
     private player: Player,
     private drawerService: DrawerService,
-    private stateService: StateService,
     private cdr: ChangeDetectorRef,
   ) {
     document.addEventListener('scroll', () => {
@@ -129,6 +133,7 @@ export class PublicTrackPlayerComponent implements OnInit, OnChanges {
   }
 
   ngOnInit(): void {
+    this.track = Object.assign(new Track(), this.track);
     this.waveformInViewPort = true;
     this.version = this.track.versions[0];
     this.player.progress.subscribe(e => {
@@ -142,11 +147,24 @@ export class PublicTrackPlayerComponent implements OnInit, OnChanges {
     this.waveformInViewPortObservable.pipe(distinctUntilChanged()).subscribe(() => {
       this.cdr.detectChanges();
     });
-    setTimeout(()=>this.cdr.detectChanges(),50);
+    setTimeout(() => this.cdr.detectChanges(), 50);
     this.markerPopover.open();
-    if(this.trackActivated){
-        setTimeout(()=> document.addEventListener("click", ($event)=> this.markerPopoverClose($event), false),500);
-      }
+    if (this.trackActivated) {
+      setTimeout(() => document.addEventListener("click", ($event) => this.markerPopoverClose($event), false), 500);
+    }
+  }
+
+  selectVersion() {
+    if (this.player.isPlaying()) this.player.stop();
+    this.cdr.detectChanges();
+    this.stateService.setActiveVersion(this.version);
+    this.appwaveform.updateVersion();
+    this.createNewComment();
+    this.project.loadFiles(this.version);
+  }
+
+  getVersionIndex(version){
+    return this.track.versions.findIndex(e => e == version);
   }
 
   private getPlayerWidth(): number {
@@ -225,7 +243,7 @@ export class PublicTrackPlayerComponent implements OnInit, OnChanges {
   }
 
   async play() {
-    await this.player.play(this.version);
+    await this.player.play(this.audioSource);
   }
 
   pause() {
@@ -267,6 +285,13 @@ export class PublicTrackPlayerComponent implements OnInit, OnChanges {
 
   getDuration(): number {
     return this.version && this.version.track_length;
+  }
+
+  get audioSource(): AudioSource {
+    return {
+      track: this.track,
+      version: this.version,
+    };
   }
 
   private getPosition(element, commentTime) {

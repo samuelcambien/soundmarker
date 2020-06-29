@@ -6,7 +6,7 @@ import {DeviceDetectorModule} from 'ngx-device-detector';
 import {FormsModule} from '@angular/forms';
 import {NgSelectModule} from '@ng-select/ng-select';
 import {ReactiveFormsModule} from '@angular/forms';
-import {TagInputModule} from '../ngx-chips/modules';
+import {TagInputModule} from '../tools/ngx-chips/modules';
 import {TrimValueAccessorModule} from 'ng-trim-value-accessor';
 import {NgbActiveModal, NgbModule} from '@ng-bootstrap/ng-bootstrap';
 
@@ -24,12 +24,12 @@ import {SubscribeComponent} from '../+public/subscribe/subscribe.component';
 //////////////    DIRECTIVES    //////////////
 import {DraggableDirective} from '../+public/public-player-page/public-track-player/draggable.directive';
 import {DurationDirective} from '../tools/formatting/duration.directive';
-import {TimeFormatDirective} from '../time-format.directive';
+import {TimeFormatDirective} from '../tools/formatting/time-format.directive';
 
 //////////////    PIPES     //////////////
 import {DurationFormatterPipe} from '../tools/formatting/duration-formatter.pipe';
 import {HighlightPipe} from '../tools/formatting/highlight.pipe';
-import {TimeFormatPipe} from '../time-format.pipe';
+import {TimeFormatPipe} from '../tools/formatting/time-format.pipe';
 import {RouterModule} from '@angular/router';
 import {LoadableComponentModule} from 'ngx-loadable-component';
 import {LoadingComponent} from "../loading/loading.component";

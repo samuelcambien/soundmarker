@@ -249,7 +249,7 @@
 
         <div class="audio-wave" id="waveform" #waveform></div>
 
-        <app-waveform [version]="version"></app-waveform>
+        <app-waveform [audioSource]="audioSource"></app-waveform>
 
       </div>
 
@@ -404,7 +404,7 @@
 
     <app-comment-form
       *ngIf="!expired"
-      [version]="version"
+      [audioSource]="audioSource"
       [comment]="comment"
       (newComment)="addComment($event)">
     </app-comment-form>
@@ -412,7 +412,7 @@
     <comment-lazy
       *ngFor="let comment of getMatchingCommentsSorted()"
       [comment]="comment"
-      [version]="version"
+      [audioSource]="audioSource"
       [search]="search"
       [expired]="expired"
       (delete)="deleteComment($event)"

@@ -5,9 +5,9 @@ import {Track} from "../model/track";
 import {Version} from "../model/version";
 import {Comment} from "../model/comment";
 import {Utils} from "../app.component";
-import {Player} from "../player.service";
 import {RestCall} from "../rest/rest-call";
 import {StateService} from "./state.service";
+import {Player} from "../player/player.service";
 
 @Injectable({
   providedIn: 'root'
@@ -26,7 +26,10 @@ export class ProjectService {
           await this.player.play(e.version, comment.start_time);
         } else {
           this.player.pause();
-          await this.player.seekTo(e.version, comment.start_time);
+          await this.player.seekTo({
+            track: this.player.track,
+            version: e.version,
+          }, comment.start_time);
         }
       }
     });
@@ -53,7 +56,8 @@ export class ProjectService {
 
   async loadProject(projectHash: string): Promise<void> {
     const project = await RestCall.getProject(projectHash);
-    if(project.project_id){
+    if (project.project_id) {
+      console.log(this.isActive(project));
       this.stateService.setActiveProject(project);
       if (!this.isActive(project) && !this.areCommentsActive(project)) {
         return Promise.resolve();
@@ -66,7 +70,7 @@ export class ProjectService {
   }
 
   public isActive(project: Project) {
-    return project.status == "active";
+    return !((project.status == "commentsonly") || (project.status == "expired"));
   }
 
   public getExpiryDate(project: Project) {
@@ -74,7 +78,7 @@ export class ProjectService {
   }
 
   public areCommentsActive(project: Project) {
-    return project.status != "expired";
+    return project.status == "commentsonly";
   }
 
   private async loadVersions(track: Track): Promise<void> {
@@ -86,11 +90,12 @@ export class ProjectService {
       if (version.downloadable == 0) version.downloadable = false
     });
 
+
     const version = track.versions[0];
     await this.loadFiles(version);
   }
 
-  private async loadFiles(version: Version) {
+  async loadFiles(version: Version) {
     version.files = (await RestCall.getVersion(version.version_id))["files"];
     this.loadComments(version);
     interval(20 * 1000)
@@ -134,7 +139,10 @@ export class ProjectService {
       if (this.stateService.getActiveTrack().getValue() != null) {
         this.stateService.setActiveTrack(nextTrack);
       }
-      await this.player.playFromStart(nextTrack.versions[0]);
+      await this.player.play({
+        track: nextTrack,
+        version: nextTrack.versions[0],
+      }, 0);
     }
   }
 

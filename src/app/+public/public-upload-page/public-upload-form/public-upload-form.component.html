@@ -17,21 +17,21 @@
               <div class="note-image" id="ni1">
 
 
-<div class="mid-shadow">
+                <div class="mid-shadow">
 
-                <svg width="43px" height="43px" viewBox="0 0 66 66" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                  <svg width="43px" height="43px" viewBox="0 0 66 66" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                     <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                        <g id="Internet-Networks-Servers-/-Upload/Download-/-upload-dash-arrow-1" transform="translate(-462.000000, -194.000000)" fill-rule="nonzero">
-                            <g id="Group-31" transform="translate(462.000000, 194.000000)">
-                                <circle id="Oval-2" fill="#7397FF" cx="33" cy="33" r="33"></circle>
-                                <g id="Group-26-Copy" transform="translate(23.000000, 23.000000)" stroke="#ffffff" stroke-linecap="round" stroke-width="4">
-                                    <path d="M0,10.5 L20,10.5" id="Line-10"></path>
-                                    <path d="M0,10.5 L20,10.5" id="Line-10" transform="translate(10.000000, 10.500000) rotate(90.000000) translate(-10.000000, -10.500000) "></path>
-                                </g>
-                            </g>
+                      <g id="Internet-Networks-Servers-/-Upload/Download-/-upload-dash-arrow-1" transform="translate(-462.000000, -194.000000)" fill-rule="nonzero">
+                        <g id="Group-31" transform="translate(462.000000, 194.000000)">
+                          <circle id="Oval-2" fill="#7397FF" cx="33" cy="33" r="33"></circle>
+                          <g id="Group-26-Copy" transform="translate(23.000000, 23.000000)" stroke="#ffffff" stroke-linecap="round" stroke-width="4">
+                            <path d="M0,10.5 L20,10.5" id="Line-10"></path>
+                            <path d="M0,10.5 L20,10.5" id="Line-10" transform="translate(10.000000, 10.500000) rotate(90.000000) translate(-10.000000, -10.500000) "></path>
+                          </g>
                         </g>
+                      </g>
                     </g>
-                </svg>
+                  </svg>
                 </div>
               </div>
 
@@ -42,22 +42,22 @@
               </div>
             </div>
           </ng-template>
-		  <a>
-          <ng-template  #addsongs>
-            <div class="addmoresongs">
-              <h5>Add more tracks</h5>
+          <a>
+            <ng-template  #addsongs>
+              <div class="addmoresongs">
+                <h5>Add more tracks</h5>
                 <h6>{{queueSizeMargin}} left</h6>
-            </div>
-          </ng-template>
-		  </a>
+              </div>
+            </ng-template>
+          </a>
         </div>
 
         <div class="tabletainer">
           <table class="table noselect">
             <tbody>
-              <tr *ngFor="let item of uploader.queue">
-                <td><p>{{ item?.file?.name }}</p></td>
-                <span (click)="removeFromQueue(item)" class="delete cross" aria-hidden="true">
+            <tr *ngFor="let item of uploader.queue">
+              <td><p>{{ item?.file?.name }}</p></td>
+              <span (click)="removeFromQueue(item)" class="delete cross" aria-hidden="true">
 <svg width="9px" height="9px" viewBox="0 0 9 9" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
     <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round">
         <g id="Internet-Networks-Servers-/-Upload/Download-/-upload-dash-arrow-1" transform="translate(-344.000000, -234.000000)" fill-rule="nonzero" stroke="#7397FF" stroke-width="1.5">
@@ -66,7 +66,7 @@
         </g>
     </g>
 </svg></span>
-              </tr>
+            </tr>
             </tbody>
           </table>
         </div>
@@ -85,8 +85,8 @@
       <div class="form-row">
 
         <div class="col-sm-12"  >
-            <input id="emailfrom" type="text" [(ngModel)]="email_from" name="email_from" placeholder="Your email*" pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$"
-                   class="form-control form-control-sm" required>
+          <input id="emailfrom" type="text" [(ngModel)]="email_from" name="email_from" placeholder="Your email*" pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$"
+                 class="form-control form-control-sm" required>
         </div>
 
         <div class="col-sm-12">
@@ -126,7 +126,7 @@
 
         <div class="col">
           <label class="custom expiration btn btn-sm btn-outline-form btn-settings noselect" popoverClass="popover-class" ngbPopover="Allow downloading of uploaded tracks"
-  [openDelay]="300" [autoClose]="false" triggers="mouseenter:mouseleave">
+                 [openDelay]="300" [autoClose]="false" triggers="mouseenter:mouseleave">
             <div class="switch">
               <input type="checkbox" [checked]="availability" (click)="toggleDownload()">
               <span class="slider round"></span>
@@ -137,7 +137,7 @@
 
         <div class="col">
           <label class="custom noselect downloadable btn btn-sm btn-outline-form btn-settings" popoverClass="popover-class" ngbPopover="Get notified by email on new comments"
-  [openDelay]="300" [autoClose]="false" triggers="mouseenter:mouseleave">
+                 [openDelay]="300" [autoClose]="false" triggers="mouseenter:mouseleave">
             <div class="switch">
               <input type="checkbox" [checked]="notifications" (click)="toggleNotifications()">
               <span class="slider round"></span>
@@ -146,8 +146,8 @@
           </label>
         </div>
 
-          <ng-template #popContent>{{ngbPopOverMessage}}</ng-template>
-          <div class="col last" popoverTitle="Oops!" [ngbPopover]=popContent triggers="manual" placement="top" popoverClass="popover-class popover-submit"  [autoClose]="'outside'" container="body" #ngbPopover="ngbPopover" (click)="validationCheck(myForm)">
+        <ng-template #popContent>{{ngbPopOverMessage}}</ng-template>
+        <div class="col last" popoverTitle="Oops!" [ngbPopover]=popContent triggers="manual" placement="top" popoverClass="popover-class popover-submit"  [autoClose]="'outside'" container="body" #ngbPopover="ngbPopover" (click)="validationCheck(myForm)">
           <button type="submit" [disabled]="!uploader.getNotUploadedItems().length || !myForm.valid"
                   class="btn btn-sm btn-primary free-upload"
                   [ngClass]="uploader.getNotUploadedItems().length > 0 ? 'upload-tracks': 'upload-tracks-disabled'" >
@@ -163,6 +163,6 @@
      #dropZone
      [uploader]="uploader"
      class="well my-drop-zone"
-     >
-     <h3>Drop that boogie</h3>
+>
+  <h3>Drop that boogie</h3>
 </div>

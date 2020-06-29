@@ -5,9 +5,10 @@ import {Version} from "../../../model/version";
 import {File} from "../../../model/file";
 import {Comment, CommentSorter} from "../../../model/comment";
 import {Utils} from "../../../app.component";
-import {Player} from "../../../player.service";
-import {State} from "../../../play-button/play-button.component";
+import {AudioSource, Player} from "../../../player/player.service";
+import {State} from "../../../player/play-button/play-button.component";
 import {DeviceDetectorService} from 'ngx-device-detector';
+import {StateService} from '../../../services/state.service';
 
 @Component({
   selector: 'app-public-track-preview',
@@ -21,7 +22,7 @@ import {DeviceDetectorService} from 'ngx-device-detector';
 })
 export class PublicTrackPreviewComponent implements OnInit {
 
-  @Input() track: Track;
+  @Input() track = new Track();
   @Input() expired: boolean;
   @Output() selected = new EventEmitter<Track>();
 
@@ -30,17 +31,26 @@ export class PublicTrackPreviewComponent implements OnInit {
   version: Version;
   private files: File[];
 
+  lalaa = new Track();
+
   constructor(
     private player: Player,
     private cdr: ChangeDetectorRef,
+    private stateService: StateService,
     private deviceService: DeviceDetectorService
   ) {
   }
 
   ngOnInit() {
+    this.track = Object.assign(new Track(), this.track);
     this.version = this.track.versions[0];
     this.files = this.version.files;
     this.trackTitleDOM.nativeElement.setAttribute("style", "text-overflow: ellipsis");
+    this.stateService.getActiveVersion().subscribe(version => {
+      if (this.track.versions.includes(version)) {
+        this.version = version;
+      }
+    });
   }
 
   getPlaybuttonState() {
@@ -68,7 +78,7 @@ export class PublicTrackPreviewComponent implements OnInit {
   }
 
   async play() {
-    await this.player.play(this.version);
+    await this.player.play(this.audioSource);
     this.cdr.detectChanges();
   }
 
@@ -90,7 +100,6 @@ export class PublicTrackPreviewComponent implements OnInit {
   }
 
   download() {
-
     window.open(
       this.files
         .filter(file => file.identifier == 1)
@@ -122,5 +131,12 @@ export class PublicTrackPreviewComponent implements OnInit {
       "· " + Utils.getTimeHumanized(
         commentsAndReplies.sort(CommentSorter.MOST_RECENT.comparator)[0].comment_time
       ) : "";
+  }
+
+  get audioSource(): AudioSource {
+    return {
+      track: this.track,
+      version: this.version,
+    };
   }
 }

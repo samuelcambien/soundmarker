@@ -1,0 +1,242 @@
+<app-pro-board-card>
+  <ng-container class="title">
+    New Project
+    <button (click)="createNewProject = !createNewProject;" type="button" class="btn btn-sm btn-primary free-upload" [class.disabled]="!user_project_list.length">{{ createNewProject == false ? 'Existing' : 'New' }} Project</button>
+  </ng-container>
+  <ng-container class="body">
+      <form #myForm="ngForm" (ngSubmit)="onSubmit()">
+      <div class="form-row">
+        <div class="col-md-8">
+          <div class="form-row">
+            <input *ngIf="createNewProject" placeholder="Project title" name="projecttitle" [(ngModel)]="smUploader.project_title" required>
+          </div>
+          <div class="form-row radios">
+            <div class="col" *ngIf="!createNewProject">
+              <ng-select
+                class="custom noselect expiration"
+                bindLabel="title"
+                bindValue="project_id"
+                groupBy="heading"
+                [items]="user_project_list"
+                [searchable]="false"
+                [clearable]="false"
+                [(ngModel)]="project_id"
+                (close)="getProjectInfo(project_id)"
+                placeholder="Existing projects*"
+                name="existing_projects"
+                dropdownPosition="auto"
+                required>
+              </ng-select>
+            </div>
+            </div>
+          <div class="form-row">
+            <div class="col-sm-12">
+              <tag-input [(ngModel)]='smUploader.email_to'
+                         [trimTags]="true"
+                         [separatorKeyCodes]="[13, 188, 186]"
+                         [addOnBlur]="true"
+                         [maxItems]="5"
+                         [ripple]="false"
+                         [animationDuration]="{enter: '0ms', leave: '0ms'}"
+                         [modelAsStrings]="true"
+                         [validators]="validators"
+                         placeholder="Email to"
+                         secondaryPlaceholder="Email to"
+                         name="email_to"
+                         class="form-control form-control-sm"
+                         id="tag-input-email"
+                         ngbTooltip="Invalid email address" triggers="manual" #t="ngbTooltip">
+              </tag-input>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group col hide-phone">
+                <textarea #notes_element
+                          [(ngModel)]="smUploader.notes"
+                          type="text"
+                          placeholder="Notes"
+                          name="notes"
+                          class="form-control
+                          form-control-sm"
+                          rows="2">
+                </textarea>
+            </div>
+
+            <div class="form-group col show-phone">
+                <textarea #notes_element
+                          [(ngModel)]="smUploader.notes"
+                          type="text"
+                          placeholder="Notes"
+                          name="notes"
+                          class="form-control
+                          form-control-sm"
+                          rows="5">
+                </textarea>
+            </div>
+          </div>
+
+          <div class="form-row radios">
+            <div class="col">
+              <ng-select
+                class="custom noselect expiration"
+                bindValue="id"
+                groupBy="heading"
+                [items]="smUploader.expirations"
+                [searchable]="false"
+                [clearable]="false"
+                [(ngModel)]="smUploader.expiration"
+                placeholder="Expire*"
+                name="expirations"
+                dropdownPosition="top"
+                required>
+              </ng-select>
+            </div>
+
+            <div class="col">
+              <ng-select
+                class="custom noselect downloadable"
+                bindValue="id"
+                groupBy="heading"
+                [items]="smUploader.availabilities"
+                [searchable]="false"
+                [clearable]="false"
+                [(ngModel)]="smUploader.availability"
+                placeholder="Download*"
+                name="downloads"
+                dropdownPosition="top"
+                required>
+              </ng-select>
+            </div>
+
+            <div class="col">
+              <ng-select
+                class="custom noselect downloadable"
+                bindValue="id"
+                groupBy="heading"
+                [items]="smUploader.stream_types"
+                [searchable]="false"
+                [clearable]="false"
+                [(ngModel)]="smUploader.stream_type"
+                placeholder="Stream*"
+                name="stream_type"
+                dropdownPosition="top"
+                required>
+              </ng-select>
+            </div>
+
+            <div class="col">
+              <ng-select
+                class="custom noselect downloadable"
+                bindValue="id"
+                groupBy="heading"
+                [items]="smUploader.smppw_enable"
+                [searchable]="false"
+                [clearable]="false"
+                [(ngModel)]="smUploader.smppw_bool"
+                placeholder="Password*"
+                name="smppw"
+                dropdownPosition="top"
+                required>
+              </ng-select>
+            </div>
+            <div class="col">
+              <input [disabled]="!smUploader.smppw_bool" name="smppwv" [(ngModel)]="smUploader.smppw" required>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-field col-md-4 bottom-tooltip" placement="bottom" [ngbTooltip]="" #ft='ngbTooltip'
+           triggers="manual" (click)="ft.close()">
+        <div class="card   rounded border-0">
+          <a>
+            <h5>Add more tracks</h5>
+          </a>
+          <input class="upload-songs-input"
+                 id="pro-uploader"
+                 type="file"
+                 title=""
+                 ng2FileSelect
+                 [uploader]="smUploader.getFileUploader()"
+                 multiple
+                 name="files"
+                 accept="{{smUploader.getAcceptedFileTypes().join(',')}}"/>
+          <div class="tabletainer">
+              <tr *ngFor="let item of smUploader.getFileUploader().queue; index as i">
+                <td><input *ngIf="!selected_existing_tracks[i]" [(ngModel)]="smUploader.titles[i]" name="title-{{i}}" required></td>
+                      <div *ngIf="selected_existing_tracks[i]"> {{getTrackTitle(selected_existing_tracks[i])}}</div>
+                <div>
+                  {{item.file.type.substring(6).toUpperCase()}} {{getFileSize(item)}}
+                </div>
+
+                <ng-select
+                  *ngIf=!createNewProject
+                  class="custom noselect downloadable"
+                  bindLabel="title"
+                  bindValue="track_id"
+                  [items]="leftExistingTracks()"
+                  [searchable]="false"
+                  [(ngModel)]="selected_existing_tracks[i]"
+                  (close)="addVersion(i)"
+                  placeholder="Add as new version*"
+                  name="version_track"
+                  dropdownPosition="auto">
+                </ng-select>
+
+                <span (click)="removeFromQueue(item, i)" class="delete cross" aria-hidden="true">
+                  <svg width="9px" height="9px" viewBox="0 0 9 9" version="1.1" xmlns="http://www.w3.org/2000/svg">
+                  <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round">
+                  <g id="Internet-Networks-Servers-/-Upload/Download-/-upload-dash-arrow-1"
+                     transform="translate(-344.000000, -234.000000)" fill-rule="nonzero" stroke="#7397FF" stroke-width="1.5">
+                  <path d="M345.5,235.5 L351.488196,241.488196" id="Line-8"></path>
+                  <path d="M345.5,235.5 L351.488196,241.488196" id="Line-8"
+                        transform="translate(348.500000, 238.500000) scale(-1, 1) translate(-348.500000, -238.500000) "></path>
+                  </g>
+                  </g>
+                  </svg>
+              </span>
+              </tr>
+          </div>
+        </div>
+        <div class="sep-line show-medium"></div>
+      </div>
+      <div class="col">
+        <button style="width:40%" type="button" class="btn btn-sm btn-primary free-upload" placement="bottom" (click)="cancelUpload(myForm.dirty, smUploader.getFileUploader().getNotUploadedItems().length )">Cancel</button>
+        <button  style="width:40%" type="submit" [disabled]="!smUploader.getFileUploader().getNotUploadedItems().length || !myForm.valid"
+                 class="btn btn-sm btn-primary free-upload" placement="bottom">
+          <div class="show-medium">Share tracks</div>
+          <svg width="30px" height="30px" viewBox="0 0 38 38" class="plane-icon hide-medium" version="1.1"
+               xmlns="http://www.w3.org/2000/svg">
+            <desc></desc>
+            <defs></defs>
+            <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+              <g id="Internet-Networks-Servers-/-Upload/Download-/-upload-dash-arrow-1"
+                 transform="translate(-30.000000, -209.000000)">
+                <g id="send-email-2" transform="translate(30.000000, 209.000000)">
+                  <path
+                    d="M10.4,10.743 C10.0795417,10.1695961 10.1694462,9.45439019 10.6218509,8.97813854 C11.0742555,8.50188689 11.7839045,8.37539349 12.373,8.666 L31.387,18.325 C31.6385553,18.4529457 31.7969886,18.7112764 31.7969886,18.9935 C31.7969886,19.2757236 31.6385553,19.5340543 31.387,19.662 L12.373,29.334 C11.7839045,29.6246065 11.0742555,29.4981131 10.6218509,29.0218615 C10.1694462,28.5456098 10.0795417,27.8304039 10.4,27.257 L15.458,18.993 L10.4,10.743 Z"
+                    id="Shape" stroke="#FFFFFF" stroke-width="1.5" stroke-linecap="round"
+                    stroke-linejoin="round"></path>
+                  <path d="M31.797,18.993 L15.453,18.993" id="Shape" stroke="#FFFFFF" stroke-width="1.5"
+                        stroke-linecap="round" stroke-linejoin="round"></path>
+                </g>
+              </g>
+            </g>
+          </svg>
+        </button>
+      </div>
+    </form>
+        <div ng2FileDrop
+         [uploader]="smUploader.getFileUploader()"
+         class="well my-drop-zone">
+    </div>
+    <app-confirm-dialog></app-confirm-dialog>
+  </ng-container>
+</app-pro-board-card>
+
+
+<!---->
+<!--<app-pro-upload-finished [class.hidden]="stage != statusEnum.GREAT_SUCCESS"-->
+<!--[link]="link" (sendNewFiles)="tryAgain()"-->
+<!--[period]="period"></app-pro-upload-finished>-->

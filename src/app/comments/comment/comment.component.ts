@@ -3,9 +3,9 @@ import {Comment} from "../../model/comment";
 import {Utils} from "../../app.component";
 import {LocalStorageService} from "../../services/local-storage.service";
 import {RestCall} from "../../rest/rest-call";
-import {Player} from "../../player.service";
 import {Version} from "../../model/version";
 import {StateService} from "../../services/state.service";
+import {AudioSource, Player} from "../../player/player.service";
 
 @Component({
   selector: 'comment-lazy',
@@ -16,7 +16,7 @@ import {StateService} from "../../services/state.service";
 export class CommentComponent implements OnInit{
 
   @Input() comment: Comment;
-  @Input() version: Version;
+  @Input() audioSource: AudioSource;
   @Input() search: string;
   @Input() expired: boolean;
   @Output() delete = new EventEmitter<Comment>();
@@ -91,12 +91,12 @@ export class CommentComponent implements OnInit{
 
   async play() {
     this.stateService.setActiveComment(this.comment);
-    await this.player.play(this.version, this.comment.start_time);
+    await this.player.play(this.audioSource, this.comment.start_time);
   }
 
   stop() {
     this.player.pause();
-    this.player.seekTo(this.version, this.comment.start_time);
+    this.player.seekTo(this.audioSource, this.comment.start_time);
   }
 
   isPlaying() {

@@ -2,15 +2,28 @@ import {Comment} from "../model/comment";
 import {Project} from "../model/project";
 import {Version} from "../model/version";
 import {isDevMode} from "@angular/core";
-import {Utils} from "../app.component";
+import {Track} from "../model/track";
 
 export class RestCall {
 
   // POST
 
-  public static async createNewProject(): Promise<any> {
-    return Request.post(Endpoints.PROJECT_NEW, {});
+  public static async createNewProject(projectTitle?: string, projectSmppw?: string): Promise<any> {
+    return Request.post(Endpoints.PROJECT_NEW, {
+      project_title: projectTitle,
+      project_password: projectSmppw
+    });
   }
+
+  public static async editProject(projectID, projectTitle?: string, projectSmppw?: string): Promise<any> {
+    return Request.post(Endpoints.PROJECT_EDIT, {
+      project_id: projectID,
+      project_title: projectTitle,
+      project_password: projectSmppw
+    });
+  }
+
+
 
   public static async createNewTrack(project_id, title): Promise<any> {
     return Request.post(Endpoints.TRACK_NEW, {
@@ -78,6 +91,7 @@ export class RestCall {
   }
 
   // DELETE
+
   public static async deleteComment(commentId: string) {
     return Request.post(Endpoints.COMMENT_DELETE, {
       comment_id: commentId
@@ -101,11 +115,11 @@ export class RestCall {
     return Request.get(Endpoints.PROJECT, [projectHash]);
   }
 
-  public static async getTrack(trackId: string): Promise<Version[]> {
+  public static async getTrack(trackId: string): Promise<Track> {
     return Request.get(Endpoints.TRACK, [trackId]);
   }
 
-  public static async getVersion(versionId: string): Promise<any> {
+  public static async getVersion(versionId: string): Promise<Version> {
     return Request.get(Endpoints.VERSION, [versionId]);
   }
 
@@ -118,6 +132,14 @@ export class RestCall {
 
   public static async getComments(versionId: string): Promise<any> {
     return Request.getNonCaching(Endpoints.COMMENTS, [versionId]);
+  }
+
+  public static async getProjects():Promise<any>{
+    return Request.getNonCaching(Endpoints.PROJECT_ALL);
+  }
+
+  public static authenticate(email: string, password: string): Promise<any> {
+    return this.getTrack('47');
   }
 }
 
@@ -145,6 +167,8 @@ export class Endpoints {
 
   public static PROJECT_NEW: string = Endpoints.BACKEND + "/project/new";
 
+  public static PROJECT_EDIT: string = Endpoints.BACKEND + "/project/edit";
+
   public static TRACK: string = Endpoints.BACKEND + "/track";
 
   public static TRACK_NEW: string = Endpoints.TRACK + "/new";
@@ -158,6 +182,8 @@ export class Endpoints {
   public static COMMENT: string = Endpoints.TRACK + "/version/comment";
 
   public static COMMENT_DELETE: string = Endpoints.TRACK + "/version/delete/comment";
+
+  public static PROJECT_ALL: string = Endpoints.BACKEND + "/project/all"
 }
 
 export class Request {

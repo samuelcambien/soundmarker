@@ -1,8 +1,7 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {Comment} from "../../model/comment";
 import {PublicTrackPlayerComponent} from "../../+public/public-player-page/public-track-player/public-track-player.component";
-import {Player} from "../../player.service";
-import {Version} from "../../model/version";
+import {AudioSource, Player} from "../../player/player.service";
 import {StateService} from "../../services/state.service";
 
 @Component({
@@ -14,7 +13,7 @@ export class CommentFormComponent implements OnInit {
 
   active: boolean = false;
 
-  @Input() version: Version;
+  @Input() audioSource: AudioSource;
   @Input() comment: Comment;
   @Output() newComment = new EventEmitter<Comment>();
 
@@ -25,11 +24,11 @@ export class CommentFormComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.comment.version_id = this.version.version_id;
+    this.comment.version_id = this.audioSource.version.version_id;
   }
 
   onSubmit() {
-    this.comment.version_id = this.version.version_id;
+    this.comment.version_id = this.audioSource.version.version_id;
     this.comment.comment_time = Date.now();
     if (!this.comment.include_start) delete this.comment.start_time;
     if (!this.comment.include_end) delete this.comment.end_time;
@@ -39,13 +38,13 @@ export class CommentFormComponent implements OnInit {
   }
 
   preview() {
-    this.player.play(this.version, this.comment.start_time);
+    this.player.play(this.audioSource, this.comment.start_time);
     this.stateService.setActiveComment(this.comment);
   }
 
   stopPreview() {
     this.player.pause();
-    this.player.seekTo(this.version, this.comment.start_time);
+    this.player.seekTo(this.audioSource, this.comment.start_time);
   }
 
   isPlaying() {
@@ -117,5 +116,5 @@ export class CommentFormComponent implements OnInit {
 
   public isValidEndTime = (time) =>
     time >= this.comment.start_time + PublicTrackPlayerComponent.MINIMAL_INTERVAL
-    && time <= this.version.track_length;
+    && time <= this.audioSource.version.track_length;
 }

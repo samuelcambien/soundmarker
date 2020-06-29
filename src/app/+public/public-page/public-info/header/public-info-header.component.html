@@ -6,27 +6,27 @@
 
   <div class="ml-auto">
   </div>
-    <div *ngIf="showAutoplayToggle()">
+  <div *ngIf="showAutoplayToggle()">
 
-      <div class="navbar autoplay-button">
-        <ul class="nav nav-pills">
-          <label class="switch">
-            <input type="checkbox" checked [(ngModel)]="projectService.autoPlay">
-            <span class="slider round"></span>
-          </label>
-        </ul>
-      </div>
+    <div class="navbar autoplay-button">
+      <ul class="nav nav-pills">
+        <label class="switch">
+          <input type="checkbox" checked [(ngModel)]="projectService.autoPlay">
+          <span class="slider round"></span>
+        </label>
+      </ul>
+    </div>
 
-      <div class="autoplay-text dropdown-menu dropdown-menu-right">
-        <div class="arrow-up"></div>
-        <div class="dropdown-container shadow-dropdown">
-          <div class="container-fluid">
-            <h5 class="noselect">
-              Autoplay {{projectService.autoPlay? "ON" : "OFF"}}
-            </h5>
-          </div>
+    <div class="autoplay-text dropdown-menu dropdown-menu-right">
+      <div class="arrow-up"></div>
+      <div class="dropdown-container shadow-dropdown">
+        <div class="container-fluid">
+          <h5 class="noselect">
+            Autoplay {{projectService.autoPlay? "ON" : "OFF"}}
+          </h5>
         </div>
       </div>
+    </div>
 
 
   </div>
@@ -41,7 +41,7 @@
         <li class="nav-item dropdown">
           <a href data-toggle="modal"
              data-target=".info-modal-player-subscribe"
-            class="nav-link nav-link-messages dropdown-toggle" id="messages" href
+             class="nav-link nav-link-messages dropdown-toggle" id="messages" href
              role="button" aria-haspopup="true"
              aria-expanded="false">
 

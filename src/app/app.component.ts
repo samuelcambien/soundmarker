@@ -22,7 +22,6 @@ export class Utils {
   }
 
   public static getName(name: string): string {
-
     return name.split(/(.*)\.(.*)/)[1];
   }
 
@@ -61,6 +60,17 @@ export class Utils {
       'minutes': minutes,
       'seconds': seconds
     }).asSeconds();
+  }
+
+  // Convert the queue size left to a human readable string.
+  public static getSizeHumanized(bytes: number): string {
+    let sizes = ['Bytes', 'KB', 'MB', 'GB'];
+    // if (bytes <= 0) {
+    //   bytes = bytes + this.acceptedQueueMargin;
+    // }
+    let i = Math.floor(Math.log(bytes) / Math.log(1000));
+    let p = Math.round(bytes / (Math.pow(1000, i)) * 100) / 100;
+    return p + ' ' + sizes[i];
   }
 
   public static getDaysDiff(date){

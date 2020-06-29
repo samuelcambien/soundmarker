@@ -6,7 +6,7 @@ import {Message} from "../../message";
 import {Version} from "../../model/version";
 import {ProjectService} from "../../services/project.service";
 import {Observable} from "rxjs";
-import {Player} from "../../player.service";
+import {Player} from "../../player/player.service";
 import {DrawerService} from "../../services/drawer.service";
 import {StateService} from "../../services/state.service";
 

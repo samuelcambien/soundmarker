@@ -2,7 +2,6 @@ import {CommonModule} from '@angular/common';
 import {LoadableComponentModule} from 'ngx-loadable-component';
 import {NgModule} from '@angular/core';
 import {SmaComponent} from '../+public/sma/sma.component';
-import {SharedModule} from './shared.module';
 
 @NgModule({
   imports: [

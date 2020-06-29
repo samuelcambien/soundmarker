@@ -41,8 +41,6 @@ const routes: Routes = [
     PublicUploadingFilesComponent,
     EmailValidationPopover
   ],
-  entryComponents: [
-  ]
 })
 
 export class HomeModule {

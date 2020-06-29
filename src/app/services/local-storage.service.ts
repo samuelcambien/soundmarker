@@ -1,4 +1,5 @@
 import {Injectable} from '@angular/core';
+import {User} from "../model/user";
 
 @Injectable({
   providedIn: 'root'
@@ -62,5 +63,13 @@ export class LocalStorageService {
   public getVisits(): number {
     return localStorage.getItem("smrk_visit") != null ?
       Number(localStorage.getItem("smrk_visit")) : 0;
+  }
+
+  public storeCurrentUser(user: User): void {
+    localStorage.setItem('currentUser', JSON.stringify(user));
+  }
+
+  public getCurrentUser(): User {
+    return Object.assign(new User(), JSON.parse(localStorage.getItem('currentUser')));
   }
 }

@@ -3,6 +3,7 @@ import {Project} from "../model/project";
 import {BehaviorSubject, ReplaySubject} from "rxjs";
 import {Track} from "../model/track";
 import {Comment} from "../model/comment";
+import {Version} from '../model/version';
 
 @Injectable({
   providedIn: 'root'
@@ -31,7 +32,17 @@ export class StateService {
     this.activeTrack.next(track);
   }
 
-  private activeTrack: BehaviorSubject<Track> = new BehaviorSubject<Track>(null);
+  public getActiveVersion(): BehaviorSubject<Version> {
+    return this.activeVersion;
+  }
+
+  public setActiveVersion(version: Version) {
+    this.activeVersion.next(version);
+  }
+
+  private  activeTrack: BehaviorSubject<Track> = new BehaviorSubject<Track>(null);
+
+  private  activeVersion: BehaviorSubject<Version> = new BehaviorSubject<Version>(null);
 
   public getActiveComment(): BehaviorSubject<Comment> {
     return this.activeComment;
@@ -42,4 +53,6 @@ export class StateService {
   }
 
   private activeComment: BehaviorSubject<Comment> = new BehaviorSubject<Comment>(null);
+
+  sidebarToggled: boolean;
 }

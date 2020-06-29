@@ -1,0 +1,26 @@
+<app-pro-board-card>
+  <ng-container class="title">Projects</ng-container>
+  <ng-container class="body">
+    <!--<div *ngFor="let project of user_project_list" routerLink="track/{{track.track_id}}">-->
+      <div *ngFor="let project of user_project_list">
+        <div routerLink="project/{{project.hash}}">{{project.title}}</div>
+        <a href data-toggle="modal"
+           data-target=".editProject">
+        <button type="button"
+                class="btn btn-primary btn-sm">
+          Edit project
+        </button>
+      </a>
+        <div class="modal fade editProject" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+             aria-hidden="true">
+          <div class="modal-dialog  modal-lg">
+            <div class="modal-content">
+              <input type="text" [value]="project.title">
+              <input type="text" [value]="project.password">
+              <!--<app-subscribe [project_id]="project_id"></app-subscribe>-->
+            </div>
+          </div>
+        </div>
+      </div>
+  </ng-container>
+</app-pro-board-card>

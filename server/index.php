@@ -239,8 +239,9 @@ Flight::route('GET /project/all', function() {
 $config = Flight::get("config");
 
 $db = Flight::db();
-$user_id = isset($_SESSION['USER']) ? $_SESSION['USER'] : "";
-if (isset($_SESSION['USER'])) {
+//$user_id = isset($_SESSION['USER']) ? $_SESSION['USER'] : "";
+$user_id = 1;
+//if (isset($_SESSION['USER'])) {
   $sql = "SELECT project_id, title, expiration_date, hash FROM Project WHERE user_id = '$user_id' AND active = '1'";
   $result = $db->query($sql)->fetchAll(PDO::FETCH_ASSOC);
 
@@ -248,12 +249,12 @@ if (isset($_SESSION['USER'])) {
   Flight::json(array(
      'projects' => $result
   ), 200);
-} else {
-  // return ok
-  Flight::json(array(
-     'return' => 'notloggedin'
-  ), 200);
-}
+//} else {
+//  // return ok
+//  Flight::json(array(
+//     'return' => 'notloggedin'
+//  ), 200);
+//}
 
 });
 
@@ -843,6 +844,7 @@ Flight::route('GET /track/@track_id', function($track_id) {
 
 $config = Flight::get("config");
 $db = Flight::db();
+$title = $db->query("SELECT title FROM Track WHERE track_id = '$track_id'")->fetchAll(PDO::FETCH_ASSOC)[0]["title"];
 $sql = "SELECT version_id, notes, downloadable, visibility, version_title, track_length, wave_png FROM Version WHERE track_id = '$track_id'";
 $result = $db->query($sql);
 $versions = $result->fetchAll(PDO::FETCH_ASSOC);
@@ -853,6 +855,7 @@ foreach ($versions as &$version) {
 
 // return ok
 Flight::json(array(
+  'title' => $title,
    'versions' => $versions
 ), 200);
 });
