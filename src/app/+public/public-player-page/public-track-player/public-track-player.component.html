@@ -172,14 +172,13 @@
 
   <div class="player-header row">
 
-    <div class="hide-phone">
+    <div class="hide-phone" id="play-button-public">
 
       <play-button
         [disabled]="expired"
         [state]="getPlaybuttonState()"
         (clicked)="clickPlaybutton($event)"
       ></play-button>
-
     </div>
 
     <div class="title unselectable">

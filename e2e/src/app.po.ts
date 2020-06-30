@@ -2,7 +2,7 @@ import {browser, by, element, protractor} from 'protractor';
 
 export class AppPage {
   navigateTo() {
-    return browser.get('/');
+    // return browser.get('/');
   }
 
   getParagraphText() {
@@ -10,7 +10,7 @@ export class AppPage {
   }
 
   getAcceptButton(){
-    return element(by.id('accepttc'));
+    return element(by.buttonText('Get started'));
   }
 
   getEmailFrom() {
@@ -56,5 +56,22 @@ export class AppPage {
 
   pasteMac(element){
     element.sendKeys(protractor.Key.chord(protractor.Key.SHIFT, protractor.Key.INSERT));
+  }
+
+  getVisiblePlayButton(){
+    let playButtons = element.all(by.tagName('play-button'));
+    let playbutton = playButtons.filter(elem => {
+      return elem.isDisplayed().then(displayedElement => {
+        // console.log("################################################################################################################################");
+        // console.log(elem);
+        // console.log(displayedElement);
+        return displayedElement;
+      })
+    });
+    return playbutton.get(0);
+  }
+
+  getWaveForm(){
+    return element.all(by.id("waveform")).get(1);
   }
 }

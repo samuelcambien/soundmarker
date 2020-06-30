@@ -23,12 +23,12 @@ export class ProjectService {
       const comment: Comment = this.stateService.getActiveComment().getValue();
       if (comment && comment.include_end && e.currentTime >= comment.end_time) {
         if (comment.loop == true) {
-          await this.player.play(e.version, comment.start_time);
+          await this.player.play(e.audioSource, comment.start_time);
         } else {
           this.player.pause();
           await this.player.seekTo({
             track: this.player.track,
-            version: e.version,
+            version: e.audioSource.version,
           }, comment.start_time);
         }
       }
@@ -57,7 +57,6 @@ export class ProjectService {
   async loadProject(projectHash: string): Promise<void> {
     const project = await RestCall.getProject(projectHash);
     if (project.project_id) {
-      console.log(this.isActive(project));
       this.stateService.setActiveProject(project);
       if (!this.isActive(project) && !this.areCommentsActive(project)) {
         return Promise.resolve();

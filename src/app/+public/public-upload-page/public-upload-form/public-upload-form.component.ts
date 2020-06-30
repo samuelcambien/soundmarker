@@ -106,7 +106,6 @@ export class PublicUploadFormComponent implements OnInit {
     }
 
     const buffer: ArrayBuffer = await Utils.read(track._file);
-    console.log(streamFileId);
     await RestCall.uploadChunk(new Blob([buffer]), streamFileId, downloadFileId, 0, extension, progress => this.setChunkProgress(progress, track._file.size));
     this.setChunkCompleted(track._file.size);
   }
@@ -121,7 +120,6 @@ export class PublicUploadFormComponent implements OnInit {
     this.uploader.uploaded++;
     this.uploadedFilesSize += fileSize;
     this.setProgress(100*this.uploadedFilesSize/this.totalQueueSize);
-    console.log(this.uploader.progress);
   }
 
   private setProgress(progress: number) {

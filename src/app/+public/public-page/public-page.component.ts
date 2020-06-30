@@ -63,7 +63,7 @@ export class PublicPageComponent implements OnInit {
         this.smaComponent = !this.smaComponent;
         this.cdr.detectChanges()
       }
-      , 1500);
+      , 10000);
 
     this.termsAccepted=  false;
      if (this.localStorageService.termsAccepted()) this.termsAccepted = true;

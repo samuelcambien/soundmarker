@@ -13,9 +13,7 @@ export class ProBoardProjectsComponent implements OnInit {
 
   ngOnInit() {
     try{
-      RestCall.getProjects().then(res => {this.user_project_list = res["projects"];
-        console.log(this.user_project_list);});
-
+      RestCall.getProjects().then(res => this.user_project_list = res["projects"]);
     }
     catch{
     }

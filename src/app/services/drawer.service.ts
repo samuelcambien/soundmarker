@@ -18,7 +18,7 @@ export class DrawerService {
   ) {
 
     player.progress.subscribe((e) => {
-      this.getDrawer(e.version.version_id).progress(e.currentTime / e.version.track_length);
+      this.getDrawer(e.audioSource.version.version_id).progress(e.currentTime / e.audioSource.version.track_length);
     });
 
     this.stateService.getActiveTrack().subscribe(track => {
@@ -30,7 +30,7 @@ export class DrawerService {
         );
       // }
     });
-    
+
     this.stateService.getActiveComment().subscribe(
       comment => {
         if (comment && comment.include_end) {

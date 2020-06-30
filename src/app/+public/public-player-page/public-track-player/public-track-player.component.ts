@@ -128,8 +128,6 @@ export class PublicTrackPlayerComponent implements OnInit, OnChanges {
   markerPopoverClose($event){
     this.markerPopover.close();
     document.removeEventListener("click", ($event)=> this.markerPopoverClose($event))
-    // console.log(this.stateService.getActiveProject());
-    // console.log($event);
   }
 
   ngOnInit(): void {
@@ -137,7 +135,7 @@ export class PublicTrackPlayerComponent implements OnInit, OnChanges {
     this.waveformInViewPort = true;
     this.version = this.track.versions[0];
     this.player.progress.subscribe(e => {
-      if (this.version === e.version) {
+      if (this.version === e.audioSource.version) {
         this._currentTime = e.currentTime;
         this.cdr.detectChanges();
       }

@@ -56,7 +56,6 @@ export class Player {
   }
 
   private async load(audioSource: AudioSource) {
-
     return new Promise(async resolve => {
       if (this.audioSource && this.audioSource.version.version_id === audioSource.version.version_id) {
         resolve();
@@ -83,7 +82,6 @@ export class Player {
   }
 
   async play(audioSource?: AudioSource, startTime?: number) {
-
     this.loading = this.version;
     if (audioSource) {
       await this.load(audioSource);
@@ -118,6 +116,7 @@ export class Player {
 
   async stop() {
     this.pause();
+
     await this.seekTo(this.audioSource, 0);
   }
 
@@ -131,7 +130,7 @@ export class Player {
 
   emitProgress() {
     this.progress.emit({
-      version: this.version,
+      audioSource: this.audioSource,
       currentTime: this.getCurrentTime()
     });
   }
@@ -145,7 +144,6 @@ export class Player {
   }
 
   private getStreamFile(): File {
-    console.log(this.version);
     return this.version.files.filter(file => file.identifier == 0)[0];
   }
 }
