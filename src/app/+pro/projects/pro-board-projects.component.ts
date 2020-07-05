@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {RestCall} from '../../rest/rest-call';
+import {StateService} from '../../services/state.service';
 
 @Component({
   selector: 'app-pro-board-projects',
@@ -8,7 +9,7 @@ import {RestCall} from '../../rest/rest-call';
 })
 export class ProBoardProjectsComponent implements OnInit {
 
-  constructor() { }
+  constructor(private stateService: StateService) { }
   user_project_list;
 
   ngOnInit() {
@@ -18,5 +19,4 @@ export class ProBoardProjectsComponent implements OnInit {
     catch{
     }
   }
-
 }

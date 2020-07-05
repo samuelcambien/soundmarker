@@ -190,6 +190,24 @@
     </div>
 
     <div class="player-toolbar hide-phone  ml-auto">
+      <ng-select *ngIf="track.versions.length>1"
+        class="custom expiration"
+        bindLabel="version_id"
+        [items]="track.versions"
+        [searchable]="false"
+        [clearable]="false"
+        [(ngModel)]="version"
+        (change)="selectVersion()"
+        placeholder="Version"
+        name="versions_control"
+        dropdownPosition="auto">
+        <ng-template ng-label-tmp let-item="item">
+          Version <b>{{track.getVersionIndex(item)+1}}</b>
+        </ng-template>
+        <ng-template ng-option-tmp let-item="item" let-index="index">
+          Version <b>{{index+1}}</b>
+        </ng-template>
+      </ng-select>
 
       <div *ngIf="version?.downloadable && !expired" class="top-icon cloud-icon" id="cloud-icon"
            (click)="download()" popoverClass="popover-class" ngbPopover="Download"
@@ -248,7 +266,7 @@
 
         <div class="audio-wave" id="waveform" #waveform></div>
 
-        <app-waveform [audioSource]="audioSource"></app-waveform>
+        <app-waveform #appwaveform [audioSource]="audioSource"></app-waveform>
 
       </div>
 
@@ -332,7 +350,7 @@
 
   </div>
 
-  <div class="session-notes shadow-topbar">
+  <div *ngIf="sender" class="session-notes shadow-topbar">
     <h3>By {{sender}}</h3>
     <div *ngIf="!message.text">
       <h4 *ngIf="!expired"> Expires in {{getDaysToExpired()}} days ({{getDateHumanized()}}) </h4>

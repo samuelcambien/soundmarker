@@ -1,4 +1,4 @@
-import {ChangeDetectorRef, Component, Input, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit} from '@angular/core';
 import {NgbActiveModal, NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {RestCall} from "../../rest/rest-call";
 
@@ -6,7 +6,8 @@ import {RestCall} from "../../rest/rest-call";
 @Component({
   selector: 'app-subscribe',
   templateUrl: './subscribe.component.html',
-  styleUrls: ['./subscribe.component.scss']
+  styleUrls: ['./subscribe.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SubscribeComponent implements OnInit {
 

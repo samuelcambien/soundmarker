@@ -7,7 +7,6 @@ import {RestCall} from "../../../rest/rest-call";
 export class ProjectResolver implements Resolve<Project> {
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Promise<Project> {
-
     return RestCall.getProject(route.params.project_hash);
   }
 }

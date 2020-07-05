@@ -1,4 +1,14 @@
-import {ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  ViewChild
+} from '@angular/core';
 import {Track} from "../../../model/track";
 import {animate, transition, trigger} from "@angular/animations";
 import {Version} from "../../../model/version";
@@ -18,7 +28,8 @@ import {StateService} from '../../../services/state.service';
     trigger('toggleComments', [
       transition('* => *', animate('5000s'))
     ])
-  ]
+  ],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PublicTrackPreviewComponent implements OnInit {
 

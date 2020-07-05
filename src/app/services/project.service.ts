@@ -50,6 +50,8 @@ export class ProjectService {
   }
 
   getTrack(version: any): Track {
+    console.log(version);
+    console.log(this.stateService.getActiveProject());
     return this.stateService.getActiveProject().tracks
       .filter(track => track.versions.includes(version))[0];
   }
@@ -61,6 +63,17 @@ export class ProjectService {
       if (!this.isActive(project) && !this.areCommentsActive(project)) {
         return Promise.resolve();
       }
+
+      return Utils.promiseSequential(
+        project.tracks.map(track => () => this.loadVersions(track))
+      );
+    }
+  }
+
+  async loadProjectLI(project): Promise<void> {
+    // const project = await RestCall.getProject(projectHash);
+    if (project.project_id) {
+      this.stateService.setActiveProject(project);
 
       return Utils.promiseSequential(
         project.tracks.map(track => () => this.loadVersions(track))
@@ -81,17 +94,14 @@ export class ProjectService {
   }
 
   private async loadVersions(track: Track): Promise<void> {
-    track.versions = (await RestCall.getTrack(track.track_id)
-  )
-    ["versions"];
+    track.versions = (await RestCall.getTrack(track.track_id))["versions"];
 
     track.versions.forEach(version => {
+      this.loadFiles(version);
       if (version.downloadable == 0) version.downloadable = false
     });
-
-
-    const version = track.versions[0];
-    await this.loadFiles(version);
+    // const version = track.versions[0];
+    // await this.loadFiles(version);
   }
 
   async loadFiles(version: Version) {
@@ -131,7 +141,6 @@ export class ProjectService {
   }
 
   async playNextTrack(currentTrack: Track) {
-
     let tracks = this.stateService.getActiveProject().tracks;
     let nextTrack = tracks[tracks.indexOf(currentTrack) + 1];
     if (nextTrack) {

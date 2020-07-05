@@ -6,7 +6,7 @@ import {
   EventEmitter,
   HostListener,
   Input,
-  OnChanges,
+  OnChanges, OnDestroy,
   OnInit,
   Output,
   ViewChild
@@ -62,7 +62,7 @@ export class PublicTrackPlayerComponent implements OnInit, OnChanges {
   @Input() expired: boolean = true;
   @Input() trackActivated: boolean;
   @Input() message: Message;
-  @Input() sender;
+  @Input() sender?;
   @Input() expiry_date;
 
   @Output() error = new EventEmitter();
@@ -137,7 +137,7 @@ export class PublicTrackPlayerComponent implements OnInit, OnChanges {
     this.player.progress.subscribe(e => {
       if (this.version === e.audioSource.version) {
         this._currentTime = e.currentTime;
-        this.cdr.detectChanges();
+        this.cdr.markForCheck();
       }
     });
     this.createNewComment();
@@ -156,6 +156,7 @@ export class PublicTrackPlayerComponent implements OnInit, OnChanges {
     if (this.player.isPlaying()) this.player.stop();
     this.cdr.detectChanges();
     this.stateService.setActiveVersion(this.version);
+    console.log(this.appwaveform);
     this.appwaveform.updateVersion();
     this.createNewComment();
     this.project.loadFiles(this.version);
@@ -501,9 +502,9 @@ export class PublicTrackPlayerComponent implements OnInit, OnChanges {
         }, 1000 / this.scrollFPS)
       };
       scrollLoop();
-    }
-    ;
+    };
   }
+
   ///////////////////////////////////////////////////////////////////////////////////////////////////
   // Catch back button when there is a project with multiple tracks to go back to overview instead of to previous website.
   @HostListener('window:popstate', ['$event'])

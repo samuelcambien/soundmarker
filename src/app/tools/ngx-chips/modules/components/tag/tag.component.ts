@@ -9,7 +9,7 @@ import {
     HostBinding,
     ViewChild,
     ChangeDetectorRef,
-    Renderer2
+    Renderer2, ChangeDetectionStrategy
 } from '@angular/core';
 
 import { TagModel } from '../../core/accessor';
@@ -27,7 +27,8 @@ const isChrome = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigat
 @Component({
     selector: "tag",
     templateUrl: "./tag.template.html",
-    styleUrls: ["./tag-component.style.scss"]
+    styleUrls: ["./tag-component.style.scss"],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TagComponent {
     /**
