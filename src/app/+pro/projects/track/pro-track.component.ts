@@ -25,7 +25,8 @@ export class ProTrackComponent implements OnInit {
 
   ngOnInit(): void {
     this.route.data.subscribe(async data => {
-      if(stateService)
+      // console.log(data);
+      // if(stateService)
       this.project = await data.project;
       this.track = await data.track;
       await this.projectService.loadProjectLI(this.project);

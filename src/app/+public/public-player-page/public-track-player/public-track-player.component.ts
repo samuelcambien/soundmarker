@@ -133,7 +133,8 @@ export class PublicTrackPlayerComponent implements OnInit, OnChanges {
   ngOnInit(): void {
     this.track = Object.assign(new Track(), this.track);
     this.waveformInViewPort = true;
-    this.version = this.track.versions[0];
+    this.version = this.stateService.getSelectedVersion(this.track) ? this.stateService.getSelectedVersion(this.track) : this.track.versions[0];
+    this.stateService.setActiveVersion(this.version);
     this.player.progress.subscribe(e => {
       if (this.version === e.audioSource.version) {
         this._currentTime = e.currentTime;
@@ -156,7 +157,7 @@ export class PublicTrackPlayerComponent implements OnInit, OnChanges {
     if (this.player.isPlaying()) this.player.stop();
     this.cdr.detectChanges();
     this.stateService.setActiveVersion(this.version);
-    console.log(this.appwaveform);
+    this.stateService.addSelectedVersion(this.track, this.version);
     this.appwaveform.updateVersion();
     this.createNewComment();
     this.project.loadFiles(this.version);

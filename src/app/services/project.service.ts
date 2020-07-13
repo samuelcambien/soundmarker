@@ -50,8 +50,6 @@ export class ProjectService {
   }
 
   getTrack(version: any): Track {
-    console.log(version);
-    console.log(this.stateService.getActiveProject());
     return this.stateService.getActiveProject().tracks
       .filter(track => track.versions.includes(version))[0];
   }
@@ -107,8 +105,8 @@ export class ProjectService {
   async loadFiles(version: Version) {
     version.files = (await RestCall.getVersion(version.version_id))["files"];
     this.loadComments(version);
-    interval(20 * 1000)
-      .subscribe(() => this.loadComments(version))
+    // interval(20 * 1000)
+    //   .subscribe(() => this.loadComments(version))
   }
 
   private async loadComments(version: Version): Promise<void> {

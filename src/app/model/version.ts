@@ -1,7 +1,7 @@
 import {File} from "./file";
 import {Comment} from "./comment";
 
-export class Version {
+export class  Version {
   downloadable;
   notes: string;
   track_length: number;
