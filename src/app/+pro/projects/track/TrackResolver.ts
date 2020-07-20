@@ -7,7 +7,6 @@ import {RestCall} from "../../../rest/rest-call";
 export class TrackResolver implements Resolve<Track> {
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Promise<Track> {
-
     return RestCall.getTrack(route.params.id);
   }
 }

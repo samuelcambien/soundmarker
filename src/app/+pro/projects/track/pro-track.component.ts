@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {ActivatedRoute} from "@angular/router";
+import {ActivatedRoute, ActivatedRouteSnapshot} from '@angular/router';
 import {Track} from "../../../model/track";
 import {Project} from "../../../model/project";
 import {RestCall} from "../../../rest/rest-call";
@@ -25,14 +25,10 @@ export class ProTrackComponent implements OnInit {
 
   ngOnInit(): void {
     this.route.data.subscribe(async data => {
-      // console.log(data);
-      // if(stateService)
       this.project = await data.project;
-      this.track = await data.track;
+      this.track = await data.track
+      this.track.track_id = this.route.snapshot.params.id
       await this.projectService.loadProjectLI(this.project);
-      // this.track.versions.forEach(async version => {
-      //   version.files = (await RestCall.getVersion(version.version_id))["files"];
-      // });
     });
   }
 

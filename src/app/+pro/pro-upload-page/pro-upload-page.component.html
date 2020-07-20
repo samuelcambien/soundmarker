@@ -171,17 +171,18 @@
                 </div>
 
                 <ng-select
+                  [(ngModel)]="selected_existing_tracks[i]"
                   *ngIf=!createNewProject
-                  class="custom noselect downloadable"
+                  class="custom noselect downloadable ng-option-disabled"
                   bindLabel="title"
                   bindValue="track_id"
-                  [items]="leftExistingTracks()"
                   [searchable]="false"
-                  [(ngModel)]="selected_existing_tracks[i]"
-                  (close)="addVersion(i)"
+                  (change)="addVersion(i, $event)"
                   placeholder="Add as new version*"
-                  name="version_track"
-                  dropdownPosition="auto">
+                  name="version_track_{{i}}"
+                  dropdownPosition="auto"
+                  (clear)="removeVersion(i)">
+                  <ng-option *ngFor="let item of project_tracks_list" [value]="item.track_id" [disabled]="item.disabled">{{item.title}}</ng-option>
                 </ng-select>
 
                 <span (click)="removeFromQueue(item, i)" class="delete cross" aria-hidden="true">
@@ -234,9 +235,3 @@
     <app-confirm-dialog></app-confirm-dialog>
   </ng-container>
 </app-pro-board-card>
-
-
-<!---->
-<!--<app-pro-upload-finished [class.hidden]="stage != statusEnum.GREAT_SUCCESS"-->
-<!--[link]="link" (sendNewFiles)="tryAgain()"-->
-<!--[period]="period"></app-pro-upload-finished>-->

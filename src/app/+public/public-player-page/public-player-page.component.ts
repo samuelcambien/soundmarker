@@ -26,6 +26,7 @@ export class PublicPlayerPageComponent implements OnInit {
   expiry_date;
   project_id: string;
 
+
   error;
 
   message: Message = new Message("", "", false, false);
@@ -115,5 +116,4 @@ export class PublicPlayerPageComponent implements OnInit {
     if (this.message.text == '') {
     }
   }
-
 }

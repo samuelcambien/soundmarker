@@ -1,4 +1,5 @@
 import {
+  ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
   ElementRef,
@@ -19,13 +20,15 @@ import {LocalStorageService} from '../../services/local-storage.service';
 import {ConfirmDialogService} from '../../services/confirmation-dialog/confirmation-dialog.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {ProjectService} from '../../services/project.service';
+import {StateService} from '../../services/state.service';
 
 // TODO: Als availabily stream only is dan wordt de downloadfile niet opgeslagen, bij Pro moet dat wel want daar kan dat achteraf nog aangepast worden.
 
 @Component({
   selector: 'app-pro-upload-page',
   templateUrl: './pro-upload-page.component.html',
-  styleUrls: ['./pro-upload-page.component.scss']
+  styleUrls: ['./pro-upload-page.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ProUploadPageComponent implements OnInit {
 
@@ -39,14 +42,18 @@ export class ProUploadPageComponent implements OnInit {
 
   @ViewChild('waveform') waveform: ElementRef;
 
+
   constructor(private uploader: Uploader,
   private localStorageService: LocalStorageService,
   private confirmDialogService: ConfirmDialogService,
   private projectService: ProjectService,
   private router: Router,
+  private stateService: StateService,
   private activatedRoute: ActivatedRoute,
   private cdr: ChangeDetectorRef) {
   }
+
+  trackId;
 
   ngOnInit() {
     this.smUploader = this.uploader.getOpenSMFileUploader();
@@ -54,26 +61,47 @@ export class ProUploadPageComponent implements OnInit {
       this.uploader.getOpenSMFileUploader().addTitles(items);
     }
     try{
-      RestCall.getProjects().then(res => {this.user_project_list = res["projects"]})
+      RestCall.getProjects().then(res => {
+        this.user_project_list = res["projects"];
+        if(this.activatedRoute.snapshot.queryParams.newTrackId) {
+          this.trackId = this.activatedRoute.snapshot.queryParams.newTrackId;
+          this.project_id = this.stateService.getActiveProject().project_id;
+          this.getProjectInfo(this.project_id);
+        }})
     }
     catch{
     }
   }
+
   private leftExistingTracks() {
     return this.project_tracks_list.filter(e => !this.selected_existing_tracks.includes(e.track_id));
   }
 
   getProjectInfo(project_id){
    let project = this.user_project_list.find(x => x.project_id === project_id);
-   RestCall.getProject(project.hash).then(res => this.project_tracks_list = res["tracks"]);
-   this.selected_existing_tracks = [];
+   RestCall.getProject(project.hash).then(res => {
+     this.project_tracks_list = res["tracks"];
+     this.selected_existing_tracks = [];
+     if (this.trackId) {
+       this.selected_existing_tracks[0] = this.trackId;
+       this.cdr.detectChanges();
+     }
+   })
   }
 
-  addVersion(i){
+  addVersion(i, $event){
+   if($event) this.project_tracks_list.find(e => e.track_id == this.selected_existing_tracks[i]).disabled = true;
   }
 
-  getTrackTitle(trackId){
-    return (this.project_tracks_list.find(track => track.track_id === trackId).title);
+  removeVersion(i){
+    this.project_tracks_list.find(e => e.track_id == this.selected_existing_tracks[i]).disabled = false;
+    this.selected_existing_tracks[i] = "";
+  }
+
+  getTrackTitle(track_id){
+    return (this.project_tracks_list.find(track => {
+      return track.track_id == track_id;
+    }).title);
   }
 
   validators = [Validators.required, Validators.pattern('^\\w+([\\.-]?\\w+)*@\\w+([\\.-]?\\w+)*(\\.\\w{2,3})+$')];
@@ -104,13 +132,9 @@ export class ProUploadPageComponent implements OnInit {
         this.smUploader.fileUploader.queue.map((track, index) => () => this.processTrack(this.project_id, track, this.smUploader.getTitle(track), this.selected_existing_tracks[index]))
       );
       const shareResponse = await RestCall.shareProject(this.project_id, this.smUploader.expiration, this.smUploader.getProjectNotes(), "", this.smUploader.getReceivers());
-      // this.link.emit(shareResponse["project_hash"]);
-      // this.uploader.removeFileUploader(running_uploader);
       this.smUploader.setStatus(Status.GREAT_SUCCESS);
-      // this.clearForm(true);
 
     } catch (e) {
-      // this.clearForm(false);
       this.error.emit(e);
     }
   }
@@ -159,6 +183,7 @@ export class ProUploadPageComponent implements OnInit {
 
   private removeFromQueue(item, index){
     this.smUploader.removeFromQueue(item);
+    this.project_tracks_list.find(e => e.track_id === this.selected_existing_tracks[index]).disabled = false;
     this.selected_existing_tracks.splice(index, 1);
   }
 

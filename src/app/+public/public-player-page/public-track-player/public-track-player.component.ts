@@ -18,7 +18,7 @@ import {RestCall} from "../../../rest/rest-call";
 import {LocalStorageService} from "../../../services/local-storage.service";
 import {DrawerService} from "../../../services/drawer.service";
 import {animate, state, style, transition, trigger} from '@angular/animations';
-import {BehaviorSubject} from 'rxjs';
+import {BehaviorSubject, Observable} from 'rxjs';
 import {distinctUntilChanged} from 'rxjs/operators';
 import {State} from "../../../player/play-button/play-button.component";
 import {AudioSource, Player} from "../../../player/player.service";
@@ -28,6 +28,7 @@ import {StateService} from '../../../services/state.service';
 import {Message} from '../../../message';
 import {Utils} from '../../../app.component';
 import {NgbPopover} from '@ng-bootstrap/ng-bootstrap';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'public-track-player',
@@ -64,6 +65,9 @@ export class PublicTrackPlayerComponent implements OnInit, OnChanges {
   @Input() message: Message;
   @Input() sender?;
   @Input() expiry_date;
+
+  private currentUser$;
+
 
   @Output() error = new EventEmitter();
   @Output() overview = new EventEmitter();
@@ -103,6 +107,7 @@ export class PublicTrackPlayerComponent implements OnInit, OnChanges {
   waveformInViewPortObservable = new BehaviorSubject<boolean>(true);
 
   constructor(
+    private router: Router,
     private localStorageService: LocalStorageService,
     private stateService: StateService,
     private project: ProjectService,
@@ -400,6 +405,10 @@ export class PublicTrackPlayerComponent implements OnInit, OnChanges {
         this.cdr.detectChanges();});
   }
 
+  addNewVersion(){
+    this.router.navigate(["../pro/dashboard"],{queryParams: {origin:'dashboard',  track_id: this.track.track_id}});
+  }
+
   removeComment(comment: Comment) {
     if (!comment.parent_comment_id) {
       this.version.comments = this.version.comments.filter(
@@ -469,6 +478,11 @@ export class PublicTrackPlayerComponent implements OnInit, OnChanges {
       setTimeout(()=> document.addEventListener("click", ($event)=> this.markerPopoverClose($event), false),500);
     }
   }
+
+   private isAdminRoute(route: string): boolean {
+      return /^\/pro\/project(\/|$)/.test(route);
+    }
+
 
   pauseAutoScroll(event) {
     this.pauseTitleScroll = event;

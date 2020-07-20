@@ -16,7 +16,7 @@
   <div *ngIf="exists && !(expired && commentsExpired)">
 
     <div class="list-container" [ngbCollapse]="getActiveTrack() | async">
-	    
+
       <div *ngFor="let track of project?.tracks; let last = last;">
 
         <app-public-track-preview

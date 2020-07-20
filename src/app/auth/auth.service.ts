@@ -11,13 +11,17 @@ import {map} from "rxjs/operators";
 })
 export class AuthService {
 
-  private currentUser: BehaviorSubject<User>;
+  private currentUserSubject: BehaviorSubject<User>;
+  private currentUser: Observable<User>
+  isAdmin: boolean= false;
 
   constructor(
     private router: Router,
     private localStorage: LocalStorageService,
   ) {
-    this.currentUser = new BehaviorSubject<User>(this.localStorage.getCurrentUser());
+    this.currentUserSubject = new BehaviorSubject<User>(this.localStorage.getCurrentUser());
+    this.currentUser = this.currentUserSubject.asObservable();
+    // );
     // this.getCurrentUser().subscribe(currentUser => {
     //   if (!currentUser) this.logOut();
     // });
@@ -26,7 +30,7 @@ export class AuthService {
   redirect: string = 'pro';
 
   getCurrentUser(): Observable<User> {
-    return this.currentUser.asObservable().pipe(
+    return this.currentUser.pipe(
       map(currentUser => {
         if (currentUser && currentUser.isValid()) {
           return currentUser;
@@ -53,6 +57,6 @@ export class AuthService {
 
   private setCurrentUser(user) {
     this.localStorage.storeCurrentUser(user);
-    this.currentUser.next(user);
+    this.currentUserSubject.next(user);
   }
 }

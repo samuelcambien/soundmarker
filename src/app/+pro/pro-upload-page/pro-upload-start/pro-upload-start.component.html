@@ -35,8 +35,11 @@
                 <h5>Add tracks</h5>
               </div>
           </div>
-          <input class="pro-upload-songs-input" id="pro-uploader" type="file" title="" ng2FileSelect [uploader]="uploader.getOpenFileUploader()"
+          <input #fileinput class="pro-upload-songs-input" id="pro-uploader" type="file" title="" ng2FileSelect [uploader]="uploader.getOpenFileUploader()"
                  multiple
+                 name="files" accept="{{uploader.getOpenSMFileUploader().getAcceptedFileTypes().join(',')}}"/>
+          <input style="display: none" #fileinputhidden class="pro-upload-songs-input" type="file" title="" ng2FileSelect [uploader]="uploader.getOpenFileUploader()"
+                 single
                  name="files" accept="{{uploader.getOpenSMFileUploader().getAcceptedFileTypes().join(',')}}"/>
                  <!--[class.disabled]="uploader.isUploading()"-->
         </div>

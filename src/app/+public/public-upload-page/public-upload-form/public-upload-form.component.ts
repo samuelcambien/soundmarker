@@ -16,6 +16,7 @@ import {NgControl, NgForm, Validators} from '@angular/forms';
 import {Utils} from "../../../app.component";
 import {LocalStorageService} from "../../../services/local-storage.service";
 import {PublicUploadPageComponent} from "../public-upload-page.component";
+import {Observable} from 'rxjs';
 
 @Component({
   selector: 'app-public-upload-form',
