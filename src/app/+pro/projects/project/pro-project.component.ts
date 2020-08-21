@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import {ActivatedRoute} from "@angular/router";
 import {Project} from "../../../model/project";
+import {Track} from '../../../model/track';
+import {StateService} from '../../../services/state.service';
 
 @Component({
   selector: 'app-pro-board-projects-project',
@@ -13,7 +15,10 @@ export class ProProjectComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-  ) { }
+    private stateService: StateService
+  ) {
+
+  }
 
   ngOnInit(): void {
     this.route.data.subscribe(async data => {

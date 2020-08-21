@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {ActivatedRoute, ActivatedRouteSnapshot} from '@angular/router';
 import {Track} from "../../../model/track";
 import {Project} from "../../../model/project";
@@ -16,21 +16,33 @@ export class ProTrackComponent implements OnInit {
 
   private project: Project;
   private track: Track;
+  @Input("inputTrack") inputTrack;
 
   constructor(
     private route: ActivatedRoute,
     private stateService: StateService,
     private projectService: ProjectService
-  ) { }
+  ) {
+
+  }
 
   ngOnInit(): void {
-    this.route.data.subscribe(async data => {
-      this.project = await data.project;
-      this.track = await data.track
-      this.track.track_id = this.route.snapshot.params.id
-      await this.projectService.loadProjectLI(this.project);
-    });
+    if(!this.inputTrack) {
+      this.route.data.subscribe(async data => {
+        this.project = await data.project;
+        this.track = await data.track;
+        this.track.track_id = this.route.snapshot.params.id;
+        this.stateService.setActiveTrack(this.track);
+        await this.projectService.loadProjectLI(this.project);
+      });
+    }
+    else{
+      this.track = this.inputTrack;
+      this.project = this.stateService.getActiveProject().getValue();
+    }
   }
+
+
 
   get audioSource(): AudioSource {
     return {

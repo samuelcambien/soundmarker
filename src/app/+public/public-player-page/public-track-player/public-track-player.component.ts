@@ -406,6 +406,8 @@ export class PublicTrackPlayerComponent implements OnInit, OnChanges {
   }
 
   addNewVersion(){
+    this.stateService.playerToggled = true;
+    this.stateService.setVersionUpload(true);
     this.router.navigate(["../pro/dashboard"],{queryParams: {origin:'dashboard',  track_id: this.track.track_id}});
   }
 
@@ -480,7 +482,7 @@ export class PublicTrackPlayerComponent implements OnInit, OnChanges {
   }
 
    private isAdminRoute(route: string): boolean {
-      return /^\/pro\/project(\/|$)/.test(route);
+      return /^\/pro(\/|$)/.test(route);
     }
 
 

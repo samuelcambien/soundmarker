@@ -63,9 +63,9 @@ export class ProUploadPageComponent implements OnInit {
     try{
       RestCall.getProjects().then(res => {
         this.user_project_list = res["projects"];
-        if(this.activatedRoute.snapshot.queryParams.newTrackId) {
+        if(this.stateService.getVersionUpload().getValue()) {
           this.trackId = this.activatedRoute.snapshot.queryParams.newTrackId;
-          this.project_id = this.stateService.getActiveProject().project_id;
+          this.project_id = this.stateService.getActiveProject().getValue().project_id;
           this.getProjectInfo(this.project_id);
         }})
     }
@@ -195,6 +195,7 @@ export class ProUploadPageComponent implements OnInit {
     if(dirty_form || file_nb>0){
       this.confirmDialogService.confirmThis("There are unsaved changes. Are sure you want to discard this project.", () => {
         this.smUploader.resetSMFileUploader();
+        this.stateService.setVersionUpload(false);
         this.router.navigate(["../dashboard"], {relativeTo: this.activatedRoute});
       }, function () {
       })}

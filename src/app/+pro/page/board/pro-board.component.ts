@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import {StateService} from '../../../services/state.service';
 
 @Component({
   selector: 'app-pro-board',
@@ -7,8 +8,14 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ProBoardComponent implements OnInit {
 
-  constructor() { }
+  activeTrack;
+  constructor(private stateService: StateService) { }
 
   ngOnInit() {
+    this.activeTrack = this.stateService.getActiveTrack().getValue();
+  }
+
+  get playerToggled(): boolean {
+    return this.stateService.playerToggled;
   }
 }

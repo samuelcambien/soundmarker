@@ -49,8 +49,8 @@ export class PublicPlayerPageComponent implements OnInit {
       this.cdr.detectChanges();
       this.projectService.loadProject(params['project_hash'])
         .then(() => {
-          if(this.stateService.getActiveProject()) {
-            this.project = this.stateService.getActiveProject();
+          if(this.stateService.getActiveProject().getValue()) {
+            this.project = this.stateService.getActiveProject().getValue();
             this.initFields();
 
             if (this.getProject().tracks.length == 1)

@@ -43,14 +43,14 @@ export class ProjectService {
 
   getVersion(versionId: string): Version {
 
-    return this.stateService.getActiveProject().tracks
+    return this.stateService.getActiveProject().getValue().tracks
       .map(track =>
         track.versions.filter(version => version.version_id == versionId)
       ).filter(versions => versions.length > 0)[0][0]
   }
 
   getTrack(version: any): Track {
-    return this.stateService.getActiveProject().tracks
+    return this.stateService.getActiveProject().getValue().tracks
       .filter(track => track.versions.includes(version))[0];
   }
 
@@ -139,7 +139,7 @@ export class ProjectService {
   }
 
   async playNextTrack(currentTrack: Track) {
-    let tracks = this.stateService.getActiveProject().tracks;
+    let tracks = this.stateService.getActiveProject().getValue().tracks;
     let nextTrack = tracks[tracks.indexOf(currentTrack) + 1];
     if (nextTrack) {
       if (this.stateService.getActiveTrack().getValue() != null) {

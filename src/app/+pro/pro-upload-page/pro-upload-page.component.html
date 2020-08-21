@@ -1,7 +1,7 @@
 <app-pro-board-card>
   <ng-container class="title">
     New Project
-    <button (click)="createNewProject = !createNewProject;" type="button" class="btn btn-sm btn-primary free-upload" [class.disabled]="!user_project_list.length">{{ createNewProject == false ? 'Existing' : 'New' }} Project</button>
+    <button *ngIf="!this.stateService.getVersionUpload().getValue()" (click)="createNewProject = !createNewProject;" type="button" class="btn btn-sm btn-primary free-upload" [class.disabled]="!user_project_list.length">{{ createNewProject == false ? 'Existing' : 'New' }} Project</button>
   </ng-container>
   <ng-container class="body">
       <form #myForm="ngForm" (ngSubmit)="onSubmit()">

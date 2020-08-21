@@ -9,7 +9,7 @@
       </div>
 
       <div class="sidebar-box view-button">
-        <div class="sidebar-tab" routerLink="dashboard">
+        <div class="sidebar-tab" routerLink="dashboard" (click)="stateService.setVersionUpload(false)">
 				<span class="projects-tab-icon">
             <ng-container *ngTemplateOutlet="icon_home"></ng-container>
 				</span>
@@ -17,7 +17,7 @@
         </div>
         <div class="sidebar-tab" routerLink="projects">
 				<span class="projects-tab-icon">
-					<ng-container *ngTemplateOutlet="icon_projects" (click)="navigateTo('/pro/projects')"></ng-container>
+					<ng-container *ngTemplateOutlet="icon_projects"></ng-container>
 				</span>
           <h5>Projects</h5>
         </div>

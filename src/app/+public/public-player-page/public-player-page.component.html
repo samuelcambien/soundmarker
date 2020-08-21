@@ -14,11 +14,8 @@
   <app-project-expired *ngIf="expired && commentsExpired"></app-project-expired>
 
   <div *ngIf="exists && !(expired && commentsExpired)">
-
     <div class="list-container" [ngbCollapse]="getActiveTrack() | async">
-
       <div *ngFor="let track of project?.tracks; let last = last;">
-
         <app-public-track-preview
           [track]="track"
           [expired]="expired && !commentsExpired"
@@ -42,7 +39,6 @@
       (overview)="setActiveTrack(null)"
       (error)="error = $event">
     </public-track-player>
-
   </div>
 
 </app-public-page>

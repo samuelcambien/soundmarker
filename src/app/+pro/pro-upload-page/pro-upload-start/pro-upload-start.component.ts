@@ -1,18 +1,42 @@
-import {Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
+import {Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild} from '@angular/core';
 import {Status, Uploader} from '../../../services/uploader.service';
-import {ActivatedRoute, NavigationEnd, Router} from '@angular/router';
-import {filter} from 'rxjs/operators';
+import {ActivatedRoute, ActivatedRouteSnapshot, NavigationEnd, Router} from '@angular/router';
+import {filter, first, take} from 'rxjs/operators';
+import {StateService} from '../../../services/state.service';
 
 @Component({
   selector: 'app-pro-upload-start',
   templateUrl: './pro-upload-start.component.html',
   styleUrls: ['./pro-upload-start.component.scss']
 })
-export class ProUploadStartComponent implements OnInit {
+export class ProUploadStartComponent implements OnInit, OnDestroy {
 
   @ViewChild('fileinputhidden') fileinput: ElementRef;
   newTrackId;
+  subscription;
+
   ngOnInit(): void {
+    this.subscription = this.stateService.getVersionUpload().subscribe(bool => {
+        if (bool) {
+          this.fileinput.nativeElement.click();
+          this.newTrackId = this.activatedRoute.snapshot.queryParams.track_id;
+          console.log(this.newTrackId);
+        }
+        else{
+          this.newTrackId = null;
+        }
+      });
+  }
+
+  ngOnDestroy(): void{
+    this.subscription.unsubscribe();
+  }
+
+  constructor(private uploader: Uploader,
+              private router: Router,
+              private stateService: StateService,
+              private activatedRoute: ActivatedRoute) {
+
     this.uploader.getOpenFileUploader().onWhenAddingFileFailed = (item, filter) => {
       let message = '';
       switch (filter.name) {
@@ -31,23 +55,14 @@ export class ProUploadStartComponent implements OnInit {
       }
     };
     this.uploader.getOpenFileUploader().onAfterAddingAll = (items) => {
-      this.router.navigate(["../upload"],{queryParams: {origin:'dashboard', newTrackId: this.newTrackId}, relativeTo: this.activatedRoute, skipLocationChange:true});
+      this.stateService.playerToggled = false;
+      this.router.navigate(['../upload'], {
+        queryParams: {origin: 'dashboard', newTrackId: this.newTrackId},
+        relativeTo: this.activatedRoute,
+        skipLocationChange: true
+      });
       this.uploader.getOpenSMFileUploader().setStatus(Status.UPLOAD_FORM);
       this.uploader.getOpenSMFileUploader().addTitles(items);
     }
-
-    this.activatedRoute.queryParams.subscribe(queryParam=>
-    {if(queryParam.track_id) {
-      this.newTrackId = queryParam.track_id;
-      this.fileinput.nativeElement.click();
-    }
-    else{
-      this.newTrackId = null;
-    }})
-  }
-
-  constructor(private uploader: Uploader,
-              private router: Router,
-              private activatedRoute: ActivatedRoute) {
   }
 }

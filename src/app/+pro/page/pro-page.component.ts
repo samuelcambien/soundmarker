@@ -2,6 +2,7 @@ import {Component} from '@angular/core';
 import {Status, Uploader} from '../../services/uploader.service';
 import {animate, state, style, transition, trigger} from '@angular/animations';
 import {Subject} from 'rxjs';
+import {StateService} from '../../services/state.service';
 
 @Component({
   selector: 'app-pro',
@@ -21,8 +22,14 @@ export class ProPageComponent {
 
   popover: boolean = true;
   eventLoadingTopbar: Subject<void> = new Subject<void>();
+  activeTrack;
 
-  constructor(private uploader: Uploader){
+
+  constructor(private uploader: Uploader,
+  private stateService: StateService){
+  }
+
+  ngOnInit(){
   }
 
   showPopover(){
