@@ -4,7 +4,7 @@
     <button *ngIf="!this.stateService.getVersionUpload().getValue()" (click)="createNewProject = !createNewProject;" type="button" class="btn btn-sm btn-primary free-upload" [class.disabled]="!user_project_list.length">{{ createNewProject == false ? 'Existing' : 'New' }} Project</button>
   </ng-container>
   <ng-container class="body">
-      <form #myForm="ngForm" (ngSubmit)="onSubmit()">
+      <form #myForm="ngForm" id="myForm" (ngSubmit)="onSubmit()">
       <div class="form-row">
         <div class="col-md-8">
           <div class="form-row">
@@ -25,11 +25,12 @@
                 placeholder="Existing projects*"
                 name="existing_projects"
                 dropdownPosition="auto"
-                required>
+                required
+                >
               </ng-select>
+             </div>
             </div>
-            </div>
-          <div class="form-row">
+          <div class="form-row" *ngIf="!this.stateService.getVersionUpload().getValue()">
             <div class="col-sm-12">
               <tag-input [(ngModel)]='smUploader.email_to'
                          [trimTags]="true"
@@ -50,7 +51,7 @@
             </div>
           </div>
 
-          <div class="form-row">
+          <div class="form-row" *ngIf="!this.stateService.getVersionUpload().getValue()">
             <div class="form-group col hide-phone">
                 <textarea #notes_element
                           [(ngModel)]="smUploader.notes"
@@ -63,7 +64,7 @@
                 </textarea>
             </div>
 
-            <div class="form-group col show-phone">
+            <div class="form-group col show-phone" *ngIf="!this.stateService.getVersionUpload().getValue()">
                 <textarea #notes_element
                           [(ngModel)]="smUploader.notes"
                           type="text"
@@ -76,7 +77,7 @@
             </div>
           </div>
 
-          <div class="form-row radios">
+          <div class="form-row radios" *ngIf="!this.stateService.getVersionUpload().getValue()">
             <div class="col">
               <ng-select
                 class="custom noselect expiration"
@@ -93,7 +94,7 @@
               </ng-select>
             </div>
 
-            <div class="col">
+            <div class="col" *ngIf="!this.stateService.getVersionUpload().getValue()">
               <ng-select
                 class="custom noselect downloadable"
                 bindValue="id"
@@ -109,7 +110,7 @@
               </ng-select>
             </div>
 
-            <div class="col">
+            <div class="col" *ngIf="!this.stateService.getVersionUpload().getValue()">
               <ng-select
                 class="custom noselect downloadable"
                 bindValue="id"
@@ -125,7 +126,7 @@
               </ng-select>
             </div>
 
-            <div class="col">
+            <div class="col" *ngIf="!this.stateService.getVersionUpload().getValue()">
               <ng-select
                 class="custom noselect downloadable"
                 bindValue="id"
@@ -140,7 +141,7 @@
                 required>
               </ng-select>
             </div>
-            <div class="col">
+            <div class="col" *ngIf="!this.stateService.getVersionUpload().getValue()">
               <input [disabled]="!smUploader.smppw_bool" name="smppwv" [(ngModel)]="smUploader.smppw" required>
             </div>
           </div>
@@ -150,10 +151,10 @@
       <div class="form-field col-md-4 bottom-tooltip" placement="bottom" [ngbTooltip]="" #ft='ngbTooltip'
            triggers="manual" (click)="ft.close()">
         <div class="card   rounded border-0">
-          <a>
+          <a *ngIf="!this.stateService.getVersionUpload().getValue()">
             <h5>Add more tracks</h5>
           </a>
-          <input class="upload-songs-input"
+          <input *ngIf="!this.stateService.getVersionUpload().getValue()" class="upload-songs-input"
                  id="pro-uploader"
                  type="file"
                  title=""
@@ -177,6 +178,7 @@
                   bindLabel="title"
                   bindValue="track_id"
                   [searchable]="false"
+                  [disabled]="this.stateService.getVersionUpload().getValue()"
                   (change)="addVersion(i, $event)"
                   placeholder="Add as new version*"
                   name="version_track_{{i}}"
@@ -185,7 +187,7 @@
                   <ng-option *ngFor="let item of project_tracks_list" [value]="item.track_id" [disabled]="item.disabled">{{item.title}}</ng-option>
                 </ng-select>
 
-                <span (click)="removeFromQueue(item, i)" class="delete cross" aria-hidden="true">
+                <span *ngIf="!this.stateService.getVersionUpload().getValue()"(click)="removeFromQueue(item, i)" class="delete cross" aria-hidden="true">
                   <svg width="9px" height="9px" viewBox="0 0 9 9" version="1.1" xmlns="http://www.w3.org/2000/svg">
                   <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round">
                   <g id="Internet-Networks-Servers-/-Upload/Download-/-upload-dash-arrow-1"
@@ -226,6 +228,7 @@
             </g>
           </svg>
         </button>
+
       </div>
     </form>
         <div ng2FileDrop
