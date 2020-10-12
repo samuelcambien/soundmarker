@@ -41,7 +41,7 @@ export class ProUploadPageComponent implements OnInit {
   smUploader;
 
   @ViewChild('waveform') waveform: ElementRef;
-
+  @ViewChild('myForm', { read: NgForm }) myForm: any;
 
   constructor(private uploader: Uploader,
   private localStorageService: LocalStorageService,
@@ -66,6 +66,7 @@ export class ProUploadPageComponent implements OnInit {
         if(this.stateService.getVersionUpload().getValue()) {
           this.trackId = this.activatedRoute.snapshot.queryParams.newTrackId;
           this.project_id = this.stateService.getActiveProject().getValue().project_id;
+          this.myForm.controls['existing_projects'].readonly();
           this.getProjectInfo(this.project_id);
         }})
     }
@@ -95,7 +96,7 @@ export class ProUploadPageComponent implements OnInit {
 
   removeVersion(i){
     this.project_tracks_list.find(e => e.track_id == this.selected_existing_tracks[i]).disabled = false;
-    this.selected_existing_tracks[i] = "";
+    this.selected_existing_tracks[i] = null;
   }
 
   getTrackTitle(track_id){
