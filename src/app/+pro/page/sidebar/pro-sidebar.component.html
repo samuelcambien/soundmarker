@@ -6,6 +6,7 @@
 
       <div class="sidebar-heading">
         <div class="sidebar-logo">soundmarker</div>
+        <p>Pro · Version 1.0</p>
       </div>
 
       <div class="sidebar-box view-button">
@@ -13,24 +14,24 @@
 				<span class="projects-tab-icon">
             <ng-container *ngTemplateOutlet="icon_home"></ng-container>
 				</span>
-          <h5>Start</h5>
+          <h3>Start</h3>
         </div>
         <div class="sidebar-tab" routerLink="projects">
 				<span class="projects-tab-icon">
 					<ng-container *ngTemplateOutlet="icon_projects"></ng-container>
 				</span>
-          <h5>Projects</h5>
+          <h3>Projects</h3>
         </div>
         <div class="sidebar-tab" routerLink="upload">
 				<span>
 					<ng-container *ngTemplateOutlet="icon_transfers"></ng-container>
 				</span>
-          <h5>Transfers</h5>
+          <h3>Transfers</h3>
         </div>
       </div>
 
       <div class="sidebar-box current-projects">
-        <p>Favourite projects</p>
+        <p>Recent projects</p>
         <div class="sidebar-item">
           <app-pro-sidebar-item-project></app-pro-sidebar-item-project>
         </div>
@@ -54,16 +55,19 @@
 
     </div>
 
-    <div class="sidebar-player">
+    <div class="sidebar-box active-transfers">
+    <div class="sidebar-item">
 
       <span class="sidebar-player-button" (click)="play()">
         <ng-container *ngTemplateOutlet="playbutton"></ng-container>
       </span>
 
       <div *ngIf="activeTrack">
-        <a href=""><h5>{{activeTrack.title}} · V3</h5></a>
+        <a href=""><h3>{{activeTrack.title}} · V3</h3></a>
         <p>{{player.getCurrentTime() | timeFormat}} / {{player.getDuration() | timeFormat}}</p>
       </div>
+
+  </div>
 
   </div>
 
@@ -130,7 +134,7 @@
           <circle id="Oval" class="fill" cx="21.5" cy="21.5" r="21.5"></circle>
           <path
             d="M27.0778787,15.3308361 L34.3009217,27.4655484 C35.1483759,28.8892715 34.6812177,30.7304244 33.2574946,31.5778787 C32.7933401,31.8541611 32.2632017,32 31.723043,32 L17.276957,32 C15.6201027,32 14.276957,30.6568542 14.276957,29 C14.276957,28.4598413 14.4227959,27.9297029 14.6990783,27.4655484 L21.9221213,15.3308361 C22.7695756,13.9071131 24.6107285,13.4399549 26.0344516,14.2874091 C26.4637095,14.5429198 26.822368,14.9015782 27.0778787,15.3308361 Z"
-            id="Triangle" fill="#B6AAFF"
+            id="Triangle" fill="#7397ff"
             transform="translate(24.500000, 21.500000) rotate(90.000000) translate(-24.500000, -21.500000) "></path>
         </g>
       </g>

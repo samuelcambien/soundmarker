@@ -1,13 +1,49 @@
 <app-pro-board-card>
-  <ng-container class="title">tracks</ng-container>
+  <ng-container class="title">Project title · 12 tracks</ng-container>
   <ng-container class="menu">
     <a class="dropdown-item" href="#">Show statistics</a>
     <a class="dropdown-item" href="#">Check loudness</a>
     <a class="dropdown-item" href="#">Track settings</a>
   </ng-container>
   <ng-container class="body">
-    <div *ngFor="let track of project?.tracks" routerLink="track/{{track.track_id}}">
-      {{track.title}}
+    <div class="list">
+    <div *ngFor="let track of project?.tracks" class="track-bar" routerLink="track/{{track.track_id}}">
+      <div class="list-header row">
+      <div class="title"><h3>{{track.title}}</h3>
+        <p>3 versions · 12 new comments</p></div>
+
+
+        <div class="ml-auto">
+
+        <a href data-toggle="modal"
+           data-target=".editProject"
+           class="menu more-icon">
+
+           <svg width="17px" height="5px" viewBox="0 0 24 8" version="1.1" xmlns="http://www.w3.org/2000/svg">
+             <g id="Page-1" stroke="none" stroke-width="1" fill="#bac1da" class="comment-options-fill" fill-rule="evenodd" stroke-linecap="round"
+                stroke-linejoin="round">
+               <g id="Interface-Essential-/-Menu-/-navigation-menu-horizontal"
+                  transform="translate(0.000000, -9.000000)"
+                  class="menu-icon" stroke="#bac1da" stroke-width="1.5">
+                 <g id="Group" transform="translate(0.000000, 9.000000)">
+                   <g id="navigation-menu-horizontal">
+                     <circle id="Oval" cx="4" cy="4" r="2.5"></circle>
+                     <circle id="Oval" cx="13" cy="4" r="2.5"></circle>
+                     <circle id="Oval" cx="22" cy="4" r="2.5"></circle>
+                   </g>
+                 </g>
+               </g>
+             </g>
+           </svg>
+
+        </a>
+        <div class="board-item-notification"></div>
+
+        </div>
+
+    </div>
+    <hr *ngIf="!last" class="preview-hr">
+    </div>
     </div>
   </ng-container>
 </app-pro-board-card>

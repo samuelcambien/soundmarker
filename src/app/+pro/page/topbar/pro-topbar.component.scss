@@ -1,8 +1,7 @@
 .nav-item {
 
-  border-radius: 0.2rem;
-  height: 31px;
-  width: 31px;
+  border-radius: 0.3rem;
+
   margin-top: -1px;
   transition: 0.2s;
   -webkit-transition: 0.2s;
@@ -65,15 +64,7 @@ a.dropdown-item {
   background-color: #eef1ff;
 }
 
-.navbar {
-  height: 48px;
-  background-color: #fff;
-  border-bottom: 1px solid #eef1ff;
-  -webkit-box-shadow: 0 0.07rem 0.3rem 0.01rem rgba(115, 150, 255, .1) !important;
-  -moz-box-shadow: 0 0.07rem 0.3rem 0.01rem rgba(115, 150, 255, .1) !important;
-  box-shadow: 0 0.07rem 0.3rem 0.01rem rgba(115, 150, 255, .1) !important;
 
-}
 
 .sidebar-toggle {
   display: none;
@@ -91,8 +82,9 @@ a.dropdown-item {
 }
 
 .breadcrumb-container {
-  padding-top: 7px;
+  padding-top: 28px;
   padding-left: 7px;
+  margin-left: 66px;
 }
 
 .breadcrumb {

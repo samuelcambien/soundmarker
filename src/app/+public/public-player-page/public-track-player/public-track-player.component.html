@@ -1,4 +1,4 @@
-'<div class="container-fluid player-container" #firstNameElement>
+<div class="container-fluid player-container" #firstNameElement>
 
   <div id="popup-playbar" ngClass="shadow-topbar hide-phone" [@openClose]="waveformInViewPort ? 'closed' : 'open'">
 
@@ -188,31 +188,16 @@
         Sorry, this track has expired.
       </p>
     </div>
-    <div class="addsongs" *ngIf="isAdminRoute(router.url)" (click)="addNewVersion()">
-      <div class="note-image" id="ni1">
-        <div class="mid-shadow">
-          <svg width="20px" height="20px" viewBox="0 0 66 66" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-            <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-              <g id="Internet-Networks-Servers-/-Upload/Download-/-upload-dash-arrow-1" transform="translate(-462.000000, -194.000000)" fill-rule="nonzero">
-                <g id="Group-31" transform="translate(462.000000, 194.000000)">
-                  <circle id="Oval-2" fill="#7397FF" cx="33" cy="33" r="33"></circle>
-                  <g id="Group-26-Copy" transform="translate(23.000000, 23.000000)" stroke="#ffffff" stroke-linecap="round" stroke-width="4">
-                    <path d="M0,10.5 L20,10.5" id="Line-10"></path>
-                    <path d="M0,10.5 L20,10.5" id="Line-10" transform="translate(10.000000, 10.500000) rotate(90.000000) translate(-10.000000, -10.500000) "></path>
-                  </g>
-                </g>
-              </g>
-            </g>
-          </svg>
-        </div>
-      </div>
 
-      <h5>Add new version</h5>
-    </div>
 
     <div class="player-toolbar hide-phone  ml-auto">
+
+      <div class="addversion top-icon btn-sm btn-outline-form" *ngIf="isAdminRoute(router.url)" (click)="addNewVersion()">
+        <h5>+</h5>
+      </div>
+
         <ng-select *ngIf="track.versions.length>1"
-        class="custom expiration"
+        class="custom top-icon version-control"
         bindLabel="version_id"
         [items]="track.versions"
         [searchable]="false"
@@ -223,10 +208,10 @@
         name="versions_control"
         dropdownPosition="auto">
         <ng-template ng-label-tmp let-item="item">
-          Version <b>{{track.getVersionIndex(item)+1}}</b>
+          v<b>{{track.getVersionIndex(item)+1}}</b>
         </ng-template>
         <ng-template ng-option-tmp let-item="item" let-index="index">
-          Version <b>{{index+1}}</b>
+          v<b>{{index+1}}</b>
         </ng-template>
       </ng-select>
 
@@ -465,4 +450,3 @@
   </div>
 
 </div>
-'

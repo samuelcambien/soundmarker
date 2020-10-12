@@ -6,6 +6,7 @@
     <a class="dropdown-item" href="#">Track settings</a>
   </ng-container>
   <ng-container class="body">
+    <div class="full-player-container">
     <public-track-player
       *ngIf="track"
       [track]="track"
@@ -14,6 +15,7 @@
       [expired]="expired && !commentsExpired">
     </public-track-player>
     <div class="waveform-container w-100" *ngIf="track?.versions[0]">
+    </div>
     </div>
   </ng-container>
 </app-pro-board-card>

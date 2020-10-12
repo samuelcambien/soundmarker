@@ -1,8 +1,8 @@
-<div class="d-flex flex-row">
+<div class="d-flex flex-row pro-back-bg">
   <app-pro-sidebar></app-pro-sidebar>
-  <div class="d-flex flex-column flex-grow-1">
+  <div class="d-flex flex-column flex-grow-1 pro-front-bg">
     <app-pro-topbar [upload]="eventLoadingTopbar.asObservable()" (popover)="openPopover()"></app-pro-topbar>
-    <div class="w-100 h-100">
+    <div class="w-100 h-100 pro-full-container">
       <div class="content w-100 h-100 p-20 d-flex">
         <router-outlet></router-outlet>
         <app-pro-upload-popover (close)=closePopover() *ngIf="(uploader.isUploading() || uploader.isReady()) && showPopover()" [@fadeAnimation]></app-pro-upload-popover>
