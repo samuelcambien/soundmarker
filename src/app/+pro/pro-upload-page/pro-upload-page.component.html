@@ -35,90 +35,27 @@
 						<div class="col">
 							<label class="custom expiration btn btn-sm btn-outline-form btn-settings noselect" popoverClass="popover-class" ngbPopover="Allow downloading of uploaded tracks" [openDelay]="300" [autoClose]="false" triggers="mouseenter:mouseleave">
 								<div class="switch">
-									<input type="checkbox" [checked]="availability" (click)="toggleDownload()"> <span class="slider round"></span>
+									<input type="checkbox" [checked]="smUploader.availability" (click)="smUploader.toggleAvailability()"> <span class="slider round"></span>
 								</div>
-								<div id="enable-download-button" [ngClass]="{'unchecked': !availability}" class="slider-text">Downloads</div>
+								<div id="enable-download-button" [ngClass]="{'unchecked': !smUploader.availability}" class="slider-text">Downloads</div>
 							</label>
 						</div>
 						<div class="col">
 							<label class="custom noselect downloadable btn btn-sm btn-outline-form btn-settings" popoverClass="popover-class" ngbPopover="Allow lossless streaming" [openDelay]="300" [autoClose]="false" triggers="mouseenter:mouseleave">
 								<div class="switch">
-									<input type="checkbox" [checked]="notifications" (click)="toggleNotifications()"> <span class="slider round"></span>
+									<input type="checkbox" [checked]="smUploader.stream_type" (click)="smUploader.toggleStreamType()"> <span class="slider round"></span>
 								</div>
-								<div [ngClass]="{'unchecked': !notifications}" class="slider-text">Lossless</div>
+								<div [ngClass]="{'unchecked': !smUploader.stream_type}" class="slider-text">Lossless</div>
 							</label>
 						</div>
 						<div class="col">
 							<label class="custom noselect downloadable btn btn-sm btn-outline-form btn-settings" popoverClass="popover-class" ngbPopover="Set extra password protection" [openDelay]="300" [autoClose]="false" triggers="mouseenter:mouseleave">
 								<div class="switch">
-									<input type="checkbox" [checked]="notifications" (click)="toggleNotifications()"> <span class="slider round"></span>
+									<input type="checkbox" [checked]="smUploader.smppw_bool" (click)="smUploader.toggleSMPpw()"> <span class="slider round"></span>
 								</div>
-								<div [ngClass]="{'unchecked': !notifications}" class="slider-text">Password</div>
+								<div [ngClass]="{'unchecked': !smUploader.smppw_bool}" class="slider-text">Password</div>
 							</label>
 						</div>
-						<!--    <div class="col">
-              <ng-select
-                class="custom noselect expiration"
-                bindValue="id"
-                groupBy="heading"
-                [items]="smUploader.expirations"
-                [searchable]="false"
-                [clearable]="false"
-                [(ngModel)]="smUploader.expiration"
-                placeholder="Expire*"
-                name="expirations"
-                dropdownPosition="top"
-                required>
-              </ng-select>
-            </div>
-
-            <div class="col">
-              <ng-select
-                class="custom noselect downloadable"
-                bindValue="id"
-                groupBy="heading"
-                [items]="smUploader.availabilities"
-                [searchable]="false"
-                [clearable]="false"
-                [(ngModel)]="smUploader.availability"
-                placeholder="Download*"
-                name="downloads"
-                dropdownPosition="top"
-                required>
-              </ng-select>
-            </div>
-
-            <div class="col">
-              <ng-select
-                class="custom noselect downloadable"
-                bindValue="id"
-                groupBy="heading"
-                [items]="smUploader.stream_types"
-                [searchable]="false"
-                [clearable]="false"
-                [(ngModel)]="smUploader.stream_type"
-                placeholder="Stream*"
-                name="stream_type"
-                dropdownPosition="top"
-                required>
-              </ng-select>
-            </div>
-
-            <div class="col">
-              <ng-select
-                class="custom noselect downloadable"
-                bindValue="id"
-                groupBy="heading"
-                [items]="smUploader.smppw_enable"
-                [searchable]="false"
-                [clearable]="false"
-                [(ngModel)]="smUploader.smppw_bool"
-                placeholder="Password*"
-                name="smppw"
-                dropdownPosition="top"
-                required>
-              </ng-select>
-            </div> -->
 						<div class="col">
 							<input [disabled]="!smUploader.smppw_bool" name="smppwv" [(ngModel)]="smUploader.smppw" class="sub-form" placeholder="Min. 6 characters" required>
 						</div>
@@ -126,9 +63,6 @@
 					<div class="form-field bottom-tooltip" placement="bottom" [ngbTooltip]="" #ft='ngbTooltip' triggers="manual" (click)="ft.close()">
 						<div class="card   rounded border-0">
               <div class="pro-add-more-tracks">
-
-
-
               </div>
               <div class="pro-upload-list-container">
 								<div class="form-row" *ngFor="let item of smUploader.getFileUploader().queue; index as i">

@@ -124,8 +124,9 @@ export class ProUploadPageComponent implements OnInit {
     this.smUploader.setStatus(Status.UPLOADING_SONGS);
     try {
       if(this.createNewProject){
-      const projectResponse = await RestCall.createNewProject(this.smUploader.getProjectTitle(), this.smUploader.getSMPPW());
-      this.project_id = projectResponse["project_id"];
+        let stream_type_id = this.smUploader.stream_type ? 0 : 1;
+        const projectResponse = await RestCall.createNewProject(this.smUploader.getProjectTitle(), this.smUploader.getSMPPW());
+        this.project_id = projectResponse["project_id"];
       }
 
       await Utils.promiseSequential(
@@ -207,4 +208,6 @@ export class ProUploadPageComponent implements OnInit {
   getFileSize(file){
     return Utils.getSizeHumanized(file.file.size);
   }
+
+
 }
