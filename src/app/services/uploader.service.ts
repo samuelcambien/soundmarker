@@ -53,17 +53,17 @@ export class SMFileUploader {
   email_to: string[];
   project_title;
 
-  expirations = [{id: '1week', label: 'Week', heading: 'Expire*'}, {id: '1month', label: 'Month', heading: 'Expire*'}];
+  // expirations = [{id: '1week', label: 'Week', heading: 'Expire*'}, {id: '1month', label: 'Month', heading: 'Expire*'}];
   expiration="1week";
 
-  availabilities = [{id: false, label: 'No', heading: 'Download*'}, {id: true, label: 'Yes', heading: 'Download*'}];
+  // availabilities = [{id: false, label: 'No', heading: 'Download*'}, {id: true, label: 'Yes', heading: 'Download*'}];
   availability = false;
 
-  smppw_enable = [{id: false, label: 'No', heading: 'Password*'}, {id: true, label: 'Yes', heading: 'Password*'}];
+  // smppw_enable = [{id: false, label: 'No', heading: 'Password*'}, {id: true, label: 'Yes', heading: 'Password*'}];
   smppw="";
   smppw_bool=false;
 
-  stream_types = [{id: false, label: 'Lossy', heading: 'Stream*'}, {id: true, label: 'Lossless', heading: 'Stream*'}];
+  // stream_types = [{id: false, label: 'Lossy', heading: 'Stream*'}, {id: true, label: 'Lossless', heading: 'Stream*'}];
   stream_type=false;
 
   statusEnum = Status;
@@ -226,4 +226,18 @@ export class SMFileUploader {
     this.getFileUploader().removeFromQueue(item);
     this.removeFileSize(item.file.size);
   }
+
+  //In use in HTML code. Do not delete, not recognized by IntelliJ parser.
+  toggleAvailability(){
+    this.availability = !this.availability;
+  }
+
+  toggleSMPpw() {
+    this.smppw_bool = !this.smppw_bool;
+  }
+
+  toggleStreamType(){
+      this.stream_type = !this.stream_type;
+    }
+
 }
