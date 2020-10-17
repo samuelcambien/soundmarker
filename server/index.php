@@ -514,7 +514,7 @@ Flight::route('GET /project/get/@project_hash', function($project_hash) {
 
 $config = Flight::get("config");
 $db = Flight::db();
-$sql = "SELECT project_id, active, expiration_date, user_id, password FROM Project WHERE hash = '$project_hash'";
+$sql = "SELECT project_id, active, expiration_date, user_id, password, stream_type FROM Project WHERE hash = '$project_hash'";
 $response = $db->query($sql)->fetchAll(PDO::FETCH_ASSOC);
 
 // check if project hash was valid
@@ -524,6 +524,7 @@ if ($response) {
   $expiration_date = $response[0]["expiration_date"];
   $user_id = $response[0]["user_id"];
   $project_password = $response[0]["password"];
+  $project_stream_type = $response[0]["stream_type"];
 
   $lastmonth = new \DateTime('-1 month');
   $lastmonthf = $lastmonth->format('Y-m-d H:i:s');
@@ -578,7 +579,7 @@ if ($response) {
 
     // return ok
     Flight::json(array(
-       'project_id' => $project_id, 'status' => $status, 'expiration' => $expiration_date, 'sender' => $emailaddress, 'tracks' => $tracks
+       'project_id' => $project_id, 'status' => $status, 'expiration' => $expiration_date, 'stream_type' => $project_stream_type, 'sender' => $emailaddress, 'tracks' => $tracks
     ), 200);
   }
 } else {
@@ -848,18 +849,34 @@ Flight::route('GET /track/@track_id', function($track_id) {
 
 $config = Flight::get("config");
 $db = Flight::db();
-$title = $db->query("SELECT title FROM Track WHERE track_id = '$track_id'")->fetchAll(PDO::FETCH_ASSOC)[0]["title"];
 $sql = "SELECT version_id, notes, downloadable, visibility, version_title, track_length, wave_png FROM Version WHERE track_id = '$track_id'";
 $result = $db->query($sql);
 $versions = $result->fetchAll(PDO::FETCH_ASSOC);
 
+// get the variables
+$s3 = Flight::get("s3");
+
 foreach ($versions as &$version) {
   $_SESSION['view_versions'][] = $version["version_id"];
+
+  // get AWS 3 text wave_png
+  if ($version["wave_png"] == "s3") {
+      $version_id = $version["version_id"];
+      $sql2 = "SELECT file_id, aws_path, version_id, file_name FROM File WHERE version_id = '$version_id'";
+      $result2 = $db->query($sql2);
+      $files2 = $result2->fetchAll(PDO::FETCH_ASSOC);
+      $aws_path = $files2[0]["aws_path"];
+
+      $wave_png = $s3->getObject([
+           'Bucket' => $config['AWS_S3_BUCKET'],
+           'Key'    => $files2[0]["version_id"] . "/" . $files2[0]["file_name"] . ".txt"
+      ]);
+      $version["wave_png"] = $wave_png['Body']->getContents();
+  }
 }
 
 // return ok
 Flight::json(array(
-  'title' => $title,
    'versions' => $versions
 ), 200);
 });
@@ -1149,8 +1166,8 @@ if (true) {
    // }
 
 
-   // now create segments
-   exec($config['FFMPEG_PATH']."/ffmpeg -i /tmp/orig".$file_id.".".$ext." -f 96 -segment_time 10 -codec:a libmp3lame -qscale:a 1 /tmp/".$file_id."/".$file_id."%03d.mp3");
+   // now create segments TODO: not sure we still need them
+   // exec($config['FFMPEG_PATH']."/ffmpeg -i /tmp/orig".$file_id.".".$ext." -f 96 -segment_time 10 -codec:a libmp3lame -qscale:a 1 /tmp/".$file_id."/".$file_id."%03d.mp3");
 
    // loop through all files and upload them
    $di = new RecursiveDirectoryIterator('/tmp/'.$file_id);
