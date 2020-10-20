@@ -849,6 +849,7 @@ Flight::route('GET /track/@track_id', function($track_id) {
 
 $config = Flight::get("config");
 $db = Flight::db();
+$title = $db->query("SELECT title FROM Track WHERE track_id = '$track_id'")->fetchAll(PDO::FETCH_ASSOC)[0]["title"];
 $sql = "SELECT version_id, notes, downloadable, visibility, version_title, track_length, wave_png FROM Version WHERE track_id = '$track_id'";
 $result = $db->query($sql);
 $versions = $result->fetchAll(PDO::FETCH_ASSOC);
@@ -877,6 +878,7 @@ foreach ($versions as &$version) {
 
 // return ok
 Flight::json(array(
+   'title' => $title,
    'versions' => $versions
 ), 200);
 });
@@ -910,6 +912,8 @@ if (true) {
           CURLOPT_URL => urldecode($file["aws_path"]).".flac",
           CURLOPT_HEADER => true,
           CURLOPT_RETURNTRANSFER => true,
+          CURLOPT_SSL_VERIFYPEER => false,
+          CURLOPT_SSL_VERIFYHOST => false,
           CURLOPT_NOBODY => true));
       $header = explode("\n", curl_exec($curl));
       curl_close($curl);
