@@ -21,8 +21,7 @@ export class ProUploadPopoverComponent implements OnInit {
   }
 
   getProgress(e: SMFileUploader ) {
-//    return e.getFileUploader().progress * 0.99;
-  return 33;
+   return e.getFileUploader().progress * 0.99;
   }
 
   getLink() {
