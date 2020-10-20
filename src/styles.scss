@@ -31,7 +31,9 @@ CONTENTS
 */
 
 $base-blurple: #7397ff;
+$base-blurple-hover: #6388f5;
 $light-blurple: #eef1ff;
+$lightest-blurple: #f6f5ff;
 $gray-blurple: #bac1da;
 $black-blurple: #717db0;
 $notify-red: #fd8c9a;
@@ -40,9 +42,161 @@ $purple-rain: #4e35c2;
 
 // to organise
 
+// topbat dropdowns
+
+h3.dropdown-header {
+  color: $base-blurple;
+  margin-top: 5px;
+  margin-bottom: 0px !important;
+  pointer-events: none;
+}
+
+h6.dropdown-header {
+  color: $black-blurple;
+  margin-top: -10px;
+  margin-bottom: 10px;
+  pointer-events: none;
+}
+
+.dropdown-divider {
+  margin-left: -10px;
+  margin-right: -10px;
+  border-color: #eef1ff;
+}
+
+a.dropdown-item {
+  font-family: 'sofia-regular';
+  color: $base-blurple !important;
+  font-size: 10pt;
+  padding: 10px;
+  padding-top: 7px;
+  padding-bottom: 6px;
+  border-radius: 0.2rem;
+}
+
+#pro .sub-line {
+	color: $gray-blurple !important;
+}
+
+// topbar Profile
+
+.nav-item {
+	background: $lightest-blurple;
+}
+
+.nav-profile h4 {
+  font-family: 'sofia-medium' !important;
+	font-size: 12pt !important;
+	margin-top: -3px;
+  color: $base-blurple;
+	padding-left: 0px;
+	padding-right: 0px;
+
+  text-align: center;
+}
+
+// upload-popover
+
+.upload-popover {
+	position: fixed;
+	padding: 20px;
+	margin: 20px;
+	right: 0px;
+	bottom: 0px;
+	min-width: 280px;
+	border: 1px solid $light-blurple;
+	border-radius: 0.6rem;
+}
+
+.upload-popover .header {
+
+	padding: 18px 5px 10px 5px;
+	margin: -20px -20px 10px -20px;
+
+}
+
+.progress-container .body h3 {
+	color: $gray-blurple;
+	margin-bottom: 10px;
+	margin-top: 10px;
+}
+
+.success .body h3 {
+	color: $base-blurple;
+	margin-bottom: 10px;
+	margin-top: 20px;
+	cursor: pointer;
+
+}
+
+.success .body a:hover {
+	text-decoration: underline;
+	text-decoration-color: $base-blurple;
+}
+
+
+
+.upload-popover h5 {
+
+	color: $base-blurple;
+}
+
+.hide-upload {
+	margin-top: -5px;
+}
+
+.progress.row {
+	background: $light-blurple;
+}
+
+.progress.row, .upload-popover .progress-bar {
+	height: 6px;
+
+}
+
+//
+
 :focus {
 	 outline: none;
 	 border: 0;
+}
+
+.alert-buttons {
+	width: fit-content;
+}
+
+#pro .btn-yes {
+	margin-left: 10px;
+}
+
+#pro .modal-dialog.custom-alert {
+	margin: auto;
+	margin-top: 76px;
+}
+
+#pro .modal-header {
+	padding-bottom: 0px;
+	border-bottom: 0px;
+}
+
+#pro .modal-header .modal-title {
+	color: $gray-blurple;
+}
+
+#pro .text-confirm {
+	color: $black-blurple;
+	margin-bottom: 1rem;
+}
+
+.nav-link .more {
+	margin-right: -7px;
+}
+
+.activeTrack h3 {
+	overflow: hidden;
+	white-space: nowrap;
+	max-width: 100%;
+	text-overflow: ellipsis;
 }
 
 .pro-nav {
@@ -50,15 +204,57 @@ $purple-rain: #4e35c2;
 	margin-right: 10px;
 }
 
-.shadow-pro-box.nav-item {
-	border: 1px solid $light-blurple;
-	margin-left: 15px;
-	height: 38px;
-	width: 38px;
+#pro .nav-item.cta {
+	background: $base-blurple;
+	cursor: pointer;
+
 }
 
-.shadow-pro-box.nav-item.search {
+#pro .nav-item.cta:hover {
+	background: $base-blurple-hover;
+}
+
+.nav-item.dropdown {
+	background: $lightest-blurple;
+	border: 1px solid $light-blurple;
+}
+
+#pro .nav-link {
+	padding-top: 6px;
+}
+
+.nav-item {
+	margin-left: 10px;
+	height: 29px;
+	width: 29px;
+}
+
+.nav-item.search {
+	width: 29px;
+	cursor: pointer;
+}
+
+.nav-item.search:focus, .nav-item.search:active, .nav-item.search:focus-within {
 	width: 200px;
+}
+
+.nav-item.search:focus-within > .sub-form {
+	padding-left: 26px;
+	opacity: 1;
+}
+
+.search-icon {
+	position: relative;
+	pointer-events: none;
+	margin-right: -32px;
+	margin-left: 16px;
+	margin-top: 4px;
+}
+
+.nav-item .sub-form {
+	background: $lightest-blurple;
+opacity: 0;
+	cursor: pointer;
 }
 
 .ng-select.version-control {
@@ -1695,9 +1891,9 @@ button:visited {
 	-moz-box-shadow: 0 0px 30px rgba(115, 150, 255, .35) !important;
 }
 .shadow-pro-box {
-	box-shadow: 0 0px 10px rgba(115, 150, 255, .35) !important;
-	-webkit-box-shadow: 0 0px 10px rgba(115, 150, 255, .35) !important;
-	-moz-box-shadow: 0 0px 10px rgba(115, 150, 255, .35) !important;
+	box-shadow: 0 0px 20px rgba(115, 150, 255, .2) !important;
+	-webkit-box-shadow: 0 0px 20px rgba(115, 150, 255, .2) !important;
+	-moz-box-shadow: 0 0px 20px rgba(115, 150, 255, .2) !important;
 }
 #sm .rounded-lg {
   &, .sma-content {

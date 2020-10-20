@@ -1,23 +1,28 @@
-<div *ngIf="message" class="modal" tabindex="-1" role="dialog" style="display:block!important">
+<div *ngIf="message" id="pro" class="modal" tabindex="-1" role="dialog" style="display:block!important">
   <div class="modal-dialog custom-alert" role="document">
     <div class="modal-content">
+
+      <div class="modal-header">
+        <h5 class="modal-title">Oops..</h5>
+
+      </div>
 
       <div *ngIf="message?.type == 'confirm'" class="modal-body">
         <div class="row">
           <div class="col-md-12">
-            <p class="text-center confirm-message">{{message.text}}</p>
+            <p class="text-left text-confirm">{{message.text}}</p>
           </div>
         </div>
         <div class="row">
           <div class="col-md-12">
-            <p class="confirm-button">
+            <div class="ml-auto alert-buttons">
               <a (click)="message.noFn()">
-                <button class="btn btn-no">Undo</button>
+                <button class="btn btn-sm btn-outline-form btn-no">Undo</button>
               </a>
               <a (click)="message.siFn()">
-                <button class="btn btn-yes">Yes</button>
+                <button class="btn btn-sm btn-primary btn-yes">Yes</button>
               </a>
-            </p>
+            </div>
           </div>
         </div>
       </div>

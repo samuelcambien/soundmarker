@@ -62,7 +62,7 @@
         <ng-container *ngTemplateOutlet="playbutton"></ng-container>
       </span>
 
-      <div *ngIf="activeTrack">
+      <div *ngIf="activeTrack" class="activeTrack">
         <a href=""><h3>{{activeTrack.title}} · V3</h3></a>
         <p>{{player.getCurrentTime() | timeFormat}} / {{player.getDuration() | timeFormat}}</p>
       </div>
