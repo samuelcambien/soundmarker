@@ -40,8 +40,8 @@ export class ProUploadPageComponent implements OnInit {
   project_id;
   smUploader;
 
-  @ViewChild('waveform') waveform: ElementRef;
-  @ViewChild('myForm', { read: NgForm }) myForm: any;
+  @ViewChild('waveform',  {static: false}) waveform: ElementRef;
+  @ViewChild('myForm', {static: false, read: NgForm }) myForm: any;
 
   constructor(private uploader: Uploader,
   private localStorageService: LocalStorageService,
@@ -108,7 +108,7 @@ export class ProUploadPageComponent implements OnInit {
   validators = [Validators.required, Validators.pattern('^\\w+([\\.-]?\\w+)*@\\w+([\\.-]?\\w+)*(\\.\\w{2,3})+$')];
   player;
 
-  @ViewChild('ngForm') public userFrm: NgForm;
+  @ViewChild('ngForm', {static: false}) public userFrm: NgForm;
   @Input() tryAgain: EventEmitter<any>;
 
   // @Output() link = new EventEmitter<string>();
@@ -116,8 +116,8 @@ export class ProUploadPageComponent implements OnInit {
   @Output() error = new EventEmitter();
   @Output() form = new EventEmitter();
 
-  @ViewChild('notes_element') notes_element: ElementRef;
-  @ViewChild('ft') files_tooltip: NgbTooltip;
+  @ViewChild('notes_element', {static: false}) notes_element: ElementRef;
+  @ViewChild('ft', {static: false}) files_tooltip: NgbTooltip;
 
   async onSubmit() {
     this.uploader.newFileUploader();

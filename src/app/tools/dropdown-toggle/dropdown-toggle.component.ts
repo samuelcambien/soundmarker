@@ -7,7 +7,7 @@ import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 })
 export class DropdownToggleComponent implements OnInit {
 
-  @ViewChild('toggle') toggle: ElementRef;
+  @ViewChild('toggle', {static: false}) toggle: ElementRef;
 
   constructor() { }
 

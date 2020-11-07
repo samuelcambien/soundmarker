@@ -6,7 +6,7 @@ import {DeviceDetectorModule} from 'ngx-device-detector';
 import {FormsModule} from '@angular/forms';
 import {NgSelectModule} from '@ng-select/ng-select';
 import {ReactiveFormsModule} from '@angular/forms';
-import {TagInputModule} from '../tools/ngx-chips/modules';
+import {TagInputModule} from '../tools/ngx-chips/esm5';
 import {TrimValueAccessorModule} from 'ng-trim-value-accessor';
 import {NgbActiveModal, NgbModule} from '@ng-bootstrap/ng-bootstrap';
 
@@ -41,7 +41,7 @@ import {LoadingComponent} from "../loading/loading.component";
     CommonModule,
     DeviceDetectorModule.forRoot(),
     FormsModule,
-    NgbModule.forRoot(),
+    NgbModule,
     NgSelectModule,
     ReactiveFormsModule,
     LoadableComponentModule.forFeature(),

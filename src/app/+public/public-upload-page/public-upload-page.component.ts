@@ -70,7 +70,7 @@ export class PublicUploadPageComponent implements OnInit {
   queueSizeRemaining: number; // 2000000000 2 000 000 000
   queueSizeRemainingString:  string = "2 GB";
 
-  @ViewChild('waveform') waveform: ElementRef;
+  @ViewChild('waveform', {static: false}) waveform: ElementRef;
 
   constructor() {
   }

@@ -32,8 +32,8 @@ export class PublicPageComponent implements OnInit {
 
   @Output() tryAgain = new EventEmitter();
 
-  @ViewChild('content') content: ElementRef;
-  @ViewChild('header') header: ElementRef;
+  @ViewChild('content', {static: true}) content: ElementRef;
+  @ViewChild('header', {static: true}) header: ElementRef;
 
   SMA_COMPONENT_ID: string = LoadableComponentIds.SMA;
 

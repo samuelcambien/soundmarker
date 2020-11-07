@@ -11,7 +11,7 @@ import {StateService} from '../../../services/state.service';
 })
 export class ProUploadStartComponent implements OnInit, OnDestroy {
 
-  @ViewChild('fileinputhidden') fileinput: ElementRef;
+  @ViewChild('fileinputhidden', {static: false}) fileinput: ElementRef;
   newTrackId;
   subscription;
 

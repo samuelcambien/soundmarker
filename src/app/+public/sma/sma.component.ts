@@ -12,7 +12,7 @@ import {Utils} from '../../app.component';
 })
 export class SmaComponent implements OnInit {
 
-  @ViewChild('sma') sma: ElementRef;
+  @ViewChild('sma', {static: true}) sma: ElementRef;
   // @ViewChild('content') content: ElementRef;
 
   @Output() scroll: EventEmitter<number> = new EventEmitter<number>();

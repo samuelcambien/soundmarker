@@ -22,7 +22,7 @@ const routes: Routes = [
   imports: [
     CommonModule,
     RouterModule.forChild(routes),
-    DragAndDropModule.forRoot(),
+    DragAndDropModule,
     FileUploadModule,
     SharedModule
   ],

@@ -72,14 +72,14 @@ export class PublicTrackPlayerComponent implements OnInit, OnChanges {
   @Output() error = new EventEmitter();
   @Output() overview = new EventEmitter();
 
-  @ViewChild('waveform') waveform: ElementRef;
-  @ViewChild('startTime') startTime: ElementRef;
-  @ViewChild('endTime') endTime: ElementRef;
-  @ViewChild('phoneSearchInput') phoneSearchInput: ElementRef;
-  @ViewChild('phonesearch') phonesearch: ElementRef;
-  @ViewChild('trackTitle') trackTitleDOM: ElementRef;
-  @ViewChild('markerPopover') markerPopover: NgbPopover;
-  @ViewChild('appwaveform') appwaveform: WaveformComponent;
+  @ViewChild('waveform', {static: false}) waveform: ElementRef;
+  @ViewChild('startTime', {static: false}) startTime: ElementRef;
+  @ViewChild('endTime', {static: false}) endTime: ElementRef;
+  @ViewChild('phoneSearchInput', {static: false}) phoneSearchInput: ElementRef;
+  @ViewChild('phonesearch', {static: false}) phonesearch: ElementRef;
+  @ViewChild('trackTitle', {static: false}) trackTitleDOM: ElementRef;
+  @ViewChild('markerPopover', {static: false}) markerPopover: NgbPopover;
+  @ViewChild('appwaveform', {static: false}) appwaveform: WaveformComponent;
 
   commentSorters: CommentSorter[] = [
     CommentSorter.MOST_RECENT,

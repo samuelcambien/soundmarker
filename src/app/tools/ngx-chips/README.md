@@ -11,7 +11,7 @@ Check out [the live demo](https://angular-mfppay.stackblitz.io/).
 
 ## Getting Started
 
-    npm install ngx-chips --save // OR
+    npm i ngx-chips // OR
     yarn add ngx-chips
 
 **Notice**: the latest version on NPM may not reflect the branch `master`. Open an issue and tag me if you need it to be published.
@@ -323,7 +323,7 @@ TagInputDropdownComponent is a proxy between `ngx-chips` and `ng2-material-dropd
 **`autocompleteObservable`** - [**`(text: string) => Observable<Response>`**]
 
 A function that takes a string (current input value) and returns an Observable (ex. `http.get()`) with an array of items wit the same structure as `autocompleteItems` (see below). Make sure you retain the scope of your class or function when using this property.
-It can be used to popuplate the autocomplete with items coming from an async request.
+It can be used to populate the autocomplete with items coming from an async request.
 
 
 **`showDropdownIfEmpty`** - [**`?boolean`**]

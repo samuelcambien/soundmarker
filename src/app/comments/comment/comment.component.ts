@@ -47,7 +47,7 @@ export class CommentComponent implements OnInit{
   ngOnInit() {
   }
 
-  @ViewChild('replyform') replyform;
+  @ViewChild('replyform', {static: false}) replyform;
 
   createReply() {
     this.reply = new Comment();

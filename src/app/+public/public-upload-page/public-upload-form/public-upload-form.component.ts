@@ -48,9 +48,9 @@ export class PublicUploadFormComponent implements OnInit {
   @Output() error = new EventEmitter();
   @Output() form = new EventEmitter();
 
-  @ViewChild('notes_element') notes_element: ElementRef;
-  @ViewChild('ngbPopover') ngbPopover: NgbPopover;
-  @ViewChild('dropZone') dropZone;
+  @ViewChild('notes_element', {static: true}) notes_element: ElementRef;
+  @ViewChild('ngbPopover', {static: true}) ngbPopover: NgbPopover;
+  @ViewChild('dropZone', {static: true}) dropZone;
 
   async onSubmit() {
     this.uploading.emit();

@@ -14,7 +14,7 @@ export class ReplyFormComponent implements OnInit {
   @Output() cancel = new EventEmitter();
   @Output() newReply = new EventEmitter<Comment>();
 
-  @ViewChild('replytext') replytext;
+  @ViewChild('replytext', {static: false}) replytext;
   constructor() {
   }
 

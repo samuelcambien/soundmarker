@@ -5,7 +5,7 @@ import {PublicPagenotfoundPageComponent} from "./+public/public-pagenotfound-pag
 const appRoutes: Routes = [
   {
     path: 'project',
-    loadChildren: './modules/project.module#ProjectModule'
+    loadChildren: () => import('./modules/project.module').then(m => m.ProjectModule)
   },
   {
     path: "pro",
@@ -13,7 +13,7 @@ const appRoutes: Routes = [
   },
   {
     path: '',
-    loadChildren: './modules/home.module#HomeModule'
+    loadChildren: () => import('./modules/home.module').then(m => m.HomeModule)
   },
   {
     path: '**',

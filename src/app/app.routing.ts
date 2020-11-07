@@ -17,17 +17,17 @@ const appRoutes: Routes = [
   },
   {
     path: 'project',
-    loadChildren: './modules/project.module#ProjectModule',
+    loadChildren: () => import('./modules/project.module').then(m => m.ProjectModule),
     data: { preload: false }
   },
   {
     path: 'pro',
-    loadChildren: './+pro/pro.module#ProModule',
+    loadChildren: () => import('./+pro/pro.module').then(m => m.ProModule),
     canActivate: [AuthGuard],
   },
   {
     path: '',
-    loadChildren: './modules/home.module#HomeModule',
+    loadChildren: () => import('./modules/home.module').then(m => m.HomeModule),
     data: { preload: false }
   },
   {
