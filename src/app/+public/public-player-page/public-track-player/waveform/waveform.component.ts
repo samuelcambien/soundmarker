@@ -25,7 +25,7 @@ export class WaveformComponent implements OnInit {
 
   @Output() seek = new EventEmitter();
 
-  @ViewChild('waveform', {static: false}) waveform;
+  @ViewChild('waveform', {static: true}) waveform;
 
   private drawer: Drawer;
 

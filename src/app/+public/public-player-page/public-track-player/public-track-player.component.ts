@@ -1,4 +1,6 @@
 import {
+  AfterContentInit,
+  AfterViewInit,
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
@@ -54,7 +56,7 @@ import {Router} from '@angular/router';
   ],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class PublicTrackPlayerComponent implements OnInit, OnChanges {
+export class PublicTrackPlayerComponent implements OnInit, OnChanges, AfterContentInit {
 
   static MINIMAL_INTERVAL: number = 1;
 
@@ -77,7 +79,7 @@ export class PublicTrackPlayerComponent implements OnInit, OnChanges {
   @ViewChild('endTime', {static: false}) endTime: ElementRef;
   @ViewChild('phoneSearchInput', {static: false}) phoneSearchInput: ElementRef;
   @ViewChild('phonesearch', {static: false}) phonesearch: ElementRef;
-  @ViewChild('trackTitle', {static: false}) trackTitleDOM: ElementRef;
+  @ViewChild('trackTitle', {static: true}) trackTitleDOM: ElementRef;
   @ViewChild('markerPopover', {static: false}) markerPopover: NgbPopover;
   @ViewChild('appwaveform', {static: false}) appwaveform: WaveformComponent;
 
@@ -151,11 +153,13 @@ export class PublicTrackPlayerComponent implements OnInit, OnChanges {
     this.waveformInViewPortObservable.pipe(distinctUntilChanged()).subscribe(() => {
       this.cdr.detectChanges();
     });
-    setTimeout(() => this.cdr.detectChanges(), 50);
-    this.markerPopover.open();
     if (this.trackActivated) {
       setTimeout(() => document.addEventListener("click", ($event) => this.markerPopoverClose($event), false), 500);
     }
+  }
+
+  ngAfterContentInit(){
+    this.markerPopover.open();
   }
 
   selectVersion() {

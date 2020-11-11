@@ -37,7 +37,7 @@ export class PublicTrackPreviewComponent implements OnInit {
   @Input() expired: boolean;
   @Output() selected = new EventEmitter<Track>();
 
-  @ViewChild('trackTitle', {static: false}) trackTitleDOM: ElementRef;
+  @ViewChild('trackTitle', {static:true}) trackTitleDOM: ElementRef;
 
   version: Version;
   private files: File[];
