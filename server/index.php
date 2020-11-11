@@ -514,12 +514,13 @@ Flight::route('GET /project/get/@project_hash', function($project_hash) {
 
 $config = Flight::get("config");
 $db = Flight::db();
-$sql = "SELECT project_id, active, expiration_date, user_id, password, stream_type FROM Project WHERE hash = '$project_hash'";
+$sql = "SELECT project_id, title, active, expiration_date, user_id, password, stream_type FROM Project WHERE hash = '$project_hash'";
 $response = $db->query($sql)->fetchAll(PDO::FETCH_ASSOC);
 
 // check if project hash was valid
 if ($response) {
   $project_id = $response[0]["project_id"];
+  $title = $response[0]["title"];
   $active = $response[0]["active"];
   $expiration_date = $response[0]["expiration_date"];
   $user_id = $response[0]["user_id"];
@@ -579,7 +580,7 @@ if ($response) {
 
     // return ok
     Flight::json(array(
-       'project_id' => $project_id, 'status' => $status, 'expiration' => $expiration_date, 'stream_type' => $project_stream_type, 'sender' => $emailaddress, 'tracks' => $tracks
+       'project_id' => $project_id, 'title' => $title, 'status' => $status, 'expiration' => $expiration_date, 'stream_type' => $project_stream_type, 'sender' => $emailaddress, 'tracks' => $tracks
     ), 200);
   }
 } else {

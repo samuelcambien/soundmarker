@@ -8,4 +8,5 @@ export class Project {
   tracks: Track[];
   expiration: string;
   sender: string;
+  title: string;
 }

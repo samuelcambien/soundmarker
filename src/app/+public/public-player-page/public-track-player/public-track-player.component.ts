@@ -31,6 +31,7 @@ import {Message} from '../../../message';
 import {Utils} from '../../../app.component';
 import {NgbPopover} from '@ng-bootstrap/ng-bootstrap';
 import {Router} from '@angular/router';
+import {NgDynamicBreadcrumbService} from 'ng-dynamic-breadcrumb';
 
 @Component({
   selector: 'public-track-player',
@@ -116,17 +117,18 @@ export class PublicTrackPlayerComponent implements OnInit, OnChanges, AfterConte
     private player: Player,
     private drawerService: DrawerService,
     private cdr: ChangeDetectorRef,
+    private ngDynamicBreadcrumbService: NgDynamicBreadcrumbService
   ) {
+
     document.addEventListener('scroll', () => {
       try {
         let bounding = this.waveform.nativeElement.getBoundingClientRect();
         if (bounding.y != 0) {
-          let scrollPane = this.waveform.nativeElement.closest(".comments-scrolltainer");
+          let scrollPane = this.waveform.nativeElement.closest('.comments-scrolltainer');
           this.waveformInViewPort = bounding.top + bounding.height / 2 > scrollPane.getBoundingClientRect().top;
-          this.waveformInViewPortObservable.next(this.waveformInViewPort)
+          this.waveformInViewPortObservable.next(this.waveformInViewPort);
         }
-      }
-      catch (e) {
+      } catch (e) {
         this.waveformInViewPort = true;
       }
     }, true);
@@ -156,6 +158,8 @@ export class PublicTrackPlayerComponent implements OnInit, OnChanges, AfterConte
     if (this.trackActivated) {
       setTimeout(() => document.addEventListener("click", ($event) => this.markerPopoverClose($event), false), 500);
     }
+    const breadcrumb =  {trackTitle: this.track.title};
+    this.ngDynamicBreadcrumbService.updateBreadcrumbLabels(breadcrumb);
   }
 
   ngAfterContentInit(){

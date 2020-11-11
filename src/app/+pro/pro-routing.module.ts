@@ -34,11 +34,11 @@ import {ProBoardProjectsComponent} from './projects/pro-board-projects.component
             path: 'projects',
             component: ProBoardProjectsComponent,
             data:{
-              title:"Projects",
+              title:'Projects',
               breadcrumb:[
                 {
                   label: 'Projects',
-                  url: ''
+                  url: 'projects'
                 }
               ]
             }
@@ -48,6 +48,19 @@ import {ProBoardProjectsComponent} from './projects/pro-board-projects.component
             component: ProProjectComponent,
             resolve: {
               project: ProjectResolver,
+            },
+            data: {
+              title: 'Project 1',
+              breadcrumb: [
+                {
+                  label: 'Project',
+                  url: 'projects'
+                },
+                {
+                  label: '{{projectTitle}}',
+                  url: 'project/:project_hash'
+                },
+              ]
             },
           },
           {
@@ -60,6 +73,23 @@ import {ProBoardProjectsComponent} from './projects/pro-board-projects.component
             resolve: {
               project: ProjectResolver,
               track: TrackResolver,
+            },
+            data: {
+              title: 'PROJECT',
+              breadcrumb: [
+                {
+                  label: 'Projects',
+                  url: 'projects'
+                },
+                {
+                  label: '{{projectTitle}}',
+                  url: 'project/:project_hash'
+                },
+                {
+                  label: '{{trackTitle}}',
+                  url: 'project/:project_hash/track/:id'
+                },
+              ]
             },
           },
           {
