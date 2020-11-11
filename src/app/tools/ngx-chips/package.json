@@ -1,63 +1,34 @@
 {
-  "$schema": "./node_modules/ng-packagr/package.schema.json",
-  "_from": "ngx-chips@2.1",
-  "_id": "ngx-chips@2.1.0",
-  "_inBundle": false,
-  "_integrity": "sha512-OQV4dTfD3nXm5d2mGKUSgwOtJOaMnZ4F+lwXOtd7DWRSUne0JQWwoZNHdOpuS6saBGhqCPDAwq6KxdR5XSgZUQ==",
-  "_location": "/ngx-chips",
-  "_phantomChildren": {},
-  "_requested": {
-    "type": "range",
-    "registry": true,
-    "raw": "ngx-chips@2.1",
-    "name": "ngx-chips",
-    "escapedName": "ngx-chips",
-    "rawSpec": "2.1",
-    "saveSpec": null,
-    "fetchSpec": "2.1"
+  "name": "ngx-chips",
+  "version": "2.0.2",
+  "description": "Tag Input component for Angular",
+  "scripts": {
+    "release": "npm run build && npm publish dist",
+    "postrelease": "rm -rf dist",
+    "build": "ng-packagr -p package.json && mkdirp ./dist/dist && ncp ./modules/core/styles ./dist/core/styles && ncp ./dist/bundles/ngx-chips.umd.js ./dist/dist/ngx-chips.bundle.js",
+    "server": "ng serve --port 3010",
+    "start": "npm run server",
+    "test": "ng test modules --browsers=ChromeHeadless --watch=false",
+    "codecov": "ng test modules --code-coverage --browsers=ChromeHeadless --watch=false"
   },
-  "_requiredBy": [
-    "#USER",
-    "/"
-  ],
-  "_resolved": "https://registry.npmjs.org/ngx-chips/-/ngx-chips-2.1.0.tgz",
-  "_shasum": "aa299bcf40dc3e1f6288bf1d29e2fdfe9a132ed3",
-  "_spec": "ngx-chips@2.1",
-  "_where": "/Users/dieterboels/Documents/SoundmarkerDev/soundmarker",
   "author": {
     "name": "Giancarlo Buomprisco",
     "email": "giancarlopsk@gmail.com"
   },
-  "bit": {
-    "env": {
-      "compiler": "bit.envs/compilers/angular@0.2.0"
-    },
-    "componentsDefaultDirectory": "components/{name}",
-    "packageManager": "npm"
-  },
-  "bugs": {
-    "url": "https://github.com/Gbuomprisco/ngx-chips/issues"
-  },
-  "bundleDependencies": false,
   "contributors": [],
-  "dependencies": {
-    "ng2-material-dropdown": "0.11.0",
-    "tslib": "^1.9.0"
-  },
-  "deprecated": false,
-  "description": "Tag Input component for Angular",
+  "license": "MIT",
   "devDependencies": {
-    "@angular-devkit/build-angular": "~0.803.9",
-    "@angular/animations": "^8.2.11",
-    "@angular/cli": "^8.2.11",
-    "@angular/common": "^8.2.11",
-    "@angular/compiler": "^8.2.11",
-    "@angular/compiler-cli": "^8.2.11",
-    "@angular/core": "^8.2.11",
-    "@angular/forms": "^8.2.11",
-    "@angular/language-service": "~8.2.11",
-    "@angular/platform-browser": "^8.2.11",
-    "@angular/platform-browser-dynamic": "^8.2.11",
+    "@angular-devkit/build-angular": "~0.800.0",
+    "@angular/animations": "^8.0.0",
+    "@angular/cli": "^8.0.0",
+    "@angular/common": "^8.0.0",
+    "@angular/compiler": "^8.0.0",
+    "@angular/compiler-cli": "^8.0.0",
+    "@angular/core": "^8.0.0",
+    "@angular/forms": "^8.0.0",
+    "@angular/language-service": "~8.0.0",
+    "@angular/platform-browser": "^8.0.0",
+    "@angular/platform-browser-dynamic": "^8.0.0",
     "@types/jasmine": "~3.3.8",
     "@types/jasminewd2": "~2.0.3",
     "@types/node": "~8.9.4",
@@ -74,15 +45,19 @@
     "protractor": "~5.4.0",
     "rxjs": "~6.4.0",
     "tslint": "^5.17.0",
-    "typescript": "^3.5.2",
+    "typescript": "3.4.5",
     "zone.js": "~0.9.1"
   },
-  "es2015": "fesm2015/ngx-chips.js",
-  "esm2015": "esm2015/ngx-chips.js",
-  "esm5": "esm5/ngx-chips.js",
-  "fesm2015": "fesm2015/ngx-chips.js",
-  "fesm5": "fesm5/ngx-chips.js",
-  "homepage": "https://github.com/Gbuomprisco/ngx-chips",
+  "dependencies": {
+    "ng2-material-dropdown": "0.10.1"
+  },
+  "peerDependencies": {
+    "@angular/animations": "^8.0.0",
+    "@angular/common": "^8.0.0",
+    "@angular/core": "^8.0.0",
+    "@angular/forms": "^8.0.0",
+    "rxjs": "~6.4.0"
+  },
   "keywords": [
     "angular tag input",
     "tag input component",
@@ -90,22 +65,25 @@
     "angular chips component",
     "material chips"
   ],
-  "license": "MIT",
-  "main": "bundles/ngx-chips.umd.js",
-  "metadata": "ngx-chips.metadata.json",
-  "module": "fesm5/ngx-chips.js",
-  "name": "ngx-chips",
-  "peerDependencies": {
-    "@angular/animations": "^8.0.0",
-    "@angular/common": "^8.0.0",
-    "@angular/core": "^8.0.0",
-    "@angular/forms": "^8.0.0"
-  },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Gbuomprisco/ngx-chips.git"
+    "url": "https://github.com/Gbuomprisco/ngx-chips"
   },
-  "sideEffects": false,
-  "typings": "ngx-chips.d.ts",
-  "version": "2.1.0"
+  "bugs": {
+    "url": "https://github.com/Gbuomprisco/ngx-chips/issues"
+  },
+  "homepage": "https://github.com/Gbuomprisco/ngx-chips",
+  "$schema": "./node_modules/ng-packagr/package.schema.json",
+  "ngPackage": {
+    "$schema": "./node_modules/ng-packagr/ng-package.schema.json",
+    "lib": {
+      "entryFile": "modules/index.ts",
+      "externals": {
+        "ng2-material-dropdown": "ng2-material-dropdown"
+      }
+    },
+    "whitelistedNonPeerDependencies": [
+      "ng2-material-dropdown"
+    ]
+  }
 }
