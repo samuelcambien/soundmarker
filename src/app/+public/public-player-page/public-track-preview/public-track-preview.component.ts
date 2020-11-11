@@ -42,8 +42,6 @@ export class PublicTrackPreviewComponent implements OnInit {
   version: Version;
   private files: File[];
 
-  lalaa = new Track();
-
   constructor(
     private player: Player,
     private cdr: ChangeDetectorRef,

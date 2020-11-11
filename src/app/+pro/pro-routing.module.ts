@@ -33,6 +33,15 @@ import {ProBoardProjectsComponent} from './projects/pro-board-projects.component
           {
             path: 'projects',
             component: ProBoardProjectsComponent,
+            data:{
+              title:"Projects",
+              breadcrumb:[
+                {
+                  label: 'Projects',
+                  url: ''
+                }
+              ]
+            }
           },
           {
             path: 'project/:project_hash',

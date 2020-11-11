@@ -20,6 +20,7 @@ import {Uploader} from '../services/uploader.service';
 import {ConfirmDialogComponent} from '../services/confirmation-dialog/confirmation-dialog.component';
 import {ConfirmDialogService} from '../services/confirmation-dialog/confirmation-dialog.service';
 import {ProUploadPopoverComponent} from './pro-upload-page/pro-upload-popover/pro-upload-popover.component';
+import {NgDynamicBreadcrumbModule} from 'ng-dynamic-breadcrumb';
 
 @NgModule({
   imports: [
@@ -27,7 +28,8 @@ import {ProUploadPopoverComponent} from './pro-upload-page/pro-upload-popover/pr
     SharedModule,
     ProRoutingModule,
     ProjectModule,
-    FileUploadModule
+    FileUploadModule,
+    NgDynamicBreadcrumbModule
   ],
   declarations: [
     ConfirmDialogComponent,
