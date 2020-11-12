@@ -42,6 +42,40 @@ $purple-rain: #4e35c2;
 
 // to organise
 
+// breadcrumbs
+
+
+
+ul.custom-bread-crumb {
+  padding: 0px !important;
+  margin: 0px !important;
+  height: 32px;
+}
+
+ul.custom-bread-crumb li {
+  color: $base-blurple !important;
+  font-size: 10pt !important;
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+ul.custom-bread-crumb li a {
+  color: $base-blurple !important;
+}
+
+ul.custom-bread-crumb li a:last-child {
+  color: $gray-blurple !important;
+  pointer-events: none;
+  text-decoration: none;
+}
+
+ul.custom-bread-crumb li .line {
+  color: $gray-blurple;
+}
+
+
 // topbat dropdowns
 
 h3.dropdown-header {

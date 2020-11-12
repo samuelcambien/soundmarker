@@ -4,7 +4,7 @@
     <app-pro-topbar [upload]="eventLoadingTopbar.asObservable()" (popover)="openPopover()"></app-pro-topbar>
     <div class="w-100 h-100 pro-full-container">
       <div class="content w-100 h-100 p-20 d-flex">
-        <app-ng-dynamic-breadcrumb [bgColor]="'#fff'" [fontSize]="'12px'" [fontColor]="'#7397FF'" [lastLinkColor]="'#000'" [symbol]="' / '"></app-ng-dynamic-breadcrumb>
+        
         <router-outlet></router-outlet>
         <app-pro-upload-popover (close)=closePopover() *ngIf="(uploader.isUploading() || uploader.isReady()) && showPopover()" [@fadeAnimation]></app-pro-upload-popover>
       </div>
