@@ -24,10 +24,32 @@ import {ProBoardProjectsComponent} from './projects/pro-board-projects.component
           {
             path: 'dashboard',
             component: ProBoardComponent,
+            data:{
+              title:'Dashboard',
+              breadcrumb:[
+                {
+                  label: 'My Board',
+                  url: 'dashboard'
+                }
+                ]
+            }
           },
           {
             path: 'upload',
             component: ProUploadPageComponent,
+            data:{
+              title:'Upload',
+              breadcrumb:[
+                {
+                  label: 'My Board',
+                  url: 'dashboard'
+                },
+                {
+                  label: 'Upload',
+                  url: 'upload'
+                }
+              ]
+            }
             // canActivate: [UploadGuard]
           },
           {
@@ -36,6 +58,10 @@ import {ProBoardProjectsComponent} from './projects/pro-board-projects.component
             data:{
               title:'Projects',
               breadcrumb:[
+                {
+                  label: 'My Board',
+                  url: 'dashboard'
+                },
                 {
                   label: 'Projects',
                   url: 'projects'
@@ -53,7 +79,11 @@ import {ProBoardProjectsComponent} from './projects/pro-board-projects.component
               title: 'Project 1',
               breadcrumb: [
                 {
-                  label: 'Project',
+                label: 'My Board',
+                url: 'dashboard'
+                },
+                {
+                  label: 'Projects',
                   url: 'projects'
                 },
                 {
@@ -78,6 +108,10 @@ import {ProBoardProjectsComponent} from './projects/pro-board-projects.component
               title: 'PROJECT',
               breadcrumb: [
                 {
+                  label: 'My Board',
+                  url: 'dashboard'
+                },
+                {
                   label: 'Projects',
                   url: 'projects'
                 },
@@ -95,7 +129,20 @@ import {ProBoardProjectsComponent} from './projects/pro-board-projects.component
           {
             path: 'transfers',
             component: ProBoardComponent,
-          },
+            data: {
+              title: 'PROJECT',
+              breadcrumb: [
+                {
+                  label: 'My Board',
+                  url: 'dashboard'
+                },
+                {
+                  label: 'Transfers',
+                  url: 'transfers'
+                },
+              ]
+            }
+          }
         ]
       },
     ])

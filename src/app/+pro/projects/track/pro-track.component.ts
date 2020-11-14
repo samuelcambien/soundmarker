@@ -6,6 +6,7 @@ import {RestCall} from "../../../rest/rest-call";
 import {AudioSource} from "../../../player/player.service";
 import {StateService} from '../../../services/state.service';
 import {ProjectService} from '../../../services/project.service';
+import {NgDynamicBreadcrumbService} from 'ng-dynamic-breadcrumb';
 
 @Component({
   selector: 'app-pro-board-projects-track',
@@ -21,7 +22,8 @@ export class ProTrackComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private stateService: StateService,
-    private projectService: ProjectService
+    private projectService: ProjectService,
+    private ngDynamicBreadcrumbService: NgDynamicBreadcrumbService,
   ) {
 
   }
@@ -34,11 +36,15 @@ export class ProTrackComponent implements OnInit {
         this.track.track_id = this.route.snapshot.params.id;
         this.stateService.setActiveTrack(this.track);
         await this.projectService.loadProjectLI(this.project);
+        const breadcrumb =  {projectTitle: this.project.title};
+        this.ngDynamicBreadcrumbService.updateBreadcrumbLabels(breadcrumb);
       });
     }
     else{
       this.track = this.inputTrack;
       this.project = this.stateService.getActiveProject().getValue();
+      const breadcrumb =  {projectTitle: this.project.title};
+      this.ngDynamicBreadcrumbService.updateBreadcrumbLabels(breadcrumb);
     }
   }
 

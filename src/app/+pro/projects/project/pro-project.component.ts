@@ -24,7 +24,6 @@ export class ProProjectComponent implements OnInit {
 
   ngOnInit(): void {
     this.route.data.subscribe(async data => {
-      console.log(data);
       this.project = await data.project;
       const breadcrumb =  {projectTitle: this.project.title};
       this.ngDynamicBreadcrumbService.updateBreadcrumbLabels(breadcrumb);

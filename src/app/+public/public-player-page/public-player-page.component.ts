@@ -38,7 +38,7 @@ export class PublicPlayerPageComponent implements OnInit {
     private projectService: ProjectService,
     private drawerService: DrawerService,
     private stateService: StateService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
   ) {
     this.playerService.started.subscribe(() => this.cdr.detectChanges());
     this.playerService.paused.subscribe(() => this.cdr.detectChanges());
