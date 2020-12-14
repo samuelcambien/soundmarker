@@ -134,9 +134,9 @@ export class PublicTrackPlayerComponent implements OnInit, OnChanges, AfterConte
     }, true);
   }
 
-  markerPopoverClose($event){
+  markerPopoverClose() {
     this.markerPopover.close();
-    document.removeEventListener("click", ($event)=> this.markerPopoverClose($event))
+    document.removeEventListener("click", () => this.markerPopoverClose())
   }
 
   ngOnInit(): void {
@@ -156,13 +156,13 @@ export class PublicTrackPlayerComponent implements OnInit, OnChanges, AfterConte
       this.cdr.detectChanges();
     });
     if (this.trackActivated) {
-      setTimeout(() => document.addEventListener("click", ($event) => this.markerPopoverClose($event), false), 500);
+      setTimeout(() => document.addEventListener("click", ($event) => this.markerPopoverClose(), false), 500);
     }
-    const breadcrumb =  {trackTitle: this.track.title};
+    const breadcrumb = {trackTitle: this.track.title};
     this.ngDynamicBreadcrumbService.updateBreadcrumbLabels(breadcrumb);
   }
 
-  ngAfterContentInit(){
+  ngAfterContentInit() {
     this.markerPopover.open();
   }
 
@@ -176,7 +176,7 @@ export class PublicTrackPlayerComponent implements OnInit, OnChanges, AfterConte
     this.project.loadFiles(this.version);
   }
 
-  getVersionIndex(version){
+  getVersionIndex(version) {
     return this.track.versions.findIndex(e => e == version);
   }
 
@@ -232,39 +232,6 @@ export class PublicTrackPlayerComponent implements OnInit, OnChanges, AfterConte
     if (commentTime < this.comment.start_time + PublicTrackPlayerComponent.MINIMAL_INTERVAL) return this.comment.start_time + PublicTrackPlayerComponent.MINIMAL_INTERVAL;
     if (commentTime > this.getTrackLength()) return this.getTrackLength();
     return commentTime;
-  }
-
-  getPlaybuttonState(): State {
-    if (this.player.isLoading(this.version)) {
-      return State.loading;
-    } else if (this.isPlaying()) {
-      return State.pause;
-    } else {
-      return State.play;
-    }
-  }
-
-  async clickPlaybutton(state: State) {
-    switch (state) {
-      case State.play:
-        await this.play();
-        break;
-      case State.pause:
-        this.pause();
-        break;
-    }
-  }
-
-  async play() {
-    await this.player.play(this.audioSource);
-  }
-
-  pause() {
-    this.player.pause();
-  }
-
-  isPlaying() {
-    return this.player.version == this.version && this.player.isPlaying();
   }
 
   getMatchingCommentsSorted(): Comment[] {
@@ -377,7 +344,7 @@ export class PublicTrackPlayerComponent implements OnInit, OnChanges, AfterConte
   }
 
   getDateHumanized() {
-    if(this.expiry_date) {
+    if (this.expiry_date) {
       Utils.getDaysDiff(this.expiry_date);
       return Utils.getDateHumanized(this.expiry_date);
     }
@@ -385,7 +352,7 @@ export class PublicTrackPlayerComponent implements OnInit, OnChanges, AfterConte
   }
 
   getDaysToExpired() {
-    if(this.expiry_date) {
+    if (this.expiry_date) {
       return Utils.getDaysDiff(this.expiry_date);
     }
     return null;
@@ -408,15 +375,16 @@ export class PublicTrackPlayerComponent implements OnInit, OnChanges, AfterConte
         this.createNewComment();
         this.cdr.detectChanges();
       })
-      .catch(() =>{
+      .catch(() => {
         this.removeComment(comment);
-        this.cdr.detectChanges();});
+        this.cdr.detectChanges();
+      });
   }
 
-  addNewVersion(){
+  addNewVersion() {
     this.stateService.playerToggled = true;
     this.stateService.setVersionUpload(true);
-    this.router.navigate(["../pro/dashboard"],{queryParams: {origin:'dashboard',  track_id: this.track.track_id}});
+    this.router.navigate(["../pro/dashboard"], {queryParams: {origin: 'dashboard', track_id: this.track.track_id}});
   }
 
   removeComment(comment: Comment) {
@@ -484,14 +452,14 @@ export class PublicTrackPlayerComponent implements OnInit, OnChanges, AfterConte
     if (this.trackActivated) {
       setTimeout(() => this.autoScroll(), this.scrollInitialWait);
     }
-    if(this.markerPopover) {
-      setTimeout(()=> document.addEventListener("click", ($event)=> this.markerPopoverClose($event), false),500);
+    if (this.markerPopover) {
+      setTimeout(() => document.addEventListener("click", ($event) => this.markerPopoverClose(), false), 500);
     }
   }
 
-   private isAdminRoute(route: string): boolean {
-      return /^\/pro(\/|$)/.test(route);
-    }
+  private isAdminRoute(route: string): boolean {
+    return /^\/pro(\/|$)/.test(route);
+  }
 
 
   pauseAutoScroll(event) {
@@ -527,7 +495,8 @@ export class PublicTrackPlayerComponent implements OnInit, OnChanges, AfterConte
         }, 1000 / this.scrollFPS)
       };
       scrollLoop();
-    };
+    }
+    ;
   }
 
   ///////////////////////////////////////////////////////////////////////////////////////////////////

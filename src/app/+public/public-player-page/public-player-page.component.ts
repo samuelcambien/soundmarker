@@ -26,7 +26,6 @@ export class PublicPlayerPageComponent implements OnInit {
   expiry_date;
   project_id: string;
 
-
   error;
 
   message: Message = new Message("", "", false, false);
@@ -49,14 +48,14 @@ export class PublicPlayerPageComponent implements OnInit {
       this.cdr.detectChanges();
       this.projectService.loadProject(params['project_hash'])
         .then(() => {
-          if(this.stateService.getActiveProject().getValue()) {
+          if (this.stateService.getActiveProject().getValue()) {
             this.project = this.stateService.getActiveProject().getValue();
             this.initFields();
 
             if (this.getProject().tracks.length == 1)
               this.stateService.setActiveTrack(this.getProject().tracks[0]);
           }
-          else{
+          else {
             this.exists = false;
             this.message = null;
           }
@@ -80,8 +79,8 @@ export class PublicPlayerPageComponent implements OnInit {
 
   getMessage(project: Project, version: Version): Message {
     let track = "track";
-    if(project.tracks.length >1){
-       track = "tracks";
+    if (project.tracks.length > 1) {
+      track = "tracks";
     }
     return new Message(
       project.tracks.length + " " + track + " added" + (project.email_from ? " by " + project.email_from : ""),

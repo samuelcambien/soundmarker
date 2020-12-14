@@ -185,11 +185,12 @@ $user_id = isset($_SESSION['USER']) ? $_SESSION['USER'] : "";
 $project_title = isset($getbody->project_title) ? $getbody->project_title : "";
 $project_password = isset($getbody->project_password) ? $getbody->project_password : "";
 $stream_type = isset($getbody->stream_type) ? $getbody->stream_type : "";
-$ipaddr = $_SERVER['REMOTE_ADDR'] . " - " . $_SERVER['HTTP_X_FORWARDED_FOR'];
+$REMOTE_ADDR = isset($_SERVER["REMOTE_ADDR"]) ? $_SERVER["REMOTE_ADDR"] : '127.0.0.1';
+$HTTP_X_FORWARDED_FOR = isset($_SERVER['HTTP_X_FORWARDED_FOR']) ? $_SERVER['HTTP_X_FORWARDED_FOR']  : $REMOTE_ADDR;
+$ipaddr = $REMOTE_ADDR . " - " . $HTTP_X_FORWARDED_FOR;
 
 $db = Flight::db();
-$sql = "INSERT INTO Project (user_id, title, password, active, ipaddr, stream_type) VALUES ('$user_id', '$project_title', '$project_password', '1', '$ipaddr', '$stream_type')";
-$result = $db->query($sql);
+$sql = "INSERT INTO Project (user_id, title, password, active, ipaddr, stream_type) VALUES ('$user_id', '$project_title', '$project_password', '1', '$ipaddr', '$stream_type')";$result = $db->query($sql);
 $project_id = $db->lastInsertId();
 
 $uuid = UUID::v4().UUID::v4();

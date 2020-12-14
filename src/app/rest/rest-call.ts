@@ -24,7 +24,6 @@ export class RestCall {
   }
 
 
-
   public static async createNewTrack(project_id, title): Promise<any> {
     return Request.post(Endpoints.TRACK_NEW, {
       project_id: project_id,
@@ -105,7 +104,7 @@ export class RestCall {
   }
 
   public static async getRandSma(id: string): Promise<any> {
-    if(!id)
+    if (!id)
       return Request.getNonCaching(Endpoints.SMA);
     else
       return Request.post(Endpoints.SMA, {sma_id: id});
@@ -134,8 +133,8 @@ export class RestCall {
     return Request.getNonCaching(Endpoints.COMMENTS, [versionId]);
   }
 
-  public static async getProjects():Promise<any>{
-    return Request.getNonCaching(Endpoints.PROJECT_ALL);
+  public static async getProjects(): Promise<any> {
+    return Request.get(Endpoints.PROJECT_ALL);
   }
 
   public static authenticate(email: string, password: string): Promise<any> {

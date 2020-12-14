@@ -3,9 +3,8 @@
   <div class="player-header row">
 
     <play-button
-      [state]="getPlaybuttonState()"
       [disabled]="expired"
-      (clicked)="clickPlaybutton($event)"
+      [audioSource]="audioSource"
     ></play-button>
 
     <div role="button" (click)="trackSelected()" class="show-track-button">

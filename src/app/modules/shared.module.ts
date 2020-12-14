@@ -1,17 +1,12 @@
-//////////////    MODULES     //////////////
-import {Component, NgModule} from '@angular/core';
+import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {ClipboardModule} from 'ngx-clipboard';
 import {DeviceDetectorModule} from 'ngx-device-detector';
-import {FormsModule} from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {NgSelectModule} from '@ng-select/ng-select';
-import {ReactiveFormsModule} from '@angular/forms';
 import {TagInputModule} from '../tools/ngx-chips/modules';
 import {TrimValueAccessorModule} from 'ng-trim-value-accessor';
 import {NgbActiveModal, NgbModule} from '@ng-bootstrap/ng-bootstrap';
-
-
-//////////////    COMPONENTS     //////////////
 import {DropdownToggleComponent} from '../tools/dropdown-toggle/dropdown-toggle.component';
 import {ErrorComponent} from '../error/error.component';
 import {InfoFooterComponent} from '../+public/public-page/public-info/topics/info-footer/info-footer.component';
@@ -21,104 +16,91 @@ import {PublicPagenotfoundPageComponent} from '../+public/public-pagenotfound-pa
 import {PublicInfoHeaderComponent} from '../+public/public-page/public-info/header/public-info-header.component';
 import {PublicIntroductionComponent} from '../+public/public-page/public-info/topics/public-introduction/public-introduction.component';
 import {SubscribeComponent} from '../+public/subscribe/subscribe.component';
-//////////////    DIRECTIVES    //////////////
 import {DraggableDirective} from '../+public/public-player-page/public-track-player/draggable.directive';
 import {DurationDirective} from '../tools/formatting/duration.directive';
 import {TimeFormatDirective} from '../tools/formatting/time-format.directive';
-
-//////////////    PIPES     //////////////
 import {DurationFormatterPipe} from '../tools/formatting/duration-formatter.pipe';
 import {HighlightPipe} from '../tools/formatting/highlight.pipe';
 import {TimeFormatPipe} from '../tools/formatting/time-format.pipe';
-import {RouterModule} from '@angular/router';
 import {LoadableComponentModule} from 'ngx-loadable-component';
 import {LoadingComponent} from "../loading/loading.component";
+import {PlayButtonComponent} from "../player/play-button/play-button.component";
+import {RouterModule} from "@angular/router";
+
+const modules = [
+  ClipboardModule,
+  CommonModule,
+  FormsModule,
+  NgbModule,
+  NgSelectModule,
+  ReactiveFormsModule,
+  RouterModule,
+  TrimValueAccessorModule,
+  TagInputModule,
+];
+
+const rootModules = [
+  DeviceDetectorModule.forRoot(),
+  LoadableComponentModule.forFeature(),
+];
+
+const providers = [
+  NgbActiveModal,
+];
+
+const components = [
+  DropdownToggleComponent,
+  ErrorComponent,
+  InfoFooterComponent,
+  LoadingComponent,
+  PageNotFoundComponent,
+  PublicInfoHeaderComponent,
+  PublicPageComponent,
+  PublicPagenotfoundPageComponent,
+  SubscribeComponent,
+  PlayButtonComponent,
+];
+
+const directives = [
+  DurationDirective,
+  DraggableDirective,
+  TimeFormatDirective,
+];
+
+const pipes = [
+  DurationFormatterPipe,
+  HighlightPipe,
+  TimeFormatPipe,
+];
+
+const entryComponents = [
+  PublicIntroductionComponent,
+  SubscribeComponent,
+];
 
 @NgModule({
-////////////////////////////////////////////////////////  IMPORTS   ////////////////////////////////////////////////////////
   imports: [
-    ClipboardModule,
-    CommonModule,
-    DeviceDetectorModule.forRoot(),
-    FormsModule,
-    NgbModule,
-    NgSelectModule,
-    ReactiveFormsModule,
-    LoadableComponentModule.forFeature(),
-    TrimValueAccessorModule,
-    TagInputModule
+    ...rootModules,
+    ...modules,
   ],
-////////////////////////////////////////////////////////  PROVIDERS   ////////////////////////////////////////////////////////
-// ACCORDING TO https://angular.io/guide/ngmodule-faq#q-why-bad you shouldn't add services providers in shared modules.
   providers: [
-    NgbActiveModal
+    ...providers,
   ],
-//////////////////////////////////////////////////////// DECLARATIONS ////////////////////////////////////////////////////////
   declarations: [
-    //////////////    COMPONENTS  //////////////
-    DropdownToggleComponent,
-    ErrorComponent,
-    InfoFooterComponent,
-    LoadingComponent,
-    PageNotFoundComponent,
-    PublicInfoHeaderComponent,
-    PublicIntroductionComponent,
-    PublicPageComponent,
-    PublicPagenotfoundPageComponent,
-    SubscribeComponent,
-
-    //////////////    DIRECTIVES  //////////////
-    DurationDirective,
-    DraggableDirective,
-    TimeFormatDirective,
-
-    //////////////    PIPES       //////////////
-    DurationFormatterPipe,
-    HighlightPipe,
-    TimeFormatPipe
+    ...components,
+    ...directives,
+    ...pipes,
+    ...entryComponents,
   ],
-////////////////////////////////////////////////////////  EXPORTS   ////////////////////////////////////////////////////////
-  exports:[
-    //////////////    MODULES     //////////////
-    ClipboardModule,
-    FormsModule,
-    NgbModule,
-    DeviceDetectorModule,
-    NgSelectModule,
-    ReactiveFormsModule,
-    LoadableComponentModule,
-    RouterModule,
-    TrimValueAccessorModule,
-    TagInputModule,
-
-    //////////////    COMPONENTS  //////////////
-    DropdownToggleComponent,
-    ErrorComponent,
-    LoadingComponent,
-    PageNotFoundComponent,
-    PublicInfoHeaderComponent,
-    PublicIntroductionComponent,
-    PublicPageComponent,
-    PublicPagenotfoundPageComponent,
-    SubscribeComponent,
-
-    //////////////    DIRECTIVES  //////////////
-    DurationDirective,
-    DraggableDirective,
-    TimeFormatDirective,
-
-    //////////////    PIPES       //////////////
-    DurationFormatterPipe,
-    HighlightPipe,
-    TimeFormatPipe
+  exports: [
+    ...modules,
+    ...components,
+    ...directives,
+    ...pipes,
   ],
-
   entryComponents: [
-    PublicIntroductionComponent,
-    SubscribeComponent
-  ]
+    ...entryComponents,
+  ],
 })
-
-
 export class SharedModule {
 }
