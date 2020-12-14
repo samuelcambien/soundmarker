@@ -33,24 +33,27 @@ import {StateService} from '../../services/state.service';
 export class ProUploadPageComponent implements OnInit {
 
   link: string;
-  user_project_list=[];
-  createNewProject = false;
+  user_project_list = [];
   selected_existing_tracks = [];
   project_tracks_list = [];
   project_id;
   smUploader;
 
-  @ViewChild('waveform',  {static: false}) waveform: ElementRef;
-  @ViewChild('myForm', {static: false, read: NgForm }) myForm: any;
+  get createNewProject() {
+    return !this.project_id;
+  }
+
+  @ViewChild('waveform', {static: false}) waveform: ElementRef;
+  @ViewChild('myForm', {static: false, read: NgForm}) myForm: any;
 
   constructor(private uploader: Uploader,
-  private localStorageService: LocalStorageService,
-  private confirmDialogService: ConfirmDialogService,
-  private projectService: ProjectService,
-  private router: Router,
-  private stateService: StateService,
-  private activatedRoute: ActivatedRoute,
-  private cdr: ChangeDetectorRef) {
+              private localStorageService: LocalStorageService,
+              private confirmDialogService: ConfirmDialogService,
+              private projectService: ProjectService,
+              private router: Router,
+              private stateService: StateService,
+              private activatedRoute: ActivatedRoute,
+              private cdr: ChangeDetectorRef) {
   }
 
   trackId;
@@ -60,17 +63,18 @@ export class ProUploadPageComponent implements OnInit {
     this.uploader.getOpenFileUploader().onAfterAddingAll = (items) => {
       this.uploader.getOpenSMFileUploader().addTitles(items);
     }
-    try{
+    try {
       RestCall.getProjects().then(res => {
         this.user_project_list = res["projects"];
-        if(this.stateService.getVersionUpload().getValue()) {
+        if (this.stateService.getVersionUpload().getValue()) {
           this.trackId = this.activatedRoute.snapshot.queryParams.newTrackId;
           this.project_id = this.stateService.getActiveProject().getValue().project_id;
           this.myForm.controls['existing_projects'].readonly();
           this.getProjectInfo(this.project_id);
-        }})
+        }
+      })
     }
-    catch{
+    catch {
     }
   }
 
@@ -78,35 +82,34 @@ export class ProUploadPageComponent implements OnInit {
     return this.project_tracks_list.filter(e => !this.selected_existing_tracks.includes(e.track_id));
   }
 
-  getProjectInfo(project_id){
-   let project = this.user_project_list.find(x => x.project_id === project_id);
-   RestCall.getProject(project.hash).then(res => {
-     this.project_tracks_list = res["tracks"];
-     this.selected_existing_tracks = [];
-     if (this.trackId) {
-       this.selected_existing_tracks[0] = this.trackId;
-       this.cdr.detectChanges();
-     }
-   })
+  getProjectInfo(project_id) {
+    let project = this.user_project_list.find(x => x.project_id === project_id);
+    RestCall.getProject(project.hash).then(res => {
+      this.project_tracks_list = res["tracks"];
+      this.selected_existing_tracks = [];
+      if (this.trackId) {
+        this.selected_existing_tracks[0] = this.trackId;
+        this.cdr.detectChanges();
+      }
+    })
   }
 
-  addVersion(i, $event){
-   if($event) this.project_tracks_list.find(e => e.track_id == this.selected_existing_tracks[i]).disabled = true;
+  addVersion(i, $event) {
+    if ($event) this.project_tracks_list.find(e => e.track_id == this.selected_existing_tracks[i]).disabled = true;
   }
 
-  removeVersion(i){
+  removeVersion(i) {
     this.project_tracks_list.find(e => e.track_id == this.selected_existing_tracks[i]).disabled = false;
     this.selected_existing_tracks[i] = null;
   }
 
-  getTrackTitle(track_id){
+  getTrackTitle(track_id) {
     return (this.project_tracks_list.find(track => {
       return track.track_id == track_id;
     }).title);
   }
 
   validators = [Validators.required, Validators.pattern('^\\w+([\\.-]?\\w+)*@\\w+([\\.-]?\\w+)*(\\.\\w{2,3})+$')];
-  player;
 
   @ViewChild('ngForm', {static: false}) public userFrm: NgForm;
   @Input() tryAgain: EventEmitter<any>;
@@ -124,7 +127,7 @@ export class ProUploadPageComponent implements OnInit {
     this.router.navigate(["../dashboard"], {relativeTo: this.activatedRoute});
     this.smUploader.setStatus(Status.UPLOADING_SONGS);
     try {
-      if(this.createNewProject){
+      if (this.createNewProject) {
         let stream_type_id = this.smUploader.stream_type ? 0 : 1;
         const projectResponse = await RestCall.createNewProject(this.smUploader.getProjectTitle(), this.smUploader.getSMPPW());
         this.project_id = projectResponse["project_id"];
@@ -145,7 +148,7 @@ export class ProUploadPageComponent implements OnInit {
     const length = 0;
     const file_name = Utils.getName(track._file.name);
     const extension = Utils.getExtension(track._file.name);
-    if(!trackId) {
+    if (!trackId) {
       const trackResponse = await RestCall.createNewTrack(projectId, title);
       trackId = trackResponse["track_id"];
     }
@@ -183,7 +186,7 @@ export class ProUploadPageComponent implements OnInit {
     }
   }
 
-  private removeFromQueue(item, index){
+  private removeFromQueue(item, index) {
     this.smUploader.removeFromQueue(item);
     this.project_tracks_list.find(e => e.track_id === this.selected_existing_tracks[index]).disabled = false;
     this.selected_existing_tracks.splice(index, 1);
@@ -194,19 +197,20 @@ export class ProUploadPageComponent implements OnInit {
   }
 
   cancelUpload(dirty_form, file_nb) {
-    if(dirty_form || file_nb>0){
+    if (dirty_form || file_nb > 0) {
       this.confirmDialogService.confirmThis("There are unsaved changes. Are sure you want to discard this project.", () => {
         this.smUploader.resetSMFileUploader();
         this.stateService.setVersionUpload(false);
         this.router.navigate(["../dashboard"], {relativeTo: this.activatedRoute});
       }, function () {
-      })}
-    else{
+      })
+    }
+    else {
       this.router.navigate(["../dashboard"], {relativeTo: this.activatedRoute});
     }
   }
 
-  getFileSize(file){
+  getFileSize(file) {
     return Utils.getSizeHumanized(file.file.size);
   }
 

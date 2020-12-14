@@ -12,7 +12,7 @@ import {map} from "rxjs/operators";
 export class AuthService {
 
   private currentUserSubject: BehaviorSubject<User>;
-  private currentUser: Observable<User>
+  private currentUser: Observable<User>;
   isAdmin: boolean= false;
 
   constructor(

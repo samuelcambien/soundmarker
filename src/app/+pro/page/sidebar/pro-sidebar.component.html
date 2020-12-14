@@ -1,73 +1,82 @@
 <div class="pro-sidebar object-shadow-black" id="sidebar-wrapper" [class.toggled]="toggled">
+</div>
 
-  <div class="sidebar-bg object-shadow-black">
+<div class="sidebar-bg object-shadow-black">
 
-    <div class="sidebar-scroll-zone">
+  <div class="sidebar-scroll-zone">
 
-      <div class="sidebar-heading">
-        <div class="sidebar-logo">soundmarker</div>
-        <p>Pro · Version 1.0</p>
-      </div>
+    <div class="sidebar-heading">
+      <div class="sidebar-logo">soundmarker</div>
+      <p>Pro · Version 1.0</p>
+    </div>
 
-      <div class="sidebar-box view-button">
-        <div class="sidebar-tab" routerLink="dashboard" (click)="stateService.setVersionUpload(false)">
+    <div class="sidebar-box view-button">
+      <div class="sidebar-tab" routerLink="dashboard" (click)="stateService.setVersionUpload(false)">
 				<span class="projects-tab-icon">
             <ng-container *ngTemplateOutlet="icon_home"></ng-container>
 				</span>
-          <h3>Start</h3>
-        </div>
-        <div class="sidebar-tab" routerLink="projects">
+        <h3>Start</h3>
+      </div>
+      <div class="sidebar-tab" routerLink="projects">
 				<span class="projects-tab-icon">
 					<ng-container *ngTemplateOutlet="icon_projects"></ng-container>
 				</span>
-          <h3>Projects</h3>
-        </div>
-        <div class="sidebar-tab" routerLink="upload">
+        <h3>Projects</h3>
+      </div>
+      <div class="sidebar-tab" routerLink="upload">
 				<span>
 					<ng-container *ngTemplateOutlet="icon_transfers"></ng-container>
 				</span>
-          <h3>Transfers</h3>
-        </div>
+        <h3>Transfers</h3>
       </div>
+    </div>
 
-      <div class="sidebar-box current-projects">
-        <p>Recent projects</p>
-        <div class="sidebar-item">
-          <app-pro-sidebar-item-project></app-pro-sidebar-item-project>
-        </div>
-        <div class="sidebar-item">
-          <app-pro-sidebar-item-project></app-pro-sidebar-item-project>
-        </div>
-        <div class="sidebar-item">
-          <app-pro-sidebar-item-project></app-pro-sidebar-item-project>
-        </div>
+    <div class="sidebar-box current-projects">
+      <p>Recent projects</p>
+      <div class="sidebar-item">
+        <app-pro-sidebar-item-project></app-pro-sidebar-item-project>
       </div>
-
-      <div class="sidebar-box active-transfers">
-        <p>Active transfers</p>
-        <div class="sidebar-item">
-          <app-pro-sidebar-item-transfer></app-pro-sidebar-item-transfer>
-        </div>
-        <div class="sidebar-item">
-          <app-pro-sidebar-item-transfer></app-pro-sidebar-item-transfer>
-        </div>
+      <div class="sidebar-item">
+        <app-pro-sidebar-item-project></app-pro-sidebar-item-project>
       </div>
-
+      <div class="sidebar-item">
+        <app-pro-sidebar-item-project></app-pro-sidebar-item-project>
+      </div>
     </div>
 
     <div class="sidebar-box active-transfers">
+      <p>Active transfers</p>
+      <div class="sidebar-item">
+        <app-pro-sidebar-item-transfer></app-pro-sidebar-item-transfer>
+      </div>
+      <div class="sidebar-item">
+        <app-pro-sidebar-item-transfer></app-pro-sidebar-item-transfer>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="sidebar-box">
     <div class="sidebar-item">
 
-      <span class="sidebar-player-button" (click)="play()">
-        <ng-container *ngTemplateOutlet="playbutton"></ng-container>
-      </span>
+      <div class="sidebar-player-button">
 
-      <div *ngIf="activeTrack" class="activeTrack">
-        <a href=""><h3>{{activeTrack.title}} · V3</h3></a>
+        <play-button
+          [inverse]="true"
+          [disabled]="false"
+          [audioSource]="audioSource"
+        ></play-button>
+
+      </div>
+
+      <div *ngIf="audioSource" class="activeTrack">
+        <a routerLink="{{getRouterLink()}}">
+          <h3>V{{versionIndex}} · {{track.title}}</h3>
+        </a>
         <p>{{player.getCurrentTime() | timeFormat}} / {{player.getDuration() | timeFormat}}</p>
       </div>
 
-  </div>
+    </div>
 
   </div>
 
@@ -119,23 +128,6 @@
             d="M0,6.45556744 L2.29565217,0.851306574 C2.52648493,0.332738464 3.04133371,-0.000994541583 3.60895652,2.22664948e-06 L17.5263478,2.22664948e-06 C18.0935026,-6.97565746e-05 18.6074743,0.333955619 18.8377391,0.852263096 L21.0788696,6.36661092"
             id="Shape"></path>
           <path d="M10.5217391,5.73913043 L10.5217391,0" id="Shape"></path>
-        </g>
-      </g>
-    </g>
-  </svg>
-</ng-template>
-
-<ng-template #playbutton>
-  <svg width="43px" height="43px" viewBox="0 0 43 43" version="1.1" xmlns="http://www.w3.org/2000/svg"
-       xmlns:xlink="http://www.w3.org/1999/xlink">
-    <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-      <g id="PRO" transform="translate(-14.000000, -1058.000000)" fill-rule="nonzero">
-        <g id="play-button" transform="translate(14.000000, 1058.000000)">
-          <circle id="Oval" class="fill" cx="21.5" cy="21.5" r="21.5"></circle>
-          <path
-            d="M27.0778787,15.3308361 L34.3009217,27.4655484 C35.1483759,28.8892715 34.6812177,30.7304244 33.2574946,31.5778787 C32.7933401,31.8541611 32.2632017,32 31.723043,32 L17.276957,32 C15.6201027,32 14.276957,30.6568542 14.276957,29 C14.276957,28.4598413 14.4227959,27.9297029 14.6990783,27.4655484 L21.9221213,15.3308361 C22.7695756,13.9071131 24.6107285,13.4399549 26.0344516,14.2874091 C26.4637095,14.5429198 26.822368,14.9015782 27.0778787,15.3308361 Z"
-            id="Triangle" fill="#7397ff"
-            transform="translate(24.500000, 21.500000) rotate(90.000000) translate(-24.500000, -21.500000) "></path>
         </g>
       </g>
     </g>

@@ -6,10 +6,9 @@
 
       <div class="popup-play-btn">
         <play-button
-          [state]="getPlaybuttonState()"
           [disabled]="expired"
-          [popup]="true"
-          (clicked)="clickPlaybutton($event)"
+          [audioSource]="audioSource"
+          [inverse]="true"
         ></play-button>
       </div>
 
@@ -118,8 +117,7 @@
 
           <play-button
             [disabled]="expired"
-            [state]="getPlaybuttonState()"
-            (clicked)="clickPlaybutton($event)"
+            [audioSource]="audioSource"
           ></play-button>
 
         </div>
@@ -176,8 +174,7 @@
 
       <play-button
         [disabled]="expired"
-        [state]="getPlaybuttonState()"
-        (clicked)="clickPlaybutton($event)"
+        [audioSource]="audioSource"
       ></play-button>
     </div>
 
@@ -294,7 +291,7 @@
               #markerPopover="ngbPopover"
               popoverClass="popover-class marker hide-phone" ngbPopover="Drag marker for time stamped comment" placement="right"
               [openDelay]="300" [closeDelay]="300" triggers="manual" [autoClose]="false"
-              (mousedown)="markerPopoverClose($event)"
+              (mousedown)="markerPopoverClose()"
             >
               <div class="phone-draggable"></div>
             </div>

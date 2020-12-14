@@ -42,7 +42,6 @@ const routes: Routes = [
     ReplyFormComponent,
     TimeInputComponent,
     WaveformComponent,
-    PlayButtonComponent,
   ],
   exports: [
     CommentComponent,

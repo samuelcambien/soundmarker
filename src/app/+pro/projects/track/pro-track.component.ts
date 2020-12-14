@@ -29,26 +29,26 @@ export class ProTrackComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    if(!this.inputTrack) {
+    if (!this.inputTrack) {
       this.route.data.subscribe(async data => {
         this.project = await data.project;
+        this.project.project_hash = this.route.snapshot.params.project_hash;
         this.track = await data.track;
+        this.track.project = this.project;
         this.track.track_id = this.route.snapshot.params.id;
         this.stateService.setActiveTrack(this.track);
         await this.projectService.loadProjectLI(this.project);
-        const breadcrumb =  {projectTitle: this.project.title};
+        const breadcrumb = {projectTitle: this.project.title};
         this.ngDynamicBreadcrumbService.updateBreadcrumbLabels(breadcrumb);
       });
     }
-    else{
+    else {
       this.track = this.inputTrack;
       this.project = this.stateService.getActiveProject().getValue();
-      const breadcrumb =  {projectTitle: this.project.title};
+      const breadcrumb = {projectTitle: this.project.title};
       this.ngDynamicBreadcrumbService.updateBreadcrumbLabels(breadcrumb);
     }
   }
-
-
 
   get audioSource(): AudioSource {
     return {

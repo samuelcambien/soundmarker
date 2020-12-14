@@ -62,48 +62,6 @@ export class PublicTrackPreviewComponent implements OnInit {
     });
   }
 
-  getPlaybuttonState() {
-    if (this.player.isLoading(this.version)) {
-      return State.loading;
-    } else if (this.isPlaying()) {
-      return State.pause;
-    } else {
-      return State.play;
-    }
-  }
-
-  async clickPlaybutton(state: State) {
-    switch (state) {
-      case State.play:
-        if(this.deviceService.isMobile() || this.deviceService.isTablet()){
-          this.trackSelected();
-        }
-        await this.play();
-        break;
-      case State.pause:
-        this.pause();
-        break;
-    }
-  }
-
-  async play() {
-    await this.player.play(this.audioSource);
-    this.cdr.detectChanges();
-  }
-
-  pause() {
-    this.getPlayer().pause();
-    this.cdr.detectChanges();
-  }
-
-  isPlaying() {
-    return this.player.version == this.version && this.player.isPlaying();
-  }
-
-  private getPlayer() {
-    return this.player;
-  }
-
   trackSelected() {
     this.selected.emit(this.track);
   }

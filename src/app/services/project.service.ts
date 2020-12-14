@@ -62,6 +62,8 @@ export class ProjectService {
         return Promise.resolve();
       }
 
+      project.tracks.forEach(track => track.project = project);
+
       return Utils.promiseSequential(
         project.tracks.map(track => () => this.loadVersions(track))
       );
@@ -72,6 +74,8 @@ export class ProjectService {
     // const project = await RestCall.getProject(projectHash);
     if (project.project_id) {
       this.stateService.setActiveProject(project);
+
+      project.tracks.forEach(track => track.project = project);
 
       return Utils.promiseSequential(
         project.tracks.map(track => () => this.loadVersions(track))
@@ -92,6 +96,7 @@ export class ProjectService {
   }
 
   private async loadVersions(track: Track): Promise<void> {
+
     track.versions = (await RestCall.getTrack(track.track_id))["versions"];
 
     track.versions.forEach(version => {
