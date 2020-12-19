@@ -18,14 +18,14 @@ $client = new OAuthClient($config);
  * the OAuth Server is giving us an "Access Code" that we can use to obtain an access token.
  *
  * Once we have an Access Code present we can simply request an access_token.
- * - Access Codes are only valid for a maximum of 10 minutes. Please refer to the OAuth Server for it spcific speficatons.
+ * - Access Codes are only valid for a maximum of 10 minutes. Please refer to the OAuth Server for it specific speficatons.
  */
 if( isset( $_GET['code'] ) ) {
 
   $curl_post_data = array(
      'grant_type'    => 'authorization_code',
      'code'          => $_GET['code'],
-     'redirect_uri'  => $config['PHPSERVER_URL'].'callback.php',
+     'redirect_uri'  => 'http://localhost/callback.php',
      'client_id'     => $config['OAUTH_CLIENT_ID'], // Only needed if server is running CGI
      'client_secret' => $config['OAUTH_CLIENT_SECRET'] // Only need if server is running CGI
   );
@@ -43,14 +43,15 @@ if( isset( $_GET['code'] ) ) {
   curl_setopt( $curl, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US; rv:1.9.1.2) Gecko/20090729 Firefox/3.5.2 GTB5' );
   curl_setopt( $curl, CURLOPT_REFERER, $config['OAUTH_SERVER_LOCATION'].'/1' );
 
+
   $curl_response = curl_exec( $curl );
   curl_close( $curl );
 
   /** OPTION but RECOMMENDED - STORAGE */
-  // Store the access token, refresh token as well as exiration from information gathered from the 
-  // OAuth Server. Here the example simple adds the entire respose from the OAuth Server into a 
+  // Store the access token, refresh token as well as exiration from information gathered from the
+  // OAuth Server. Here the example simple adds the entire respose from the OAuth Server into a
   // session. One could also save the this information to a database so it can be used later.
-  // An access_token is only good as long as the OAuth Server specifies. 
+  // An access_token is only good as long as the OAuth Server specifies.
   if (isset(json_decode($curl_response)->access_token)) {
     $_SESSION['USER'] = $curl_response;
     $now = new DateTime();
@@ -58,10 +59,11 @@ if( isset( $_GET['code'] ) ) {
     $response = getSubscriptions(json_decode($curl_response)->access_token, $config, $now);
     $_SESSION["status"] = "pro";
   }
-  
+
   // Once you have an access token, you know that user has signed in sucessfully and that they have
   // authorized your application (if scope is supported). Here is where you can call the resource server
   // and get user informaiton about the user. What you do with this information is up to you.
-  header("Location: ".$config['PHPSERVER_URL']);  
-  
+header("Location: ".$config['PHPSERVER_URL']);
+
+
 }

@@ -19,13 +19,12 @@ function getSubscriptions($token, $config, $now) {
     } else {
       $_SESSION["status"] = "free";
     }
-
     return $response;
 }
 
-class OAuthClient 
+class OAuthClient
 {
-    
+
   const VERSION = "1.0.0";
   const RESPONSE_CODE_PARAM = 'code';
 
@@ -41,7 +40,7 @@ class OAuthClient
    * @todo It may be quicker to simply set the config as the array instead of looping. Not really
    * a big deal but may be a thought.
    *
-   * @todo You could add a check to make sure that all the given params are given. This way you can 
+   * @todo You could add a check to make sure that all the given params are given. This way you can
    * controll the errors.
   */
   function __construct ( $config )
@@ -74,12 +73,12 @@ class OAuthClient
    * Return a caonfig varaible from current object
    * @param  [type] $key [description]
    * @return [type]      [description]
-   * 
+   *
    * @todo Do proper check for variable instead of surpressing any errors
   */
   public function get_config ($key)
   {
     return @$this->_config[$key];
-  } 
+  }
 }
 ?>

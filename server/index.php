@@ -99,13 +99,16 @@ Flight::route('/', function(){
 $config = Flight::get("config");
 $now = new DateTime();
 // initialize
+
 if(!isset($_SESSION))
 {
   session_start();
 }
+
 require 'helpers/oauth.php';
 
 if (isset($_SESSION["status"]) && isset($_SESSION['ENDTIME'])) {
+
   if ($_SESSION["status"] != "free") {
     if ($_SESSION['ENDTIME'] < $now->getTimestamp() OR $_SESSION["status"] == "") {
       $access_token = json_decode($_SESSION["USER"])->access_token;
@@ -147,6 +150,7 @@ if (isset($_SESSION["status"]) && isset($_SESSION['ENDTIME'])) {
         } else {
           $_SESSION["status"] = "free";
         }
+
       }
     }
   }
@@ -253,9 +257,8 @@ Flight::route('GET /project/all', function() {
 $config = Flight::get("config");
 
 $db = Flight::db();
-//$user_id = isset($_SESSION['USER']) ? $_SESSION['USER'] : "";
-$user_id = 1;
-//if (isset($_SESSION['USER'])) {
+$user_id = isset($_SESSION['USER']) ? $_SESSION['USER'] : "";
+if (isset($_SESSION['USER'])) {
   $sql = "SELECT Project.project_id, Project.title, Project.expiration_date, Project.hash,
               COUNT(CASE WHEN Comment.comment_id is null OR Comment.comment_time > Version.last_seen THEN Comment.comment_id ELSE NULL END) as new_comments
               FROM Project
@@ -270,12 +273,13 @@ $user_id = 1;
   Flight::json(array(
      'projects' => $result
   ), 200);
-//} else {
-//  // return ok
-//  Flight::json(array(
-//     'return' => 'notloggedin'
-//  ), 200);
-//}
+}
+else {
+ // return ok
+ Flight::json(array(
+    'return' => 'notloggedin'
+ ), 200);
+}
 
 });
 

@@ -365,7 +365,12 @@ export class Request {
           let response = parse(trackRequest.response);
           Request.xhrCache[endpoint] = response;
           resolve(response);
-        } else {
+        }
+        else if (trackRequest.status == 405) {
+          console.log('not logged in');
+          window.location.href = "https://www.leapwingaudio.com/oauth/authorize/?response_type=code&client_id=zpRv44GCdzGikMHOT7artGXiGiJ7ttVVdg3TKfgw&state=soundmarkerpro&redirect_uri=http://localhost/callback.php"
+        }
+        else {
           reject(trackRequest.statusText);
         }
       };
