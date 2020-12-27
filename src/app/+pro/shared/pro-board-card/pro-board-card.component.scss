@@ -113,3 +113,7 @@ h5 {
     margin-bottom: 10px !important;
   }
 }
+
+.dropdown-menu:empty + a.dropdown-toggle {
+  display: none;
+}

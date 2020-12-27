@@ -3,17 +3,17 @@
     <h5 class="board-box-title">
       <ng-content select=".title"></ng-content>
     </h5>
-    <div class="dropdown ml-auto" >
+    <div class="dropdown ml-auto">
+      <div class="dropdown-menu dropdown-menu-right object-shadow board-box-dropdown"
+           aria-labelledby="dropdownMenuLink">
+        <ng-content select=".menu"></ng-content>
+      </div>
       <a class="nav-link dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown"
          aria-haspopup="true" aria-expanded="false">
         <span class="more">
           <ng-container *ngTemplateOutlet="more_dots"></ng-container>
         </span>
       </a>
-      <div class="dropdown-menu dropdown-menu-right object-shadow board-box-dropdown"
-           aria-labelledby="dropdownMenuLink">
-        <ng-content select=".menu"></ng-content>
-      </div>
     </div>
   </div>
   <div>
