@@ -2,10 +2,9 @@
   <ng-container class="title">Projects</ng-container>
   <ng-container class="body" id="sm">
     <div class="list">
-
-    <!--<div *ngFor="let project of user_project_list" routerLink="track/{{track.track_id}}">-->
       <div  *ngFor="let project of user_project_list">
 
+<!--        <div routerLink="project/{{project.hash}}" class="track-bar" tabindex="1">-->
         <div routerLink="project/{{project.hash}}" class="track-bar">
           <div class="list-header row">
 
@@ -13,54 +12,56 @@
         <p>{{project?.tracks?.length}} tracks · 12 new comments</p></div>
 
         <div class="ml-auto">
-
-        <a href data-toggle="modal"
-           data-target=".editProject"
+        <a id="dropdownMenuLink" data-toggle="dropdown"
+           (click)="$event.stopPropagation(); myDrop.open();"
            class="menu more-icon">
 
-           <svg width="17px" height="5px" viewBox="0 0 24 8" version="1.1" xmlns="http://www.w3.org/2000/svg">
-             <g id="Page-1" stroke="none" stroke-width="1" fill="#bac1da" class="comment-options-fill" fill-rule="evenodd" stroke-linecap="round"
-                stroke-linejoin="round">
-               <g id="Interface-Essential-/-Menu-/-navigation-menu-horizontal"
-                  transform="translate(0.000000, -9.000000)"
-                  class="menu-icon" stroke="#bac1da" stroke-width="1.5">
-                 <g id="Group" transform="translate(0.000000, 9.000000)">
-                   <g id="navigation-menu-horizontal">
-                     <circle id="Oval" cx="4" cy="4" r="2.5"></circle>
-                     <circle id="Oval" cx="13" cy="4" r="2.5"></circle>
-                     <circle id="Oval" cx="22" cy="4" r="2.5"></circle>
-                   </g>
-                 </g>
-               </g>
-             </g>
+  <svg width="17px" height="5px" viewBox="0 0 24 8" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <g id="Page-1" stroke="none" stroke-width="1" fill="#bac1da" class="comment-options-fill" fill-rule="evenodd" stroke-linecap="round"
+       stroke-linejoin="round">
+      <g id="Interface-Essential-/-Menu-/-navigation-menu-horizontal"
+         transform="translate(0.000000, -9.000000)"
+         class="menu-icon" stroke="#bac1da" stroke-width="1.5">
+        <g id="Group" transform="translate(0.000000, 9.000000)">
+          <g id="navigation-menu-horizontal">
+            <circle id="Oval" cx="4" cy="4" r="2.5"></circle>
+            <circle id="Oval" cx="13" cy="4" r="2.5"></circle>
+            <circle id="Oval" cx="22" cy="4" r="2.5"></circle>
+          </g>
+        </g>
+      </g>
+    </g>
            </svg>
 
       </a>
-        <div class="board-item-notification"></div>
-
-        </div>
-
-        <div class="modal fade editProject" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
-             aria-hidden="true">
-          <div class  ="modal-dialog  modal-lg">
-            <div class="modal-content">
-              <input type="text" [value]="project.title">
-              <input type="text" [value]="project.password">
-              <!--<app-subscribe [project_id]="project_id"></app-subscribe>-->
+          <div ngbDropdown #myDrop="ngbDropdown">
+          <div class="dropdown-menu dropdown-menu-right object-shadow board-box-dropdown"
+               aria-labelledby="dropdownMenuLink"
+               ngbDropdownMenu>
+            <a href data-toggle="modal"
+               data-target=".editProject"
+               class="menu more-icon"> Edit Project
+            </a>
+            <div class="modal fade editProject" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+                 aria-hidden="true">
+              <div class  ="modal-dialog  modal-lg">
+                <div class="modal-content">
+                  <input type="text" [value]="project.title">
+                  <input type="text" [value]="project.password">
+                  <!--<app-subscribe [project_id]="project_id"></app-subscribe>-->
+                </div>
+              </div>
             </div>
           </div>
+          </div>
+
+        <div class="board-item-notification"></div>
+
         </div>
         </div>
         </div>
         <hr *ngIf="!last" class="preview-hr">
         </div>
         </div>
-
-
-
   </ng-container>
-
-
-
-
 </app-pro-board-card>
