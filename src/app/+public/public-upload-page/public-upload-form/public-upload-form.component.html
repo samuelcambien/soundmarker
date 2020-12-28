@@ -71,8 +71,17 @@
           </table>
         </div>
 
-        <input class="upload-songs-input" id="public-uploader" type="file" title="" ng2FileSelect [uploader]="uploader" multiple
-               name="files" accept="{{getAcceptedFileTypes().join(',')}}"/>
+        <input
+          class="upload-songs-input"
+          id="public-uploader"
+          type="file"
+          title=""
+          ng2FileSelect
+          [uploader]="uploader"
+          multiple
+          name="files"
+          accept="{{getAcceptedFileTypes().join(',')}}"
+        />
 
       </div>
 

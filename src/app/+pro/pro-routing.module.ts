@@ -52,7 +52,6 @@ import {PendingChangesGuard} from '../auth/pending-changes.guard';
                 }
               ]
             }
-            // canActivate: [UploadGuard]
           },
           {
             path: 'projects',

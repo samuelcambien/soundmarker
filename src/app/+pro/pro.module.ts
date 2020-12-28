@@ -48,12 +48,14 @@ import {PendingChangesGuard} from '../auth/pending-changes.guard';
     ProUploadPopoverComponent,
     EditProjectFormComponent
   ],
-  providers:
-  [
+  providers: [
     ConfirmDialogService,
     Uploader,
     PendingChangesGuard
-  ]
+  ],
+  entryComponents: [
+    ConfirmDialogComponent,
+  ],
 })
 export class ProModule {
 

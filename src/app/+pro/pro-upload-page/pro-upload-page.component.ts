@@ -10,8 +10,8 @@ import {
   Output,
   ViewChild
 } from '@angular/core';
-import {FileItem, FileUploader} from '../../tools/ng2-file-upload';
-import {Status, Uploader} from '../../services/uploader.service';
+import {FileItem} from '../../tools/ng2-file-upload';
+import {SMFileUploader, Status, Uploader} from '../../services/uploader.service';
 import {FormGroup, NgForm, Validators, FormControl} from '@angular/forms';
 import {NgbTooltip} from '@ng-bootstrap/ng-bootstrap';
 import {RestCall} from '../../rest/rest-call';
@@ -22,6 +22,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {ProjectService} from '../../services/project.service';
 import {StateService} from '../../services/state.service';
 import {Observable} from 'rxjs';
+import {ComponentCanDeactivate} from "../../auth/pending-changes.guard";
 
 // TODO: Als availabily stream only is dan wordt de downloadfile niet opgeslagen, bij Pro moet dat wel want daar kan dat achteraf nog aangepast worden.
 
@@ -31,14 +32,14 @@ import {Observable} from 'rxjs';
   styleUrls: ['./pro-upload-page.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ProUploadPageComponent implements OnInit {
+export class ProUploadPageComponent implements OnInit, ComponentCanDeactivate {
 
   link: string;
   user_project_list = [];
   selected_existing_tracks = [];
   project_tracks_list = [];
   project_id;
-  smUploader;
+  smUploader: SMFileUploader;
 
   get createNewProject() {
     return !this.project_id;
@@ -54,27 +55,22 @@ export class ProUploadPageComponent implements OnInit {
               private router: Router,
               private stateService: StateService,
               private activatedRoute: ActivatedRoute,
-              private cdr: ChangeDetectorRef) {
+              private cdr: ChangeDetectorRef,
+  ) {
   }
 
   trackId;
 
-  ngOnInit() {
+  async ngOnInit() {
     this.smUploader = this.uploader.getOpenSMFileUploader();
     this.uploader.getOpenFileUploader().onAfterAddingAll = (items) => {
       this.uploader.getOpenSMFileUploader().addTitles(items);
-    }
-    try {
-      RestCall.getProjects().then(res => {
-        this.user_project_list = res["projects"];
-        if (this.stateService.getVersionUpload().getValue()) {
-          this.trackId = this.activatedRoute.snapshot.queryParams.newTrackId;
-          this.project_id = this.stateService.getActiveProject().getValue().project_id;
-          this.getProjectInfo(this.project_id);
-        }
-      })
-    }
-    catch {
+    };
+    this.user_project_list = await this.projectService.getAllProjects();
+    if (this.stateService.getVersionUpload().getValue()) {
+      this.trackId = this.activatedRoute.snapshot.queryParams.newTrackId;
+      this.project_id = this.stateService.getActiveProject().getValue().project_id;
+      await this.getProjectInfo(this.project_id);
     }
   }
 
@@ -82,16 +78,14 @@ export class ProUploadPageComponent implements OnInit {
     return this.project_tracks_list.filter(e => !this.selected_existing_tracks.includes(e.track_id));
   }
 
-  getProjectInfo(project_id) {
+  async getProjectInfo(project_id) {
     let project = this.user_project_list.find(x => x.project_id === project_id);
-    RestCall.getProject(project.hash).then(res => {
-      this.project_tracks_list = res["tracks"];
-      this.selected_existing_tracks = [];
-      if (this.trackId) {
-        this.selected_existing_tracks[0] = this.trackId;
-        this.cdr.detectChanges();
-      }
-    })
+    this.project_tracks_list = (await RestCall.getProject(project.hash))["tracks"];
+    this.selected_existing_tracks = [];
+    if (this.trackId) {
+      this.selected_existing_tracks[0] = this.trackId;
+      this.cdr.detectChanges();
+    }
   }
 
   addVersion(i, $event) {
@@ -122,12 +116,19 @@ export class ProUploadPageComponent implements OnInit {
   @ViewChild('notes_element', {static: false}) notes_element: ElementRef;
   @ViewChild('ft', {static: false}) files_tooltip: NgbTooltip;
 
-  @HostListener('window:beforeunload')
-  canDeactivate() {
-    return !this.stateService.getVersionUpload().getValue();
+  async canDeactivate(): Promise<boolean> {
+
+    if (!this.stateService.getVersionUpload().getValue()) {
+      return true;
     }
 
-    // returning false will show a confirm dialog before navigating away
+    const confirm: boolean = await this.confirmDialogService.confirm();
+    if (confirm) {
+      this.smUploader.resetSMFileUploader();
+      this.stateService.setVersionUpload(false);
+    }
+    return confirm;
+  }
 
   async onSubmit() {
     this.uploader.newFileUploader();
@@ -207,14 +208,13 @@ export class ProUploadPageComponent implements OnInit {
     this.setProgress(((100 * this.uploader.getOpenFileUploader().uploaded + progress) / this.uploader.getOpenFileUploader().queue.length));
   }
 
-  cancelUpload(dirty_form, file_nb) {
+  async cancelUpload(dirty_form, file_nb) {
     if (dirty_form || file_nb > 0) {
-      this.confirmDialogService.confirmThis("There are unsaved changes. Are sure you want to discard this project.", () => {
+      if (await this.confirmDialogService.confirm()) {
         this.smUploader.resetSMFileUploader();
         this.stateService.setVersionUpload(false);
         this.router.navigate(["../dashboard"], {relativeTo: this.activatedRoute});
-      }, function () {
-      })
+      }
     }
     else {
       this.router.navigate(["../dashboard"], {relativeTo: this.activatedRoute});

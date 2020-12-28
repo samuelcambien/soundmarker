@@ -17,17 +17,17 @@ export class ProUploadStartComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.subscription = this.stateService.getVersionUpload().subscribe(bool => {
-        if (bool) {
-          this.fileinput.nativeElement.click();
-          this.newTrackId = this.activatedRoute.snapshot.queryParams.track_id;
-        }
-        else{
-          this.newTrackId = null;
-        }
-      });
+      if (bool) {
+        this.fileinput.nativeElement.click();
+        this.newTrackId = this.activatedRoute.snapshot.queryParams.track_id;
+      }
+      else {
+        this.newTrackId = null;
+      }
+    });
   }
 
-  ngOnDestroy(): void{
+  ngOnDestroy(): void {
     this.subscription.unsubscribe();
   }
 

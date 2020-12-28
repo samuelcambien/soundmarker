@@ -19,20 +19,9 @@
       <div class="top-icon icon-action ml-auto"></div>
       <div class="top-icon list-icon" id="scroll-icon" role="button" (click)="scrollToTop()">
 
-
-        <svg width="13px" height="8px" viewBox="0 0 13 8" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-            <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round">
-                <g id="Internet-Networks-Servers-/-Upload/Download-/-upload-dash-arrow-1" transform="translate(-326.000000, -253.000000)" fill-rule="nonzero" stroke="#7397FF" stroke-width="1.5">
-                    <g id="Group-16-Copy" transform="translate(326.000000, 253.000000)">
-                        <path d="M0.7,7 L6.3,1.4" id="Line-7"></path>
-                        <path d="M6.3,7 L11.9,1.4" id="Line-7-Copy" transform="translate(9.100000, 4.200000) scale(-1, 1) translate(-9.100000, -4.200000) "></path>
-                    </g>
-                </g>
-            </g>
-        </svg>
+        <ng-container *ngTemplateOutlet="icon_scroll"></ng-container>
 
       </div>
-
 
     </div>
 
@@ -47,15 +36,7 @@
         <div class="top-icon list-icon" id="list-icon" role="button" (click)="goToOverview()"
              [class.disabled]="!enableOverview">
 
-             <svg width="21px" height="18px" viewBox="0 0 21 18" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-                 <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
-                     <g id="Internet-Networks-Servers-/-Upload/Download-/-upload-dash-arrow-1" transform="translate(-414.000000, -448.000000)" class="icon-stroke"  stroke-width="1.5">
-                         <path d="M415,454 L428.722222,454 C431.637058,454 434,456.462434 434,459.5 C434,462.537566 431.637058,465 428.722222,465" id="Shape"></path>
-                         <polyline id="Shape" points="420 449 415 454 420 459"></polyline>
-                     </g>
-                 </g>
-             </svg>
-
+          <ng-container *ngTemplateOutlet="icon_list"></ng-container>
 
         </div>
 
@@ -67,46 +48,17 @@
         <div class="top-icon cloud-icon" (click)="download()"
              [class.disabled]="!version?.downloadable || expired">
 
-
-     <svg width="22px" height="21px" viewBox="0 0 22 21" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
-        <g id="Internet-Networks-Servers-/-Upload/Download-/-upload-dash-arrow-1" transform="translate(-418.000000, -84.000000)" class="icon-stroke" stroke-width="1.5">
-            <g id="Group-Copy-8" transform="translate(419.000000, 85.000000)">
-                <g id="upload-brackets">
-                    <path d="M10.0008333,0.526315789 L10.0008333,14.7368421" id="Shape"></path>
-                    <polyline id="Shape" points="6.25083333 10.7894737 10.0008333 14.7368421 13.7508333 10.7894737"></polyline>
-                    <g id="Group-24" transform="translate(10.000000, 17.368421) rotate(90.000000) translate(-10.000000, -17.368421) translate(7.500000, 6.842105)">
-                        <path d="M0,0.657894737 L3.125,0.657894737 C3.81535594,0.657894737 4.375,1.24699375 4.375,1.97368421 L4.375,19.0789474 C4.375,19.8056378 3.81535594,20.3947368 3.125,20.3947368 L0,20.3947368" id="Shape"></path>
-                    </g>
-                </g>
-            </g>
-        </g>
-    </g>
-</svg>
+          <ng-container *ngTemplateOutlet="icon_download"></ng-container>
 
         </div>
         <div class="phone-playbar-text">Download</div>
       </div>
 
       <div class="col">
-        <div class="top-icon text-icon" id="text-icon" (click)="showPhoneSearch()"
-        >
-          <svg width="21px" height="21px" viewBox="0 0 21 21" version="1.1" xmlns="http://www.w3.org/2000/svg"
-          >
+        <div class="top-icon text-icon" id="text-icon" (click)="showPhoneSearch()">
 
-            <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round"
-               stroke-linejoin="round">
-              <g id="Internet-Networks-Servers-/-Upload/Download-/-upload-dash-arrow-1"
-                 transform="translate(-156.000000, -21.000000)" class="popup-icon-stroke" stroke-width="1.5">
-                <g id="zoom-out" transform="translate(157.000000, 22.000000)">
-                  <path
-                    d="M15,7.49906291 C15.0003347,10.5325607 13.1732573,13.2675469 10.3707669,14.4286482 C7.56827642,15.5897494 4.34230415,14.9482949 2.19717894,12.8034064 C0.0520537392,10.6585179 -0.589756733,7.43261636 0.571035293,4.62999779 C1.73182732,1.82737921 4.46661184,1.84658698e-08 7.50010963,0 C11.6418616,-2.52121665e-08 14.999543,3.35731097 15,7.49906291 Z"
-                    id="Shape"></path>
-                  <path d="M13,13 L19,19" id="Shape"></path>
-                </g>
-              </g>
-            </g>
-          </svg>
+          <ng-container *ngTemplateOutlet="icon_search"></ng-container>
+
         </div>
         <div class="phone-playbar-text">Search</div>
       </div>
@@ -124,7 +76,6 @@
       </div>
     </div>
   </div>
-
 
 
   <div tabindex="0" id="phonesearch" class="show-phone shadow-topbar" #phonesearch>
@@ -213,45 +164,28 @@
 
       <div *ngIf="version?.downloadable && !expired" class="top-icon cloud-icon" id="cloud-icon"
            (click)="download()" popoverClass="popover-class" ngbPopover="Download"
-   [openDelay]="300" [closeDelay]="300" triggers="mouseenter:mouseleave" placement="bottom">
-
-
-
-
-<svg width="22px" height="18px" viewBox="0 0 22 18" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
-        <g id="Internet-Networks-Servers-/-Upload/Download-/-upload-dash-arrow-1" transform="translate(-389.000000, -447.000000)" class="icon-stroke" stroke-width="1.5">
-            <g id="Group-Copy-14" transform="translate(389.000000, 448.000000)">
-                <g id="upload-brackets">
-                    <path d="M11,0.5 L11.0008333,11.7368421" id="Shape"></path>
-                    <polyline id="Shape" points="7.25083333 7.78947368 11.0008333 11.7368421 14.7508333 7.78947368"></polyline>
-                    <g id="Group-24" transform="translate(11.000000, 14.368421) rotate(90.000000) translate(-11.000000, -14.368421) translate(8.500000, 3.842105)">
-                        <path d="M0,0.657894737 L3.125,0.657894737 C3.81535594,0.657894737 4.375,1.24699375 4.375,1.97368421 L4.375,19.0789474 C4.375,19.8056378 3.81535594,20.3947368 3.125,20.3947368 L0,20.3947368" id="Shape"></path>
-                    </g>
-                </g>
-            </g>
-        </g>
-    </g>
-</svg>
-
+           [openDelay]="300" [closeDelay]="300" triggers="mouseenter:mouseleave" placement="bottom">
       </div>
 
       <div *ngIf="enableOverview" class="top-icon list-icon" id="list-icon" role="button"
            (click)="overviewByOverviewIconClick()" popoverClass="popover-class" ngbPopover="Overview"
-   [openDelay]="300" [closeDelay]="300" triggers="mouseenter:mouseleave" placement="bottom"
-           >
+           [openDelay]="300" [closeDelay]="300" triggers="mouseenter:mouseleave" placement="bottom"
+      >
 
 
-
-
-<svg width="21px" height="18px" viewBox="0 0 21 18" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
-        <g id="Internet-Networks-Servers-/-Upload/Download-/-upload-dash-arrow-1" transform="translate(-414.000000, -448.000000)" class="icon-stroke"  stroke-width="1.5">
-            <path d="M415,454 L428.722222,454 C431.637058,454 434,456.462434 434,459.5 C434,462.537566 431.637058,465 428.722222,465" id="Shape"></path>
-            <polyline id="Shape" points="420 449 415 454 420 459"></polyline>
-        </g>
-    </g>
-</svg>
+        <svg width="21px" height="18px" viewBox="0 0 21 18" version="1.1" xmlns="http://www.w3.org/2000/svg"
+             xmlns:xlink="http://www.w3.org/1999/xlink">
+          <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round"
+             stroke-linejoin="round">
+            <g id="Internet-Networks-Servers-/-Upload/Download-/-upload-dash-arrow-1"
+               transform="translate(-414.000000, -448.000000)" class="icon-stroke" stroke-width="1.5">
+              <path
+                d="M415,454 L428.722222,454 C431.637058,454 434,456.462434 434,459.5 C434,462.537566 431.637058,465 428.722222,465"
+                id="Shape"></path>
+              <polyline id="Shape" points="420 449 415 454 420 459"></polyline>
+            </g>
+          </g>
+        </svg>
 
       </div>
 
@@ -288,7 +222,8 @@
               (dragStart)="dragStart()"
               (dragMove)="updateStartTime($event)"
               #markerPopover="ngbPopover"
-              popoverClass="popover-class marker hide-phone" ngbPopover="Drag marker for time stamped comment" placement="right"
+              popoverClass="popover-class marker hide-phone" ngbPopover="Drag marker for time stamped comment"
+              placement="right"
               [openDelay]="300" [closeDelay]="300" triggers="manual" [autoClose]="false"
               (mousedown)="markerPopoverClose()"
             >
@@ -359,12 +294,12 @@
       <h4 *ngIf="expired"> Expired on {{getDateHumanized()}} </h4>
     </div>
     <p *ngIf="message.text && notesCollapsed" (click)="notesCollapsed = !notesCollapsed"><a>Show more</a></p>
-      <div class="open" [ngbCollapse]="notesCollapsed">
-        <h4 *ngIf="!expired"> Expires in {{getDaysToExpired()}} days ({{getDateHumanized()}}) </h4>
-        <h4 *ngIf="expired"> Expired on {{getDateHumanized()}} </h4>
-        <p>{{message.text}}<br>
-      <a (click)="notesCollapsed = !notesCollapsed">Show less</a></p>
-      </div>
+    <div class="open" [ngbCollapse]="notesCollapsed">
+      <h4 *ngIf="!expired"> Expires in {{getDaysToExpired()}} days ({{getDateHumanized()}}) </h4>
+      <h4 *ngIf="expired"> Expired on {{getDateHumanized()}} </h4>
+      <p>{{message.text}}<br>
+        <a (click)="notesCollapsed = !notesCollapsed">Show less</a></p>
+    </div>
   </div>
 
 
@@ -378,8 +313,8 @@
         Checked</h4>
 
       <div class="comment-search ml-auto hide-phone" [class.active]="search" [class.disabled]="!hasComments()"
-      popoverClass="popover-class" ngbPopover="Search for words or names"
-[openDelay]="300" [closeDelay]="300" triggers="mouseenter:mouseleave">
+           popoverClass="popover-class" ngbPopover="Search for words or names"
+           [openDelay]="300" [closeDelay]="300" triggers="mouseenter:mouseleave">
 
         <input type="search" name="search" placeholder="Filter e.g. bass" [(ngModel)]="search"
                class="comment-form-search sub-form search-box">
@@ -446,3 +381,87 @@
   </div>
 
 </div>
+
+<ng-template #icon_scroll>
+  <svg width="22px" height="18px" viewBox="0 0 22 18" version="1.1" xmlns="http://www.w3.org/2000/svg"
+       xmlns:xlink="http://www.w3.org/1999/xlink">
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round"
+       stroke-linejoin="round">
+      <g id="Internet-Networks-Servers-/-Upload/Download-/-upload-dash-arrow-1"
+         transform="translate(-389.000000, -447.000000)" class="icon-stroke" stroke-width="1.5">
+        <g id="Group-Copy-14" transform="translate(389.000000, 448.000000)">
+          <g id="upload-brackets">
+            <path d="M11,0.5 L11.0008333,11.7368421" id="Shape"></path>
+            <polyline id="Shape"
+                      points="7.25083333 7.78947368 11.0008333 11.7368421 14.7508333 7.78947368"></polyline>
+            <g id="Group-24"
+               transform="translate(11.000000, 14.368421) rotate(90.000000) translate(-11.000000, -14.368421) translate(8.500000, 3.842105)">
+              <path
+                d="M0,0.657894737 L3.125,0.657894737 C3.81535594,0.657894737 4.375,1.24699375 4.375,1.97368421 L4.375,19.0789474 C4.375,19.8056378 3.81535594,20.3947368 3.125,20.3947368 L0,20.3947368"
+                id="Shape"></path>
+            </g>
+          </g>
+        </g>
+      </g>
+    </g>
+  </svg>
+</ng-template>
+
+<ng-template #icon_list>
+  <svg width="21px" height="18px" viewBox="0 0 21 18" version="1.1" xmlns="http://www.w3.org/2000/svg"
+       xmlns:xlink="http://www.w3.org/1999/xlink">
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round"
+       stroke-linejoin="round">
+      <g id="Internet-Networks-Servers-/-Upload/Download-/-upload-dash-arrow-1"
+         transform="translate(-414.000000, -448.000000)" class="icon-stroke" stroke-width="1.5">
+        <path
+          d="M415,454 L428.722222,454 C431.637058,454 434,456.462434 434,459.5 C434,462.537566 431.637058,465 428.722222,465"
+          id="Shape"></path>
+        <polyline id="Shape" points="420 449 415 454 420 459"></polyline>
+      </g>
+    </g>
+  </svg>
+</ng-template>
+
+<ng-template #icon_download>
+  <svg width="22px" height="21px" viewBox="0 0 22 21" version="1.1" xmlns="http://www.w3.org/2000/svg"
+       xmlns:xlink="http://www.w3.org/1999/xlink">
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round"
+       stroke-linejoin="round">
+      <g id="Internet-Networks-Servers-/-Upload/Download-/-upload-dash-arrow-1"
+         transform="translate(-418.000000, -84.000000)" class="icon-stroke" stroke-width="1.5">
+        <g id="Group-Copy-8" transform="translate(419.000000, 85.000000)">
+          <g id="upload-brackets">
+            <path d="M10.0008333,0.526315789 L10.0008333,14.7368421" id="Shape"></path>
+            <polyline id="Shape"
+                      points="6.25083333 10.7894737 10.0008333 14.7368421 13.7508333 10.7894737"></polyline>
+            <g id="Group-24"
+               transform="translate(10.000000, 17.368421) rotate(90.000000) translate(-10.000000, -17.368421) translate(7.500000, 6.842105)">
+              <path
+                d="M0,0.657894737 L3.125,0.657894737 C3.81535594,0.657894737 4.375,1.24699375 4.375,1.97368421 L4.375,19.0789474 C4.375,19.8056378 3.81535594,20.3947368 3.125,20.3947368 L0,20.3947368"
+                id="Shape"></path>
+            </g>
+          </g>
+        </g>
+      </g>
+    </g>
+  </svg>
+</ng-template>
+
+<ng-template #icon_search>
+  <svg width="21px" height="21px" viewBox="0 0 21 21" version="1.1" xmlns="http://www.w3.org/2000/svg">
+
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round"
+       stroke-linejoin="round">
+      <g id="Internet-Networks-Servers-/-Upload/Download-/-upload-dash-arrow-1"
+         transform="translate(-156.000000, -21.000000)" class="popup-icon-stroke" stroke-width="1.5">
+        <g id="zoom-out" transform="translate(157.000000, 22.000000)">
+          <path
+            d="M15,7.49906291 C15.0003347,10.5325607 13.1732573,13.2675469 10.3707669,14.4286482 C7.56827642,15.5897494 4.34230415,14.9482949 2.19717894,12.8034064 C0.0520537392,10.6585179 -0.589756733,7.43261636 0.571035293,4.62999779 C1.73182732,1.82737921 4.46661184,1.84658698e-08 7.50010963,0 C11.6418616,-2.52121665e-08 14.999543,3.35731097 15,7.49906291 Z"
+            id="Shape"></path>
+          <path d="M13,13 L19,19" id="Shape"></path>
+        </g>
+      </g>
+    </g>
+  </svg>
+</ng-template>

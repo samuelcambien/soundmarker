@@ -181,7 +181,6 @@ export class SMFileUploader {
     this.notes = "";
     this.project_title = "";
     this.email_to = [];
-
   }
 
   addTitles(items) {

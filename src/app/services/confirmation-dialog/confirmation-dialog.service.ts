@@ -1,31 +1,17 @@
-import { Injectable } from '@angular/core';
-import { Router, NavigationStart } from '@angular/router';
-import {Observable, Subject} from 'rxjs';
+import {Injectable} from '@angular/core';
+import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
+import {ConfirmDialogComponent} from "./confirmation-dialog.component";
 
-@Injectable() export class ConfirmDialogService {
-  private subject = new Subject<any>();
-  constructor() { }
-  confirmThis(message: string, siFn: () => void, noFn: () => void) {
-    this.setConfirmation(message, siFn, noFn);
-  }
-  setConfirmation(message: string, siFn: () => void, noFn: () => void) {
-    let that = this;
-    this.subject.next({
-      type: "confirm",
-      text: message,
-      siFn:
-        function () {
-          that.subject.next(); //this will close the modal
-          siFn();
-        },
-      noFn: function () {
-        that.subject.next();
-        noFn();
-      }
-    });
+@Injectable()
+export class ConfirmDialogService {
+
+  constructor(
+    private modalService: NgbModal,
+  ) {
   }
 
-  getMessage(): Observable<any> {
-    return this.subject.asObservable();
+  public confirm(): Promise<boolean> {
+    const modalRef = this.modalService.open(ConfirmDialogComponent);
+    return modalRef.result;
   }
 }

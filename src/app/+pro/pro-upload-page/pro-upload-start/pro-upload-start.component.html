@@ -11,44 +11,62 @@
 
                 <div class="note-image" id="ni1">
 
-
                   <div class="mid-shadow">
-                    <svg width="43px" height="43px" viewBox="0 0 66 66" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-                      <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                        <g id="Internet-Networks-Servers-/-Upload/Download-/-upload-dash-arrow-1" transform="translate(-462.000000, -194.000000)" fill-rule="nonzero">
-                          <g id="Group-31" transform="translate(462.000000, 194.000000)">
-                            <circle id="Oval-2" fill="#7397FF" cx="33" cy="33" r="33"></circle>
-                            <g id="Group-26-Copy" transform="translate(23.000000, 23.000000)" stroke="#ffffff" stroke-linecap="round" stroke-width="4">
-                              <path d="M0,10.5 L20,10.5" id="Line-10"></path>
-                              <path d="M0,10.5 L20,10.5" id="Line-10" transform="translate(10.000000, 10.500000) rotate(90.000000) translate(-10.000000, -10.500000) "></path>
-                            </g>
-                          </g>
-                        </g>
-                      </g>
-                    </svg>
+
+                    <div *ngTemplateOutlet="icon_note"></div>
+
                   </div>
                 </div>
 
                 <h5>Add tracks</h5>
               </div>
           </div>
-          <input #fileinput class="pro-upload-songs-input" id="pro-uploader" type="file" title="" ng2FileSelect [uploader]="uploader.getOpenFileUploader()"
+          <input #fileinput
+                 class="pro-upload-songs-input"
+                 id="pro-uploader"
+                 type="file"
+                 title=""
+                 ng2FileSelect
+                 [uploader]="uploader.getOpenFileUploader()"
                  multiple
-                 name="files" accept="{{uploader.getOpenSMFileUploader().getAcceptedFileTypes().join(',')}}"/>
-
+                 name="files"
+                 accept="{{uploader.getOpenSMFileUploader().getAcceptedFileTypes().join(',')}}"
+          />
         </div>
       </div>
     </div>
   </ng-container>
 </app-pro-board-card>
 
-<input style="display: none" #fileinputhidden class="pro-upload-songs-input" type="file" title="" ng2FileSelect [uploader]="uploader.getOpenFileUploader()"
-         id="fileinputhidden"
+<input style="display: none" #fileinputhidden
+       class="pro-upload-songs-input"
+       type="file"
+       title=""
+       ng2FileSelect
+       [uploader]="uploader.getOpenFileUploader()"
+       id="fileinputhidden"
        single
-       name="files" accept="{{uploader.getOpenSMFileUploader().getAcceptedFileTypes().join(',')}}"/>
+       name="files"
+       accept="{{uploader.getOpenSMFileUploader().getAcceptedFileTypes().join(',')}}"/>
 <!--[class.disabled]="uploader.isUploading()"-->
 
 <div ng2FileDrop
      [uploader]="uploader.fileUploader"
      class="well my-drop-zone">
 </div>
+
+<ng-template #icon_note>
+  <svg width="43px" height="43px" viewBox="0 0 66 66" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+      <g id="Internet-Networks-Servers-/-Upload/Download-/-upload-dash-arrow-1" transform="translate(-462.000000, -194.000000)" fill-rule="nonzero">
+        <g id="Group-31" transform="translate(462.000000, 194.000000)">
+          <circle id="Oval-2" fill="#7397FF" cx="33" cy="33" r="33"></circle>
+          <g id="Group-26-Copy" transform="translate(23.000000, 23.000000)" stroke="#ffffff" stroke-linecap="round" stroke-width="4">
+            <path d="M0,10.5 L20,10.5" id="Line-10"></path>
+            <path d="M0,10.5 L20,10.5" id="Line-10" transform="translate(10.000000, 10.500000) rotate(90.000000) translate(-10.000000, -10.500000) "></path>
+          </g>
+        </g>
+      </g>
+    </g>
+  </svg>
+</ng-template>
