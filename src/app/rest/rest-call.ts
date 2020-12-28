@@ -8,30 +8,34 @@ export class RestCall {
 
   // POST
 
-  public static async createNewProject(projectTitle?: string, projectSmppw?: string, stream_type?: string): Promise<any> {
+  public static createNewProject(projectTitle?: string, downloadable?: string, streamType?: string, projectSmppw?: string): Promise<any> {
     return Request.post(Endpoints.PROJECT_NEW, {
       project_title: projectTitle,
-      project_password: projectSmppw
+      downloadable,
+      stream_type: streamType,
+      project_password: projectSmppw,
     });
   }
 
-  public static async editProject(projectID, projectTitle?: string, projectSmppw?: string): Promise<any> {
+  public static editProject(projectID, projectTitle: string, downloadable: string, streamType: string, projectSmppw?: string): Promise<any> {
     return Request.post(Endpoints.PROJECT_EDIT, {
       project_id: projectID,
       project_title: projectTitle,
-      project_password: projectSmppw
+      downloadable,
+      stream_type: streamType,
+      project_password: projectSmppw,
     });
   }
 
 
-  public static async createNewTrack(project_id, title): Promise<any> {
+  public static createNewTrack(project_id, title): Promise<any> {
     return Request.post(Endpoints.TRACK_NEW, {
       project_id: project_id,
       track_title: title
     });
   }
 
-  public static async createNewVersion(trackId: string, versionNotes: string, downloadable): Promise<Version> {
+  public static createNewVersion(trackId: string, versionNotes: string, downloadable): Promise<Version> {
     return Request.post(Endpoints.VERSION_NEW, {
       track_id: trackId,
       notes: versionNotes,
@@ -39,7 +43,7 @@ export class RestCall {
     });
   }
 
-  public static async createNewFile(file: File, file_name: string, extension: string, size: number, versionId: string, identifier: number, length: number): Promise<string> {
+  public static createNewFile(file: File, file_name: string, extension: string, size: number, versionId: string, identifier: number, length: number): Promise<string> {
     return Request.post(Endpoints.UPLOAD, {
       version_id: versionId,
       identifier: identifier,
@@ -51,11 +55,11 @@ export class RestCall {
     });
   }
 
-  public static async uploadChunk(buffer, streamFileId: string, downloadFileId: string, index: number, ext: string, onProgress): Promise<any> {
+  public static uploadChunk(buffer, streamFileId: string, downloadFileId: string, index: number, ext: string, onProgress): Promise<any> {
     return Request.postData(Endpoints.UPLOAD_CHUNK, buffer, [streamFileId, downloadFileId, index, ext], onProgress);
   }
 
-  public static async shareProject(project_id: string, expiration: string, notes: string, emailFrom?: string, emailTo?: string[]): Promise<any> {
+  public static shareProject(project_id: string, expiration: string, notes: string, emailFrom?: string, emailTo?: string[]): Promise<any> {
     return Request.post(Endpoints.PROJECT_SHARE, {
       project_id: project_id,
       expiration: expiration,
@@ -65,11 +69,11 @@ export class RestCall {
     });
   }
 
-  public static async addComment(comment: Comment): Promise<any> {
+  public static addComment(comment: Comment): Promise<any> {
     return Request.post(Endpoints.COMMENT, comment);
   }
 
-  public static async subscribe(project_id: string, email, notifyID): Promise<any> {
+  public static subscribe(project_id: string, email, notifyID): Promise<any> {
     return Request.post(Endpoints.PROJECT_SUBSCRIBE, {
       project_id: project_id,
       notify_id: notifyID,
@@ -91,7 +95,7 @@ export class RestCall {
 
   // DELETE
 
-  public static async deleteComment(commentId: string) {
+  public static deleteComment(commentId: string) {
     return Request.post(Endpoints.COMMENT_DELETE, {
       comment_id: commentId
     })
@@ -99,11 +103,11 @@ export class RestCall {
 
   // GET
 
-  public static async getSma(sma_id: string): Promise<any> {
+  public static getSma(sma_id: string): Promise<any> {
     return Request.getNonCaching(Endpoints.SMA, [sma_id]);
   }
 
-  public static async getRandSma(id: string): Promise<any> {
+  public static getRandSma(id: string): Promise<any> {
     if (!id)
       return Request.getNonCaching(Endpoints.SMA);
     else
@@ -116,6 +120,7 @@ export class RestCall {
       title: string,
       status: string,
       expiration: string,
+      downloadable: string,
       stream_type: string,
       sender: string,
       tracks: {
@@ -127,26 +132,26 @@ export class RestCall {
     return Request.getNonCaching(Endpoints.PROJECT, [projectHash]);
   }
 
-  public static async getTrack(trackId: string): Promise<Track> {
+  public static getTrack(trackId: string): Promise<Track> {
     return Request.get(Endpoints.TRACK, [trackId]);
   }
 
-  public static async getVersion(versionId: string): Promise<Version> {
+  public static getVersion(versionId: string): Promise<Version> {
     return Request.get(Endpoints.VERSION, [versionId]);
   }
 
-  public static async getChunk(awsPath: string, extension: string, index: number) {
+  public static getChunk(awsPath: string, extension: string, index: number) {
     return Request.getData(
       awsPath + index.toString().padStart(3, "0") + "." + extension, [],
       'arraybuffer'
     );
   }
 
-  public static async getComments(versionId: string): Promise<any> {
+  public static getComments(versionId: string): Promise<any> {
     return Request.getNonCaching(Endpoints.COMMENTS, [versionId]);
   }
 
-  public static async getProjects(): Promise<any> {
+  public static getProjects(): Promise<any> {
     return Request.get(Endpoints.PROJECT_ALL);
   }
 
@@ -202,7 +207,7 @@ export class Request {
 
   private static xhrCache = {};
 
-  public static async get(endpoint, path?): Promise<any> {
+  public static get(endpoint, path?): Promise<any> {
     return Request.execute(
       "GET", endpoint,
       {
@@ -213,7 +218,7 @@ export class Request {
     );
   }
 
-  public static async getNonCaching(endpoint, path?): Promise<any> {
+  public static getNonCaching(endpoint, path?): Promise<any> {
     return Request.execute(
       "GET", endpoint,
       {
@@ -224,7 +229,7 @@ export class Request {
     );
   }
 
-  public static async getData(endpoint, path?, responseType?): Promise<any> {
+  public static getData(endpoint, path?, responseType?): Promise<any> {
     return Request.execute(
       "GET", endpoint,
       {
@@ -236,7 +241,7 @@ export class Request {
     );
   }
 
-  public static async post(endpoint, data, path?): Promise<any> {
+  public static post(endpoint, data, path?): Promise<any> {
     return Request.execute(
       "POST", endpoint,
       {
@@ -249,7 +254,7 @@ export class Request {
     );
   }
 
-  public static async postData(endpoint, data, path?, onProgress?): Promise<any> {
+  public static postData(endpoint, data, path?, onProgress?): Promise<any> {
     return Request.execute(
       "POST", endpoint,
       {
@@ -264,7 +269,7 @@ export class Request {
   }
 
 
-  public static async execute(method: RequestMethod, endpoint: string, parameters: RequestParameters): Promise<any> {
+  public static execute(method: RequestMethod, endpoint: string, parameters: RequestParameters): Promise<any> {
 
     let contentType = parameters.contentType;
     let responseType = parameters.responseType;

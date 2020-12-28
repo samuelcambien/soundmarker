@@ -184,13 +184,14 @@ $getbody = json_decode(Flight::request()->getBody());
 $user_id = isset($_SESSION['USER']) ? $_SESSION['USER'] : "";
 $project_title = isset($getbody->project_title) ? $getbody->project_title : "";
 $project_password = isset($getbody->project_password) ? $getbody->project_password : "";
+$downloadable = isset($getbody->downloadable) ? $getbody->downloadable : "";
 $stream_type = isset($getbody->stream_type) ? $getbody->stream_type : "";
 $REMOTE_ADDR = isset($_SERVER["REMOTE_ADDR"]) ? $_SERVER["REMOTE_ADDR"] : '127.0.0.1';
 $HTTP_X_FORWARDED_FOR = isset($_SERVER['HTTP_X_FORWARDED_FOR']) ? $_SERVER['HTTP_X_FORWARDED_FOR']  : $REMOTE_ADDR;
 $ipaddr = $REMOTE_ADDR . " - " . $HTTP_X_FORWARDED_FOR;
 
 $db = Flight::db();
-$sql = "INSERT INTO Project (user_id, title, password, active, ipaddr, stream_type) VALUES ('$user_id', '$project_title', '$project_password', '1', '$ipaddr', '$stream_type')";$result = $db->query($sql);
+$db->query("INSERT INTO Project (user_id, title, password, active, ipaddr, downloadable, stream_type) VALUES ('$user_id', '$project_title', '$project_password', '1', '$ipaddr', $downloadable, '$stream_type')");
 $project_id = $db->lastInsertId();
 
 $uuid = UUID::v4().UUID::v4();
@@ -208,34 +209,43 @@ Flight::json(array(
 //////////////////////////////////////////////////////// Routes - /project/edit POST ///////////////////////////////////////////////////
 Flight::route('POST /project/edit', function() {
 
-$config = Flight::get("config");
-$getbody = json_decode(Flight::request()->getBody());
+  $config = Flight::get("config");
+  $getbody = json_decode(Flight::request()->getBody());
 
-$project_id = isset($getbody->project_id) ? $getbody->project_id : "";
-$project_title = isset($getbody->project_title) ? $getbody->project_title : "";
-$project_password = isset($getbody->project_password) ? $getbody->project_password : "";
-$stream_type = isset($getbody->stream_type) ? $getbody->stream_type : "";
+  $project_id = isset($getbody->project_id) ? $getbody->project_id : "";
+  $project_title = isset($getbody->project_title) ? $getbody->project_title : "";
+  $edit_password = isset($getbody->project_enable_password);
+  $downloadable = isset($getbody->downloadable) ? $getbody->downloadable : "";
+  if ($edit_password) {
+    if ($getbody->project_enable_password) {
+      $project_password = $getbody->project_password;
+    } else {
+      $project_password = '';
+    }
+  }
+  $stream_type = isset($getbody->stream_type) ? $getbody->stream_type : "";
 
 // if user is able to edit this project -> update with user permissions
-if (true) {
-  $db = Flight::db();
-  $sql = "UPDATE Project SET title = '$project_title' WHERE project_id = '$project_id'";
-  $result = $db->query($sql);
-  $sql = "UPDATE Project SET password = '$project_password' WHERE project_id = '$project_id'";
-  $result = $db->query($sql);
-  $sql = "UPDATE Project SET stream_type = '$stream_type' WHERE project_id = '$project_id'";
-  $result = $db->query($sql);
+  if (true) {
+    $db = Flight::db();
 
-  // return ok
-  Flight::json(array(
-     'return' => 'ok'
-  ), 200);
-} else {
-  // return not allowed
-  Flight::json(array(
-     'return' => 'notallowed'
-  ), 405);
-}
+    $db->query("UPDATE Project SET title = '$project_title' WHERE project_id = '$project_id'");
+    if ($edit_password) {
+      $db->query("UPDATE Project SET password = '$project_password' WHERE project_id = '$project_id'");
+    }
+    $db->query("UPDATE Project SET downloadable = '$downloadable' WHERE project_id = '$project_id'");
+    $db->query("UPDATE Project SET stream_type = '$stream_type' WHERE project_id = '$project_id'");
+
+    // return ok
+    Flight::json(array(
+      'return' => 'ok'
+    ), 200);
+  } else {
+    // return not allowed
+    Flight::json(array(
+      'return' => 'notallowed'
+    ), 405);
+  }
 });
 
 //////////////////////////////////////////////////////// Routes - /project/all GET ///////////////////////////////////////////////////
@@ -515,7 +525,7 @@ Flight::route('GET /project/get/@project_hash', function($project_hash) {
 
 $config = Flight::get("config");
 $db = Flight::db();
-$sql = "SELECT project_id, title, active, expiration_date, user_id, password, stream_type FROM Project WHERE hash = '$project_hash'";
+$sql = "SELECT project_id, title, active, expiration_date, user_id, password, downloadable, stream_type FROM Project WHERE hash = '$project_hash'";
 $response = $db->query($sql)->fetchAll(PDO::FETCH_ASSOC);
 
 // check if project hash was valid
@@ -526,6 +536,7 @@ if ($response) {
   $expiration_date = $response[0]["expiration_date"];
   $user_id = $response[0]["user_id"];
   $project_password = $response[0]["password"];
+  $downloadable = $response[0]["downloadable"];
   $project_stream_type = $response[0]["stream_type"];
 
   $lastmonth = new \DateTime('-1 month');
@@ -581,7 +592,14 @@ if ($response) {
 
     // return ok
     Flight::json(array(
-       'project_id' => $project_id, 'title' => $title, 'status' => $status, 'expiration' => $expiration_date, 'stream_type' => $project_stream_type, 'sender' => $emailaddress, 'tracks' => $tracks
+      'project_id' => $project_id,
+      'title' => $title,
+      'status' => $status,
+      'expiration' => $expiration_date,
+      'stream_type' => $project_stream_type,
+      'sender' => $emailaddress,
+      'tracks' => $tracks,
+      'downloadable' => $downloadable,
     ), 200);
   }
 } else {

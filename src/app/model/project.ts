@@ -11,6 +11,6 @@ export class Project {
   sender: string;
   title: string;
 
-  downloads: boolean;
+  downloadable: boolean;
   losless: boolean;
 }

@@ -29,7 +29,7 @@ export class EditProjectFormComponent implements OnInit {
 
   ngOnInit() {
     this.title = this.project.title;
-    this.downloads = this.project.downloads;
+    this.downloads = this.project.downloadable;
     this.losless = this.project.losless;
     this.passwordProtected = false;
   }

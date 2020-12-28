@@ -128,10 +128,12 @@ export class ProUploadPageComponent implements OnInit {
     this.smUploader.setStatus(Status.UPLOADING_SONGS);
     try {
       if (this.createNewProject) {
-        let stream_type = this.smUploader.stream_type ? "0" : "1";
+        let downloadable = this.smUploader.downloadable ? "1" : "0";
+        let stream_type = this.smUploader.stream_type ? "1" : "0";
         const projectResponse = await RestCall.createNewProject(
           this.smUploader.getProjectTitle(),
           this.smUploader.getSMPPW(),
+          downloadable,
           stream_type,
         );
         this.project_id = projectResponse["project_id"];
