@@ -54,7 +54,6 @@ export class ProjectService {
         project.tracks.map(track => () => this.loadVersions(track))
       );
 
-      project.downloadable = response.downloadable != "0";
       project.losless = response.stream_type != "0";
     }
 
@@ -124,7 +123,7 @@ export class ProjectService {
       throw new TypeError();
     }
 
-    await RestCall.editProject(projectId, title, downloads ? "1" : "0", losless ? "1" : "0");
+    await RestCall.editProject(projectId, title, losless? "1" : "0", "0");
   }
 
   public isActive(project: Project) {

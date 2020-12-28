@@ -16,25 +16,6 @@
 
           <div class="form-row radios  mb-5p">
             <div class="col">
-              <label class="custom expiration btn btn-sm btn-outline-form btn-settings noselect"
-                     popoverClass="popover-class"
-                     ngbPopover="Allow downloading of uploaded tracks"
-                     [openDelay]="300"
-                     [autoClose]="false"
-                     triggers="mouseenter:mouseleave">
-                <div class="switch">
-                  <input type="checkbox"
-                         name="downloads"
-                         [(ngModel)]="downloads">
-                  <span class="slider round"></span>
-                </div>
-                <div id="enable-download-button"
-                     [ngClass]="{'unchecked': !downloads}"
-                     class="slider-text">Downloads
-                </div>
-              </label>
-            </div>
-            <div class="col">
               <label class="custom noselect downloadable btn btn-sm btn-outline-form btn-settings"
                      popoverClass="popover-class"
                      ngbPopover="Allow lossless streaming"

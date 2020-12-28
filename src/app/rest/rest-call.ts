@@ -8,20 +8,18 @@ export class RestCall {
 
   // POST
 
-  public static createNewProject(projectTitle?: string, downloadable?: string, streamType?: string, projectSmppw?: string): Promise<any> {
+  public static async createNewProject(projectTitle?: string, streamType?: string, projectSmppw?: string): Promise<any> {
     return Request.post(Endpoints.PROJECT_NEW, {
       project_title: projectTitle,
-      downloadable,
       stream_type: streamType,
       project_password: projectSmppw,
     });
   }
 
-  public static editProject(projectID, projectTitle: string, downloadable: string, streamType: string, projectSmppw?: string): Promise<any> {
+  public static async editProject(projectID, projectTitle: string, streamType: string, projectSmppw?: string): Promise<any> {
     return Request.post(Endpoints.PROJECT_EDIT, {
       project_id: projectID,
       project_title: projectTitle,
-      downloadable,
       stream_type: streamType,
       project_password: projectSmppw,
     });
