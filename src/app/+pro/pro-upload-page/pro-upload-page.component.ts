@@ -3,7 +3,7 @@ import {
   ChangeDetectorRef,
   Component,
   ElementRef,
-  EventEmitter,
+  EventEmitter, HostListener,
   Input,
   NgZone,
   OnInit,
@@ -12,7 +12,7 @@ import {
 } from '@angular/core';
 import {FileItem, FileUploader} from '../../tools/ng2-file-upload';
 import {Status, Uploader} from '../../services/uploader.service';
-import {NgForm, Validators} from '@angular/forms';
+import {FormGroup, NgForm, Validators, FormControl} from '@angular/forms';
 import {NgbTooltip} from '@ng-bootstrap/ng-bootstrap';
 import {RestCall} from '../../rest/rest-call';
 import {Utils} from '../../app.component';
@@ -21,6 +21,7 @@ import {ConfirmDialogService} from '../../services/confirmation-dialog/confirmat
 import {ActivatedRoute, Router} from '@angular/router';
 import {ProjectService} from '../../services/project.service';
 import {StateService} from '../../services/state.service';
+import {Observable} from 'rxjs';
 
 // TODO: Als availabily stream only is dan wordt de downloadfile niet opgeslagen, bij Pro moet dat wel want daar kan dat achteraf nog aangepast worden.
 
@@ -69,7 +70,6 @@ export class ProUploadPageComponent implements OnInit {
         if (this.stateService.getVersionUpload().getValue()) {
           this.trackId = this.activatedRoute.snapshot.queryParams.newTrackId;
           this.project_id = this.stateService.getActiveProject().getValue().project_id;
-          this.myForm.controls['existing_projects'].readonly();
           this.getProjectInfo(this.project_id);
         }
       })
@@ -121,6 +121,13 @@ export class ProUploadPageComponent implements OnInit {
 
   @ViewChild('notes_element', {static: false}) notes_element: ElementRef;
   @ViewChild('ft', {static: false}) files_tooltip: NgbTooltip;
+
+  @HostListener('window:beforeunload')
+  canDeactivate() {
+    return !this.stateService.getVersionUpload().getValue();
+    }
+
+    // returning false will show a confirm dialog before navigating away
 
   async onSubmit() {
     this.uploader.newFileUploader();

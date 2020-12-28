@@ -23,7 +23,6 @@ import {Observable, Subject} from 'rxjs';
         noFn();
       }
     });
-
   }
 
   getMessage(): Observable<any> {

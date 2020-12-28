@@ -9,6 +9,7 @@ import {TrackResolver} from "./projects/track/TrackResolver";
 import {ProUploadPageComponent} from './pro-upload-page/pro-upload-page.component';
 import {UploadGuard} from '../auth/upload/upload.guard';
 import {ProBoardProjectsComponent} from './projects/pro-board-projects.component';
+import {PendingChangesGuard} from '../auth/pending-changes.guard';
 
 @NgModule({
   imports: [
@@ -37,6 +38,7 @@ import {ProBoardProjectsComponent} from './projects/pro-board-projects.component
           {
             path: 'upload',
             component: ProUploadPageComponent,
+            canDeactivate: [PendingChangesGuard],
             data:{
               title:'Upload',
               breadcrumb:[

@@ -21,6 +21,7 @@ import {ConfirmDialogService} from '../services/confirmation-dialog/confirmation
 import {ProUploadPopoverComponent} from './pro-upload-page/pro-upload-popover/pro-upload-popover.component';
 import {NgDynamicBreadcrumbModule} from 'ng-dynamic-breadcrumb';
 import {EditProjectFormComponent} from './projects/edit-project-form/edit-project-form.component';
+import {PendingChangesGuard} from '../auth/pending-changes.guard';
 
 @NgModule({
   imports: [
@@ -50,7 +51,8 @@ import {EditProjectFormComponent} from './projects/edit-project-form/edit-projec
   providers:
   [
     ConfirmDialogService,
-    Uploader
+    Uploader,
+    PendingChangesGuard
   ]
 })
 export class ProModule {

@@ -11,7 +11,7 @@ import {StateService} from '../../../services/state.service';
 })
 export class ProUploadStartComponent implements OnInit, OnDestroy {
 
-  @ViewChild('fileinputhidden', {static: false}) fileinput: ElementRef;
+  @ViewChild('fileinputhidden', {static: true}) fileinput: ElementRef;
   newTrackId;
   subscription;
 
@@ -20,7 +20,6 @@ export class ProUploadStartComponent implements OnInit, OnDestroy {
         if (bool) {
           this.fileinput.nativeElement.click();
           this.newTrackId = this.activatedRoute.snapshot.queryParams.track_id;
-          console.log(this.newTrackId);
         }
         else{
           this.newTrackId = null;

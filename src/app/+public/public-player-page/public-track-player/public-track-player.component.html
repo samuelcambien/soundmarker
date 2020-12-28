@@ -188,12 +188,7 @@
 
 
     <div class="player-toolbar hide-phone  ml-auto">
-
-      <div class="addversion top-icon btn-sm btn-outline-form" *ngIf="isAdminRoute(router.url)" (click)="addNewVersion()">
-        <h5>+</h5>
-      </div>
-
-        <ng-select *ngIf="track.versions.length>1"
+        <ng-select
         class="custom top-icon version-control"
         bindLabel="version_id"
         [items]="track.versions"
@@ -204,8 +199,12 @@
         placeholder="Version"
         name="versions_control"
         dropdownPosition="auto">
+
         <ng-template ng-label-tmp let-item="item">
           v<b>{{track.getVersionIndex(item)+1}}</b>
+        </ng-template>
+        <ng-template ng-footer-tmp *ngIf="isAdminRoute(router.url)" >
+          <p (click)="addNewVersion()">Add new version</p>
         </ng-template>
         <ng-template ng-option-tmp let-item="item" let-index="index">
           v<b>{{index+1}}</b>
