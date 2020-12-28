@@ -22,7 +22,7 @@ export class SmaComponent implements OnInit {
 
   smaClass = this.getSmaClass();
 
-  adExposureTime = 45 ;        // in seconds
+  adExposureTime = 45;        // in seconds
   adFadeInTime = "0.74s";     // Needs to be a string.
   adFadeOutTime = "0.5s";     // Needs to be a string.
   adInitialDelay = 350;      // in ms, this is also the delay between loading an ad and showing it. (Enough time to load it)
@@ -36,7 +36,8 @@ export class SmaComponent implements OnInit {
   adTimer = new Subscription();
   screenAction = new Subject();
 
-  constructor() { }
+  constructor() {
+  }
 
   ngOnInit() {
     this.adTimer.unsubscribe();
@@ -49,20 +50,30 @@ export class SmaComponent implements OnInit {
     document.addEventListener("visibilitychange", this.toggleBrowserTab, true);           // Listen to browser tab events to set user activity to none.
     document.addEventListener("visibilitychange", this.onFocus, false);                   // In case a user has left to another tab .
     this.screenAction.subscribe(
-      ()=> {
-        if(this.firstAd || this.adTimer.closed) {                                                       // Launch a new advertisement cycle on user interaction.
+      () => {
+        if (this.firstAd || this.adTimer.closed) {                                                       // Launch a new advertisement cycle on user interaction.
           this.adTimer = timer(0, this.adExposureTime * 1000).pipe             // Initiate the advertisement cycle
-          (tap(() => {if(!this.hiddenIframe) this.loadNextAd()}),                                  // Only load a new ad if there is not one waiting (in case page was inactive and there is already an ad waiting)
-            tap(() => {if(!this.pageIsActive()) {this.adWait();}}),                                 // If page is inactive: break the chain and wait for user interaction.
-            delay(this.firstAd? this.adPostFetchDelay/1.5 : this.adPostFetchDelay),                // Delay between loading an ad an refreshing the ad.
-            tap(() => {this.firstAd = false; this.hideIframe(this.shownIframe)}),                   // Fadeout old ad
+          (tap(() => {
+              if (!this.hiddenIframe) this.loadNextAd()
+            }),                                  // Only load a new ad if there is not one waiting (in case page was inactive and there is already an ad waiting)
+            tap(() => {
+              if (!this.pageIsActive()) {
+                this.adWait();
+              }
+            }),                                 // If page is inactive: break the chain and wait for user interaction.
+            delay(this.firstAd ? this.adPostFetchDelay / 1.5 : this.adPostFetchDelay),                // Delay between loading an ad an refreshing the ad.
+            tap(() => {
+              this.firstAd = false;
+              this.hideIframe(this.shownIframe)
+            }),                   // Fadeout old ad
             delay(this.adTransitionWait),                                                                 // Wait for fadeout before destroying the iframe
             tap(() => this.destroyIframe(this.shownIframe))                                         // Destroy the old iframe
           ).subscribe(() => this.showIframe(this.hiddenIframe))                                    // Fade in the new iframe
-        }}
+        }
+      }
     );
 
-    if(document.visibilityState=="visible") {
+    if (document.visibilityState == "visible") {
       setTimeout(() => this.screenAction.next(), this.adInitialDelay);
     }                                                                                                   // Launch advertisement algorithm for the first time if tab is open.
 
@@ -79,7 +90,7 @@ export class SmaComponent implements OnInit {
   // Registering a click.
   private clickSma(event) {
     if (event.origin !== Utils.getSmaDomain()) return; // Make sure that the click from the iframe click is coming from the correct domain.
-    if(event.data) {
+    if (event.data) {
       if (Number.isInteger(event.data)) {
         this.scroll.emit(event.data);
         return
@@ -89,24 +100,22 @@ export class SmaComponent implements OnInit {
     }
   }
 
-  private loadNextAd(): Promise<any> {
-    return RestCall.getRandSma(this.smaId)
-      .then(response => {
-          if(response["html"]){
-            this.hiddenIframe = this.createIframe(response["html"]);
-            this.nextSmaId=response["sma_id"];}
-          else{
-            this.adTimer.unsubscribe();                                         // If there is no add fetched from the backend stop the refresh algorithm for this session.
-            this.screenAction.unsubscribe();
-            document.removeEventListener("visibilitychange", this.toggleBrowserTab, true);
-            document.removeEventListener("visibilitychange", this.onFocus, false);
-          }
-        }
-      );
+  private async loadNextAd(): Promise<any> {
+    const response = await RestCall.getRandSma(this.smaId);
+    if (response["html"]) {
+      this.hiddenIframe = this.createIframe(response["html"]);
+      this.nextSmaId = response["sma_id"];
+    }
+    else {
+      this.adTimer.unsubscribe();                                         // If there is no add fetched from the backend stop the refresh algorithm for this session.
+      this.screenAction.unsubscribe();
+      document.removeEventListener("visibilitychange", this.toggleBrowserTab, true);
+      document.removeEventListener("visibilitychange", this.onFocus, false);
+    }
   }
 
   // Create new iframe with src of external webpage.
-  private createIframe(src){
+  private createIframe(src) {
     let iframe = document.createElement('iframe');
     iframe.setAttribute('id', 'iframe');
     iframe.setAttribute('src', src);
@@ -117,20 +126,19 @@ export class SmaComponent implements OnInit {
   }
 
   // Fade in iframe
-  private showIframe(iframe){
-    if(iframe) {
+  private async showIframe(iframe) {
+    if (iframe) {
       this.smaId = this.nextSmaId;
-      RestCall.logSmaImpression(this.smaId).then(()=>{
-        iframe.style.animation = 'shown-sma ' + this.adFadeInTime + ' forwards';
-        this.shownIframe = this.hiddenIframe;
-        this.hiddenIframe = null;
-      });
+      await RestCall.logSmaImpression(this.smaId);
+      iframe.style.animation = 'shown-sma ' + this.adFadeInTime + ' forwards';
+      this.shownIframe = this.hiddenIframe;
+      this.hiddenIframe = null;
     }
   }
 
   // Fade out iframe
-  private hideIframe(iframe){
-    if(iframe) {
+  private hideIframe(iframe) {
+    if (iframe) {
       iframe.style.animation = 'hidden-sma ' + this.adFadeOutTime + ' forwards';
     }
   }
@@ -150,7 +158,7 @@ export class SmaComponent implements OnInit {
   browserPrefix = this.getHiddenPrefix();
 
   // Breaks the advertisement cycle and waits for a user interaction to restart a new cycle and update the ad.
-  private adWait(){
+  private adWait() {
     this.firstAd = true;
     this.adTimer.unsubscribe();
     document.addEventListener('mouseover', this.onVisibilityChange, true);
@@ -162,19 +170,19 @@ export class SmaComponent implements OnInit {
   // When going to another tab: set the user activity way in the past.
   // When going back to page: set user activity to null.
   toggleBrowserTab = () => {
-    if(document.visibilityState == this.browserPrefix)  {
+    if (document.visibilityState == this.browserPrefix) {
       let t = new Date('2019-03-12T00:00:00');       // This is a work around for when a user is in another tab the most user activity goes far in the past.
       this.mostRecentUserActivity = t;
       document.addEventListener("visibilitychange", this.onFocus, false);
     }
-    else{
+    else {
       this.mostRecentUserActivity = null;
     }
   };
 
   // Returns true if the page is considered to be active.
-  pageIsActive(): boolean{
-    if(this.mostRecentUserActivity){
+  pageIsActive(): boolean {
+    if (this.mostRecentUserActivity) {
       let sec = moment(new Date()).diff(moment(this.mostRecentUserActivity), 'seconds');
       return (sec < this.pageInactiveTolerance);
     }
@@ -188,8 +196,8 @@ export class SmaComponent implements OnInit {
 
   // If user goes away from window, start listening for different types of user activity.
   @HostListener('window:blur', ['$event'])
-  onBlurOut(){
-    if(document.visibilityState != this.browserPrefix){
+  onBlurOut() {
+    if (document.visibilityState != this.browserPrefix) {
       this.updateMostRecentUserActivity();
       document.addEventListener("mouseover", this.mouseEventHandler, true);
     }
@@ -197,38 +205,38 @@ export class SmaComponent implements OnInit {
   }
 
   @HostListener('window:focus', ['$event'])
-  onFocusIn(){
+  onFocusIn() {
     document.removeEventListener("mouseover", this.mouseEventHandler, true);
   }
 
   onFocus = () => {
-    if(document.visibilityState == 'visible') {
+    if (document.visibilityState == 'visible') {
       document.removeEventListener("visibilitychange", this.onFocus, false);
       document.removeEventListener('focus', this.onFocus, false);
       document.removeEventListener('mouseover', this.onVisibilityChange, true);
       this.mostRecentUserActivity = null;
-      if(this.adTimer.closed) this.screenAction.next();
+      if (this.adTimer.closed) this.screenAction.next();
     }
   };
 
   onVisibilityChange = () => {
-    if(document.visibilityState == "visible") {
+    if (document.visibilityState == "visible") {
       document.removeEventListener('mouseover', this.onVisibilityChange, true);
       this.updateMostRecentUserActivity();
-      if(this.adTimer.closed) this.screenAction.next();
+      if (this.adTimer.closed) this.screenAction.next();
     }
   };
 
-  private updateMostRecentUserActivity(){
+  private updateMostRecentUserActivity() {
     let t = new Date();
     this.mostRecentUserActivity = t;
   }
 
   // Browser user activity (page visibility API) has different prefixes in different browsers.
-  getHiddenPrefix(): string{
-    let prefixes = ['webkit','moz','ms','o'];
+  getHiddenPrefix(): string {
+    let prefixes = ['webkit', 'moz', 'ms', 'o'];
     if ('hidden' in document) return 'hidden';
-    for (let i = 0; i < prefixes.length; i++){
+    for (let i = 0; i < prefixes.length; i++) {
       if ((prefixes[i] + 'Hidden') in document)
         return prefixes[i] + 'Hidden';
     }

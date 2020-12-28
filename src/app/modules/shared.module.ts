@@ -26,10 +26,12 @@ import {LoadableComponentModule} from 'ngx-loadable-component';
 import {LoadingComponent} from "../loading/loading.component";
 import {PlayButtonComponent} from "../player/play-button/play-button.component";
 import {RouterModule} from "@angular/router";
+import {FileUploadModule} from "../tools/ng2-file-upload";
 
 const modules = [
   ClipboardModule,
   CommonModule,
+  FileUploadModule,
   FormsModule,
   NgbModule,
   NgSelectModule,

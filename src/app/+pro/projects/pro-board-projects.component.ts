@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
-import {RestCall} from '../../rest/rest-call';
-import {StateService} from '../../services/state.service';
+import {Component, OnInit} from '@angular/core';
+import {Project} from "../../model/project";
+import {ProjectService} from "../../services/project.service";
 
 @Component({
   selector: 'app-pro-board-projects',
@@ -9,14 +9,15 @@ import {StateService} from '../../services/state.service';
 })
 export class ProBoardProjectsComponent implements OnInit {
 
-  constructor(private stateService: StateService) { }
-  user_project_list;
+  constructor(
+    protected projectService: ProjectService,
+  ) {
 
-  ngOnInit() {
-    try{
-      RestCall.getProjects().then(res => this.user_project_list = res["projects"]);
-    }
-    catch{
-    }
+  }
+
+  user_project_list: Project[];
+
+  async ngOnInit() {
+    this.user_project_list = await this.projectService.getAllProjects();
   }
 }

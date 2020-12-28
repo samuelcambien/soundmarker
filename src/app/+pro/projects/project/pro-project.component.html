@@ -1,5 +1,5 @@
 <app-pro-board-card>
-  <ng-container class="title">Project title · 12 tracks</ng-container>
+  <ng-container class="title">{{project?.title}} · {{project?.tracks?.length}} tracks</ng-container>
   <ng-container class="menu">
     <a class="dropdown-item" href="#">Show statistics</a>
     <a class="dropdown-item" href="#">Check loudness</a>
@@ -10,7 +10,7 @@
     <div *ngFor="let track of project?.tracks" class="track-bar" routerLink="track/{{track.track_id}}">
       <div class="list-header row">
       <div class="title"><h3>{{track.title}}</h3>
-        <p>3 versions · 12 new comments</p></div>
+        <p>{{track.versions?.length}} versions · 12 new comments</p></div>
 
 
         <div class="ml-auto">

@@ -28,7 +28,6 @@ import {NgDynamicBreadcrumbModule} from 'ng-dynamic-breadcrumb';
     SharedModule,
     ProRoutingModule,
     ProjectModule,
-    FileUploadModule,
     NgDynamicBreadcrumbModule
   ],
   declarations: [

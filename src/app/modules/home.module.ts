@@ -6,7 +6,6 @@ import {PublicUploadPageComponent} from '../+public/public-upload-page/public-up
 import {PublicUploadingFilesComponent} from '../+public/public-upload-page/public-upload-progress/public-uploading-files.component';
 import {PublicUploadFinishedComponent} from '../+public/public-upload-page/public-upload-finished/public-upload-finished.component';
 import {DragAndDropModule} from 'angular-draggable-droppable';
-import {FileUploadModule} from '../tools/ng2-file-upload';
 import {PublicUploadFormComponent} from '../+public/public-upload-page/public-upload-form/public-upload-form.component';
 
 import {EmailValidationPopover} from '../+public/public-upload-page/public-upload-form/public-upload-form.component';
@@ -23,7 +22,6 @@ const routes: Routes = [
     CommonModule,
     RouterModule.forChild(routes),
     DragAndDropModule,
-    FileUploadModule,
     SharedModule
   ],
   declarations: [

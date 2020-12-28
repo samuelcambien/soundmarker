@@ -41,6 +41,21 @@ export class ProjectService {
     });
   }
 
+  async getAllProjects(): Promise<Project[]> {
+    const projects = (await RestCall.getProjects())["projects"];
+    projects.forEach(
+      async (project) => Object.assign(project, await RestCall.getProject(project.hash))
+    );
+    return projects;
+  }
+
+  async getRecentProjects(count: number): Promise<Project[]> {
+    const allProjects: Project[] = await this.getAllProjects();
+    return allProjects
+      .sort()
+      .slice(0, count);
+  }
+
   getVersion(versionId: string): Version {
 
     return this.stateService.getActiveProject().getValue().tracks

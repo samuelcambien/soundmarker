@@ -21,7 +21,6 @@ export class ProTopbarComponent {
   constructor(
     private authService: AuthService,
     private stateService: StateService,
-    private uploader: Uploader
   ) {
     this.currentUser$ = authService.getCurrentUser();
   }
