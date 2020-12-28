@@ -14,13 +14,13 @@ import {ProTopbarComponent} from "./page/topbar/pro-topbar.component";
 import {ProBoardCardComponent} from './shared/pro-board-card/pro-board-card.component';
 import {ProjectModule} from "../modules/project.module";
 import {ProUploadPageComponent} from './pro-upload-page/pro-upload-page.component';
-import {FileUploadModule} from "../tools/ng2-file-upload";
-import { ProUploadStartComponent } from './pro-upload-page/pro-upload-start/pro-upload-start.component';
+import {ProUploadStartComponent} from './pro-upload-page/pro-upload-start/pro-upload-start.component';
 import {Uploader} from '../services/uploader.service';
 import {ConfirmDialogComponent} from '../services/confirmation-dialog/confirmation-dialog.component';
 import {ConfirmDialogService} from '../services/confirmation-dialog/confirmation-dialog.service';
 import {ProUploadPopoverComponent} from './pro-upload-page/pro-upload-popover/pro-upload-popover.component';
 import {NgDynamicBreadcrumbModule} from 'ng-dynamic-breadcrumb';
+import {EditProjectFormComponent} from './projects/edit-project-form/edit-project-form.component';
 
 @NgModule({
   imports: [
@@ -44,7 +44,8 @@ import {NgDynamicBreadcrumbModule} from 'ng-dynamic-breadcrumb';
     ProBoardCardComponent,
     ProUploadPageComponent,
     ProUploadStartComponent,
-    ProUploadPopoverComponent
+    ProUploadPopoverComponent,
+    EditProjectFormComponent
   ],
   providers:
   [

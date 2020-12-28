@@ -44,23 +44,21 @@ export class PublicPlayerPageComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.route.params.subscribe(params => {
+    this.route.params.subscribe(async params => {
       this.cdr.detectChanges();
-      this.projectService.loadProject(params['project_hash'])
-        .then(() => {
-          if (this.stateService.getActiveProject().getValue()) {
-            this.project = this.stateService.getActiveProject().getValue();
-            this.initFields();
+      await this.projectService.loadProject(params['project_hash']);
+      if (this.stateService.getActiveProject().getValue()) {
+        this.project = this.stateService.getActiveProject().getValue();
+        this.initFields();
 
-            if (this.getProject().tracks.length == 1)
-              this.stateService.setActiveTrack(this.getProject().tracks[0]);
-          }
-          else {
-            this.exists = false;
-            this.message = null;
-          }
-          this.cdr.detectChanges();
-        })
+        if (this.getProject().tracks.length == 1)
+          this.stateService.setActiveTrack(this.getProject().tracks[0]);
+      }
+      else {
+        this.exists = false;
+        this.message = null;
+      }
+      this.cdr.detectChanges();
     });
   }
 

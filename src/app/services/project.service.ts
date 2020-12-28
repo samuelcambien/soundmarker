@@ -41,10 +41,30 @@ export class ProjectService {
     });
   }
 
+  async getProject(projectHash: string): Promise<Project> {
+
+    const response = await RestCall.getProject(projectHash);
+    const project: Project = Object.assign(new Project(), response, {project_hash: projectHash});
+
+    if (project.project_id) {
+
+      project.tracks.forEach(track => track.project = project);
+
+      await Utils.promiseSequential(
+        project.tracks.map(track => () => this.loadVersions(track))
+      );
+
+      project.downloads = response.stream_type != "0";
+      project.losless = false;
+    }
+
+    return project;
+  }
+
   async getAllProjects(): Promise<Project[]> {
     const projects = (await RestCall.getProjects())["projects"];
     projects.forEach(
-      async (project) => Object.assign(project, await RestCall.getProject(project.hash))
+      async (project) => Object.assign(project, await this.getProject(project.hash))
     );
     return projects;
   }
@@ -70,32 +90,41 @@ export class ProjectService {
   }
 
   async loadProject(projectHash: string): Promise<void> {
-    const project = await RestCall.getProject(projectHash);
+
+    const project: Project = await this.getProject(projectHash);
+    this.stateService.setActiveProject(project);
+    if (!this.isActive(project) && !this.areCommentsActive(project)) {
+      return;
+    }
+  }
+
+  async loadProjectLI(project): Promise<void> {
+
     if (project.project_id) {
       this.stateService.setActiveProject(project);
-      if (!this.isActive(project) && !this.areCommentsActive(project)) {
-        return Promise.resolve();
-      }
 
       project.tracks.forEach(track => track.project = project);
 
-      return Utils.promiseSequential(
+      await Utils.promiseSequential(
         project.tracks.map(track => () => this.loadVersions(track))
       );
     }
   }
 
-  async loadProjectLI(project): Promise<void> {
-    // const project = await RestCall.getProject(projectHash);
-    if (project.project_id) {
-      this.stateService.setActiveProject(project);
+  async editProject(
+    projectId: string,
+    title: string,
+    downloads: boolean,
+    losless: boolean,
+    passwordProtected: boolean,
+    password?: string
+  ): Promise<void> {
 
-      project.tracks.forEach(track => track.project = project);
-
-      return Utils.promiseSequential(
-        project.tracks.map(track => () => this.loadVersions(track))
-      );
+    if (passwordProtected && !password) {
+      throw new TypeError();
     }
+
+    await RestCall.editProject(projectId, title, losless? "1" : "0", "0");
   }
 
   public isActive(project: Project) {

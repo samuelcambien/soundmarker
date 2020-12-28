@@ -110,8 +110,21 @@ export class RestCall {
       return Request.post(Endpoints.SMA, {sma_id: id});
   }
 
-  public static async getProject(projectHash: string): Promise<Project> {
-    return Request.get(Endpoints.PROJECT, [projectHash]);
+  public static async getProject(projectHash: string):
+    Promise<{
+      project_id: string,
+      title: string,
+      status: string,
+      expiration: string,
+      stream_type: string,
+      sender: string,
+      tracks: {
+        track_id: string,
+        title: string,
+      }[],
+    }> {
+
+    return Request.getNonCaching(Endpoints.PROJECT, [projectHash]);
   }
 
   public static async getTrack(trackId: string): Promise<Track> {

@@ -1,0 +1,103 @@
+<div id="sm">
+  <div id="pro">
+
+    <form #myForm="ngForm"
+          (ngSubmit)="onSubmit()">
+      <div class="pro-form-container">
+
+          <div class="form-row mb-5p">
+            <div class="form-group col">
+              <input class="form-control form-control-sm"
+                     placeholder="Project title"
+                     name="projecttitle"
+                     [(ngModel)]="title">
+            </div>
+          </div>
+
+          <div class="form-row radios  mb-5p">
+            <div class="col">
+              <label class="custom expiration btn btn-sm btn-outline-form btn-settings noselect"
+                     popoverClass="popover-class"
+                     ngbPopover="Allow downloading of uploaded tracks"
+                     [openDelay]="300"
+                     [autoClose]="false"
+                     triggers="mouseenter:mouseleave">
+                <div class="switch">
+                  <input type="checkbox"
+                         name="downloads"
+                         [(ngModel)]="downloads">
+                  <span class="slider round"></span>
+                </div>
+                <div id="enable-download-button"
+                     [ngClass]="{'unchecked': !downloads}"
+                     class="slider-text">Downloads
+                </div>
+              </label>
+            </div>
+            <div class="col">
+              <label class="custom noselect downloadable btn btn-sm btn-outline-form btn-settings"
+                     popoverClass="popover-class"
+                     ngbPopover="Allow lossless streaming"
+                     [openDelay]="300"
+                     [autoClose]="false"
+                     triggers="mouseenter:mouseleave">
+                <div class="switch">
+                  <input type="checkbox"
+                         name="losless"
+                         [(ngModel)]="losless">
+                  <span class="slider round"></span>
+                </div>
+                <div [ngClass]="{'unchecked': !losless}"
+                     class="slider-text">Lossless
+                </div>
+              </label>
+            </div>
+            <div class="col">
+              <label class="custom noselect downloadable btn btn-sm btn-outline-form btn-settings"
+                     popoverClass="popover-class"
+                     ngbPopover="Set extra password protection"
+                     [openDelay]="300"
+                     [autoClose]="false"
+                     triggers="mouseenter:mouseleave">
+                <div class="switch">
+                  <input type="checkbox"
+                         name="passwordProtected"
+                         [(ngModel)]="passwordProtected">
+                  <span class="slider round"></span>
+                </div>
+                <div [ngClass]="{'unchecked': !passwordProtected}"
+                     class="slider-text">Password
+                </div>
+              </label>
+            </div>
+            <div class="col">
+              <input [disabled]="!passwordProtected"
+                     name="smppwv"
+                     [(ngModel)]="password"
+                     class="sub-form"
+                     placeholder="Min. 6 characters">
+            </div>
+          </div>
+
+          <div class="form-row mb-5p d-flex justify-content-end">
+            <div class="col col-sm-2">
+              <button type="button"
+                      class="btn btn-sm btn-outline-form free-upload"
+                      (click)="close.emit()">
+                Cancel
+              </button>
+            </div>
+            <div class="col col-sm-3">
+              <button type="submit"
+                      [disabled]="!myForm.valid"
+                      class="btn btn-sm btn-primary free-upload">
+                Save
+              </button>
+            </div>
+          </div>
+
+      </div>
+    </form>
+
+  </div>
+</div>

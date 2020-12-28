@@ -128,15 +128,19 @@ export class ProUploadPageComponent implements OnInit {
     this.smUploader.setStatus(Status.UPLOADING_SONGS);
     try {
       if (this.createNewProject) {
-        let stream_type_id = this.smUploader.stream_type ? 0 : 1;
-        const projectResponse = await RestCall.createNewProject(this.smUploader.getProjectTitle(), this.smUploader.getSMPPW());
+        let stream_type = this.smUploader.stream_type ? "0" : "1";
+        const projectResponse = await RestCall.createNewProject(
+          this.smUploader.getProjectTitle(),
+          this.smUploader.getSMPPW(),
+          stream_type,
+        );
         this.project_id = projectResponse["project_id"];
       }
 
       await Utils.promiseSequential(
         this.smUploader.fileUploader.queue.map((track, index) => () => this.processTrack(this.project_id, track, this.smUploader.getTitle(track), this.selected_existing_tracks[index]))
       );
-      const shareResponse = await RestCall.shareProject(this.project_id, this.smUploader.expiration, this.smUploader.getProjectNotes(), "", this.smUploader.getReceivers());
+      await RestCall.shareProject(this.project_id, this.smUploader.expiration, this.smUploader.getProjectNotes(), "", this.smUploader.getReceivers());
       this.smUploader.setStatus(Status.GREAT_SUCCESS);
 
     } catch (e) {

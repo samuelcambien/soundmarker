@@ -227,7 +227,6 @@ export class SMFileUploader {
     this.removeFileSize(item.file.size);
   }
 
-  //In use in HTML code. Do not delete, not recognized by IntelliJ parser.
   toggleAvailability(){
     this.availability = !this.availability;
   }

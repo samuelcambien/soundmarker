@@ -10,4 +10,7 @@ export class Project {
   expiration: string;
   sender: string;
   title: string;
+
+  downloads: boolean;
+  losless: boolean;
 }
