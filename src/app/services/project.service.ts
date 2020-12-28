@@ -8,6 +8,7 @@ import {Utils} from "../app.component";
 import {RestCall} from "../rest/rest-call";
 import {StateService} from "./state.service";
 import {Player} from "../player/player.service";
+import {TrackService} from "./track.service";
 
 @Injectable({
   providedIn: 'root'
@@ -17,6 +18,7 @@ export class ProjectService {
   constructor(
     private player: Player,
     private stateService: StateService,
+    private trackService: TrackService,
   ) {
 
     player.progress.subscribe(async e => {
@@ -48,7 +50,9 @@ export class ProjectService {
 
     if (project.project_id) {
 
-      project.tracks.forEach(track => track.project = project);
+      project.tracks.forEach(
+        async track => Object.assign(track, await this.trackService.getTrack(track.track_id))
+      );
 
       await Utils.promiseSequential(
         project.tracks.map(track => () => this.loadVersions(track))
@@ -75,7 +79,7 @@ export class ProjectService {
       .slice(0, count);
   }
 
-  async removeProject(project_id){
+  async removeProject(project_id) {
     await RestCall.removeProject(project_id);
   }
 
@@ -127,7 +131,7 @@ export class ProjectService {
       throw new TypeError();
     }
 
-    await RestCall.editProject(projectId, title, losless? "1" : "0", "0");
+    await RestCall.editProject(projectId, title, losless ? "1" : "0", "0");
   }
 
   public isActive(project: Project) {

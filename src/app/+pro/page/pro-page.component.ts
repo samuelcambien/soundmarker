@@ -1,8 +1,7 @@
 import {Component} from '@angular/core';
-import {Status, Uploader} from '../../services/uploader.service';
+import {Uploader} from '../../services/uploader.service';
 import {animate, state, style, transition, trigger} from '@angular/animations';
 import {Subject} from 'rxjs';
-import {StateService} from '../../services/state.service';
 
 @Component({
   selector: 'app-pro',
@@ -11,9 +10,9 @@ import {StateService} from '../../services/state.service';
   animations: [
     trigger('fadeAnimation', [
       state('in', style({opacity: 1})),
-      transition(':enter', [style({opacity: 0}),animate(350)
+      transition(':enter', [style({opacity: 0}), animate(350)
       ]),
-      transition(':leave',animate(200, style({opacity: 0})))
+      transition(':leave', animate(200, style({opacity: 0})))
     ])
   ]
 })
@@ -22,21 +21,20 @@ export class ProPageComponent {
 
   popover: boolean = true;
   eventLoadingTopbar: Subject<void> = new Subject<void>();
-  activeTrack;
 
-
-  constructor(private uploader: Uploader,
-  private stateService: StateService){
+  constructor(
+    private uploader: Uploader,
+  ) {
   }
 
-  ngOnInit(){
+  ngOnInit() {
   }
 
-  showPopover(){
-    return this.popover;
+  showUploadPopover() {
+    return (this.uploader.isUploading() || this.uploader.isReady()) && this.popover;
   }
 
-  closePopover(){
+  closePopover() {
     this.uploader.clearFileUploaders();
     if (this.uploader.isUploading()) {
       this.eventLoadingTopbar.next();
@@ -44,7 +42,7 @@ export class ProPageComponent {
     }
   }
 
-  openPopover(){
+  openPopover() {
     this.popover = true;
   }
 }

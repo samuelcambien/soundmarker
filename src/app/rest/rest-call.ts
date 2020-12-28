@@ -31,11 +31,24 @@ export class RestCall {
     });
   }
 
-
   public static createNewTrack(project_id, title): Promise<any> {
     return Request.post(Endpoints.TRACK_NEW, {
       project_id: project_id,
       track_title: title
+    });
+  }
+
+  public static editTrack(trackId: string, title: string, visibility: string) {
+    return Request.post(Endpoints.TRACK_EDIT, {
+      track_id: trackId,
+      title,
+      visibility,
+    })
+  }
+
+  static deleteTrack(trackId: string) {
+    return Request.post(Endpoints.TRACK_DELETE, {
+      track_id: trackId,
     });
   }
 
@@ -136,8 +149,12 @@ export class RestCall {
     return Request.getNonCaching(Endpoints.PROJECT, [projectHash]);
   }
 
-  public static getTrack(trackId: string): Promise<Track> {
-    return Request.get(Endpoints.TRACK, [trackId]);
+  public static getTrack(trackId: string): Promise<{
+    title: string,
+    visibility: string,
+    versions: any[],
+  }> {
+    return Request.getNonCaching(Endpoints.TRACK, [trackId]);
   }
 
   public static getVersion(versionId: string): Promise<Version> {
@@ -163,7 +180,7 @@ export class RestCall {
     return this.getTrack('47');
   }
 
-  public static deleteProject(){
+  public static deleteProject() {
     Request.deleteFromCache(Endpoints.PROJECT_ALL);
   }
 }
@@ -199,6 +216,10 @@ export class Endpoints {
   public static TRACK: string = Endpoints.BACKEND + "/track";
 
   public static TRACK_NEW: string = Endpoints.TRACK + "/new";
+
+  public static TRACK_EDIT: string = Endpoints.TRACK + "/edit";
+
+  public static TRACK_DELETE: string = Endpoints.TRACK + "/delete";
 
   public static VERSION: string = Endpoints.TRACK + "/version";
 

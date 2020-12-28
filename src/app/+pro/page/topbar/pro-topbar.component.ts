@@ -12,9 +12,10 @@ import {Uploader} from '../../../services/uploader.service';
 })
 export class ProTopbarComponent {
 
-  private currentUser$: Observable<User>;
-  private eventsSubscription: Subscription;
+  currentUser$: Observable<User>;
+  eventsSubscription: Subscription;
   showUploading= false;
+
   @Output() popover = new EventEmitter();
   @Input() upload: Observable<boolean>;
 

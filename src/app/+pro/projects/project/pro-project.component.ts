@@ -6,6 +6,8 @@ import {NgDynamicBreadcrumbService} from 'ng-dynamic-breadcrumb';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {ProjectService} from '../../../services/project.service';
 import {RestCall} from '../../../rest/rest-call';
+import {TrackService} from "../../../services/track.service";
+import {Track} from "../../../model/track";
 
 @Component({
   selector: 'app-pro-board-projects-project',
@@ -23,30 +25,39 @@ export class ProProjectComponent implements OnInit {
     private ngDynamicBreadcrumbService: NgDynamicBreadcrumbService,
     private modalService: NgbModal,
     protected projectService: ProjectService,
+    protected trackService: TrackService,
     private cdr: ChangeDetectorRef,
-) {
+  ) {
 
   }
 
   ngOnInit(): void {
     this.route.data.subscribe(async data => {
       this.project = await data.project;
-      const breadcrumb =  {projectTitle: this.project.title};
+      const breadcrumb = {projectTitle: this.project.title};
       this.ngDynamicBreadcrumbService.updateBreadcrumbLabels(breadcrumb);
       this.cdr.detectChanges();
     });
-
   }
 
   openModal(modal) {
     this.modalService.open(modal);
   }
 
-  removeProject(){
-    this.projectService.removeProject(this.project.project_id).then(()=> {
-     RestCall.deleteProject();
-      this.router.navigate(["../pro/projects"]);
-      }
-    )
+  async removeProject() {
+    await this.projectService.removeProject(this.project.project_id);
+    RestCall.deleteProject();
+    await this.router.navigate(["../pro/projects"]);
+  }
+
+  async deleteTrack(track: Track) {
+    await this.trackService.delete(track);
+    await this.reloadProject();
+  }
+
+  async reloadProject() {
+    this.project = await this.projectService.getProject(
+      this.project.project_hash
+    );
   }
 }

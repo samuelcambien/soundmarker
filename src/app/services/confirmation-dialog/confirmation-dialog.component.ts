@@ -8,6 +8,8 @@ import {NgbActiveModal} from "@ng-bootstrap/ng-bootstrap";
 })
 export class ConfirmDialogComponent {
 
+  message: string;
+
   constructor(
     private activeModal: NgbActiveModal,
   ) {

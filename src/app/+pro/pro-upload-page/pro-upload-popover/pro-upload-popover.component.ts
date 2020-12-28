@@ -20,7 +20,7 @@ export class ProUploadPopoverComponent implements OnInit {
   ngOnInit() {
   }
 
-  getProgress(e: SMFileUploader ) {
+  getProgress(e: SMFileUploader) {
    return e.getFileUploader().progress * 0.99;
   }
 
@@ -29,7 +29,11 @@ export class ProUploadPopoverComponent implements OnInit {
     return "http://localhost:4200/project/";
   }
 
-  closePopover(){
+  closePopover() {
     this.close.emit();
+  }
+
+  getFileUploaders() {
+    return this.uploader.fileUploaders;
   }
 }

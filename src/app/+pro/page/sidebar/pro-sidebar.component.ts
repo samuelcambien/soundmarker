@@ -43,4 +43,8 @@ export class ProSidebarComponent {
   getRouterLink() {
     return 'project/' + this.track.project.project_hash + '/track/' + this.track.track_id;
   }
+
+  setVersionUpload(versionUpload: boolean) {
+    this.stateService.setVersionUpload(versionUpload);
+  }
 }

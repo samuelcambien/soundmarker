@@ -15,7 +15,7 @@
 	</span>
   </div>
 
-  <div *ngFor="let fileUploader of uploader.fileUploaders">
+  <div *ngFor="let fileUploader of getFileUploaders()">
   <div class="progress-container" *ngIf="fileUploader.stage == fileUploader.statusEnum.UPLOADING_SONGS">
     <div class="row body">
       <h3 class="col">{{fileUploader.project_title}}Track title</h3><h3 class="col text-right"> {{getProgress(fileUploader) | number:'1.0-0'}}% </h3>

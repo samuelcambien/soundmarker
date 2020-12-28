@@ -27,10 +27,10 @@
                  type="file"
                  title=""
                  ng2FileSelect
-                 [uploader]="uploader.getOpenFileUploader()"
+                 [uploader]="getOpenSMFileUploader().getFileUploader()"
                  multiple
                  name="files"
-                 accept="{{uploader.getOpenSMFileUploader().getAcceptedFileTypes().join(',')}}"
+                 accept="{{getOpenSMFileUploader().getAcceptedFileTypes().join(',')}}"
           />
         </div>
       </div>
@@ -43,15 +43,15 @@
        type="file"
        title=""
        ng2FileSelect
-       [uploader]="uploader.getOpenFileUploader()"
+       [uploader]="getOpenSMFileUploader().getFileUploader()"
        id="fileinputhidden"
        single
        name="files"
-       accept="{{uploader.getOpenSMFileUploader().getAcceptedFileTypes().join(',')}}"/>
+       accept="{{getOpenSMFileUploader().getAcceptedFileTypes().join(',')}}"/>
 <!--[class.disabled]="uploader.isUploading()"-->
 
 <div ng2FileDrop
-     [uploader]="uploader.fileUploader"
+     [uploader]="getFileUploader()"
      class="well my-drop-zone">
 </div>
 

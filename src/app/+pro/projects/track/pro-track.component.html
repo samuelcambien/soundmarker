@@ -1,21 +1,51 @@
 <app-pro-board-card>
   <ng-container class="title">{{track?.title}}</ng-container>
   <ng-container class="menu">
-    <a class="dropdown-item" href="#">Show statistics</a>
-    <a class="dropdown-item" href="#">Check loudness</a>
-    <a class="dropdown-item" href="#">Track settings</a>
+    <a class="dropdown-item"
+       (click)="openModal(editTrackModal);">Edit track</a>
+    <a class="dropdown-item"
+       href="#">Show statistics</a>
+    <a class="dropdown-item"
+       href="#">Check loudness</a>
+    <a class="dropdown-item"
+       href="#">Track settings</a>
+    <a class="dropdown-item"
+       (click)="openModal(deleteTrackModal);">Delete track</a>
   </ng-container>
   <ng-container class="body">
     <div class="full-player-container">
-    <public-track-player
-      *ngIf="track"
-      [track]="track"
-      [enableOverview]="false"
-      [trackActivated]="true"
-      [expired]="expired && !commentsExpired">
-    </public-track-player>
-    <div class="waveform-container w-100" *ngIf="track?.versions[0]">
-    </div>
+      <public-track-player *ngIf="track"
+                           [track]="track"
+                           [enableOverview]="false"
+                           [trackActivated]="true"
+                           [expired]="expired && !commentsExpired"></public-track-player>
+      <div class="waveform-container w-100"
+           *ngIf="track?.versions[0]"></div>
     </div>
   </ng-container>
 </app-pro-board-card>
+
+<ng-template #editTrackModal
+             let-modal>
+  <div class="modal-content">
+    <app-edit-track-form [track]="track"
+                         (close)="modal.close();"
+                         (save)="modal.close(); reloadTrack()"></app-edit-track-form>
+  </div>
+</ng-template>
+
+<ng-template #deleteTrackModal
+             let-modal>
+  <div class="modal-body">
+    Are you sure to remove all content related with this track?
+    This operation can not be undone.
+    <button type="button"
+            class="btn btn-sm btn-outline-form free-upload"
+            (click)="modal.dismiss()">Cancel
+    </button>
+    <button type="button"
+            class="btn btn-sm btn-primary free-upload"
+            (click)="modal.close(); deleteTrack();">Ok
+    </button>
+  </div>
+</ng-template>

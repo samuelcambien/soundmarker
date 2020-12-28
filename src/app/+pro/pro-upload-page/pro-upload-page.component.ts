@@ -225,5 +225,7 @@ export class ProUploadPageComponent implements OnInit, ComponentCanDeactivate {
     return Utils.getSizeHumanized(file.file.size);
   }
 
-
+  get isVersionUpload(): boolean {
+    return this.stateService.getVersionUpload().getValue() == true;
+  }
 }

@@ -1,8 +1,9 @@
 import {Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild} from '@angular/core';
-import {Status, Uploader} from '../../../services/uploader.service';
+import {SMFileUploader, Status, Uploader} from '../../../services/uploader.service';
 import {ActivatedRoute, ActivatedRouteSnapshot, NavigationEnd, Router} from '@angular/router';
 import {filter, first, take} from 'rxjs/operators';
 import {StateService} from '../../../services/state.service';
+import {FileUploader} from "../../../tools/ng2-file-upload";
 
 @Component({
   selector: 'app-pro-upload-start',
@@ -63,5 +64,13 @@ export class ProUploadStartComponent implements OnInit, OnDestroy {
       this.uploader.getOpenSMFileUploader().setStatus(Status.UPLOAD_FORM);
       this.uploader.getOpenSMFileUploader().addTitles(items);
     }
+  }
+
+  getOpenSMFileUploader(): SMFileUploader {
+    return this.uploader.getOpenSMFileUploader();
+  }
+
+  getFileUploader(): FileUploader {
+    return this.uploader.fileUploader;
   }
 }

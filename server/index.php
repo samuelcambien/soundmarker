@@ -756,6 +756,38 @@ if (true) {
 }
 });
 
+/////////////////////////////////////////////////////// Routes - /track/edit POST //////////////////////////////////////////////////////
+Flight::route('POST /track/edit', function() {
+
+  $config = Flight::get("config");
+  $getbody = json_decode(Flight::request()->getBody());
+  $track_id = $getbody->track_id;
+
+  // if user is not able to edit this project
+  if (!true) {
+    Flight::json(array(
+      'return' => 'notallowed'
+    ), 405);
+  }
+
+  $db = Flight::db();
+
+  if (isset($getbody->title)) {
+    $db->query(
+      "UPDATE Track SET title = '$getbody->title' WHERE track_id = '$track_id'"
+    );
+  }
+  if (isset($getbody->visibility)) {
+    $db->query(
+      "UPDATE Track SET visibility = '$getbody->visibility' WHERE track_id = '$track_id'"
+    );
+  }
+
+  Flight::json(array(
+    'return' => 'ok'
+  ), 200);
+});
+
 /////////////////////////////////////////////////////// Routes - /track/visibility POST //////////////////////////////////////////////////////
 Flight::route('POST /track/visibility', function() {
 
@@ -860,7 +892,9 @@ Flight::route('GET /track/@track_id', function($track_id) {
 
 $config = Flight::get("config");
 $db = Flight::db();
-$title = $db->query("SELECT title FROM Track WHERE track_id = '$track_id'")->fetchAll(PDO::FETCH_ASSOC)[0]["title"];
+  $track_row = $db->query("SELECT title, visibility FROM Track WHERE track_id = '$track_id'")->fetchAll(PDO::FETCH_ASSOC)[0];
+  $title = $track_row["title"];
+  $visibility = $track_row["visibility"];
 $sql = "SELECT version_id, notes, downloadable, visibility, version_title, track_length, wave_png FROM Version WHERE track_id = '$track_id'";
 $result = $db->query($sql);
 $versions = $result->fetchAll(PDO::FETCH_ASSOC);
@@ -890,8 +924,35 @@ foreach ($versions as &$version) {
 // return ok
 Flight::json(array(
    'title' => $title,
+   'visibility' => $visibility,
    'versions' => $versions
 ), 200);
+});
+
+///////////////////////////////////////////////////////// Routes - /track/delete POST /////////////////////////////////////////////////////////
+
+Flight::route('POST /track/delete', function() {
+
+  // Check if user projects
+  $config = Flight::get("config");
+  $getbody = json_decode(Flight::request()->getBody());
+  $track_id = $getbody->track_id;
+
+  // if user is not able to delete this track
+  if (!true) {
+    Flight::json(array(
+      'return' => 'notallowed'
+    ), 405);
+  }
+
+  $db = Flight::db();
+  $db->query(
+    "DELETE FROM Track WHERE track_id = '$track_id'"
+  );
+
+  Flight::json(array(
+    'track_id' => $track_id
+  ), 200);
 });
 
 ///////////////////////////////////////////////////// Routes - /track/version GET /////////////////////////////////////////////////////

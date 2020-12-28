@@ -10,8 +10,9 @@ export class ConfirmDialogService {
   ) {
   }
 
-  public confirm(): Promise<boolean> {
+  public confirm(message?: string): Promise<boolean> {
     const modalRef = this.modalService.open(ConfirmDialogComponent);
+    // (modalRef.componentInstance as ConfirmDialogComponent).message = message;
     return modalRef.result;
   }
 }

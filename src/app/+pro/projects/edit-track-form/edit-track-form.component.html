@@ -1,0 +1,59 @@
+<div id="sm">
+  <div id="pro">
+
+    <form #myForm="ngForm"
+          (ngSubmit)="onSubmit()">
+      <div class="pro-form-container">
+
+        <div class="form-row mb-5p">
+          <div class="form-group col">
+            <input class="form-control form-control-sm"
+                   placeholder="Track title"
+                   name="tracktitle"
+                   [(ngModel)]="title">
+          </div>
+        </div>
+
+        <div class="form-row radios  mb-5p">
+          <div class="col">
+            <label class="custom noselect downloadable btn btn-sm btn-outline-form btn-settings"
+                   popoverClass="popover-class"
+                   ngbPopover="Make this track visible"
+                   [openDelay]="300"
+                   [autoClose]="false"
+                   triggers="mouseenter:mouseleave">
+              <div class="switch">
+                <input type="checkbox"
+                       name="losless"
+                       [(ngModel)]="visible">
+                <span class="slider round"></span>
+              </div>
+              <div [ngClass]="{'unchecked': !visible}"
+                   class="slider-text">Visible
+              </div>
+            </label>
+          </div>
+        </div>
+
+        <div class="form-row mb-5p d-flex justify-content-end">
+          <div class="col col-sm-2">
+            <button type="button"
+                    class="btn btn-sm btn-outline-form free-upload"
+                    (click)="close.emit()">
+              Cancel
+            </button>
+          </div>
+          <div class="col col-sm-3">
+            <button type="submit"
+                    [disabled]="!myForm.valid"
+                    class="btn btn-sm btn-primary free-upload">
+              Save
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </form>
+
+  </div>
+</div>

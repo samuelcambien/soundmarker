@@ -22,6 +22,8 @@ import {ProUploadPopoverComponent} from './pro-upload-page/pro-upload-popover/pr
 import {NgDynamicBreadcrumbModule} from 'ng-dynamic-breadcrumb';
 import {EditProjectFormComponent} from './projects/edit-project-form/edit-project-form.component';
 import {PendingChangesGuard} from '../auth/pending-changes.guard';
+import {EditTrackFormComponent} from './projects/edit-track-form/edit-track-form.component';
+import {ProjectTransferComponent} from "./transfers/project-transfer/project-transfer.component";
 
 @NgModule({
   imports: [
@@ -46,7 +48,9 @@ import {PendingChangesGuard} from '../auth/pending-changes.guard';
     ProUploadPageComponent,
     ProUploadStartComponent,
     ProUploadPopoverComponent,
-    EditProjectFormComponent
+    EditProjectFormComponent,
+    EditTrackFormComponent,
+    ProjectTransferComponent,
   ],
   providers: [
     ConfirmDialogService,

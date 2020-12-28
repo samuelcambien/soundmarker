@@ -9,10 +9,7 @@ export class Track {
   versions: Version[];
   duration: number;
   project: Project;
-
-  constructor() {
-
-  }
+  visible: boolean;
 
   getVersionIndex(version) {
     return this.versions.findIndex(e => e == version);

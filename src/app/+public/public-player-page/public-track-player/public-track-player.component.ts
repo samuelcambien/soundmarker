@@ -110,14 +110,14 @@ export class PublicTrackPlayerComponent implements OnInit, OnChanges, AfterConte
   waveformInViewPortObservable = new BehaviorSubject<boolean>(true);
 
   constructor(
-    private router: Router,
-    private localStorageService: LocalStorageService,
-    private stateService: StateService,
-    private project: ProjectService,
-    private player: Player,
-    private drawerService: DrawerService,
-    private cdr: ChangeDetectorRef,
-    private ngDynamicBreadcrumbService: NgDynamicBreadcrumbService
+    protected router: Router,
+    protected localStorageService: LocalStorageService,
+    protected stateService: StateService,
+    protected project: ProjectService,
+    protected player: Player,
+    protected drawerService: DrawerService,
+    protected cdr: ChangeDetectorRef,
+    protected ngDynamicBreadcrumbService: NgDynamicBreadcrumbService
   ) {
 
     document.addEventListener('scroll', () => {
@@ -457,8 +457,8 @@ export class PublicTrackPlayerComponent implements OnInit, OnChanges, AfterConte
     }
   }
 
-  private isAdminRoute(route: string): boolean {
-    return /^\/pro(\/|$)/.test(route);
+  isAdminRoute(): boolean {
+    return /^\/pro(\/|$)/.test(this.router.url);
   }
 
 
