@@ -1,10 +1,29 @@
 <app-pro-board-card>
   <ng-container class="title">{{project?.title}} · {{project?.tracks?.length}} tracks</ng-container>
   <ng-container class="menu">
+    <a class="dropdown-item" (click)="openModal(editProjectModal);">Edit project</a>
     <a class="dropdown-item" href="#">Show statistics</a>
     <a class="dropdown-item" href="#">Check loudness</a>
     <a class="dropdown-item" href="#">Track settings</a>
+    <a class="dropdown-item" (click)="openModal(removeProjectModal);">Delete project</a>
   </ng-container>
+  <ng-template #editProjectModal let-modal>
+    <div class="modal-content">
+      <app-edit-project-form
+        [project]="project"
+        (close)="modal.close();"
+        (save)="modal.close();"
+      ></app-edit-project-form>
+    </div>
+  </ng-template>
+  <ng-template #removeProjectModal let-modal>
+  <div class="modal-body">
+    Are you sure to remove all content related with this project?
+    This operation can not be undone.
+    <button type="button" class="btn btn-sm btn-outline-form free-upload" (click)="modal.dismiss('cancel click')">Cancel</button>
+    <button type="button" class="btn btn-sm btn-primary free-upload" (click)="modal.close('Ok click'); removeProject()">Ok</button>
+  </div>
+</ng-template>
   <ng-container class="body">
     <div class="list">
     <div *ngFor="let track of project?.tracks" class="track-bar" routerLink="track/{{track.track_id}}">
@@ -40,6 +59,7 @@
         <div class="board-item-notification"></div>
 
         </div>
+
 
     </div>
     <hr *ngIf="!last" class="preview-hr">

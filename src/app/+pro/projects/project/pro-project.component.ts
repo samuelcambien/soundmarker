@@ -1,9 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import {ActivatedRoute} from "@angular/router";
+import {ActivatedRoute, Router} from '@angular/router';
 import {Project} from "../../../model/project";
 import {Track} from '../../../model/track';
 import {StateService} from '../../../services/state.service';
 import {NgDynamicBreadcrumbService} from 'ng-dynamic-breadcrumb';
+import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
+import {ProjectService} from '../../../services/project.service';
+import {RestCall} from '../../../rest/rest-call';
 
 @Component({
   selector: 'app-pro-board-projects-project',
@@ -16,8 +19,11 @@ export class ProProjectComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
+    private router: Router,
     private stateService: StateService,
-    private ngDynamicBreadcrumbService: NgDynamicBreadcrumbService
+    private ngDynamicBreadcrumbService: NgDynamicBreadcrumbService,
+    private modalService: NgbModal,
+    protected projectService: ProjectService
   ) {
 
   }
@@ -29,5 +35,17 @@ export class ProProjectComponent implements OnInit {
       this.ngDynamicBreadcrumbService.updateBreadcrumbLabels(breadcrumb);
     });
 
+  }
+
+  openModal(modal) {
+    this.modalService.open(modal);
+  }
+
+  removeProject(){
+    this.projectService.removeProject(this.project.project_id).then(()=> {
+     RestCall.deleteProject();
+      this.router.navigate(["../pro/projects"]);
+      }
+    )
   }
 }

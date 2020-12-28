@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {Project} from "../../model/project";
 import {ProjectService} from "../../services/project.service";
@@ -13,6 +13,7 @@ export class ProBoardProjectsComponent implements OnInit {
   constructor(
     protected projectService: ProjectService,
     protected modalService: NgbModal,
+    private cdr: ChangeDetectorRef
   ) {
   }
 
@@ -30,5 +31,13 @@ export class ProBoardProjectsComponent implements OnInit {
     this.user_project_list[index] = await this.projectService.getProject(
       this.user_project_list[index].project_hash
     );
+  }
+
+  removeProject(project: Project, index: number){
+    this.projectService.removeProject(project.project_id).then(()=> {
+        this.user_project_list.splice(index, 1);
+        this.cdr.detectChanges();
+      }
+    )
   }
 }

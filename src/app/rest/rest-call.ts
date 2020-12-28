@@ -25,6 +25,12 @@ export class RestCall {
     });
   }
 
+  public static async removeProject(projectID){
+    return Request.post(Endpoints.PROJECT_DELETE,{
+      project_id: projectID
+    });
+  }
+
 
   public static createNewTrack(project_id, title): Promise<any> {
     return Request.post(Endpoints.TRACK_NEW, {
@@ -156,6 +162,10 @@ export class RestCall {
   public static authenticate(email: string, password: string): Promise<any> {
     return this.getTrack('47');
   }
+
+  public static deleteProject(){
+    Request.deleteFromCache(Endpoints.PROJECT_ALL);
+  }
 }
 
 export class Endpoints {
@@ -181,6 +191,8 @@ export class Endpoints {
   public static PROJECT_SUBSCRIBE: string = Endpoints.BACKEND + "/project/subscribe";
 
   public static PROJECT_NEW: string = Endpoints.BACKEND + "/project/new";
+
+  public static PROJECT_DELETE: string = Endpoints.BACKEND + "/project/delete";
 
   public static PROJECT_EDIT: string = Endpoints.BACKEND + "/project/edit";
 
@@ -265,7 +277,9 @@ export class Request {
       }
     );
   }
-
+  public static deleteFromCache(endpoint: string){
+    delete Request.xhrCache[endpoint];
+  }
 
   public static execute(method: RequestMethod, endpoint: string, parameters: RequestParameters): Promise<any> {
 

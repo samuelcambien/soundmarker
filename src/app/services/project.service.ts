@@ -75,6 +75,10 @@ export class ProjectService {
       .slice(0, count);
   }
 
+  async removeProject(project_id){
+    await RestCall.removeProject(project_id);
+  }
+
   getVersion(versionId: string): Version {
 
     return this.stateService.getActiveProject().getValue().tracks
