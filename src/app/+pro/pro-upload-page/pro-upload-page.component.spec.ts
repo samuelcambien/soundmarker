@@ -1,5 +1,5 @@
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
-import {PublicUploadPageComponent} from './public-upload-page.component';
+import {PublicUploadPageComponent} from '../../+public/public-upload-page/public-upload-page.component';
 
 describe('ProUploadPageComponent', () => {
   let component: PublicUploadPageComponent;

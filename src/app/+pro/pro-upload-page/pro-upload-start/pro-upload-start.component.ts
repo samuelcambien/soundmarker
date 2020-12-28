@@ -16,10 +16,11 @@ export class ProUploadStartComponent implements OnInit, OnDestroy {
   newTrackId;
   subscription;
 
+
+
   ngOnInit(): void {
     this.subscription = this.stateService.getVersionUpload().subscribe(bool => {
       if (bool) {
-        this.fileinput.nativeElement.click();
         this.newTrackId = this.activatedRoute.snapshot.queryParams.track_id;
       }
       else {
@@ -55,9 +56,7 @@ export class ProUploadStartComponent implements OnInit, OnDestroy {
       }
     };
     this.uploader.getOpenFileUploader().onAfterAddingAll = (items) => {
-      this.stateService.playerToggled = false;
       this.router.navigate(['../upload'], {
-        queryParams: {origin: 'dashboard', newTrackId: this.newTrackId},
         relativeTo: this.activatedRoute,
         skipLocationChange: true
       });

@@ -155,7 +155,7 @@
           v<b>{{track.getVersionIndex(item)+1}}</b>
         </ng-template>
         <ng-template ng-footer-tmp *ngIf="isAdminRoute()" >
-          <p (click)="addNewVersion()">Add new version</p>
+          <p (click)="fileinputhidden.click()">Add new version</p>
         </ng-template>
         <ng-template ng-option-tmp let-item="item" let-index="index">
           v<b>{{index+1}}</b>
@@ -465,3 +465,13 @@
     </g>
   </svg>
 </ng-template>
+<input style="display: none" #fileinputhidden
+       class="pro-upload-songs-input"
+       type="file"
+       title=""
+       ng2FileSelect
+       [uploader]="uploader.getOpenFileUploader()"
+       id="fileinputhidden"
+       single
+       name="files"
+       accept="{{uploader.getOpenSMFileUploader().getAcceptedFileTypes().join(',')}}"/>

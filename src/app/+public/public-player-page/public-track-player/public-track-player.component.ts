@@ -32,6 +32,7 @@ import {Utils} from '../../../app.component';
 import {NgbPopover} from '@ng-bootstrap/ng-bootstrap';
 import {Router} from '@angular/router';
 import {NgDynamicBreadcrumbService} from 'ng-dynamic-breadcrumb';
+import {Status, Uploader} from '../../../services/uploader.service';
 
 @Component({
   selector: 'public-track-player',
@@ -111,6 +112,7 @@ export class PublicTrackPlayerComponent implements OnInit, OnChanges, AfterConte
 
   constructor(
     protected router: Router,
+    protected uploader: Uploader,
     protected localStorageService: LocalStorageService,
     protected stateService: StateService,
     protected project: ProjectService,
@@ -132,6 +134,15 @@ export class PublicTrackPlayerComponent implements OnInit, OnChanges, AfterConte
         this.waveformInViewPort = true;
       }
     }, true);
+    this.uploader.getOpenFileUploader().onAfterAddingAll = (items) => {
+      this.router.navigate(['pro/upload'], {
+        queryParams: {origin: 'dashboard', newTrackId: this.track.track_id},
+        skipLocationChange: true
+      });
+      this.stateService.setVersionUpload(true);
+      this.uploader.getOpenSMFileUploader().setStatus(Status.UPLOAD_FORM);
+      this.uploader.getOpenSMFileUploader().addTitles(items);
+    }
   }
 
   markerPopoverClose() {
@@ -381,12 +392,6 @@ export class PublicTrackPlayerComponent implements OnInit, OnChanges, AfterConte
       });
   }
 
-  addNewVersion() {
-    this.stateService.playerToggled = true;
-    this.stateService.setVersionUpload(true);
-    this.router.navigate(["../pro/dashboard"], {queryParams: {origin: 'dashboard', track_id: this.track.track_id}});
-  }
-
   removeComment(comment: Comment) {
     if (!comment.parent_comment_id) {
       this.version.comments = this.version.comments.filter(
@@ -498,6 +503,7 @@ export class PublicTrackPlayerComponent implements OnInit, OnChanges, AfterConte
     }
     ;
   }
+
 
   ///////////////////////////////////////////////////////////////////////////////////////////////////
   // Catch back button when there is a project with multiple tracks to go back to overview instead of to previous website.

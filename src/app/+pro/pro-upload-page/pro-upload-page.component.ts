@@ -81,11 +81,18 @@ export class ProUploadPageComponent implements OnInit, ComponentCanDeactivate {
   async getProjectInfo(project_id) {
     let project = this.user_project_list.find(x => x.project_id === project_id);
     this.project_tracks_list = (await RestCall.getProject(project.hash))["tracks"];
+    this.smUploader.setProjectTitle(project.title);
     this.selected_existing_tracks = [];
     if (this.trackId) {
       this.selected_existing_tracks[0] = this.trackId;
-      this.cdr.detectChanges();
     }
+    this.cdr.detectChanges();
+  }
+
+  newProjectSelect(){
+    this.smUploader.setProjectTitle(null);
+    this.project_id = null;
+    this.cdr.detectChanges();
   }
 
   addVersion(i, $event) {

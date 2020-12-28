@@ -196,6 +196,10 @@ export class SMFileUploader {
     return this.project_title;
   }
 
+  setProjectTitle(project_title: string){
+    this.project_title = project_title;
+  }
+
   getProjectNotes(){
     return this.notes;
   }
