@@ -40,6 +40,7 @@ export class ProUploadPageComponent implements OnInit, ComponentCanDeactivate {
   project_tracks_list = [];
   project_id;
   smUploader: SMFileUploader;
+  preventNavigation: boolean;
 
   get createNewProject() {
     return !this.project_id;
@@ -68,6 +69,7 @@ export class ProUploadPageComponent implements OnInit, ComponentCanDeactivate {
     };
     this.user_project_list = await this.projectService.getAllProjects();
     if (this.stateService.getVersionUpload().getValue()) {
+      this.preventNavigation = true;
       this.trackId = this.activatedRoute.snapshot.queryParams.newTrackId;
       this.project_id = this.stateService.getActiveProject().getValue().project_id;
       await this.getProjectInfo(this.project_id);
@@ -129,6 +131,10 @@ export class ProUploadPageComponent implements OnInit, ComponentCanDeactivate {
       return true;
     }
 
+    if (!this.preventNavigation) {
+      return true;
+    }
+
     const confirm: boolean = await this.confirmDialogService.confirm();
     if (confirm) {
       this.smUploader.resetSMFileUploader();
@@ -139,6 +145,7 @@ export class ProUploadPageComponent implements OnInit, ComponentCanDeactivate {
 
   async onSubmit() {
     this.uploader.newFileUploader();
+    this.preventNavigation = false;
     this.router.navigate(["../dashboard"], {relativeTo: this.activatedRoute});
     this.smUploader.setStatus(Status.UPLOADING_SONGS);
     try {
