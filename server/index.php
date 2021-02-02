@@ -278,7 +278,7 @@ else {
  // return ok
  Flight::json(array(
     'return' => 'notloggedin'
- ), 200);
+ ), 405);
 }
 
 });

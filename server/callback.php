@@ -25,7 +25,7 @@ if( isset( $_GET['code'] ) ) {
   $curl_post_data = array(
      'grant_type'    => 'authorization_code',
      'code'          => $_GET['code'],
-     'redirect_uri'  => 'http://localhost/callback.php',
+     'redirect_uri'  => 'https://localhost/callback.php',
      'client_id'     => $config['OAUTH_CLIENT_ID'], // Only needed if server is running CGI
      'client_secret' => $config['OAUTH_CLIENT_SECRET'] // Only need if server is running CGI
   );
@@ -45,6 +45,7 @@ if( isset( $_GET['code'] ) ) {
 
 
   $curl_response = curl_exec( $curl );
+
   curl_close( $curl );
 
   /** OPTION but RECOMMENDED - STORAGE */
@@ -60,10 +61,47 @@ if( isset( $_GET['code'] ) ) {
     $_SESSION["status"] = "pro";
   }
 
+
+  // NOW get user info
+  $cURLConnection = curl_init();
+
+  curl_setopt($cURLConnection, CURLOPT_HTTPHEADER, array(
+      'cache-control: no-cache'
+  ));
+  curl_setopt($cURLConnection, CURLOPT_SSL_VERIFYPEER, false );
+  curl_setopt($cURLConnection, CURLOPT_VERBOSE, true);
+  curl_setopt($cURLConnection, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US; rv:1.9.1.2) Gecko/20090729 Firefox/3.5.2 GTB5' );
+  curl_setopt($cURLConnection, CURLOPT_URL, 'https://www.leapwingaudio.com/oauth/me/?access_token='.json_decode($curl_response)->access_token);
+  curl_setopt($cURLConnection, CURLOPT_RETURNTRANSFER, true);
+
+  $userinfo = curl_exec($cURLConnection);
+  curl_close($cURLConnection);
+  $_SESSION["user"] = json_decode($userinfo)->user_nicename;
+  print_r($userinfo);
+  // Store user info in DB:
+  try {
+    require 'credentials.php';
+    $dbh = new PDO('mysql:host='.$config["RDS_HOSTNAME"].';dbname='.$config["RDS_DB_NAME"], $config["RDS_USERNAME"], $config["RDS_PASSWORD"]);
+
+    $sql = "SELECT COUNT(*) AS num FROM `User` WHERE user_nicename = :nicename";
+    //Prepare the SQL statement.
+    $stmt = $dbh->prepare($sql);
+    //Bind our email value to the :email parameter.
+    $stmt->bindValue(':nicename', json_decode($userinfo)->user_nicename);
+    //Execute the statement.
+    $stmt->execute();
+    //Fetch the row / result.
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    //If num is bigger than 0, the email already exists.
+    if($row['num'] == 0){
+      $dbh->query("INSERT IGNORE INTO User (user_nicename, emailaddress) VALUES ('".json_decode($userinfo)->user_nicename."', '".json_decode($userinfo)->user_email."')");
+    }
+  } catch (Exception $e) {}
+
   // Once you have an access token, you know that user has signed in sucessfully and that they have
   // authorized your application (if scope is supported). Here is where you can call the resource server
   // and get user informaiton about the user. What you do with this information is up to you.
-header("Location: ".$config['PHPSERVER_URL']);
-
+//   header("Location: ".$config['PHPSERVER_URL']);
 
 }

@@ -23,7 +23,7 @@ const appRoutes: Routes = [
   {
     path: 'pro',
     loadChildren: () => import('./+pro/pro.module').then(m => m.ProModule),
-    canActivate: [AuthGuard],
+    // canActivate: [AuthGuard],
   },
   {
     path: '',
