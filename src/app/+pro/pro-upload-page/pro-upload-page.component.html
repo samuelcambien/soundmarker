@@ -58,28 +58,6 @@
                          #t="ngbTooltip"></tag-input>
             </div>
           </div>
-          <div class="form-row">
-            <div class="form-group col hide-phone">
-							<textarea #notes_element
-                        [(ngModel)]="smUploader.notes"
-                        type="text"
-                        placeholder="Notes"
-                        name="notes"
-                        class="form-control
-                          form-control-sm"
-                        rows="2"></textarea>
-            </div>
-            <div class="form-group col show-phone">
-							<textarea #notes_element
-                        [(ngModel)]="smUploader.notes"
-                        type="text"
-                        placeholder="Notes"
-                        name="notes"
-                        class="form-control
-                          form-control-sm"
-                        rows="5"></textarea>
-            </div>
-          </div>
           <div class="form-row radios"
                *ngIf="!isVersionUpload">
             <div class="col">
@@ -162,6 +140,24 @@
                     <div class="sub-form disabled"
                          *ngIf="selected_existing_tracks[i]">{{getTrackTitle(selected_existing_tracks[i])}}
                     </div>
+                  </div>
+                  <div class="form-group col hide-phone">
+                    <textarea [id]="'notes-' + i"
+                        type="text"
+                        placeholder="Notes"
+                        name="notes"
+                        class="form-control
+                          form-control-sm"
+                        rows="2"></textarea>
+                  </div>
+                  <div class="form-group col show-phone">
+                    <textarea [id]="'notes-' + index"
+                        type="text"
+                        placeholder="Notes"
+                        name="notes"
+                        class="form-control
+                          form-control-sm"
+                        rows="5"></textarea>
                   </div>
                   <div class="col">
                     <div class="btn-sm btn-outline-form static">{{item.file.type.substring(6).toUpperCase()}} ·

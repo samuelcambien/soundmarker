@@ -66,7 +66,6 @@ export class PublicTrackPlayerComponent implements OnInit, OnChanges, AfterConte
   @Input() enableOverview: boolean;
   @Input() expired: boolean = true;
   @Input() trackActivated: boolean;
-  @Input() message: Message;
   @Input() sender?;
   @Input() expiry_date;
 
@@ -109,6 +108,10 @@ export class PublicTrackPlayerComponent implements OnInit, OnChanges, AfterConte
   public notesCollapsed = true;
 
   waveformInViewPortObservable = new BehaviorSubject<boolean>(true);
+
+  get notes(): string {
+    return this.version.notes;
+  }
 
   constructor(
     protected router: Router,
@@ -354,7 +357,7 @@ export class PublicTrackPlayerComponent implements OnInit, OnChanges, AfterConte
 
   }
 
-  getDateHumanized() {
+  getExpiryDateHumanized() {
     if (this.expiry_date) {
       Utils.getDaysDiff(this.expiry_date);
       return Utils.getDateHumanized(this.expiry_date);

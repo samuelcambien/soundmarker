@@ -18,7 +18,8 @@
                            [track]="track"
                            [enableOverview]="false"
                            [trackActivated]="true"
-                           [expired]="expired && !commentsExpired"></public-track-player>
+                           [expired]="expired && !commentsExpired"
+                           [sender]="project.sender"></public-track-player>
       <div class="waveform-container w-100"
            *ngIf="track?.versions[0]"></div>
     </div>

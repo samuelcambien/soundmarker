@@ -110,7 +110,5 @@ export class PublicPlayerPageComponent implements OnInit {
     this.project_id = this.project.project_id;
 
     this.message = this.getMessage(this.project, this.project.tracks[0].versions[0]);
-    if (this.message.text == '') {
-    }
   }
 }

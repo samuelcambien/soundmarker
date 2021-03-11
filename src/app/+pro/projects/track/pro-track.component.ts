@@ -6,9 +6,9 @@ import {AudioSource} from "../../../player/player.service";
 import {StateService} from '../../../services/state.service';
 import {ProjectService} from '../../../services/project.service';
 import {NgDynamicBreadcrumbService} from 'ng-dynamic-breadcrumb';
-import {RestCall} from "../../../rest/rest-call";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {TrackService} from "../../../services/track.service";
+import {Message} from "../../../message";
 
 @Component({
   selector: 'app-pro-board-projects-track',

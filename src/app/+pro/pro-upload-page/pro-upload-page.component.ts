@@ -3,16 +3,16 @@ import {
   ChangeDetectorRef,
   Component,
   ElementRef,
-  EventEmitter, HostListener,
+  EventEmitter,
+  Inject,
   Input,
-  NgZone,
   OnInit,
   Output,
   ViewChild
 } from '@angular/core';
 import {FileItem} from '../../tools/ng2-file-upload';
 import {SMFileUploader, Status, Uploader} from '../../services/uploader.service';
-import {FormGroup, NgForm, Validators, FormControl} from '@angular/forms';
+import {NgForm, Validators} from '@angular/forms';
 import {NgbTooltip} from '@ng-bootstrap/ng-bootstrap';
 import {RestCall} from '../../rest/rest-call';
 import {Utils} from '../../app.component';
@@ -21,8 +21,9 @@ import {ConfirmDialogService} from '../../services/confirmation-dialog/confirmat
 import {ActivatedRoute, Router} from '@angular/router';
 import {ProjectService} from '../../services/project.service';
 import {StateService} from '../../services/state.service';
-import {Observable} from 'rxjs';
 import {ComponentCanDeactivate} from "../../auth/pending-changes.guard";
+import {DOCUMENT} from "@angular/common";
+import {AuthService} from "../../auth/auth.service";
 
 // TODO: Als availabily stream only is dan wordt de downloadfile niet opgeslagen, bij Pro moet dat wel want daar kan dat achteraf nog aangepast worden.
 
@@ -55,8 +56,10 @@ export class ProUploadPageComponent implements OnInit, ComponentCanDeactivate {
               private projectService: ProjectService,
               private router: Router,
               private stateService: StateService,
+              private authService: AuthService,
               private activatedRoute: ActivatedRoute,
               private cdr: ChangeDetectorRef,
+              @Inject(DOCUMENT) document,
   ) {
   }
 
@@ -114,6 +117,8 @@ export class ProUploadPageComponent implements OnInit, ComponentCanDeactivate {
 
   validators = [Validators.required, Validators.pattern('^\\w+([\\.-]?\\w+)*@\\w+([\\.-]?\\w+)*(\\.\\w{2,3})+$')];
 
+  notes: string[];
+
   @ViewChild('ngForm', {static: false}) public userFrm: NgForm;
   @Input() tryAgain: EventEmitter<any>;
 
@@ -122,7 +127,6 @@ export class ProUploadPageComponent implements OnInit, ComponentCanDeactivate {
   @Output() error = new EventEmitter();
   @Output() form = new EventEmitter();
 
-  @ViewChild('notes_element', {static: false}) notes_element: ElementRef;
   @ViewChild('ft', {static: false}) files_tooltip: NgbTooltip;
 
   async canDeactivate(): Promise<boolean> {
@@ -145,6 +149,9 @@ export class ProUploadPageComponent implements OnInit, ComponentCanDeactivate {
 
   async onSubmit() {
     this.uploader.newFileUploader();
+    this.notes = this.smUploader.fileUploader.queue.map(
+      (track, index) => (document.getElementById(`notes-${index}`) as HTMLTextAreaElement).value
+    );
     this.preventNavigation = false;
     this.router.navigate(["../dashboard"], {relativeTo: this.activatedRoute});
     this.smUploader.setStatus(Status.UPLOADING_SONGS);
@@ -160,9 +167,11 @@ export class ProUploadPageComponent implements OnInit, ComponentCanDeactivate {
       }
 
       await Utils.promiseSequential(
-        this.smUploader.fileUploader.queue.map((track, index) => () => this.processTrack(this.project_id, track, this.smUploader.getTitle(track), this.selected_existing_tracks[index]))
+        this.smUploader.fileUploader.queue.map((track, index) => () => this.processTrack(this.project_id, track, this.smUploader.getTitle(track), index))
       );
-      await RestCall.shareProject(this.project_id, this.smUploader.expiration, this.smUploader.getProjectNotes(), "", this.smUploader.getReceivers());
+      this.authService.getCurrentUser().subscribe(async currentUser =>
+        await RestCall.shareProject(this.project_id, this.smUploader.expiration, this.smUploader.getProjectNotes(), currentUser.email, this.smUploader.getReceivers())
+      );
       this.smUploader.setStatus(Status.GREAT_SUCCESS);
 
     } catch (e) {
@@ -170,16 +179,18 @@ export class ProUploadPageComponent implements OnInit, ComponentCanDeactivate {
     }
   }
 
-  private async processTrack(projectId, track: FileItem, title, trackId?): Promise<void> {
+  private async processTrack(projectId, track: FileItem, title, index: number): Promise<void> {
     const length = 0;
     const file_name = Utils.getName(track._file.name);
     const extension = Utils.getExtension(track._file.name);
+    const notes = this.notes[index];
+    let trackId = this.selected_existing_tracks[index];
     if (!trackId) {
       const trackResponse = await RestCall.createNewTrack(projectId, title);
       trackId = trackResponse["track_id"];
     }
     const versionResponse = await RestCall.createNewVersion(
-      trackId, this.notes_element.nativeElement.value, this.smUploader.getAvailability() ? "1" : "0"
+      trackId, notes, this.smUploader.getAvailability() ? "1" : "0"
     );
 
     const versionId = versionResponse["version_id"];

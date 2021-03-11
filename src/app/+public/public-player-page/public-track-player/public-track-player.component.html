@@ -289,15 +289,19 @@
 
   <div *ngIf="sender" class="session-notes shadow-topbar">
     <h3>By {{sender}}</h3>
-    <div *ngIf="!message.text">
-      <h4 *ngIf="!expired"> Expires in {{getDaysToExpired()}} days ({{getDateHumanized()}}) </h4>
-      <h4 *ngIf="expired"> Expired on {{getDateHumanized()}} </h4>
+    <div *ngIf="!notes">
+      <ng-container *ngIf="expiry_date">
+        <h4 *ngIf="!expired"> Link expires in {{getDaysToExpired()}} days ({{getExpiryDateHumanized()}}) </h4>
+        <h4 *ngIf="expired"> Link expired on {{getExpiryDateHumanized()}} </h4>
+      </ng-container>
     </div>
-    <p *ngIf="message.text && notesCollapsed" (click)="notesCollapsed = !notesCollapsed"><a>Show more</a></p>
+    <p *ngIf="notes && notesCollapsed" (click)="notesCollapsed = !notesCollapsed"><a>Show more</a></p>
     <div class="open" [ngbCollapse]="notesCollapsed">
-      <h4 *ngIf="!expired"> Expires in {{getDaysToExpired()}} days ({{getDateHumanized()}}) </h4>
-      <h4 *ngIf="expired"> Expired on {{getDateHumanized()}} </h4>
-      <p>{{message.text}}<br>
+      <ng-container *ngIf="expiry_date">
+        <h4 *ngIf="!expired"> Link expires in {{getDaysToExpired()}} days ({{getExpiryDateHumanized()}}) </h4>
+        <h4 *ngIf="expired"> Link expired on {{getExpiryDateHumanized()}} </h4>
+      </ng-container>
+      <p>{{notes}}<br>
         <a (click)="notesCollapsed = !notesCollapsed">Show less</a></p>
     </div>
   </div>
@@ -465,6 +469,7 @@
     </g>
   </svg>
 </ng-template>
+
 <input style="display: none" #fileinputhidden
        class="pro-upload-songs-input"
        type="file"

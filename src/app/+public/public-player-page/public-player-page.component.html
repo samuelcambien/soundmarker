@@ -1,5 +1,4 @@
 <app-public-page
-  [message]="message"
   [expiry_date]="expiry_date"
   [expired]="expired"
   [project_id]="project_id"
@@ -27,7 +26,6 @@
     </div>
 
     <public-track-player
-      [message]="message"
       [expiry_date]="expiry_date"
       [sender]="project.sender"
       *ngFor="let track of project?.tracks"
