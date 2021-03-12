@@ -25,7 +25,7 @@ if( isset( $_GET['code'] ) ) {
   $curl_post_data = array(
      'grant_type'    => 'authorization_code',
      'code'          => $_GET['code'],
-     'redirect_uri'  => 'https://localhost/callback.php',
+     'redirect_uri'  => 'http://localhost/callback.php',
      'client_id'     => $config['OAUTH_CLIENT_ID'], // Only needed if server is running CGI
      'client_secret' => $config['OAUTH_CLIENT_SECRET'] // Only need if server is running CGI
   );
@@ -43,9 +43,8 @@ if( isset( $_GET['code'] ) ) {
   curl_setopt( $curl, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US; rv:1.9.1.2) Gecko/20090729 Firefox/3.5.2 GTB5' );
   curl_setopt( $curl, CURLOPT_REFERER, $config['OAUTH_SERVER_LOCATION'].'/1' );
 
-
   $curl_response = curl_exec( $curl );
-
+// print_r(json_decode($curl_response)->access_token);
   curl_close( $curl );
 
   /** OPTION but RECOMMENDED - STORAGE */
@@ -61,23 +60,29 @@ if( isset( $_GET['code'] ) ) {
     $_SESSION["status"] = "pro";
   }
 
-
   // NOW get user info
   $cURLConnection = curl_init();
-
+  print_r($userinfo);
   curl_setopt($cURLConnection, CURLOPT_HTTPHEADER, array(
       'cache-control: no-cache'
   ));
   curl_setopt($cURLConnection, CURLOPT_SSL_VERIFYPEER, false );
+  curl_setopt($cURLConnection, CURLOPT_SSL_VERIFYHOST, 0);
   curl_setopt($cURLConnection, CURLOPT_VERBOSE, true);
   curl_setopt($cURLConnection, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US; rv:1.9.1.2) Gecko/20090729 Firefox/3.5.2 GTB5' );
   curl_setopt($cURLConnection, CURLOPT_URL, 'https://www.leapwingaudio.com/oauth/me/?access_token='.json_decode($curl_response)->access_token);
   curl_setopt($cURLConnection, CURLOPT_RETURNTRANSFER, true);
 
+  $httpCode = curl_getinfo($cURLConnection , CURLINFO_HTTP_CODE); // this results 0 every time
+
+
   $userinfo = curl_exec($cURLConnection);
+  $response = curl_error($cURLConnection);
+  error_log($userinfo);
+  error_log($response);
   curl_close($cURLConnection);
   $_SESSION["user"] = json_decode($userinfo)->user_nicename;
-  print_r($userinfo);
+
   // Store user info in DB:
   try {
     require 'credentials.php';
