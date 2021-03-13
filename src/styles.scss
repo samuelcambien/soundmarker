@@ -42,6 +42,25 @@ $purple-rain: #4e35c2;
 
 // to organise
 
+.btn-add-new-project {
+  width: 100%;
+  margin-bottom: 1px;
+  margin-top: 1px
+}
+
+.track-field {
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-top: 10px;
+  border: 1px solid $light-blurple;
+  border-radius: 0.3rem;
+  margin-bottom: 10px;
+}
+
+.track-field .form-row:last-child {
+  margin-bottom: 5px !important;
+}
+
 .ng-dropdown-panel .ng-dropdown-header {
   border-bottom: 1px solid $lightest-blurple;
 }
@@ -1919,6 +1938,7 @@ button:visited {
 	padding-top: 5px;
 	padding-bottom: 3px;
 	height: 29px;
+  cursor: pointer;
 }
 
 .free-upload:disabled  {

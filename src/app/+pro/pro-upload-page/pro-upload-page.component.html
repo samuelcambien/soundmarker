@@ -9,7 +9,7 @@
                *ngIf="!isVersionUpload">
             <div class="col-sm-8">
               <input class="form-control form-control-sm"
-                     placeholder="New project title"
+                     placeholder="New project title*"
                      name="projecttitle"
                      required
                      [(ngModel)]="smUploader.project_title"
@@ -26,12 +26,12 @@
                            [clearable]="false"
                            [(ngModel)]="project_id"
                            (change)="getProjectInfo(project_id)"
-                           placeholder="Existing projects*"
+                           placeholder="Existing projects"
                            name="existing_projects"
                            dropdownPosition="auto"
                            #user_project_listt>
                 <ng-template  ng-header-tmp let-item="item">
-              <p class="custom noselect expiration" (click)="newProjectSelect(); user_project_listt.close();">Create new project</p>
+              <p class="custom noselect expiration btn btn-sm btn-primary btn-add-new-project" (click)="newProjectSelect(); user_project_listt.close();">Create new project</p>
               </ng-template></ng-select>
               </div>
             </div>
@@ -130,9 +130,10 @@
             <div class="card   rounded border-0">
               <div class="pro-add-more-tracks"></div>
               <div class="pro-upload-list-container">
-                <div class="form-row"
+                <div class="track-field"
                      *ngFor="let item of smUploader.getFileUploader().queue; index as i">
-                  <div class="col-sm-4">
+                <div class="form-row">
+                  <div class="col-sm-8">
                     <input class="sub-form"
                            *ngIf="!selected_existing_tracks[i]"
                            [(ngModel)]="smUploader.titles[i]"
@@ -141,48 +142,14 @@
                          *ngIf="selected_existing_tracks[i]">{{getTrackTitle(selected_existing_tracks[i])}}
                     </div>
                   </div>
-                  <div class="form-group col hide-phone">
-                    <textarea [id]="'notes-' + i"
-                        type="text"
-                        placeholder="Notes"
-                        name="notes"
-                        class="form-control
-                          form-control-sm"
-                        rows="2"></textarea>
-                  </div>
-                  <div class="form-group col show-phone">
-                    <textarea [id]="'notes-' + index"
-                        type="text"
-                        placeholder="Notes"
-                        name="notes"
-                        class="form-control
-                          form-control-sm"
-                        rows="5"></textarea>
-                  </div>
+
+
                   <div class="col">
                     <div class="btn-sm btn-outline-form static">{{item.file.type.substring(6).toUpperCase()}} ·
                                                                 {{getFileSize(item)}}
                     </div>
                   </div>
-                  <div class="col">
-                    <ng-select [(ngModel)]="selected_existing_tracks[i]"
-                               *ngIf="!createNewProject && !isVersionUpload"
-                               class="custom noselect
-                               downloadable ng-option-disabled"
-                               bindLabel="title"
-                               bindValue="track_id"
-                               [searchable]="false"
-                               (change)="addVersion(i, $event)"
-                               placeholder="Add as new version*"
-                               name="version_track_{{i}}"
-                               dropdownPosition="auto"
-                               (clear)="removeVersion(i)">
-                      <ng-option *ngFor="let item of project_tracks_list"
-                                 [value]="item.track_id"
-                                 [disabled]="item.disabled">{{item.title}}
-                      </ng-option>
-                    </ng-select>
-                  </div>
+
                   <div class="col pro-remove-track">
                     <div *ngIf="!isVersionUpload"
                          (click)="removeFromQueue(item, i)"
@@ -215,6 +182,36 @@
               </span>
                     </div>
                   </div>
+                  </div>
+                  <div class="form-row">
+                  <div class="form-group col">
+                    <textarea [id]="'notes-' + i"
+                        type="text"
+                        placeholder="Version notes"
+                        name="notes"
+                        class="sub-form"
+                        rows="2"></textarea>
+                  </div>
+                  <div *ngIf="!createNewProject && !isVersionUpload" class="col-sm-4">
+                    <ng-select [(ngModel)]="selected_existing_tracks[i]"
+
+                               class="custom noselect
+                               downloadable ng-option-disabled"
+                               bindLabel="title"
+                               bindValue="track_id"
+                               [searchable]="false"
+                               (change)="addVersion(i, $event)"
+                               placeholder="Add as new version*"
+                               name="version_track_{{i}}"
+                               dropdownPosition="auto"
+                               (clear)="removeVersion(i)">
+                      <ng-option *ngFor="let item of project_tracks_list"
+                                 [value]="item.track_id"
+                                 [disabled]="item.disabled">{{item.title}}
+                      </ng-option>
+                    </ng-select>
+                  </div>
+                </div>
                 </div>
               </div>
 
@@ -243,7 +240,7 @@
                           class="btn btn-sm btn-outline-form free-upload"
                           placement="bottom"
                           (click)="cancelUpload(myForm.dirty, smUploader.getFileUploader().getNotUploadedItems().length )">
-                    <ng-container>{{ isVersionUpload ? 'Cancel' : 'Clear form' }}</ng-container>
+                    <ng-container>{{ isVersionUpload ? 'Cancel' : 'Cancel' }}</ng-container>
                   </button>
                 </div>
                 <div class="col-sm-3">
