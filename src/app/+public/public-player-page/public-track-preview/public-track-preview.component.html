@@ -10,12 +10,12 @@
     <div role="button" (click)="trackSelected()" class="show-track-button">
 
       <div class="title"><h4  #trackTitle>{{track?.title}}</h4>
-        <p *ngIf="!expired">{{getCommentCount()}} comments {{getLastUpdated()}}</p>
+        <p *ngIf="!expired"><span *ngIf="track.versions.length>1" > v{{track.getVersionIndex(version) + 1}} · </span>{{getCommentCount()}} comments {{getLastUpdated()}}</p>
       <p *ngIf="expired">
         Sorry, this track has expired.
       </p></div>
     </div>
-    <!--<div *ngIf="track.versions.length>1" > Version {{track.getVersionIndex(version) + 1}} </div>-->
+    <!--<div *ngIf="track.versions.length>1" > V{{track.getVersionIndex(version) + 1}} </div>-->
     <div class="ml-auto hide-phone player-toolbar">
       <div *ngIf="version?.downloadable && !expired" class="top-icon cloud-icon" id="cloud-icon" (click)="download()" popoverClass="popover-class" ngbPopover="Download"
 [openDelay]="300" [closeDelay]="300" triggers="mouseenter:mouseleave" placement="bottom">
