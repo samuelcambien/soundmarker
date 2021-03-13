@@ -154,8 +154,11 @@
         <ng-template ng-label-tmp let-item="item">
           v<b>{{track.getVersionIndex(item)+1}}</b>
         </ng-template>
-        <ng-template ng-footer-tmp *ngIf="isAdminRoute()" >
-          <p (click)="fileinputhidden.click()">Add new version</p>
+        <ng-template ng-header-tmp *ngIf="isAdminRoute()" >
+          <a class="add-version-button btn btn-primary btn-sm" (click)="fileinputhidden.click()">
+            <svg  xmlns:xlink="http://www.w3.org/1999/xlink" height="14px" version="1.1" viewBox="0 0 24 25" width="13px" xmlns="http://www.w3.org/2000/svg"><g fill="none" fill-rule="evenodd" id="Page-1" stroke="none" stroke-linecap="round" stroke-width="1"><g _ngcontent-xtp-c3="" fill-rule="nonzero" id="Internet-Networks-Servers-/-Upload/Download-/-upload-dash-arrow-1" stroke="#ffffff" stroke-width="4" transform="translate(-483.000000, -215.000000)"><g id="Group-31" transform="translate(462.000000, 194.000000)"><g id="Group-26-Copy" transform="translate(23.000000, 23.000000)"><path d="M0,10.5 L20,10.5" id="Line-10"></path><path d="M0,10.5 L20,10.5" id="Line-10" transform="translate(10.000000, 10.500000) rotate(90.000000) translate(-10.000000, -10.500000) "></path></g></g></g></g></svg>
+          </a>
+
         </ng-template>
         <ng-template ng-option-tmp let-item="item" let-index="index">
           v<b>{{index+1}}</b>
@@ -165,6 +168,21 @@
       <div *ngIf="version?.downloadable && !expired" class="top-icon cloud-icon" id="cloud-icon"
            (click)="download()" popoverClass="popover-class" ngbPopover="Download"
            [openDelay]="300" [closeDelay]="300" triggers="mouseenter:mouseleave" placement="bottom">
+           <svg width="22px" height="18px" viewBox="0 0 22 18" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+               <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
+                   <g id="Internet-Networks-Servers-/-Upload/Download-/-upload-dash-arrow-1" transform="translate(-389.000000, -447.000000)" class="icon-stroke" stroke-width="1.5">
+                       <g id="Group-Copy-14" transform="translate(389.000000, 448.000000)">
+                           <g id="upload-brackets">
+                               <path d="M11,0.5 L11.0008333,11.7368421" id="Shape"></path>
+                               <polyline id="Shape" points="7.25083333 7.78947368 11.0008333 11.7368421 14.7508333 7.78947368"></polyline>
+                               <g id="Group-24" transform="translate(11.000000, 14.368421) rotate(90.000000) translate(-11.000000, -14.368421) translate(8.500000, 3.842105)">
+                                   <path d="M0,0.657894737 L3.125,0.657894737 C3.81535594,0.657894737 4.375,1.24699375 4.375,1.97368421 L4.375,19.0789474 C4.375,19.8056378 3.81535594,20.3947368 3.125,20.3947368 L0,20.3947368" id="Shape"></path>
+                               </g>
+                           </g>
+                       </g>
+                   </g>
+               </g>
+           </svg>
       </div>
 
       <div *ngIf="enableOverview" class="top-icon list-icon" id="list-icon" role="button"
