@@ -53,8 +53,34 @@ $purple-rain: #2a2a2a;
 
 // to organise
 
+.collapsable .big-bb {
+  min-height: 0px !important;
+
+}
+
+.collapsable .big-bb .collapse {
+  overflow: scroll !important;
+  max-height: calc(50vh - 140px) !important;
+}
+
+
+.big-bb {
+  width: 640px;
+  min-height: 233px;
+
+
+}
+
+.board-box-title {
+  width: 100%
+}
+
+.board-box-title a {
+  color: $base-blurple !important;
+}
+
 div {
-    
+
     scrollbar-width: none; /* Firefox */
     -ms-overflow-style: none;  /* Internet Explorer 10+ */
 }
@@ -566,6 +592,7 @@ border-radius: 0.3rem !important;
 	margin-top: 0px;
 	margin-bottom: 0px;
 }
+
 
 
 ///

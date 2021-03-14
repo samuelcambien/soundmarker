@@ -1,7 +1,13 @@
-<app-pro-board-card>
-  <ng-container class="title">Projects</ng-container>
+<app-pro-board-card class="collapsable">
+  <ng-container class="title">Recent projects
+    <a class="ml-auto float-right" data-toggle="collapse" href="#collapseRecent" role="button" aria-expanded="false" aria-controls="collapseExample">
+        Show
+    </a>
+  </ng-container>
+
   <ng-container class="body"
                 id="sm">
+                <div class="collapse" id="collapseRecent">
     <div class="list">
       <div *ngFor="let project of user_project_list; index as index">
         <div routerLink="project/{{project?.hash}}"
@@ -75,7 +81,100 @@
             class="preview-hr">
       </div>
     </div>
+    </div>
   </ng-container>
+</app-pro-board-card>
+
+
+
+<app-pro-board-card class="collapsable">
+  <ng-container class="title">Previous projects
+    <a class="ml-auto float-right" data-toggle="collapse" href="#collapsePrevious" role="button" aria-expanded="false" aria-controls="collapseExample">
+        Show
+    </a>
+  </ng-container>
+
+  <ng-container class="body"
+                id="sm">
+                <div class="collapse" id="collapsePrevious">
+    <div class="list">
+      <div *ngFor="let project of user_project_list; index as index">
+        <div routerLink="project/{{project?.hash}}"
+             class="track-bar">
+          <div class="list-header row">
+
+            <div class="title">
+              <h3>{{project?.title}}</h3>
+              <p>{{project?.tracks?.length}} tracks · 12 new comments</p>
+            </div>
+
+            <div class="ml-auto">
+              <a (click)="$event.stopPropagation(); myDrop.open();"
+                 class="menu more-icon">
+                <ng-container *ngTemplateOutlet="icon_more_dots"></ng-container>
+              </a>
+              <div ngbDropdown
+                   placement="bottom-right"
+                   #myDrop="ngbDropdown">
+                <div class="dropdown-menu pro-dropdown dropdown-menu-right shadow-pro-box board-box-dropdown"
+                     aria-labelledby="dropdownMenuLink"
+                     ngbDropdownMenu>
+                  <a ngbDropdownAnchor
+                     class="dropdown-item"
+                     (click)="$event.stopPropagation(); openModal(editProjectModal);"> Edit Project</a>
+                  <a ngbDropdownAnchor
+                     class="dropdown-item"
+                     (click)="$event.stopPropagation(); openModal(removeProjectModal);"> Delete Project</a>
+                </div>
+              </div>
+              <div class="board-item-notification"></div>
+            </div>
+          </div>
+
+          <ng-template #editProjectModal
+                       let-modal>
+            <div class="modal-content shadow-pro-box">
+              <app-edit-project-form [project]="project"
+                                     (close)="modal.close()"
+                                     (save)="modal.close(); reloadProject(index)"></app-edit-project-form>
+            </div>
+          </ng-template>
+          <ng-template #removeProjectModal
+                       let-modal>
+                       <div id="sm">
+                         <div id="pro">
+                           <div class="modal-header shadow-topbar">
+                               <h5 class="modal-title">Delete project</h5>
+
+                             </div>
+            <div class="modal-body">
+              <p>Are you sure you want to delete all content related with this project?<br>
+              This operation cannot be undone.</p>
+              <div class="d-flex justify-content-end">
+              <button type="button"
+                      class="btn btn-sm btn-outline-form btn-no"
+                      (click)="modal.dismiss('cancel click')">Cancel
+              </button>
+              <button type="button"
+                      class="btn btn-sm btn-primary btn-yes"
+                      (click)="modal.close('Ok click'); removeProject(project, index)">Ok
+              </button>
+            </div>
+            </div>
+            </div>
+            </div>
+          </ng-template>
+
+
+        </div>
+        <hr *ngIf="!last"
+            class="preview-hr">
+      </div>
+    </div>
+    </div>
+  </ng-container>
+
+
 </app-pro-board-card>
 
 <ng-template #icon_more_dots>
