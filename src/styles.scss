@@ -53,6 +53,16 @@ $purple-rain: #2a2a2a;
 
 // to organise
 
+div {
+    
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none;  /* Internet Explorer 10+ */
+}
+div::-webkit-scrollbar { /* WebKit */
+    width: 0;
+    height: 0;
+}
+
 .mb-10p {
   margin-bottom: 10px !important;
 }
