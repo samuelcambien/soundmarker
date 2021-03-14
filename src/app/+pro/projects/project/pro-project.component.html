@@ -17,7 +17,7 @@
 
   <ng-template #editProjectModal
                let-modal>
-    <div class="modal-content">
+    <div class="modal-content shadow-pro-box">
       <app-edit-project-form [project]="project"
                              (close)="modal.close();"
                              (save)="modal.close();"></app-edit-project-form>
@@ -26,17 +26,27 @@
 
   <ng-template #removeProjectModal
                let-modal>
+               <div id="sm">
+                 <div id="pro">
+                   <div class="modal-header shadow-topbar">
+                       <h5 class="modal-title">Delete project</h5>
+
+                     </div>
     <div class="modal-body">
-      Are you sure to remove all content related with this project?
-      This operation can not be undone.
+      <p>Are you sure you want to delete all content related with this project?<br>
+      This operation can not be undone.</p>
+      <div class="d-flex justify-content-end">
       <button type="button"
-              class="btn btn-sm btn-outline-form free-upload"
+              class="btn btn-sm btn-outline-form btn no"
               (click)="modal.dismiss('cancel click')">Cancel
       </button>
       <button type="button"
-              class="btn btn-sm btn-primary free-upload"
+              class="btn btn-sm btn-primary btn-yes"
               (click)="modal.close('Ok click'); removeProject()">Ok
       </button>
+    </div>
+    </div>
+    </div>
     </div>
   </ng-template>
 
@@ -75,7 +85,7 @@
 
           <ng-template #editTrackModal
                        let-modal>
-            <div class="modal-content">
+            <div class="modal-content shadow-pro-box">
               <app-edit-track-form [track]="track"
                                      (close)="modal.close()"
                                      (save)="modal.close(); reloadProject()"></app-edit-track-form>
@@ -84,17 +94,27 @@
 
           <ng-template #deleteTrackModal
                        let-modal>
+                       <div id="sm">
+                         <div id="pro">
+                           <div class="modal-header shadow-topbar">
+                               <h5 class="modal-title">Delete track</h5>
+
+                             </div>
             <div class="modal-body">
-              Are you sure to remove all content related with this track?
-              This operation can not be undone.
+              <p>Are you sure you want to delete all content related with this track?<br>
+              This operation cannot be undone.</p>
+              <div class="d-flex justify-content-end">
               <button type="button"
-                      class="btn btn-sm btn-outline-form free-upload"
+                      class="btn btn-sm btn-outline-form btn-no"
                       (click)="modal.dismiss()">Cancel
               </button>
               <button type="button"
-                      class="btn btn-sm btn-primary free-upload"
+                      class="btn btn-sm btn-primary btn-yes"
                       (click)="modal.close(); deleteTrack(track)">Ok
               </button>
+            </div>
+            </div>
+            </div>
             </div>
           </ng-template>
 

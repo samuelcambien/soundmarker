@@ -42,10 +42,32 @@ $purple-rain: #4e35c2;
 
 // to organise
 
+.mb-10p {
+  margin-bottom: 10px !important;
+}
+
+#pro .modal-header {
+  border-bottom: 1px solid $light-blurple !important;
+  padding-bottom: 8px !important;
+}
+
+.modal-body p {
+  color: $black-blurple;
+  margin-bottom: 20px;
+}
+
 .btn-add-new-project {
   width: 100%;
   margin-bottom: 1px;
   margin-top: 1px
+}
+
+.edit-track-version {
+  padding: 10px;
+  padding-bottom: 5px !important;
+  border: 1px solid $light-blurple;
+  border-radius: 0.3rem;
+  margin-bottom: 10px;
 }
 
 .track-field {
@@ -1562,7 +1584,7 @@ h2 {
 }
 #sm .modal-dialog,
 .modal-dialog {
-	margin: 60px;
+	margin-top: 60px;
 }
 .modal-lg,
 .modal,

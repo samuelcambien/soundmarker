@@ -1,11 +1,17 @@
 <div id="sm">
   <div id="pro">
 
+    <div class="modal-header shadow-topbar">
+        <h5 class="modal-title">Edit track</h5>
+
+      </div>
+      <div class="modal-body">
+
     <form #myForm="ngForm"
           (ngSubmit)="onSubmit()">
-      <div class="pro-form-container">
 
-        <div class="form-row mb-5p">
+
+        <div class="form-row mb-10p">
           <div class="form-group col">
             <input class="form-control form-control-sm"
                    placeholder="Track title"
@@ -14,7 +20,22 @@
           </div>
         </div>
 
-        <div class="form-row radios  mb-5p">
+        <div class="edit-track-version">
+
+        <div class="form-row mb-10p">
+
+          <div class="col">
+            <div class="btn-sm btn-outline-form static">Version 1
+
+            </div>
+          </div>
+
+          <div class="col">
+            <div class="btn-sm btn-outline-form static">MPEG · 355KB
+
+            </div>
+          </div>
+
           <div class="col">
             <label class="custom noselect downloadable btn btn-sm btn-outline-form btn-settings"
                    popoverClass="popover-class"
@@ -34,6 +55,17 @@
             </label>
           </div>
         </div>
+        <div class="form-row">
+        <div class="form-group col">
+          <textarea [id]="'notes-' + i"
+              type="text"
+              placeholder="Version notes"
+              name="notes"
+              class="sub-form"
+              rows="2"></textarea>
+        </div>
+        </div>
+        </div>
 
         <div class="form-row mb-5p d-flex justify-content-end">
           <div class="col col-sm-2">
@@ -52,8 +84,10 @@
           </div>
         </div>
 
-      </div>
+
     </form>
+
+    </div>
 
   </div>
 </div>
