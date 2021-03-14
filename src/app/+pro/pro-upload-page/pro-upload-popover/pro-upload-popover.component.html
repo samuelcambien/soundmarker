@@ -18,7 +18,7 @@
   <div *ngFor="let fileUploader of getFileUploaders()">
   <div class="progress-container" *ngIf="fileUploader.stage == fileUploader.statusEnum.UPLOADING_SONGS">
     <div class="row body">
-      <h3 class="col">{{fileUploader.project_title}}Track title</h3><h3 class="col text-right"> {{getProgress(fileUploader) | number:'1.0-0'}}% </h3>
+      <h3 class="col">Track title</h3><h3 class="col text-right"> {{getProgress(fileUploader) | number:'1.0-0'}}% </h3>
       </div>
         <div class="container-fluid">
       <div class="progress row">
@@ -30,7 +30,7 @@
   <div class="success" *ngIf="fileUploader.stage == fileUploader.statusEnum.GREAT_SUCCESS">
     <div class="row body">
 
-      <a><h3 class="col">{{fileUploader.project_title}}Track title</h3></a><h3 class="col text-right">
+      <a href="https://project-link.com"><h3 class="col">Track title</h3></a><h3 class="col text-right">
 
 
         <svg width="16px" height="18px" viewBox="0 0 18 19" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
