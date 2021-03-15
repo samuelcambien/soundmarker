@@ -154,7 +154,6 @@ export class PublicTrackPlayerComponent implements OnInit, OnChanges, AfterConte
   }
 
   ngOnInit(): void {
-    this.track = Object.assign(new Track(), this.track);
     this.waveformInViewPort = true;
     this.version = this.stateService.getSelectedVersion(this.track) ? this.stateService.getSelectedVersion(this.track) : this.track.versions[0];
     this.stateService.setActiveVersion(this.version);

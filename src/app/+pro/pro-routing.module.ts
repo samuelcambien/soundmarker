@@ -5,9 +5,7 @@ import {ProPageComponent} from "./page/pro-page.component";
 import {ProProjectComponent} from "./projects/project/pro-project.component";
 import {ProjectResolver} from "./projects/project/ProjectResolver";
 import {ProTrackComponent} from "./projects/track/pro-track.component";
-import {TrackResolver} from "./projects/track/TrackResolver";
 import {ProUploadPageComponent} from './pro-upload-page/pro-upload-page.component';
-import {UploadGuard} from '../auth/upload/upload.guard';
 import {ProBoardProjectsComponent} from './projects/pro-board-projects.component';
 import {PendingChangesGuard} from '../auth/pending-changes.guard';
 
@@ -103,7 +101,6 @@ import {PendingChangesGuard} from '../auth/pending-changes.guard';
             component: ProTrackComponent,
             resolve: {
               project: ProjectResolver,
-              track: TrackResolver,
             },
             data: {
               title: 'PROJECT',
@@ -150,7 +147,6 @@ import {PendingChangesGuard} from '../auth/pending-changes.guard';
   ],
   providers: [
     ProjectResolver,
-    TrackResolver,
   ]
 })
 export class ProRoutingModule {

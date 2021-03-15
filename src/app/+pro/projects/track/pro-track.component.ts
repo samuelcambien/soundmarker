@@ -38,7 +38,7 @@ export class ProTrackComponent implements OnInit {
       this.route.data.subscribe(async data => {
         this.project = await data.project;
         this.project.project_hash = this.route.snapshot.params.project_hash;
-        this.track = await data.track;
+        this.track = this.project.tracks.find(track => track.track_id == this.route.snapshot.params.id);
         this.track.project = this.project;
         this.track.track_id = this.route.snapshot.params.id;
         this.stateService.setActiveTrack(this.track);

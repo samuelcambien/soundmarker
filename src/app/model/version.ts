@@ -1,5 +1,6 @@
 import {File} from "./file";
 import {Comment} from "./comment";
+import {Track} from "./track";
 
 export class  Version {
   downloadable;
@@ -10,7 +11,7 @@ export class  Version {
   files: File[];
   comments: Comment[];
 
-
+  track: Track;
 }
 
 
