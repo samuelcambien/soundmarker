@@ -12,6 +12,7 @@ import {DrawerService} from "../../../../services/drawer.service";
 import {AudioSource, Player} from '../../../../player/player.service';
 import {Drawer} from "../../../../player/drawer";
 import {StateService} from "../../../../services/state.service";
+import {RestCall} from "../../../../rest/rest-call";
 
 @Component({
   selector: 'app-waveform',
@@ -41,12 +42,13 @@ export class WaveformComponent implements OnInit {
     this.drawWaveform();
   }
 
-  drawWaveform() {
+  async drawWaveform() {
+    const waveform = await RestCall.getWaveform(this.audioSource.version.version_id);
     this.drawer = new Drawer(
       this.waveform.nativeElement,
       {
         height: 128,
-        peaks: JSON.parse(this.audioSource.version.wave_png),
+        peaks: JSON.parse(waveform),
       }
     );
     this.drawer.seek.subscribe(async progress => {

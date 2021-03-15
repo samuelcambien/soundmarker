@@ -183,11 +183,15 @@ export class RestCall {
   public static deleteProject() {
     Request.deleteFromCache(Endpoints.PROJECT_ALL);
   }
+
+  public static getWaveform(versionId: string) {
+    return Request.get(`${Endpoints.BACKEND}/track/version/${versionId}/waveform`)
+  }
 }
 
 export class Endpoints {
 
-  private static BACKEND: string = "http://localhost";
+  public static BACKEND: string = "http://localhost";
 
   private static DATA: string = Endpoints.BACKEND;
 
