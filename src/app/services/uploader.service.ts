@@ -132,7 +132,7 @@ export class SMFileUploader {
     return this.stage == Status.UPLOADING_SONGS;
   }
 
-  getStage() {
+  getStatus() {
     return this.stage;
   }
 

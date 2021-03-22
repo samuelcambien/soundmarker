@@ -38,31 +38,31 @@ export class ProUploadStartComponent implements OnInit, OnDestroy {
               private stateService: StateService,
               private activatedRoute: ActivatedRoute) {
 
-    this.uploader.getOpenFileUploader().onWhenAddingFileFailed = (item, filter) => {
-      let message = '';
-      switch (filter.name) {
-        case 'fileSize':
-          message = "You exceeded the limit of 2 GB."
-          break;
-        case 'onlyAudio':
-          message = "One or more files are not supported and were not added.";
-          break;
-        case 'checkSizeLimit':
-          message = "You exceeded the limit of 2 GB.";
-          break;
-        default:
-          message = "Something went wrong, please try again.";
-          break;
-      }
-    };
-    this.uploader.getOpenFileUploader().onAfterAddingAll = (items) => {
-      this.router.navigate(['../upload'], {
-        relativeTo: this.activatedRoute,
-        skipLocationChange: true
-      });
-      this.uploader.getOpenSMFileUploader().setStatus(Status.UPLOAD_FORM);
-      this.uploader.getOpenSMFileUploader().addTitles(items);
-    }
+    // this.uploader.getOpenFileUploader().onWhenAddingFileFailed = (item, filter) => {
+    //   let message = '';
+    //   switch (filter.name) {
+    //     case 'fileSize':
+    //       message = "You exceeded the limit of 2 GB."
+    //       break;
+    //     case 'onlyAudio':
+    //       message = "One or more files are not supported and were not added.";
+    //       break;
+    //     case 'checkSizeLimit':
+    //       message = "You exceeded the limit of 2 GB.";
+    //       break;
+    //     default:
+    //       message = "Something went wrong, please try again.";
+    //       break;
+    //   }
+    // };
+    // this.uploader.getOpenFileUploader().onAfterAddingAll = (items) => {
+    //   this.router.navigate(['../upload'], {
+    //     relativeTo: this.activatedRoute,
+    //     skipLocationChange: true
+    //   });
+    //   this.uploader.getOpenSMFileUploader().setStatus(Status.UPLOAD_FORM);
+    //   this.uploader.getOpenSMFileUploader().addTitles(items);
+    // }
   }
 
   getOpenSMFileUploader(): SMFileUploader {

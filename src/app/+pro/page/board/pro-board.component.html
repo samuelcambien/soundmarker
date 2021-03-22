@@ -1,1 +1,8 @@
-<app-pro-upload-start></app-pro-upload-start>
+<app-pro-upload-start *ngIf="this.uploader.getOpenFileUploader().queue.length == 0"></app-pro-upload-start>
+<app-pro-upload-page *ngIf="this.uploader.getOpenFileUploader().queue.length != 0"></app-pro-upload-page>
+
+<ngb-alert #selfClosingAlert *ngIf="successMessage" type="success" (close)="closeAlert($event)">{{ successMessage }}
+</ngb-alert>
+<p>
+  <button class="btn btn-primary" (click)="changeSuccessMessage()">Change message</button>
+</p>

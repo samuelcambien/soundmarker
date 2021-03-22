@@ -33,7 +33,6 @@ export class PublicUploadPageComponent implements OnInit {
 
   error;
 
-
   uploader: FileUploader = new FileUploader({
     url: UPLOAD_FILES_ENDPOINT,
     disableMultipart: true,

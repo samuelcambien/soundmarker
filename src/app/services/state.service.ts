@@ -92,4 +92,13 @@ export class StateService {
   public setVersionUpload(versionUpload: boolean) {
     this.versionUpload.next(versionUpload);
   }
+
+  ///////////////////// ALERT ///////////////////////////////////////////////////////////
+  private alert: BehaviorSubject<string> = new BehaviorSubject<string>(null);
+  public getAlert(): BehaviorSubject<string> {
+    return this.alert;
+  }
+  public setAlert(alert: string) {
+    this.alert.next(alert);
+  }
 }

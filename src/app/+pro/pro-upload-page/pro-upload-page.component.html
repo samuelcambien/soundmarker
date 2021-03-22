@@ -243,13 +243,23 @@
                     <ng-container>{{ isVersionUpload ? 'Cancel' : 'Cancel' }}</ng-container>
                   </button>
                 </div>
-                <div class="col-sm-3">
+
+                <ng-template #popContent>{{ngbPopOverMessage}}</ng-template>
+                <div class="col last" popoverTitle="Oops!" [ngbPopover]=popContent triggers="manual" placement="top" popoverClass="popover-class popover-submit"  [autoClose]="'outside'" container="body" #ngbPopover="ngbPopover" (click)="validationCheck(myForm)">
                   <button type="submit"
                           [disabled]="!smUploader.getFileUploader().getNotUploadedItems().length || !myForm.valid"
                           class="btn btn-sm btn-primary free-upload"
                           placement="bottom">Upload {{ isVersionUpload ? 'new version' : 'tracks' }}
                   </button>
                 </div>
+
+<!--                <div class="col-sm-3">-->
+<!--                  <button type="submit"-->
+<!--                          [disabled]="!smUploader.getFileUploader().getNotUploadedItems().length || !myForm.valid"-->
+<!--                          class="btn btn-sm btn-primary free-upload"-->
+<!--                          placement="bottom">Upload {{ isVersionUpload ? 'new version' : 'tracks' }}-->
+<!--                  </button>-->
+<!--                </div>-->
               </div>
             </div>
           </div>

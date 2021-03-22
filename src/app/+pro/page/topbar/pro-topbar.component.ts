@@ -3,6 +3,7 @@ import {Observable, Subscription} from 'rxjs';
 import {StateService} from "../../../services/state.service";
 import {AuthService} from "../../../auth/auth.service";
 import {User} from "../../../model/user";
+import {ActivatedRoute, Router} from '@angular/router';
 import {Uploader} from '../../../services/uploader.service';
 import {RestCall} from "../../../rest/rest-call";
 
@@ -30,6 +31,9 @@ export class ProTopbarComponent {
   constructor(
     private authService: AuthService,
     private stateService: StateService,
+    protected uploader: Uploader,
+    private router: Router,
+    private activatedRoute: ActivatedRoute
   ) {
     this.currentUser$ = authService.getCurrentUser();
   }
@@ -50,5 +54,14 @@ export class ProTopbarComponent {
   openPopover() {
     this.showUploading = false;
     this.popover.emit();
+  }
+
+  newUpload(){
+    if(this.uploader.getOpenFileUploader().queue.length == 0)
+     document.getElementById("fileinputhiddentop").click();
+    else {this.router.navigate(['../pro/upload'], {
+      relativeTo: this.activatedRoute,
+      skipLocationChange: false
+    });}
   }
 }

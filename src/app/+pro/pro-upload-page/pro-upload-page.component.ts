@@ -130,15 +130,8 @@ export class ProUploadPageComponent implements OnInit, ComponentCanDeactivate {
   @ViewChild('ft', {static: false}) files_tooltip: NgbTooltip;
 
   async canDeactivate(): Promise<boolean> {
-
-    if (!this.stateService.getVersionUpload().getValue()) {
-      return true;
-    }
-
-    if (!this.preventNavigation) {
-      return true;
-    }
-
+    if (!this.stateService.getVersionUpload().getValue()) return true
+    if (!this.preventNavigation) return true
     const confirm: boolean = await this.confirmDialogService.confirm();
     if (confirm) {
       this.smUploader.resetSMFileUploader();

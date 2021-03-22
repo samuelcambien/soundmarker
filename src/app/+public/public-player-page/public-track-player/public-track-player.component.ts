@@ -140,7 +140,8 @@ export class PublicTrackPlayerComponent implements OnInit, OnChanges, AfterConte
         queryParams: {origin: 'dashboard', newTrackId: this.track.track_id},
         skipLocationChange: true
       });
-      this.stateService.setVersionUpload(true);
+
+      // this.stateService.setVersionUpload(true);
       this.uploader.getOpenSMFileUploader().setStatus(Status.UPLOAD_FORM);
       this.uploader.getOpenSMFileUploader().addTitles(items);
     }
@@ -523,8 +524,14 @@ export class PublicTrackPlayerComponent implements OnInit, OnChanges, AfterConte
       scrollLoop();
     }
     ;
-  }
 
+
+  }
+  newUpload(){
+    this.stateService.setVersionUpload(true);
+    document.getElementById("fileinputhidden").click();
+
+  }
 
   ///////////////////////////////////////////////////////////////////////////////////////////////////
   // Catch back button when there is a project with multiple tracks to go back to overview instead of to previous website.
