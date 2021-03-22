@@ -9,10 +9,11 @@ import {
   ViewChild
 } from '@angular/core';
 import {DrawerService} from "../../../../services/drawer.service";
-import {AudioSource, Player} from '../../../../player/player.service';
+import {Player} from '../../../../player/player.service';
 import {Drawer} from "../../../../player/drawer";
 import {StateService} from "../../../../services/state.service";
 import {RestCall} from "../../../../rest/rest-call";
+import {Version} from "../../../../model/version";
 
 @Component({
   selector: 'app-waveform',
@@ -20,9 +21,7 @@ import {RestCall} from "../../../../rest/rest-call";
   styleUrls: ['./waveform.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class WaveformComponent implements OnInit {
-
-  @Input() audioSource: AudioSource;
+export class WaveformComponent {
 
   @Output() seek = new EventEmitter();
 
@@ -38,12 +37,9 @@ export class WaveformComponent implements OnInit {
   ) {
   }
 
-  ngOnInit() {
-    this.drawWaveform();
-  }
-
-  async drawWaveform() {
-    const waveform = await RestCall.getWaveform(this.audioSource.version.version_id);
+  async drawWaveform(version: Version) {
+    this.waveform.nativeElement.innerHTML = "";
+    const waveform = await RestCall.getWaveform(version.version_id);
     this.drawer = new Drawer(
       this.waveform.nativeElement,
       {
@@ -53,20 +49,13 @@ export class WaveformComponent implements OnInit {
     );
     this.drawer.seek.subscribe(async progress => {
       this.stateService.setActiveComment(null);
-      const startTime = progress * this.audioSource.version.track_length;
+      const startTime = progress * version.track_length;
       if (this.player.isPlaying()) {
-        await this.player.play(this.audioSource, startTime);
+        await this.player.play(version, startTime);
       } else {
-        await this.player.seekTo(this.audioSource, startTime);
+        await this.player.seekTo(version, startTime);
       }
     });
-    this.drawerService.register(this.audioSource.version, this.drawer);
-  }
-
-  updateVersion(){
-    this.waveform.nativeElement.innerHTML = "";
-    this.drawWaveform();
-    this.drawerService.redraw(this.audioSource.version.version_id);
-
+    this.drawerService.register(version, this.drawer);
   }
 }

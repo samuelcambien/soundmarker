@@ -10,6 +10,7 @@ export class Track {
   duration: number;
   project: Project;
   visible: boolean;
+  new_comments: number;
 
   getVersionIndex(version) {
     return this.versions.findIndex(e => e == version);

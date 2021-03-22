@@ -15,8 +15,7 @@ import {Version} from "../../../model/version";
 import {File} from "../../../model/file";
 import {Comment, CommentSorter} from "../../../model/comment";
 import {Utils} from "../../../app.component";
-import {AudioSource, Player} from "../../../player/player.service";
-import {State} from "../../../player/play-button/play-button.component";
+import {Player} from "../../../player/player.service";
 import {DeviceDetectorService} from 'ngx-device-detector';
 import {StateService} from '../../../services/state.service';
 
@@ -98,12 +97,5 @@ export class PublicTrackPreviewComponent implements OnInit {
       "· " + Utils.getTimeHumanized(
         commentsAndReplies.sort(CommentSorter.MOST_RECENT.comparator)[0].comment_time
       ) : "";
-  }
-
-  get audioSource(): AudioSource {
-    return {
-      track: this.track,
-      version: this.version,
-    };
   }
 }

@@ -64,12 +64,12 @@
         <play-button
           [inverse]="true"
           [disabled]="false"
-          [audioSource]="audioSource"
+          [version]="version"
         ></play-button>
 
       </div>
 
-      <div *ngIf="audioSource" class="activeTrack">
+      <div *ngIf="version" class="activeTrack">
         <a routerLink="{{getRouterLink()}}">
           <h3>V{{versionIndex}} · {{track.title}}</h3>
         </a>

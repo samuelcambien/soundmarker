@@ -10,6 +10,7 @@ export class Project {
   expiration: string;
   sender: string;
   title: string;
+  new_comments: number;
 
   losless: boolean;
 }

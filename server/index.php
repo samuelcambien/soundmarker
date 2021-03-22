@@ -256,7 +256,14 @@ $db = Flight::db();
 //$user_id = isset($_SESSION['USER']) ? $_SESSION['USER'] : "";
 $user_id = 1;
 //if (isset($_SESSION['USER'])) {
-  $sql = "SELECT project_id, title, expiration_date, hash FROM Project WHERE user_id = '$user_id' AND active = '1'";
+  $sql = "SELECT Project.project_id, Project.title, Project.expiration_date, Project.hash, count(Comment.comment_id) as new_comments
+              FROM Project
+              LEFT OUTER JOIN Track ON Project.project_id = Track.project_id
+              LEFT OUTER JOIN Version ON Track.track_id = Version.track_id
+              LEFT OUTER JOIN Comment ON Version.version_id = Comment.version_id
+              WHERE user_id = '$user_id' AND active = '1'
+              AND (Comment.comment_id is null OR Comment.comment_time > Version.last_seen)
+              GROUP BY Project.project_id";
   $result = $db->query($sql)->fetchAll(PDO::FETCH_ASSOC);
 
   // return ok
@@ -829,12 +836,14 @@ $visibility = isset($getbody->visibility) ? $getbody->visibility : 1;
 $notes = isset($getbody->notes) ? $getbody->notes : "";
 $version_title = isset($getbody->version_title) ? $getbody->version_title : "";
 $track_length = isset($getbody->track_length) ? $getbody->track_length : 0;
-// $wave_png = isset($getbody->wave_png) ? json_encode($getbody->wave_png) : "";
 
 // if user is able to edit this track
 if (true) {
   $db = Flight::db();
-  $sql = "INSERT INTO Version (track_id, downloadable, visibility, notes, version_title, track_length) VALUES ('$track_id', '$downloadable', '$visibility', '$notes', '$version_title', '$track_length')";
+  $version_index = $db->query(
+    "SELECT max(version_index) from Version version WHERE version.track_id = '$track_id';"
+  )->fetchAll(PDO::FETCH_COLUMN)[0] + 1;
+  $sql = "INSERT INTO Version (track_id, downloadable, visibility, notes, version_title, version_index, track_length) VALUES ('$track_id', '$downloadable', '$visibility', '$notes', '$version_title', '$version_index', '$track_length')";
   $result = $db->query($sql);
 
   $_SESSION['user_versions'][] = $db->lastInsertId();
@@ -850,7 +859,6 @@ if (true) {
   ), 405);
 }
 });
-
 
 //////////////////////////////////////////////////// Routes - /track/version/edit POST /////////////////////////////////////////////////////
 Flight::route('POST /track/version/edit', function() {
@@ -890,20 +898,31 @@ if (true) {
 ///////////////////////////////////////////////////////// Routes - /track GET /////////////////////////////////////////////////////////
 Flight::route('GET /track/@track_id', function($track_id) {
 
-$config = Flight::get("config");
-$db = Flight::db();
+  $config = Flight::get("config");
+  $db = Flight::db();
   $track_row = $db->query("SELECT title, visibility FROM Track WHERE track_id = '$track_id'")->fetchAll(PDO::FETCH_ASSOC)[0];
   $title = $track_row["title"];
   $visibility = $track_row["visibility"];
-$sql = "SELECT version_id, notes, downloadable, visibility, version_title, track_length, wave_png FROM Version WHERE track_id = '$track_id'";
-$result = $db->query($sql);
-$versions = $result->fetchAll(PDO::FETCH_ASSOC);
+  $sql = "SELECT version_id, notes, downloadable, visibility, version_title, version_index, track_length FROM Version WHERE track_id = '$track_id'";
+  $result = $db->query($sql);
+  $versions = $result->fetchAll(PDO::FETCH_ASSOC);
+
+  $new_comments = $db
+    ->query(
+      "SELECT count(comment.comment_id) FROM Comment
+      INNER JOIN Version ON comment.version_id = version.version_id
+      WHERE version.track_id = $track_id
+        AND (version.last_seen is null
+        OR comment.comment_time > version.last_seen);"
+    )
+    ->fetchAll(PDO::FETCH_COLUMN)[0];
 
 // return ok
 Flight::json(array(
    'title' => $title,
    'visibility' => $visibility,
-   'versions' => $versions
+   'versions' => $versions,
+  'new_comments' => $new_comments,
 ), 200);
 });
 
@@ -1103,6 +1122,64 @@ if (true) {
      'return' => 'notallowed'
   ), 405);
 }
+});
+
+//////////////////////////////////////////////////// Routes - /version/last_seen POST /////////////////////////////////////////////////////
+Flight::route('POST /track/version/@version_id/last_seen', function($version_id) {
+
+  // if user is not able to edit this version
+  if (!true) {
+    // return not allowed
+    Flight::json(array(
+      'return' => 'notallowed'
+    ), 405);
+    return;
+  }
+
+  $body = json_decode(Flight::request()->getBody());
+
+  $last_seen = $body->last_seen;
+  Flight::db()->query("UPDATE Version set last_seen = '$last_seen' WHERE version_id = '$version_id';");
+
+  Flight::json(array(
+  ), 200);
+});
+
+//////////////////////////////////////////////////// Routes - /version/last_seen POST /////////////////////////////////////////////////////
+Flight::route('GET /comments/new', function() {
+
+  // if user is not able to edit this version
+  if (!true) {
+    // return not allowed
+    Flight::json(array(
+      'return' => 'notallowed'
+    ), 405);
+    return;
+  }
+
+  $user_id = 1;
+
+  if (isset($_GET['count'])) {
+    $count = $_GET['count'];
+  } else {
+    $count = 10;
+  }
+  Flight::json(
+    Flight::db()
+      ->query("
+        SELECT Track.title, count(Comment.comment_id) as count, Project.hash, Track.track_id, Version.version_index
+          FROM Comment
+          INNER JOIN Version ON Comment.version_id = Version.version_id
+          INNER JOIN Track ON Version.track_id = Track.track_id
+          INNER JOIN Project ON Track.project_id = Project.project_id
+          WHERE user_id = '1' AND active = '1'
+          AND (Version.last_seen is null OR Comment.comment_time > Version.last_seen)
+          GROUP BY Version.version_id
+          HAVING count(Comment.comment_id) > 0;
+      ")
+      ->fetchAll(PDO::FETCH_ASSOC),
+    200
+  );
 });
 
 

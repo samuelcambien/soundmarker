@@ -25,13 +25,10 @@ export class ProjectService {
       const comment: Comment = this.stateService.getActiveComment().getValue();
       if (comment && comment.include_end && e.currentTime >= comment.end_time) {
         if (comment.loop == true) {
-          await this.player.play(e.audioSource, comment.start_time);
+          await this.player.play(e.version, comment.start_time);
         } else {
           this.player.pause();
-          await this.player.seekTo({
-            track: this.player.track,
-            version: e.audioSource.version,
-          }, comment.start_time);
+          await this.player.seekTo(e.version, comment.start_time);
         }
       }
     });
@@ -139,10 +136,7 @@ export class ProjectService {
       if (this.stateService.getActiveTrack().getValue() != null) {
         this.stateService.setActiveTrack(nextTrack);
       }
-      await this.player.play({
-        track: nextTrack,
-        version: nextTrack.versions[0],
-      }, 0);
+      await this.player.play(nextTrack.versions[0], 0);
     }
   }
 

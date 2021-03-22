@@ -98,6 +98,16 @@ export class RestCall {
     });
   }
 
+  public static updateLastSeen(version_id: string) {
+    return Request.post(`${Endpoints.BACKEND}/track/version/${version_id}/last_seen`, {
+      last_seen: Date.now()
+    });
+  }
+
+  public static getNewComments() {
+    return Request.getNonCaching(`${Endpoints.BACKEND}/comments/new`);
+  }
+
   static logSmaClick(smaId: string): Promise<any> {
     return Request.post(Endpoints.SMA_CLICK, {
       sma_id: smaId

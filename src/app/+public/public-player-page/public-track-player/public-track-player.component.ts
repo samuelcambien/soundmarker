@@ -1,6 +1,5 @@
 import {
   AfterContentInit,
-  AfterViewInit,
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
@@ -8,7 +7,7 @@ import {
   EventEmitter,
   HostListener,
   Input,
-  OnChanges, OnDestroy,
+  OnChanges,
   OnInit,
   Output,
   ViewChild
@@ -18,21 +17,20 @@ import {Comment, CommentSorter} from "../../../model/comment";
 import {Version} from "../../../model/version";
 import {RestCall} from "../../../rest/rest-call";
 import {LocalStorageService} from "../../../services/local-storage.service";
-import {DrawerService} from "../../../services/drawer.service";
 import {animate, state, style, transition, trigger} from '@angular/animations';
-import {BehaviorSubject, Observable} from 'rxjs';
+import {BehaviorSubject} from 'rxjs';
 import {distinctUntilChanged} from 'rxjs/operators';
-import {State} from "../../../player/play-button/play-button.component";
-import {AudioSource, Player} from "../../../player/player.service";
+import {Player} from "../../../player/player.service";
 import {WaveformComponent} from './waveform/waveform.component';
 import {ProjectService} from '../../../services/project.service';
 import {StateService} from '../../../services/state.service';
-import {Message} from '../../../message';
 import {Utils} from '../../../app.component';
 import {NgbPopover} from '@ng-bootstrap/ng-bootstrap';
-import {Router} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {NgDynamicBreadcrumbService} from 'ng-dynamic-breadcrumb';
 import {Status, Uploader} from '../../../services/uploader.service';
+import {AuthService} from "../../../auth/auth.service";
+import {TrackService} from "../../../services/track.service";
 
 @Component({
   selector: 'public-track-player',
@@ -96,8 +94,6 @@ export class PublicTrackPlayerComponent implements OnInit, OnChanges, AfterConte
 
   search: string;
 
-  _currentTime: number = 0;
-
   startPos;
   endPos;
 
@@ -115,12 +111,14 @@ export class PublicTrackPlayerComponent implements OnInit, OnChanges, AfterConte
 
   constructor(
     protected router: Router,
+    protected route: ActivatedRoute,
     protected uploader: Uploader,
     protected localStorageService: LocalStorageService,
     protected stateService: StateService,
-    protected project: ProjectService,
+    protected authService: AuthService,
+    protected projectService: ProjectService,
+    protected trackService: TrackService,
     protected player: Player,
-    protected drawerService: DrawerService,
     protected cdr: ChangeDetectorRef,
     protected ngDynamicBreadcrumbService: NgDynamicBreadcrumbService
   ) {
@@ -155,11 +153,22 @@ export class PublicTrackPlayerComponent implements OnInit, OnChanges, AfterConte
 
   ngOnInit(): void {
     this.waveformInViewPort = true;
-    this.version = this.stateService.getSelectedVersion(this.track) ? this.stateService.getSelectedVersion(this.track) : this.track.versions[0];
-    this.stateService.setActiveVersion(this.version);
+    this.route.data.subscribe(() => {
+      this.version = this.stateService.getSelectedVersion(this.track) ? this.stateService.getSelectedVersion(this.track) : this.track.versions[0];
+      this.route.queryParams.subscribe(async queryParams => {
+        const versionParam = queryParams["version"];
+        if (!!versionParam) {
+          const version = this.track.versions.find(version => version.version_index == versionParam);
+          if (!!version) {
+            this.version = version;
+          }
+        }
+        await this.selectVersion();
+        this.cdr.detectChanges();
+      });
+    });
     this.player.progress.subscribe(e => {
-      if (this.version === e.audioSource.version) {
-        this._currentTime = e.currentTime;
+      if (this.player.hasLoaded(this.version)) {
         this.cdr.markForCheck();
       }
     });
@@ -169,28 +178,41 @@ export class PublicTrackPlayerComponent implements OnInit, OnChanges, AfterConte
       this.cdr.detectChanges();
     });
     if (this.trackActivated) {
-      setTimeout(() => document.addEventListener("click", ($event) => this.markerPopoverClose(), false), 500);
+      setTimeout(() => document.addEventListener("click", () => this.markerPopoverClose(), false), 500);
     }
-    const breadcrumb = {trackTitle: this.track.title};
-    this.ngDynamicBreadcrumbService.updateBreadcrumbLabels(breadcrumb);
+    this.ngDynamicBreadcrumbService.updateBreadcrumbLabels({
+      trackTitle: this.track.title,
+    });
+    this.cdr.detectChanges();
+    this.updateLastSeen();
   }
 
   ngAfterContentInit() {
     this.markerPopover.open();
   }
 
-  selectVersion() {
-    if (this.player.isPlaying()) this.player.stop();
+  async selectVersion() {
+    await this.player.load(this.version);
     this.cdr.detectChanges();
     this.stateService.setActiveVersion(this.version);
     this.stateService.addSelectedVersion(this.track, this.version);
-    this.appwaveform.updateVersion();
+    await this.appwaveform.drawWaveform(this.version);
     this.createNewComment();
-    this.project.loadFiles(this.version);
+    await this.trackService.loadFiles(this.version);
+    this.cdr.detectChanges();
+    this.updateLastSeen();
   }
 
-  getVersionIndex(version) {
-    return this.track.versions.findIndex(e => e == version);
+  updateLastSeen() {
+    this.authService.getCurrentUser().subscribe(currentUser => {
+      if (!!currentUser) {
+        RestCall.updateLastSeen(this.version.version_id);
+      }
+    });
+  }
+
+  getVersions() {
+    return this.track.versions.reverse();
   }
 
   private getPlayerWidth(): number {
@@ -273,18 +295,14 @@ export class PublicTrackPlayerComponent implements OnInit, OnChanges, AfterConte
   }
 
   getCurrentTime(): number {
-    return this._currentTime;
+    if (!this.player.hasLoaded(this.version)) {
+      return 0;
+    }
+    return this.player.getCurrentTime();
   }
 
   getDuration(): number {
     return this.version && this.version.track_length;
-  }
-
-  get audioSource(): AudioSource {
-    return {
-      track: this.track,
-      version: this.version,
-    };
   }
 
   private getPosition(element, commentTime) {
@@ -373,6 +391,7 @@ export class PublicTrackPlayerComponent implements OnInit, OnChanges, AfterConte
 
   createNewComment() {
     this.comment = new Comment();
+    this.comment.version_id = this.version.version_id;
     this.comment.name = this.localStorageService.getCommentName();
     this.comment.start_time = 0;
     this.comment.end_time = this.getTrackLength();

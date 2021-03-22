@@ -4,6 +4,7 @@ import {StateService} from "../../../services/state.service";
 import {AuthService} from "../../../auth/auth.service";
 import {User} from "../../../model/user";
 import {Uploader} from '../../../services/uploader.service';
+import {RestCall} from "../../../rest/rest-call";
 
 @Component({
   selector: 'app-pro-topbar',
@@ -14,7 +15,14 @@ export class ProTopbarComponent {
 
   currentUser$: Observable<User>;
   eventsSubscription: Subscription;
-  showUploading= false;
+  showUploading = false;
+  newComments: {
+    title: string,
+    hash: string,
+    track_id: string,
+    version_index: string,
+    count: number
+  }[];
 
   @Output() popover = new EventEmitter();
   @Input() upload: Observable<boolean>;
@@ -26,8 +34,9 @@ export class ProTopbarComponent {
     this.currentUser$ = authService.getCurrentUser();
   }
 
-  ngOnInit(){
+  async ngOnInit() {
     this.eventsSubscription = this.upload.subscribe(() => this.showUploading = true);
+    this.newComments = await RestCall.getNewComments();
   }
 
   toggleSidebar() {
@@ -38,7 +47,7 @@ export class ProTopbarComponent {
     this.authService.logOut();
   }
 
-  openPopover(){
+  openPopover() {
     this.showUploading = false;
     this.popover.emit();
   }

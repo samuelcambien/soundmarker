@@ -2,13 +2,11 @@ import {Component, Input, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Track} from "../../../model/track";
 import {Project} from "../../../model/project";
-import {AudioSource} from "../../../player/player.service";
 import {StateService} from '../../../services/state.service';
 import {ProjectService} from '../../../services/project.service';
 import {NgDynamicBreadcrumbService} from 'ng-dynamic-breadcrumb';
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {TrackService} from "../../../services/track.service";
-import {Message} from "../../../message";
 
 @Component({
   selector: 'app-pro-board-projects-track',
@@ -42,24 +40,18 @@ export class ProTrackComponent implements OnInit {
         this.track.project = this.project;
         this.track.track_id = this.route.snapshot.params.id;
         this.stateService.setActiveTrack(this.track);
-        await this.projectService.loadProjectLI(this.project);
-        const breadcrumb = {projectTitle: this.project.title};
-        this.ngDynamicBreadcrumbService.updateBreadcrumbLabels(breadcrumb);
+        this.ngDynamicBreadcrumbService.updateBreadcrumbLabels({
+          projectTitle: this.project.title,
+        });
       });
     }
     else {
       this.track = this.inputTrack;
       this.project = this.stateService.getActiveProject().getValue();
-      const breadcrumb = {projectTitle: this.project.title};
-      this.ngDynamicBreadcrumbService.updateBreadcrumbLabels(breadcrumb);
+      this.ngDynamicBreadcrumbService.updateBreadcrumbLabels({
+        projectTitle: this.project.title,
+      });
     }
-  }
-
-  get audioSource(): AudioSource {
-    return {
-      track: this.track,
-      version: this.track.versions[0],
-    };
   }
 
   openModal(modal) {

@@ -7,7 +7,7 @@
       <div class="popup-play-btn">
         <play-button
           [disabled]="expired"
-          [audioSource]="audioSource"
+          [version]="version"
           [inverse]="true"
         ></play-button>
       </div>
@@ -69,7 +69,7 @@
 
           <play-button
             [disabled]="expired"
-            [audioSource]="audioSource"
+            [version]="version"
           ></play-button>
 
         </div>
@@ -125,7 +125,7 @@
 
       <play-button
         [disabled]="expired"
-        [audioSource]="audioSource"
+        [version]="version"
       ></play-button>
     </div>
 
@@ -142,7 +142,7 @@
         <ng-select
         class="custom top-icon version-control"
         bindLabel="version_id"
-        [items]="track.versions"
+        [items]="getVersions()"
         [searchable]="false"
         [clearable]="false"
         [(ngModel)]="version"
@@ -152,7 +152,7 @@
         dropdownPosition="auto">
 
         <ng-template ng-label-tmp let-item="item">
-          v<b>{{track.getVersionIndex(item)+1}}</b>
+          v<b>{{item.version_index}}</b>
         </ng-template>
         <ng-template ng-header-tmp *ngIf="isAdminRoute()" >
           <a class="add-version-button btn btn-primary btn-sm" (click)="fileinputhidden.click()">
@@ -161,7 +161,7 @@
 
         </ng-template>
         <ng-template ng-option-tmp let-item="item" let-index="index">
-          v<b>{{index+1}}</b>
+          v<b>{{item.version_index}}</b>
         </ng-template>
       </ng-select>
 
@@ -220,7 +220,7 @@
 
         <div class="audio-wave" id="waveform" #waveform></div>
 
-        <app-waveform #appwaveform [audioSource]="audioSource"></app-waveform>
+        <app-waveform #appwaveform></app-waveform>
 
       </div>
 
@@ -380,7 +380,7 @@
 
     <app-comment-form
       *ngIf="!expired"
-      [audioSource]="audioSource"
+      [version]="version"
       [comment]="comment"
       (newComment)="addComment($event)">
     </app-comment-form>
@@ -388,7 +388,7 @@
     <comment-lazy
       *ngFor="let comment of getMatchingCommentsSorted()"
       [comment]="comment"
-      [audioSource]="audioSource"
+      [version]="version"
       [search]="search"
       [expired]="expired"
       (delete)="deleteComment($event)"

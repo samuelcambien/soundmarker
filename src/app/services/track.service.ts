@@ -25,18 +25,16 @@ export class TrackService {
 
     track.versions = (await RestCall.getTrack(track.track_id))["versions"];
 
-    track.versions.forEach(version => {
-      this.loadFiles(version);
+    await Promise.all(track.versions.map(async version => {
+      await this.loadFiles(version);
       if (version.downloadable == 0) version.downloadable = false;
       version.track = track;
-    });
-    // const version = track.versions[0];
-    // await this.loadFiles(version);
+    }));
   }
 
   async loadFiles(version: Version) {
     version.files = (await RestCall.getVersion(version.version_id))["files"];
-    this.loadComments(version);
+    await this.loadComments(version);
     // interval(20 * 1000)
     //   .subscribe(() => this.loadComments(version))
   }

@@ -1,5 +1,5 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {AudioSource, Player} from "../player.service";
+import {Component, Input} from '@angular/core';
+import {Player} from "../player.service";
 import {Version} from "../../model/version";
 
 @Component({
@@ -11,13 +11,7 @@ export class PlayButtonComponent {
 
   @Input() inverse: boolean = false;
   @Input() disabled: boolean;
-  @Input() audioSource: AudioSource;
-
-  get version(): Version {
-    return !this.audioSource ?
-      undefined :
-      this.audioSource.version;
-  }
+  @Input() version: Version;
 
   get state(): State {
     if (!this.version) {
@@ -40,7 +34,7 @@ export class PlayButtonComponent {
   async click() {
     switch (this.state) {
       case State.play:
-        await this.player.play(this.audioSource);
+        await this.player.play(this.version);
         break;
       case State.pause:
         this.player.pause();

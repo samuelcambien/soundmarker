@@ -58,7 +58,7 @@
         <div class="list-header row">
           <div class="title">
             <h3>{{track.title}}</h3>
-            <p>{{track.versions?.length}} versions · 12 new comments</p>
+            <p>{{track.versions?.length}} versions · {{track.new_comments}} new comments</p>
           </div>
 
             <div class="ml-auto">
@@ -80,7 +80,7 @@
                      (click)="$event.stopPropagation(); openModal(deleteTrackModal);"> Delete Track</a>
                 </div>
               </div>
-              <div class="board-item-notification"></div>
+              <div *ngIf="track.new_comments > 0" class="board-item-notification"></div>
             </div>
 
           <ng-template #editTrackModal

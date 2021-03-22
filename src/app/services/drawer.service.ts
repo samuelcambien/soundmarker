@@ -18,7 +18,12 @@ export class DrawerService {
   ) {
 
     player.progress.subscribe((e) => {
-      this.getDrawer(e.audioSource.version.version_id).progress(e.currentTime / e.audioSource.version.track_length);
+      if (!!e.version) {
+        const drawer = this.getDrawer(e.version.version_id);
+        if (!!drawer) {
+          drawer.progress(e.currentTime / e.version.track_length);
+        }
+      }
     });
 
     this.stateService.getActiveTrack().subscribe(track => {

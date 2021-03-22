@@ -16,7 +16,7 @@
     <div class="full-player-container card-body">
       <public-track-player *ngIf="track"
                            [track]="track"
-                           [enableOverview]="false"
+                           [enableOverview]="true"
                            [trackActivated]="true"
                            [expired]="expired && !commentsExpired"
                            [sender]="project.sender"></public-track-player>
