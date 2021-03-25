@@ -24,6 +24,8 @@ import {EditProjectFormComponent} from './projects/edit-project-form/edit-projec
 import {PendingChangesGuard} from '../auth/pending-changes.guard';
 import {EditTrackFormComponent} from './projects/edit-track-form/edit-track-form.component';
 import {ProjectTransferComponent} from "./transfers/project-transfer/project-transfer.component";
+import { ProPopoverComponent } from './shared/pro-popover/pro-popover.component';
+import { ProWarningsPopoverComponent } from './page/pro-warnings-popover/pro-warnings-popover.component';
 
 @NgModule({
   imports: [
@@ -51,6 +53,8 @@ import {ProjectTransferComponent} from "./transfers/project-transfer/project-tra
     EditProjectFormComponent,
     EditTrackFormComponent,
     ProjectTransferComponent,
+    ProPopoverComponent,
+    ProWarningsPopoverComponent,
   ],
   providers: [
     ConfirmDialogService,

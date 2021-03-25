@@ -29,11 +29,11 @@ export class ProUploadPopoverComponent implements OnInit {
     return "http://localhost:4200/project/";
   }
 
-  closePopover() {
-    this.close.emit();
-  }
-
   getFileUploaders() {
     return this.uploader.fileUploaders;
+  }
+
+  closePopover() {
+    this.close.emit();
   }
 }

@@ -12,23 +12,14 @@ import {NgbAlert} from '@ng-bootstrap/ng-bootstrap';
 export class ProBoardComponent implements OnInit {
 
   activeTrack;
-  successMessage = '';
-  @ViewChild('selfClosingAlert', {static: false}) selfClosingAlert: NgbAlert;
   constructor(private stateService: StateService, private uploader: Uploader ) { }
 
   ngOnInit() {
     this.activeTrack = this.stateService.getActiveTrack().getValue();
 
-    this.stateService.getAlert().subscribe(message => this.successMessage = message);
-
   }
-  public changeSuccessMessage() { this.stateService.setAlert("spannend"); }
 
   get playerToggled(): boolean {
     return this.stateService.playerToggled;
-  }
-
-  public closeAlert(){
-    this.stateService.setAlert("");
   }
 }

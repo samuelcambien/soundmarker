@@ -23,17 +23,21 @@ import {RestCall} from '../../rest/rest-call';
 
 export class ProPageComponent {
 
+  successMessage = '';
+  warnings = [];
   @ViewChild('ngbPopover', {static: true}) ngbPopover: NgbPopover;
   popover: boolean = true;
   eventLoadingTopbar: Subject<void> = new Subject<void>();
+  ngbPopOverMessage;
 
   constructor(
     private uploader: Uploader,
     private router: Router,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private stateService: StateService
   ) {
+
   }
-  ngbPopOverMessage;
 
   ngOnInit() {
     RestCall.getAccount();
@@ -42,25 +46,28 @@ export class ProPageComponent {
       switch (filter.name) {
         case 'fileSize':
           this.ngbPopOverMessage = "You exceeded the max size of a single file: 1GB"
+          this.stateService.setAlert(this.ngbPopOverMessage);
           break;
         case 'avoidDuplicates':
           this.ngbPopOverMessage = "Some of these files were already added"
+          this.stateService.setAlert(this.ngbPopOverMessage);
           break;
         case 'onlyAudio':
           this.ngbPopOverMessage = "One or more files are not supported and were not added";
+          this.stateService.setAlert(this.ngbPopOverMessage);
           break;
         case 'checkSizeLimit':
           this.ngbPopOverMessage = "You exceeded the total limit: 2GB";
+          this.stateService.setAlert(this.ngbPopOverMessage);
           break;
         default:
           this.ngbPopOverMessage = "Something went wrong, please try again";
+          this.stateService.setAlert(this.ngbPopOverMessage);
           break;
       }
-      this.ngbPopover.open();
     };
 
     this.uploader.getOpenFileUploader().onAfterAddingAll = (items) => {
-      this.ngbPopover.close()
       this.router.navigate(['pro/upload'], {
         skipLocationChange: false
       });
@@ -73,7 +80,7 @@ export class ProPageComponent {
     return (this.uploader.isUploading() || this.uploader.isReady()) && this.popover;
   }
 
-  closePopover() {
+  closeUploadPopover() {
     this.uploader.clearFileUploaders();
     if (this.uploader.isUploading()) {
       this.eventLoadingTopbar.next();
@@ -81,7 +88,7 @@ export class ProPageComponent {
     }
   }
 
-  openPopover() {
+  openUploadPopover() {
     this.popover = true;
   }
 }

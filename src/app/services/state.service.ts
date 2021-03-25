@@ -95,10 +95,12 @@ export class StateService {
 
   ///////////////////// ALERT ///////////////////////////////////////////////////////////
   private alert: BehaviorSubject<string> = new BehaviorSubject<string>(null);
+
   public getAlert(): BehaviorSubject<string> {
     return this.alert;
   }
   public setAlert(alert: string) {
+    console.log(alert);
     this.alert.next(alert);
   }
 }
