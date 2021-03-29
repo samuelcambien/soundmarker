@@ -69,6 +69,9 @@
             </a>
             <div *ngIf="!last" class="dropdown-divider"></div>
           </ng-container>
+          <div *ngIf="newComments.length == 0">
+            no new comments
+          </div>
         </div>
       </li>
       <li class="nav-item  hide-phone dropdown">

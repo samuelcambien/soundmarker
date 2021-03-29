@@ -190,7 +190,7 @@ $HTTP_X_FORWARDED_FOR = isset($_SERVER['HTTP_X_FORWARDED_FOR']) ? $_SERVER['HTTP
 $ipaddr = $REMOTE_ADDR . " - " . $HTTP_X_FORWARDED_FOR;
 
 $db = Flight::db();
-$sql = "INSERT INTO Project (user_id, title, password, active, ipaddr, stream_type) VALUES ('$user_id', '$project_title', '$project_password', '1', '$ipaddr', '$stream_type')";$result = $db->query($sql);
+$sql = "INSERT INTO Project (user_id, title, password, active, ipaddr, stream_type, date_of_last_activity) VALUES ('$user_id', '$project_title', '$project_password', '1', '$ipaddr', '$stream_type', now)";$result = $db->query($sql);
 $project_id = $db->lastInsertId();
 
 $uuid = UUID::v4().UUID::v4();
@@ -256,13 +256,13 @@ $db = Flight::db();
 //$user_id = isset($_SESSION['USER']) ? $_SESSION['USER'] : "";
 $user_id = 1;
 //if (isset($_SESSION['USER'])) {
-  $sql = "SELECT Project.project_id, Project.title, Project.expiration_date, Project.hash, count(Comment.comment_id) as new_comments
+  $sql = "SELECT Project.project_id, Project.title, Project.expiration_date, Project.hash,
+              COUNT(CASE WHEN Comment.comment_id is null OR Comment.comment_time > Version.last_seen THEN Comment.comment_id ELSE NULL END) as new_comments
               FROM Project
               LEFT OUTER JOIN Track ON Project.project_id = Track.project_id
               LEFT OUTER JOIN Version ON Track.track_id = Version.track_id
               LEFT OUTER JOIN Comment ON Version.version_id = Comment.version_id
               WHERE user_id = '$user_id' AND active = '1'
-              AND (Comment.comment_id is null OR Comment.comment_time > Version.last_seen)
               GROUP BY Project.project_id";
   $result = $db->query($sql)->fetchAll(PDO::FETCH_ASSOC);
 
@@ -277,6 +277,37 @@ $user_id = 1;
 //  ), 200);
 //}
 
+});
+
+//////////////////////////////////////////////////////// Routes - /project/recent GET ///////////////////////////////////////////////////
+Flight::route('GET /project/recent', function() {
+
+  if (false) {
+  //  // return ok
+  //  Flight::json(array(
+  //     'return' => 'notloggedin'
+  //  ), 405);
+  }
+
+  $db = Flight::db();
+  $user_id = 1;
+
+  $sql = "SELECT Project.project_id, Project.title, Project.expiration_date, Project.hash,
+              COUNT(CASE WHEN Comment.comment_id is null OR Comment.comment_time > Version.last_seen THEN Comment.comment_id ELSE NULL END) as new_comments,
+              COUNT(Track.track_id) as track_count,
+              FROM Project
+              LEFT OUTER JOIN Track ON Project.project_id = Track.project_id
+              LEFT OUTER JOIN Version ON Track.track_id = Version.track_id
+              LEFT OUTER JOIN Comment ON Version.version_id = Comment.version_id
+              WHERE user_id = '$user_id' AND active = '1'
+              GROUP BY Project.project_id
+              ";
+  $result = $db->query($sql)->fetchAll(PDO::FETCH_ASSOC);
+
+  // return ok
+  Flight::json(array(
+    'projects' => $result
+  ), 200);
 });
 
 //////////////////////////////////////////////// Routes - /project/get/@project_hash POST /////////////////////////////////////////////

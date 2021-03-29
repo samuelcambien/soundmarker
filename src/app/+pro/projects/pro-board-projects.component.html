@@ -1,4 +1,5 @@
 <app-pro-board-card class="collapsable">
+
   <ng-container class="title">Recent projects
     <a class="ml-auto float-right" data-toggle="collapse" href="#collapseRecent" role="button" aria-expanded="false" aria-controls="collapseExample">
         Show
@@ -16,7 +17,7 @@
 
             <div class="title">
               <h3>{{project?.title}}</h3>
-              <p>{{project?.tracks?.length}} tracks · 12 new comments</p>
+              <p>{{project?.tracks?.length}} tracks · {{project.new_comments}} new comments</p>
             </div>
 
             <div class="ml-auto">
@@ -38,7 +39,7 @@
                      (click)="$event.stopPropagation(); openModal(removeProjectModal);"> Delete Project</a>
                 </div>
               </div>
-              <div class="board-item-notification"></div>
+              <div *ngIf="project.new_comments > 0" class="board-item-notification"></div>
             </div>
           </div>
 
@@ -83,11 +84,11 @@
     </div>
     </div>
   </ng-container>
+
 </app-pro-board-card>
 
-
-
 <app-pro-board-card class="collapsable">
+
   <ng-container class="title">Previous projects
     <a class="ml-auto float-right" data-toggle="collapse" href="#collapsePrevious" role="button" aria-expanded="false" aria-controls="collapseExample">
         Show
@@ -173,7 +174,6 @@
     </div>
     </div>
   </ng-container>
-
 
 </app-pro-board-card>
 
