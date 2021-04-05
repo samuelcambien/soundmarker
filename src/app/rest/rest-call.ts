@@ -39,7 +39,7 @@ export class RestCall {
     });
   }
 
-  public static async uploadChunk(buffer, streamFileId: string, downloadFileId: string, index: number, ext: string, onProgress): Promise<any> {
+  public static async uploadChunk(buffer, streamFileId: string, downloadFileId: number, index: number, ext: string, onProgress): Promise<any> {
     return Request.postData(Endpoints.UPLOAD_CHUNK, buffer, [streamFileId, downloadFileId, index, ext], onProgress);
   }
 

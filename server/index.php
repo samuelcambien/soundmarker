@@ -47,8 +47,8 @@ if(!isset($_SESSION)) {
   //  set the cache expire to 30 minutes
   // session_cache_expire(1440);
   // $cache_expire = session_cache_expire();
-  session_start(); 
-} 
+  session_start();
+}
 if (isset($_SESSION["USER"])) {
   $access_token = json_decode($_SESSION["USER"])->access_token;
 }
@@ -99,10 +99,10 @@ Flight::route('/', function(){
 $config = Flight::get("config");
 $now = new DateTime();
 // initialize
-if(!isset($_SESSION)) 
-{ 
-  session_start(); 
-} 
+if(!isset($_SESSION))
+{
+  session_start();
+}
 require 'helpers/oauth.php';
 
 if (isset($_SESSION["status"]) && isset($_SESSION['ENDTIME'])) {
@@ -110,7 +110,7 @@ if (isset($_SESSION["status"]) && isset($_SESSION['ENDTIME'])) {
     if ($_SESSION['ENDTIME'] < $now->getTimestamp() OR $_SESSION["status"] == "") {
       $access_token = json_decode($_SESSION["USER"])->access_token;
       $response = getSubscriptions($access_token, $config, $now);
-      if ($response->error) { 
+      if ($response->error) {
         if (isset(json_decode($_SESSION["USER"])->refresh_token)) {
         // get refresh token
         $curl_post_data = array(
@@ -147,9 +147,9 @@ if (isset($_SESSION["status"]) && isset($_SESSION['ENDTIME'])) {
         } else {
           $_SESSION["status"] = "free";
         }
-      } 
+      }
     }
-  } 
+  }
 }
 include 'index.html';
 });
@@ -184,10 +184,11 @@ $getbody = json_decode(Flight::request()->getBody());
 $user_id = isset($_SESSION['USER']) ? $_SESSION['USER'] : "";
 $project_title = isset($getbody->project_title) ? $getbody->project_title : "";
 $project_password = isset($getbody->project_password) ? $getbody->project_password : "";
+$stream_type = isset($getbody->stream_type) ? $getbody->stream_type : "";
 $ipaddr = $_SERVER['REMOTE_ADDR'] . " - " . $_SERVER['HTTP_X_FORWARDED_FOR'];
 
 $db = Flight::db();
-$sql = "INSERT INTO Project (user_id, title, password, active, ipaddr) VALUES ('$user_id', '$project_title', '$project_password', '1', '$ipaddr')";
+$sql = "INSERT INTO Project (user_id, title, password, active, ipaddr, stream_type) VALUES ('$user_id', '$project_title', '$project_password', '1', '$ipaddr', '$stream_type')";
 $result = $db->query($sql);
 $project_id = $db->lastInsertId();
 
@@ -212,6 +213,7 @@ $getbody = json_decode(Flight::request()->getBody());
 $project_id = isset($getbody->project_id) ? $getbody->project_id : "";
 $project_title = isset($getbody->project_title) ? $getbody->project_title : "";
 $project_password = isset($getbody->project_password) ? $getbody->project_password : "";
+$stream_type = isset($getbody->stream_type) ? $getbody->stream_type : "";
 
 // if user is able to edit this project -> update with user permissions
 if (true) {
@@ -219,6 +221,8 @@ if (true) {
   $sql = "UPDATE Project SET title = '$project_title' WHERE project_id = '$project_id'";
   $result = $db->query($sql);
   $sql = "UPDATE Project SET password = '$project_password' WHERE project_id = '$project_id'";
+  $result = $db->query($sql);
+  $sql = "UPDATE Project SET stream_type = '$stream_type' WHERE project_id = '$project_id'";
   $result = $db->query($sql);
 
   // return ok
@@ -292,7 +296,7 @@ if (true) {
   $emailstring = html_entity_decode($db->query($sql)->fetch()[0], ENT_COMPAT, 'ISO-8859-1');
   $sql = "SELECT email_string_text FROM Emails WHERE email_name = 'soundmarker-initial-email-to-sender'";
   $emailstring_text = html_entity_decode($db->query($sql)->fetch()[0], ENT_COMPAT, 'ISO-8859-1');
-  
+
   // Replace strings
   // Replace strings -> %projectdate%
   $emailstring = str_replace("%projectdate%",$projectdate->format('F jS Y'),$emailstring);
@@ -308,7 +312,7 @@ if (true) {
     $emailstring_text = str_replace("%recipientmail%",implode("\n", $receiver),$emailstring_text);
   } else {
     $emailstring = str_replace("%recipientmail%","Link only",$emailstring);
-    $emailstring_text = str_replace("%recipientmail%","Link only",$emailstring_text);   
+    $emailstring_text = str_replace("%recipientmail%","Link only",$emailstring_text);
   }
   // Replace strings -> %trackamount%
   $sql = "SELECT track_id FROM Track WHERE project_id = '$project_id'";
@@ -331,14 +335,14 @@ if (true) {
     $trackcount = count($files). " tracks";
   }
   $emailstring = str_replace("%trackamount%",$trackcount,$emailstring);
-  $emailstring_text = str_replace("%trackamount%",$trackcount,$emailstring_text);   
+  $emailstring_text = str_replace("%trackamount%",$trackcount,$emailstring_text);
   // Replace strings -> %tracktitle%
   $tracktitle = "";
   foreach ($files as &$file) {
       $tracktitle .= urldecode($file["file_name"]) . "<br>";
   }
   $emailstring = str_replace("%tracktitle%",$tracktitle,$emailstring);
-  $emailstring_text = str_replace("%tracktitle%",$tracktitle,$emailstring_text);   
+  $emailstring_text = str_replace("%tracktitle%",$tracktitle,$emailstring_text);
 
   $subject = 'Your tracks have been shared successfully via Soundmarker';
   $char_set = 'UTF-8';
@@ -381,7 +385,7 @@ if (true) {
     $emailstring = html_entity_decode($db->query($sql)->fetch()[0], ENT_COMPAT, 'ISO-8859-1');
     $sql = "SELECT email_string_text FROM Emails WHERE email_name = 'soundmarker-initial-email-to-recipient'";
     $emailstring_text = html_entity_decode($db->query($sql)->fetch()[0], ENT_COMPAT, 'ISO-8859-1');
-    
+
     // Replace strings
     // Replace strings -> %projectdate%
     $emailstring = str_replace("%projectdate%",$projectdate->format('F jS Y'),$emailstring);
@@ -394,16 +398,16 @@ if (true) {
     $emailstring_text = str_replace("%recipientmail%",implode("\n", $receiver),$emailstring_text);
     // Replace strings -> %trackamount%
     $emailstring = str_replace("%trackamount%",$trackcount,$emailstring);
-    $emailstring_text = str_replace("%trackamount%",$trackcount,$emailstring_text);   
+    $emailstring_text = str_replace("%trackamount%",$trackcount,$emailstring_text);
     // Replace strings -> %tracktitle%
     $emailstring = str_replace("%tracktitle%",$tracktitle,$emailstring);
-    $emailstring_text = str_replace("%tracktitle%",$tracktitle,$emailstring_text);   
+    $emailstring_text = str_replace("%tracktitle%",$tracktitle,$emailstring_text);
     // Replace strings -> %projectnotes%
     $emailstring = str_replace("%projectnotes%",urldecode($notes),$emailstring);
-    $emailstring_text = str_replace("%projectnotes%",urldecode($notes),$emailstring_text);   
+    $emailstring_text = str_replace("%projectnotes%",urldecode($notes),$emailstring_text);
     // Replace strings -> %sendermail%
     $emailstring = str_replace("%sendermail%",$sender,$emailstring);
-    $emailstring_text = str_replace("%sendermail%",$sender,$emailstring_text);   
+    $emailstring_text = str_replace("%sendermail%",$sender,$emailstring_text);
 
     $subject = $sender . ' has shared '. $trackcount . ' with you via Soundmarker';
     $char_set = 'UTF-8';
@@ -499,7 +503,7 @@ if (!isset($response[0])) {
   // return alreadyindatabase
   Flight::json(array(
      'return' => "alreadyindatabase"
-  ), 200); 
+  ), 200);
 }
 });
 
@@ -509,7 +513,7 @@ Flight::route('GET /project/get/@project_hash', function($project_hash) {
 
 $config = Flight::get("config");
 $db = Flight::db();
-$sql = "SELECT project_id, active, expiration_date, user_id, password FROM Project WHERE hash = '$project_hash'";
+$sql = "SELECT project_id, active, expiration_date, user_id, password, stream_type FROM Project WHERE hash = '$project_hash'";
 $response = $db->query($sql)->fetchAll(PDO::FETCH_ASSOC);
 
 // check if project hash was valid
@@ -519,6 +523,7 @@ if ($response) {
   $expiration_date = $response[0]["expiration_date"];
   $user_id = $response[0]["user_id"];
   $project_password = $response[0]["password"];
+  $project_stream_type = $response[0]["stream_type"];
 
   $lastmonth = new \DateTime('-1 month');
   $lastmonthf = $lastmonth->format('Y-m-d H:i:s');
@@ -573,7 +578,7 @@ if ($response) {
 
     // return ok
     Flight::json(array(
-       'project_id' => $project_id, 'status' => $status, 'expiration' => $expiration_date, 'sender' => $emailaddress, 'tracks' => $tracks
+       'project_id' => $project_id, 'status' => $status, 'expiration' => $expiration_date, 'stream_type' => $project_stream_type, 'sender' => $emailaddress, 'tracks' => $tracks
     ), 200);
   }
 } else {
@@ -604,7 +609,7 @@ if ($result->fetch()[0] == $project_password) {
 } else {
     Flight::json(array(
      'return' => 'nook'
-    ), 200);    
+    ), 200);
 }
 });
 
@@ -843,16 +848,36 @@ Flight::route('GET /track/@track_id', function($track_id) {
 
 $config = Flight::get("config");
 $db = Flight::db();
+$title = $db->query("SELECT title FROM Track WHERE track_id = '$track_id'")->fetchAll(PDO::FETCH_ASSOC)[0]["title"];
 $sql = "SELECT version_id, notes, downloadable, visibility, version_title, track_length, wave_png FROM Version WHERE track_id = '$track_id'";
 $result = $db->query($sql);
 $versions = $result->fetchAll(PDO::FETCH_ASSOC);
 
+// get the variables
+$s3 = Flight::get("s3");
+
 foreach ($versions as &$version) {
   $_SESSION['view_versions'][] = $version["version_id"];
+
+  // get AWS 3 text wave_png
+  if ($version["wave_png"] == "s3") {
+      $version_id = $version["version_id"];
+      $sql2 = "SELECT file_id, aws_path, version_id, file_name FROM File WHERE version_id = '$version_id'";
+      $result2 = $db->query($sql2);
+      $files2 = $result2->fetchAll(PDO::FETCH_ASSOC);
+      $aws_path = $files2[0]["aws_path"];
+
+      $wave_png = $s3->getObject([
+           'Bucket' => $config['AWS_S3_BUCKET'],
+           'Key'    => $files2[0]["version_id"] . "/" . $files2[0]["file_name"] . ".txt"
+      ]);
+      $version["wave_png"] = $wave_png['Body']->getContents();
+  }
 }
 
 // return ok
 Flight::json(array(
+   'title' => $title,
    'versions' => $versions
 ), 200);
 });
@@ -868,8 +893,34 @@ if (true) {
   $result = $db->query($sql);
   $files = $result->fetchAll(PDO::FETCH_ASSOC);
 
+  // Check if project is lossless or not.
+  // First we need to get track ID and then Project ID to find out if it's lossless
+  $sqltrack = "SELECT track_id FROM Version WHERE version_id = '$version_id'";
+  $track_id = $db->query($sqltrack)->fetch()[0];
+  $sqlproject = "SELECT project_id FROM Track WHERE track_id = '$track_id'";
+  $project_id = $db->query($sqlproject)->fetch()[0];
+  $sqlstream = "SELECT stream_type FROM Project WHERE project_id = '$project_id'";
+  $stream_type = $db->query($sqlstream)->fetch()[0];
+
   foreach ($files as &$file) {
     $_SESSION["view_files"][] = $file["file_id"];
+    if ($stream_type == 1) {
+      // if flac exists
+      $curl = curl_init();
+      curl_setopt_array($curl, array(
+          CURLOPT_URL => urldecode($file["aws_path"]).".flac",
+          CURLOPT_HEADER => true,
+          CURLOPT_RETURNTRANSFER => true,
+          CURLOPT_SSL_VERIFYPEER => false,
+          CURLOPT_SSL_VERIFYHOST => false,
+          CURLOPT_NOBODY => true));
+      $header = explode("\n", curl_exec($curl));
+      curl_close($curl);
+
+      if (substr($header[0], 9, 3) == "200") {
+        $file["extension"] = "flac";
+      }
+    }
   }
 
   // return ok
@@ -943,7 +994,7 @@ if (true) {
   Flight::json(array(
      'return' => 'notallowed'
   ), 405);
-} 
+}
 });
 
 ///////////////////////////////////////////////// Routes - /track/version/delete/comment POST ///////////////////////////////////////////
@@ -970,7 +1021,7 @@ if (true) {
   Flight::json(array(
      'return' => 'notallowed'
   ), 405);
-} 
+}
 });
 
 
@@ -995,7 +1046,7 @@ if (true) {
   Flight::json(array(
      'return' => 'notallowed'
   ), 405);
-} 
+}
 });
 
 
@@ -1040,7 +1091,7 @@ if (true) {
   Flight::json(array(
      'return' => 'notallowed'
   ), 405);
-} 
+}
 });
 
 ////////////////////////////////////////////////// Routes - /file/chunk/$file_id POST /////////////////////////////////////////////////
@@ -1056,6 +1107,7 @@ if (true) {
   $sql = "SELECT version_id, extension, metadata, aws_path, file_name, file_size, identifier, chunk_length FROM File WHERE file_id = '$file_id'";
   $result = $db->query($sql);
   $files = $result->fetchAll();
+  $version_id = $files[0]["version_id"];
 
   // get the variables
   $s3 = Flight::get("s3");
@@ -1072,10 +1124,8 @@ if (true) {
   }
 
   fclose($dest);
-
   // close session
   session_write_close();
-
   // return ok -> let's try
   Flight::json(array(
      'ok' => 'ok'
@@ -1091,21 +1141,39 @@ if (true) {
   $duration = $ffprobe
       ->format("/tmp/orig".$file_id.".".$ext) // extracts file informations
       ->get('duration');
-
   $codec_name = $ffprobe
       ->streams("/tmp/orig".$file_id.".".$ext) // extracts file informations
       ->first()
-      ->get('codec_name'); 
+      ->get('codec_name');
 
    // mkdir folder
    exec("mkdir /tmp/".$file_id);
-   // now create segments
-   exec($config['FFMPEG_PATH']."/ffmpeg -i /tmp/orig".$file_id.".".$ext." -f segment -segment_time 10 -codec:a libmp3lame -qscale:a 1 /tmp/".$file_id."/".$file_id."%03d.mp3");
+
+
+   // Check if project is lossless or not.
+   // First we need to get track ID and then Project ID to find out if it's lossless
+   // $sqltrack = "SELECT track_id FROM Version WHERE version_id = '$version_id'";
+   // $track_id = $db->query($sqltrack)->fetch()[0];
+   // $sqlproject = "SELECT project_id FROM Track WHERE track_id = '$track_id'";
+   // $project_id = $db->query($sqlproject)->fetch()[0];
+   // $sqlstream = "SELECT stream_type FROM Project WHERE project_id = '$project_id'";
+   // $stream_type = $db->query($sqlstream)->fetch()[0];
+
+   // if ($stream_type == 1) {
+   if ((strpos($codec_name, 'pcm') !== false) || (strpos($codec_name, 'lac') !== false) || (strpos($codec_name, 'wavpack') !== false)) {
+   exec($config['FFMPEG_PATH']."/ffmpeg -i /tmp/orig".$file_id.".".$ext." -c:a flac /tmp/".$file_id."/".$file_id.".flac");
+   }
+   // }
+
+
+   // now create segments TODO: not sure we still need them
+   // exec($config['FFMPEG_PATH']."/ffmpeg -i /tmp/orig".$file_id.".".$ext." -f 96 -segment_time 10 -codec:a libmp3lame -qscale:a 1 /tmp/".$file_id."/".$file_id."%03d.mp3");
+
    // loop through all files and upload them
    $di = new RecursiveDirectoryIterator('/tmp/'.$file_id);
     foreach (new RecursiveIteratorIterator($di) as $filename => $file) {
         //echo $filename . ' - ' . $file->getSize() . ' bytes <br/>';
-        $filenameshort = substr($filename, (strlen($file_id)*2+6)); 
+        $filenameshort = substr($filename, (strlen($file_id)*2+6));
         // upload in chunks to S3
          $result = $s3->putObject([
              'Bucket' => $config['AWS_S3_BUCKET'],
@@ -1119,9 +1187,8 @@ if (true) {
 
     // delete files
     exec("rm -rf /tmp/".$file_id."/*");
-
-  // if coded is not lossy, transcode
-  // if ((strpos($codec_name, 'pcm') !== false) || (strpos($codec_name, 'lac') !== false) || (strpos($codec_name, 'wavpack') !== false)) {
+    // if codec is not lossy, transcode
+    // if ((strpos($codec_name, 'pcm') !== false) || (strpos($codec_name, 'lac') !== false) || (strpos($codec_name, 'wavpack') !== false)) {
     // now we split up the song in 10sec fragments
     // now let's convert the file
     $ffmpeg = FFMpeg\FFMpeg::create(array(
@@ -1161,14 +1228,15 @@ if (true) {
   //            'ContentDisposition' => 'attachment; filename='. $files[0]["file_name"] . '.' . $ext
   //        ]);
   // }
-  
+
+  gc_collect_cycles();
   // now it's time to create the png
   // let's create wave_png
   exec($config['FFMPEG_PATH']."/ffmpeg -nostats -i /tmp/orig".$file_id.".".$ext." -af astats=length=0.1:metadata=1:reset=1,ametadata=print:key=lavfi.astats.Overall.RMS_level -f null - 2>&1", $output);
   foreach ($output as &$value) {
     if (strpos($value, 'lavfi.astats.Overall.RMS_level=') !== false) {
         $momentarylufs = substr($value, strpos($value, "lavfi.astats.Overall.RMS_level=") + 31, 10);
-        if (strpos($momentarylufs, 'inf') == false) { 
+        if (strpos($momentarylufs, 'inf') == false) {
           $zerotohundred = (floatval($momentarylufs)/70)+1;
           if ($zerotohundred < 0) {
             $zerotohundred = 0;
@@ -1183,38 +1251,50 @@ if (true) {
 
   // Update wave_png in dB
   $version_id = $files[0]["version_id"];
-  $sql = "UPDATE Version SET wave_png = '$wave_png_json' WHERE version_id = '$version_id'";
+  // $sql = "UPDATE Version SET wave_png = '$wave_png_json' WHERE version_id = '$version_id'";
+  // $result = $db->query($sql);
+  // add wave_png json to file txt
+  $sql = "SELECT version_id, extension, metadata, aws_path, file_name, file_size, identifier, chunk_length FROM File WHERE file_id = '$file_id'";
   $result = $db->query($sql);
+  $filesnew = $result->fetchAll();
+  $result = $s3->putObject([
+    'Bucket' => $config['AWS_S3_BUCKET'],
+    'Key'    => $filesnew[0]["version_id"] . "/" . $filesnew[0]["file_name"] . '.txt',
+    'Body'   => $wave_png_json,
+    'ACL'    => 'public-read',
+    'ContentType' => 'text/plain',
+    'ContentDisposition' => 'attachment; filename='. $filesnew[0]["file_name"] . '.txt'
+  ]);
 
   // Update duration in dB
-  $sql = "UPDATE Version SET track_length = '$duration' WHERE version_id = '$version_id'";
+  $sql = "UPDATE Version SET track_length = '$duration', wave_png = 's3' WHERE version_id = '$version_id'";
   $result = $db->query($sql);
 
   // now if downloadable, also save the original file:
   if ($download_id > 0) {
-    $sql = "SELECT version_id, extension, metadata, aws_path, file_name, file_size, identifier, chunk_length FROM File WHERE file_id = '$download_id'";
-    $result = $db->query($sql);
-    $filesnew = $result->fetchAll();
-    
+    // $sql = "SELECT version_id, extension, metadata, aws_path, file_name, file_size, identifier, chunk_length FROM File WHERE file_id = '$download_id'";
+    // $result = $db->query($sql);
+    // $filesnew = $result->fetchAll();
+
     $result = $s3->putObject([
         'Bucket' => $config['AWS_S3_BUCKET'],
-        'Key'    => $filesnew[0]["version_id"] . "/" . $filesnew[0]["file_name"] . '.' . $filesnew[0]["extension"],
+        'Key'    => $filesnew[0]["version_id"] . "/" . $filesnew[0]["file_name"] . '.' . $ext,
         'Body'   => file_get_contents("/tmp/orig".$file_id.".".$ext),
         'ACL'    => 'public-read',
         'ContentType' => 'application/octet-stream; charset=utf-8',
-        'ContentDisposition' => 'attachment; filename='. $files[0]["file_name"] . '.' . $filesnew[0]["extension"]
+        'ContentDisposition' => 'attachment; filename='. $files[0]["file_name"] . '.' . $ext
     ]);
   }
 
+  gc_collect_cycles();
   // delete original upload
-  unlink("/tmp/orig".$file_id.".".$ext);
-
+  try { unlink("/tmp/orig".$file_id.".".$ext); } catch (AwsException $e) { }
 } else {
   // return not allowed
   Flight::json(array(
      'return' => 'notallowed'
   ), 405);
-} 
+}
 });
 
 
