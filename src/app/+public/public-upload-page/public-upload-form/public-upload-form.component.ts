@@ -98,12 +98,12 @@ export class PublicUploadFormComponent implements OnInit {
     const streamFileResponse = await RestCall.createNewFile(track._file, title, this.getStreamFileExtension(extension), track._file.size, versionId, 0, length);
     const streamFileId = streamFileResponse["file_id"];
 
-    let downloadFileId: string;
+    let downloadFileId: number;
     if (this.availability) {
       const downloadFileResponse = await RestCall.createNewFile(track._file, title, extension, track._file.size, versionId, 1, length);
       downloadFileId = downloadFileResponse["file_id"];
     } else {
-      downloadFileId = "0";
+      downloadFileId = 0;
     }
 
     const buffer: ArrayBuffer = await Utils.read(track._file);
@@ -112,9 +112,8 @@ export class PublicUploadFormComponent implements OnInit {
   }
 
   private setChunkProgress(progress: number, fileSize: number) {
-    let totalDone = 100*(this.uploadedFilesSize+progress*fileSize)/this.totalQueueSize;
+    let totalDone = (100*this.uploadedFilesSize+progress*fileSize)/this.totalQueueSize;
     this.setProgress(totalDone);
-    // this.setProgress(((100 * this.uploader.uploaded + progress) / this.uploader.queue.length));
   }
 
   private setChunkCompleted(fileSize) {
@@ -125,7 +124,6 @@ export class PublicUploadFormComponent implements OnInit {
 
   private setProgress(progress: number) {
       this.uploader.progress = progress;
-      // this.uploader.progress = 100;
   }
 
   private getStreamFileExtension(extension: string) {

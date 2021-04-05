@@ -75,7 +75,6 @@ if(!isset($_SESSION))
 {
   session_start();
 }
-
 require 'helpers/oauth.php';
 
 if (isset($_SESSION["status"]) && isset($_SESSION['ENDTIME'])) {
@@ -121,7 +120,6 @@ if (isset($_SESSION["status"]) && isset($_SESSION['ENDTIME'])) {
         } else {
           $_SESSION["status"] = "free";
         }
-
       }
     }
   }
@@ -221,6 +219,8 @@ if (true) {
     $sql = "UPDATE Project SET password = '$project_password' WHERE project_id = '$project_id'";
     $result = $db->query($sql);
   }
+  $sql = "UPDATE Project SET stream_type = '$stream_type' WHERE project_id = '$project_id'";
+  $result = $db->query($sql);
   $sql = "UPDATE Project SET stream_type = '$stream_type' WHERE project_id = '$project_id'";
   $result = $db->query($sql);
 
@@ -1303,10 +1303,8 @@ if (true) {
   }
 
   fclose($dest);
-
   // close session
   session_write_close();
-
   // return ok -> let's try
   Flight::json(array(
      'ok' => 'ok'
@@ -1322,7 +1320,6 @@ if (true) {
   $duration = $ffprobe
       ->format("/tmp/orig".$file_id.".".$ext) // extracts file informations
       ->get('duration');
-
   $codec_name = $ffprobe
       ->streams("/tmp/orig".$file_id.".".$ext) // extracts file informations
       ->first()

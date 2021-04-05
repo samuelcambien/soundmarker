@@ -57,7 +57,7 @@ if( isset( $_GET['code'] ) ) {
     $now = new DateTime();
     $_SESSION['ENDTIME'] = $now->getTimestamp() + 60*60*24;
     $response = getSubscriptions(json_decode($curl_response)->access_token, $config, $now);
-    $_SESSION["status"] = "pro";
+    $_SESSION["status"] = "pro"; // shortcut to show pro -> only show with subscription
   }
 
   // NOW get user info
