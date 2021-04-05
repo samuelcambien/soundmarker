@@ -182,6 +182,11 @@ export class RestCall {
     return Request.getNonCaching(Endpoints.COMMENTS, [versionId]);
   }
 
+  public static getAccount(){
+    // return new Promise(resolve => resolve(false));
+    return Request.getNonCaching(Endpoints.ACCOUNT);
+  }
+
   public static getProjects(): Promise<any> {
     return Request.get(Endpoints.PROJECT_ALL);
   }
@@ -246,6 +251,8 @@ export class Endpoints {
   public static COMMENT_DELETE: string = Endpoints.TRACK + "/version/delete/comment";
 
   public static PROJECT_ALL: string = Endpoints.BACKEND + "/project/all"
+
+  publis static ACCOUNT: string = Endpoints.BACKEND + "/account"
 }
 
 export class Request {
