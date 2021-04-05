@@ -20,7 +20,7 @@ export class ProTopbarComponent {
     title: string,
     hash: string,
     track_id: string,
-    version_index: string,
+    version_number: string,
     count: number
   }[];
 

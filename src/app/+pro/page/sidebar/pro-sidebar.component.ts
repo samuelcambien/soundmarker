@@ -33,7 +33,7 @@ export class ProSidebarComponent {
   }
 
   get versionIndex() {
-    return this.version.version_index;
+    return this.version.version_number;
   }
 
   getRouterLink() {

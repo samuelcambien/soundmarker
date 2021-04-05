@@ -63,7 +63,7 @@
         <div class="dropdown-menu shadow-pro-box dropdown-menu-right pro-dropdown pro-notifications"
              aria-labelledby="dropdownMenuLink">
           <ng-container *ngFor="let newComment of newComments">
-            <a class="dropdown-item" routerLink="project/{{newComment.hash}}/track/{{newComment.track_id}}" [queryParams]="{'version':newComment.version_index}">
+            <a class="dropdown-item" routerLink="project/{{newComment.hash}}/track/{{newComment.track_id}}" [queryParams]="{'version':newComment.version_number}">
               <h3>{{newComment.title}}</h3>
               <span class="sub-line">{{newComment.count}} new comments</span>
             </a>

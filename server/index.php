@@ -55,6 +55,7 @@ if (isset($_SESSION["USER"])) {
 
 // Set Session
 Flight::set("session", $_SESSION);
+
 // Error handling
 Flight::map('error', function(Exception $ex){
     // Handle error
@@ -861,10 +862,11 @@ $track_length = isset($getbody->track_length) ? $getbody->track_length : 0;
 // if user is able to edit this track
 if (true) {
   $db = Flight::db();
-  $version_index = $db->query(
-    "SELECT max(version_index) from Version version WHERE version.track_id = '$track_id';"
-  )->fetchAll(PDO::FETCH_COLUMN)[0] + 1;
-  $sql = "INSERT INTO Version (track_id, downloadable, visibility, notes, version_title, version_index, track_length) VALUES ('$track_id', '$downloadable', '$visibility', '$notes', '$version_title', '$version_index', '$track_length')";
+
+  // add version_number
+  $latestversion = $db->query("SELECT MAX(version_number) FROM Version WHERE track_id = '$track_id'")->fetchAll(PDO::FETCH_ASSOC)[0]["version_number"];
+  if ($latestversion > 0) { $newversionnumber = $latestversion + 1; } else { $newversionnumber = 1; }
+  $sql = "INSERT INTO Version (track_id, downloadable, visibility, notes, version_title, track_length, version_number) VALUES ('$track_id', '$downloadable', '$visibility', '$notes', '$version_title', '$track_length', '$newversionnumber')";
   $result = $db->query($sql);
 
   $_SESSION['user_versions'][] = $db->lastInsertId();
@@ -924,7 +926,7 @@ Flight::route('GET /track/@track_id', function($track_id) {
   $track_row = $db->query("SELECT title, visibility FROM Track WHERE track_id = '$track_id'")->fetchAll(PDO::FETCH_ASSOC)[0];
   $title = $track_row["title"];
   $visibility = $track_row["visibility"];
-  $sql = "SELECT version_id, notes, downloadable, visibility, version_title, version_index, track_length FROM Version WHERE track_id = '$track_id'";
+  $sql = "SELECT version_id, notes, downloadable, visibility, version_title, version_number, track_length FROM Version WHERE track_id = '$track_id'";
   $result = $db->query($sql);
   $versions = $result->fetchAll(PDO::FETCH_ASSOC);
 
@@ -1188,7 +1190,7 @@ Flight::route('GET /comments/new', function() {
   Flight::json(
     Flight::db()
       ->query("
-        SELECT Track.title, count(Comment.comment_id) as count, Project.hash, Track.track_id, Version.version_index
+        SELECT Track.title, count(Comment.comment_id) as count, Project.hash, Track.track_id, Version.version_number
           FROM Comment
           INNER JOIN Version ON Comment.version_id = Version.version_id
           INNER JOIN Track ON Version.track_id = Track.track_id

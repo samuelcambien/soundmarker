@@ -158,7 +158,7 @@ export class PublicTrackPlayerComponent implements OnInit, OnChanges, AfterConte
       this.route.queryParams.subscribe(async queryParams => {
         const versionParam = queryParams["version"];
         if (!!versionParam) {
-          const version = this.track.versions.find(version => version.version_index == versionParam);
+          const version = this.track.versions.find(version => version.version_number == versionParam);
           if (!!version) {
             this.version = version;
           }

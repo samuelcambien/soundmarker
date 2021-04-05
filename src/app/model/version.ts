@@ -9,7 +9,7 @@ export class  Version {
   version_id: string;
   files: File[];
   comments: Comment[];
-  version_index: number;
+  version_number: number;
 
   track: Track;
 }
