@@ -250,9 +250,9 @@ export class Endpoints {
 
   public static COMMENT_DELETE: string = Endpoints.TRACK + "/version/delete/comment";
 
-  public static PROJECT_ALL: string = Endpoints.BACKEND + "/project/all"
+  public static PROJECT_ALL: string = Endpoints.BACKEND + "/project/all";
 
-  publis static ACCOUNT: string = Endpoints.BACKEND + "/account"
+  public static ACCOUNT: string = Endpoints.BACKEND + "/account";
 }
 
 export class Request {

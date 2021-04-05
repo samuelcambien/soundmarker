@@ -46,7 +46,8 @@
     RewriteCond %{REQUEST_URI} "/unsubscribe/([a-z0-9/-]+)$" [OR]
     RewriteCond %{REQUEST_URI} "/subscribe/([a-z0-9/-]+)$" [OR]
     RewriteCond %{REQUEST_URI} "/login" [OR]
-    RewriteCond %{REQUEST_URI} "/sma"
+    RewriteCond %{REQUEST_URI} "/sma" [OR]
+    RewriteCond %{REQUEST_URI} "/account"
     RewriteRule ^ index.php [L]
 
 
