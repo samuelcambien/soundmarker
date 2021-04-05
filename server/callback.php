@@ -25,7 +25,8 @@ if( isset( $_GET['code'] ) ) {
   $curl_post_data = array(
      'grant_type'    => 'authorization_code',
      'code'          => $_GET['code'],
-     'redirect_uri'  => 'http://localhost/callback.php',
+     'redirect_uri'  => $config['PHPSERVER_URL'].'callback.php',
+//      'redirect_uri'  => 'http://localhost/callback.php',
      'client_id'     => $config['OAUTH_CLIENT_ID'], // Only needed if server is running CGI
      'client_secret' => $config['OAUTH_CLIENT_SECRET'] // Only need if server is running CGI
   );
@@ -44,7 +45,6 @@ if( isset( $_GET['code'] ) ) {
   curl_setopt( $curl, CURLOPT_REFERER, $config['OAUTH_SERVER_LOCATION'].'/1' );
 
   $curl_response = curl_exec( $curl );
-// print_r(json_decode($curl_response)->access_token);
   curl_close( $curl );
 
   /** OPTION but RECOMMENDED - STORAGE */
@@ -69,17 +69,12 @@ if( isset( $_GET['code'] ) ) {
   curl_setopt($cURLConnection, CURLOPT_SSL_VERIFYPEER, false );
   curl_setopt($cURLConnection, CURLOPT_SSL_VERIFYHOST, 0);
   curl_setopt($cURLConnection, CURLOPT_VERBOSE, true);
+  curl_setopt($cURLConnection, CURLOPT_FOLLOWLOCATION, true);
   curl_setopt($cURLConnection, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US; rv:1.9.1.2) Gecko/20090729 Firefox/3.5.2 GTB5' );
   curl_setopt($cURLConnection, CURLOPT_URL, 'https://www.leapwingaudio.com/oauth/me/?access_token='.json_decode($curl_response)->access_token);
   curl_setopt($cURLConnection, CURLOPT_RETURNTRANSFER, true);
 
-  $httpCode = curl_getinfo($cURLConnection , CURLINFO_HTTP_CODE); // this results 0 every time
-
-
   $userinfo = curl_exec($cURLConnection);
-  $response = curl_error($cURLConnection);
-  error_log($userinfo);
-  error_log($response);
   curl_close($cURLConnection);
   $_SESSION["user"] = json_decode($userinfo)->user_nicename;
 
@@ -103,10 +98,11 @@ if( isset( $_GET['code'] ) ) {
       $dbh->query("INSERT IGNORE INTO User (user_nicename, emailaddress) VALUES ('".json_decode($userinfo)->user_nicename."', '".json_decode($userinfo)->user_email."')");
     }
   } catch (Exception $e) {}
-
+//   print_r($_SESSION);
   // Once you have an access token, you know that user has signed in sucessfully and that they have
   // authorized your application (if scope is supported). Here is where you can call the resource server
   // and get user informaiton about the user. What you do with this information is up to you.
-//   header("Location: ".$config['PHPSERVER_URL']);
+//   print_r($_SESSION);
+  header("Location: ".$config['PHPSERVER_URL']);
 
 }

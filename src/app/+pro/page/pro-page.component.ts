@@ -2,6 +2,7 @@ import {Component} from '@angular/core';
 import {Uploader} from '../../services/uploader.service';
 import {animate, state, style, transition, trigger} from '@angular/animations';
 import {Subject} from 'rxjs';
+import {RestCall} from '../../rest/rest-call';
 
 @Component({
   selector: 'app-pro',
@@ -28,6 +29,7 @@ export class ProPageComponent {
   }
 
   ngOnInit() {
+    RestCall.getAccount();
   }
 
   showUploadPopover() {

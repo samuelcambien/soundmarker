@@ -53,6 +53,8 @@ if (isset($_SESSION["USER"])) {
   $access_token = json_decode($_SESSION["USER"])->access_token;
 }
 
+// Set Session
+Flight::set("session", $_SESSION);
 // Error handling
 Flight::map('error', function(Exception $ex){
     // Handle error
@@ -61,45 +63,14 @@ Flight::map('error', function(Exception $ex){
     ), 400);
 });
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 /*
 ROUTING TO FRONT-END
 */
 /////////////////////////////////////////////////////////// Routes - Global Index /////////////////////////////////////////////////////
 Flight::route('/', function(){
-
 $config = Flight::get("config");
 $now = new DateTime();
 // initialize
-
 if(!isset($_SESSION))
 {
   session_start();
@@ -158,20 +129,34 @@ if (isset($_SESSION["status"]) && isset($_SESSION['ENDTIME'])) {
 include 'index.html';
 });
 
-
 Flight::route('GET /login', function() {
 
 $config = Flight::get("config");
 echo "<script>window.location = \"" . $config['OAUTH_SERVER_LOCATION'] . "/oauth/authorize/?response_type=code&client_id=" . $config['OAUTH_CLIENT_ID'] . "&state=soundmarkerpro&redirect_uri=" . $config['PHPSERVER_URL'] ."callback.php" . "\";</script>";
 });
 
+//////////////////////////////////////////////////////// Routes - /account/ GET ///////////////////////////////////////////////////
+Flight::route('GET /account/', function() {
+$config = Flight::get("config");
+$getbody = json_decode(Flight::request()->getBody());
 
+$session = Flight::get("session");
 
+$db = Flight::db();
+$user_id = isset($_SESSION['USER']) ? $_SESSION['USER'] : "";
 
-
-
-
-
+if (isset($_SESSION['USER'])) {
+  Flight::json(array(
+     'user' => $_SESSION['USER']
+  ), 200);
+}
+else {
+ // return ok
+ Flight::json(array(
+    'return' => 'Unauthorized'
+ ), 401);
+}
+});
 
 
 
@@ -246,8 +231,8 @@ if (true) {
 } else {
   // return not allowed
   Flight::json(array(
-     'return' => 'notallowed'
-  ), 405);
+     'return' => 'Unauthorized'
+  ), 401);
 }
 });
 
@@ -256,6 +241,7 @@ Flight::route('GET /project/all', function() {
 
 $config = Flight::get("config");
 
+$session = Flight::get("session");
 $db = Flight::db();
 $user_id = isset($_SESSION['USER']) ? $_SESSION['USER'] : "";
 if (isset($_SESSION['USER'])) {
@@ -277,8 +263,8 @@ if (isset($_SESSION['USER'])) {
 else {
  // return ok
  Flight::json(array(
-    'return' => 'notloggedin'
- ), 405);
+    'return' => 'Unauthorized'
+ ), 401);
 }
 
 });
@@ -523,8 +509,8 @@ if (true) {
 } else {
   // return not allowed
   Flight::json(array(
-     'return' => 'notallowed'
-  ), 405);
+     'return' => 'Unauthorized'
+  ), 401);
 }
 });
 
@@ -662,8 +648,8 @@ if ($result->fetch()[0] == $project_password) {
     ), 200);
 } else {
     Flight::json(array(
-     'return' => 'nook'
-    ), 200);
+     'return' => 'Unauthorized'
+    ), 401);
 }
 });
 
@@ -688,8 +674,8 @@ if (true) {
 } else {
   // return not allowed
   Flight::json(array(
-     'return' => 'notallowed'
-  ), 405);
+     'return' => 'Unauthorized'
+  ), 401);
 }
 });
 
@@ -714,8 +700,8 @@ if (true) {
 } else {
   // return not allowed
   Flight::json(array(
-     'return' => 'notallowed'
-  ), 405);
+     'return' => 'Unauthorized'
+  ), 401);
 }
 });
 
@@ -741,8 +727,8 @@ if (true) {
 } else {
   // return not allowed
   Flight::json(array(
-     'return' => 'notallowed'
-  ), 405);
+     'return' => 'Unauthorized'
+  ), 401);
 }
 });
 
@@ -793,8 +779,8 @@ if (true) {
 } else {
   // return not allowed
   Flight::json(array(
-     'return' => 'notallowed'
-  ), 405);
+     'return' => 'Unauthorized'
+  ), 401);
 }
 });
 
@@ -854,8 +840,8 @@ if (true) {
 } else {
   // return not allowed
   Flight::json(array(
-     'return' => 'notallowed'
-  ), 405);
+     'return' => 'Unauthorized'
+  ), 401);
 }
 });
 
@@ -890,8 +876,8 @@ if (true) {
 } else {
   // return not allowed
   Flight::json(array(
-     'return' => 'notallowed'
-  ), 405);
+     'return' => 'Unauthorized'
+  ), 401);
 }
 });
 
@@ -925,8 +911,8 @@ if (true) {
 } else {
   // return not allowed
   Flight::json(array(
-     'return' => 'notallowed'
-  ), 405);
+     'return' => 'Unauthorized'
+  ), 401);
 }
 });
 
@@ -973,8 +959,8 @@ Flight::route('POST /track/delete', function() {
   // if user is not able to delete this track
   if (!true) {
     Flight::json(array(
-      'return' => 'notallowed'
-    ), 405);
+      'return' => 'Unauthorized'
+    ), 401);
   }
 
   $db = Flight::db();
@@ -1035,8 +1021,8 @@ if (true) {
 } else {
   // return not allowed
   Flight::json(array(
-     'return' => 'notallowed'
-  ), 405);
+     'return' => 'Unauthorized'
+  ), 401);
 }
 });
 
@@ -1092,8 +1078,8 @@ if (true) {
 } else {
   // return not allowed
   Flight::json(array(
-     'return' => 'notallowed'
-  ), 405);
+     'return' => 'Unauthorized'
+  ), 401);
 }
 });
 
@@ -1127,8 +1113,8 @@ if (true) {
 } else {
   // return not allowed
   Flight::json(array(
-     'return' => 'notallowed'
-  ), 405);
+     'return' => 'Unauthorized'
+  ), 401);
 }
 });
 
@@ -1154,8 +1140,8 @@ if (true) {
 } else {
   // return not allowed
   Flight::json(array(
-     'return' => 'notallowed'
-  ), 405);
+     'return' => 'Unauthorized'
+  ), 401);
 }
 });
 
@@ -1237,8 +1223,8 @@ if (true) {
 } else {
   // return not allowed
   Flight::json(array(
-     'return' => 'notallowed'
-  ), 405);
+     'return' => 'Unauthorized'
+  ), 401);
 }
 });
 
@@ -1282,8 +1268,8 @@ if (true) {
 } else {
   // return not allowed
   Flight::json(array(
-     'return' => 'notallowed'
-  ), 405);
+     'return' => 'Unauthorized'
+  ), 401);
 }
 });
 
@@ -1488,8 +1474,8 @@ if (true) {
 } else {
   // return not allowed
   Flight::json(array(
-     'return' => 'notallowed'
-  ), 405);
+     'return' => 'Unauthorized'
+  ), 401);
 }
 });
 
@@ -1589,13 +1575,15 @@ $impressionsnew = intval($resultfetch[0]["impressions"]) + 1;
 $sql = "UPDATE Ad SET impressions = '$impressionsnew' WHERE ad_id = '$ad_id'";
 $result = $db->query($sql);
 
+$session = Flight::get("session");
+
 // return ok
 Flight::json(array(
-   'ok' => 'ok'
+   'ok' => 'ok', 'session' => $session
 ), 200);
 });
 
-////////////////////////////////////////////////////////// Routes - /sma/imp POST //////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////// Routes - /sma/click POST //////////////////////////////////////////////////////////
 Flight::route('POST /sma/click', function() {
 
 $config = Flight::get("config");

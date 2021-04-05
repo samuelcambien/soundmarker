@@ -53,7 +53,6 @@ export class PublicPageComponent implements OnInit {
     this.header.nativeElement.addEventListener("wheel", event => {
       this.contentScroll(event.deltaY);
     });
-
     // setTimeout(() => {
     //   if (this.localStorageService.termsAccepted()) {
     //     this.openIntroduction();
