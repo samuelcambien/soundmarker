@@ -53,6 +53,9 @@ if (isset($_SESSION["USER"])) {
   $access_token = json_decode($_SESSION["USER"])->access_token;
 }
 
+// Set Session
+Flight::set("session", $_SESSION);
+
 // Error handling
 Flight::map('error', function(Exception $ex){
     // Handle error
@@ -790,7 +793,11 @@ $track_length = isset($getbody->track_length) ? $getbody->track_length : 0;
 // if user is able to edit this track
 if (true) {
   $db = Flight::db();
-  $sql = "INSERT INTO Version (track_id, downloadable, visibility, notes, version_title, track_length) VALUES ('$track_id', '$downloadable', '$visibility', '$notes', '$version_title', '$track_length')";
+
+  // add version_number
+  $latestversion = $db->query("SELECT MAX(version_number) FROM Version WHERE track_id = '$track_id'")->fetchAll(PDO::FETCH_ASSOC)[0]["version_number"];
+  if ($latestversion > 0) { $newversionnumber = $latestversion + 1; } else { $newversionnumber = 1; }
+  $sql = "INSERT INTO Version (track_id, downloadable, visibility, notes, version_title, track_length, version_number) VALUES ('$track_id', '$downloadable', '$visibility', '$notes', '$version_title', '$track_length', '$newversionnumber')";
   $result = $db->query($sql);
 
   $_SESSION['user_versions'][] = $db->lastInsertId();
@@ -849,7 +856,7 @@ Flight::route('GET /track/@track_id', function($track_id) {
 $config = Flight::get("config");
 $db = Flight::db();
 $title = $db->query("SELECT title FROM Track WHERE track_id = '$track_id'")->fetchAll(PDO::FETCH_ASSOC)[0]["title"];
-$sql = "SELECT version_id, notes, downloadable, visibility, version_title, track_length, wave_png FROM Version WHERE track_id = '$track_id'";
+$sql = "SELECT version_id, notes, downloadable, visibility, version_title, track_length, wave_png, version_number FROM Version WHERE track_id = '$track_id'";
 $result = $db->query($sql);
 $versions = $result->fetchAll(PDO::FETCH_ASSOC);
 
@@ -1393,13 +1400,15 @@ $impressionsnew = intval($resultfetch[0]["impressions"]) + 1;
 $sql = "UPDATE Ad SET impressions = '$impressionsnew' WHERE ad_id = '$ad_id'";
 $result = $db->query($sql);
 
+$session = Flight::get("session");
+
 // return ok
 Flight::json(array(
-   'ok' => 'ok'
+   'ok' => 'ok', 'session' => $session
 ), 200);
 });
 
-////////////////////////////////////////////////////////// Routes - /sma/imp POST //////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////// Routes - /sma/click POST //////////////////////////////////////////////////////////
 Flight::route('POST /sma/click', function() {
 
 $config = Flight::get("config");
