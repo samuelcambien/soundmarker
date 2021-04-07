@@ -12,7 +12,7 @@ import {FileUploader} from "../../../tools/ng2-file-upload";
 })
 export class ProUploadStartComponent implements OnInit, OnDestroy {
 
-  @ViewChild('fileinputhidden', {static: true}) fileinput: ElementRef;
+  @ViewChild('fileinputhiddenstart', {static: true}) fileinput: ElementRef;
   newTrackId;
   subscription;
 
@@ -69,7 +69,8 @@ export class ProUploadStartComponent implements OnInit, OnDestroy {
     return this.uploader.getOpenSMFileUploader();
   }
 
-  getFileUploader(): FileUploader {
-    return this.uploader.fileUploader;
+  newUpload(){
+    this.stateService.setVersionUpload(false);
+    document.getElementById("fileinputhiddenstart").click();
   }
 }

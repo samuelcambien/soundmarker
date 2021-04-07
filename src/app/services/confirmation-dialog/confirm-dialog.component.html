@@ -5,14 +5,13 @@
 
       </div>
     <div class="modal-body">
-      <p>There are unsaved changes. Are sure you want to cancel this upload? </p>
-      <!--<p>{{ message }}</p>-->
+      <p>{{ message }}</p>
       <div class="d-flex justify-content-end">
         <button class="btn btn-sm btn-outline-form btn-no"
-                (click)="decline()">Undo
+                (click)="decline()">{{ cancel_false }}
         </button>
         <button class="btn btn-sm btn-primary btn-yes"
-                (click)="accept()">Yes
+                (click)="accept()">{{ ok_true }}
         </button>
       </div>
     </div>

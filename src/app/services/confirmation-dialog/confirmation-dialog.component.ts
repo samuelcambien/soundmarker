@@ -9,6 +9,8 @@ import {NgbActiveModal} from "@ng-bootstrap/ng-bootstrap";
 export class ConfirmDialogComponent {
 
   message: string;
+  ok_true: string;
+  cancel_false: string;
 
   constructor(
     private activeModal: NgbActiveModal,

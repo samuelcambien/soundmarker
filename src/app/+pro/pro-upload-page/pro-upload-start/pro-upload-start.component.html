@@ -6,52 +6,35 @@
            triggers="manual" (click)="ft.close()">
         <!--<div class="card pro-upload-songs-area rounded border-0" [class.disabled]="uploader.isUploading()">-->
         <div class="card pro-upload-songs-area rounded border-0">
-          <div class="upload-songs-text">
+          <div class="upload-songs-text" (click)="newUpload()">
               <div class="addsongs">
-
                 <div class="note-image" id="ni1">
-
                   <div class="mid-shadow">
-
                     <div *ngTemplateOutlet="icon_note"></div>
-
                   </div>
                 </div>
-
                 <h5>Add tracks</h5>
               </div>
           </div>
-          <input #fileinput
-                 class="pro-upload-songs-input"
-                 id="pro-uploader"
-                 type="file"
-                 title=""
-                 ng2FileSelect
-                 [uploader]="getOpenSMFileUploader().getFileUploader()"
-                 multiple
-                 name="files"
-                 accept="{{getOpenSMFileUploader().getAcceptedFileTypes().join(',')}}"
-          />
         </div>
       </div>
     </div>
   </ng-container>
 </app-pro-board-card>
 
-<input style="display: none" #fileinputhidden
+<input style="display: none" #fileinputhiddenstart
        class="pro-upload-songs-input"
        type="file"
        title=""
        ng2FileSelect
        [uploader]="getOpenSMFileUploader().getFileUploader()"
-       id="fileinputhidden"
-       single
+       id="fileinputhiddenstart"
+       multiple
        name="files"
        accept="{{getOpenSMFileUploader().getAcceptedFileTypes().join(',')}}"/>
-<!--[class.disabled]="uploader.isUploading()"-->
 
 <div ng2FileDrop
-     [uploader]="getFileUploader()"
+     [uploader]="getOpenSMFileUploader().getFileUploader()"
      class="well my-drop-zone">
 </div>
 

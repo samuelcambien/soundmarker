@@ -66,16 +66,16 @@ export class ProUploadPageComponent implements OnInit, ComponentCanDeactivate {
   trackId;
 
   async ngOnInit() {
-    this.smUploader = this.uploader.getOpenSMFileUploader();
-    this.uploader.getOpenFileUploader().onAfterAddingAll = (items) => {
-      this.uploader.getOpenSMFileUploader().addTitles(items);
-    };
+      this.smUploader = this.uploader.getOpenSMFileUploader();
+    // this.uploader.getOpenFileUploader().onAfterAddingAll = (items) => {
+    //   this.uploader.getOpenSMFileUploader().addTitles(items);
+    // };
     this.user_project_list = await this.projectService.getAllProjects();
     if (this.stateService.getVersionUpload().getValue()) {
-      this.preventNavigation = true;
-      this.trackId = this.activatedRoute.snapshot.queryParams.newTrackId;
-      this.project_id = this.stateService.getActiveProject().getValue().project_id;
-      await this.getProjectInfo(this.project_id);
+        this.preventNavigation = true;
+        this.trackId = this.activatedRoute.snapshot.queryParams.newTrackId;
+        this.project_id = this.stateService.getActiveProject().getValue().project_id;
+        await this.getProjectInfo(this.project_id);
     }
   }
 
@@ -91,7 +91,6 @@ export class ProUploadPageComponent implements OnInit, ComponentCanDeactivate {
     if (this.trackId) {
       this.selected_existing_tracks[0] = this.trackId;
     }
-    this.cdr.detectChanges();
   }
 
   newProjectSelect(){
@@ -132,7 +131,7 @@ export class ProUploadPageComponent implements OnInit, ComponentCanDeactivate {
   async canDeactivate(): Promise<boolean> {
     if (!this.stateService.getVersionUpload().getValue()) return true
     if (!this.preventNavigation) return true
-    const confirm: boolean = await this.confirmDialogService.confirm();
+    const confirm: boolean = await this.confirmDialogService.confirm('There are unsaved changes. Are sure you want to discard this project?', 'Yes', 'Undo');
     if (confirm) {
       this.smUploader.resetSMFileUploader();
       this.stateService.setVersionUpload(false);
@@ -228,7 +227,7 @@ export class ProUploadPageComponent implements OnInit, ComponentCanDeactivate {
 
   async cancelUpload(dirty_form, file_nb) {
     if (dirty_form || file_nb > 0) {
-      if (await this.confirmDialogService.confirm()) {
+      if (await this.confirmDialogService.confirm('There are unsaved changes. Are sure you want to discard this project?', 'Yes', 'Undo')) {
         this.smUploader.resetSMFileUploader();
         this.stateService.setVersionUpload(false);
         this.router.navigate(["../dashboard"], {relativeTo: this.activatedRoute});

@@ -31,6 +31,7 @@ import {NgDynamicBreadcrumbService} from 'ng-dynamic-breadcrumb';
 import {Status, Uploader} from '../../../services/uploader.service';
 import {AuthService} from "../../../auth/auth.service";
 import {TrackService} from "../../../services/track.service";
+import {ConfirmDialogService} from '../../../services/confirmation-dialog/confirmation-dialog.service';
 
 @Component({
   selector: 'public-track-player',
@@ -120,7 +121,8 @@ export class PublicTrackPlayerComponent implements OnInit, OnChanges, AfterConte
     protected trackService: TrackService,
     protected player: Player,
     protected cdr: ChangeDetectorRef,
-    protected ngDynamicBreadcrumbService: NgDynamicBreadcrumbService
+    protected ngDynamicBreadcrumbService: NgDynamicBreadcrumbService,
+    protected confirmDialogService: ConfirmDialogService
   ) {
 
     document.addEventListener('scroll', () => {
@@ -140,8 +142,6 @@ export class PublicTrackPlayerComponent implements OnInit, OnChanges, AfterConte
         queryParams: {origin: 'dashboard', newTrackId: this.track.track_id},
         skipLocationChange: true
       });
-
-      // this.stateService.setVersionUpload(true);
       this.uploader.getOpenSMFileUploader().setStatus(Status.UPLOAD_FORM);
       this.uploader.getOpenSMFileUploader().addTitles(items);
     }
@@ -524,13 +524,22 @@ export class PublicTrackPlayerComponent implements OnInit, OnChanges, AfterConte
       scrollLoop();
     }
     ;
-
-
   }
-  newUpload(){
-    this.stateService.setVersionUpload(true);
-    document.getElementById("fileinputhidden").click();
 
+  async newUpload(){
+    if(this.uploader.getOpenFileUploader().queue.length == 0)
+        {
+          this.stateService.setVersionUpload(true);
+          this.uploader.getOpenSMFileUploader().resetSMFileUploader();
+          document.getElementById("fileinputhiddenplayer").click();
+        }
+    else {
+      if (await this.confirmDialogService.confirm('You have pending changes in the upload, if you continue changes will be lost', 'Continue', 'Cancel')) {
+        this.stateService.setVersionUpload(true);
+        this.uploader.getOpenSMFileUploader().resetSMFileUploader();
+        document.getElementById("fileinputhiddenplayer").click();
+      }
+    }
   }
 
   ///////////////////////////////////////////////////////////////////////////////////////////////////

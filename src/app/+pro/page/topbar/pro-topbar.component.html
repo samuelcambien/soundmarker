@@ -4,16 +4,10 @@
   </a>
 
   <div class="breadcrumb-container">
-  <app-ng-dynamic-breadcrumb [bgColor]="'transparent'" [symbol]="' / '"></app-ng-dynamic-breadcrumb>
+    <app-ng-dynamic-breadcrumb [bgColor]="'transparent'" [symbol]="' / '"></app-ng-dynamic-breadcrumb>
   </div>
-
 
   <div class="topbar-logo show-no-sidebar">soundmarker</div>
-
-  <div  (click)="openPopover()" class="w-25" *ngIf="showUploading">
-    <button *ngIf="uploader.isUploading()"> Loading ... </button>
-    <button *ngIf="uploader.isReady()"> Uploading ready </button>
-  </div>
 
   <div class="collapse navbar-collapse pro-nav">
     <ul class="navbar-nav ml-auto">

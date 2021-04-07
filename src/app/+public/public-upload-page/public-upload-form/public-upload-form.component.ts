@@ -272,8 +272,6 @@ export class EmailValidationPopover {
     });
   }
 
-
-
   @HostListener('focusout') onFocusOutMethod() {
     if (this.control.dirty && this.control.invalid && this.control.value) {
       this.popover.open();

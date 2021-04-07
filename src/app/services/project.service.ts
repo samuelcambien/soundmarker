@@ -41,20 +41,16 @@ export class ProjectService {
   }
 
   async getProject(projectHash: string): Promise<Project> {
-
     const response = await RestCall.getProject(projectHash);
     const project: Project = Object.assign(new Project(), response, {project_hash: projectHash});
     this.stateService.setActiveProject(project);
 
     if (project.project_id) {
-
       project.tracks = await Promise.all(
         project.tracks.map(async track => await this.trackService.getTrack(track.track_id))
       );
-
       project.losless = response.stream_type != "0";
     }
-
     return project;
   }
 

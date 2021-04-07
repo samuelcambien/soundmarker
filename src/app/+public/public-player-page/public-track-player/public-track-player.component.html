@@ -488,13 +488,13 @@
   </svg>
 </ng-template>
 
-<input style="display: none" #fileinputhidden
+<input style="display: none" #fileinputhiddenplayer
        class="pro-upload-songs-input"
        type="file"
        title=""
        ng2FileSelect
        [uploader]="uploader.getOpenFileUploader()"
-       id="fileinputhidden"
+       id="fileinputhiddenplayer"
        single
        name="files"
        accept="{{uploader.getOpenSMFileUploader().getAcceptedFileTypes().join(',')}}"/>

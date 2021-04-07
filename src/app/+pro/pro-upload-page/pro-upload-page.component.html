@@ -244,8 +244,7 @@
                   </button>
                 </div>
 
-                <ng-template #popContent>{{ngbPopOverMessage}}</ng-template>
-                <div class="col last" popoverTitle="Oops!" [ngbPopover]=popContent triggers="manual" placement="top" popoverClass="popover-class popover-submit"  [autoClose]="'outside'" container="body" #ngbPopover="ngbPopover" (click)="validationCheck(myForm)">
+                <div class="col last" popoverTitle="Oops!" triggers="manual" placement="top" popoverClass="popover-class popover-submit" container="body" (click)="validationCheck(myForm)">
                   <button type="submit"
                           [disabled]="!smUploader.getFileUploader().getNotUploadedItems().length || !myForm.valid"
                           class="btn btn-sm btn-primary free-upload"

@@ -1,4 +1,4 @@
-import {Component, ViewChild} from '@angular/core';
+import {ChangeDetectorRef, Component, ViewChild} from '@angular/core';
 import {Status, Uploader} from '../../services/uploader.service';
 import {animate, state, style, transition, trigger} from '@angular/animations';
 import {Subject} from 'rxjs';
@@ -83,12 +83,7 @@ export class ProPageComponent {
   closeUploadPopover() {
     this.uploader.clearFileUploaders();
     if (this.uploader.isUploading()) {
-      this.eventLoadingTopbar.next();
       this.popover = false;
     }
-  }
-
-  openUploadPopover() {
-    this.popover = true;
   }
 }
