@@ -16,17 +16,14 @@ import {ConfirmDialogService} from '../../../services/confirmation-dialog/confir
 export class ProTopbarComponent {
 
   currentUser$: Observable<User>;
-  eventsSubscription: Subscription;
-  showUploading = false;
   newComments: {
     title: string,
     hash: string,
     track_id: string,
     version_number: string,
     count: number
-  }[];
+  }[] = [];
 
-  @Output() popover = new EventEmitter();
   @Input() upload: Observable<boolean>;
 
   constructor(
@@ -41,7 +38,6 @@ export class ProTopbarComponent {
   }
 
   async ngOnInit() {
-    this.eventsSubscription = this.upload.subscribe(() => this.showUploading = true);
     this.newComments = await RestCall.getNewComments();
   }
 
@@ -53,10 +49,6 @@ export class ProTopbarComponent {
     this.authService.logOut();
   }
 
-  openPopover() {
-    this.showUploading = false;
-    this.popover.emit();
-  }
 
   async newUpload(){
     if(this.uploader.getOpenFileUploader().queue.length != 0){

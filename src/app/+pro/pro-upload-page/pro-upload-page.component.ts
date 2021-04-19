@@ -190,12 +190,12 @@ export class ProUploadPageComponent implements OnInit, ComponentCanDeactivate {
     const streamFileResponse = await RestCall.createNewFile(track._file, file_name, this.getStreamFileExtension(extension), track._file.size, versionId, 0, length);
     const streamFileId = streamFileResponse["file_id"];
 
-    let downloadFileId: string;
+    let downloadFileId: number;
     if (this.smUploader.getAvailability()) {
       const downloadFileResponse = await RestCall.createNewFile(track._file, file_name, extension, track._file.size, versionId, 1, length);
       downloadFileId = downloadFileResponse["file_id"];
     } else {
-      downloadFileId = "null";
+      downloadFileId = 0;
     }
 
     const buffer: ArrayBuffer = await Utils.read(track._file);

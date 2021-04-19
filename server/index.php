@@ -239,20 +239,19 @@ if (true) {
 
 //////////////////////////////////////////////////////// Routes - /project/all GET ///////////////////////////////////////////////////
 Flight::route('GET /project/all', function() {
-
 $config = Flight::get("config");
 
 $session = Flight::get("session");
 $db = Flight::db();
 $user_id = isset($_SESSION['USER']) ? $_SESSION['USER'] : "";
-if (isset($_SESSION['USER'])) {
+if (true) {
   $sql = "SELECT Project.project_id, Project.title, Project.expiration_date, Project.hash,
               COUNT(CASE WHEN Comment.comment_id is null OR Comment.comment_time > Version.last_seen THEN Comment.comment_id ELSE NULL END) as new_comments
               FROM Project
               LEFT OUTER JOIN Track ON Project.project_id = Track.project_id
               LEFT OUTER JOIN Version ON Track.track_id = Version.track_id
               LEFT OUTER JOIN Comment ON Version.version_id = Comment.version_id
-              WHERE user_id = '$user_id' AND active = '1'
+              WHERE user_id = '1' AND active = '1'
               GROUP BY Project.project_id";
   $result = $db->query($sql)->fetchAll(PDO::FETCH_ASSOC);
 

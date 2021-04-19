@@ -27,6 +27,7 @@ import {LoadingComponent} from "../loading/loading.component";
 import {PlayButtonComponent} from "../player/play-button/play-button.component";
 import {RouterModule} from "@angular/router";
 import {FileUploadModule} from "../tools/ng2-file-upload";
+import {ConfirmDialogService} from '../services/confirmation-dialog/confirmation-dialog.service';
 
 const modules = [
   ClipboardModule,
@@ -48,6 +49,7 @@ const rootModules = [
 
 const providers = [
   NgbActiveModal,
+  ConfirmDialogService
 ];
 
 const components = [

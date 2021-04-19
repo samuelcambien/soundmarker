@@ -57,7 +57,6 @@ import { ProWarningsPopoverComponent } from './page/pro-warnings-popover/pro-war
     ProWarningsPopoverComponent,
   ],
   providers: [
-    ConfirmDialogService,
     Uploader,
     PendingChangesGuard
   ],
