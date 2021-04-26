@@ -100,7 +100,6 @@ export class StateService {
     return this.alert;
   }
   public setAlert(alert: string) {
-    console.log(alert);
     this.alert.next(alert);
   }
 }

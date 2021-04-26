@@ -1,24 +1,21 @@
-<app-pro-popover *ngIf="warnings.length > 0" (close)=closeWarningPopover() [@fadeAnimation]>
-<ng-container class="title"> Warnings </ng-container>
+<app-pro-popover (close)=closeAlert() >
+<ng-container class="title"> Warning </ng-container>
 <ng-container class="body">
-  <div *ngFor="let item of warnings; let index = index">
     <div class="row body">
-      <h3 class="col">{{ item }}</h3>
-
-
-  <span class="hide-upload col text-right" (click)="closeAlert(index)">
-		<svg width="12px" height="12px" viewBox="0 0 12 12" version="1.1" xmlns="http://www.w3.org/2000/svg">
-		    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round">
-		        <g id="Internet-Networks-Servers-/-Upload/Download-/-upload-dash-arrow-1" transform="translate(-404.000000, -229.000000)" fill-rule="nonzero" stroke="#7397FF" stroke-width="1.95">
-		            <g id="Group-26" transform="translate(410.000000, 235.000000) rotate(45.000000) translate(-410.000000, -235.000000) translate(403.000000, 228.000000)">
-		                <path d="M0.636363636,7 L13.3636364,7" id="Line-10"></path>
-		                <path d="M0.636363636,7 L13.3636364,7" id="Line-10" transform="translate(7.000000, 7.000000) rotate(90.000000) translate(-7.000000, -7.000000) "></path>
-		            </g>
-		        </g>
-		    </g>
-		</svg>
-	</span>
+      <h3 class="col">{{ alert }}</h3>
+<!--  <span class="hide-upload col text-right" (click)="closeAlert()">-->
+<!--		<svg width="12px" height="12px" viewBox="0 0 12 12" version="1.1" xmlns="http://www.w3.org/2000/svg">-->
+<!--		    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round">-->
+<!--		        <g id="Internet-Networks-Servers-/-Upload/Download-/-upload-dash-arrow-1" transform="translate(-404.000000, -229.000000)" fill-rule="nonzero" stroke="#7397FF" stroke-width="1.95">-->
+<!--		            <g id="Group-26" transform="translate(410.000000, 235.000000) rotate(45.000000) translate(-410.000000, -235.000000) translate(403.000000, 228.000000)">-->
+<!--		                <path d="M0.636363636,7 L13.3636364,7" id="Line-10"></path>-->
+<!--		                <path d="M0.636363636,7 L13.3636364,7" id="Line-10" transform="translate(7.000000, 7.000000) rotate(90.000000) translate(-7.000000, -7.000000) "></path>-->
+<!--		            </g>-->
+<!--		        </g>-->
+<!--		    </g>-->
+<!--		</svg>-->
+<!--	</span>-->
     </div>
-  </div>
+<!--  </div>-->
 </ng-container>
 </app-pro-popover>
