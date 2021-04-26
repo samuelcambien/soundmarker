@@ -28,6 +28,7 @@ import {PlayButtonComponent} from "../player/play-button/play-button.component";
 import {RouterModule} from "@angular/router";
 import {FileUploadModule} from "../tools/ng2-file-upload";
 import {ConfirmDialogService} from '../services/confirmation-dialog/confirmation-dialog.service';
+import {LoggedOutDialogComponent} from '../services/loggedout-dialog/loggedout-dialog.component';
 
 const modules = [
   ClipboardModule,
@@ -62,6 +63,7 @@ const components = [
   PublicPageComponent,
   PublicPagenotfoundPageComponent,
   SubscribeComponent,
+  LoggedOutDialogComponent,
   PlayButtonComponent,
 ];
 
@@ -80,6 +82,7 @@ const pipes = [
 const entryComponents = [
   PublicIntroductionComponent,
   SubscribeComponent,
+  LoggedOutDialogComponent
 ];
 
 @NgModule({

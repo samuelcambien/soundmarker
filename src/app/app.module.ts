@@ -15,7 +15,6 @@ import {StoreModule} from '@ngrx/store';
 import {coreReducers} from "./core.reducers";
 import {AuthGuard} from "./auth/auth.guard";
 import {AuthService} from "./auth/auth.service";
-import {LoginComponent} from './auth/login/login.component';
 import {ProfileComponent} from './+pro/profile/profile.component';
 
 
@@ -31,7 +30,6 @@ import {ProfileComponent} from './+pro/profile/profile.component';
   ],
   declarations: [
     AppComponent,
-    LoginComponent,
     ProfileComponent,
   ],
   providers: [

@@ -8,6 +8,8 @@ import {ProTrackComponent} from "./projects/track/pro-track.component";
 import {ProUploadPageComponent} from './pro-upload-page/pro-upload-page.component';
 import {ProBoardProjectsComponent} from './projects/pro-board-projects.component';
 import {PendingChangesGuard} from '../auth/pending-changes.guard';
+import {UploadGuard} from '../auth/upload/upload.guard';
+import {AuthGuard} from '../auth/auth.guard';
 
 @NgModule({
   imports: [
@@ -15,6 +17,7 @@ import {PendingChangesGuard} from '../auth/pending-changes.guard';
       {
         path: '',
         component: ProPageComponent,
+        // canActivate: [AuthGuard],
         children: [
           {
             path: '',
@@ -37,6 +40,7 @@ import {PendingChangesGuard} from '../auth/pending-changes.guard';
             path: 'upload',
             component: ProUploadPageComponent,
             canDeactivate: [PendingChangesGuard],
+            // canActivate: [UploadGuard],
             data:{
               title:'Upload',
               breadcrumb:[
@@ -150,5 +154,4 @@ import {PendingChangesGuard} from '../auth/pending-changes.guard';
   ]
 })
 export class ProRoutingModule {
-
 }
