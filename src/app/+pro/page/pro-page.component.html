@@ -6,7 +6,9 @@
       <div class="content w-100 h-100 p-20 d-flex">
         <router-outlet></router-outlet>
         <app-pro-upload-popover (close)=closeUploadPopover() *ngIf="showUploadPopover()" [@fadeAnimation]></app-pro-upload-popover>
-        <app-pro-warnings-popover> </app-pro-warnings-popover>
+        <div *ngFor="let alert of warnings; let index = index">
+          <app-pro-warnings-popover [alert]="alert" (close)="closeAlert(index)" [@fadeAnimation]> </app-pro-warnings-popover>
+        </div>
       </div>
     </div>
   </div>

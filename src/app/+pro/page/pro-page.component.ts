@@ -6,6 +6,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {StateService} from '../../services/state.service';
 import {NgbPopover} from '@ng-bootstrap/ng-bootstrap';
 import {RestCall} from '../../rest/rest-call';
+import {throttleTime} from 'rxjs/operators';
 
 @Component({
   selector: 'app-pro',
@@ -29,6 +30,7 @@ export class ProPageComponent {
   popover: boolean = true;
   eventLoadingTopbar: Subject<void> = new Subject<void>();
   ngbPopOverMessage;
+  warnings_timers = new Array<number>();
 
   constructor(
     private uploader: Uploader,
@@ -40,6 +42,14 @@ export class ProPageComponent {
   }
 
   ngOnInit() {
+    this.stateService.getAlert().pipe(throttleTime(5000)).subscribe(message =>{
+      console.log('lalaa');
+      if(message){
+        this.warnings.unshift(message);
+        let newTimer = setTimeout(() => this.warnings.splice(-1,1) ,10000);
+        this.warnings_timers.unshift(newTimer);
+      }
+    });
     RestCall.getAccount();
     this.uploader.getOpenFileUploader().onWhenAddingFileFailed = (item, filter) => {
       let message = '';
@@ -65,6 +75,8 @@ export class ProPageComponent {
           this.stateService.setAlert(this.ngbPopOverMessage);
           break;
       }
+
+
     };
 
     this.uploader.getOpenFileUploader().onAfterAddingAll = (items) => {
@@ -85,5 +97,11 @@ export class ProPageComponent {
     if (this.uploader.isUploading()) {
       this.popover = false;
     }
+  }
+
+  public closeAlert(index){
+    this.warnings.splice(index, 1);
+    clearTimeout(this.warnings_timers[index]);
+    this.warnings_timers.splice(index, 1);
   }
 }
