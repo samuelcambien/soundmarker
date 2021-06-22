@@ -484,6 +484,17 @@ opacity: 0;
 
 }
 
+.topbar-item-notification {
+	position: absolute;
+	background-color: $notify-red;
+	height: 12px;
+	width: 12px;
+	margin-left: 20px;
+  margin-top: -6px;
+	border-radius: 1em;
+
+}
+
 #pro.navbar {
 	background: transparent;
 	border: none;
