@@ -30,6 +30,7 @@ CONTENTS
 
 */
 
+
 $base-blurple: #7397ff;
 $base-blurple-hover: #6388f5;
 $light-blurple: #eef1ff;
@@ -38,6 +39,7 @@ $gray-blurple: #bac1da;
 $black-blurple: #717db0;
 $notify-red: #fd8c9a;
 $purple-rain: #4e35c2;
+$main-background: #ffffff;
 
 /* DARK SKIN
 $base-blurple: #2a2a2a;
@@ -252,12 +254,24 @@ a.dropdown-item {
 
 // upload-popover
 
-.upload-popover {
-	position: fixed;
-	padding: 20px;
-	margin: 20px;
-	right: 0px;
+.pro-popover-field {
+  position: fixed;
+  right: 0px;
 	bottom: 0px;
+  padding: 10px;
+}
+
+.pro-popover-field h3 {
+  padding-top: 10px;
+  color: $gray-blurple;
+  margin-bottom: 0px !important;
+}
+
+.upload-popover {
+	position: relative;
+	padding: 20px;
+	margin: 10px;
+  background: $main-background;
 	min-width: 280px;
 	border: 1px solid $light-blurple;
 	border-radius: 0.6rem;

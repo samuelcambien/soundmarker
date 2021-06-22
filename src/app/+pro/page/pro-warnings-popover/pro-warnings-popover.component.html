@@ -1,8 +1,10 @@
 <app-pro-popover (close)=closeAlert() >
-<ng-container class="title"> Warning </ng-container>
+<ng-container class="title">Warning</ng-container>
 <ng-container class="body">
     <div class="row body">
-      <h3 class="col">{{ alert }}</h3>
+      <div class="col">
+      <h3>{{ alert }}</h3>
+      </div>
 <!--  <span class="hide-upload col text-right" (click)="closeAlert()">-->
 <!--		<svg width="12px" height="12px" viewBox="0 0 12 12" version="1.1" xmlns="http://www.w3.org/2000/svg">-->
 <!--		    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round">-->
