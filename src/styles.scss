@@ -55,6 +55,43 @@ $purple-rain: #2a2a2a;
 
 // to organise
 
+.list-header.dropdown {
+  position: absolute;
+}
+
+.addsongs .note-image, .addsongs h5 {
+  -webkit-transition: 200ms ease-in;
+  -moz-transition: 200ms ease-in;
+  -o-transition: 200ms ease-in;
+  transition: 200ms ease-in;
+}
+
+.pro-upload-songs-area:hover .addsongs .note-image, .pro-upload-songs-area:hover .addsongs h5 {
+  transform: translateY(-8px);
+  -webkit-transition: 200ms ease-in;
+  -moz-transition: 200ms ease-in;
+  -o-transition: 200ms ease-in;
+  transition: 200ms ease-in;
+}
+
+.addsongs h6 {
+  opacity: 0;
+  margin-top: -16px;
+  -webkit-transition: 200ms ease-in;
+  -moz-transition: 200ms ease-in;
+  -o-transition: 200ms ease-in;
+  transition: 200ms ease-in;
+}
+
+.pro-upload-songs-area:hover .addsongs h6 {
+  opacity: 1;
+  transform: translateY(8px);
+  -webkit-transition: 200ms ease-in;
+  -moz-transition: 200ms ease-in;
+  -o-transition: 200ms ease-in;
+  transition: 200ms ease-in;
+}
+
 .pro-notifications {
   margin-right: -40px;
   max-width: 280px;
@@ -139,12 +176,13 @@ div::-webkit-scrollbar { /* WebKit */
 }
 
 .track-field {
-  padding-left: 10px;
-  padding-right: 10px;
-  padding-top: 10px;
-  border: 1px solid $light-blurple;
-  border-radius: 0.3rem;
-  margin-bottom: 10px;
+  //padding-left: 10px;
+  //padding-right: 10px;
+  //padding-top: 10px;
+  //border: 1px solid $light-blurple;
+  //border-radius: 0.3rem;
+  //margin-bottom: 10px;
+
 }
 
 .track-field .form-row:last-child {
@@ -172,6 +210,7 @@ div::-webkit-scrollbar { /* WebKit */
 
 .dropdown-header {
   padding: .5rem .5rem;
+  color: $black-blurple;
 }
 
 
