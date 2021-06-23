@@ -70,6 +70,9 @@ $purple-rain: #2a2a2a;
     text-overflow: ellipsis;
   }
 
+.ng-dropdown-panel .ng-dropdown-panel-items .ng-option.ng-option-disabled {
+  color: $gray-blurple !important;
+}
 
 .collapsable .big-bb {
   min-height: 0px !important;
