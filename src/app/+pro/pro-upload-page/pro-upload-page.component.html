@@ -194,7 +194,6 @@
                   </div>
                   <div *ngIf="!createNewProject && !isVersionUpload" class="col-sm-4">
                     <ng-select [(ngModel)]="selected_existing_tracks[i]"
-
                                class="custom noselect
                                downloadable ng-option-disabled"
                                bindLabel="title"
@@ -244,11 +243,11 @@
                   </button>
                 </div>
 
-                <div class="col last" popoverTitle="Oops!" triggers="manual" placement="top" popoverClass="popover-class popover-submit" container="body" (click)="validationCheck(myForm)">
-                  <button type="submit"
-                          [disabled]="!smUploader.getFileUploader().getNotUploadedItems().length || !myForm.valid"
+                <div class="col last" popoverTitle="Oops!" placement="top" popoverClass="popover-class popover-submit"  container="body" (click)="validationCheck(myForm)">
+                  <button id="submit"
+                          type="submit"
                           class="btn btn-sm btn-primary free-upload"
-                          placement="bottom">Upload {{ isVersionUpload ? 'new version' : 'tracks' }}
+                          [ngClass]="smUploader.getFileUploader().getNotUploadedItems().length  > 0 ? 'upload-tracks': 'upload-tracks-disabled'">Upload {{ isVersionUpload ? 'new version' : 'tracks' }}
                   </button>
                 </div>
 

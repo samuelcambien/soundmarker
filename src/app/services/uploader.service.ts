@@ -1,6 +1,8 @@
 import {Injectable} from '@angular/core';
 import {FileUploader} from '../tools/ng2-file-upload';
 import {Utils} from '../app.component';
+import {Router} from '@angular/router';
+import {StateService} from './state.service';
 
 export enum Status {
   UPLOAD_FORM, UPLOADING_SONGS, GREAT_SUCCESS
@@ -13,7 +15,8 @@ export enum Status {
 export class Uploader {
   fileUploaders: Array<SMFileUploader> = [];
 
-  constructor() {
+  constructor(private router: Router,
+              private stateService: StateService) {
     this.newFileUploader();
   }
 
@@ -23,6 +26,34 @@ export class Uploader {
     let SMfileuploader = new SMFileUploader();
     this.fileUploaders.push(SMfileuploader);
     this.fileUploader = this.getOpenFileUploader();
+
+    this.getOpenFileUploader().onWhenAddingFileFailed = (item, filter) => {
+      switch (filter.name) {
+        case 'fileSize':
+          this.stateService.setAlert("You exceeded the max size of a single file: 1GB");
+          break;
+        case 'avoidDuplicates':
+          this.stateService.setAlert("Some of these files were already added");
+          break;
+        case 'onlyAudio':
+          this.stateService.setAlert( "One or more files are not supported and were not added");
+          break;
+        case 'checkSizeLimit':
+          this.stateService.setAlert("You exceeded the total limit: 2GB");
+          break;
+        default:
+          this.stateService.setAlert("Something went wrong, please try again");
+          break;
+      }
+    }
+
+    this.getOpenFileUploader().onAfterAddingAll = (items) => {
+      this.router.navigate(['pro/upload'], {
+        skipLocationChange: false
+      });
+      this.getOpenSMFileUploader().setStatus(Status.UPLOAD_FORM);
+      this.getOpenSMFileUploader().addTitles(items);
+    }
   }
 
   getOpenFileUploader(): FileUploader {

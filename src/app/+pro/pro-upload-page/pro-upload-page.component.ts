@@ -59,8 +59,7 @@ export class ProUploadPageComponent implements OnInit, ComponentCanDeactivate {
               private authService: AuthService,
               private activatedRoute: ActivatedRoute,
               private cdr: ChangeDetectorRef,
-              @Inject(DOCUMENT) document,
-  ) {
+              @Inject(DOCUMENT) document) {
   }
 
   trackId;
@@ -76,6 +75,17 @@ export class ProUploadPageComponent implements OnInit, ComponentCanDeactivate {
         this.trackId = this.activatedRoute.snapshot.queryParams.newTrackId;
         this.project_id = this.stateService.getActiveProject().getValue().project_id;
         await this.getProjectInfo(this.project_id);
+    }
+  }
+
+  validationCheck(form: NgForm){
+    if(this.smUploader.getFileUploader().getNotUploadedItems().length === 0){
+      this.stateService.setAlert('No tracks are selected for upload');
+      return;
+    }
+    else if(!this.myForm.controls.projecttitle.value){
+        this.stateService.setAlert('Project title is missing');
+        return;
     }
   }
 
@@ -96,6 +106,7 @@ export class ProUploadPageComponent implements OnInit, ComponentCanDeactivate {
   newProjectSelect(){
     this.smUploader.setProjectTitle(null);
     this.project_id = null;
+    console.log(this.smUploader);
     this.cdr.detectChanges();
   }
 
@@ -140,49 +151,55 @@ export class ProUploadPageComponent implements OnInit, ComponentCanDeactivate {
   }
 
   async onSubmit() {
-    this.uploader.newFileUploader();
-    this.notes = this.smUploader.fileUploader.queue.map(
-      (track, index) => (document.getElementById(`notes-${index}`) as HTMLTextAreaElement).value
-    );
-    this.preventNavigation = false;
-    this.router.navigate(["../dashboard"], {relativeTo: this.activatedRoute});
-    this.smUploader.setStatus(Status.UPLOADING_SONGS);
-    try {
-      if (this.createNewProject) {
-        let stream_type = this.smUploader.stream_type ? "1" : "0";
-        const projectResponse = await RestCall.createNewProject(
-          this.smUploader.getProjectTitle(),
-          this.smUploader.getSMPPW(),
-          stream_type,
+    if (this.smUploader.getFileUploader().getNotUploadedItems().length>0 && this.myForm.valid) {
+      let smUploadingUploader = this.uploader.getOpenSMFileUploader();
+      let uploadingProjectId = this.project_id;
+      let uploading_selected_existing_tracks = this.selected_existing_tracks;
+      let uploadingCreateNewProject = this.createNewProject;
+      let notes = smUploadingUploader.fileUploader.queue.map(
+        (track, index) => (document.getElementById(`notes-${index}`) as HTMLTextAreaElement).value
+      );
+      this.uploader.newFileUploader();
+      this.smUploader = this.uploader.getOpenSMFileUploader();
+      this.selected_existing_tracks = [];
+      this.preventNavigation = false;
+      this.router.navigate(["../dashboard"], {relativeTo: this.activatedRoute});
+      smUploadingUploader.setStatus(Status.UPLOADING_SONGS);
+      try {
+        if (uploadingCreateNewProject) {
+          let stream_type = smUploadingUploader.stream_type ? "1" : "0";
+          const projectResponse = await RestCall.createNewProject(
+            smUploadingUploader.getProjectTitle(),
+            smUploadingUploader.getSMPPW(),
+            stream_type,
+          );
+          uploadingProjectId = projectResponse["project_id"];
+        }
+
+        await Utils.promiseSequential(
+          smUploadingUploader.fileUploader.queue.map((track, index) => () => this.processTrack(uploadingProjectId, track, smUploadingUploader.getTitle(track), notes[index], this.smUploader.getAvailability(), uploading_selected_existing_tracks[index], index))
         );
-        this.project_id = projectResponse["project_id"];
+        this.authService.getCurrentUser().subscribe(async currentUser =>
+          await RestCall.shareProject(uploadingProjectId, smUploadingUploader.expiration, smUploadingUploader.getProjectNotes(), currentUser.email, smUploadingUploader.getReceivers())
+        );
+        smUploadingUploader.setStatus(Status.GREAT_SUCCESS);
+
+      } catch (e) {
+        this.error.emit(e);
       }
-
-      await Utils.promiseSequential(
-        this.smUploader.fileUploader.queue.map((track, index) => () => this.processTrack(this.project_id, track, this.smUploader.getTitle(track), index))
-      );
-      this.authService.getCurrentUser().subscribe(async currentUser =>
-        await RestCall.shareProject(this.project_id, this.smUploader.expiration, this.smUploader.getProjectNotes(), currentUser.email, this.smUploader.getReceivers())
-      );
-      this.smUploader.setStatus(Status.GREAT_SUCCESS);
-
-    } catch (e) {
-      this.error.emit(e);
     }
   }
 
-  private async processTrack(projectId, track: FileItem, title, index: number): Promise<void> {
+  private async processTrack(projectId, track: FileItem, title, notes, availability, trackId, index: number): Promise<void> {
     const length = 0;
     const file_name = Utils.getName(track._file.name);
     const extension = Utils.getExtension(track._file.name);
-    const notes = this.notes[index];
-    let trackId = this.selected_existing_tracks[index];
     if (!trackId) {
       const trackResponse = await RestCall.createNewTrack(projectId, title);
       trackId = trackResponse["track_id"];
     }
     const versionResponse = await RestCall.createNewVersion(
-      trackId, notes, this.smUploader.getAvailability() ? "1" : "0"
+      trackId, notes, availability ? "1" : "0"
     );
 
     const versionId = versionResponse["version_id"];
@@ -191,7 +208,7 @@ export class ProUploadPageComponent implements OnInit, ComponentCanDeactivate {
     const streamFileId = streamFileResponse["file_id"];
 
     let downloadFileId: number;
-    if (this.smUploader.getAvailability()) {
+    if (availability) {
       const downloadFileResponse = await RestCall.createNewFile(track._file, file_name, extension, track._file.size, versionId, 1, length);
       downloadFileId = downloadFileResponse["file_id"];
     } else {

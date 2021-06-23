@@ -10,12 +10,11 @@
 
           <div id="uploadsongs" *ngIf="uploader.getNotUploadedItems().length == 0; then uploadsongs else addsongs"></div>
 
-          <ng-template #uploadsongs >
+          <ng-template #uploadsongs>
 
             <div class="addsongs">
 
               <div class="note-image" id="ni1">
-
 
                 <div class="mid-shadow">
 
@@ -82,7 +81,6 @@
           name="files"
           accept="{{getAcceptedFileTypes().join(',')}}"
         />
-
       </div>
 
       <div class="sep-line show-medium"></div>
@@ -157,7 +155,8 @@
 
         <ng-template #popContent>{{ngbPopOverMessage}}</ng-template>
         <div class="col last" popoverTitle="Oops!" [ngbPopover]=popContent triggers="manual" placement="top" popoverClass="popover-class popover-submit"  [autoClose]="'outside'" container="body" #ngbPopover="ngbPopover" (click)="validationCheck(myForm)">
-          <button type="submit" [disabled]="!uploader.getNotUploadedItems().length || !myForm.valid"
+          <button type="submit"
+                  [disabled]="!uploader.getNotUploadedItems().length || !myForm.valid"
                   class="btn btn-sm btn-primary free-upload"
                   [ngClass]="uploader.getNotUploadedItems().length > 0 ? 'upload-tracks': 'upload-tracks-disabled'" >
             <div class=""> Upload tracks</div>

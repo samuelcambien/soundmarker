@@ -178,7 +178,7 @@ $HTTP_X_FORWARDED_FOR = isset($_SERVER['HTTP_X_FORWARDED_FOR']) ? $_SERVER['HTTP
 $ipaddr = $REMOTE_ADDR . " - " . $HTTP_X_FORWARDED_FOR;
 
 $db = Flight::db();
-$sql = "INSERT INTO Project (user_id, title, password, active, ipaddr, stream_type, date_of_last_activity) VALUES ('$user_id', '$project_title', '$project_password', '1', '$ipaddr', '$stream_type', now)";$result = $db->query($sql);
+$sql = "INSERT INTO Project (user_id, title, password, active, ipaddr, stream_type, date_of_last_activity) VALUES ('$user_id', '$project_title', '$project_password', '1', '$ipaddr', '$stream_type', now())";$result = $db->query($sql);
 $project_id = $db->lastInsertId();
 
 $uuid = UUID::v4().UUID::v4();
