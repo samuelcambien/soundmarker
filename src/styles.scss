@@ -55,6 +55,22 @@ $purple-rain: #2a2a2a;
 
 // to organise
 
+.pro-notifications {
+  margin-right: -40px;
+  max-width: 280px;
+  max-height: 365px;
+  overflow-x: scroll;
+}
+
+.pro-notifications h3 {
+    max-width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+    text-align: left;
+    text-overflow: ellipsis;
+  }
+
+
 .collapsable .big-bb {
   min-height: 0px !important;
 
