@@ -1190,7 +1190,7 @@ Flight::route('GET /comments/new', function() {
   Flight::json(
     Flight::db()
       ->query("
-        SELECT Track.title, count(Comment.comment_id) as count, Project.hash, Track.track_id, Version.version_index
+        SELECT Track.title, count(Comment.comment_id) as count, Project.hash, Track.track_id, Version.version_number
           FROM Comment
           INNER JOIN Version ON Comment.version_id = Version.version_id
           INNER JOIN Track ON Version.track_id = Track.track_id
