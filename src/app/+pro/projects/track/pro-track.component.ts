@@ -4,7 +4,6 @@ import {Track} from "../../../model/track";
 import {Project} from "../../../model/project";
 import {StateService} from '../../../services/state.service';
 import {ProjectService} from '../../../services/project.service';
-import {NgDynamicBreadcrumbService} from 'ng-dynamic-breadcrumb';
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {TrackService} from "../../../services/track.service";
 
@@ -23,7 +22,6 @@ export class ProTrackComponent implements OnInit {
     private route: ActivatedRoute,
     private stateService: StateService,
     private projectService: ProjectService,
-    private ngDynamicBreadcrumbService: NgDynamicBreadcrumbService,
     private modalService: NgbModal,
     private router: Router,
     private trackService: TrackService,
@@ -40,17 +38,11 @@ export class ProTrackComponent implements OnInit {
         this.track.project = this.project;
         this.track.track_id = this.route.snapshot.params.id;
         this.stateService.setActiveTrack(this.track);
-        this.ngDynamicBreadcrumbService.updateBreadcrumbLabels({
-          projectTitle: this.project.title,
-        });
       });
     }
     else {
       this.track = this.inputTrack;
       this.project = this.stateService.getActiveProject().getValue();
-      this.ngDynamicBreadcrumbService.updateBreadcrumbLabels({
-        projectTitle: this.project.title,
-      });
     }
   }
 

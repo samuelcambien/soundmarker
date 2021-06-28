@@ -2,7 +2,6 @@ import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Project} from "../../../model/project";
 import {StateService} from '../../../services/state.service';
-import {NgDynamicBreadcrumbService} from 'ng-dynamic-breadcrumb';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {ProjectService} from '../../../services/project.service';
 import {RestCall} from '../../../rest/rest-call';
@@ -22,7 +21,6 @@ export class ProProjectComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private stateService: StateService,
-    private ngDynamicBreadcrumbService: NgDynamicBreadcrumbService,
     private modalService: NgbModal,
     protected projectService: ProjectService,
     protected trackService: TrackService,
@@ -34,8 +32,6 @@ export class ProProjectComponent implements OnInit {
   ngOnInit(): void {
     this.route.data.subscribe(async data => {
       this.project = await data.project;
-      const breadcrumb = {projectTitle: this.project.title};
-      this.ngDynamicBreadcrumbService.updateBreadcrumbLabels(breadcrumb);
       this.cdr.detectChanges();
     });
   }

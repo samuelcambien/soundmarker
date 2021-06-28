@@ -27,7 +27,6 @@ import {StateService} from '../../../services/state.service';
 import {Utils} from '../../../app.component';
 import {NgbPopover} from '@ng-bootstrap/ng-bootstrap';
 import {ActivatedRoute, Router} from '@angular/router';
-import {NgDynamicBreadcrumbService} from 'ng-dynamic-breadcrumb';
 import {Status, Uploader} from '../../../services/uploader.service';
 import {AuthService} from "../../../auth/auth.service";
 import {TrackService} from "../../../services/track.service";
@@ -121,7 +120,6 @@ export class PublicTrackPlayerComponent implements OnInit, OnChanges, AfterConte
     protected trackService: TrackService,
     protected player: Player,
     protected cdr: ChangeDetectorRef,
-    protected ngDynamicBreadcrumbService: NgDynamicBreadcrumbService,
     protected confirmDialogService: ConfirmDialogService
   ) {
 
@@ -181,9 +179,6 @@ export class PublicTrackPlayerComponent implements OnInit, OnChanges, AfterConte
     if (this.trackActivated) {
       setTimeout(() => document.addEventListener("click", () => this.markerPopoverClose(), false), 500);
     }
-    this.ngDynamicBreadcrumbService.updateBreadcrumbLabels({
-      trackTitle: this.track.title,
-    });
     this.cdr.detectChanges();
     this.updateLastSeen();
   }

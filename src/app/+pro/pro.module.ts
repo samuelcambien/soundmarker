@@ -19,7 +19,6 @@ import {Uploader} from '../services/uploader.service';
 import {ConfirmDialogComponent} from '../services/confirmation-dialog/confirmation-dialog.component';
 import {ConfirmDialogService} from '../services/confirmation-dialog/confirmation-dialog.service';
 import {ProUploadPopoverComponent} from './pro-upload-page/pro-upload-popover/pro-upload-popover.component';
-import {NgDynamicBreadcrumbModule} from 'ng-dynamic-breadcrumb';
 import {EditProjectFormComponent} from './projects/edit-project-form/edit-project-form.component';
 import {PendingChangesGuard} from '../auth/pending-changes.guard';
 import {EditTrackFormComponent} from './projects/edit-track-form/edit-track-form.component';
@@ -33,7 +32,6 @@ import {ProWarningsPopoverComponent } from './page/pro-warnings-popover/pro-warn
     SharedModule,
     ProRoutingModule,
     ProjectModule,
-    NgDynamicBreadcrumbModule
   ],
   declarations: [
     ConfirmDialogComponent,
