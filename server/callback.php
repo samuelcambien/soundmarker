@@ -77,8 +77,6 @@ if( isset( $_GET['code'] ) ) {
   $userinfo = curl_exec($cURLConnection);
   curl_close($cURLConnection);
 
-  $_SESSION['EMAIL']->email = json_decode($userinfo)->user_nicename;
-
   // Store user info in DB:
   try {
     require 'credentials.php';
@@ -88,7 +86,9 @@ if( isset( $_GET['code'] ) ) {
     //Prepare the SQL statement.
     $stmt = $dbh->prepare($sql);
     //Bind our email value to the :email parameter.
-    $stmt->bindValue(':nicename', json_decode($userinfo)->user_nicename);
+    $user_nicename = json_decode($userinfo)->user_nicename;
+    $user_email = json_decode($userinfo)->user_email;
+    $stmt->bindValue(':nicename', $user_nicename);
     //Execute the statement.
     $stmt->execute();
     //Fetch the row / result.
@@ -96,8 +96,18 @@ if( isset( $_GET['code'] ) ) {
 
     //If num is bigger than 0, the email already exists.
     if($row['num'] == 0){
-      $dbh->query("INSERT IGNORE INTO User (user_nicename, emailaddress) VALUES ('".json_decode($userinfo)->user_nicename."', '".json_decode($userinfo)->user_email."')");
+      $dbh->query("INSERT IGNORE INTO User (user_nicename, emailaddress) VALUES ('". $user_nicename ."', '". $user_email ."')");
     }
+
+    $user_id = $dbh->query("SELECT user_id FROM `User` WHERE user_nicename = :nicename")
+      ->fetchColumn();
+
+    $_SESSION['USER_INFO'] = "{
+      \"nicename\": $user_nicename,
+      \"email\": $user_email,
+      \"id\": $user_id
+    }";
+
   } catch (Exception $e) {}
 //   print_r($_SESSION);
   // Once you have an access token, you know that user has signed in sucessfully and that they have

@@ -144,26 +144,32 @@ echo "<script>window.location = \"" . $config['OAUTH_SERVER_LOCATION'] . "/oauth
 
 //////////////////////////////////////////////////////// Routes - /account/ GET ///////////////////////////////////////////////////
 Flight::route('GET /account/', function() {
-$config = Flight::get("config");
-$getbody = json_decode(Flight::request()->getBody());
 
-$session = Flight::get("session");
+  if (isAuthenticated()) {
+    Flight::json(array(
+      'user' => json_decode($_SESSION['USER']),
+    ), 200);
+  } else {
+    // return ok
+    Flight::json(array(
+      'return' => 'Unauthorized'
+    ), 401);
+  }
+});
 
-$db = Flight::db();
-$user_id = isset($_SESSION['USER']) ? $_SESSION['USER'] : "";
+//////////////////////////////////////////////////////// Routes - /account/ GET ///////////////////////////////////////////////////
+Flight::route('GET /user/', function() {
 
-if (isset($_SESSION['USER'])) {
-  Flight::json(array(
-     'user' => json_decode($_SESSION['USER']),
-      'email' => $_SESSION['EMAIL']
-  ), 200);
-}
-else {
- // return ok
- Flight::json(array(
-    'return' => 'Unauthorized'
- ), 401);
-}
+  if (isAuthenticated()) {
+    Flight::json(array(
+      'user_info' => json_decode($_SESSION['USER_INFO']),
+    ), 200);
+  } else {
+    // return ok
+    Flight::json(array(
+      'return' => 'Unauthorized'
+    ), 401);
+  }
 });
 
 
