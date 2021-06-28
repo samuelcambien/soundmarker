@@ -154,7 +154,8 @@ $user_id = isset($_SESSION['USER']) ? $_SESSION['USER'] : "";
 
 if (isset($_SESSION['USER'])) {
   Flight::json(array(
-     'user' => $_SESSION['USER']
+     'user' => json_decode($_SESSION['USER']),
+      'email' => $_SESSION['EMAIL']
   ), 200);
 }
 else {

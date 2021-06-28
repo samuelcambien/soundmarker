@@ -76,7 +76,8 @@ if( isset( $_GET['code'] ) ) {
 
   $userinfo = curl_exec($cURLConnection);
   curl_close($cURLConnection);
-  $_SESSION["user"] = json_decode($userinfo)->user_nicename;
+
+  $_SESSION['EMAIL']->email = json_decode($userinfo)->user_nicename;
 
   // Store user info in DB:
   try {
