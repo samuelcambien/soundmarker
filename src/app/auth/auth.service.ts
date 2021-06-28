@@ -19,7 +19,7 @@ export class AuthService {
     private router: Router,
     private localStorage: LocalStorageService,
   ) {
-    this.currentUserSubject = new BehaviorSubject<User>(this.localStorage.getCurrentUser());
+    this.currentUserSubject = new BehaviorSubject<User>(new User(undefined, undefined, "iedemenne@soundmarker.com"));
     this.currentUser = this.currentUserSubject.asObservable();
     // );
     // this.getCurrentUser().subscribe(currentUser => {
