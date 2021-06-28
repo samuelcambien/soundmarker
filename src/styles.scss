@@ -216,7 +216,17 @@ div::-webkit-scrollbar { /* WebKit */
 
 
 .dropdown-item:hover {
-  background-color: #eef1ff;
+  background-color: $light-blurple;
+}
+
+.dropdown-item.passive {
+  padding-bottom: 1px !important;
+  cursor: default;
+}
+
+.dropdown-item.passive:hover {
+  background-color: $main-background;
+  cursor: default;
 }
 
 .nav-item:hover {
