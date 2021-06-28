@@ -47,7 +47,10 @@
     RewriteCond %{REQUEST_URI} "/subscribe/([a-z0-9/-]+)$" [OR]
     RewriteCond %{REQUEST_URI} "/login" [OR]
     RewriteCond %{REQUEST_URI} "/sma" [OR]
-    RewriteCond %{REQUEST_URI} "/account"
+    RewriteCond %{REQUEST_URI} "/account" [OR]
+    RewriteCond %{REQUEST_URI} "/user" [OR]
+    RewriteCond %{REQUEST_URI} "/pro" [OR]
+    RewriteCond %{REQUEST_URI} "/pro/dashboard"
     RewriteRule ^ index.php [L]
 
 
