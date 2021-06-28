@@ -49,7 +49,14 @@ if(!isset($_SESSION)) {
   // $cache_expire = session_cache_expire();
   session_start();
 }
-$_SESSION["USER"] = 'test user';
+
+$_SESSION["USER"] = '{"user":{"access_token":"wva1mo9rrm6kaem4i1artirf8qerszuoxufq8ooe","expires_in":3600,"token_type":"Bearer","scope":"basic","refresh_token":"vryh2ozy7roapeoiorteolzf44dtjqxsptyuyxun"}}';
+$_SESSION['USER_INFO'] = "{
+      \"nicename\": test nicename,
+      \"email\": test email,
+      \"id\": 1
+    }";
+
 if (isset($_SESSION["USER"])) {
   $access_token = json_decode($_SESSION["USER"])->access_token;
 }
