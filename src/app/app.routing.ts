@@ -18,12 +18,25 @@ const appRoutes: Routes = [
   {
     path: 'pro',
     loadChildren: () => import('./+pro/pro.module').then(m => m.ProModule),
+    data: {
+      breadcrumb: {
+        label: 'Dashboard',
+        info: 'home',
+        routeInterceptor: (routeLink) => {
+          return routeLink;
+        },
+      },
+    },
     // canActivate: [AuthGuard],
   },
   {
     path: '',
     loadChildren: () => import('./modules/home.module').then(m => m.HomeModule),
-    data: { preload: false }
+    data: {
+      preload: false,
+      breadcrumb: {
+        skip: true,
+      },}
   },
   {
     path: '**',

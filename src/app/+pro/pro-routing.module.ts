@@ -26,124 +26,54 @@ import {AuthGuard} from '../auth/auth.guard';
           {
             path: 'dashboard',
             component: ProBoardComponent,
-            data:{
-              title:'Dashboard',
-              breadcrumb:[
-                {
-                  label: 'My Board',
-                  url: 'dashboard'
-                }
-                ]
-            }
+            data: {
+              breadcrumb: {
+                skip: true,
+              },}
           },
           {
             path: 'upload',
             component: ProUploadPageComponent,
             canDeactivate: [PendingChangesGuard],
+            data: { breadcrumb: 'Upload' }
             // canActivate: [UploadGuard],
-            data:{
-              title:'Upload',
-              breadcrumb:[
-                {
-                  label: 'My Board',
-                  url: 'dashboard'
-                },
-                {
-                  label: 'Upload',
-                  url: 'upload'
-                }
-              ]
-            }
           },
           {
             path: 'projects',
-            component: ProBoardProjectsComponent,
-            data:{
-              title:'Projects',
-              breadcrumb:[
-                {
-                  label: 'My Board',
-                  url: 'dashboard'
-                },
-                {
-                  label: 'Projects',
-                  url: 'projects'
-                }
-              ]
-            }
-          },
-          {
-            path: 'project/:project_hash',
-            component: ProProjectComponent,
-            resolve: {
-              project: ProjectResolver,
-            },
-            data: {
-              title: 'Project 1',
-              breadcrumb: [
-                {
-                label: 'My Board',
-                url: 'dashboard'
-                },
-                {
-                  label: 'Projects',
-                  url: 'projects'
-                },
-                {
-                  label: '{{projectTitle}}',
-                  url: 'project/:project_hash'
-                },
+            data: { breadcrumb: 'Projects' },
+            children: [
+              {
+                   path: ':project_hash',
+                   children: [
+                     {
+                       path: 'track/:id',
+                       component: ProTrackComponent,
+                         resolve: {
+                           project: ProjectResolver,
+                         },
+                     },
+                     {
+                      path: '',
+                      component: ProProjectComponent,
+                      resolve: {
+                      project: ProjectResolver,
+                    },
+                     }
+                    ],
+                    },
+              {
+                path: '',
+                component: ProBoardProjectsComponent
+              }
               ]
             },
-          },
           {
-            path: 'projects/project/:project_hash',
-            redirectTo: 'project/:project_hash'
-          },
-          {
-            path: 'project/:project_hash/track/:id',
-            component: ProTrackComponent,
-            resolve: {
-              project: ProjectResolver,
-            },
-            data: {
-              title: 'PROJECT',
-              breadcrumb: [
-                {
-                  label: 'My Board',
-                  url: 'dashboard'
-                },
-                {
-                  label: 'Projects',
-                  url: 'projects'
-                },
-                {
-                  label: '{{projectTitle}}',
-                  url: 'project/:project_hash'
-                },
-                {
-                  label: '{{trackTitle}}',
-                  url: 'project/:project_hash/track/:id'
-                },
-              ]
-            },
+            path: '/project/:project_hash',
+            redirectTo: 'projects/project/:project_hash'
           },
           {
             path: 'transfers',
             component: ProBoardComponent,
-            data: {
-              title: 'PROJECT',
-              breadcrumb: [
-                {
-                  label: 'My Board',
-                  url: 'dashboard'
-                },
-                {
-                  label: 'Transfers',
-                  url: 'transfers'
-                },
-              ]
-            }
           }
         ]
       },

@@ -7,6 +7,7 @@ import {ProjectService} from '../../../services/project.service';
 import {RestCall} from '../../../rest/rest-call';
 import {TrackService} from "../../../services/track.service";
 import {Track} from "../../../model/track";
+import { BreadcrumbService } from 'xng-breadcrumb';
 
 @Component({
   selector: 'app-pro-board-projects-project',
@@ -24,6 +25,7 @@ export class ProProjectComponent implements OnInit {
     private modalService: NgbModal,
     protected projectService: ProjectService,
     protected trackService: TrackService,
+    private breadcrumbService: BreadcrumbService,
     private cdr: ChangeDetectorRef,
   ) {
 
@@ -32,7 +34,10 @@ export class ProProjectComponent implements OnInit {
   ngOnInit(): void {
     this.route.data.subscribe(async data => {
       this.project = await data.project;
+      // this.breadcrumbService.set('project', { skip: false }); // using alias '@mentorName'
+      this.breadcrumbService.set('/projects/:project_hash', this.project.title);
       this.cdr.detectChanges();
+
     });
   }
 

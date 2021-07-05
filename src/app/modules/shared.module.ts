@@ -29,6 +29,7 @@ import {RouterModule} from "@angular/router";
 import {FileUploadModule} from "../tools/ng2-file-upload";
 import {ConfirmDialogService} from '../services/confirmation-dialog/confirmation-dialog.service';
 import {LoggedOutDialogComponent} from '../services/loggedout-dialog/loggedout-dialog.component';
+import {BreadcrumbModule} from 'xng-breadcrumb';
 
 const modules = [
   ClipboardModule,
@@ -41,6 +42,7 @@ const modules = [
   RouterModule,
   TrimValueAccessorModule,
   TagInputModule,
+  BreadcrumbModule
 ];
 
 const rootModules = [

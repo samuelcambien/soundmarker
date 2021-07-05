@@ -6,6 +6,7 @@ import {StateService} from '../../../services/state.service';
 import {ProjectService} from '../../../services/project.service';
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {TrackService} from "../../../services/track.service";
+import {BreadcrumbService} from 'xng-breadcrumb';
 
 @Component({
   selector: 'app-pro-board-projects-track',
@@ -25,6 +26,7 @@ export class ProTrackComponent implements OnInit {
     private modalService: NgbModal,
     private router: Router,
     private trackService: TrackService,
+    private breadcrumbService: BreadcrumbService
   ) {
 
   }
@@ -35,6 +37,8 @@ export class ProTrackComponent implements OnInit {
         this.project = await data.project;
         this.project.project_hash = this.route.snapshot.params.project_hash;
         this.track = this.project.tracks.find(track => track.track_id == this.route.snapshot.params.id);
+        this.breadcrumbService.set('/projects/:project_hash', this.project.title);
+        this.breadcrumbService.set('/track/:track_id', this.track.title);
         this.track.project = this.project;
         this.track.track_id = this.route.snapshot.params.id;
         this.stateService.setActiveTrack(this.track);
