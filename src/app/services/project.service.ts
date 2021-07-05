@@ -56,7 +56,7 @@ export class ProjectService {
 
   async getAllProjects(): Promise<Project[]> {
     const projects = (await RestCall.getProjects())["projects"];
-    projects.forEach(
+    await projects.forEach(
       async (project) => Object.assign(project, await this.getProject(project.hash))
     );
     return projects;

@@ -103,9 +103,9 @@ if( isset( $_GET['code'] ) ) {
       ->fetchColumn();
 
     $_SESSION['USER_INFO'] = "{
-      \"nicename\": $user_nicename,
-      \"email\": $user_email,
-      \"id\": $user_id
+      \"nicename\": \"$user_nicename\",
+      \"email\": \"$user_email\",
+      \"id\": \"$user_id\"
     }";
 
   } catch (Exception $e) {}
