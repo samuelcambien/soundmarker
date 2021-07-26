@@ -136,10 +136,13 @@ export class PublicTrackPlayerComponent implements OnInit, OnChanges, AfterConte
       }
     }, true);
     this.uploader.getOpenFileUploader().onAfterAddingAll = (items) => {
-      this.router.navigate(['pro/upload'], {
-        queryParams: {origin: 'dashboard', newTrackId: this.track.track_id},
+      if(this.stateService.getVersionUpload().getValue()){
+      this.router.navigate(['../newversion'], {
+        relativeTo: this.route,
+        queryParams: {origin: 'newversion', newTrackId: this.track.track_id},
         skipLocationChange: true
-      });
+      });}
+      else
       this.uploader.getOpenSMFileUploader().setStatus(Status.UPLOAD_FORM);
       this.uploader.getOpenSMFileUploader().addTitles(items);
     }

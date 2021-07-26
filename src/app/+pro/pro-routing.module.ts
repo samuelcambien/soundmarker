@@ -10,6 +10,7 @@ import {ProBoardProjectsComponent} from './projects/pro-board-projects.component
 import {PendingChangesGuard} from '../auth/pending-changes.guard';
 import {UploadGuard} from '../auth/upload/upload.guard';
 import {AuthGuard} from '../auth/auth.guard';
+import {NewversionGuard} from '../auth/newversion.guard';
 
 @NgModule({
   imports: [
@@ -46,17 +47,39 @@ import {AuthGuard} from '../auth/auth.guard';
                    path: ':project_hash',
                    children: [
                      {
-                       path: 'track/:id',
-                       component: ProTrackComponent,
-                         resolve: {
-                           project: ProjectResolver,
+                       path: 'track',
+                       data: { breadcrumb: { skip: true }},
+                       children: [
+                         {
+                           path: ':id',
+                           children: [
+                             {
+                               path: 'newversion',
+                               component: ProUploadPageComponent,
+                               data: { breadcrumb: {label: 'Upload new version'}},
+                               canDeactivate: [PendingChangesGuard],
+                               canActivate: [NewversionGuard],
+                             },
+                             {
+                               path: '',
+                               component: ProTrackComponent,
+                               resolve: {
+                                 project: ProjectResolver,
+                               },
+                             }
+                           ],
                          },
+                         {
+                           path: '',
+                           redirectTo: '/pro/projects/'
+                         }
+                         ]
                      },
                      {
                       path: '',
                       component: ProProjectComponent,
                       resolve: {
-                      project: ProjectResolver,
+                        project: ProjectResolver,
                     },
                      }
                     ],

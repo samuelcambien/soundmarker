@@ -27,6 +27,7 @@ import {ProjectTransferComponent} from "./transfers/project-transfer/project-tra
 import {ProPopoverComponent} from './shared/pro-popover/pro-popover.component';
 import {ProWarningsPopoverComponent } from './page/pro-warnings-popover/pro-warnings-popover.component';
 import {BreadcrumbModule} from 'xng-breadcrumb';
+import {NewversionGuard} from '../auth/newversion.guard';
 
 @NgModule({
   imports: [
@@ -58,7 +59,8 @@ import {BreadcrumbModule} from 'xng-breadcrumb';
   ],
   providers: [
     Uploader,
-    PendingChangesGuard
+    PendingChangesGuard,
+    NewversionGuard
   ],
   entryComponents: [
     ConfirmDialogComponent,

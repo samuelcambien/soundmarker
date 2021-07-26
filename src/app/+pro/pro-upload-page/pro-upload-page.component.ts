@@ -24,6 +24,7 @@ import {StateService} from '../../services/state.service';
 import {ComponentCanDeactivate} from "../../auth/pending-changes.guard";
 import {DOCUMENT} from "@angular/common";
 import {AuthService} from "../../auth/auth.service";
+import {BreadcrumbService} from 'xng-breadcrumb';
 
 // TODO: Als availabily stream only is dan wordt de downloadfile niet opgeslagen, bij Pro moet dat wel want daar kan dat achteraf nog aangepast worden.
 
@@ -59,6 +60,7 @@ export class ProUploadPageComponent implements OnInit, ComponentCanDeactivate {
               private authService: AuthService,
               private activatedRoute: ActivatedRoute,
               private cdr: ChangeDetectorRef,
+              private breadcrumbService: BreadcrumbService,
               @Inject(DOCUMENT) document) {
   }
 
@@ -97,16 +99,18 @@ export class ProUploadPageComponent implements OnInit, ComponentCanDeactivate {
     let project = this.user_project_list.find(x => x.project_id === project_id);
     this.project_tracks_list = (await RestCall.getProject(project.hash))["tracks"];
     this.smUploader.setProjectTitle(project.title);
+    let track_id = this.trackId;
     this.selected_existing_tracks = [];
     if (this.trackId) {
       this.selected_existing_tracks[0] = this.trackId;
+      this.breadcrumbService.set('/track/:id', this.getTrackTitle(this.trackId));
+      this.breadcrumbService.set('/track/:id/newversion' , 'New version upload');
     }
   }
 
   newProjectSelect(){
     this.smUploader.setProjectTitle(null);
     this.project_id = null;
-    console.log(this.smUploader);
     this.cdr.detectChanges();
   }
 

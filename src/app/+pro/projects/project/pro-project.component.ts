@@ -34,10 +34,8 @@ export class ProProjectComponent implements OnInit {
   ngOnInit(): void {
     this.route.data.subscribe(async data => {
       this.project = await data.project;
-      // this.breadcrumbService.set('project', { skip: false }); // using alias '@mentorName'
       this.breadcrumbService.set('/projects/:project_hash', this.project.title);
       this.cdr.detectChanges();
-
     });
   }
 
