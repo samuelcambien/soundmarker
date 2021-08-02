@@ -27,8 +27,7 @@ export class AuthService implements OnInit {
     return this.currentUser.pipe(
       tap(async (currentUser) => {
         if (!currentUser) {
-          const newVar = await Request.getNonCaching(Endpoints.USER);
-          const email = newVar['user_info']['user_email'];
+          const email = (await Request.getNonCaching(Endpoints.USER))['user_email'];
           this.setCurrentUser(new User(email));
         }
       }),
