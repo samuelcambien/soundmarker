@@ -52,9 +52,13 @@ if (!isset($_SESSION)) {
 
 $_SESSION["USER"] = '{"user":{"access_token":"wva1mo9rrm6kaem4i1artirf8qerszuoxufq8ooe","expires_in":3600,"token_type":"Bearer","scope":"basic","refresh_token":"vryh2ozy7roapeoiorteolzf44dtjqxsptyuyxun"}}';
 $_SESSION['USER_INFO'] = "{
-      \"nicename\": \"test nicename\",
-      \"email\": \"test email\",
-      \"id\": 1
+      \"user_nicename\": \"test nicename\",
+      \"user_email\": \"test email\",
+      \"user_login\": \"test email\",
+      \"user_registered\": \"2021-04-05 11:54:38\",
+      \"display_name\": \"test display name\",
+      \"user_status\": \"0\",
+      \"ID\": 1
     }";
 
 if (isset($_SESSION["USER"])) {
@@ -255,7 +259,7 @@ Flight::route('GET /project/all', function () {
 
   $db = Flight::db();
   if (isAuthenticated()) {
-    $user_id = json_decode($_SESSION['USER_INFO'])->id;
+    $user_id = json_decode($_SESSION['USER_INFO'])->ID;
     $sql = "SELECT Project.project_id, Project.title, Project.expiration_date, Project.hash,
               COUNT(CASE WHEN Comment.comment_id is null OR Comment.comment_time > Version.last_seen THEN Comment.comment_id ELSE NULL END) as new_comments
               FROM Project

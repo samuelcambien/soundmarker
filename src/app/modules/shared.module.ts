@@ -30,6 +30,7 @@ import {FileUploadModule} from "../tools/ng2-file-upload";
 import {ConfirmDialogService} from '../services/confirmation-dialog/confirmation-dialog.service';
 import {LoggedOutDialogComponent} from '../services/loggedout-dialog/loggedout-dialog.component';
 import {BreadcrumbModule} from 'xng-breadcrumb';
+import { NgVarDirective } from '../tools/ng-var.directive';
 
 const modules = [
   ClipboardModule,
@@ -73,6 +74,7 @@ const directives = [
   DurationDirective,
   DraggableDirective,
   TimeFormatDirective,
+  NgVarDirective,
 ];
 
 const pipes = [

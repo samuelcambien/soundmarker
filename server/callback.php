@@ -77,6 +77,8 @@ if( isset( $_GET['code'] ) ) {
   $userinfo = curl_exec($cURLConnection);
   curl_close($cURLConnection);
 
+  $_SESSION['USER_INFO'] = $userinfo;
+
   // Store user info in DB:
   try {
     require 'credentials.php';
@@ -101,12 +103,6 @@ if( isset( $_GET['code'] ) ) {
 
     $user_id = $dbh->query("SELECT user_id FROM `User` WHERE user_nicename = :nicename")
       ->fetchColumn();
-
-    $_SESSION['USER_INFO'] = "{
-      \"nicename\": \"$user_nicename\",
-      \"email\": \"$user_email\",
-      \"id\": \"$user_id\"
-    }";
 
   } catch (Exception $e) {}
 //   print_r($_SESSION);

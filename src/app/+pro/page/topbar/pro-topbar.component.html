@@ -17,29 +17,30 @@
 
   <div class="topbar-logo show-no-sidebar">soundmarker</div>
 
+  <ng-container *ngVar="(currentUser$ | async) as currentUser">
+    <ng-container *ngIf="currentUser">
+      <div class="collapse navbar-collapse pro-nav">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item cta hide-phone" (click)="newUpload()">
+            <a class="nav-link"  role="button">
 
-  <div class="collapse navbar-collapse pro-nav">
-    <ul class="navbar-nav ml-auto">
-      <li class="nav-item cta hide-phone" (click)="newUpload()">
-        <a class="nav-link"  role="button">
-
-          <svg width="13px" height="14px" viewBox="0 0 24 25" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-              <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round">
+              <svg width="13px" height="14px" viewBox="0 0 24 25" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round">
                   <g id="Internet-Networks-Servers-/-Upload/Download-/-upload-dash-arrow-1" transform="translate(-483.000000, -215.000000)" fill-rule="nonzero" stroke="#ffffff" stroke-width="4">
-                      <g id="Group-31" transform="translate(462.000000, 194.000000)">
-                          <g id="Group-26-Copy" transform="translate(23.000000, 23.000000)">
-                              <path d="M0,10.5 L20,10.5" id="Line-10"></path>
-                              <path d="M0,10.5 L20,10.5" id="Line-10" transform="translate(10.000000, 10.500000) rotate(90.000000) translate(-10.000000, -10.500000) "></path>
-                          </g>
+                    <g id="Group-31" transform="translate(462.000000, 194.000000)">
+                      <g id="Group-26-Copy" transform="translate(23.000000, 23.000000)">
+                        <path d="M0,10.5 L20,10.5" id="Line-10"></path>
+                        <path d="M0,10.5 L20,10.5" id="Line-10" transform="translate(10.000000, 10.500000) rotate(90.000000) translate(-10.000000, -10.500000) "></path>
                       </g>
+                    </g>
                   </g>
-              </g>
-          </svg>
+                </g>
+              </svg>
 
-        </a>
+            </a>
 
-      </li>
-      <span class="search-icon">
+          </li>
+          <span class="search-icon">
 
       <svg width="16px" height="16px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
       <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
@@ -50,59 +51,60 @@
       </g>
       </svg>
       </span>
-      <li class="nav-item search hide-phone">
+          <li class="nav-item search hide-phone">
 
-          <input type="search" class="sub-form" placeholder="Search...">
+            <input type="search" class="sub-form" placeholder="Search...">
 
 
-      </li>
-      <li class="nav-item  hide-phone dropdown ">
-        <span _ngcontent-pst-c6="" class="topbar-item-notification"></span>
-        <a class="nav-link dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown"
-           aria-haspopup="true" aria-expanded="false">
-          <ng-container *ngTemplateOutlet="notifications_bell"></ng-container>
-        </a>
-        <div class="dropdown-menu shadow-pro-box dropdown-menu-right pro-dropdown pro-notifications"
-             aria-labelledby="dropdownMenuLink">
-          <ng-container *ngFor="let newComment of newComments">
-            <a class="dropdown-item" routerLink="project/{{newComment.hash}}/track/{{newComment.track_id}}" [queryParams]="{'version':newComment.version_number}">
-              <h3>{{newComment.title}}</h3>
-              <span class="sub-line">{{newComment.count}} new comments</span>
+          </li>
+          <li class="nav-item  hide-phone dropdown ">
+            <span _ngcontent-pst-c6="" class="topbar-item-notification"></span>
+            <a class="nav-link dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown"
+               aria-haspopup="true" aria-expanded="false">
+              <ng-container *ngTemplateOutlet="notifications_bell"></ng-container>
             </a>
-            <div *ngIf="!last" class="dropdown-divider"></div>
-          </ng-container>
-          <div *ngIf="newComments.length == 0">
+            <div class="dropdown-menu shadow-pro-box dropdown-menu-right pro-dropdown pro-notifications"
+                 aria-labelledby="dropdownMenuLink">
+              <ng-container *ngFor="let newComment of newComments">
+                <a class="dropdown-item" routerLink="project/{{newComment.hash}}/track/{{newComment.track_id}}" [queryParams]="{'version':newComment.version_number}">
+                  <h3>{{newComment.title}}</h3>
+                  <span class="sub-line">{{newComment.count}} new comments</span>
+                </a>
+                <div *ngIf="!last" class="dropdown-divider"></div>
+              </ng-container>
+              <div *ngIf="newComments.length == 0">
 
-            <a class="dropdown-item passive">
-              <h3>No new comments</h3>
+                <a class="dropdown-item passive">
+                  <h3>No new comments</h3>
+                </a>
+              </div>
+            </div>
+          </li>
+          <li class="nav-item  hide-phone dropdown">
+            <a class="nav-link dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown"
+               aria-haspopup="true" aria-expanded="false">
+              <div class="nav-profile"><h4>{{(currentUser$ | async)?.email.substring(0, 1).toUpperCase()}}</h4></div>
             </a>
-          </div>
-        </div>
-      </li>
-
-      <li class="nav-item  hide-phone dropdown">
-        <a class="nav-link dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown"
-           aria-haspopup="true" aria-expanded="false">
-          <div class="nav-profile"><h4>{{(currentUser$ | async).email.substring(0, 1).toUpperCase()}}</h4></div>
-        </a>
-        <div class="dropdown-menu shadow-pro-box dropdown-menu-right  pro-dropdown" aria-labelledby="dropdownMenuLink">
-          <h5 class="dropdown-header">Michiel Mutsaerts</h5>
-          <h6 class="dropdown-header">{{(currentUser$ | async).email}}</h6>
-          <a class="dropdown-item" href="#">Profile</a>
-          <a class="dropdown-item" href="#">Settings</a>
-          <div class="dropdown-divider"></div>
-          <a class="dropdown-item" (click)="logout()">Sign out</a>
-          <div class="dropdown-divider"></div>
-          <a class="dropdown-item" target="_blank" href="https://more.soundmarker.com/support/">Help</a>
-        </div>
-      </li>
-      <li class="show-phone">
-        <a class="nav-link phone-rightbar-toggle" href="#">
-          <ng-container *ngTemplateOutlet="settings_gear"></ng-container>
-        </a>
-      </li>
-    </ul>
-  </div>
+            <div class="dropdown-menu shadow-pro-box dropdown-menu-right  pro-dropdown" aria-labelledby="dropdownMenuLink">
+              <h5 class="dropdown-header">Michiel Mutsaerts</h5>
+              <h6 class="dropdown-header">{{(currentUser$ | async).email}}</h6>
+              <a class="dropdown-item" href="#">Profile</a>
+              <a class="dropdown-item" href="#">Settings</a>
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item" (click)="logout()">Sign out</a>
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item" target="_blank" href="https://more.soundmarker.com/support/">Help</a>
+            </div>
+          </li>
+          <li class="show-phone">
+            <a class="nav-link phone-rightbar-toggle" href="#">
+              <ng-container *ngTemplateOutlet="settings_gear"></ng-container>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </ng-container>
+  </ng-container>
 </nav>
 
 <ng-template #toggle_sidebar>

@@ -253,6 +253,8 @@ export class Endpoints {
   public static PROJECT_ALL: string = Endpoints.BACKEND + "/project/all";
 
   public static ACCOUNT: string = Endpoints.BACKEND + "/account";
+
+  public static USER: string = Endpoints.BACKEND + "/user";
 }
 
 export class Request {

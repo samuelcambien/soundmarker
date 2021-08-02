@@ -1,41 +1,35 @@
-import {Injectable} from '@angular/core';
-import {RestCall} from "../rest/rest-call";
+import {Injectable, OnInit} from '@angular/core';
+import {Endpoints, Request} from "../rest/rest-call";
 import {Router} from "@angular/router";
 import {LocalStorageService} from "../services/local-storage.service";
 import {User} from "../model/user";
 import {BehaviorSubject, Observable} from "rxjs";
-import {map} from "rxjs/operators";
+import {tap} from "rxjs/operators";
 
 @Injectable({
   providedIn: 'root',
 })
-export class AuthService {
+export class AuthService implements OnInit {
 
-  private currentUserSubject: BehaviorSubject<User>;
-  private currentUser: Observable<User>;
   isAdmin: boolean= false;
+  currentUser: BehaviorSubject<User> = new BehaviorSubject<User>(null);
 
   constructor(
     private router: Router,
     private localStorage: LocalStorageService,
   ) {
-    this.currentUserSubject = new BehaviorSubject<User>(new User(undefined, undefined, "iedemenne@soundmarker.com"));
-    this.currentUser = this.currentUserSubject.asObservable();
-    // );
-    // this.getCurrentUser().subscribe(currentUser => {
-    //   if (!currentUser) this.logOut();
-    // });
+
   }
 
   redirect: string = 'pro';
 
   getCurrentUser(): Observable<User> {
     return this.currentUser.pipe(
-      map(currentUser => {
-        if (currentUser && currentUser.isValid()) {
-          return currentUser;
-        } else {
-          return null
+      tap(async (currentUser) => {
+        if (!currentUser) {
+          const newVar = await Request.getNonCaching(Endpoints.USER);
+          const email = newVar['user_info']['user_email'];
+          this.setCurrentUser(new User(email));
         }
       }),
     );
@@ -47,6 +41,9 @@ export class AuthService {
 
   private setCurrentUser(user) {
     this.localStorage.storeCurrentUser(user);
-    this.currentUserSubject.next(user);
+    this.currentUser.next(user);
+  }
+
+  async ngOnInit(): Promise<void> {
   }
 }
