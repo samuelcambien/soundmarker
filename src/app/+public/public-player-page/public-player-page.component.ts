@@ -106,7 +106,9 @@ export class PublicPlayerPageComponent implements OnInit {
       }
     }
 
-    this.expiry_date = this.project.expiration.substr(0, 10);
+    if (this.project.expiration) {
+      this.expiry_date = this.project.expiration.substr(0, 10);
+    }
     this.project_id = this.project.project_id;
 
     this.message = this.getMessage(this.project, this.project.tracks[0].versions[0]);
