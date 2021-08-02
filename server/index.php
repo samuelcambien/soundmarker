@@ -999,11 +999,11 @@ Flight::route('GET /track/@track_id', function ($track_id) {
 
   $new_comments = $db
     ->query(
-      "SELECT count(comment.comment_id) FROM Comment
-      INNER JOIN Version ON comment.version_id = version.version_id
-      WHERE version.track_id = $track_id
-        AND (version.last_seen is null
-        OR comment.comment_time > version.last_seen);"
+      "SELECT count(Comment.comment_id) FROM Comment
+      INNER JOIN Version ON Comment.version_id = Version.version_id
+      WHERE Version.track_id = $track_id
+        AND (Version.last_seen is null
+        OR Comment.comment_time > Version.last_seen);"
     )
     ->fetchAll(PDO::FETCH_COLUMN)[0];
 
