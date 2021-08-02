@@ -1230,7 +1230,7 @@ Flight::route('POST /track/version/@version_id/last_seen', function ($version_id
   Flight::json(array(), 201);
 });
 
-//////////////////////////////////////////////////// Routes - /version/last_seen POST /////////////////////////////////////////////////////
+//////////////////////////////////////////////////// Routes - /comments/new GET /////////////////////////////////////////////////////
 Flight::route('GET /comments/new', function () {
 
   // if user is not able to edit this version
@@ -1242,7 +1242,7 @@ Flight::route('GET /comments/new', function () {
     return;
   }
 
-  $user_id = $_SESSION['USER'];
+  $user_id = getUserId();
 
   if (isset($_GET['count'])) {
     $count = $_GET['count'];
