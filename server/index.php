@@ -923,7 +923,7 @@ Flight::route('POST /track/version', function () {
     $db = Flight::db();
 
     // add version_number
-    $latestversion = $db->query("SELECT MAX(version_number) FROM Version WHERE track_id = '$track_id'")->fetchAll(PDO::FETCH_ASSOC)[0]["version_number"];
+    $latestversion = $db->query("SELECT MAX(version_number) as version_number FROM Version WHERE track_id = '$track_id'")->fetchAll(PDO::FETCH_ASSOC)[0]["version_number"];
     if ($latestversion > 0) {
       $newversionnumber = $latestversion + 1;
     } else {
