@@ -68,14 +68,6 @@ if (isset($_SESSION["USER"])) {
 // Set Session
 Flight::set("session", $_SESSION);
 
-// Error handling
-Flight::map('error', function (Exception $ex) {
-  // Handle error
-  Flight::json(array(
-    'error' => $ex->getTraceAsString()
-  ), 400);
-});
-
 /*
 ROUTING TO FRONT-END
 */
@@ -162,9 +154,7 @@ Flight::route('GET /account/', function () {
 Flight::route('GET /user/', function () {
 
   if (isAuthenticated()) {
-    Flight::json(array(
-      'user_info' => json_decode($_SESSION['USER_INFO']),
-    ), 200);
+    Flight::json((json_decode($_SESSION['USER_INFO'])));
   } else {
     // return ok
     Flight::json(array(
@@ -178,13 +168,21 @@ Flight::route('GET /user/', function () {
 PROJECT
 */
 //////////////////////////////////////////////////////// Routes - /project/new POST ///////////////////////////////////////////////////
+/**
+ * @return mixed|string
+ */
+function getUserId()
+{
+  return isset($_SESSION['USER_INFO']) ? json_decode($_SESSION['USER_INFO'])->ID : "";
+}
+
 Flight::route('POST /project/new', function () {
 
   $config = Flight::get("config");
 // Todo: check if user_id exists first (foreign_key needs to be valid) -> put in dB
   $getbody = json_decode(Flight::request()->getBody());
 
-  $user_id = isset($_SESSION['USER']) ? $_SESSION['USER'] : "";
+  $user_id = getUserId();
   $project_title = isset($getbody->project_title) ? $getbody->project_title : "";
   $project_password = isset($getbody->project_password) ? $getbody->project_password : "";
   $stream_type = isset($getbody->stream_type) ? $getbody->stream_type : "";
@@ -205,7 +203,7 @@ Flight::route('POST /project/new', function () {
 
 // return ok
   Flight::json(array(
-    'project_id' => $project_id
+    'project_id' => $project_id,
   ), 200);
 });
 
@@ -228,7 +226,7 @@ Flight::route('POST /project/edit', function () {
   $stream_type = isset($getbody->stream_type) ? $getbody->stream_type : "";
 
 // if user is able to edit this project -> update with user permissions
-  if (in_array($project_id, $_SESSION['user_projects'])) {
+  if (canEditProject($project_id)) {
     $db = Flight::db();
     $sql = "UPDATE Project SET title = '$project_title' WHERE project_id = '$project_id'";
     $result = $db->query($sql);
@@ -328,7 +326,7 @@ Flight::route('POST /project/get/url', function () {
   $notes = isset($getbody->notes) ? $getbody->notes : "";
 
 // if user is able to edit this project -> update with user permissions
-  if (in_array($project_id, $_SESSION['user_projects'])) {
+  if (canEditProject($project_id)) {
     $db = Flight::db();
     // Update expiration date
     $projectdate = new \DateTime('+' . $expiration);
@@ -675,7 +673,7 @@ Flight::route('POST /project/password', function () {
   $project_id = $getbody->project_id;
 
 // if user is able to edit this project password
-  if (in_array($project_id, $_SESSION['user_projects'])) {
+  if (canEditProject($project_id)) {
     $db = Flight::db();
     $sql = "SELECT password FROM Project WHERE project_id = '$project_id'";
     $result = $db->query($sql);
@@ -701,7 +699,7 @@ Flight::route('POST /project/delete', function () {
   $project_id = $getbody->project_id;
 
 // if user is able to edit this project password
-  if (in_array($project_id, $_SESSION['user_projects'])) {
+  if (canEditProject($project_id)) {
     $db = Flight::db();
     $sql = "UPDATE Project SET active = '0' WHERE project_id = '$project_id'";
     $result = $db->query($sql);
@@ -727,7 +725,7 @@ Flight::route('POST /project/url', function () {
   $project_id = $getbody->project_id;
 
 // if user is able to edit this project password
-  if (in_array($project_id, $_SESSION['user_projects'])) {
+  if (canEditProject($project_id)) {
     $db = Flight::db();
     $sql = "SELECT hash FROM Project WHERE project_id = '$project_id'";
     $result = $db->query($sql);
@@ -823,7 +821,7 @@ Flight::route('POST /track/new', function () {
   $visibility = isset($getbody->visibility) ? $getbody->visibility : 1;
 
 // if user is able to edit this project password
-  if (in_array($project_id, $_SESSION['user_projects'])) {
+  if (canEditProject($project_id)) {
     $db = Flight::db();
     if ($project_id) {
       $sql = "INSERT INTO Track (title, artist, project_id, visibility) VALUES ('$track_title', '$track_artist', '$project_id', '$visibility')";
@@ -888,7 +886,7 @@ Flight::route('POST /track/visibility', function () {
   $visibility = isset($getbody->visibility) ? $getbody->visibility : 1;
 
 // if user is able to edit this project
-  if (in_array($project_id, $_SESSION['user_projects'])) {
+  if (canEditProject($project_id)) {
     $db = Flight::db();
     $sql = "UPDATE Track SET visibility = '$visibility' WHERE track_id = '$track_id'";
     $result = $db->query($sql);
@@ -921,7 +919,7 @@ Flight::route('POST /track/version', function () {
   $track_length = isset($getbody->track_length) ? $getbody->track_length : 0;
 
 // if user is able to edit this track
-  if (in_array($track_id, $_SESSION['user_tracks'])) {
+  if (canEditTrack($track_id)) {
     $db = Flight::db();
 
     // add version_number
@@ -1314,7 +1312,7 @@ Flight::route('POST /file/new', function () {
   $aws_path = urlencode($config['AWS_S3_PATH'] . $version_id . "/" . urlencode($file_name));
 
 // if user is able to upload file
-  if (in_array($version_id, $_SESSION['user_versions'])) {
+  if (canEditVersion($version_id)) {
     $db = Flight::db();
     $sql = "INSERT INTO File (version_id, file_name, file_size, metadata, extension, chunk_length, identifier, aws_path) VALUES ('$version_id', '$file_name', '$file_size', '$metadata', '$extension', '$chunk_length', '$identifier', '$aws_path')";
     $result = $db->query($sql);
@@ -1341,7 +1339,7 @@ Flight::route('POST /file/chunk/@file_id/@download_id/@idno/@ext', function ($fi
   set_time_limit(0);
 
 // if user is able to upload file
-  if (in_array($file_id, $_SESSION['user_files'])) {
+  if (canEditFile($file_id)) {
     $db = Flight::db();
     $sql = "SELECT version_id, extension, metadata, aws_path, file_name, file_size, identifier, chunk_length FROM File WHERE file_id = '$file_id'";
     $result = $db->query($sql);
@@ -1669,8 +1667,47 @@ Flight::route('GET /unsubscribe/@update_id/@project_id', function ($update_id, $
 
 // Render a display -> front end
   echo "<script>window.location = \"https://more.soundmarker.com/notifications/\";</script>";
-});
+})
 
+;/**
+ * @param $project_id
+ * @return bool
+ */
+function canEditProject($project_id)
+{
+//  return in_array($project_id, $_SESSION['user_projects']);
+  return true;
+}
+
+/**
+ * @param $track_id
+ * @return bool
+ */
+function canEditTrack($track_id)
+{
+//  return in_array($track_id, $_SESSION['user_tracks']);
+  return true;
+}
+
+/**
+ * @param $version_id
+ * @return bool
+ */
+function canEditVersion($version_id)
+{
+//  return in_array($version_id, $_SESSION['user_versions']);
+  return true;
+}
+
+/**
+ * @param $file_id
+ * @return bool
+ */
+function canEditFile($file_id)
+{
+//  return in_array($file_id, $_SESSION['user_files']);
+  return true;
+}
 
 /*
 FLIGHT
