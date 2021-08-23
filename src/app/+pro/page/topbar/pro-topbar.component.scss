@@ -38,28 +38,7 @@
   margin-left: 66px;
 }
 
-.breadcrumb {
-  background: transparent !important;
-  height: 29px;
-  border: none;
-  color: #BAC1DA !important;
-  display: inline;
-}
 
-.breadcrumb-item {
-  font-family: 'sofia-regular';
-  font-size: 10pt;
-  color: #BAC1DA !important;
-  float: left;
-}
-
-.breadcrumb-item + .breadcrumb-item::before {
-  color: #BAC1DA !important;
-}
-
-.breadcrumb-item a {
-  color: #7397FF !important;
-}
 
 .breadcrumbbar {
   background-color: rgba(255, 255, 255, 0.95);
@@ -91,12 +70,7 @@
   pointer-events: none;
 }
 
-.breadcrumb-item {
-  max-width: 200px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
+
 
 .phone-rightbar-toggle {
   top: 13px;

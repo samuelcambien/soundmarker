@@ -55,6 +55,40 @@ $purple-rain: #2a2a2a;
 
 // to organise
 
+.xng-breadcrumb-item {
+  background: transparent !important;
+  //height: 29px;
+  border: none;
+  color: #BAC1DA !important;
+  display: inline;
+}
+
+.xng-breadcrumb-link, .xng-breadcrumb-trail {
+  font-family: 'sofia-regular' !important;
+  font-size: 10pt !important;
+  color: #BAC1DA !important;
+  float: left;
+}
+
+.xng-breadcrumb-separator {
+  color: #BAC1DA !important;
+  font-family: 'sofia-regular' !important;
+  font-size: 10pt !important;
+}
+
+.xng-breadcrumb-link {
+  color: #7397FF !important;
+}
+
+.xng-breadcrumb-link, .xng-breadcrumb-trail {
+  max-width: 200px !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+  margin-bottom: 0px !important;
+  display: inline-block !important;
+}
+
 .list-header.dropdown {
   position: absolute;
 }
