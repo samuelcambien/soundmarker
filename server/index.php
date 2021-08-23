@@ -1169,7 +1169,7 @@ Flight::route('POST /track/version/comment', function () {
 //  if (in_array($version_id, $_SESSION['view_versions'])) {
   if (true) {
     $db = Flight::db();
-    $sql = "INSERT INTO Comment (version_id, notes, name, start_time, end_time, parent_comment_id, include_start, include_end, comment_time) VALUES ('$version_id', '$notes', '$name', '$start_time', '$end_time', '$parent_comment_id', '$include_start', '$include_end', '$comment_time')";
+    $sql = "INSERT INTO Comment (version_id, notes, name, start_time, end_time, parent_comment_id, include_start, include_end, comment_time, checked) VALUES ('$version_id', '$notes', '$name', '$start_time', '$end_time', '$parent_comment_id', '$include_start', '$include_end', '$comment_time', False)";
     $result = $db->query($sql);
 
     $_SESSION["view_comments"][] = $db->lastInsertId();
@@ -1211,6 +1211,34 @@ Flight::route('POST /track/version/delete/comment', function () {
     ), 401);
   }
 });
+
+
+///////////////////////////////////////////////// Routes - /track/version/delete/comment POST ///////////////////////////////////////////
+Flight::route('POST /track/version/comment/check', function () {
+
+// Can user delete comments for this version?
+  $config = Flight::get("config");
+  $getbody = json_decode(Flight::request()->getBody());
+
+  $comment_id = $getbody->comment_id;
+
+// if user is allow to check this comment
+if (true) {
+    $db = Flight::db();
+    $sql = "UPDATE Comment SET checked = !checked WHERE comment_id = '$comment_id'";
+    $result = $db->query($sql);
+
+    // return ok
+    Flight::json(array(
+      'return' => 'ok'
+    ), 200);
+  } else {
+    // return not allowed
+    Flight::json(array(
+      'return' => 'Unauthorized'
+    ), 401);
+  }
+ });
 
 //////////////////////////////////////////////////// Routes - /version/last_seen POST /////////////////////////////////////////////////////
 Flight::route('POST /track/version/@version_id/last_seen', function ($version_id) {

@@ -108,7 +108,6 @@
   </div>
 
   <div [ngbCollapse]="!phoneOrder" id="phoneorder" class="show-phone shadow">
-
     <div class="comment-sort custom select-button">
       <select>
         <option>Most recent</option>
@@ -116,8 +115,8 @@
         <option>Name</option>
       </select>
     </div>
-
   </div>
+  <hr>
 
   <div class="player-header row">
 
@@ -324,7 +323,6 @@
     </div>
   </div>
 
-
   <div class="comments">
 
     <div class="comments-header row">
@@ -376,6 +374,18 @@
         </ng-select>
       </div>
 
+    </div>
+
+    <div class="btn-group btn-group-toggle" ngbRadioGroup name="radioBasic" [(ngModel)]="commentFilter">
+      <label ngbButtonLabel class="btn-primary">
+        <input ngbButton type="radio" [value]="2"> All Comments
+      </label>
+      <label ngbButtonLabel class="btn-primary">
+        <input ngbButton type="radio" [value]="0"> Unchecked
+      </label>
+      <label ngbButtonLabel class="btn-primary">
+        <input ngbButton type="radio" [value]="1"> Checked
+      </label>
     </div>
 
     <app-comment-form

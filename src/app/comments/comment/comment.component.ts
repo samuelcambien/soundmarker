@@ -118,6 +118,14 @@ export class CommentComponent implements OnInit{
     this.cdr.detectChanges();
   }
 
+  checkComment(){
+    RestCall.checkComment(this.comment.comment_id).then(() =>{
+      this.comment.checked = this.comment.checked == 0 ? 1 : 0
+      this.cdr.detectChanges();
+    }
+    );
+  }
+
   isMobileDevice() {
     return (typeof window.orientation !== "undefined") || (navigator.userAgent.indexOf('IEMobile') !== -1);
   };

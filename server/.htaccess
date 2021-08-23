@@ -32,6 +32,7 @@
     RewriteCond %{REQUEST_URI} "/comments/new" [OR]
     RewriteCond %{REQUEST_URI} "/track/version/comment" [OR]
     RewriteCond %{REQUEST_URI} "/track/version/delete/comment" [OR]
+    RewriteCond %{REQUEST_URI} "/track/version/comment/check" [OR]
     RewriteCond %{REQUEST_URI} "/project/set/viewpassword" [OR]
     RewriteCond %{REQUEST_URI} "/project/new" [OR]
     RewriteCond %{REQUEST_URI} "/project/all" [OR]

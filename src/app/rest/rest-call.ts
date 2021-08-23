@@ -128,6 +128,12 @@ export class RestCall {
     })
   }
 
+  public static checkComment(commentId: string){
+    return Request.post(Endpoints.COMMENT_CHECK, {
+      comment_id: commentId
+    })
+  }
+
   // GET
 
   public static getSma(sma_id: string): Promise<any> {
@@ -249,6 +255,8 @@ export class Endpoints {
   public static COMMENT: string = Endpoints.TRACK + "/version/comment";
 
   public static COMMENT_DELETE: string = Endpoints.TRACK + "/version/delete/comment";
+
+  public static COMMENT_CHECK: string = Endpoints.TRACK + "/version/comment/check";
 
   public static PROJECT_ALL: string = Endpoints.BACKEND + "/project/all";
 

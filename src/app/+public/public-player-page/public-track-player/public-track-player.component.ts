@@ -90,6 +90,8 @@ export class PublicTrackPlayerComponent implements OnInit, OnChanges, AfterConte
 
   currentSorter: CommentSorter = CommentSorter.MOST_RECENT;
 
+  commentFilter: number = 2;
+
   comment: Comment = new Comment();
 
   search: string;
@@ -269,7 +271,7 @@ export class PublicTrackPlayerComponent implements OnInit, OnChanges, AfterConte
   }
 
   getMatchingCommentsSorted(): Comment[] {
-    return this.getMatchingComments().sort(this.currentSorter.comparator);
+    return this.getMatchingComments().filter(comment => this.commentFilter == comment.checked || this.commentFilter == 2).sort(this.currentSorter.comparator);
   }
 
   getMatchingComments(): Comment[] {
@@ -281,7 +283,7 @@ export class PublicTrackPlayerComponent implements OnInit, OnChanges, AfterConte
     let search = new RegExp(this.search, 'i');
 
     return this.version.comments.filter(
-      comment => search.test(comment.notes) || search.test(comment.name)
+      comment => (search.test(comment.notes) || search.test(comment.name))
     );
   }
 
@@ -485,7 +487,6 @@ export class PublicTrackPlayerComponent implements OnInit, OnChanges, AfterConte
   isAdminRoute(): boolean {
     return /^\/pro(\/|$)/.test(this.router.url);
   }
-
 
   pauseAutoScroll(event) {
     this.pauseTitleScroll = event;
