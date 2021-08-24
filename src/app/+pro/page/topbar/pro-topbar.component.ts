@@ -7,6 +7,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {Uploader} from '../../../services/uploader.service';
 import {RestCall} from "../../../rest/rest-call";
 import {ConfirmDialogService} from '../../../services/confirmation-dialog/confirmation-dialog.service';
+import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-pro-topbar',
@@ -32,7 +33,8 @@ export class ProTopbarComponent {
     protected uploader: Uploader,
     private router: Router,
     private activatedRoute: ActivatedRoute,
-    private confirmDialogService: ConfirmDialogService
+    private confirmDialogService: ConfirmDialogService,
+    private modalService: NgbModal
   ) {
     this.currentUser$ = authService.getCurrentUser();
   }
@@ -64,5 +66,9 @@ export class ProTopbarComponent {
     else{
         this.stateService.setVersionUpload(false);
         document.getElementById("fileinputhiddentop").click();}
+  }
+
+  openModal(modal) {
+    this.modalService.open(modal);
   }
 }
