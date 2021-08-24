@@ -28,6 +28,7 @@ import {ProPopoverComponent} from './shared/pro-popover/pro-popover.component';
 import {ProWarningsPopoverComponent } from './page/pro-warnings-popover/pro-warnings-popover.component';
 import {BreadcrumbModule} from 'xng-breadcrumb';
 import {NewversionGuard} from '../auth/newversion.guard';
+import { ProSearchResultsComponent } from './pro-search-results/pro-search-results.component';
 import { ProSettingsComponent } from './pro-settings/pro-settings.component';
 
 @NgModule({
@@ -58,6 +59,7 @@ import { ProSettingsComponent } from './pro-settings/pro-settings.component';
     ProPopoverComponent,
     ProWarningsPopoverComponent,
     ProSettingsComponent,
+    ProSearchResultsComponent,
   ],
   providers: [
     Uploader,
