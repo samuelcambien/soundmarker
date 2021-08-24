@@ -20,9 +20,7 @@
       <div class="top-icon list-icon" id="scroll-icon" role="button" (click)="scrollToTop()">
 
         <ng-container *ngTemplateOutlet="icon_scroll"></ng-container>
-
       </div>
-
     </div>
 
   </div>
@@ -152,7 +150,7 @@
         dropdownPosition="auto">
 
         <ng-template ng-label-tmp let-item="item">
-          v<b>{{item.version_number}}</b>
+          V<b>{{item.version_number}}</b>
         </ng-template>
         <ng-template ng-header-tmp *ngIf="isAdminRoute()" >
           <a class="add-version-button btn btn-primary btn-sm" (click)="newUpload()">
@@ -161,7 +159,7 @@
 
         </ng-template>
         <ng-template ng-option-tmp let-item="item" let-index="index">
-          v<b>{{item.version_number}}</b>
+          V<b>{{item.version_number}}</b>
         </ng-template>
       </ng-select>
 

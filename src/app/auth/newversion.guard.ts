@@ -16,7 +16,6 @@ export class NewversionGuard implements CanActivate {
   }
 
   checkOrigin(queryParams): boolean {
-    console.log(queryParams.origin);
     if (queryParams.origin) {
       if(this.allowedOrigins.includes(queryParams.origin)) return true;
     }
