@@ -60,6 +60,7 @@ import { ProSettingsComponent } from './pro-settings/pro-settings.component';
     ProWarningsPopoverComponent,
     ProSearchResultsComponent,
     ProSettingsComponent,
+    ProSearchResultsComponent,
   ],
   providers: [
     Uploader,
