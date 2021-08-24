@@ -37,4 +37,8 @@ export class EditTrackFormComponent implements OnInit {
     );
     this.save.emit();
   }
+
+  toggleVisibility(i){
+    return;
+  }
 }

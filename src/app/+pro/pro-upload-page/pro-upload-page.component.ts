@@ -25,6 +25,7 @@ import {ComponentCanDeactivate} from "../../auth/pending-changes.guard";
 import {DOCUMENT} from "@angular/common";
 import {AuthService} from "../../auth/auth.service";
 import {BreadcrumbService} from 'xng-breadcrumb';
+import {Location} from '@angular/common';
 
 // TODO: Als availabily stream only is dan wordt de downloadfile niet opgeslagen, bij Pro moet dat wel want daar kan dat achteraf nog aangepast worden.
 
@@ -61,6 +62,7 @@ export class ProUploadPageComponent implements OnInit, ComponentCanDeactivate {
               private activatedRoute: ActivatedRoute,
               private cdr: ChangeDetectorRef,
               private breadcrumbService: BreadcrumbService,
+              private _location: Location,
               @Inject(DOCUMENT) document) {
   }
 
@@ -81,13 +83,14 @@ export class ProUploadPageComponent implements OnInit, ComponentCanDeactivate {
   }
 
   validationCheck(form: NgForm){
-    if(this.smUploader.getFileUploader().getNotUploadedItems().length === 0){
-      this.stateService.setAlert('No tracks are selected for upload');
-      return;
-    }
-    else if(!this.myForm.controls.projecttitle.value){
+    if(!this.stateService.getVersionUpload().getValue()) {
+      if (this.smUploader.getFileUploader().getNotUploadedItems().length === 0) {
+        this.stateService.setAlert('No tracks are selected for upload');
+        return;
+      } else if (!this.myForm.controls.projecttitle.value) {
         this.stateService.setAlert('Project title is missing');
         return;
+      }
     }
   }
 
@@ -156,6 +159,12 @@ export class ProUploadPageComponent implements OnInit, ComponentCanDeactivate {
 
   async onSubmit() {
     if (this.smUploader.getFileUploader().getNotUploadedItems().length>0 && this.myForm.valid) {
+      if(this.stateService.getVersionUpload().getValue()){
+        this._location.back();
+      }
+      else {
+        this.router.navigate(["pro/dashboard"] );
+      }
       let smUploadingUploader = this.uploader.getOpenSMFileUploader();
       let uploadingProjectId = this.project_id;
       let uploading_selected_existing_tracks = this.selected_existing_tracks;
@@ -167,7 +176,6 @@ export class ProUploadPageComponent implements OnInit, ComponentCanDeactivate {
       this.smUploader = this.uploader.getOpenSMFileUploader();
       this.selected_existing_tracks = [];
       this.preventNavigation = false;
-      this.router.navigate(["../dashboard"], {relativeTo: this.activatedRoute});
       smUploadingUploader.setStatus(Status.UPLOADING_SONGS);
       try {
         if (uploadingCreateNewProject) {
@@ -185,9 +193,9 @@ export class ProUploadPageComponent implements OnInit, ComponentCanDeactivate {
         );
         this.authService.getCurrentUser().subscribe(async currentUser =>
           await RestCall.shareProject(uploadingProjectId, smUploadingUploader.expiration, smUploadingUploader.getProjectNotes(), currentUser.email, smUploadingUploader.getReceivers())
-        );
-        smUploadingUploader.setStatus(Status.GREAT_SUCCESS);
+        )
 
+          smUploadingUploader.setStatus(Status.GREAT_SUCCESS);
       } catch (e) {
         this.error.emit(e);
       }
@@ -250,8 +258,13 @@ export class ProUploadPageComponent implements OnInit, ComponentCanDeactivate {
     if (dirty_form || file_nb > 0) {
       if (await this.confirmDialogService.confirm('There are unsaved changes. Are sure you want to discard this project?', 'Yes', 'Undo')) {
         this.smUploader.resetSMFileUploader();
-        this.stateService.setVersionUpload(false);
-        this.router.navigate(["../dashboard"], {relativeTo: this.activatedRoute});
+        if(this.stateService.getVersionUpload().getValue()){
+          this.stateService.setVersionUpload(false);
+          this._location.back();
+        }
+        else {
+          this.router.navigate(["../dashboard"], {relativeTo: this.activatedRoute});
+        }
       }
     }
     else {

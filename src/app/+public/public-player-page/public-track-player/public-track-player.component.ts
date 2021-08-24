@@ -69,7 +69,6 @@ export class PublicTrackPlayerComponent implements OnInit, OnChanges, AfterConte
 
   private currentUser$;
 
-
   @Output() error = new EventEmitter();
   @Output() overview = new EventEmitter();
 
@@ -158,7 +157,7 @@ export class PublicTrackPlayerComponent implements OnInit, OnChanges, AfterConte
   ngOnInit(): void {
     this.waveformInViewPort = true;
     this.route.data.subscribe(() => {
-      this.version = this.stateService.getSelectedVersion(this.track) ? this.stateService.getSelectedVersion(this.track) : this.track.versions[0];
+      this.version = this.stateService.getSelectedVersion(this.track) ? this.stateService.getSelectedVersion(this.track) : this.track.versions[this.track.versions.length-1];
       this.route.queryParams.subscribe(async queryParams => {
         const versionParam = queryParams["version"];
         if (!!versionParam) {
