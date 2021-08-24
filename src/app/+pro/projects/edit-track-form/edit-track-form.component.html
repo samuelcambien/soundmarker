@@ -4,10 +4,7 @@
       <h5 class="modal-title">Edit track</h5>
     </div>
     <div class="modal-body">
-
-      <form #myForm="ngForm"
-            (ngSubmit)="onSubmit()">
-
+      <form id="EditTrackForm" #myForm="ngForm" (ngSubmit)="onSubmit()">
 
         <div class="form-row mb-10p">
           <div class="form-group col">
@@ -17,63 +14,65 @@
                    [(ngModel)]="title">
           </div>
         </div>
-          <div class="form-group">
-              <form *ngFor="let version of track?.versions; let i = index">
-              <label for="'dateOfBirth-' + i">Date of birth</label>
-              <div class="input-group">
-                <input id="'dateOfBirth-' + i" class="form-control" placeholder="yyyy-mm-dd" name="dp" ngbDatepicker #dp="ngbDatepicker">
-                <div class="input-group-append">
-                  <button class="btn btn-outline-secondary calendar" (click)="dp.toggle()" type="button"></button>
+
+        <div class="edit-track-version" *ngFor="let version of track?.versions; let i = index; trackBy: trackByFn">
+            <div class="form-row mb-10p">
+              <div class="col">
+                <div class="btn-sm btn-outline-form static">Version {{version.version_number}}
                 </div>
               </div>
-             </form>
+
+              <div class="col">
+                <div class="btn-sm btn-outline-form static">MPEG · 355KB
+                </div>
+              </div>
+              <div class="col">
+                <label class="custom noselect downloadable btn btn-sm btn-outline-form btn-settings"
+                       popoverClass="popover-class"
+                       ngbPopover="Make this track visible"
+                       [openDelay]="300"
+                       [autoClose]="false"
+                       triggers="mouseenter:mouseleave">
+                  <div class="switch">
+                    <input type="checkbox"
+                           [checked]="version.visibility==1"
+                           (click)="toggleVisibility(i)">
+                    <span class="slider round"></span>
+                  </div>
+                  <div [ngClass]="{'checked': version.visibility == 1}"
+                       class="slider-text">Visible
+                  </div>
+                </label>
+                <label class="custom noselect downloadable btn btn-sm btn-outline-form btn-settings"
+                       popoverClass="popover-class"
+                       ngbPopover="Make this track visible"
+                       [openDelay]="300"
+                       [autoClose]="false"
+                       triggers="mouseenter:mouseleave">
+                  <div class="switch">
+                    <input type="checkbox"
+                           [checked]="version.downloadable==1"
+                           (click)="toggleDownloadable(i)">
+                    <span class="slider round"></span>
+                  </div>
+                  <div [ngClass]="{'checked': version.downloadable == 1}"
+                       class="slider-text">Downloadable
+                  </div>
+                </label>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group col">
+          <textarea [id]="'notes-' + i"
+                    type="text"
+                    placeholder="Version notes"
+                    name="notes"
+                    class="sub-form"
+                    rows="2"
+                    (change)="editedVersion(i)"></textarea>
+              </div>
+            </div>
           </div>
-
-<!--        <div class="edit-track-version">-->
-<!--          <div *ngFor="let version of track?.versions; let i = index">-->
-<!--            <div class="form-row mb-10p">-->
-<!--              <div class="col">-->
-<!--                <div class="btn-sm btn-outline-form static">Version {{version.version_number}}-->
-<!--                </div>-->
-<!--              </div>-->
-
-<!--              <div class="col">-->
-<!--                <div class="btn-sm btn-outline-form static">MPEG · 355KB-->
-<!--                </div>-->
-<!--              </div>-->
-<!--              <button (click)="toggleVisibility()">lalaa</button>-->
-<!--              <div class="col">-->
-<!--                <label class="custom noselect downloadable btn btn-sm btn-outline-form btn-settings"-->
-<!--                       popoverClass="popover-class"-->
-<!--                       ngbPopover="Make this track visible"-->
-<!--                       [openDelay]="300"-->
-<!--                       [autoClose]="false"-->
-<!--                       triggers="mouseenter:mouseleave">-->
-<!--                  <div class="switch">-->
-
-<!--                    <input type="checkbox"-->
-<!--                           [checked]="version.visibility==1"-->
-<!--                           (click)="toggleVisibility(i)">-->
-<!--                    <span class="slider round"></span>-->
-<!--                  </div>-->
-<!--                  <div [ngClass]="{'unchecked': version.visibility == 0}"-->
-<!--                       class="slider-text">Visible-->
-<!--                  </div>-->
-<!--                </label>-->
-<!--              </div>-->
-<!--            </div>-->
-<!--            <div class="form-row">-->
-<!--              <div class="form-group col">-->
-<!--          <textarea [id]="'notes-' + i"-->
-<!--                    type="text"-->
-<!--                    placeholder="Version notes"-->
-<!--                    name="notes"-->
-<!--                    class="sub-form"-->
-<!--                    rows="2"></textarea>-->
-<!--              </div>-->
-<!--            </div>-->
-<!--          </div>-->
-<!--        </div>-->
 
         <div class="form-row mb-5p d-flex justify-content-end">
           <div class="col col-sm-2">

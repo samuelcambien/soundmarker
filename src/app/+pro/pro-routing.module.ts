@@ -11,6 +11,7 @@ import {PendingChangesGuard} from '../auth/pending-changes.guard';
 import {UploadGuard} from '../auth/upload/upload.guard';
 import {AuthGuard} from '../auth/auth.guard';
 import {NewversionGuard} from '../auth/newversion.guard';
+import {EditTrackFormComponent} from './projects/edit-track-form/edit-track-form.component';
 
 @NgModule({
   imports: [
