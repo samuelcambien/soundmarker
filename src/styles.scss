@@ -52,8 +52,47 @@ $notify-red: #fd8c9a;
 $purple-rain: #2a2a2a;
 */
 
+// settings
+
+.settings-modal {
+  min-width: 600px;
+}
+
+.settings-modal .nav-link {
+  color: $base-blurple !important;
+  padding: .5rem .5rem .8rem .5rem;
+  margin: 3px;
+}
+
+.settings-modal .nav-link:hover {
+  color: $base-blurple !important;
+  padding: .5rem .5rem .8rem .5rem;
+  background: $light-blurple;
+}
+
+.settings-modal .nav-link.active {
+  color: $main-background !important;
+  background: $base-blurple !important;
+}
+
+.tab-pane h3 {
+  color: $black-blurple;
+}
+
+.tab-pane p {
+  color: $gray-blurple !important;
+  max-width: 320px;
+}
+
+.form-check-label {
+  color: $black-blurple !important;
+  font-family: 'sofia-regular' !important;
+  font-size: 11pt !important;
+}
 
 // to organise
+
+
 
 .list-header .dropdown {
   position: absolute;
@@ -63,25 +102,25 @@ $purple-rain: #2a2a2a;
   background: transparent !important;
   //height: 29px;
   border: none;
-  color: #BAC1DA !important;
+  color: $gray-blurple !important;
   display: inline;
 }
 
 .xng-breadcrumb-link, .xng-breadcrumb-trail {
   font-family: 'sofia-regular' !important;
   font-size: 10pt !important;
-  color: #BAC1DA !important;
+  color: $gray-blurple !important;
   float: left;
 }
 
 .xng-breadcrumb-separator {
-  color: #BAC1DA !important;
+  color: $gray-blurple !important;
   font-family: 'sofia-regular' !important;
   font-size: 10pt !important;
 }
 
 .xng-breadcrumb-link {
-  color: #7397FF !important;
+  color: $base-blurple !important;
 }
 
 .xng-breadcrumb-link, .xng-breadcrumb-trail {
