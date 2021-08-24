@@ -41,6 +41,7 @@
 }
 
 .comment-toolbar {
+	position: relative;
 	top:0px;
 	bottom: 0px;
 	width: 38px;
@@ -74,9 +75,19 @@
 }
 
 .comment-play-button.hidden {
-	visibility: hidden;
+	display: none;
 	cursor: default;
 	pointer-events: none;
+}
+
+.comment-check {
+	width: 18px;
+	height: 18px;
+
+	margin-top: 1px;
+	transition: 0.2s;
+	-webkit-transition: 0.2s;
+	cursor: pointer;
 }
 
 .region-loop {
@@ -108,7 +119,9 @@
 
 .comment-options {
 	margin-top: -5px;
-	cursor: pointer
+	cursor: pointer;
+	position: absolute;
+	bottom: 0;
 }
 
 .comment-time {

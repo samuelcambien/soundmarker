@@ -6,9 +6,15 @@
 
     <div class="comment-toolbar">
 
+
+
       <div class="comment-play-button"
            [class.hidden]="!comment?.include_start" [class.disabled]="expired">
         <div *ngIf="isPlaying(); then stopbutton else playbutton"></div>
+      </div>
+
+      <div class="comment-check" (click) = "checkComment()" >
+        <ng-container *ngTemplateOutlet="comment.checked == 0 ? uncheckbutton : checkbutton;" ></ng-container>
       </div>
 
       <div class="region-loop" popoverClass="popover-class hide-phone" ngbPopover="Loop region"
@@ -21,9 +27,7 @@
         <ng-container *ngTemplateOutlet="loopbutton"></ng-container>
       </div>
 
-      <div class="region-loop" (click) = "checkComment()" >
-        <ng-container *ngTemplateOutlet="comment.checked == 0 ? uncheckbutton : checkbutton;" ></ng-container>
-      </div>
+
 
       <div class="comment-options" *ngIf="comment.deleteable">
         <div class="dropdown">
@@ -242,22 +246,52 @@
 </ng-template>
 
 <ng-template #checkbutton>
-<svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-     viewBox="0 0 512 512" style="enable-background:new 0 0 512 512;" xml:space="preserve">
-			<path d="M361.858,161.858L216,307.716l-65.858-65.858c-7.81-7.811-20.473-7.81-28.284,0c-7.811,7.81-7.811,20.473,0,28.284l80,80
-				C205.763,354.047,210.881,356,216,356s10.237-1.953,14.142-5.858l160-160c7.811-7.81,7.811-20.473,0-28.284
-				C382.332,154.047,369.668,154.047,361.858,161.858z"/>
-      <path d="M452,0H60C26.916,0,0,26.916,0,60v392c0,33.084,26.916,60,60,60h392c33.084,0,60-26.916,60-60V60
-				C512,26.916,485.084,0,452,0z M472,452c0,11.028-8.972,20-20,20H60c-11.028,0-20-8.972-20-20V60c0-11.028,8.972-20,20-20h392
-				c11.028,0,20,8.972,20,20V452z"/>
-</svg>
+
+
+
+
+  <svg width="18px" height="18px" viewBox="0 0 18 18" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+      <g id="Welcome" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+          <g id="intro-3" transform="translate(-78.000000, -460.000000)">
+              <g id="Group" transform="translate(33.000000, 93.000000)">
+                  <g id="Group-4">
+                      <g id="comment" transform="translate(35.000000, 251.000000)">
+                          <g id="comment-toolbar">
+                              <g id="play-button-copy-2" transform="translate(10.000000, 116.000000)">
+                                  <g id="checked">
+                                      <circle id="Oval-Copy-3" fill="#BAC1DA" fill-rule="nonzero" cx="9" cy="9" r="9"></circle>
+                                      <g id="Group-5" transform="translate(8.889087, 8.889087) rotate(-45.000000) translate(-8.889087, -8.889087) translate(5.389087, 6.889087)" stroke="#E2E7F5" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5">
+                                          <path d="M1,3 L6.47355101,3" id="Line-5"></path>
+                                          <path d="M1,3 L1,0.405550613" id="Line-6"></path>
+                                      </g>
+                                  </g>
+                              </g>
+                          </g>
+                      </g>
+                  </g>
+              </g>
+          </g>
+      </g>
+  </svg>
 </ng-template>
 
 <ng-template #uncheckbutton>
-  <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-       viewBox="0 0 512 512" style="enable-background:new 0 0 512 512;" xml:space="preserve">
-      <path d="M452,0H60C26.916,0,0,26.916,0,60v392c0,33.084,26.916,60,60,60h392c33.084,0,60-26.916,60-60V60
-				C512,26.916,485.084,0,452,0z M472,452c0,11.028-8.972,20-20,20H60c-11.028,0-20-8.972-20-20V60c0-11.028,8.972-20,20-20h392
-				c11.028,0,20,8.972,20,20V452z"/>
+
+<svg width="18px" height="18px" viewBox="0 0 18 18" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <g id="Welcome" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="intro-3" transform="translate(-78.000000, -415.000000)" fill-rule="nonzero" stroke="#BAC1DA" stroke-width="1.5">
+            <g id="Group" transform="translate(33.000000, 93.000000)">
+                <g id="Group-4">
+                    <g id="comment" transform="translate(35.000000, 251.000000)">
+                        <g id="comment-toolbar">
+                            <g id="play-button-copy" transform="translate(10.000000, 71.000000)">
+                                <circle id="Oval" cx="9" cy="9" r="8.25"></circle>
+                            </g>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
 </svg>
 </ng-template>

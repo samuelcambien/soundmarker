@@ -116,7 +116,7 @@
       </select>
     </div>
   </div>
-  <hr>
+  <!--<hr>-->
 
   <div class="player-header row">
 
@@ -327,10 +327,22 @@
 
     <div class="comments-header row">
 
-      <h4 class="comments-title unselectable">{{getMatchingComments()?.length}} comments </h4>
+      <div class="btn-group btn-group-toggle" ngbRadioGroup name="radioBasic" [(ngModel)]="commentFilter">
+        <label ngbButtonLabel class="btn-sm">
+          <input ngbButton type="radio" [value]="2"> All {{getMatchingComments()?.length}}
+        </label>
+        <label ngbButtonLabel class="btn-sm">
+          <input ngbButton type="radio" [value]="0"> Unchecked 3
+        </label>
+        <label ngbButtonLabel class="btn-sm">
+          <input ngbButton type="radio" [value]="1"> Checked 4
+        </label>
+      </div>
 
-      <h4 class="checked-comments-title hide-pro">|
-        Checked</h4>
+    <!--  <p class="comments-title unselectable">{{getMatchingComments()?.length}} comments </p>
+
+      <a class="checked-comments-title hide-pro">|
+        Checked</a>-->
 
       <div class="comment-search ml-auto hide-phone" [class.active]="search" [class.disabled]="!hasComments()"
            popoverClass="popover-class" ngbPopover="Search for words or names"
@@ -376,17 +388,7 @@
 
     </div>
 
-    <div class="btn-group btn-group-toggle" ngbRadioGroup name="radioBasic" [(ngModel)]="commentFilter">
-      <label ngbButtonLabel class="btn-primary">
-        <input ngbButton type="radio" [value]="2"> All Comments
-      </label>
-      <label ngbButtonLabel class="btn-primary">
-        <input ngbButton type="radio" [value]="0"> Unchecked
-      </label>
-      <label ngbButtonLabel class="btn-primary">
-        <input ngbButton type="radio" [value]="1"> Checked
-      </label>
-    </div>
+
 
     <app-comment-form
       *ngIf="!expired"
