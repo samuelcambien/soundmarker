@@ -68,6 +68,10 @@ export class ProTopbarComponent {
         document.getElementById("fileinputhiddentop").click();}
   }
 
+  search(){
+    this.router.navigate(['../pro/search']);
+  }
+
   openModal(modal) {
     this.modalService.open(modal);
   }
