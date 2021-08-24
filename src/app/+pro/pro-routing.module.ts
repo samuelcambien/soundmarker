@@ -11,6 +11,7 @@ import {PendingChangesGuard} from '../auth/pending-changes.guard';
 import {UploadGuard} from '../auth/upload/upload.guard';
 import {AuthGuard} from '../auth/auth.guard';
 import {NewversionGuard} from '../auth/newversion.guard';
+import {ProSearchResultsComponent} from './pro-search-results/pro-search-results.component';
 
 @NgModule({
   imports: [
@@ -97,6 +98,11 @@ import {NewversionGuard} from '../auth/newversion.guard';
           {
             path: 'transfers',
             component: ProBoardComponent,
+          },
+          {
+            path: 'search',
+            component: ProSearchResultsComponent,
+            data: { breadcrumb: 'Search Results' },
           }
         ]
       },

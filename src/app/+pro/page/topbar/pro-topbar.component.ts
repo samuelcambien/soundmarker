@@ -65,4 +65,8 @@ export class ProTopbarComponent {
         this.stateService.setVersionUpload(false);
         document.getElementById("fileinputhiddentop").click();}
   }
+
+  search(){
+    this.router.navigate(['../pro/search']);
+  }
 }
