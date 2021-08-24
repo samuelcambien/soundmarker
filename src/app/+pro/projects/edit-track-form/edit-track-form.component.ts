@@ -1,6 +1,8 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {Track} from "../../../model/track";
 import {TrackService} from "../../../services/track.service";
+import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {Observable} from 'rxjs';
 
 @Component({
   selector: 'app-edit-track-form',
@@ -18,15 +20,16 @@ export class EditTrackFormComponent implements OnInit {
   @Input()
   track: Track;
 
+  changedVersions = [];
+
   @Output() close = new EventEmitter();
   @Output() save = new EventEmitter();
 
   title: string;
-  visible: boolean;
+  visible;
 
   ngOnInit() {
-    this.title = this.track.title;
-    this.visible = this.track.visible;
+      this.title = this.track.title;
   }
 
   async onSubmit() {
@@ -38,7 +41,23 @@ export class EditTrackFormComponent implements OnInit {
     this.save.emit();
   }
 
+  trackByFn(index, item) {
+    return index;  }
+
   toggleVisibility(i){
+    console.log('visi');
+    this.editedVersion(i);
     return;
+  }
+
+  toggleDownloadable(i){
+    console.log('down');
+    this.editedVersion(i);
+    return;
+  }
+
+  editedVersion(i){
+    this.changedVersions.push(i);
+    this.changedVersions = this.changedVersions.filter((el, i, a) => i === a.indexOf(el))
   }
 }
