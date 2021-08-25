@@ -99,6 +99,11 @@ import {EditTrackFormComponent} from './projects/edit-track-form/edit-track-form
           {
             path: 'transfers',
             component: ProBoardComponent,
+          },
+          {
+            path: 'search',
+            component: ProSearchResultsComponent,
+            data: { breadcrumb: 'Search' },
           }
         ]
       },

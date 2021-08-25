@@ -1,6 +1,84 @@
 <app-pro-board-card id="pro">
   <ng-container class="title">Search results for "sweet"</ng-container>
   <ng-container class="body">
+    <div class="card-body">
+
+    <div class="btn-group btn-group-toggle" ngbRadioGroup name="radioBasic" [(ngModel)]="commentFilter">
+      <label ngbButtonLabel class="btn-sm">
+        <input ngbButton type="radio" [value]="0"> All 5
+      </label>
+      <label ngbButtonLabel class="btn-sm">
+        <input ngbButton type="radio" [value]="1"> Projects 2
+      </label>
+      <label ngbButtonLabel class="btn-sm">
+        <input ngbButton type="radio" [value]="2"> Tracks 1
+      </label>
+      <label ngbButtonLabel class="btn-sm">
+        <input ngbButton type="radio" [value]="3"> Communication 2
+      </label>
+    </div>
+
+    </div>
+
+    <h3 class="search-cat-title">Projects</h3>
+
+      <div class="list">
+          <div class="track-bar search-result" ng-reflect-router-link="e81d3f8d-f76f-4ae1-9e06-ff2799">
+            <div class="list-header row">
+              <div class="title">
+                <h3><mark>Sweet</mark>ener</h3>
+                <p>2 tracks · 0 new comments</p>
+              </div>
+            </div>
+          </div>
+          <div class="track-bar search-result" ng-reflect-router-link="e81d3f8d-f76f-4ae1-9e06-ff2799">
+            <div class="list-header row">
+              <div class="title">
+                <h3><mark>Sweet</mark> Baby Jane</h3>
+                <p>2 tracks · 0 new comments</p>
+              </div>
+            </div>
+          </div>
+    </div>
+
+    <h3 class="search-cat-title">Tracks</h3>
+
+      <div class="list">
+          <div class="track-bar search-result" ng-reflect-router-link="e81d3f8d-f76f-4ae1-9e06-ff2799">
+            <div class="list-header row">
+              <div class="title">
+                <h3><mark>Sweet</mark> Home Alabama</h3>
+                <p>4 versions · 0 new comments</p>
+              </div>
+            </div>
+          </div>
+
+    </div>
+
+    <h3 class="search-cat-title">Communication</h3>
+
+      <div class="list">
+          <div class="track-bar search-result" ng-reflect-router-link="e81d3f8d-f76f-4ae1-9e06-ff2799">
+            <div class="list-header row">
+              <div class="title">
+                <h3>Dieter Boels</h3>
+                <h4>..sounds like a <mark>sweet</mark> bass in this..</h4>
+                <p>For John Hurt · Version 3</p>
+              </div>
+            </div>
+          </div>
+          <div class="track-bar search-result" ng-reflect-router-link="e81d3f8d-f76f-4ae1-9e06-ff2799">
+            <div class="list-header row">
+              <div class="title">
+                <h3>John <mark>Sweet</mark></h3>
+                <h4>Maybe you can remove those little..</h4>
+                <p>For John Hurt · Version 2</p>
+              </div>
+            </div>
+          </div>
+    </div>
+
+
 
 
 
