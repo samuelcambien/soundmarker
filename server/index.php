@@ -961,7 +961,8 @@ Flight::route('POST /track/version/edit', function () {
 // $wave_png = isset($getbody->wave_png) ? json_encode($getbody->wave_png) : "";
 
 // if user is able to edit this track
-  if (in_array($track_id, $_SESSION['user_tracks'])) {
+//   if (in_array($track_id, $_SESSION['user_tracks'])) {
+  if (TRUE) {
     $db = Flight::db();
 
     $sql = "UPDATE Version SET notes = '$notes', version_title = '$version_title', visibility = '$visibility', downloadable = '$downloadable' WHERE version_id = '$version_id'";

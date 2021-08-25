@@ -11,7 +11,7 @@ import {Version} from "../../../model/version";
   templateUrl: './pro-sidebar.component.html',
   styleUrls: ['./pro-sidebar.component.scss']
 })
-export class ProSidebarComponent {
+export class ProSidebarComponent implements OnInit{
 
   constructor(
     protected stateService: StateService,
@@ -19,6 +19,12 @@ export class ProSidebarComponent {
     protected player: Player,
     protected router: Router,
   ) { }
+
+  trackRoute ;
+
+  ngOnInit(){
+    this.stateService.getSidebarPlayer().subscribe((playerRoute)=> this.trackRoute = playerRoute)
+  }
 
   get toggled(): boolean {
     return this.stateService.sidebarToggled;
@@ -37,6 +43,7 @@ export class ProSidebarComponent {
   }
 
   getRouterLink() {
-    return 'project/' + this.track.project.project_hash + '/track/' + this.track.track_id;
+    // console.log(this);
+    return this.trackRoute
   }
 }

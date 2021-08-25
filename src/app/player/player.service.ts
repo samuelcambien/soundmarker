@@ -49,8 +49,8 @@ export class Player {
         return;
       }
 
-      if (this.version)
-        await this.stop();
+      // if (this.version){}
+      //   await this.stop();
 
       this.version = version;
       const file: File = this.getStreamFile();
@@ -69,6 +69,7 @@ export class Player {
   }
 
   async play(version?: Version, startTime?: number) {
+    this.stateService.setSidebarPlayer('projects/' + this.stateService.getActiveProject().value.project_hash + '/track/' + this.stateService.getActiveTrack().value.track_id);
     this.loading = this.version;
     if (version) {
       await this.load(version);
@@ -103,7 +104,6 @@ export class Player {
 
   async stop() {
     this.pause();
-
     await this.seekTo(this.version, 0);
   }
 

@@ -102,4 +102,14 @@ export class StateService {
   public setAlert(alert: string) {
     this.alert.next(alert);
   }
+
+  ///////////////////// Sidebar player routerlink ///////////////////////////////////////////////////////////
+  private sidebarPlayer: BehaviorSubject<string> = new BehaviorSubject<string>(null);
+
+  public getSidebarPlayer(): BehaviorSubject<string> {
+    return this.sidebarPlayer;
+  }
+  public setSidebarPlayer(alert: string) {
+    this.sidebarPlayer.next(alert);
+  }
 }
