@@ -76,6 +76,15 @@ export class TrackService {
     )
   }
 
+  async editVersion(version: Version, downloadable: boolean, visibility: string, notes: string) {
+    await RestCall.editVersion(
+      version.version_id,
+      downloadable ? "1" : "0",
+      visibility,
+      notes
+    )
+  }
+
   async delete(track: Track) {
     await RestCall.deleteTrack(track.track_id);
   }

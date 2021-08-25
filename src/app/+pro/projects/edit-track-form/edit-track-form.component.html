@@ -14,6 +14,24 @@
                    [(ngModel)]="title">
           </div>
         </div>
+        <div class="col">
+          <label class="custom noselect downloadable btn btn-sm btn-outline-form btn-settings"
+                 popoverClass="popover-class"
+                 ngbPopover="Recepient can see this track"
+                 [openDelay]="300"
+                 [autoClose]="false"
+                 triggers="mouseenter:mouseleave">
+            <div class="switch">
+              <input type="checkbox"
+                     name = "visible"
+                     [(ngModel)]="visible">
+              <span class="slider round"></span>
+            </div>
+            <div [ngClass]="{'checked': visible}"
+                 class="slider-text">Visible
+            </div>
+          </label>
+        </div>
 
         <div class="edit-track-version" *ngFor="let version of track?.versions; let i = index; trackBy: trackByFn">
             <div class="form-row mb-10p">
@@ -23,13 +41,13 @@
               </div>
 
               <div class="col">
-                <div class="btn-sm btn-outline-form static">MPEG ·{{getFileSize(version.files[0])}}
+                <div class="btn-sm btn-outline-form static"> {{version.files[0] ? version.files[0].extension.toUpperCase() : ''}} ·{{getFileSize(version.files[0])}}
                 </div>
               </div>
               <div class="col">
                 <label class="custom noselect downloadable btn btn-sm btn-outline-form btn-settings"
                        popoverClass="popover-class"
-                       ngbPopover="Make this track visible"
+                       ngbPopover="Recepient can see this version"
                        [openDelay]="300"
                        [autoClose]="false"
                        triggers="mouseenter:mouseleave">
@@ -43,9 +61,11 @@
                        class="slider-text">Visible
                   </div>
                 </label>
+              </div>
+                <div class="col">
                 <label class="custom noselect downloadable btn btn-sm btn-outline-form btn-settings"
                        popoverClass="popover-class"
-                       ngbPopover="Make this track visible"
+                       ngbPopover="Recepient can download the original file"
                        [openDelay]="300"
                        [autoClose]="false"
                        triggers="mouseenter:mouseleave">
@@ -56,20 +76,20 @@
                     <span class="slider round"></span>
                   </div>
                   <div [ngClass]="{'checked': version.downloadable}"
-                       class="slider-text">Downloadable
+                       class="slider-text">Download
                   </div>
                 </label>
-              </div>
+                </div>
             </div>
             <div class="form-row">
               <div class="form-group col">
-          <textarea [id]="'notes-' + i"
+          <textarea id = "'notes' + i"
                     type="text"
                     placeholder="Version notes"
                     name="notes"
                     class="sub-form"
                     rows="2"
-                    (change)="editedVersion(i)"></textarea>
+                    (change)="editedVersion(i, $event.target.value)">{{version.notes}}</textarea>
               </div>
             </div>
           </div>

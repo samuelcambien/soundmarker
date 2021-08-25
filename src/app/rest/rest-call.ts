@@ -46,6 +46,15 @@ export class RestCall {
     })
   }
 
+  public static editVersion(versionId: string, downloadable: string, visibility: string, notes: string) {
+    return Request.post(Endpoints.VERSION_EDIT, {
+      version_id: versionId,
+      downloadable: downloadable,
+      visibility: visibility,
+      notes: notes
+    })
+  }
+
   static deleteTrack(trackId: string) {
     return Request.post(Endpoints.TRACK_DELETE, {
       track_id: trackId,
@@ -243,6 +252,8 @@ export class Endpoints {
   public static VERSION: string = Endpoints.TRACK + "/version";
 
   public static VERSION_NEW: string = Endpoints.VERSION;
+
+  public static VERSION_EDIT: string = Endpoints.VERSION + "/edit";
 
   public static COMMENTS: string = Endpoints.TRACK + "/version/comments";
 

@@ -27,11 +27,11 @@ export class EditTrackFormComponent implements OnInit {
   @Output() save = new EventEmitter();
 
   title: string;
-  visible;
+  visible = false;
 
   ngOnInit() {
       this.title = this.track.title;
-      console.log(this.track.versions[0]);
+      this.visible = this.track.visible;
   }
 
   async onSubmit() {
@@ -40,6 +40,11 @@ export class EditTrackFormComponent implements OnInit {
       this.title,
       this.visible,
     );
+    await this.changedVersions.forEach(item=>{
+      let version = this.track.versions[item];
+      this.trackService.editVersion(version, version.downloadable, version.visibility, version.notes);
+    }
+    )
     this.save.emit();
   }
 
@@ -58,13 +63,13 @@ export class EditTrackFormComponent implements OnInit {
     return;
   }
 
-  editedVersion(i){
+  editedVersion(i, new_notes?){
+    this.track.versions[i].notes = new_notes ? new_notes : this.track.versions[i].notes;
     this.changedVersions.push(i);
     this.changedVersions = this.changedVersions.filter((el, i, a) => i === a.indexOf(el))
   }
 
   getFileSize(file) {
-    // console.log(file.file_size);
     if(file) {
       return Utils.getSizeHumanized(file.file_size);
     }
