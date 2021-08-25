@@ -52,6 +52,32 @@ $notify-red: #fd8c9a;
 $purple-rain: #2a2a2a;
 */
 
+//search
+
+.search-cat-title {
+  color: $black-blurple;
+  margin-left: 20px;
+  margin-bottom: -10px !important;
+}
+
+.track-bar.search-result {
+  // background: $lightest-blurple;
+  border: 1px solid $light-blurple;
+  margin: 10px;
+}
+
+.track-bar.search-result .list-header {
+  max-height: none;
+}
+
+.track-bar.search-result h4 {
+  color: $black-blurple !important;
+  font-family: 'sofia-regular' !important;
+  font-size: 11pt !important;
+  margin-bottom: 4px;
+  padding-top: 0px;
+}
+
 // settings
 
 .settings-modal {
@@ -91,6 +117,8 @@ $purple-rain: #2a2a2a;
 }
 
 // to organise
+
+
 
 .btn-sm:focus {
    outline: 0 !important;

@@ -102,7 +102,7 @@ import {ProSearchResultsComponent} from './pro-search-results/pro-search-results
           {
             path: 'search',
             component: ProSearchResultsComponent,
-            data: { breadcrumb: 'Search Results' },
+            data: { breadcrumb: 'Search' },
           }
         ]
       },
