@@ -1,0 +1,146 @@
+<div id="sm">
+   <div id="pro">
+      <div class="modal-header shadow-topbar">
+         <h5 class="modal-title">Settings</h5>
+      </div>
+      <div class="modal-body">
+         <div class="row settings-window">
+            <div class="col-3">
+               <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                  <a class="nav-link btn-sm active" id="v-pills-upload-tab" data-toggle="pill" href="#v-pills-upload" role="tab" aria-controls="v-pills-upload" aria-selected="true">Upload</a>
+                  <a class="nav-link btn-sm" id="v-pills-link-tab" data-toggle="pill" href="#v-pills-link" role="tab" aria-controls="v-pills-link" aria-selected="false">Public links</a>
+                  <a class="nav-link btn-sm" id="v-pills-notifications-tab" data-toggle="pill" href="#v-pills-notifications" role="tab" aria-controls="v-pills-notifications" aria-selected="false">Notifications</a>
+                  <a class="nav-link btn-sm" id="v-pills-sidebar-tab" data-toggle="pill" href="#v-pills-sidebar" role="tab" aria-controls="v-pills-sidebar" aria-selected="false">Sidebar</a>
+               </div>
+            </div>
+            <div class="col-9">
+               <div class="tab-content" id="v-pills-tabContent">
+
+
+
+
+
+                  <div class="tab-pane fade show active" id="v-pills-upload" role="tabpanel" aria-labelledby="v-pills-upload-tab">
+
+
+                     <h3>Streaming quality</h3>
+                     <p>Set your default preference. You still have the ability to set the streaming quality per project.</p>
+
+                  <div class="form-check">
+                     <input class="form-check-input" type="radio" name="s-u-streaming" id="s-u-streaming1" value="option1" checked>
+                     <label class="form-check-label" for="s-u-streaming1">Lossy</label>
+                  </div>
+
+                  <div class="form-check">
+                     <input class="form-check-input" type="radio" name="s-u-streaming" id="s-u-streaming2" value="option2">
+                     <label class="form-check-label" for="s-u-streaming2">Lossless</label>
+                  </div>
+
+                <hr>
+
+
+
+                  <h3>Allow downloading</h3>
+                  <p>Set your default preference. You still have the ability to set the downloadability per version of a track.</p>
+
+               <div class="form-check">
+                  <input class="form-check-input" type="radio" name="s-u-download" id="s-u-download1" value="option1" checked>
+                  <label class="form-check-label" for="s-u-download1">Yes</label>
+               </div>
+               <div class="form-check">
+                  <input class="form-check-input" type="radio" name="s-u-download" id="s-u-download2" value="option2">
+                  <label class="form-check-label" for="s-u-download2">No</label>
+               </div>
+
+
+               </div>
+
+
+               <div class="tab-pane fade " id="v-pills-link" role="tabpanel" aria-labelledby="v-pills-link-tab">
+
+
+
+
+              <h3>Expiration time</h3>
+              <p>Set your default preference. You still have the ability to set a custom period per project.</p>
+
+
+
+           <div class="form-check">
+              <input class="form-check-input" type="radio" name="s-u-expire" id="s-u-expire1" value="option1" checked>
+              <label class="form-check-label" for="s-u-expire1">One week</label>
+           </div>
+           <div class="form-check">
+              <input class="form-check-input" type="radio" name="s-u-expire" id="s-u-expire2" value="option2" checked>
+              <label class="form-check-label" for="s-u-expire2">One month</label>
+           </div>
+           <div class="form-check">
+              <input class="form-check-input" type="radio" name="s-u-expire" id="s-u-expire3" value="option3">
+              <label class="form-check-label inline" for="s-u-expire3">Other, <input type="number" class="sub-form" id="expiry-days" aria-describedby="inputNumber">
+days</label>
+           </div>
+
+
+
+            </div>
+
+
+
+                  <div class="tab-pane fade" id="v-pills-notifications" role="tabpanel" aria-labelledby="v-pills-notifications-tab">
+                     <h3>Notify me about</h3>
+                     <div class="form-check">
+                        <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1" value="option1" checked>
+                        <label class="form-check-label" for="exampleRadios1"> Comments & replies </label>
+                     </div>
+                     <div class="form-check">
+                        <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios2" value="option2">
+                        <label class="form-check-label" for="exampleRadios2"> Comments only </label>
+                     </div>
+                     <div class="form-check">
+                        <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios3" value="option3">
+                        <label class="form-check-label" for="exampleRadios3"> Nothing </label>
+                     </div>
+                     <hr>
+                     <h3>Email notifications</h3>
+                     <div class="form-check">
+                        <input class="form-check-input" type="radio" name="s-email" id="s-email1" value="option1" checked>
+                        <label class="form-check-label" for="s-email"> All updates </label>
+                     </div>
+                     <div class="form-check">
+                        <input class="form-check-input" type="radio" name="s-email" id="s-email2" value="option2">
+                        <label class="form-check-label" for="es-email2"> None </label>
+                     </div>
+                  </div>
+
+
+                  <div class="tab-pane fade" id="v-pills-sidebar" role="tabpanel" aria-labelledby="v-pills-sidebar-tab">
+                    <h3>Show in the sidebar:</h3>
+                    <div class="form-check">
+                      <input class="form-check-input" type="checkbox" value="" id="defaultCheck1" checked>
+                      <label class="form-check-label" for="defaultCheck1">
+                        Recent projects
+                      </label>
+                    </div>
+                    <div class="form-check">
+                      <input class="form-check-input" type="checkbox" value="" id="defaultCheck2" disabled>
+                      <label class="form-check-label" for="defaultCheck2">
+                        Active transfers
+                      </label>
+                    </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+         <form #myForm="ngForm" (ngSubmit)="onSubmit()">
+         <div class="form-row mb-5p d-flex justify-content-end">
+            <div class="col col-sm-2">
+               <button type="button" class="btn btn-sm btn-outline-form free-upload" (click)="close.emit()"> Cancel </button>
+            </div>
+            <div class="col col-sm-3">
+               <button type="submit" [disabled]="!myForm.valid" class="btn btn-sm btn-primary free-upload"> Update settings </button>
+            </div>
+         </div>
+         </form>
+      </div>
+   </div>
+</div>

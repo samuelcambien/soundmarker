@@ -92,7 +92,7 @@
               <h5 class="dropdown-header">Michiel Mutsaerts</h5>
               <h6 class="dropdown-header">{{(currentUser$ | async).email}}</h6>
               <a class="dropdown-item" href="#">Profile</a>
-              <a class="dropdown-item" href="#">Settings</a>
+              <a class="dropdown-item" (click)="openModal(settingsModal)">Settings</a>
               <div class="dropdown-divider"></div>
               <a class="dropdown-item" (click)="logout()">Sign out</a>
               <div class="dropdown-divider"></div>
@@ -152,6 +152,12 @@
   </svg>
 </ng-template>
 
+<ng-template #settingsModal
+             let-modal>
+  <div class="modal-content settings-modal shadow-pro-box">
+    <app-pro-settings></app-pro-settings>
+  </div>
+</ng-template>
 
 
 <input style="display: none" #fileinputhiddentop

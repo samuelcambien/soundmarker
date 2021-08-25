@@ -1,14 +1,14 @@
 <app-pro-board-card class="collapsable">
 
   <ng-container class="title">Recent projects
-    <a class="ml-auto float-right" data-toggle="collapse" href="#collapseRecent" role="button" aria-expanded="false" aria-controls="collapseExample">
+    <a class="ml-auto float-right" data-toggle="collapse" href="#collapseRecent" role="button" aria-expanded="true" aria-controls="collapseExample">
         Show
     </a>
   </ng-container>
 
   <ng-container class="body"
                 id="sm">
-                <div class="collapse" id="collapseRecent">
+                <div class="collapse show" id="collapseRecent">
     <div class="list">
       <div *ngFor="let project of user_project_list; index as index">
         <div routerLink="{{project?.hash}}"
@@ -26,7 +26,7 @@
                 <ng-container *ngTemplateOutlet="icon_more_dots"></ng-container>
               </a>
               <div ngbDropdown
-              
+
                    placement="bottom-right"
                    #myDrop="ngbDropdown">
                 <div class="dropdown-menu pro-dropdown dropdown-menu-right shadow-pro-box board-box-dropdown"
