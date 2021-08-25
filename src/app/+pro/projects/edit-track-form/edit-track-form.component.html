@@ -71,11 +71,11 @@
                        triggers="mouseenter:mouseleave">
                   <div class="switch">
                     <input type="checkbox"
-                           [ngClass]="{'checked': version.downloadable}"
+                           [checked]="version.downloadable == true"
                            (click)="toggleDownloadable(i)">
                     <span class="slider round"></span>
                   </div>
-                  <div [ngClass]="{'checked': version.downloadable}"
+                  <div [ngClass]="{'checked': version.downloadable == true}"
                        class="slider-text">Download
                   </div>
                 </label>

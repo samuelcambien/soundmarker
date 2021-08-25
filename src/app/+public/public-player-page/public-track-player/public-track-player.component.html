@@ -163,7 +163,7 @@
         </ng-template>
       </ng-select>
 
-      <div *ngIf="version?.downloadable && !expired" class="top-icon cloud-icon" id="cloud-icon"
+      <div *ngIf="(version?.downloadable && !expired) || isAdminRoute()" class="top-icon cloud-icon" id="cloud-icon"
            (click)="download()" popoverClass="popover-class" ngbPopover="Download"
            [openDelay]="300" [closeDelay]="300" triggers="mouseenter:mouseleave" placement="bottom">
            <svg width="22px" height="18px" viewBox="0 0 22 18" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
