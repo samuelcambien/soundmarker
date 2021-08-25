@@ -23,7 +23,7 @@
               </div>
 
               <div class="col">
-                <div class="btn-sm btn-outline-form static">MPEG · 355KB
+                <div class="btn-sm btn-outline-form static">MPEG ·{{getFileSize(version.files[0])}}
                 </div>
               </div>
               <div class="col">
@@ -51,11 +51,11 @@
                        triggers="mouseenter:mouseleave">
                   <div class="switch">
                     <input type="checkbox"
-                           [checked]="version.downloadable==1"
+                           [ngClass]="{'checked': version.downloadable}"
                            (click)="toggleDownloadable(i)">
                     <span class="slider round"></span>
                   </div>
-                  <div [ngClass]="{'checked': version.downloadable == 1}"
+                  <div [ngClass]="{'checked': version.downloadable}"
                        class="slider-text">Downloadable
                   </div>
                 </label>

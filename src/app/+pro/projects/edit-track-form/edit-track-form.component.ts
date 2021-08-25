@@ -3,6 +3,7 @@ import {Track} from "../../../model/track";
 import {TrackService} from "../../../services/track.service";
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {Observable} from 'rxjs';
+import {Utils} from '../../../app.component';
 
 @Component({
   selector: 'app-edit-track-form',
@@ -30,6 +31,7 @@ export class EditTrackFormComponent implements OnInit {
 
   ngOnInit() {
       this.title = this.track.title;
+      console.log(this.track.versions[0]);
   }
 
   async onSubmit() {
@@ -45,13 +47,13 @@ export class EditTrackFormComponent implements OnInit {
     return index;  }
 
   toggleVisibility(i){
-    console.log('visi');
+    this.track.versions[i].visibility = Math.abs(this.track.versions[i].visibility-1);
     this.editedVersion(i);
     return;
   }
 
   toggleDownloadable(i){
-    console.log('down');
+    this.track.versions[i].downloadable = !this.track.versions[i].downloadable;
     this.editedVersion(i);
     return;
   }
@@ -59,5 +61,13 @@ export class EditTrackFormComponent implements OnInit {
   editedVersion(i){
     this.changedVersions.push(i);
     this.changedVersions = this.changedVersions.filter((el, i, a) => i === a.indexOf(el))
+  }
+
+  getFileSize(file) {
+    // console.log(file.file_size);
+    if(file) {
+      return Utils.getSizeHumanized(file.file_size);
+    }
+    else return '';
   }
 }
