@@ -31,6 +31,8 @@ export class ProBoardProjectsComponent implements OnInit {
     this.user_project_list[index] = await this.projectService.getProject(
       this.user_project_list[index].project_hash
     );
+    console.log(this.user_project_list);
+    this.cdr.detectChanges();
   }
 
   removeProject(project: Project, index: number){
