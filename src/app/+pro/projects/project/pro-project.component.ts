@@ -58,5 +58,6 @@ export class ProProjectComponent implements OnInit {
     this.project = await this.projectService.getProject(
       this.project.project_hash
     );
+    this.cdr.detectChanges();
   }
 }

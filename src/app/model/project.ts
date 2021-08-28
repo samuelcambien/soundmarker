@@ -12,5 +12,5 @@ export class Project {
   title: string;
   new_comments: number;
 
-  losless: boolean;
+  lossless: boolean;
 }

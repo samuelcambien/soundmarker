@@ -49,7 +49,7 @@ export class ProjectService {
       project.tracks = await Promise.all(
         project.tracks.map(async track => await this.trackService.getTrack(track.track_id))
       );
-      project.losless = response.stream_type != "0";
+      project.lossless = response.stream_type != "0";
     }
     return project;
   }

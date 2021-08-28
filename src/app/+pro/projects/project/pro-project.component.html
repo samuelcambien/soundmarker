@@ -20,7 +20,7 @@
     <div class="modal-content shadow-pro-box">
       <app-edit-project-form [project]="project"
                              (close)="modal.close();"
-                             (save)="modal.close();"></app-edit-project-form>
+                             (save)="modal.close(); reloadProject()"></app-edit-project-form>
     </div>
   </ng-template>
 
