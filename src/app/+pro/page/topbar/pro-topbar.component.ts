@@ -58,7 +58,8 @@ export class ProTopbarComponent {
         this.uploader.getOpenSMFileUploader().resetSMFileUploader();
         this.stateService.setVersionUpload(false);
         document.getElementById("fileinputhiddentop").click();}
-      else {this.router.navigate(['../pro/upload'], {
+      else {
+        this.router.navigate(['../pro/upload'], {
         relativeTo: this.activatedRoute,
         skipLocationChange: false});
       }

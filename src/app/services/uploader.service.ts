@@ -1,4 +1,4 @@
-import {Injectable} from '@angular/core';
+import {ChangeDetectorRef, Injectable} from '@angular/core';
 import {FileUploader} from '../tools/ng2-file-upload';
 import {Utils} from '../app.component';
 import {Router} from '@angular/router';
@@ -54,6 +54,7 @@ export class Uploader {
       });
       this.getOpenSMFileUploader().setStatus(Status.UPLOAD_FORM);
       this.getOpenSMFileUploader().addTitles(items);
+
     }
   }
 
@@ -84,6 +85,7 @@ export class SMFileUploader {
   notes: string;
   email_to: string[];
   project_title;
+  project_id;
 
   // expirations = [{id: '1week', label: 'Week', heading: 'Expire*'}, {id: '1month', label: 'Month', heading: 'Expire*'}];
   expiration="1week";
@@ -212,6 +214,7 @@ export class SMFileUploader {
     this.titles = [];
     this.notes = "";
     this.project_title = "";
+    this.project_id = null;
     this.email_to = [];
   }
 
@@ -230,6 +233,14 @@ export class SMFileUploader {
 
   setProjectTitle(project_title: string){
     this.project_title = project_title;
+  }
+
+  setProjectId(project_id){
+    this.project_id = project_id;
+  }
+
+  getProjectId(){
+    return this.project_id;
   }
 
   getProjectNotes(){

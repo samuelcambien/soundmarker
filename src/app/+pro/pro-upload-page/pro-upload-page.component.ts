@@ -33,7 +33,7 @@ import {Location} from '@angular/common';
   selector: 'app-pro-upload-page',
   templateUrl: './pro-upload-page.component.html',
   styleUrls: ['./pro-upload-page.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.Default
 })
 export class ProUploadPageComponent implements OnInit, ComponentCanDeactivate {
 
@@ -41,12 +41,11 @@ export class ProUploadPageComponent implements OnInit, ComponentCanDeactivate {
   user_project_list = [];
   selected_existing_tracks = [];
   project_tracks_list = [];
-  project_id;
   smUploader: SMFileUploader;
   preventNavigation: boolean;
 
   get createNewProject() {
-    return !this.project_id;
+    return !this.uploader.getOpenSMFileUploader().project_id;
   }
 
   @ViewChild('waveform', {static: false}) waveform: ElementRef;
@@ -77,8 +76,8 @@ export class ProUploadPageComponent implements OnInit, ComponentCanDeactivate {
     if (this.stateService.getVersionUpload().getValue()) {
         this.preventNavigation = true;
         this.trackId = this.activatedRoute.snapshot.queryParams.newTrackId;
-        this.project_id = this.stateService.getActiveProject().getValue().project_id;
-        await this.getProjectInfo(this.project_id);
+        this.uploader.getOpenSMFileUploader().setProjectId(this.stateService.getActiveProject().getValue().project_id);
+        await this.getProjectInfo(this.uploader.getOpenSMFileUploader().getProjectId());
     }
   }
 
@@ -109,11 +108,12 @@ export class ProUploadPageComponent implements OnInit, ComponentCanDeactivate {
       this.breadcrumbService.set('/track/:id', this.getTrackTitle(this.trackId));
       this.breadcrumbService.set('/track/:id/newversion' , 'New version upload');
     }
+    this.cdr.detectChanges();
   }
 
   newProjectSelect(){
     this.smUploader.setProjectTitle(null);
-    this.project_id = null;
+    this.uploader.getOpenSMFileUploader().setProjectId(null);
     this.cdr.detectChanges();
   }
 
@@ -166,7 +166,7 @@ export class ProUploadPageComponent implements OnInit, ComponentCanDeactivate {
         this.router.navigate(["pro/dashboard"] );
       }
       let smUploadingUploader = this.uploader.getOpenSMFileUploader();
-      let uploadingProjectId = this.project_id;
+      let uploadingProjectId = this.uploader.getOpenSMFileUploader().project_id;
       let uploading_selected_existing_tracks = this.selected_existing_tracks;
       let uploadingCreateNewProject = this.createNewProject;
       let notes = smUploadingUploader.fileUploader.queue.map(
