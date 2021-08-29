@@ -7,13 +7,13 @@
       <form id="EditTrackForm" #myForm="ngForm" (ngSubmit)="onSubmit()">
 
         <div class="form-row mb-10p">
-          <div class="form-group col">
-            <input class="form-control form-control-sm"
+          <div class="form-group col-sm-9">
+            <input class="sub-form"
                    placeholder="Track title"
                    name="tracktitle"
                    [(ngModel)]="title">
           </div>
-        </div>
+
         <div class="col">
           <label class="custom noselect downloadable btn btn-sm btn-outline-form btn-settings"
                  popoverClass="popover-class"
@@ -32,35 +32,18 @@
             </div>
           </label>
         </div>
+        </div>
 
         <div class="edit-track-version" *ngFor="let version of track?.versions; let i = index; trackBy: trackByFn">
             <div class="form-row mb-10p">
-              <div class="col">
-                <div class="btn-sm btn-outline-form static">Version {{version.version_number}}
+              <div class="col-sm-2">
+                <div class="btn-sm btn-outline-form static">V{{version.version_number}}
                 </div>
               </div>
 
               <div class="col">
                 <div class="btn-sm btn-outline-form static"> {{version.files[0] ? version.files[0].extension.toUpperCase() : ''}} ·{{getFileSize(version.files[0])}}
                 </div>
-              </div>
-              <div class="col">
-                <label class="custom noselect downloadable btn btn-sm btn-outline-form btn-settings"
-                       popoverClass="popover-class"
-                       ngbPopover="Recepient can see this version"
-                       [openDelay]="300"
-                       [autoClose]="false"
-                       triggers="mouseenter:mouseleave">
-                  <div class="switch">
-                    <input type="checkbox"
-                           [checked]="version.visibility==1"
-                           (click)="toggleVisibility(i)">
-                    <span class="slider round"></span>
-                  </div>
-                  <div [ngClass]="{'checked': version.visibility == 1}"
-                       class="slider-text">Visible
-                  </div>
-                </label>
               </div>
                 <div class="col">
                 <label class="custom noselect downloadable btn btn-sm btn-outline-form btn-settings"
@@ -79,6 +62,24 @@
                        class="slider-text">Download
                   </div>
                 </label>
+                </div>
+                <div class="col">
+                  <label class="custom noselect downloadable btn btn-sm btn-outline-form btn-settings"
+                         popoverClass="popover-class"
+                         ngbPopover="Recepient can see this version"
+                         [openDelay]="300"
+                         [autoClose]="false"
+                         triggers="mouseenter:mouseleave">
+                    <div class="switch">
+                      <input type="checkbox"
+                             [checked]="version.visibility==1"
+                             (click)="toggleVisibility(i)">
+                      <span class="slider round"></span>
+                    </div>
+                    <div [ngClass]="{'checked': version.visibility == 1}"
+                         class="slider-text">Visible
+                    </div>
+                  </label>
                 </div>
             </div>
             <div class="form-row">
