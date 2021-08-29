@@ -10,7 +10,7 @@
                 id="sm">
                 <div class="collapse show" id="collapseRecent">
     <div class="list">
-      <div *ngFor="let project of user_project_list; index as index">
+      <div class="list-item" *ngFor="let project of user_project_list; index as index">
         <div routerLink="{{project.project_hash}}"
              class="track-bar">
           <div class="list-header row">

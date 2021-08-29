@@ -787,6 +787,10 @@ label.btn-outline-form:active {
 	margin: 10px;
 }
 
+.list-item:last-of-type hr {
+  display: none !important;
+}
+
 .list-header {
 	margin-left: 0px;
 	margin-right: 0px;
