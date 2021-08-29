@@ -52,8 +52,9 @@
 
   <ng-container class="body">
     <div class="list">
-      <div *ngFor="let track of project?.tracks; index as index"
-           class="track-bar"
+      <div class="list-item" *ngFor="let track of project?.tracks; index as index">
+
+           <div class="track-bar"
            routerLink="track/{{track.track_id}}">
         <div class="list-header row">
           <div class="title">
@@ -118,6 +119,7 @@
             </div>
           </ng-template>
 
+          </div>
         </div>
         <hr *ngIf="!last"
             class="preview-hr">
