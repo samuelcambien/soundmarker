@@ -11,9 +11,9 @@
           (ngSubmit)="onSubmit(myForm)">
 
 
-          <div class="form-row mb-5p">
+          <div class="form-row mb-10p">
             <div class="form-group col">
-              <input class="form-control form-control-sm"
+              <input class="sub-form"
                      placeholder="Project title"
                      name="projecttitle"
                      required
@@ -21,7 +21,7 @@
             </div>
           </div>
 
-          <div class="form-row radios  mb-5p">
+          <div class="form-row radios  mb-10p">
             <div class="col">
               <label class="custom noselect downloadable btn btn-sm btn-outline-form btn-settings"
                      popoverClass="popover-class"
@@ -68,9 +68,9 @@
           </div>
 
       <div class="edit-track-version" *ngFor="let track of project?.tracks; let i = index; trackBy: trackByFn">
-        <div class="form-row mb-10p">
-          <div class="form-group col">
-            <input class="form-control form-control-sm"
+        <div class="form-row mb-5p">
+          <div class="form-group col-sm-9">
+            <input class="sub-form"
                    placeholder="Track title"
                    value="{{track.title}}"
                    (change)="editedTrack(i, $event.target.value)"
