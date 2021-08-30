@@ -180,7 +180,7 @@ export class PublicTrackPlayerComponent implements OnInit, OnChanges, AfterConte
     this.waveformInViewPortObservable.pipe(distinctUntilChanged()).subscribe(() => {
       this.cdr.detectChanges();
     });
-    if (this.trackActivated) {
+    if (this.trackActivated && !this.isAdminRoute()) {
       setTimeout(() => document.addEventListener("click", () => this.markerPopoverClose(), false), 500);
     }
     this.cdr.detectChanges();
@@ -188,7 +188,7 @@ export class PublicTrackPlayerComponent implements OnInit, OnChanges, AfterConte
   }
 
   ngAfterContentInit() {
-    this.markerPopover.open();
+    if(!this.isAdminRoute()) this.markerPopover.open();
   }
 
   async selectVersion() {
@@ -478,7 +478,7 @@ export class PublicTrackPlayerComponent implements OnInit, OnChanges, AfterConte
     if (this.trackActivated) {
       setTimeout(() => this.autoScroll(), this.scrollInitialWait);
     }
-    if (this.markerPopover) {
+    if (this.markerPopover && !this.isAdminRoute()) {
       setTimeout(() => document.addEventListener("click", ($event) => this.markerPopoverClose(), false), 500);
     }
   }

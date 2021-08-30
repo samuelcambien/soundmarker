@@ -43,6 +43,7 @@ export class ProUploadPageComponent implements OnInit, ComponentCanDeactivate {
   project_tracks_list = [];
   smUploader: SMFileUploader;
   preventNavigation: boolean;
+  version_download = false;
 
   get createNewProject() {
     return !this.uploader.getOpenSMFileUploader().project_id;

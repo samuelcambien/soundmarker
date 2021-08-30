@@ -210,48 +210,67 @@
                       </ng-option>
                     </ng-select>
                   </div>
-                </div>
-                </div>
-              </div>
+                  <div *ngIf="isVersionUpload" class="col">
+                                          <label class="custom noselect downloadable btn btn-sm btn-outline-form btn-settings"
+                                                 popoverClass="popover-class"
+                                                 ngbPopover="Recepient can download this track"
+                                                 [openDelay]="300"
+                                                 [autoClose]="false"
+                                                 triggers="mouseenter:mouseleave">
+                                            <div class="switch">
+                                              <input type="checkbox"
+                                                     name = "download"
+                                                     [checked]="smUploader.availability"
+                                                     (click)="smUploader.toggleAvailability()">
+                                              <span class="slider round"></span>
+                                            </div>
+                                            <div [ngClass]="{'checked': smUploader.availability}"
+                                                 class="slider-text">Download
+                                            </div>
+                                          </label>
+                                      </div>
+                  </div>
+                                    </div>
+                                  </div>
 
-              <div class="form-row mb-5p">
-                <div class="col-sm-3"
-                     *ngIf="!isVersionUpload">
-                  <input class="upload-songs-input"
-                         id="pro-uploader"
-                         type="file"
-                         title=""
-                         ng2FileSelect
-                         [uploader]="smUploader.getFileUploader()"
-                         multiple
-                         name="files"
-                         accept="{{smUploader.getAcceptedFileTypes().join(',')}}">
-                  <button type="button"
-                          class="btn btn-sm btn-outline-form free-upload"
-                          placement="bottom"
-                          (click)="cancelUpload(myForm.dirty, smUploader.getFileUploader().getNotUploadedItems().length )">
-                    + Add more tracks
-                  </button>
-                </div>
-                <div class="col-sm-4"></div>
-                <div class="col-sm-2">
-                  <button type="button"
-                          class="btn btn-sm btn-outline-form free-upload"
-                          placement="bottom"
-                          (click)="cancelUpload(myForm.dirty, smUploader.getFileUploader().getNotUploadedItems().length )">
-                    <ng-container>{{ isVersionUpload ? 'Cancel' : 'Cancel' }}</ng-container>
-                  </button>
-                </div>
+                                  <div class="form-row mb-5p">
+                                    <div class="col-sm-3"
+                                         *ngIf="!isVersionUpload">
+                                      <input class="upload-songs-input"
+                                             id="pro-uploader"
+                                             type="file"
+                                             title=""
+                                             ng2FileSelect
+                                             [uploader]="smUploader.getFileUploader()"
+                                             multiple
+                                             name="files"
+                                             accept="{{smUploader.getAcceptedFileTypes().join(',')}}">
+                                      <button type="button"
+                                              class="btn btn-sm btn-outline-form free-upload"
+                                              placement="bottom"
+                                              (click)="cancelUpload(myForm.dirty, smUploader.getFileUploader().getNotUploadedItems().length )">
+                                        + Add more tracks
+                                      </button>
+                                    </div>
+                                    <div class="col-sm-4"></div>
+                                    <div class="col-sm-2">
+                                      <button type="button"
+                                              class="btn btn-sm btn-outline-form free-upload"
+                                              placement="bottom"
+                                              (click)="cancelUpload(myForm.dirty, smUploader.getFileUploader().getNotUploadedItems().length )">
+                                        <ng-container>{{ isVersionUpload ? 'Cancel' : 'Cancel' }}</ng-container>
+                                      </button>
+                                    </div>
 
-                <div class="col last" popoverTitle="Oops!" placement="top" popoverClass="popover-class popover-submit"  container="body" (click)="validationCheck(myForm)">
-                  <button id="submit"
-                          type="submit"
-                          class="btn btn-sm btn-primary free-upload"
-                          [ngClass]="smUploader.getFileUploader().getNotUploadedItems().length  > 0 ? 'upload-tracks': 'upload-tracks-disabled'">Upload {{ isVersionUpload ? 'new version' : 'tracks' }}
-                  </button>
-                </div>
+                                    <div class="col last" popoverTitle="Oops!" placement="top" popoverClass="popover-class popover-submit"  container="body" (click)="validationCheck(myForm)">
+                                      <button id="submit"
+                                              type="submit"
+                                              class="btn btn-sm btn-primary free-upload"
+                                              [ngClass]="smUploader.getFileUploader().getNotUploadedItems().length  > 0 ? 'upload-tracks': 'upload-tracks-disabled'">Upload {{ isVersionUpload ? 'new version' : 'tracks' }}
+                                      </button>
+                                    </div>
 
-<!--                <div class="col-sm-3">-->
+                    <!--                <div class="col-sm-3">-->
 <!--                  <button type="submit"-->
 <!--                          [disabled]="!smUploader.getFileUploader().getNotUploadedItems().length || !myForm.valid"-->
 <!--                          class="btn btn-sm btn-primary free-upload"-->
