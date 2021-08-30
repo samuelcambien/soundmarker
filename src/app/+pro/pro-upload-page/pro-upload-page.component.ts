@@ -118,6 +118,9 @@ export class ProUploadPageComponent implements OnInit, ComponentCanDeactivate {
   }
 
   addVersion(i, $event) {
+    let old_version;
+    old_version = this.project_tracks_list.find(e => e.disabled && this.selected_existing_tracks.indexOf(e.track_id) == -1 ) ;
+    if(old_version)  old_version.disabled = false;
     if ($event) this.project_tracks_list.find(e => e.track_id == this.selected_existing_tracks[i]).disabled = true;
   }
 
