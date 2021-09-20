@@ -48,7 +48,7 @@ export class Uploader {
     }
 
     this.getOpenFileUploader().onAfterAddingAll = (items) => {
-      this.router.navigate(['pro/upload'], {
+      this.router.navigate(['../pro/upload'], {
         queryParams: {origin: 'dashboard'},
         skipLocationChange: false
       });

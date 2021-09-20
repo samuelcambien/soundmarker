@@ -60,7 +60,6 @@ export class ProTopbarComponent {
         document.getElementById("fileinputhiddentop").click();}
       else {
         this.router.navigate(['../pro/upload'], {
-        relativeTo: this.activatedRoute,
         skipLocationChange: false});
       }
     }
