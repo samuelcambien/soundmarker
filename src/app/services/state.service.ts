@@ -4,13 +4,15 @@ import {BehaviorSubject, ReplaySubject} from "rxjs";
 import {Track} from "../model/track";
 import {Comment} from "../model/comment";
 import {Version} from '../model/version';
+import {Router} from '@angular/router';
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class StateService {
 
-  constructor() {
+  constructor(protected router: Router) {
   }
 
   ///////////////////// PROJECT /////////////////////////////////////////////////////////////
@@ -111,5 +113,9 @@ export class StateService {
   }
   public setSidebarPlayer(alert: string) {
     this.sidebarPlayer.next(alert);
+  }
+
+  isAdminRoute(): boolean {
+    return /^\/pro(\/|$)/.test(this.router.url);
   }
 }

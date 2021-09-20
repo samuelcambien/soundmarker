@@ -13,7 +13,7 @@
         <div *ngIf="isPlaying(); then stopbutton else playbutton"></div>
       </div>
 
-      <div class="comment-check" (click) = "checkComment()" >
+      <div *ngIf="stateService.isAdminRoute()" class="comment-check" (click) = "checkComment()" >
         <ng-container *ngTemplateOutlet="comment.checked == 0 ? uncheckbutton : checkbutton;" ></ng-container>
       </div>
 
