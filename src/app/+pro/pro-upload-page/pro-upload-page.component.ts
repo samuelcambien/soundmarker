@@ -67,6 +67,7 @@ export class ProUploadPageComponent implements OnInit, ComponentCanDeactivate {
   }
 
   trackId;
+  url;
 
   async ngOnInit() {
       this.smUploader = this.uploader.getOpenSMFileUploader();
@@ -80,7 +81,11 @@ export class ProUploadPageComponent implements OnInit, ComponentCanDeactivate {
         this.uploader.getOpenSMFileUploader().setProjectId(this.stateService.getActiveProject().getValue().project_id);
         await this.getProjectInfo(this.uploader.getOpenSMFileUploader().getProjectId());
     }
+    this.url = this.router.routerState.snapshot.url;
+    this.url = this.url.replace(/[^\/]+$/,'');
   }
+
+
 
   validationCheck(form: NgForm){
     if(!this.stateService.getVersionUpload().getValue()) {
@@ -263,8 +268,8 @@ export class ProUploadPageComponent implements OnInit, ComponentCanDeactivate {
       if (await this.confirmDialogService.confirm('There are unsaved changes. Are sure you want to discard this project?', 'Yes', 'Undo')) {
         this.smUploader.resetSMFileUploader();
         if(this.stateService.getVersionUpload().getValue()){
+          this.router.navigate([this.url]);
           this.stateService.setVersionUpload(false);
-          this._location.back();
         }
         else {
           this.router.navigate(["../dashboard"], {relativeTo: this.activatedRoute});
