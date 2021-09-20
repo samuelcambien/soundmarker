@@ -12,15 +12,15 @@ import {
   Output,
   ViewChild
 } from '@angular/core';
-import {Track} from "../../../model/track";
-import {Comment, CommentSorter} from "../../../model/comment";
-import {Version} from "../../../model/version";
-import {RestCall} from "../../../rest/rest-call";
-import {LocalStorageService} from "../../../services/local-storage.service";
+import {Track} from '../../../model/track';
+import {Comment, CommentSorter} from '../../../model/comment';
+import {Version} from '../../../model/version';
+import {RestCall} from '../../../rest/rest-call';
+import {LocalStorageService} from '../../../services/local-storage.service';
 import {animate, state, style, transition, trigger} from '@angular/animations';
 import {BehaviorSubject} from 'rxjs';
 import {distinctUntilChanged} from 'rxjs/operators';
-import {Player} from "../../../player/player.service";
+import {Player} from '../../../player/player.service';
 import {WaveformComponent} from './waveform/waveform.component';
 import {ProjectService} from '../../../services/project.service';
 import {StateService} from '../../../services/state.service';
@@ -28,8 +28,8 @@ import {Utils} from '../../../app.component';
 import {NgbPopover} from '@ng-bootstrap/ng-bootstrap';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Status, Uploader} from '../../../services/uploader.service';
-import {AuthService} from "../../../auth/auth.service";
-import {TrackService} from "../../../services/track.service";
+import {AuthService} from '../../../auth/auth.service';
+import {TrackService} from '../../../services/track.service';
 import {ConfirmDialogService} from '../../../services/confirmation-dialog/confirmation-dialog.service';
 
 @Component({
@@ -102,6 +102,8 @@ export class PublicTrackPlayerComponent implements OnInit, OnChanges, AfterConte
   phoneOrder: boolean;
   waveformInViewPort = true;
 
+  versionsArrayReverse ;
+
   public notesCollapsed = true;
 
   waveformInViewPortObservable = new BehaviorSubject<boolean>(true);
@@ -155,6 +157,7 @@ export class PublicTrackPlayerComponent implements OnInit, OnChanges, AfterConte
   }
 
   ngOnInit(): void {
+    this.versionsArrayReverse = this.track.versions.slice().reverse();
     this.waveformInViewPort = true;
     this.route.data.subscribe(() => {
       this.version = this.stateService.getSelectedVersion(this.track) ? this.stateService.getSelectedVersion(this.track) : this.track.versions[this.track.versions.length-1];
@@ -191,6 +194,9 @@ export class PublicTrackPlayerComponent implements OnInit, OnChanges, AfterConte
     if(!this.isAdminRoute()) this.markerPopover.open();
   }
 
+  trackByFn(index, version) {
+    return version.version_id;  }
+
   async selectVersion() {
     // await this.player.load(this.version);
     this.cdr.detectChanges();
@@ -212,7 +218,7 @@ export class PublicTrackPlayerComponent implements OnInit, OnChanges, AfterConte
   }
 
   getVersions() {
-    return this.track.versions.reverse();
+    return this.versionsArrayReverse;
   }
 
   private getPlayerWidth(): number {

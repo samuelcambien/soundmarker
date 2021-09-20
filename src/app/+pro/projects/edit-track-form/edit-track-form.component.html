@@ -34,7 +34,7 @@
         </div>
         </div>
 
-        <div class="edit-track-version" *ngFor="let version of track?.versions; let i = index; trackBy: trackByFn">
+        <div class="edit-track-version" *ngFor="let version of track?.versions.slice().reverse()  ; let i =  index; trackBy: trackByFn">
             <div class="form-row mb-10p">
               <div class="col-sm-2">
                 <div class="btn-sm btn-outline-form static">V{{version.version_number}}

@@ -28,6 +28,7 @@ export class EditTrackFormComponent implements OnInit {
 
   title: string;
   visible = false;
+  versions = 2;
 
   ngOnInit() {
       this.title = this.track.title;
@@ -49,25 +50,31 @@ export class EditTrackFormComponent implements OnInit {
   }
 
   trackByFn(index, item) {
-    return index;  }
+    return item.version_id;  }
 
   toggleVisibility(i){
-    this.track.versions[i].visibility = Math.abs(this.track.versions[i].visibility-1);
+    this.track.versions[this.getInversedIndex(i)].visibility = Math.abs(this.track.versions[this.getInversedIndex(i)].visibility-1);
     this.editedVersion(i);
     return;
   }
 
   toggleDownloadable(i){
-    this.track.versions[i].downloadable = !this.track.versions[i].downloadable;
+    this.track.versions[this.getInversedIndex(i)].downloadable = !this.track.versions[this.getInversedIndex(i)].downloadable;
     this.editedVersion(i);
     return;
   }
 
   editedVersion(i, new_notes?){
-    this.track.versions[i].notes = new_notes ? new_notes : this.track.versions[i].notes;
-    this.changedVersions.push(i);
-    this.changedVersions = this.changedVersions.filter((el, i, a) => i === a.indexOf(el))
+    let reversedIndex = this.getInversedIndex(i)
+    this.track.versions[reversedIndex].notes = new_notes ? new_notes : this.track.versions[reversedIndex].notes;
+    this.changedVersions.push(reversedIndex);
+    this.changedVersions = this.changedVersions.filter((el, reversedIndex, a) => reversedIndex === a.indexOf(el))
   }
+
+  getInversedIndex(i): number{
+    return this.track.versions.length - 1 - i;
+  }
+
 
   getFileSize(file) {
     if(file) {
