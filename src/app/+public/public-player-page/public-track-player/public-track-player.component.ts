@@ -292,6 +292,14 @@ export class PublicTrackPlayerComponent implements OnInit, OnChanges, AfterConte
     );
   }
 
+  getNbUncheckedComments(){
+    return this.getMatchingComments().filter(comment => comment.checked == 0).length;
+  }
+
+  getNbCheckedComments(){
+    return this.getMatchingComments().filter(comment => comment.checked == 1).length;
+  }
+
   hasComments() {
     return this.version.comments && this.version.comments.length > 0;
   }

@@ -328,13 +328,13 @@
 
       <div class="btn-group btn-group-toggle" ngbRadioGroup name="radioBasic" [(ngModel)]="commentFilter">
         <label ngbButtonLabel class="btn-sm">
-          <input ngbButton type="radio" [value]="2"> All {{getMatchingComments()?.length}}
+          <input ngbButton type="radio" [value]="2"> {{stateService.isAdminRoute() ? "All " : ""}} {{getMatchingComments()?.length}} {{stateService.isAdminRoute() ? "" : " comments"}}
         </label>
-        <label ngbButtonLabel class="btn-sm">
-          <input ngbButton type="radio" [value]="0"> Unchecked 3
+        <label *ngIf="stateService.isAdminRoute()" ngbButtonLabel class="btn-sm">
+          <input ngbButton type="radio" [value]="0"> Unchecked {{getNbUncheckedComments()}}
         </label>
-        <label ngbButtonLabel class="btn-sm">
-          <input ngbButton type="radio" [value]="1"> Checked 4
+        <label *ngIf="stateService.isAdminRoute()" ngbButtonLabel class="btn-sm">
+          <input ngbButton type="radio" [value]="1"> Checked {{getNbCheckedComments()}}
         </label>
       </div>
 
