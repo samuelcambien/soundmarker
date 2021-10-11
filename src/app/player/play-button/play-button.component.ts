@@ -20,7 +20,7 @@ export class PlayButtonComponent {
     if (this.player.isLoading(this.version)) {
       return State.loading;
     }
-    if (this.player.isPlaying()) {
+    if (this.player.isPlaying(this.version)) {
       return State.pause;
     }
     return State.play;

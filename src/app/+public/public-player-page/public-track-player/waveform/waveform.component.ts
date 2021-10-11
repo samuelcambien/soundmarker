@@ -50,7 +50,7 @@ export class WaveformComponent {
     this.drawer.seek.subscribe(async progress => {
       this.stateService.setActiveComment(null);
       const startTime = progress * version.track_length;
-      if (this.player.isPlaying()) {
+      if (this.player.isPlaying(version)) {
         await this.player.play(version, startTime);
       } else {
         await this.player.seekTo(version, startTime);

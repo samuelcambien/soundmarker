@@ -115,8 +115,8 @@ export class Player {
     return !!version && !!this.version && version.version_id === this.version.version_id;
   }
 
-  isPlaying(): boolean {
-    return this.getMedia() && !this.getMedia().paused;
+  isPlaying(version: Version): boolean {
+    return this.getMedia() && !this.getMedia().paused && this.version === version;
   }
 
   emitProgress() {
