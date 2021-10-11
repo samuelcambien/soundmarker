@@ -195,10 +195,15 @@ export class PublicTrackPlayerComponent implements OnInit, OnChanges, AfterConte
   }
 
   trackByFn(index, version) {
-    return version.version_id;  }
+    return version.version_id;
+  }
+
+  async switchVersion() {
+    await this.player.load(this.version);
+    await this.selectVersion();
+  }
 
   async selectVersion() {
-    // await this.player.load(this.version);
     this.cdr.detectChanges();
     this.stateService.setActiveVersion(this.version);
     this.stateService.addSelectedVersion(this.track, this.version);
