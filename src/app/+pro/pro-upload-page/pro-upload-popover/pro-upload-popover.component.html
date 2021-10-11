@@ -1,22 +1,22 @@
 <app-pro-popover (close)="closePopover()">
     <ng-container class="title">Uploading...</ng-container>
     <ng-container class="body">
-  <div *ngFor="let fileUploader of getFileUploaders()">
-  <div class="progress-container" *ngIf="fileUploader.stage == fileUploader.statusEnum.UPLOADING_SONGS">
+  <div *ngFor="let smFileUploader of getFileUploaders()">
+  <div class="progress-container" *ngIf="smFileUploader.stage == smFileUploader.statusEnum.UPLOADING_SONGS">
     <div class="row body">
-      <h3 class="col">Track title</h3><h3 class="col text-right"> {{getProgress(fileUploader) | number:'1.0-0'}}% </h3>
+      <h3 class="col">{{smFileUploader.getProjectTitle()}}</h3><h3 class="col text-right"> {{getProgress(smFileUploader) | number:'1.0-0'}}% </h3>
       </div>
         <div class="container-fluid">
       <div class="progress row">
-        <div class="progress-bar" role="progressbar" [ngStyle]="{ 'width': getProgress(fileUploader) + '%' }"></div>
+        <div class="progress-bar" role="progressbar" [ngStyle]="{ 'width': getProgress(smFileUploader) + '%' }"></div>
     </div>
     </div>
   </div>
 
-  <div class="success" *ngIf="fileUploader.stage == fileUploader.statusEnum.GREAT_SUCCESS">
+  <div class="success" *ngIf="smFileUploader.stage == smFileUploader.statusEnum.GREAT_SUCCESS">
     <div class="row body">
 
-      <a href="https://project-link.com"><h3 class="col">Track title</h3></a><h3 class="col text-right">
+      <a routerLink="{{getLink(smFileUploader)}}"><h3 class="col">{{smFileUploader.getProjectTitle()}}</h3></a><h3 class="col text-right">
 
 
         <svg width="16px" height="18px" viewBox="0 0 18 19" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">

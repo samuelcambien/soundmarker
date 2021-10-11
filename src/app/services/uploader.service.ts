@@ -54,12 +54,15 @@ export class Uploader {
       });
       this.getOpenSMFileUploader().setStatus(Status.UPLOAD_FORM);
       this.getOpenSMFileUploader().addTitles(items);
-
     }
   }
 
   getOpenFileUploader(): FileUploader {
     return this.getOpenSMFileUploader().getFileUploader();
+  }
+
+  getFileUploaders(){
+    return this.fileUploaders;
   }
 
   getOpenSMFileUploader(): SMFileUploader {
@@ -69,6 +72,11 @@ export class Uploader {
   isUploading(){
     return this.fileUploaders.filter(fileUploader => fileUploader.isUploading()).length;
   }
+
+  uploadingFileUploaders(){
+    return this.fileUploaders.filter(fileUploader => fileUploader.isUploading())
+  }
+
 
   isReady(){
     let readyUploaders = this.fileUploaders.filter(fileUploader => fileUploader.isReady()).length;
@@ -86,6 +94,7 @@ export class SMFileUploader {
   email_to: string[];
   project_title;
   project_id;
+  project_hash: string;
 
   // expirations = [{id: '1week', label: 'Week', heading: 'Expire*'}, {id: '1month', label: 'Month', heading: 'Expire*'}];
   expiration="1week";
@@ -186,6 +195,14 @@ export class SMFileUploader {
     return this.fileUploader;
   }
 
+  setProjectHash(hash: string){
+    this.project_hash = hash;
+}
+
+  getProjectHash(): string{
+    return this.project_hash;
+  }
+
   getTitles() {
     return this.titles;
   }
@@ -284,5 +301,4 @@ export class SMFileUploader {
   toggleStreamType(){
       this.stream_type = !this.stream_type;
     }
-
 }

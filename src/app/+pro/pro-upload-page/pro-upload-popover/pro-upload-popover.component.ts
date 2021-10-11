@@ -24,9 +24,8 @@ export class ProUploadPopoverComponent implements OnInit {
    return e.getFileUploader().progress * 0.99;
   }
 
-  getLink() {
-    // return "http://localhost:4200/project/" + this.link;
-    return "http://localhost:4200/project/";
+  getLink(smFileUploader) {
+    return "projects/" + smFileUploader.getProjectHash();
   }
 
   getFileUploaders() {

@@ -107,6 +107,7 @@ export class ProUploadPageComponent implements OnInit, ComponentCanDeactivate {
     let project = this.user_project_list.find(x => x.project_id === project_id);
     this.project_tracks_list = (await RestCall.getProject(project.project_hash))["tracks"];
     this.smUploader.setProjectTitle(project.title);
+    this.smUploader.setProjectHash(project.project_hash);
     let track_id = this.trackId;
     this.selected_existing_tracks = [];
     if (this.trackId) {
@@ -200,9 +201,12 @@ export class ProUploadPageComponent implements OnInit, ComponentCanDeactivate {
         await Utils.promiseSequential(
           smUploadingUploader.fileUploader.queue.map((track, index) => () => this.processTrack(uploadingProjectId, track, smUploadingUploader.getTitle(track), notes[index], this.smUploader.getAvailability(), uploading_selected_existing_tracks[index], index))
         );
-        this.authService.getCurrentUser().subscribe(async currentUser =>
-          await RestCall.shareProject(uploadingProjectId, smUploadingUploader.expiration, smUploadingUploader.getProjectNotes(), currentUser.email, smUploadingUploader.getReceivers())
+        this.authService.getCurrentUser().subscribe(async currentUser => {
+            const shareResponse = await RestCall.shareProject(uploadingProjectId, smUploadingUploader.expiration, smUploadingUploader.getProjectNotes(), currentUser.email, smUploadingUploader.getReceivers());
+            smUploadingUploader.setProjectHash(shareResponse.project_hash);
+          }
         )
+
 
           smUploadingUploader.setStatus(Status.GREAT_SUCCESS);
       } catch (e) {
