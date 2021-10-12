@@ -117,7 +117,7 @@ export class PublicTrackPlayerComponent implements OnInit, OnChanges, AfterConte
     protected route: ActivatedRoute,
     protected uploader: Uploader,
     protected localStorageService: LocalStorageService,
-    protected stateService: StateService,
+    public  stateService: StateService,
     protected authService: AuthService,
     protected projectService: ProjectService,
     protected trackService: TrackService,

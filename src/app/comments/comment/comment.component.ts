@@ -40,7 +40,7 @@ export class CommentComponent implements OnInit{
     private localStorageService: LocalStorageService,
     private cdr: ChangeDetectorRef,
     private player: Player,
-    private stateService: StateService
+    public stateService: StateService
   ) {
   }
 

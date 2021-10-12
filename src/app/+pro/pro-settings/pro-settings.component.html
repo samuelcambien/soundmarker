@@ -131,10 +131,10 @@ days</label>
                </div>
             </div>
          </div>
-         <form #myForm="ngForm" (ngSubmit)="onSubmit()">
+         <form #myForm="ngForm">
          <div class="form-row mb-5p d-flex justify-content-end">
             <div class="col col-sm-2">
-               <button type="button" class="btn btn-sm btn-outline-form free-upload" (click)="close.emit()"> Cancel </button>
+               <button type="button" class="btn btn-sm btn-outline-form free-upload"> Cancel </button>
             </div>
             <div class="col col-sm-3">
                <button type="submit" [disabled]="!myForm.valid" class="btn btn-sm btn-primary free-upload"> Update settings </button>
