@@ -68,6 +68,10 @@ if (isset($_SESSION["USER"])) {
 // Set Session
 Flight::set("session", $_SESSION);
 
+header("Access-Control-Allow-Origin: http://localhost:4200");
+header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
+header("Access-Control-Allow-Headers: http://localhost:4200");
+
 /*
 ROUTING TO FRONT-END
 */
