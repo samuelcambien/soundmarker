@@ -192,8 +192,9 @@ export class ProUploadPageComponent implements OnInit, ComponentCanDeactivate {
           let stream_type = smUploadingUploader.stream_type ? "1" : "0";
           const projectResponse = await RestCall.createNewProject(
             smUploadingUploader.getProjectTitle(),
-            smUploadingUploader.getSMPPW(),
             stream_type,
+            smUploadingUploader.getPasswordProtected(),
+            smUploadingUploader.getPassword()
           );
           uploadingProjectId = projectResponse["project_id"];
         }

@@ -110,7 +110,7 @@ export class ProjectService {
       throw new TypeError();
     }
 
-    await RestCall.editProject(projectId, title, losless ? "1" : "0", "0");
+    await RestCall.editProject(projectId, title, losless ? "1" : "0", passwordProtected, password);
   }
 
   public isActive(project: Project) {
