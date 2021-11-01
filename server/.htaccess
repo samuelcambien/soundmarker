@@ -29,6 +29,7 @@
     RewriteCond %{REQUEST_URI} "/track/version" [OR]
     RewriteCond %{REQUEST_URI} "/track/version/edit" [OR]
     RewriteCond %{REQUEST_URI} "/track/version/comments" [OR]
+    RewriteCond %{REQUEST_URI} "/track/version/delete" [OR]
     RewriteCond %{REQUEST_URI} "/comments/new" [OR]
     RewriteCond %{REQUEST_URI} "/track/version/comment" [OR]
     RewriteCond %{REQUEST_URI} "/track/version/delete/comment" [OR]

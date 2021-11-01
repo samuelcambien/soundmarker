@@ -196,52 +196,60 @@ export class ProUploadPageComponent implements OnInit, ComponentCanDeactivate {
             stream_type,
           );
           uploadingProjectId = projectResponse["project_id"];
+          smUploadingUploader.project_id = projectResponse["project_id"];
+          smUploadingUploader.new_project = true;
         }
 
         await Utils.promiseSequential(
-          smUploadingUploader.fileUploader.queue.map((track, index) => () => this.processTrack(uploadingProjectId, track, smUploadingUploader.getTitle(track), notes[index], this.smUploader.getAvailability(), uploading_selected_existing_tracks[index], index))
+          smUploadingUploader.fileUploader.queue.map((track, index) => () => this.processTrack(smUploadingUploader, uploadingProjectId, track, notes[index], uploading_selected_existing_tracks[index], index))
         );
+        if(!smUploadingUploader.isCancelled()){
         this.authService.getCurrentUser().subscribe(async currentUser => {
             const shareResponse = await RestCall.shareProject(uploadingProjectId, smUploadingUploader.expiration, smUploadingUploader.getProjectNotes(), currentUser.email, smUploadingUploader.getReceivers());
             smUploadingUploader.setProjectHash(shareResponse.project_hash);
           }
         )
-
-
           smUploadingUploader.setStatus(Status.GREAT_SUCCESS);
+        }
       } catch (e) {
         this.error.emit(e);
       }
     }
   }
 
-  private async processTrack(projectId, track: FileItem, title, notes, availability, trackId, index: number): Promise<void> {
-    const length = 0;
-    const file_name = Utils.getName(track._file.name);
-    const extension = Utils.getExtension(track._file.name);
-    if (!trackId) {
-      const trackResponse = await RestCall.createNewTrack(projectId, title);
-      trackId = trackResponse["track_id"];
+  private async processTrack(smUploadingUploader: SMFileUploader, projectId, track: FileItem, notes, trackId, index: number): Promise<void> {
+    if(!smUploadingUploader.isCancelled()){
+      const length = 0;
+      const file_name = Utils.getName(track._file.name);
+      const extension = Utils.getExtension(track._file.name);
+      if (!trackId) {
+        const trackResponse = await RestCall.createNewTrack(projectId, smUploadingUploader.getTitle(track));
+        trackId = trackResponse["track_id"];
+        smUploadingUploader.newly_uploaded_tracks.push(trackId);
+      }
+      const versionResponse = await RestCall.createNewVersion(
+        trackId, notes, smUploadingUploader.getAvailability() ? "1" : "0"
+      );
+
+      const versionId = versionResponse["version_id"];
+      if(!smUploadingUploader.newly_uploaded_tracks.includes(trackId)){
+        smUploadingUploader.newly_uploaded_versions.push(versionId);
+      }
+
+      const streamFileResponse = await RestCall.createNewFile(track._file, file_name, this.getStreamFileExtension(extension), track._file.size, versionId, 0, length);
+      const streamFileId = streamFileResponse["file_id"];
+
+      let downloadFileId: number;
+      if (smUploadingUploader.getAvailability()) {
+        const downloadFileResponse = await RestCall.createNewFile(track._file, file_name, extension, track._file.size, versionId, 1, length);
+        downloadFileId = downloadFileResponse["file_id"];
+      } else {
+        downloadFileId = 0;
+      }
+
+      const buffer: ArrayBuffer = await Utils.read(track._file);
+      await RestCall.uploadChunk(buffer, streamFileId, downloadFileId, 0, extension, progress => this.setChunkProgress(progress));
     }
-    const versionResponse = await RestCall.createNewVersion(
-      trackId, notes, availability ? "1" : "0"
-    );
-
-    const versionId = versionResponse["version_id"];
-
-    const streamFileResponse = await RestCall.createNewFile(track._file, file_name, this.getStreamFileExtension(extension), track._file.size, versionId, 0, length);
-    const streamFileId = streamFileResponse["file_id"];
-
-    let downloadFileId: number;
-    if (availability) {
-      const downloadFileResponse = await RestCall.createNewFile(track._file, file_name, extension, track._file.size, versionId, 1, length);
-      downloadFileId = downloadFileResponse["file_id"];
-    } else {
-      downloadFileId = 0;
-    }
-
-    const buffer: ArrayBuffer = await Utils.read(track._file);
-    await RestCall.uploadChunk(buffer, streamFileId, downloadFileId, 0, extension, progress => this.setChunkProgress(progress));
   }
 
   private setProgress(progress: number) {

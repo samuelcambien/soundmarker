@@ -1122,6 +1122,32 @@ Flight::route('GET /track/version/@version_id/waveform', function ($version_id) 
   Flight::json($wave_png);
 });
 
+///////////////////////////////////////////////////////// Routes - /track/version/delete POST /////////////////////////////////////////////////////////
+
+Flight::route('POST /track/version/delete', function () {
+
+  // Check if user projects
+  $config = Flight::get("config");
+  $getbody = json_decode(Flight::request()->getBody());
+  $version_id = $getbody->version_id;
+
+  // if user is not able to delete this track
+  if (!isset($_SESSION['USER'])) {
+    Flight::json(array(
+      'return' => 'Unauthorized'
+    ), 401);
+  }
+
+  $db = Flight::db();
+  $db->query(
+    "DELETE FROM Version WHERE version_id = '$version_id'"
+  );
+
+  Flight::json(array(
+    'version_id' => $version_id
+  ), 200);
+});
+
 ///////////////////////////////////////////////// Routes - /track/version/comments GET ////////////////////////////////////////////////
 Flight::route('GET /track/version/comments/@version_id', function ($version_id) {
 

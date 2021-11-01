@@ -5,7 +5,7 @@ import {Router} from '@angular/router';
 import {StateService} from './state.service';
 
 export enum Status {
-  UPLOAD_FORM, UPLOADING_SONGS, GREAT_SUCCESS
+  UPLOAD_FORM, UPLOADING_SONGS, GREAT_SUCCESS, CANCELLED
 }
 
 @Injectable({
@@ -77,7 +77,6 @@ export class Uploader {
     return this.fileUploaders.filter(fileUploader => fileUploader.isUploading())
   }
 
-
   isReady(){
     let readyUploaders = this.fileUploaders.filter(fileUploader => fileUploader.isReady()).length;
     let openUploaders = this.fileUploaders.filter(fileUploader => fileUploader.isUploading()).length;
@@ -87,14 +86,21 @@ export class Uploader {
   clearFileUploaders(){
     this.fileUploaders = this.fileUploaders.filter(fileUploader => !fileUploader.isReady());
   }
+
+  removeCancelled(cancelledSMFileUploader){
+    this.fileUploaders = this.fileUploaders.filter(fileUploader => !fileUploader.isCancelled());
+  }
 }
 
 export class SMFileUploader {
   notes: string;
   email_to: string[];
-  project_title;
-  project_id;
+  project_title = "" ;
+  project_id = null;
   project_hash: string;
+  newly_uploaded_tracks = [];
+  new_project: boolean = false;
+  newly_uploaded_versions = [];
 
   // expirations = [{id: '1week', label: 'Week', heading: 'Expire*'}, {id: '1month', label: 'Month', heading: 'Expire*'}];
   expiration="1week";
@@ -164,11 +170,13 @@ export class SMFileUploader {
         {
           name: 'checkSizeLimit',
           fn: item => {
-            return this.acceptedQueueMargin + this.queueSizeRemaining - item.size > 0;}
+            return this.acceptedQueueMargin + this.queueSizeRemaining - item.size > 0;
+          }
         }
       ]
     });
   }
+
 
   isUploading() {
     // return this.fileUploader.isUploading;
@@ -187,6 +195,10 @@ export class SMFileUploader {
     return this.stage == Status.GREAT_SUCCESS;
   }
 
+  isCancelled() {
+    return this.stage == Status.CANCELLED;
+  }
+
   setStatus(e) {
     this.stage = e;
   }
@@ -197,7 +209,7 @@ export class SMFileUploader {
 
   setProjectHash(hash: string){
     this.project_hash = hash;
-}
+  }
 
   getProjectHash(): string{
     return this.project_hash;

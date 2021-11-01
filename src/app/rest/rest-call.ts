@@ -3,6 +3,7 @@ import {Project} from "../model/project";
 import {Version} from "../model/version";
 import {isDevMode} from "@angular/core";
 import {Track} from "../model/track";
+import {StateService} from '../services/state.service';
 
 export class RestCall {
 
@@ -58,6 +59,12 @@ export class RestCall {
   static deleteTrack(trackId: string) {
     return Request.post(Endpoints.TRACK_DELETE, {
       track_id: trackId,
+    });
+  }
+
+  static deleteVersion(versionId: string) {
+    return Request.post(Endpoints.VERSION_DELETE, {
+      version_id: versionId,
     });
   }
 
@@ -260,6 +267,8 @@ export class Endpoints {
   public static VERSION_NEW: string = Endpoints.VERSION;
 
   public static VERSION_EDIT: string = Endpoints.VERSION + "/edit";
+
+  public static VERSION_DELETE: string = Endpoints.VERSION + "/delete";
 
   public static COMMENTS: string = Endpoints.TRACK + "/version/comments";
 
