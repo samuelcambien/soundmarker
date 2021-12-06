@@ -1,4 +1,9 @@
 <?php
+
+if ($_SERVER["REQUEST_METHOD"] === "OPTIONS") {
+  exit;
+}
+
 require 'flight/Flight.php';
 require 'vendor/autoload.php';
 require 'credentials.php';
@@ -67,10 +72,6 @@ if (isset($_SESSION["USER"])) {
 
 // Set Session
 Flight::set("session", $_SESSION);
-
-header("Access-Control-Allow-Origin: http://localhost:4200");
-header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
-header("Access-Control-Allow-Headers: http://localhost:4200");
 
 /*
 ROUTING TO FRONT-END
@@ -550,11 +551,15 @@ Flight::route('POST /project/subscribe', function () {
   }
 });
 
+Flight::route('GET /project/@project_hash/passwordprotected', function ($project_hash) {
+  Flight::json(
+    !!Flight::db()->query("SELECT password FROM Project WHERE hash = '$project_hash'")->fetchAll(PDO::FETCH_ASSOC)[0]["password"]
+  );
+});
 
 //////////////////////////////////////////////// Routes - /project/get/@project_hash GET /////////////////////////////////////////////
 Flight::route('GET /project/get/@project_hash', function ($project_hash) {
 
-  $config = Flight::get("config");
   $db = Flight::db();
   $sql = "SELECT project_id, title, active, expiration_date, user_id, password, stream_type FROM Project WHERE hash = '$project_hash'";
   $response = $db->query($sql)->fetchAll(PDO::FETCH_ASSOC);
@@ -594,26 +599,37 @@ Flight::route('GET /project/get/@project_hash', function ($project_hash) {
     }
 
     // if project is password protected
-    if ($project_password && !canEditPassword($project_id)) {
-      Flight::json(array(
-        'return' => 'passwordmissing'
-      ), 403);
-    } else {
-      // also send sender
-      $sql = "SELECT emailaddress, user_id FROM Notification WHERE type = '0' AND type_id = '$project_id'";
-      $response = $db->query($sql)->fetchAll(PDO::FETCH_ASSOC);
-      // if only link is created, then no sender
-      if (isset($response[0])) {
-        $emailaddress = $response[0]["emailaddress"];
-      } else {
-        $emailaddress = "";
+    if ($project_password && $user_id != getUserId()) {
+      $password = $_SERVER['HTTP_PASSWORD'];
+      if (!$password) {
+        Flight::json('passwordmissing', 401);
+        return;
+      } else if (strcmp($project_password, hash('sha256', $password)) != 0) {
+        Flight::json('passwordwrong', 403);
+        return;
       }
-
-      // return ok
-      Flight::json(array(
-        'project_id' => $project_id, 'title' => $title, 'status' => $status, 'expiration' => $expiration_date, 'stream_type' => $project_stream_type, 'sender' => $emailaddress, 'tracks' => $tracks
-      ));
     }
+
+    // also send sender
+    $sql = "SELECT emailaddress, user_id FROM Notification WHERE type = '0' AND type_id = '$project_id'";
+    $response = $db->query($sql)->fetchAll(PDO::FETCH_ASSOC);
+    // if only link is created, then no sender
+    if (isset($response[0])) {
+      $emailaddress = $response[0]["emailaddress"];
+    } else {
+      $emailaddress = "";
+    }
+
+    // return ok
+    Flight::json(array(
+      'project_id' => $project_id,
+      'title' => $title,
+      'status' => $status,
+      'expiration' => $expiration_date,
+      'stream_type' => $project_stream_type,
+      'sender' => $emailaddress,
+      'tracks' => $tracks
+    ));
   } else {
     // project hash was not valid.
     Flight::json(array(
@@ -967,7 +983,6 @@ Flight::route('POST /track/version/edit', function () {
 ///////////////////////////////////////////////////////// Routes - /track GET /////////////////////////////////////////////////////////
 Flight::route('GET /track/@track_id', function ($track_id) {
 
-  $config = Flight::get("config");
   $db = Flight::db();
   $track_row = $db->query("SELECT title, visibility FROM Track WHERE track_id = '$track_id'")->fetchAll(PDO::FETCH_ASSOC)[0];
   $title = $track_row["title"];
@@ -1083,11 +1098,6 @@ Flight::route('GET /track/version/@version_id', function ($version_id) {
 Flight::route('GET /track/version/@version_id/waveform', function ($version_id) {
 
   $config = Flight::get("config");
-  if (!isAuthenticated()) {
-    Flight::json(array(
-      'return' => 'Unauthorized'
-    ), 401);
-  }
 
   $file_name = Flight::db()
     ->query("SELECT file_name FROM File WHERE version_id = '$version_id'")
@@ -1731,3 +1741,5 @@ FLIGHT
 */
 ///////////////////////////////////////////////////////////// Start Flight ////////////////////////////////////////////////////////////
 Flight::start();
+
+?>

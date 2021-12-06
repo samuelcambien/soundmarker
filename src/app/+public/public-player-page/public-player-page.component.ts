@@ -9,6 +9,8 @@ import {Observable} from "rxjs";
 import {Player} from "../../player/player.service";
 import {DrawerService} from "../../services/drawer.service";
 import {StateService} from "../../services/state.service";
+import {RestCall} from '../../rest/rest-call';
+import {LocalStorageService} from '../../services/local-storage.service';
 
 @Component({
   selector: 'app-public-player',
@@ -18,13 +20,20 @@ import {StateService} from "../../services/state.service";
 })
 export class PublicPlayerPageComponent implements OnInit {
 
+  password: string;
+  name: string = this.localStorageService.getCommentName();
+
   exists: boolean = true;
   expired: boolean = false;
   commentsExpired = false;
 
+  hash: string;
   project: Project;
   expiry_date;
   project_id: string;
+
+  showPasswordForm: boolean;
+  wrongPassword: boolean = false;
 
   error;
 
@@ -38,6 +47,7 @@ export class PublicPlayerPageComponent implements OnInit {
     private drawerService: DrawerService,
     private stateService: StateService,
     private cdr: ChangeDetectorRef,
+    private localStorageService: LocalStorageService,
   ) {
     this.playerService.started.subscribe(() => this.cdr.detectChanges());
     this.playerService.paused.subscribe(() => this.cdr.detectChanges());
@@ -46,20 +56,43 @@ export class PublicPlayerPageComponent implements OnInit {
   ngOnInit() {
     this.route.params.subscribe(async params => {
       this.cdr.detectChanges();
-      await this.projectService.loadProject(params['project_hash']);
-      if (this.stateService.getActiveProject().getValue()) {
-        this.project = this.stateService.getActiveProject().getValue();
-        this.initFields();
-
-        if (this.getProject().tracks.length == 1)
-          this.stateService.setActiveTrack(this.getProject().tracks[0]);
-      }
-      else {
-        this.exists = false;
-        this.message = null;
+      this.hash = params['project_hash'];
+      if (await RestCall.isPasswordProtected(this.hash)) {
+        this.showPasswordForm = true;
+      } else {
+        await this.loadProject(this.hash);
       }
       this.cdr.detectChanges();
     });
+  }
+
+  async submitPasswordForm() {
+    try {
+      await this.loadProject(this.hash, this.password);
+      this.showPasswordForm = false;
+      this.cdr.detectChanges();
+    } catch (error) {
+      this.wrongPassword = true;
+      this.cdr.detectChanges();
+    }
+    if (!!this.name) {
+      this.localStorageService.storeCommentName(this.name);
+    }
+  }
+
+  private async loadProject(hash: string, password?: string) {
+    await this.projectService.loadProject(hash, password);
+    if (this.stateService.getActiveProject().getValue()) {
+      this.project = this.stateService.getActiveProject().getValue();
+      this.initFields();
+
+      if (this.getProject().tracks.length == 1) {
+        this.stateService.setActiveTrack(this.getProject().tracks[0]);
+      }
+    } else {
+      this.exists = false;
+      this.message = null;
+    }
   }
 
   getActiveTrack(): Observable<Track> {

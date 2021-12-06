@@ -40,8 +40,8 @@ export class ProjectService {
     });
   }
 
-  async getProject(projectHash: string): Promise<Project> {
-    const response = await RestCall.getProject(projectHash);
+  async getProject(projectHash: string, password?: string): Promise<Project> {
+    const response = await RestCall.getProject(projectHash, password);
     const project: Project = Object.assign(new Project(), response, {project_hash: projectHash});
     this.stateService.setActiveProject(project);
 
@@ -81,9 +81,9 @@ export class ProjectService {
       ).filter(versions => versions.length > 0)[0][0]
   }
 
-  async loadProject(projectHash: string): Promise<void> {
+  async loadProject(projectHash: string, password?: string): Promise<void> {
 
-    const project: Project = await this.getProject(projectHash);
+    const project: Project = await this.getProject(projectHash, password);
     if (!this.isActive(project) && !this.areCommentsActive(project)) {
       return;
     }

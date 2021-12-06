@@ -1,42 +1,70 @@
-<app-public-page
-  [expiry_date]="expiry_date"
-  [expired]="expired"
-  [project_id]="project_id"
-  [error]="error"
-  (tryAgain)="backToHome()"
-  xmlns="http://www.w3.org/1999/html">
+<ng-container *ngIf="showPasswordForm">
+  <div class="password-form">
+    <h5>Iedemenne, paswoord?</h5>
+    <div *ngIf="wrongPassword">paswoord verkeerd</div>
+    <form #myForm="ngForm" (ngSubmit)="submitPasswordForm()">
+      <div class="d-flex flex-column">
+        <input class="form-group"
+               placeholder="password"
+               name="password"
+               required
+               [(ngModel)]="password">
+        <input
+          placeholder="name"
+          name="name"
+          [(ngModel)]="name">
 
-  <app-loading *ngIf="!project && exists"></app-loading>
-
-  <app-page-not-found *ngIf="!exists" ></app-page-not-found>
-
-  <app-project-expired *ngIf="expired && commentsExpired"></app-project-expired>
-
-  <div *ngIf="exists && !(expired && commentsExpired)">
-    <div class="list-container" [ngbCollapse]="getActiveTrack() | async">
-      <div *ngFor="let track of project?.tracks; let last = last;">
-        <app-public-track-preview
-          [track]="track"
-          [expired]="expired && !commentsExpired"
-          (selected)="selectTrack(track)"
-        >
-        </app-public-track-preview>
-        <hr *ngIf="!last" class="preview-hr">
+        <button type="submit"
+                [disabled]="!myForm.valid"
+                class="btn btn-sm btn-primary form-group">
+          Continue
+        </button>
       </div>
+    </form>
+  </div>
+</ng-container>
+
+<ng-container *ngIf="project">
+  <app-public-page
+    [expiry_date]="expiry_date"
+    [expired]="expired"
+    [project_id]="project_id"
+    [error]="error"
+    (tryAgain)="backToHome()"
+    xmlns="http://www.w3.org/1999/html">
+
+    <app-loading *ngIf="!project && exists"></app-loading>
+
+    <app-page-not-found *ngIf="!exists"></app-page-not-found>
+
+    <app-project-expired *ngIf="expired && commentsExpired"></app-project-expired>
+
+    <div *ngIf="exists && !(expired && commentsExpired)">
+      <div class="list-container" [ngbCollapse]="getActiveTrack() | async">
+        <div *ngFor="let track of project?.tracks; let last = last;">
+          <app-public-track-preview
+            [track]="track"
+            [expired]="expired && !commentsExpired"
+            (selected)="selectTrack(track)"
+          >
+          </app-public-track-preview>
+          <hr *ngIf="!last" class="preview-hr">
+        </div>
+      </div>
+
+      <public-track-player
+        [expiry_date]="expiry_date"
+        [sender]="project.sender"
+        *ngFor="let track of project?.tracks"
+        [track]="track"
+        [enableOverview]="project?.tracks?.length > 1"
+        [ngbCollapse]="(getActiveTrack() | async) != track"
+        [trackActivated]="(getActiveTrack() | async) == track"
+        [expired]="expired && !commentsExpired"
+        (overview)="setActiveTrack(null)"
+        (error)="error = $event">
+      </public-track-player>
     </div>
 
-    <public-track-player
-      [expiry_date]="expiry_date"
-      [sender]="project.sender"
-      *ngFor="let track of project?.tracks"
-      [track]="track"
-      [enableOverview]="project?.tracks?.length > 1"
-      [ngbCollapse]="(getActiveTrack() | async) != track"
-      [trackActivated]="(getActiveTrack() | async) == track"
-      [expired]="expired && !commentsExpired"
-      (overview)="setActiveTrack(null)"
-      (error)="error = $event">
-    </public-track-player>
-  </div>
-
-</app-public-page>
+  </app-public-page>
+</ng-container>
