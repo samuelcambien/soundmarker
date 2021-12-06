@@ -1,4 +1,9 @@
 <?php
+
+if ($_SERVER["REQUEST_METHOD"] === "OPTIONS") {
+  exit;
+}
+
 require 'flight/Flight.php';
 require 'vendor/autoload.php';
 require 'credentials.php';
@@ -184,7 +189,7 @@ Flight::route('POST /project/new', function () {
 
   $user_id = getUserId();
   $project_title = isset($getbody->project_title) ? $getbody->project_title : "";
-  $project_password = isset($getbody->project_password) ? $getbody->project_password : "";
+  $project_password = $getbody->project_enable_password ? hash('sha256', $getbody->project_password) : "";
   $stream_type = isset($getbody->stream_type) ? $getbody->stream_type : "";
   $REMOTE_ADDR = isset($_SERVER["REMOTE_ADDR"]) ? $_SERVER["REMOTE_ADDR"] : '127.0.0.1';
   $HTTP_X_FORWARDED_FOR = isset($_SERVER['HTTP_X_FORWARDED_FOR']) ? $_SERVER['HTTP_X_FORWARDED_FOR'] : $REMOTE_ADDR;
@@ -210,34 +215,23 @@ Flight::route('POST /project/new', function () {
 //////////////////////////////////////////////////////// Routes - /project/edit POST ///////////////////////////////////////////////////
 Flight::route('POST /project/edit', function () {
 
-  $config = Flight::get("config");
   $getbody = json_decode(Flight::request()->getBody());
 
   $project_id = isset($getbody->project_id) ? $getbody->project_id : "";
   $project_title = isset($getbody->project_title) ? $getbody->project_title : "";
   $edit_password = isset($getbody->project_enable_password);
-  if ($edit_password) {
-    if ($getbody->project_enable_password) {
-      $project_password = $getbody->project_password;
-    } else {
-      $project_password = '';
-    }
-  }
-  $stream_type = isset($getbody->stream_type) ? $getbody->stream_type : "";
 
 // if user is able to edit this project -> update with user permissions
   if (canEditProject($project_id)) {
     $db = Flight::db();
-    $sql = "UPDATE Project SET title = '$project_title' WHERE project_id = '$project_id'";
-    $result = $db->query($sql);
+    $db->query("UPDATE Project SET title = '$project_title' WHERE project_id = '$project_id'");
     if ($edit_password) {
-      $sql = "UPDATE Project SET password = '$project_password' WHERE project_id = '$project_id'";
-      $result = $db->query($sql);
+      $project_password = $getbody->project_enable_password ? hash('sha256', $getbody->project_password) : '';
+      $db->query("UPDATE Project SET password = '$project_password' WHERE project_id = '$project_id'");
     }
-    $sql = "UPDATE Project SET stream_type = '$stream_type' WHERE project_id = '$project_id'";
-    $result = $db->query($sql);
-    $sql = "UPDATE Project SET stream_type = '$stream_type' WHERE project_id = '$project_id'";
-    $result = $db->query($sql);
+    if (isset($getbody->stream_type)) {
+      $db->query("UPDATE Project SET stream_type = '$getbody->stream_type' WHERE project_id = '$project_id'");
+    }
 
     // return ok
     Flight::json(array(
@@ -557,11 +551,15 @@ Flight::route('POST /project/subscribe', function () {
   }
 });
 
+Flight::route('GET /project/@project_hash/passwordprotected', function ($project_hash) {
+  Flight::json(
+    !!Flight::db()->query("SELECT password FROM Project WHERE hash = '$project_hash'")->fetchAll(PDO::FETCH_ASSOC)[0]["password"]
+  );
+});
 
 //////////////////////////////////////////////// Routes - /project/get/@project_hash GET /////////////////////////////////////////////
 Flight::route('GET /project/get/@project_hash', function ($project_hash) {
 
-  $config = Flight::get("config");
   $db = Flight::db();
   $sql = "SELECT project_id, title, active, expiration_date, user_id, password, stream_type FROM Project WHERE hash = '$project_hash'";
   $response = $db->query($sql)->fetchAll(PDO::FETCH_ASSOC);
@@ -601,42 +599,42 @@ Flight::route('GET /project/get/@project_hash', function ($project_hash) {
     }
 
     // if project is password protected
-    if ($project_password) {
-      if (in_array($project_id, $_SESSION['approved_user_projects'])) {
-        $_SESSION['view_user_projects'][] = $project_id;
-        // return ok
-        Flight::json(array(
-          'project_id' => $project_id, 'status' => $status, 'tracks' => $tracks
-        ), 200);
-      } else {
-        // return ok
-        Flight::json(array(
-          'return' => 'passwordmissing'
-        ), 200);
+    if ($project_password && $user_id != getUserId()) {
+      $password = $_SERVER['HTTP_PASSWORD'];
+      if (!$password) {
+        Flight::json('passwordmissing', 401);
+        return;
+      } else if (strcmp($project_password, hash('sha256', $password)) != 0) {
+        Flight::json('passwordwrong', 403);
+        return;
       }
-    } else {
-      $_SESSION['view_user_projects'][] = $project_id;
-
-      // also send sender
-      $sql = "SELECT emailaddress, user_id FROM Notification WHERE type = '0' AND type_id = '$project_id'";
-      $response = $db->query($sql)->fetchAll(PDO::FETCH_ASSOC);
-      // if only link is created, then no sender
-      if (isset($response[0])) {
-        $emailaddress = $response[0]["emailaddress"];
-      } else {
-        $emailaddress = "";
-      }
-
-      // return ok
-      Flight::json(array(
-        'project_id' => $project_id, 'title' => $title, 'status' => $status, 'expiration' => $expiration_date, 'stream_type' => $project_stream_type, 'sender' => $emailaddress, 'tracks' => $tracks
-      ), 200);
     }
+
+    // also send sender
+    $sql = "SELECT emailaddress, user_id FROM Notification WHERE type = '0' AND type_id = '$project_id'";
+    $response = $db->query($sql)->fetchAll(PDO::FETCH_ASSOC);
+    // if only link is created, then no sender
+    if (isset($response[0])) {
+      $emailaddress = $response[0]["emailaddress"];
+    } else {
+      $emailaddress = "";
+    }
+
+    // return ok
+    Flight::json(array(
+      'project_id' => $project_id,
+      'title' => $title,
+      'status' => $status,
+      'expiration' => $expiration_date,
+      'stream_type' => $project_stream_type,
+      'sender' => $emailaddress,
+      'tracks' => $tracks
+    ));
   } else {
     // project hash was not valid.
     Flight::json(array(
       'return' => 'nook'
-    ), 200);
+    ));
   }
 });
 
@@ -985,7 +983,6 @@ Flight::route('POST /track/version/edit', function () {
 ///////////////////////////////////////////////////////// Routes - /track GET /////////////////////////////////////////////////////////
 Flight::route('GET /track/@track_id', function ($track_id) {
 
-  $config = Flight::get("config");
   $db = Flight::db();
   $track_row = $db->query("SELECT title, visibility FROM Track WHERE track_id = '$track_id'")->fetchAll(PDO::FETCH_ASSOC)[0];
   $title = $track_row["title"];
@@ -1101,11 +1098,6 @@ Flight::route('GET /track/version/@version_id', function ($version_id) {
 Flight::route('GET /track/version/@version_id/waveform', function ($version_id) {
 
   $config = Flight::get("config");
-  if (!isAuthenticated()) {
-    Flight::json(array(
-      'return' => 'Unauthorized'
-    ), 401);
-  }
 
   $file_name = Flight::db()
     ->query("SELECT file_name FROM File WHERE version_id = '$version_id'")
@@ -1764,8 +1756,16 @@ function canEditFile($file_id)
   return true;
 }
 
+function canEditPassword($project_id): bool
+{
+//  return in_array($project_id, $_SESSION['approved_user_projects']);
+  return true;
+}
+
 /*
 FLIGHT
 */
 ///////////////////////////////////////////////////////////// Start Flight ////////////////////////////////////////////////////////////
 Flight::start();
+
+?>

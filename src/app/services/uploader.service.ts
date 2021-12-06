@@ -292,8 +292,12 @@ export class SMFileUploader {
     return this.stream_type;
   }
 
-  getSMPPW(){
+  getPassword(): string {
     return this.smppw;
+  }
+
+  getPasswordProtected(): boolean {
+    return this.smppw_bool;
   }
 
   removeFromQueue(item) {

@@ -23,7 +23,7 @@ export class TrackService {
 
   private async loadVersions(track: Track): Promise<void> {
 
-    track.versions = (await RestCall.getTrack(track.track_id))["versions"];
+    track.versions = track["versions"];
 
     await Promise.all(track.versions.map(async version => {
       await this.loadFiles(version);

@@ -1,28 +1,27 @@
 import {Comment} from "../model/comment";
-import {Project} from "../model/project";
 import {Version} from "../model/version";
 import {isDevMode} from "@angular/core";
-import {Track} from "../model/track";
-import {StateService} from '../services/state.service';
 
 export class RestCall {
 
   // POST
 
-  public static async createNewProject(projectTitle?: string, streamType?: string, projectSmppw?: string): Promise<any> {
+  public static async createNewProject(projectTitle?: string, streamType?: string, passwordProtected?: boolean, password?: string): Promise<any> {
     return Request.post(Endpoints.PROJECT_NEW, {
       project_title: projectTitle,
       stream_type: streamType,
-      project_password: projectSmppw,
+      project_enable_password: passwordProtected,
+      project_password: password,
     });
   }
 
-  public static async editProject(projectID, projectTitle: string, streamType: string, projectSmppw?: string): Promise<any> {
+  public static async editProject(projectID, projectTitle: string, streamType: string, passwordProtected: boolean, password?: string): Promise<any> {
     return Request.post(Endpoints.PROJECT_EDIT, {
       project_id: projectID,
       project_title: projectTitle,
       stream_type: streamType,
-      project_password: projectSmppw,
+      project_enable_password: passwordProtected,
+      project_password: password,
     });
   }
 
@@ -163,7 +162,11 @@ export class RestCall {
       return Request.post(Endpoints.SMA, {sma_id: id});
   }
 
-  public static async getProject(projectHash: string):
+  public static async isPasswordProtected(projectHash: string): Promise<boolean> {
+    return Request.getNonCaching(Endpoints.BACKEND + "/project/" + projectHash + "/passwordprotected");
+  }
+
+  public static async getProject(projectHash: string, password?: string):
     Promise<{
       project_id: string,
       title: string,
@@ -178,7 +181,12 @@ export class RestCall {
       }[],
     }> {
 
-    return Request.getNonCaching(Endpoints.PROJECT, [projectHash]);
+    let headers: Map<string, string> = new Map();
+    if (!!password) {
+      headers.set("password", password);
+    }
+
+    return Request.getNonCaching(Endpoints.PROJECT, [projectHash], headers);
   }
 
   public static getTrack(trackId: string): Promise<{
@@ -300,13 +308,14 @@ export class Request {
     );
   }
 
-  public static getNonCaching(endpoint, path?): Promise<any> {
+  public static getNonCaching(endpoint, path?, headers?: Map<string, string>): Promise<any> {
     return Request.execute(
       "GET", endpoint,
       {
         path: path,
         parse: true,
-        cache: false
+        cache: false,
+        headers,
       }
     );
   }
@@ -384,15 +393,20 @@ export class Request {
       Request.xhrCache[endpoint] = 'pending';
 
       let trackRequest = new XMLHttpRequest();
-
-      if (contentType) {
-        trackRequest.setRequestHeader("Content-Type", contentType);
-      }
       if (responseType) {
         trackRequest.responseType = responseType;
       }
 
       trackRequest.open(method, endpoint, true);
+
+      if (contentType) {
+        trackRequest.setRequestHeader("Content-Type", contentType);
+      }
+
+      if (parameters.headers) {
+        parameters.headers.forEach((value, key) => trackRequest.setRequestHeader(key, value));
+      }
+
       trackRequest.onreadystatechange = () => {
 
         if (trackRequest.readyState !== 4) return;
@@ -407,7 +421,7 @@ export class Request {
             // window.location.href = "https://www.leapwingaudio.com/oauth/authorize/?response_type=code&client_id=O7mazXp53IMKB7kF7meEH4AiuPJDTJwIuZEBw3dT&state=soundmarkerpro&redirect_uri=http://localhost/callback.php";
          }
         else {
-          reject(trackRequest.statusText);
+          reject(new Error(trackRequest.statusText));
         }
       };
       trackRequest.onerror = () => reject("connection error");
@@ -427,7 +441,7 @@ export class Request {
   }
 
   private static parse(string: string) {
-    return JSON.parse(string, (key, value) => typeof value === 'string' ? unescape(value) : value);
+    return JSON.parse(string.trim(), (key, value) => typeof value === 'string' ? unescape(value) : value);
   }
 }
 
@@ -437,6 +451,7 @@ export interface RequestParameters {
   contentType?;
   responseType?;
   data?;
+  headers?: Map<string, string>;
   path?: string[];
   stringify?: boolean;
   parse?: boolean;
