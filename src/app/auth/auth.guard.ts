@@ -14,7 +14,6 @@ import {Observable} from "rxjs";
 import {map} from "rxjs/operators";
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {LoggedOutDialogComponent} from '../services/loggedout-dialog/loggedout-dialog.component';
-174
 @Injectable({
   providedIn: 'root',
 })

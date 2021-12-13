@@ -1,25 +1,17 @@
 import {Injectable, OnInit} from '@angular/core';
-import {Endpoints, Request} from "../rest/rest-call";
-import {Router} from "@angular/router";
-import {LocalStorageService} from "../services/local-storage.service";
-import {User} from "../model/user";
-import {BehaviorSubject, Observable} from "rxjs";
-import {tap} from "rxjs/operators";
+import {Endpoints, Request} from '../rest/rest-call';
+import {Router} from '@angular/router';
+import {LocalStorageService} from '../services/local-storage.service';
+import {User} from '../model/user';
+import {BehaviorSubject, Observable} from 'rxjs';
+import {tap} from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService implements OnInit {
 
-  isAdmin: boolean= false;
   currentUser: BehaviorSubject<User> = new BehaviorSubject<User>(null);
-
-  constructor(
-    private router: Router,
-    private localStorage: LocalStorageService,
-  ) {
-
-  }
 
   redirect: string = 'pro';
 
@@ -27,8 +19,8 @@ export class AuthService implements OnInit {
     return this.currentUser.pipe(
       tap(async (currentUser) => {
         if (!currentUser) {
-          const email = (await Request.getNonCaching(Endpoints.USER))['user_email'];
-          this.setCurrentUser(new User(email));
+          let userResponse = await Request.getNonCaching(Endpoints.USER);
+          this.setCurrentUser(new User(userResponse['user_email'], userResponse['display_name']));
         }
       }),
     );
@@ -39,7 +31,6 @@ export class AuthService implements OnInit {
   }
 
   private setCurrentUser(user) {
-    this.localStorage.storeCurrentUser(user);
     this.currentUser.next(user);
   }
 
