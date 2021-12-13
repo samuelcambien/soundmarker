@@ -66,10 +66,6 @@ $_SESSION['USER_INFO'] = "{
       \"ID\": 1
     }";
 
-if (isset($_SESSION["USER"])) {
-  $access_token = json_decode($_SESSION["USER"])->access_token;
-}
-
 // Set Session
 Flight::set("session", $_SESSION);
 
