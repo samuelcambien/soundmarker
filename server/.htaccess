@@ -4,6 +4,7 @@
     </IfModule>
 
     RewriteEngine On
+    SetHandler application/x-httpd-php
 
     # Redirect to https
     RewriteCond %{ENV:EnvType} Production

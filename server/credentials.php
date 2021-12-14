@@ -14,4 +14,4 @@ $config['AWS_S3_BUCKET'] = (($_SERVER["AWSS3_BUCKET"]) != "") ? $_SERVER["AWSS3_
 $config['OAUTH_CLIENT_ID'] = (($_SERVER["OAUTH_CLIENT_ID"]) != "") ? $_SERVER["OAUTH_CLIENT_ID"] : 'zpRv44GCdzGikMHOT7artGXiGiJ7ttVVdg3TKfgw';
 $config['OAUTH_CLIENT_SECRET'] = (($_SERVER["OAUTH_CLIENT_SECRET"]) != "") ? $_SERVER["OAUTH_CLIENT_SECRET"] : '0OxdwkJa6F2nXuPxdiMue6sGKR78JQat9ptouLA4';
 $config['OAUTH_SERVER_LOCATION'] = (($_SERVER["OAUTH_SERVER_LOCATION"]) != "") ? $_SERVER["OAUTH_SERVER_LOCATION"] : 'https://www.leapwingaudio.com';
-$config['FFMPEG_PATH'] = (($_SERVER["FFMPEG_PATH"]) != "") ? $_SERVER["FFMPEG_PATH"] : '/usr/local/bin';
+$config['FFMPEG_PATH'] = (($_SERVER["FFMPEG_PATH"]) != "") ? $_SERVER["FFMPEG_PATH"] : '/usr/local/bin/';
