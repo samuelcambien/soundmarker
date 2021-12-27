@@ -61,6 +61,7 @@
                   <div [ngClass]="{'checked': version.downloadable == true}"
                        class="slider-text">Download
                   </div>
+
                 </label>
                 </div>
                 <div class="col">
@@ -81,6 +82,11 @@
                     </div>
                   </label>
                 </div>
+              <button type="button"
+                      class="btn btn-sm btn-outline-form free-upload"
+                      (click)="deleteVersion(version)">
+                Delete version
+              </button>
             </div>
             <div class="form-row">
               <div class="form-group col">

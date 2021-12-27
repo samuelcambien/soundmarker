@@ -1,9 +1,13 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output, Version} from '@angular/core';
 import {Track} from "../../../model/track";
 import {TrackService} from "../../../services/track.service";
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {Observable} from 'rxjs';
 import {Utils} from '../../../app.component';
+import {RestCall} from '../../../rest/rest-call';
+import {ConfirmDialogService} from '../../../services/confirmation-dialog/confirmation-dialog.service';
+import {Router} from '@angular/router';
+import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-edit-track-form',
@@ -14,6 +18,9 @@ export class EditTrackFormComponent implements OnInit {
 
   constructor(
     protected trackService: TrackService,
+    private confirmDialogService: ConfirmDialogService,
+    private router: Router,
+    private modalService: NgbModal,
   ) {
 
   }
@@ -81,5 +88,27 @@ export class EditTrackFormComponent implements OnInit {
       return Utils.getSizeHumanized(file.file_size);
     }
     else return '';
+  }
+
+  async deleteVersion(version){
+    if(this.track.versions.length == 1) {
+    const confirm: boolean = await this.confirmDialogService.confirm('You are about to delete the only version of a track.\n' +
+      'All information about this track will be deleted, are you sure?', 'Yes', "No");
+    if (confirm){
+      await RestCall.deleteTrack(this.track.track_id).then(() => {
+        this.router.navigate([`../pro/projects/${this.track.project.project_id}`]);
+        this.modalService.dismissAll();
+      })
+    }
+
+    }
+    else{
+      const confirm: boolean = await this.confirmDialogService.confirm('Are you sure you want to delete all content related with this version?\n' +
+        'This operation cannot be undone.', 'Yes', "No");
+      if (confirm) await RestCall.deleteVersion(version.version_id).then(()=>{
+          this.track.versions = this.track.versions.filter(item => item.version_id != version.version_id);
+        }
+      )
+    }
   }
 }
