@@ -67,4 +67,8 @@ export class ProUploadPopoverComponent implements OnInit {
       this.uploader.removeCancelled(smFileUploader);
     }
   }
+
+  removeSmFileUploadPopover(smFileUploader){
+    this.uploader.fileUploaders = this.uploader.getFileUploaders().filter(e => e != smFileUploader);
+  }
 }
