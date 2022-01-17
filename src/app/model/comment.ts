@@ -2,7 +2,7 @@ export class Comment {
 
   public deleteable: boolean;
   public loop: boolean = false;
-  public checked: number;
+  public checked: number = 0;
 
   public comment_id;
   public version_id;

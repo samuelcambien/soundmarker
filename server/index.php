@@ -1179,12 +1179,13 @@ Flight::route('POST /track/version/comment', function () {
   $include_start = isset($getbody->include_start) ? $getbody->include_start : 0;
   $include_end = isset($getbody->include_end) ? $getbody->include_end : 0;
   $comment_time = isset($getbody->comment_time) ? $getbody->comment_time : "";
+  $checked = isset($getbody->checked) ? $getbody->checked : "";
 
 // if user is allow to see this version
 //  if (in_array($version_id, $_SESSION['view_versions'])) {
   if (true) {
     $db = Flight::db();
-    $sql = "INSERT INTO Comment (version_id, notes, name, start_time, end_time, parent_comment_id, include_start, include_end, comment_time, checked) VALUES ('$version_id', '$notes', '$name', '$start_time', '$end_time', '$parent_comment_id', '$include_start', '$include_end', '$comment_time', False)";
+    $sql = "INSERT INTO Comment (version_id, notes, name, start_time, end_time, parent_comment_id, include_start, include_end, comment_time, checked) VALUES ('$version_id', '$notes', '$name', '$start_time', '$end_time', '$parent_comment_id', '$include_start', '$include_end', '$comment_time', $checked)";
     $result = $db->query($sql);
 
     $_SESSION["view_comments"][] = $db->lastInsertId();
