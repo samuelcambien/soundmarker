@@ -1173,11 +1173,11 @@ Flight::route('POST /track/version/comment', function () {
   $version_id = $getbody->version_id;
   $notes = isset($getbody->notes) ? $getbody->notes : "";
   $name = isset($getbody->name) ? $getbody->name : "";
-  $start_time = isset($getbody->start_time) ? $getbody->start_time : "";
-  $end_time = isset($getbody->end_time) ? $getbody->end_time : "";
-  $parent_comment_id = isset($getbody->parent_comment_id) ? $getbody->parent_comment_id : "";
-  $include_start = isset($getbody->include_start) ? $getbody->include_start : "";
-  $include_end = isset($getbody->include_end) ? $getbody->include_end : "";
+  $start_time = isset($getbody->start_time) ? $getbody->start_time : -1;
+  $end_time = isset($getbody->end_time) ? $getbody->end_time : -1;
+  $parent_comment_id = isset($getbody->parent_comment_id) ? $getbody->parent_comment_id : 0;
+  $include_start = isset($getbody->include_start) ? $getbody->include_start : 0;
+  $include_end = isset($getbody->include_end) ? $getbody->include_end : 0;
   $comment_time = isset($getbody->comment_time) ? $getbody->comment_time : "";
 
 // if user is allow to see this version
