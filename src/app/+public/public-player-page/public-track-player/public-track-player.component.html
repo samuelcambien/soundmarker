@@ -232,7 +232,6 @@
             [style.left]="getStartPosition()"
           >
             <div
-              *ngIf="stateService.isAdminRoute()"
               class="app-draggable"
               appDraggable
               (dragStart)="dragStart()"

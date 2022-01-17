@@ -115,7 +115,7 @@ export class StateService {
     this.sidebarPlayer.next(alert);
   }
 
-  isAdminRoute(): boolean {
+  public isAdminRoute(): boolean {
     return /^\/pro(\/|$)/.test(this.router.url);
   }
 }
