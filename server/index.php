@@ -548,8 +548,10 @@ Flight::route('POST /project/subscribe', function () {
 });
 
 Flight::route('GET /project/@project_hash/passwordprotected', function ($project_hash) {
+  $project = Flight::db()->query("SELECT password, user_id FROM Project WHERE hash = '$project_hash'")->fetchAll(PDO::FETCH_ASSOC)[0];
   Flight::json(
-    !!Flight::db()->query("SELECT password FROM Project WHERE hash = '$project_hash'")->fetchAll(PDO::FETCH_ASSOC)[0]["password"]
+    $project["user_id"] != getUserId() &&
+    !!$project["password"]
   );
 });
 
