@@ -13,19 +13,6 @@ Flight::register('db', 'PDO', array('mysql:host='.$config["RDS_HOSTNAME"].';dbna
         $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 });
 
-////////////////////////////////////////////////////////////// Setup S3 client ////////////////////////////////////////////////////////
-use Aws\S3\S3Client;
-use Aws\S3\Exception\S3Exception;
-
-$s3 = new Aws\S3\S3Client([
-    'profile'     => 's3',
-    'version'     => 'latest',
-    'region'      => $config['AWS_S3_REGION'],
-    'scheme'      => 'http',
-]);
-
-Flight::set("s3", $s3);
-
 ///////////////////////////////////////////////////////////// Setup SES client ////////////////////////////////////////////////////////
 use Aws\Ses\SesClient;
 use Aws\Exception\AwsException;
@@ -343,36 +330,36 @@ if (true) {
   $subject = 'Your tracks have been shared successfully via Soundmarker';
   $char_set = 'UTF-8';
 
-  try {
-      $result = Flight::get("SesClient")->sendEmail([
-          'Destination' => [
-              'ToAddresses' => [$sender],
-          ],
-          'ReplyToAddresses' => ["noreply@soundmarker.com"],
-          'Source' => "Soundmarker <noreply@soundmarker.com>",
-          'Message' => [
-            'Body' => [
-                'Html' => [
-                    'Charset' => $char_set,
-                    'Data' => $emailstring,
-                ],
-                'Text' => [
-                    'Charset' => $char_set,
-                    'Data' => $emailstring_text,
-                ],
-            ],
-            'Subject' => [
-                'Charset' => $char_set,
-                'Data' => $subject,
-            ],
-          ],
-      ]);
-      $messageId = $result['MessageId'];
-  } catch (AwsException $e) {
-      // output error message if fails
-      echo $e->getMessage();
-      echo("The email was not sent. Error message: ".$e->getAwsErrorMessage()."\n");
-  }
+//   try {
+//       $result = Flight::get("SesClient")->sendEmail([
+//           'Destination' => [
+//               'ToAddresses' => [$sender],
+//           ],
+//           'ReplyToAddresses' => ["noreply@soundmarker.com"],
+//           'Source' => "Soundmarker <noreply@soundmarker.com>",
+//           'Message' => [
+//             'Body' => [
+//                 'Html' => [
+//                     'Charset' => $char_set,
+//                     'Data' => $emailstring,
+//                 ],
+//                 'Text' => [
+//                     'Charset' => $char_set,
+//                     'Data' => $emailstring_text,
+//                 ],
+//             ],
+//             'Subject' => [
+//                 'Charset' => $char_set,
+//                 'Data' => $subject,
+//             ],
+//           ],
+//       ]);
+//       $messageId = $result['MessageId'];
+//   } catch (AwsException $e) {
+//       // output error message if fails
+//       echo $e->getMessage();
+//       echo("The email was not sent. Error message: ".$e->getAwsErrorMessage()."\n");
+//   }
 
   // only send if opted in for email
   if ($receiver) {
@@ -408,38 +395,38 @@ if (true) {
     $subject = $sender . ' has shared '. $trackcount . ' with you via Soundmarker';
     $char_set = 'UTF-8';
 
-    try {
-        foreach ($receiver as &$receiveremail) {
-        $result = Flight::get("SesClient")->sendEmail([
-            'Destination' => [
-                'ToAddresses' => [$receiveremail],
-            ],
-            'ReplyToAddresses' => [$sender],
-            'Source' => "Soundmarker <noreply@soundmarker.com>",
-            'Message' => [
-              'Body' => [
-                  'Html' => [
-                      'Charset' => $char_set,
-                      'Data' => $emailstring,
-                  ],
-                  'Text' => [
-                      'Charset' => $char_set,
-                      'Data' => $emailstring_text,
-                  ],
-              ],
-              'Subject' => [
-                  'Charset' => $char_set,
-                  'Data' => $subject,
-              ],
-            ],
-        ]);
-        // $messageId = $result['MessageId'];
-        }
-    } catch (AwsException $e) {
-        // output error message if fails
-        echo $e->getMessage();
-        echo("The email was not sent. Error message: ".$e->getAwsErrorMessage()."\n");
-    }
+//     try {
+//         foreach ($receiver as &$receiveremail) {
+//         $result = Flight::get("SesClient")->sendEmail([
+//             'Destination' => [
+//                 'ToAddresses' => [$receiveremail],
+//             ],
+//             'ReplyToAddresses' => [$sender],
+//             'Source' => "Soundmarker <noreply@soundmarker.com>",
+//             'Message' => [
+//               'Body' => [
+//                   'Html' => [
+//                       'Charset' => $char_set,
+//                       'Data' => $emailstring,
+//                   ],
+//                   'Text' => [
+//                       'Charset' => $char_set,
+//                       'Data' => $emailstring_text,
+//                   ],
+//               ],
+//               'Subject' => [
+//                   'Charset' => $char_set,
+//                   'Data' => $subject,
+//               ],
+//             ],
+//         ]);
+//         // $messageId = $result['MessageId'];
+//         }
+//     } catch (AwsException $e) {
+//         // output error message if fails
+//         echo $e->getMessage();
+//         echo("The email was not sent. Error message: ".$e->getAwsErrorMessage()."\n");
+//     }
 
     // Create DailyUpdates in dB
     // $sql = "INSERT INTO DailyUpdates (emailaddress, project_id) VALUES ('$sender', '$project_id')";
