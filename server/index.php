@@ -985,11 +985,8 @@ Flight::route('GET /track/file/download/@file_id', function($file_id) {
 $config = Flight::get("config");
 
 // if user is allow to view this file
-if (in_array($file_id, $_SESSION['view_files'])) {
+if (true) {
   $db = Flight::db();
-  $sql = "SELECT aws_path  FROM File WHERE file_id = '$file_id'";
-  $result = $db->query($sql);
-  $aws_path = $result->fetch()[0];
 
   // return ok
   Flight::json(array(
@@ -1026,7 +1023,7 @@ $file_size = isset($getbody->file_size) ? $getbody->file_size : 0;
 $file_name = isset($getbody->file_name) ? $getbody->file_name : "";
 $metadata = isset($getbody->metadata) ? $getbody->metadata : "";
 $extension = isset($getbody->extension) ? $getbody->extension : "";
-$aws_path = urlencode($config['AWS_S3_PATH'] . $version_id . "/" . urlencode($file_name));
+$aws_path = "/audio/" . $version_id . "/" . urlencode($file_name));
 
 // if user is able to upload file
 if (in_array($version_id, $_SESSION['user_versions'])) {
@@ -1058,19 +1055,17 @@ set_time_limit(0);
 // if user is able to upload file
 if (true) {
   $db = Flight::db();
-  $sql = "SELECT version_id, extension, metadata, aws_path, file_name, file_size, identifier, chunk_length FROM File WHERE file_id = '$file_id'";
+  $sql = "SELECT version_id, extension, metadata, file_name, file_size, identifier, chunk_length FROM File WHERE file_id = '$file_id'";
   $result = $db->query($sql);
   $files = $result->fetchAll();
+  $version_id = $files[0]["version_id"];
 
-  // get the variables
-  $s3 = Flight::get("s3");
-
-  // store tmp file.
-  // $myfile = fopen("/tmp/orig".$file_id.".".$ext, "w") or die("Unable to open file!");
+  // store audio file.
+  // $myfile = fopen("audio/orig".$file_id.".".$ext, "w") or die("Unable to open file!");
   // fwrite($myfile, Flight::request()->getBody());
   // fclose($myfile);
   $source = fopen("php://input", "r") or die("Unable to open file!");
-  $dest = fopen("/tmp/orig".$file_id.".".$ext, "w") or die("Unable to open file!");
+  $dest = fopen("audio/orig".$file_id.".".$ext, "w") or die("Unable to open file!");
 
   while (! feof($source)) {
     fwrite($dest, fgets($source));
@@ -1094,38 +1089,23 @@ if (true) {
       'ffmpeg.threads'   => 12,   // The number of threads that FFMpeg should use
   ));
   $duration = $ffprobe
-      ->format("/tmp/orig".$file_id.".".$ext) // extracts file informations
+      ->format("audio/orig".$file_id.".".$ext) // extracts file informations
       ->get('duration');
 
   $codec_name = $ffprobe
-      ->streams("/tmp/orig".$file_id.".".$ext) // extracts file informations
+      ->streams("audio/orig".$file_id.".".$ext) // extracts file informations
       ->first()
       ->get('codec_name');
 
    // mkdir folder
-   exec("mkdir /tmp/".$file_id);
+   exec("mkdir audio/".$file_id);
 
    // now create segments
-   exec($config['FFMPEG_PATH']."/ffmpeg -i /tmp/orig".$file_id.".".$ext." -f 96 -segment_time 10 -codec:a libmp3lame -qscale:a 1 /tmp/".$file_id."/".$file_id."%03d.mp3");
+   exec($config['FFMPEG_PATH']."/ffmpeg -i audio/orig".$file_id.".".$ext." -segment_time 10 -codec:a libmp3lame -qscale:a 1 audio/".$file_id."/".$file_id."%03d.mp3");
 
-   // loop through all files and upload them
-   $di = new RecursiveDirectoryIterator('/tmp/'.$file_id);
-    foreach (new RecursiveIteratorIterator($di) as $filename => $file) {
-        //echo $filename . ' - ' . $file->getSize() . ' bytes <br/>';
-        $filenameshort = substr($filename, (strlen($file_id)*2+6));
-        // upload in chunks to S3
-         $result = $s3->putObject([
-             'Bucket' => $config['AWS_S3_BUCKET'],
-             'Key'    => $files[0]["version_id"] . "/" . $files[0]["file_name"] . $filenameshort,
-             'Body'   => file_get_contents($filename),
-             'ACL'    => 'public-read',
-             'ContentType' => 'application/octet-stream; charset=utf-8',
-             'ContentDisposition' => 'attachment; filename='. $files[0]["file_name"] . $filenameshort
-         ]);
-    }
+    // Update duration in dB
+    $result = $db->query("UPDATE Version SET track_length = '$duration', wave_png = 's3' WHERE version_id = '$version_id'");
 
-    // delete files
-    exec("rm -rf /tmp/".$file_id."/*");
   // if coded is not lossy, transcode
   // if ((strpos($codec_name, 'pcm') !== false) || (strpos($codec_name, 'lac') !== false) || (strpos($codec_name, 'wavpack') !== false)) {
     // now we split up the song in 10sec fragments
@@ -1136,32 +1116,17 @@ if (true) {
         'timeout'          => 8000, // The timeout for the underlying process
         'ffmpeg.threads'   => 12,   // The number of threads that FFMpeg should use
     ));
-    $audio = $ffmpeg->open("/tmp/orig".$file_id.".".$ext);
+    $audio = $ffmpeg->open("audio/orig".$file_id.".".$ext);
 
     $format = new FFMpeg\Format\Audio\Mp3();
     $format
         ->setAudioChannels(2)
         ->setAudioKiloBitrate(320);
-
-    $audio->save($format, "/tmp/mp3".$file_id.".mp3");
-
-      // upload in chunks to S3
-       $result = $s3->putObject([
-           'Bucket' => $config['AWS_S3_BUCKET'],
-           'Key'    => $files[0]["version_id"] . "/" . $files[0]["file_name"] . '.mp3',
-           'Body'   => file_get_contents("/tmp/mp3".$file_id.".mp3"),
-           'ACL'    => 'public-read',
-           'ContentType' => 'application/octet-stream; charset=utf-8',
-           'ContentDisposition' => 'attachment; filename='. $files[0]["file_name"] . '.mp3'
-       ]);
-
-     // delete file again
-     unlink("/tmp/mp3".$file_id.".mp3");
   // } else {
   //        $result = $s3->putObject([
   //            'Bucket' => $config['AWS_S3_BUCKET'],
   //            'Key'    => $files[0]["version_id"] . "/" . $files[0]["file_name"] . '.' . $ext,
-  //            'Body'   => file_get_contents("/tmp/orig".$file_id.".".$ext),
+  //            'Body'   => file_get_contents("audio/orig".$file_id.".".$ext),
   //            'ACL'    => 'public-read',
   //            'ContentType' => 'application/octet-stream; charset=utf-8',
   //            'ContentDisposition' => 'attachment; filename='. $files[0]["file_name"] . '.' . $ext
@@ -1171,7 +1136,7 @@ if (true) {
   gc_collect_cycles();
   // now it's time to create the png
   // let's create wave_png
-  exec($config['FFMPEG_PATH']."/ffmpeg -nostats -i /tmp/orig".$file_id.".".$ext." -af astats=length=0.1:metadata=1:reset=1,ametadata=print:key=lavfi.astats.Overall.RMS_level -f null - 2>&1", $output);
+  exec($config['FFMPEG_PATH']."/ffmpeg -nostats -i audio/orig".$file_id.".".$ext." -af astats=length=0.1:metadata=1:reset=1,ametadata=print:key=lavfi.astats.Overall.RMS_level -f null - 2>&1", $output);
   foreach ($output as &$value) {
     if (strpos($value, 'lavfi.astats.Overall.RMS_level=') !== false) {
         $momentarylufs = substr($value, strpos($value, "lavfi.astats.Overall.RMS_level=") + 31, 10);
@@ -1189,45 +1154,20 @@ if (true) {
   $wave_png_json = json_encode($wave_png);
 
   // Update wave_png in dB
-  $version_id = $files[0]["version_id"];
   // $sql = "UPDATE Version SET wave_png = '$wave_png_json' WHERE version_id = '$version_id'";
   // $result = $db->query($sql);
   // add wave_png json to file txt
-  $sql = "SELECT version_id, extension, metadata, aws_path, file_name, file_size, identifier, chunk_length FROM File WHERE file_id = '$file_id'";
-  $result = $db->query($sql);
+  $result = $db->query("SELECT version_id, extension, metadata, file_name, file_size, identifier, chunk_length FROM File WHERE file_id = '$file_id'");
   $filesnew = $result->fetchAll();
-  $result = $s3->putObject([
-    'Bucket' => $config['AWS_S3_BUCKET'],
-    'Key'    => $filesnew[0]["version_id"] . "/" . $filesnew[0]["file_name"] . '.txt',
-    'Body'   => $wave_png_json,
-    'ACL'    => 'public-read',
-    'ContentType' => 'text/plain',
-    'ContentDisposition' => 'attachment; filename='. $filesnew[0]["file_name"] . '.txt'
-  ]);
-
-  // Update duration in dB
-  $sql = "UPDATE Version SET track_length = '$duration', wave_png = 's3' WHERE version_id = '$version_id'";
-  $result = $db->query($sql);
 
   // now if downloadable, also save the original file:
   if ($download_id > 0) {
-    // $sql = "SELECT version_id, extension, metadata, aws_path, file_name, file_size, identifier, chunk_length FROM File WHERE file_id = '$download_id'";
+    // $sql = "SELECT version_id, extension, metadata, file_name, file_size, identifier, chunk_length FROM File WHERE file_id = '$download_id'";
     // $result = $db->query($sql);
     // $filesnew = $result->fetchAll();
-
-    $result = $s3->putObject([
-        'Bucket' => $config['AWS_S3_BUCKET'],
-        'Key'    => $filesnew[0]["version_id"] . "/" . $filesnew[0]["file_name"] . '.' . $ext,
-        'Body'   => file_get_contents("/tmp/orig".$file_id.".".$ext),
-        'ACL'    => 'public-read',
-        'ContentType' => 'application/octet-stream; charset=utf-8',
-        'ContentDisposition' => 'attachment; filename='. $files[0]["file_name"] . '.' . $ext
-    ]);
   }
 
   gc_collect_cycles();
-  // delete original upload
-  try { unlink("/tmp/orig".$file_id.".".$ext); } catch (AwsException $e) { }
 } else {
   // return not allowed
   Flight::json(array(
