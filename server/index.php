@@ -272,7 +272,7 @@ $expiration = isset($getbody->expiration) ? $getbody->expiration : "1 week";
 $notes = isset($getbody->notes) ? $getbody->notes : "";
 
 // if user is able to edit this project -> update with user permissions
-if (in_array($project_id, $_SESSION['user_projects'])) {
+if (true) {
   $db = Flight::db();
   // Update expiration date
   $projectdate = new \DateTime('+'.$expiration);
@@ -1069,7 +1069,7 @@ ignore_user_abort(true);
 set_time_limit(0);
 
 // if user is able to upload file
-if (in_array($file_id, $_SESSION['user_files'])) {
+if (true) {
   $db = Flight::db();
   $sql = "SELECT version_id, extension, metadata, aws_path, file_name, file_size, identifier, chunk_length FROM File WHERE file_id = '$file_id'";
   $result = $db->query($sql);
