@@ -1,8 +1,7 @@
-import {Comment} from "../model/comment";
-import {Project} from "../model/project";
-import {Version} from "../model/version";
-import {isDevMode} from "@angular/core";
-import {Utils} from "../app.component";
+import { Comment } from '../model/comment';
+import { Project } from '../model/project';
+import { Version } from '../model/version';
+import { isDevMode } from '@angular/core';
 
 export class RestCall {
 
@@ -123,7 +122,7 @@ export class RestCall {
 
 export class Endpoints {
 
-  private static BACKEND: string = "http://localhost";
+  private static BACKEND: string = "";
 
   private static DATA: string = Endpoints.BACKEND;
 
