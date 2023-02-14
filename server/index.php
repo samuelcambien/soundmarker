@@ -15,7 +15,6 @@ Flight::register('db', 'PDO', array('mysql:host='.$config["RDS_HOSTNAME"].';dbna
 
 ///////////////////////////////////////////////////////////// Setup SES client ////////////////////////////////////////////////////////
 use Aws\Ses\SesClient;
-use Aws\Exception\AwsException;
 
 $SesClient = new SesClient([
     'profile' => 'ses',
@@ -164,112 +163,90 @@ PROJECT
 //////////////////////////////////////////////////////// Routes - /project/new POST ///////////////////////////////////////////////////
 Flight::route('POST /project/new', function() {
 
-$config = Flight::get("config");
+  Flight::get("config");
 // Todo: check if user_id exists first (foreign_key needs to be valid) -> put in dB
-$getbody = json_decode(Flight::request()->getBody());
+  $getbody = json_decode(Flight::request()->getBody());
 
-$user_id = isset($_SESSION['USER']) ? $_SESSION['USER'] : "0";
-$project_title = isset($getbody->project_title) ? $getbody->project_title : "";
-$project_password = isset($getbody->project_password) ? $getbody->project_password : "";
-$ipaddr = $_SERVER['REMOTE_ADDR'] . " - " . $_SERVER['HTTP_X_FORWARDED_FOR'];
+  $user_id = isset($_SESSION['USER']) ? $_SESSION['USER'] : "0";
+  $project_title = isset($getbody->project_title) ? $getbody->project_title : "";
+  $project_password = isset($getbody->project_password) ? $getbody->project_password : "";
+  $ipaddr = $_SERVER['REMOTE_ADDR'] . " - " . $_SERVER['HTTP_X_FORWARDED_FOR'];
 
-$db = Flight::db();
-$sql = "INSERT INTO Project (user_id, title, password, active, ipaddr) VALUES ('$user_id', '$project_title', '$project_password', '1', '$ipaddr')";
-$result = $db->query($sql);
-$project_id = $db->lastInsertId();
+  $db = Flight::db();
+  $db->query("INSERT INTO Project (user_id, title, password, active, ipaddr) VALUES ('$user_id', '$project_title', '$project_password', '1', '$ipaddr')");
+  $project_id = $db->lastInsertId();
 
-$uuid = UUID::v4().UUID::v4();
-$sql = "UPDATE Project SET hash = '$uuid' WHERE project_id = '$project_id'";
-$result = $db->query($sql);
-
-$_SESSION['user_projects'][] = $project_id;
+  $uuid = UUID::v4() . UUID::v4();
+  $db->query("UPDATE Project SET hash = '$uuid' WHERE project_id = '$project_id'");
 
 // return ok
-Flight::json(array(
-   'project_id' => $project_id
-), 200);
+  Flight::json(array(
+    'project_id' => $project_id
+  ));
 });
 
 //////////////////////////////////////////////////////// Routes - /project/edit POST ///////////////////////////////////////////////////
 Flight::route('POST /project/edit', function() {
 
-$config = Flight::get("config");
-$getbody = json_decode(Flight::request()->getBody());
+  Flight::get("config");
+  $getbody = json_decode(Flight::request()->getBody());
 
-$project_id = isset($getbody->project_id) ? $getbody->project_id : "";
-$project_title = isset($getbody->project_title) ? $getbody->project_title : "";
-$project_password = isset($getbody->project_password) ? $getbody->project_password : "";
+  $project_id = isset($getbody->project_id) ? $getbody->project_id : "";
+  $project_title = isset($getbody->project_title) ? $getbody->project_title : "";
+  $project_password = isset($getbody->project_password) ? $getbody->project_password : "";
 
-// if user is able to edit this project -> update with user permissions
-if (in_array($project_id, $_SESSION['user_projects'])) {
   $db = Flight::db();
-  $sql = "UPDATE Project SET title = '$project_title' WHERE project_id = '$project_id'";
-  $result = $db->query($sql);
-  $sql = "UPDATE Project SET password = '$project_password' WHERE project_id = '$project_id'";
-  $result = $db->query($sql);
+  $db->query("UPDATE Project SET title = '$project_title' WHERE project_id = '$project_id'");
+  $db->query("UPDATE Project SET password = '$project_password' WHERE project_id = '$project_id'");
 
   // return ok
   Flight::json(array(
-     'return' => 'ok'
-  ), 200);
-} else {
-  // return not allowed
-  Flight::json(array(
-     'return' => 'notallowed'
-  ), 405);
-}
+    'return' => 'ok'
+  ));
 });
 
 //////////////////////////////////////////////////////// Routes - /project/all GET ///////////////////////////////////////////////////
 Flight::route('GET /project/all', function() {
 
-$config = Flight::get("config");
+  Flight::get("config");
 
-$db = Flight::db();
-$user_id = isset($_SESSION['USER']) ? $_SESSION['USER'] : "0";
-if (isset($_SESSION['USER'])) {
-  $sql = "SELECT project_id, title, expiration_date, hash FROM Project WHERE user_id = '$user_id' AND active = '1'";
-  $result = $db->query($sql)->fetchAll(PDO::FETCH_ASSOC);
+  $user_id = isset($_SESSION['USER']) ? $_SESSION['USER'] : "0";
+  if (isset($_SESSION['USER'])) {
+    $result = Flight::db()
+      ->query("SELECT project_id, title, expiration_date, hash FROM Project WHERE user_id = '$user_id' AND active = '1'")
+      ->fetchAll(PDO::FETCH_ASSOC);
 
-  // return ok
-  Flight::json(array(
-     'projects' => $result
-  ), 200);
-} else {
-  // return ok
-  Flight::json(array(
-     'return' => 'notloggedin'
-  ), 200);
-}
-
+    Flight::json(array(
+      'projects' => $result
+    ));
+  } else {
+    Flight::json(array(
+      'return' => 'notloggedin'
+    ));
+  }
 });
 
 //////////////////////////////////////////////// Routes - /project/get/@project_hash POST /////////////////////////////////////////////
 Flight::route('POST /project/get/url', function() {
 
-$config = Flight::get("config");
+  $config = Flight::get("config");
 // calculate amount of tracks and get track names
-$getbody = json_decode(Flight::request()->getBody());
+  $getbody = json_decode(Flight::request()->getBody());
 
-$project_id = isset($getbody->project_id) ? $getbody->project_id : "";
-$sender = isset($getbody->sender) ? $getbody->sender : "";
-$receiver = isset($getbody->receiver) ? $getbody->receiver : "";
-$expiration = isset($getbody->expiration) ? $getbody->expiration : "1 week";
+  $project_id = isset($getbody->project_id) ? $getbody->project_id : "";
+  $sender = isset($getbody->sender) ? $getbody->sender : "";
+  $receiver = isset($getbody->receiver) ? $getbody->receiver : "";
+  $expiration = isset($getbody->expiration) ? $getbody->expiration : "1 week";
 // check notes????
-$notes = isset($getbody->notes) ? $getbody->notes : "";
+  $notes = isset($getbody->notes) ? $getbody->notes : "";
 
-// if user is able to edit this project -> update with user permissions
-if (true) {
   $db = Flight::db();
   // Update expiration date
-  $projectdate = new \DateTime('+'.$expiration);
+  $projectdate = new \DateTime('+' . $expiration);
   $projectdatef = $projectdate->format('Y-m-d H:i:s');
-  $sql = "UPDATE Project SET expiration_date = '$projectdatef' WHERE project_id = '$project_id'";
-  $result = $db->query($sql);
+  $db->query("UPDATE Project SET expiration_date = '$projectdatef' WHERE project_id = '$project_id'");
 
-  $sql = "SELECT hash FROM Project WHERE project_id = '$project_id'";
-  $result = $db->query($sql);
-  $hash = $result->fetch()[0];
+  $hash = $db->query("SELECT hash FROM Project WHERE project_id = '$project_id'")->fetch()[0];
 
   // https://www.functions-online.com/htmlentities.html
   // htmlentities('', ENT_COMPAT, 'ISO-8859-1');
@@ -282,84 +259,55 @@ if (true) {
 
   // Replace strings
   // Replace strings -> %projectdate%
-  $emailstring = str_replace("%projectdate%",$projectdate->format('F jS Y'),$emailstring);
-  $emailstring_text = str_replace("%projectdate%",$projectdate->format('F jS Y'),$emailstring_text);
+  $emailstring = str_replace("%projectdate%", $projectdate->format('F jS Y'), $emailstring);
+  $emailstring_text = str_replace("%projectdate%", $projectdate->format('F jS Y'), $emailstring_text);
   // Replace strings -> %projectlink%
   $sql = "SELECT hash FROM Project WHERE project_id = '$project_id'";
-  $projectlink = $config['SERVER_URL']."/project/" . $db->query($sql)->fetch()[0];
-  $emailstring = str_replace("%projectlink%",$projectlink,$emailstring);
-  $emailstring_text = str_replace("%projectlink%",$projectlink,$emailstring_text);
+  $projectlink = $config['SERVER_URL'] . "/project/" . $db->query($sql)->fetch()[0];
+  $emailstring = str_replace("%projectlink%", $projectlink, $emailstring);
+  $emailstring_text = str_replace("%projectlink%", $projectlink, $emailstring_text);
   // Replace strings -> %recipientmail%
   if ($receiver) {
-    $emailstring = str_replace("%recipientmail%",implode("<br>", $receiver),$emailstring);
-    $emailstring_text = str_replace("%recipientmail%",implode("\n", $receiver),$emailstring_text);
+    $emailstring = str_replace("%recipientmail%", implode("<br>", $receiver), $emailstring);
+    $emailstring_text = str_replace("%recipientmail%", implode("\n", $receiver), $emailstring_text);
   } else {
-    $emailstring = str_replace("%recipientmail%","Link only",$emailstring);
-    $emailstring_text = str_replace("%recipientmail%","Link only",$emailstring_text);
+    $emailstring = str_replace("%recipientmail%", "Link only", $emailstring);
+    $emailstring_text = str_replace("%recipientmail%", "Link only", $emailstring_text);
   }
   // Replace strings -> %trackamount%
   $sql = "SELECT track_id FROM Track WHERE project_id = '$project_id'";
   $tracks = $db->query($sql)->fetchAll(PDO::FETCH_ASSOC);
   foreach ($tracks as &$track) {
-      $trackid = $track["track_id"];
-      $sqlversion = "SELECT version_id FROM Version WHERE track_id = '$trackid'";
-      $versions[] = $db->query($sqlversion)->fetchAll(PDO::FETCH_ASSOC);
+    $trackid = $track["track_id"];
+    $sqlversion = "SELECT version_id FROM Version WHERE track_id = '$trackid'";
+    $versions[] = $db->query($sqlversion)->fetchAll(PDO::FETCH_ASSOC);
   }
   foreach ($versions as &$versions2) {
     foreach ($versions2 as &$version) {
-        $versionid = $version["version_id"];
-        $sqlfiles = "SELECT file_name FROM File WHERE version_id = '$versionid'";
-        $files[] = $db->query($sqlfiles)->fetchAll(PDO::FETCH_ASSOC)[0];
+      $versionid = $version["version_id"];
+      $sqlfiles = "SELECT file_name FROM File WHERE version_id = '$versionid'";
+      $files[] = $db->query($sqlfiles)->fetchAll(PDO::FETCH_ASSOC)[0];
     }
   }
   if (count($files) == 1) {
-    $trackcount = count($files). " track";
+    $trackcount = count($files) . " track";
   } else {
-    $trackcount = count($files). " tracks";
+    $trackcount = count($files) . " tracks";
   }
-  $emailstring = str_replace("%trackamount%",$trackcount,$emailstring);
-  $emailstring_text = str_replace("%trackamount%",$trackcount,$emailstring_text);
+  $emailstring = str_replace("%trackamount%", $trackcount, $emailstring);
+  $emailstring_text = str_replace("%trackamount%", $trackcount, $emailstring_text);
   // Replace strings -> %tracktitle%
   $tracktitle = "";
   foreach ($files as &$file) {
-      $tracktitle .= urldecode($file["file_name"]) . "<br>";
+    $tracktitle .= urldecode($file["file_name"]) . "<br>";
   }
-  $emailstring = str_replace("%tracktitle%",$tracktitle,$emailstring);
-  $emailstring_text = str_replace("%tracktitle%",$tracktitle,$emailstring_text);
+  $emailstring = str_replace("%tracktitle%", $tracktitle, $emailstring);
+  $emailstring_text = str_replace("%tracktitle%", $tracktitle, $emailstring_text);
 
   $subject = 'Your tracks have been shared successfully via Soundmarker';
   $char_set = 'UTF-8';
 
-//   try {
-//       $result = Flight::get("SesClient")->sendEmail([
-//           'Destination' => [
-//               'ToAddresses' => [$sender],
-//           ],
-//           'ReplyToAddresses' => ["noreply@soundmarker.com"],
-//           'Source' => "Soundmarker <noreply@soundmarker.com>",
-//           'Message' => [
-//             'Body' => [
-//                 'Html' => [
-//                     'Charset' => $char_set,
-//                     'Data' => $emailstring,
-//                 ],
-//                 'Text' => [
-//                     'Charset' => $char_set,
-//                     'Data' => $emailstring_text,
-//                 ],
-//             ],
-//             'Subject' => [
-//                 'Charset' => $char_set,
-//                 'Data' => $subject,
-//             ],
-//           ],
-//       ]);
-//       $messageId = $result['MessageId'];
-//   } catch (AwsException $e) {
-//       // output error message if fails
-//       echo $e->getMessage();
-//       echo("The email was not sent. Error message: ".$e->getAwsErrorMessage()."\n");
-//   }
+  mail($sender, $subject, $emailstring);
 
   // only send if opted in for email
   if ($receiver) {
@@ -371,307 +319,221 @@ if (true) {
 
     // Replace strings
     // Replace strings -> %projectdate%
-    $emailstring = str_replace("%projectdate%",$projectdate->format('F jS Y'),$emailstring);
-    $emailstring_text = str_replace("%projectdate%",$projectdate->format('F jS Y'),$emailstring_text);
+    $emailstring = str_replace("%projectdate%", $projectdate->format('F jS Y'), $emailstring);
+    $emailstring_text = str_replace("%projectdate%", $projectdate->format('F jS Y'), $emailstring_text);
     // Replace strings -> %projectlink%
-    $emailstring = str_replace("%projectlink%",$projectlink,$emailstring);
-    $emailstring_text = str_replace("%projectlink%",$projectlink,$emailstring_text);
+    $emailstring = str_replace("%projectlink%", $projectlink, $emailstring);
+    $emailstring_text = str_replace("%projectlink%", $projectlink, $emailstring_text);
     // Replace strings -> %recipientmail%
-    $emailstring = str_replace("%recipientmail%",implode("\n", $receiver),$emailstring);
-    $emailstring_text = str_replace("%recipientmail%",implode("\n", $receiver),$emailstring_text);
+    $emailstring = str_replace("%recipientmail%", implode("\n", $receiver), $emailstring);
+    $emailstring_text = str_replace("%recipientmail%", implode("\n", $receiver), $emailstring_text);
     // Replace strings -> %trackamount%
-    $emailstring = str_replace("%trackamount%",$trackcount,$emailstring);
-    $emailstring_text = str_replace("%trackamount%",$trackcount,$emailstring_text);
+    $emailstring = str_replace("%trackamount%", $trackcount, $emailstring);
+    $emailstring_text = str_replace("%trackamount%", $trackcount, $emailstring_text);
     // Replace strings -> %tracktitle%
-    $emailstring = str_replace("%tracktitle%",$tracktitle,$emailstring);
-    $emailstring_text = str_replace("%tracktitle%",$tracktitle,$emailstring_text);
+    $emailstring = str_replace("%tracktitle%", $tracktitle, $emailstring);
+    $emailstring_text = str_replace("%tracktitle%", $tracktitle, $emailstring_text);
     // Replace strings -> %projectnotes%
-    $emailstring = str_replace("%projectnotes%",urldecode($notes),$emailstring);
-    $emailstring_text = str_replace("%projectnotes%",urldecode($notes),$emailstring_text);
+    $emailstring = str_replace("%projectnotes%", urldecode($notes), $emailstring);
+    $emailstring_text = str_replace("%projectnotes%", urldecode($notes), $emailstring_text);
     // Replace strings -> %sendermail%
-    $emailstring = str_replace("%sendermail%",$sender,$emailstring);
-    $emailstring_text = str_replace("%sendermail%",$sender,$emailstring_text);
+    $emailstring = str_replace("%sendermail%", $sender, $emailstring);
+    $emailstring_text = str_replace("%sendermail%", $sender, $emailstring_text);
 
-    $subject = $sender . ' has shared '. $trackcount . ' with you via Soundmarker';
+    $subject = $sender . ' has shared ' . $trackcount . ' with you via Soundmarker';
     $char_set = 'UTF-8';
 
-//     try {
-//         foreach ($receiver as &$receiveremail) {
-//         $result = Flight::get("SesClient")->sendEmail([
-//             'Destination' => [
-//                 'ToAddresses' => [$receiveremail],
-//             ],
-//             'ReplyToAddresses' => [$sender],
-//             'Source' => "Soundmarker <noreply@soundmarker.com>",
-//             'Message' => [
-//               'Body' => [
-//                   'Html' => [
-//                       'Charset' => $char_set,
-//                       'Data' => $emailstring,
-//                   ],
-//                   'Text' => [
-//                       'Charset' => $char_set,
-//                       'Data' => $emailstring_text,
-//                   ],
-//               ],
-//               'Subject' => [
-//                   'Charset' => $char_set,
-//                   'Data' => $subject,
-//               ],
-//             ],
-//         ]);
-//         // $messageId = $result['MessageId'];
-//         }
-//     } catch (AwsException $e) {
-//         // output error message if fails
-//         echo $e->getMessage();
-//         echo("The email was not sent. Error message: ".$e->getAwsErrorMessage()."\n");
-//     }
+    foreach ($receiver as $receiveremail) {
+      mail($receiveremail, $subject, $emailstring,
+        'From:Soundmarker <noreply@soundmarker.com>' . '\r\n' .
+        'Reply-To:' . $sender
+      );
 
-    // Create DailyUpdates in dB
-    // $sql = "INSERT INTO DailyUpdates (emailaddress, project_id) VALUES ('$sender', '$project_id')";
-    // $result = $db->query($sql);
+      // Create DailyUpdates in dB
+      $db->query("INSERT INTO DailyUpdates (emailaddress, project_id) VALUES ('$sender', '$project_id')");
+    }
   }
 
   // Create notifications
   // Notification -> Expired
   $senddate = $projectdate->modify('-3 days');
   $senddatef = $senddate->format('Y-m-d H:i:s');
-  $db = Flight::db();
   if ($receiver) {
     $receiverstring = implode("\n", $receiver);
   } else {
     $receiverstring = "";
   }
-  $sql = "INSERT INTO Notification (emailaddress, senddate, type, status, type_id, recipientemail) VALUES ('$sender', '$projectdatef', '0', '0', '$project_id', '$receiverstring')";
-  $result = $db->query($sql);
+  Flight::db()->query(
+    "INSERT INTO Notification (emailaddress, senddate, type, status, type_id, recipientemail) VALUES ('$sender', '$projectdatef', '0', '0', '$project_id', '$receiverstring')"
+  );
 
-  // return ok
   Flight::json(array(
-     'project_hash' => $hash
-  ), 200);
-} else {
-  // return not allowed
-  Flight::json(array(
-     'return' => 'notallowed'
-  ), 405);
-}
+    'project_hash' => $hash
+  ));
 });
 
 /////////////////////////////////////////////////////// Routes - /project/subscribe GET ///////////////////////////////////////////////////////
 
 Flight::route('POST /project/subscribe', function() {
 
-// Check if user is allowed to get that info
-$config = Flight::get("config");
-$getbody = json_decode(Flight::request()->getBody());
+  Flight::get("config");
+  $getbody = json_decode(Flight::request()->getBody());
 
-$emailaddress = $getbody->emailaddress;
-$project_id = $getbody->project_id;
-$notify_id = $getbody->notify_id;
+  $emailaddress = $getbody->emailaddress;
+  $project_id = $getbody->project_id;
+  $notify_id = $getbody->notify_id;
 
-$db = Flight::db();
+  $db = Flight::db();
 
 // Check to make sure it doesn't exist yet.
-$sql = "SELECT emailaddress FROM DailyUpdates WHERE project_id = '$project_id' AND emailaddress = '$emailaddress'";
-$response = $db->query($sql)->fetchAll(PDO::FETCH_ASSOC);
-if (!isset($response[0])) {
-  $sql = "INSERT INTO DailyUpdates (project_id, emailaddress, notify_id) VALUES ('$project_id', '$emailaddress', '$notify_id')";
-  $result = $db->query($sql);
-  // return ok
-  Flight::json(array(
-     'return' => "ok"
-  ), 200);
-} else {
-  // return alreadyindatabase
-  Flight::json(array(
-     'return' => "alreadyindatabase"
-  ), 200);
-}
+  $response = $db
+    ->query("SELECT emailaddress FROM DailyUpdates WHERE project_id = '$project_id' AND emailaddress = '$emailaddress'")
+    ->fetchAll(PDO::FETCH_ASSOC);
+  if (!isset($response[0])) {
+    $db->query("INSERT INTO DailyUpdates (project_id, emailaddress, notify_id) VALUES ('$project_id', '$emailaddress', '$notify_id')");
+    Flight::json(array(
+      'return' => "ok"
+    ));
+  } else {
+    // return alreadyindatabase
+    Flight::json(array(
+      'return' => "alreadyindatabase"
+    ));
+  }
 });
 
 
 //////////////////////////////////////////////// Routes - /project/get/@project_hash GET /////////////////////////////////////////////
 Flight::route('GET /project/get/@project_hash', function($project_hash) {
 
-$config = Flight::get("config");
-$db = Flight::db();
-$sql = "SELECT project_id, active, expiration_date, user_id, password FROM Project WHERE hash = '$project_hash'";
-$response = $db->query($sql)->fetchAll(PDO::FETCH_ASSOC);
+  Flight::get("config");
+  $response = Flight::db()->query("SELECT project_id, active, expiration_date, user_id, password FROM Project WHERE hash = '$project_hash'")->fetchAll(PDO::FETCH_ASSOC);
 
 // check if project hash was valid
-if ($response) {
-  $project_id = $response[0]["project_id"];
-  $active = $response[0]["active"];
-  $expiration_date = $response[0]["expiration_date"];
-  $user_id = $response[0]["user_id"];
-  $project_password = $response[0]["password"];
+  if ($response) {
+    $project_id = $response[0]["project_id"];
+    $active = $response[0]["active"];
+    $expiration_date = $response[0]["expiration_date"];
+    $user_id = $response[0]["user_id"];
+    $project_password = $response[0]["password"];
 
-  $lastmonth = new \DateTime('-1 month');
-  $lastmonthf = $lastmonth->format('Y-m-d H:i:s');
-  $currentmonth = new \DateTime();
-  $currentmonthf = $currentmonth->format('Y-m-d H:i:s');
+    $lastmonth = new \DateTime('-1 month');
+    $lastmonthf = $lastmonth->format('Y-m-d H:i:s');
+    $currentmonth = new \DateTime();
+    $currentmonthf = $currentmonth->format('Y-m-d H:i:s');
 
-  if ($user_id) {
-    $status = "pro";
-  } elseif ($active == 0) {
-    $status = "inactive";
-  } elseif ($expiration_date < $lastmonthf) {
-    $status = "expired";
-  } elseif ($expiration_date < $currentmonthf) {
-    $status = "commentsonly";
-  } else {
-    $status = "active";
-  }
-
-  $sql = "SELECT track_id, title FROM Track WHERE project_id = '$project_id'";
-  $result = $db->query($sql);
-  $tracks = $result->fetchAll(PDO::FETCH_ASSOC);
-  if ($status == "expired") {
-    $tracks = "";
-  }
-
-  // if project is password protected
-  if ($project_password) {
-    if (in_array($project_id, $_SESSION['approved_user_projects'])) {
-      $_SESSION['view_user_projects'][] = $project_id;
-      // return ok
-      Flight::json(array(
-         'project_id' => $project_id, 'status' => $status, 'tracks' => $tracks
-      ), 200);
+    if ($user_id) {
+      $status = "pro";
+    } elseif ($active == 0) {
+      $status = "inactive";
+    } elseif ($expiration_date < $lastmonthf) {
+      $status = "expired";
+    } elseif ($expiration_date < $currentmonthf) {
+      $status = "commentsonly";
     } else {
-      // return ok
-      Flight::json(array(
-         'return' => 'passwordmissing'
-      ), 200);
-    }
-  } else {
-    $_SESSION['view_user_projects'][] = $project_id;
-
-    // also send sender
-    $sql = "SELECT emailaddress, user_id FROM Notification WHERE type = '0' AND type_id = '$project_id'";
-    $response = $db->query($sql)->fetchAll(PDO::FETCH_ASSOC);
-    // if only link is created, then no sender
-    if (isset($response[0])) {
-      $emailaddress = $response[0]["emailaddress"];
-    } else {
-      $emailaddress = "";
+      $status = "active";
     }
 
-    // return ok
-    Flight::json(array(
-       'project_id' => $project_id, 'status' => $status, 'expiration' => $expiration_date, 'sender' => $emailaddress, 'tracks' => $tracks
-    ), 200);
-  }
-} else {
+    $tracks = Flight::db()->query("SELECT track_id, title FROM Track WHERE project_id = '$project_id'")->fetchAll(PDO::FETCH_ASSOC);
+    if ($status == "expired") {
+      $tracks = "";
+    }
+
+    // if project is password protected
+    if ($project_password) {
+      // return ok
+      Flight::json(array(
+        'project_id' => $project_id, 'status' => $status, 'tracks' => $tracks
+      ));
+    } else {
+      // also send sender
+      $sql = "SELECT emailaddress, user_id FROM Notification WHERE type = '0' AND type_id = '$project_id'";
+      $response = Flight::db()->query($sql)->fetchAll(PDO::FETCH_ASSOC);
+      // if only link is created, then no sender
+      if (isset($response[0])) {
+        $emailaddress = $response[0]["emailaddress"];
+      } else {
+        $emailaddress = "";
+      }
+
+      // return ok
+      Flight::json(array(
+        'project_id' => $project_id, 'status' => $status, 'expiration' => $expiration_date, 'sender' => $emailaddress, 'tracks' => $tracks
+      ));
+    }
+  } else {
     // project hash was not valid.
     Flight::json(array(
-     'return' => 'nook'
-    ), 200);
-}
+      'return' => 'nook'
+    ));
+  }
 });
 
 //////////////////////////////////////////////// Routes - /project/set/viewpassword POST /////////////////////////////////////////////
 Flight::route('POST /project/set/viewpassword', function() {
 
-$config = Flight::get("config");
-$getbody = json_decode(Flight::request()->getBody());
-$project_id = $getbody->project_id;
-$project_password = $getbody->password;
+  Flight::get("config");
+  $getbody = json_decode(Flight::request()->getBody());
+  $project_id = $getbody->project_id;
+  $project_password = $getbody->password;
 
-$db = Flight::db();
-$sql = "SELECT password FROM Project WHERE project_id = '$project_id'";
-$result = $db->query($sql);
+  $result = Flight::db()->query("SELECT password FROM Project WHERE project_id = '$project_id'");
 
-if ($result->fetch()[0] == $project_password) {
-    $_SESSION['approved_user_projects'][] = $project_id;
+  if ($result->fetch()[0] == $project_password) {
     Flight::json(array(
-     'return' => 'ok'
-    ), 200);
-} else {
+      'return' => 'ok'
+    ));
+  } else {
     Flight::json(array(
-     'return' => 'nook'
-    ), 200);
-}
+      'return' => 'nook'
+    ));
+  }
 });
 
 ///////////////////////////////////////////////////// Routes - /project/password POST /////////////////////////////////////////////////
 Flight::route('POST /project/password', function() {
 
-// Check if user_projects
-$config = Flight::get("config");
-$getbody = json_decode(Flight::request()->getBody());
-$project_id = $getbody->project_id;
+  Flight::get("config");
+  $getbody = json_decode(Flight::request()->getBody());
+  $project_id = $getbody->project_id;
 
-// if user is able to edit this project password
-if (in_array($project_id, $_SESSION['user_projects'])) {
-  $db = Flight::db();
-  $sql = "SELECT password FROM Project WHERE project_id = '$project_id'";
-  $result = $db->query($sql);
+  $result = Flight::db()->query("SELECT password FROM Project WHERE project_id = '$project_id'");
 
   Flight::json(array(
-     'project_id' => $project_id,
-     'project_password' => $result->fetch()[0]
-  ), 200);
-} else {
-  // return not allowed
-  Flight::json(array(
-     'return' => 'notallowed'
-  ), 405);
-}
+    'project_id' => $project_id,
+    'project_password' => $result->fetch()[0]
+  ));
 });
 
 //////////////////////////////////////////////////// Routes - /project/delete POST ////////////////////////////////////////////////////
 Flight::route('POST /project/delete', function() {
 
-// Check if user projects
-$config = Flight::get("config");
-$getbody = json_decode(Flight::request()->getBody());
-$project_id = $getbody->project_id;
+  Flight::get("config");
+  $getbody = json_decode(Flight::request()->getBody());
+  $project_id = $getbody->project_id;
 
-// if user is able to edit this project password
-if (in_array($project_id, $_SESSION['user_projects'])) {
-  $db = Flight::db();
-  $sql = "UPDATE Project SET active = '0' WHERE project_id = '$project_id'";
-  $result = $db->query($sql);
+  Flight::db()->query("UPDATE Project SET active = '0' WHERE project_id = '$project_id'");
 
-  // return ok
   Flight::json(array(
-     'project_id' => $project_id
-  ), 200);
-} else {
-  // return not allowed
-  Flight::json(array(
-     'return' => 'notallowed'
-  ), 405);
-}
+    'project_id' => $project_id
+  ));
 });
 
 //////////////////////////////////////////////////// Routes - /project/url POST ///////////////////////////////////////////////////////
 Flight::route('POST /project/url', function() {
 
-// Check if user projects
-$config = Flight::get("config");
-$getbody = json_decode(Flight::request()->getBody());
-$project_id = $getbody->project_id;
+  $config = Flight::get("config");
+  $getbody = json_decode(Flight::request()->getBody());
+  $project_id = $getbody->project_id;
 
-// if user is able to edit this project password
-if (in_array($project_id, $_SESSION['user_projects'])) {
   $db = Flight::db();
   $sql = "SELECT hash FROM Project WHERE project_id = '$project_id'";
   $result = $db->query($sql);
 
-  // return ok
   Flight::json(array(
-     'project_url' => $config['SERVER_URL'].'/project/'. $result->fetch()[0],
-     'project_hash' => $result->fetch()[0]
-  ), 200);
-} else {
-  // return not allowed
-  Flight::json(array(
-     'return' => 'notallowed'
-  ), 405);
-}
+    'project_url' => $config['SERVER_URL'] . '/project/' . $result->fetch()[0],
+    'project_hash' => $result->fetch()[0]
+  ));
 });
 
 /////////////////////////////////////////////// Routes - /project/@project_hash POST //////////////////////////////////////////////////
@@ -694,211 +556,120 @@ TRACK
 /////////////////////////////////////////////////////// Routes - /track/new POST //////////////////////////////////////////////////////
 Flight::route('POST /track/new', function() {
 
-$config = Flight::get("config");
-$getbody = json_decode(Flight::request()->getBody());
+  Flight::get("config");
+  $getbody = json_decode(Flight::request()->getBody());
 
-$project_id = $getbody->project_id;
-$track_title = isset($getbody->track_title) ? $getbody->track_title : "";
-$track_artist = isset($getbody->track_artist) ? $getbody->track_artist : "";
-$visibility = isset($getbody->visibility) ? $getbody->visibility : 1;
+  $project_id = $getbody->project_id;
+  $track_title = isset($getbody->track_title) ? $getbody->track_title : "";
+  $track_artist = isset($getbody->track_artist) ? $getbody->track_artist : "";
+  $visibility = isset($getbody->visibility) ? $getbody->visibility : 1;
 
-// if user is able to edit this project password
-if (in_array($project_id, $_SESSION['user_projects'])) {
-  $db = Flight::db();
   if ($project_id) {
-      $sql = "INSERT INTO Track (title, artist, project_id, visibility) VALUES ('$track_title', '$track_artist', '$project_id', '$visibility')";
+    $sql = "INSERT INTO Track (title, artist, project_id, visibility) VALUES ('$track_title', '$track_artist', '$project_id', '$visibility')";
   } else {
-      $sql = "INSERT INTO Track (title, artist, visibility) VALUES ('$track_title', '$track_artist', '$visibility')";
+    $sql = "INSERT INTO Track (title, artist, visibility) VALUES ('$track_title', '$track_artist', '$visibility')";
   }
-  $result = $db->query($sql);
+  Flight::db()->query($sql);
 
-  $_SESSION['user_tracks'][] = $db->lastInsertId();
-
-  // return ok
   Flight::json(array(
-     'track_id' => $db->lastInsertId()
-  ), 200);
-} else {
-  // return not allowed
-  Flight::json(array(
-     'return' => 'notallowed'
-  ), 405);
-}
+    'track_id' => Flight::db()->lastInsertId()
+  ));
 });
 
 /////////////////////////////////////////////////////// Routes - /track/visibility POST //////////////////////////////////////////////////////
 Flight::route('POST /track/visibility', function() {
 
-$config = Flight::get("config");
-$getbody = json_decode(Flight::request()->getBody());
+  Flight::get("config");
+  $getbody = json_decode(Flight::request()->getBody());
 
-$track_id = $getbody->track_id;
-$visibility = isset($getbody->visibility) ? $getbody->visibility : 1;
+  $track_id = $getbody->track_id;
+  $visibility = isset($getbody->visibility) ? $getbody->visibility : 1;
 
-// if user is able to edit this project
-if (in_array($project_id, $_SESSION['user_projects'])) {
-  $db = Flight::db();
-  $sql = "UPDATE Track SET visibility = '$visibility' WHERE track_id = '$track_id'";
-  $result = $db->query($sql);
+  Flight::db()->query("UPDATE Track SET visibility = '$visibility' WHERE track_id = '$track_id'");
 
-  // $_SESSION['user_tracks'][] = $db->lastInsertId();
-
-  // return ok
   Flight::json(array(
-     'return' => 'ok'
-  ), 200);
-} else {
-  // return not allowed
-  Flight::json(array(
-     'return' => 'notallowed'
-  ), 405);
-}
+    'return' => 'ok'
+  ));
 });
 
 //////////////////////////////////////////////////// Routes - /track/version POST /////////////////////////////////////////////////////
 Flight::route('POST /track/version', function() {
 
-$config = Flight::get("config");
-$getbody = json_decode(Flight::request()->getBody());
+  Flight::get("config");
+  $getbody = json_decode(Flight::request()->getBody());
 
-$track_id = $getbody->track_id;
-$downloadable = isset($getbody->downloadable) ? $getbody->downloadable : 0;
-$visibility = isset($getbody->visibility) ? $getbody->visibility : 1;
-$notes = isset($getbody->notes) ? $getbody->notes : "";
-$version_title = isset($getbody->version_title) ? $getbody->version_title : "";
-$track_length = isset($getbody->track_length) ? $getbody->track_length : 0;
-// $wave_png = isset($getbody->wave_png) ? json_encode($getbody->wave_png) : "";
+  $track_id = $getbody->track_id;
+  $downloadable = isset($getbody->downloadable) ? $getbody->downloadable : 0;
+  $visibility = isset($getbody->visibility) ? $getbody->visibility : 1;
+  $notes = isset($getbody->notes) ? $getbody->notes : "";
+  $version_title = isset($getbody->version_title) ? $getbody->version_title : "";
+  $track_length = isset($getbody->track_length) ? $getbody->track_length : 0;
 
-// if user is able to edit this track
-if (in_array($track_id, $_SESSION['user_tracks'])) {
-  $db = Flight::db();
-  $sql = "INSERT INTO Version (track_id, downloadable, visibility, notes, version_title, track_length) VALUES ('$track_id', '$downloadable', '$visibility', '$notes', '$version_title', '$track_length')";
-  $result = $db->query($sql);
+  Flight::db()->query("INSERT INTO Version (track_id, downloadable, visibility, notes, version_title, track_length) VALUES ('$track_id', '$downloadable', '$visibility', '$notes', '$version_title', '$track_length')");
 
-  $_SESSION['user_versions'][] = $db->lastInsertId();
-
-  // return ok
   Flight::json(array(
-     'version_id' => $db->lastInsertId()
-  ), 200);
-} else {
-  // return not allowed
-  Flight::json(array(
-     'return' => 'notallowed'
-  ), 405);
-}
+    'version_id' => Flight::db()->lastInsertId()
+  ));
 });
 
 
 //////////////////////////////////////////////////// Routes - /track/version/edit POST /////////////////////////////////////////////////////
 Flight::route('POST /track/version/edit', function() {
 
-$config = Flight::get("config");
-$getbody = json_decode(Flight::request()->getBody());
+  Flight::get("config");
+  $getbody = json_decode(Flight::request()->getBody());
 
-$version_id = isset($getbody->version_id) ? $getbody->version_id : "";
-$downloadable = isset($getbody->downloadable) ? $getbody->downloadable : 0;
-$visibility = isset($getbody->visibility) ? $getbody->visibility : 1;
-$notes = isset($getbody->notes) ? $getbody->notes : "";
-$version_title = isset($getbody->version_title) ? $getbody->version_title : "";
-// $track_length = isset($getbody->track_length) ? $getbody->track_length : 0;
-// $wave_png = isset($getbody->wave_png) ? json_encode($getbody->wave_png) : "";
+  $version_id = isset($getbody->version_id) ? $getbody->version_id : "";
+  $downloadable = isset($getbody->downloadable) ? $getbody->downloadable : 0;
+  $visibility = isset($getbody->visibility) ? $getbody->visibility : 1;
+  $notes = isset($getbody->notes) ? $getbody->notes : "";
+  $version_title = isset($getbody->version_title) ? $getbody->version_title : "";
 
-// if user is able to edit this track
-if (in_array($track_id, $_SESSION['user_tracks'])) {
-  $db = Flight::db();
+  Flight::db()->query("UPDATE Version SET notes = '$notes', version_title = '$version_title', visibility = '$visibility', downloadable = '$downloadable' WHERE version_id = '$version_id'");
 
-  $sql = "UPDATE Version SET notes = '$notes', version_title = '$version_title', visibility = '$visibility', downloadable = '$downloadable' WHERE version_id = '$version_id'";
-  $result = $db->query($sql);
-
-  // $_SESSION['user_versions'][] = $db->lastInsertId();
-
-  // return ok
   Flight::json(array(
-     'version_id' => $db->lastInsertId()
-  ), 200);
-} else {
-  // return not allowed
-  Flight::json(array(
-     'return' => 'notallowed'
-  ), 405);
-}
+    'version_id' => Flight::db()->lastInsertId()
+  ));
+
 });
 
 ///////////////////////////////////////////////////////// Routes - /track GET /////////////////////////////////////////////////////////
 Flight::route('GET /track/@track_id', function($track_id) {
+  Flight::get("config");
 
-$config = Flight::get("config");
-$db = Flight::db();
-$sql = "SELECT version_id, notes, downloadable, visibility, version_title, track_length, wave_png FROM Version WHERE track_id = '$track_id'";
-$result = $db->query($sql);
-$versions = $result->fetchAll(PDO::FETCH_ASSOC);
+  $versions = Flight::db()
+    ->query("SELECT version_id, notes, downloadable, visibility, version_title, track_length, wave_png FROM Version WHERE track_id = '$track_id'")
+    ->fetchAll(PDO::FETCH_ASSOC);
 
-// get the variables
-$s3 = Flight::get("s3");
-
-foreach ($versions as &$version) {
-  $_SESSION['view_versions'][] = $version["version_id"];
-
-  // get AWS 3 text wave_png
-  if ($version["wave_png"] == "s3") {
-      $version_id = $version["version_id"];
-      $sql2 = "SELECT file_id, aws_path, version_id, file_name FROM File WHERE version_id = '$version_id'";
-      $result2 = $db->query($sql2);
-      $files2 = $result2->fetchAll(PDO::FETCH_ASSOC);
-      $aws_path = $files2[0]["aws_path"];
-
-      $wave_png = $s3->getObject([
-           'Bucket' => $config['AWS_S3_BUCKET'],
-           'Key'    => $files2[0]["version_id"] . "/" . $files2[0]["file_name"] . ".txt"
-      ]);
-      $version["wave_png"] = $wave_png['Body']->getContents();
+  foreach ($versions as &$version) {
+    $version["wave_png"] = file_get_contents('waveform/' . $version["version_id"]);
   }
-}
 
-// return ok
-Flight::json(array(
-   'versions' => $versions
-), 200);
+  Flight::json(array(
+    'versions' => $versions
+  ));
 });
 
 ///////////////////////////////////////////////////// Routes - /track/version GET /////////////////////////////////////////////////////
 Flight::route('GET /track/version/@version_id', function($version_id) {
+  Flight::get("config");
 
-$config = Flight::get("config");
-// if user is allow to see this version
-if (in_array($version_id, $_SESSION['view_versions'])) {
-  $db = Flight::db();
-  $sql = "SELECT file_id, extension, metadata, aws_path, file_name, file_size, identifier, chunk_length FROM File WHERE version_id = '$version_id'";
-  $result = $db->query($sql);
-  $files = $result->fetchAll(PDO::FETCH_ASSOC);
+  $files = Flight::db()
+    ->query("SELECT file_id, extension, metadata, aws_path, file_name, file_size, identifier, chunk_length FROM File WHERE version_id = '$version_id'")
+    ->fetchAll(PDO::FETCH_ASSOC);
 
-  foreach ($files as &$file) {
-    $_SESSION["view_files"][] = $file["file_id"];
-  }
-
-  // return ok
   Flight::json(array(
-     'files' => $files
-  ), 200);
-} else {
-  // return not allowed
-  Flight::json(array(
-     'return' => 'notallowed'
-  ), 405);
-}
+    'files' => $files
+  ));
 });
 
 ///////////////////////////////////////////////// Routes - /track/version/comments GET ////////////////////////////////////////////////
 Flight::route('GET /track/version/comments/@version_id', function($version_id) {
+  Flight::get("config");
 
-// if user is allow to see this version
-if (in_array($version_id, $_SESSION['view_versions'])) {
-  $config = Flight::get("config");
-  $db = Flight::db();
-  $sql = "SELECT comment_id, notes, start_time, end_time, checked, parent_comment_id, name, include_end, include_start, comment_time FROM Comment WHERE version_id = '$version_id'";
-  $result = $db->query($sql);
-  $comments = $result->fetchAll(PDO::FETCH_ASSOC);
+  $comments = Flight::db()
+    ->query("SELECT comment_id, notes, start_time, end_time, checked, parent_comment_id, name, include_end, include_start, comment_time FROM Comment WHERE version_id = '$version_id'")
+    ->fetchAll(PDO::FETCH_ASSOC);
 
   // don't cache
   header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
@@ -906,98 +677,57 @@ if (in_array($version_id, $_SESSION['view_versions'])) {
 
   // return ok
   Flight::json(array(
-     'comments' => $comments
-  ), 200);
-} else {
-  // return not allowed
-  Flight::json(array(
-     'return' => 'notallowed'
-  ), 405);
-}
+    'comments' => $comments
+  ));
 });
 
 ///////////////////////////////////////////////// Routes - /track/version/comment POST ////////////////////////////////////////////////
 Flight::route('POST /track/version/comment', function() {
 
-$config = Flight::get("config");
-$getbody = json_decode(Flight::request()->getBody());
+  Flight::get("config");
+  $getbody = json_decode(Flight::request()->getBody());
 
-$version_id = $getbody->version_id;
-$notes = isset($getbody->notes) ? $getbody->notes : "";
-$name = isset($getbody->name) ? $getbody->name : "";
-$start_time = isset($getbody->start_time) ? $getbody->start_time : "";
-$end_time = isset($getbody->end_time) ? $getbody->end_time : "";
-$parent_comment_id = isset($getbody->parent_comment_id) ? $getbody->parent_comment_id : "";
-$include_start = isset($getbody->include_start) ? $getbody->include_start : "";
-$include_end = isset($getbody->include_end) ? $getbody->include_end : "";
-$comment_time = isset($getbody->comment_time) ? $getbody->comment_time : "";
+  $version_id = $getbody->version_id;
+  $notes = isset($getbody->notes) ? $getbody->notes : "";
+  $name = isset($getbody->name) ? $getbody->name : "";
+  $start_time = isset($getbody->start_time) ? $getbody->start_time : 0;
+  $end_time = isset($getbody->end_time) ? $getbody->end_time : 0;
+  $parent_comment_id = isset($getbody->parent_comment_id) ? $getbody->parent_comment_id : 0;
+  $include_start = isset($getbody->include_start) ? $getbody->include_start : 0;
+  $include_end = isset($getbody->include_end) ? $getbody->include_end : 0;
+  $comment_time = isset($getbody->comment_time) ? $getbody->comment_time : "";
 
-// if user is allow to see this version
-if (in_array($version_id, $_SESSION['view_versions'])) {
-  $db = Flight::db();
-  $sql = "INSERT INTO Comment (version_id, notes, name, start_time, end_time, parent_comment_id, include_start, include_end, comment_time) VALUES ('$version_id', '$notes', '$name', '$start_time', '$end_time', '$parent_comment_id', '$include_start', '$include_end', '$comment_time')";
-  $result = $db->query($sql);
+  Flight::db()
+    ->query("INSERT INTO Comment (version_id, notes, name, start_time, end_time, parent_comment_id, include_start, include_end, comment_time) VALUES ('$version_id', '$notes', '$name', '$start_time', '$end_time', '$parent_comment_id', '$include_start', '$include_end', '$comment_time')");
 
-  $_SESSION["view_comments"][] = $db->lastInsertId();
   // return ok
   Flight::json(array(
-     'comment_id' => $db->lastInsertId()
-  ), 200);
-} else {
-  // return not allowed
-  Flight::json(array(
-     'return' => 'notallowed'
-  ), 405);
-}
+    'comment_id' => Flight::db()->lastInsertId()
+  ));
 });
 
 ///////////////////////////////////////////////// Routes - /track/version/delete/comment POST ///////////////////////////////////////////
 Flight::route('POST /track/version/delete/comment', function() {
 
-// Can user delete comments for this version?
-$config = Flight::get("config");
-$getbody = json_decode(Flight::request()->getBody());
+  Flight::get("config");
+  $comment_id = json_decode(Flight::request()->getBody())->comment_id;
 
-$comment_id = $getbody->comment_id;
+  Flight::db()->query("DELETE FROM Comment WHERE comment_id = '$comment_id'");
 
-// if user is allow to delete this comment
-if (in_array($comment_id, $_SESSION['view_comments'])) {
-  $db = Flight::db();
-  $sql = "DELETE FROM Comment WHERE comment_id = '$comment_id'";
-  $result = $db->query($sql);
-
-  // return ok
   Flight::json(array(
-     'return' => 'ok'
-  ), 200);
-} else {
-  // return not allowed
-  Flight::json(array(
-     'return' => 'notallowed'
-  ), 405);
-}
+    'return' => 'ok'
+  ));
 });
 
 
 ////////////////////////////////////////////////// Routes - /track/file/download GET //////////////////////////////////////////////////
 Flight::route('GET /track/file/download/@file_id', function($file_id) {
-
-$config = Flight::get("config");
-
-// if user is allow to view this file
-if (true) {
-  $db = Flight::db();
-
+  Flight::get("config");
+  $aws_path = Flight::db()->query("SELECT aws_path  FROM File WHERE file_id = '$file_id'")->fetch()[0];
   // return ok
   Flight::json(array(
-     'aws_path' => $aws_path
-  ), 200);
-} else {
-  // return not allowed
-  Flight::json(array(
-     'return' => 'notallowed'
-  ), 405);
-}
+    'aws_path' => $aws_path
+  ));
 });
 
 
@@ -1013,61 +743,47 @@ FILE
 /////////////////////////////////////////////////////// Routes - /file/new POST ///////////////////////////////////////////////////////
 Flight::route('POST /file/new', function() {
 
-$config = Flight::get("config");
-$getbody = json_decode(Flight::request()->getBody());
+  Flight::get("config");
+  $getbody = json_decode(Flight::request()->getBody());
 
-$version_id = $getbody->version_id;
-$identifier = isset($getbody->identifier) ? $getbody->identifier : 0;
-$chunk_length = isset($getbody->chunk_length) ? $getbody->chunk_length : 0;
-$file_size = isset($getbody->file_size) ? $getbody->file_size : 0;
-$file_name = isset($getbody->file_name) ? $getbody->file_name : "";
-$metadata = isset($getbody->metadata) ? $getbody->metadata : "";
-$extension = isset($getbody->extension) ? $getbody->extension : "";
-$aws_path = "/audio/" . $version_id . "/" . urlencode($file_name));
+  $version_id = $getbody->version_id;
+  $identifier = isset($getbody->identifier) ? $getbody->identifier : 0;
+  $chunk_length = isset($getbody->chunk_length) ? $getbody->chunk_length : 0;
+  $file_size = isset($getbody->file_size) ? $getbody->file_size : 0;
+  $file_name = isset($getbody->file_name) ? $getbody->file_name : "";
+  $metadata = isset($getbody->metadata) ? $getbody->metadata : "";
+  $extension = isset($getbody->extension) ? $getbody->extension : "";
 
-// if user is able to upload file
-if (in_array($version_id, $_SESSION['user_versions'])) {
   $db = Flight::db();
-  $sql = "INSERT INTO File (version_id, file_name, file_size, metadata, extension, chunk_length, identifier, aws_path) VALUES ('$version_id', '$file_name', '$file_size', '$metadata', '$extension', '$chunk_length', '$identifier', '$aws_path')";
-  $result = $db->query($sql);
+  $db->query("INSERT INTO File (version_id, file_name, file_size, metadata, extension, chunk_length, identifier) VALUES ('$version_id', '$file_name', '$file_size', '$metadata', '$extension', '$chunk_length', '$identifier')");
 
-  $_SESSION['user_files'][] = $db->lastInsertId();
-
-  // return ok
+  $file_id = $db->lastInsertId();
+  $aws_path = "\/audio\/orig" . $file_id;
+  $db->query("UPDATE File set aws_path = '$aws_path' where version_id = '$version_id'");
   Flight::json(array(
-     'file_id' => $db->lastInsertId()
-  ), 200);
-} else {
-  // return not allowed
-  Flight::json(array(
-     'return' => 'notallowed'
-  ), 405);
-}
+    'file_id' => $file_id
+  ));
 });
 
 ////////////////////////////////////////////////// Routes - /file/chunk/$file_id POST /////////////////////////////////////////////////
 Flight::route('POST /file/chunk/@file_id/@download_id/@idno/@ext', function($file_id, $download_id, $idno, $ext) {
 
-$config = Flight::get("config");
-ignore_user_abort(true);
-set_time_limit(0);
+  $config = Flight::get("config");
+  ignore_user_abort(true);
+  set_time_limit(0);
 
-// if user is able to upload file
-if (true) {
-  $db = Flight::db();
-  $sql = "SELECT version_id, extension, metadata, file_name, file_size, identifier, chunk_length FROM File WHERE file_id = '$file_id'";
-  $result = $db->query($sql);
-  $files = $result->fetchAll();
-  $version_id = $files[0]["version_id"];
+  $version_id = Flight::db()
+    ->query("SELECT version_id, extension, metadata, file_name, file_size, identifier, chunk_length FROM File WHERE file_id = '$file_id'")
+    ->fetchAll()[0]["version_id"];
 
   // store audio file.
   // $myfile = fopen("audio/orig".$file_id.".".$ext, "w") or die("Unable to open file!");
   // fwrite($myfile, Flight::request()->getBody());
   // fclose($myfile);
   $source = fopen("php://input", "r") or die("Unable to open file!");
-  $dest = fopen("audio/orig".$file_id.".".$ext, "w") or die("Unable to open file!");
+  $dest = fopen("audio/orig" . $file_id . "." . $ext, "w") or die("Unable to open file!");
 
-  while (! feof($source)) {
+  while (!feof($source)) {
     fwrite($dest, fgets($source));
   }
 
@@ -1078,87 +794,72 @@ if (true) {
 
   // return ok -> let's try
   Flight::json(array(
-     'ok' => 'ok'
+    'ok' => 'ok'
   ), 200);
 
   // now let's see how long the song is
   $ffprobe = FFMpeg\FFProbe::create(array(
-      'ffmpeg.binaries'  => $config['FFMPEG_PATH'].'/ffmpeg',
-      'ffprobe.binaries' => $config['FFMPEG_PATH'].'/ffprobe',
-      'timeout'          => 8000, // The timeout for the underlying process
-      'ffmpeg.threads'   => 12,   // The number of threads that FFMpeg should use
+    'ffmpeg.binaries' => $config['FFMPEG_PATH'] . '/ffmpeg',
+    'ffprobe.binaries' => $config['FFMPEG_PATH'] . '/ffprobe',
+    'timeout' => 8000, // The timeout for the underlying process
+    'ffmpeg.threads' => 12,   // The number of threads that FFMpeg should use
   ));
   $duration = $ffprobe
-      ->format("audio/orig".$file_id.".".$ext) // extracts file informations
-      ->get('duration');
+    ->format("audio/orig" . $file_id . "." . $ext) // extracts file informations
+    ->get('duration');
 
   $codec_name = $ffprobe
-      ->streams("audio/orig".$file_id.".".$ext) // extracts file informations
-      ->first()
-      ->get('codec_name');
+    ->streams("audio/orig" . $file_id . "." . $ext) // extracts file informations
+    ->first()
+    ->get('codec_name');
 
-   // mkdir folder
-   exec("mkdir audio/".$file_id);
+  // mkdir folder
+  exec("mkdir audio/" . $file_id);
 
-   // now create segments
-   exec($config['FFMPEG_PATH']."/ffmpeg -i audio/orig".$file_id.".".$ext." -segment_time 10 -codec:a libmp3lame -qscale:a 1 audio/".$file_id."/".$file_id."%03d.mp3");
+  // now create segments
+  exec($config['FFMPEG_PATH'] . "/ffmpeg -i audio/orig" . $file_id . "." . $ext . " -segment_time 10 -codec:a libmp3lame -qscale:a 1 audio/" . $file_id . "/" . $file_id . "%03d.mp3");
 
-    // Update duration in dB
-    $result = $db->query("UPDATE Version SET track_length = '$duration', wave_png = 's3' WHERE version_id = '$version_id'");
+  // Update duration in dB
+  Flight::db()->query("UPDATE Version SET track_length = '$duration' WHERE version_id = '$version_id'");
 
   // if coded is not lossy, transcode
   // if ((strpos($codec_name, 'pcm') !== false) || (strpos($codec_name, 'lac') !== false) || (strpos($codec_name, 'wavpack') !== false)) {
-    // now we split up the song in 10sec fragments
-    // now let's convert the file
-    $ffmpeg = FFMpeg\FFMpeg::create(array(
-        'ffmpeg.binaries'  => $config['FFMPEG_PATH'].'/ffmpeg',
-        'ffprobe.binaries' => $config['FFMPEG_PATH'].'/ffprobe',
-        'timeout'          => 8000, // The timeout for the underlying process
-        'ffmpeg.threads'   => 12,   // The number of threads that FFMpeg should use
-    ));
-    $audio = $ffmpeg->open("audio/orig".$file_id.".".$ext);
+  // now we split up the song in 10sec fragments
+  // now let's convert the file
+  $ffmpeg = FFMpeg\FFMpeg::create(array(
+    'ffmpeg.binaries' => $config['FFMPEG_PATH'] . '/ffmpeg',
+    'ffprobe.binaries' => $config['FFMPEG_PATH'] . '/ffprobe',
+    'timeout' => 8000, // The timeout for the underlying process
+    'ffmpeg.threads' => 12,   // The number of threads that FFMpeg should use
+  ));
+  $audio = $ffmpeg->open("audio/orig" . $file_id . "." . $ext);
 
-    $format = new FFMpeg\Format\Audio\Mp3();
-    $format
-        ->setAudioChannels(2)
-        ->setAudioKiloBitrate(320);
-  // } else {
-  //        $result = $s3->putObject([
-  //            'Bucket' => $config['AWS_S3_BUCKET'],
-  //            'Key'    => $files[0]["version_id"] . "/" . $files[0]["file_name"] . '.' . $ext,
-  //            'Body'   => file_get_contents("audio/orig".$file_id.".".$ext),
-  //            'ACL'    => 'public-read',
-  //            'ContentType' => 'application/octet-stream; charset=utf-8',
-  //            'ContentDisposition' => 'attachment; filename='. $files[0]["file_name"] . '.' . $ext
-  //        ]);
-  // }
+  $format = new FFMpeg\Format\Audio\Mp3();
+  $format
+    ->setAudioChannels(2)
+    ->setAudioKiloBitrate(320);
+
+  $audio->save($format, "/tmp/mp3" . $file_id . ".mp3");
 
   gc_collect_cycles();
   // now it's time to create the png
   // let's create wave_png
-  exec($config['FFMPEG_PATH']."/ffmpeg -nostats -i audio/orig".$file_id.".".$ext." -af astats=length=0.1:metadata=1:reset=1,ametadata=print:key=lavfi.astats.Overall.RMS_level -f null - 2>&1", $output);
-  foreach ($output as &$value) {
+  exec($config['FFMPEG_PATH'] . "/ffmpeg -nostats -i audio/orig" . $file_id . "." . $ext . " -af astats=length=0.1:metadata=1:reset=1,ametadata=print:key=lavfi.astats.Overall.RMS_level -f null - 2>&1", $output);
+  foreach ($output as $value) {
     if (strpos($value, 'lavfi.astats.Overall.RMS_level=') !== false) {
-        $momentarylufs = substr($value, strpos($value, "lavfi.astats.Overall.RMS_level=") + 31, 10);
-        if (strpos($momentarylufs, 'inf') == false) {
-          $zerotohundred = (floatval($momentarylufs)/70)+1;
-          if ($zerotohundred < 0) {
-            $zerotohundred = 0;
-          }
-        } else {
+      $momentarylufs = substr($value, strpos($value, "lavfi.astats.Overall.RMS_level=") + 31, 10);
+      if (strpos($momentarylufs, 'inf') == false) {
+        $zerotohundred = (floatval($momentarylufs) / 70) + 1;
+        if ($zerotohundred < 0) {
           $zerotohundred = 0;
         }
-        $wave_png[] = $zerotohundred;
+      } else {
+        $zerotohundred = 0;
+      }
+      $wave_png[] = $zerotohundred;
     }
   }
-  $wave_png_json = json_encode($wave_png);
-
-  // Update wave_png in dB
-  // $sql = "UPDATE Version SET wave_png = '$wave_png_json' WHERE version_id = '$version_id'";
-  // $result = $db->query($sql);
-  // add wave_png json to file txt
-  $result = $db->query("SELECT version_id, extension, metadata, file_name, file_size, identifier, chunk_length FROM File WHERE file_id = '$file_id'");
-  $filesnew = $result->fetchAll();
+  file_put_contents('waveform/' . $version_id, json_encode($wave_png));
 
   // now if downloadable, also save the original file:
   if ($download_id > 0) {
@@ -1168,12 +869,6 @@ if (true) {
   }
 
   gc_collect_cycles();
-} else {
-  // return not allowed
-  Flight::json(array(
-     'return' => 'notallowed'
-  ), 405);
-}
 });
 
 
@@ -1194,112 +889,100 @@ ADS
 // retire this call
 Flight::route('GET /sma', function() {
 
-$config = Flight::get("config");
-// TODO: if nothing returns, show default one, no error
-$db = Flight::db();
-$sql = "SELECT html, ad_id, impressions FROM Ad WHERE priority = '1' AND impressions <= limits";
-$result = $db->query($sql);
-$array = $result->fetchAll();
+  Flight::get("config");
+  // TODO: if nothing returns, show default one, no error
+  $array = Flight::db()
+    ->query("SELECT html, ad_id, impressions FROM Ad WHERE priority = '1' AND impressions <= limits")
+    ->fetchAll();
 
-$rand = rand(0,(count($array)-1));
-$html = $array[$rand]["html"];
-$ad_id = $array[$rand]["ad_id"];
+  $rand = rand(0, (count($array) - 1));
+  $html = $array[$rand]["html"];
+  $ad_id = $array[$rand]["ad_id"];
 
-// return ok
-Flight::json(array(
-   'sma_id' => $ad_id,
-   'html' => $html
-), 200);
+  Flight::json(array(
+    'sma_id' => $ad_id,
+    'html' => $html
+  ));
 
 // // store impression for new ad
-// $sql = "UPDATE Ad SET impressions = '$impressions' WHERE ad_id = '$ad_id'";
-// $result = $db->query($sql);
+//  $db->query("UPDATE Ad SET impressions = '$impressions' WHERE ad_id = '$ad_id'");
 });
 
 /////////////////////////////////////////////////////// Routes - /ad/@ad_id GET ///////////////////////////////////////////////////////
 Flight::route('GET /sma/@ad_id', function($ad_id) {
+  Flight::get("config");
 
-$config = Flight::get("config");
-$db = Flight::db();
-$sql = "SELECT html FROM Ad WHERE ad_id = '$ad_id'";
-$result = $db->query($sql);
-$html = $result->fetch()[0];
-
-echo stripslashes($html);
+  $html = Flight::db()->query("SELECT html FROM Ad WHERE ad_id = '$ad_id'")->fetch()[0];
+  echo stripslashes($html);
 });
 
 ////////////////////////////////////////////////////////// Routes - /ad POST //////////////////////////////////////////////////////////
 Flight::route('POST /sma', function() {
 
-$config = Flight::get("config");
-$getbody = json_decode(Flight::request()->getBody());
+  Flight::get("config");
+  $getbody = json_decode(Flight::request()->getBody());
 
-$ad_id = $getbody->sma_id;
+  $ad_id = $getbody->sma_id;
 
-// get next ad
-$db = Flight::db();
-$sql = "SELECT html, ad_id, impressions FROM Ad WHERE priority = '0' AND impressions <= limits AND ad_id <> '$ad_id'";
-$result = $db->query($sql);
-$array = $result->fetchAll(PDO::FETCH_ASSOC);
+  // get next ad
+  $db = Flight::db();
+  $array = $db
+    ->query("SELECT html, ad_id, impressions FROM Ad WHERE priority = '0' AND impressions <= limits AND ad_id <> '$ad_id'")
+    ->fetchAll(PDO::FETCH_ASSOC);
 
-$rand = rand(0,(count($array)-1));
-$html = $array[$rand]["html"];
-$ad_id = $array[$rand]["ad_id"];
+  $rand = rand(0, (count($array) - 1));
+  $html = $array[$rand]["html"];
+  $ad_id = $array[$rand]["ad_id"];
 
-// return ok
-Flight::json(array(
-   'sma_id' => $ad_id,
-   'html' => $html
-), 200);
-
+  Flight::json(array(
+    'sma_id' => $ad_id,
+    'html' => $html
+  ));
 });
 
 ////////////////////////////////////////////////////////// Routes - /sma/imp POST //////////////////////////////////////////////////////////
 Flight::route('POST /sma/imp', function() {
 
-$config = Flight::get("config");
-$getbody = json_decode(Flight::request()->getBody());
+  Flight::get("config");
+  $getbody = json_decode(Flight::request()->getBody());
 
-$ad_id = $getbody->sma_id;
+  $ad_id = $getbody->sma_id;
 
-$db = Flight::db();
-$sql = "SELECT clicks, exposure_time, impressions FROM Ad WHERE ad_id = '$ad_id'";
-$result = $db->query($sql);
-$resultfetch = $result->fetchAll(PDO::FETCH_ASSOC);
+  $db = Flight::db();
+  $resultfetch = $db
+    ->query("SELECT clicks, exposure_time, impressions FROM Ad WHERE ad_id = '$ad_id'")
+    ->fetchAll(PDO::FETCH_ASSOC);
 
-$impressionsnew = intval($resultfetch[0]["impressions"]) + 1;
+  $impressionsnew = intval($resultfetch[0]["impressions"]) + 1;
 
-$sql = "UPDATE Ad SET impressions = '$impressionsnew' WHERE ad_id = '$ad_id'";
-$result = $db->query($sql);
+  $db->query("UPDATE Ad SET impressions = '$impressionsnew' WHERE ad_id = '$ad_id'");
 
-// return ok
-Flight::json(array(
-   'ok' => 'ok'
-), 200);
+  Flight::json(array(
+    'ok' => 'ok'
+  ));
 });
 
 ////////////////////////////////////////////////////////// Routes - /sma/imp POST //////////////////////////////////////////////////////////
 Flight::route('POST /sma/click', function() {
 
-$config = Flight::get("config");
-$getbody = json_decode(Flight::request()->getBody());
+  Flight::get("config");
+  $getbody = json_decode(Flight::request()->getBody());
 
-$ad_id = $getbody->sma_id;
+  $ad_id = $getbody->sma_id;
 
-$db = Flight::db();
-$sql = "SELECT clicks, exposure_time, impressions FROM Ad WHERE ad_id = '$ad_id'";
-$result = $db->query($sql);
-$resultfetch = $result->fetchAll(PDO::FETCH_ASSOC);
+  $db = Flight::db();
+  $sql = "SELECT clicks, exposure_time, impressions FROM Ad WHERE ad_id = '$ad_id'";
+  $result = $db->query($sql);
+  $resultfetch = $result->fetchAll(PDO::FETCH_ASSOC);
 
-$clicksnew = intval($resultfetch[0]["clicks"]) + 1;
+  $clicksnew = intval($resultfetch[0]["clicks"]) + 1;
 
-$sql = "UPDATE Ad SET clicks = '$clicksnew' WHERE ad_id = '$ad_id'";
-$result = $db->query($sql);
+  $db->query("UPDATE Ad SET clicks = '$clicksnew' WHERE ad_id = '$ad_id'");
 
 // return ok
-Flight::json(array(
-   'ok' => 'ok'
-), 200);
+  Flight::json(array(
+    'ok' => 'ok'
+  ));
 });
 
 
